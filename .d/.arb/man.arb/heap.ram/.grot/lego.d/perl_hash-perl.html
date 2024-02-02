@@ -1,0 +1,528 @@
+<html>
+<head>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=koi8-r">
+
+ 	<title>Хэши (ассоциативные массивы) в Perl</title>
+</head>
+
+<body bgcolor="#DDE1C2">
+<!--#include virtual="/header.raw"-->
+<h3>Версия для печати</h3>
+<b><a href="http://www.opennet.ru/docs/">Архив документации на OpenNet.ru</a> / 
+Раздел "<a href="http://www.opennet.ru/docs/141.shtml">Perl</a>"
+</b>
+ <small>(<a href="./">Многостраничная версия</a>)</small>
+<hr noshade size=1>
+
+<a name="index_html"></a>
+<h1>Хэши (ассоциативные массивы) в Perl</h1>
+<br>Оригинал: <a href="http://www.perl.ru/">http://www.perl.ru/</a>
+
+<p align="justify">Хэш - ассоциативный массив, т.к. доступ к данным осуществляется при помощи ключа, ассоциированного со значением. Хэши начинаются с префикса <font color="Green">%</font>: <font color="Green">%hash</font>. Для работы с с хэш-массивами нужно, как и в обычных массивах, использовать разыменовывающий префикс <font color="Green">$</font>: <font color="Green">$hash{шляпа} = серая;</font></p>
+
+Хэш можно определить несколькими способами:
+<div><pre><font size="2" color="Green">%hash = (
+	'шляпа' => 'серая',
+	'водка' => 'горькая',
+	'вобла' => 'вкусная',
+	'штаны' => 'широкие',
+	'пиво' => 'темное',
+	'игрушка' => 'любимая');
+	
+%hash = (); #можно не указывать пустой хеш для создания массива, perl может сам создавать пустой хэш.
+$hash{'шляпа'} = 'серая';
+$hash{'водка'} = 'горькая';
+$hash{'вобла'} = 'вкусная';
+$hash{'штаны'} = 'широкие';
+$hash{'пиво'} = 'темное';
+$hash{'игрушка'} = 'любимая';</font>
+</pre></div>
+<p align="justify">Если используется пробел при определении элемента хэша, то этот пробел лучше поставить в одинарные кавычки <font color="Green">$hash{'дырявая шляпа'} = серая;</font></p>
+
+Добавить элементы в хеш можно так:
+<div><pre><font size="2" color="Green">%hash = (
+	'шляпа' => 'серая',
+	'водка' => 'горькая',
+	'вобла' => 'вкусная');
+%hash = (%hash, 'кошка', 'мягкая');
+foreach $k (keys %hash){
+print "$k = $hash{$k}\n";
+}</font></pre></div>
+и так:
+<div><pre><font size="2" color="Green">%hash = (
+	'шляпа' => 'серая',
+	'водка' => 'горькая',
+	'вобла' => 'вкусная');
+$hash{"дом"} = "большой";
+$hash{"дым"} = "сизый";
+foreach $k (keys %hash){
+print "$k = $hash{$k}\n";
+}</font></pre></div>
+Проверка хэша на наличие элемента:
+<div><pre><font size="2" color="Green">
+%hash = (
+	'шляпа' => 'серая',
+	'водка' => 'горькая',
+	'вобла' => 'вкусная');
+
+if(exists($hash{"дождь"})){
+	print "Элемент найден";
+        }
+else{
+	print "Элемент не найден";
+	}</font></pre></div>
+
+Удалить элемент из хэша можно при помощи функции <font color="Green">delete</font>:
+<div><pre><font size="2" color="Green">
+%hash = (
+	'шляпа' => 'серая',
+	'водка' => 'горькая',
+	'вобла' => 'вкусная');
+
+delete($hash{"шляпа"});
+if(exists($hash{"шляпа"})){
+	print "Элемент найден";
+	}
+else{
+	print "Элемент не найден";
+	}</font></pre></div>
+
+<p align="justify">Функция <font color="Green">delete</font> может вызываться для среза хэша, что приводит к удалению всех указанных ключей:
+<font color="Green">delete @hash{'шляпа','водка','вобла'};</font> см. perlfunc(1)
+</p>
+Для того чтобы организовать циклы по элементам хэша, нужно использовать функцию each:
+<div><pre><font size="2" color="Green">
+%hash = (
+	'шляпа' => 'серая',
+	'водка' => 'горькая',
+	'вобла' => 'вкусная');
+
+while(($key,$value) = each %hash){
+	print "$key => $value\n";
+	};
+</font></pre></div>
+Для перебора элементов не очень большого хеша можно воспользоваться foreach:
+<div><pre><font size="2" color="Green">
+%hash = (
+	'шляпа' => 'серая',
+	'водка' => 'горькая',
+	'вобла' => 'вкусная');
+
+foreach $key(keys %hash){
+print $key,"\n"; #возвращает список ключей хеша
+}
+
+%hash = (
+	'шляпа' => 'серая',
+	'водка' => 'горькая',
+	'вобла' => 'вкусная');    
+
+foreach $value(values %hash){
+print "$value\n"; #возвращает список значений хеша
+}
+</font></pre></div>
+<p align="justify">Преимущество each заключается в том, что пары ключ/значение извлекаются по одной, Если хэш содержит слишком много ключей, отказ от предварительного построения полного списка существенно экономит память и время, но функция each не позволяет управлять порядком обработки пар. Перебор хэша при помощи while затрачивает мало памяти. Можно любым образом форматировать выходные данные, при этом нужны всего лишь две скалярные переменные, ключ и значение.
+</p><p align="justify">
+Цикл foreach перебирает заранее построенный список ключей, поэтому после начала цикла он ничего не знает о добавленных или удаленных ключах, ключи, добавляемые внутри цикла, не включаются автоматически в список перебираемых ключей, а удаленные внутри цикла ключи не удаляются из этого списка. </p>
+Содержимое хэша можно вывести и так:
+<pre><font size="2" color="Green">while (@Res = each %hash){
+        print "$Res[0] = $Res[1]\n"
+}</font></pre><p>Вывод хэша одной строкой.
+<p>
+можно воспользоваться функцией <font color="Green">map</font>:
+
+<font color="Green">print map {"$_ => $hash{$_}\n"} keys %hash;</font>
+
+<p align="justify">функция map позволяет работать с элементами в произвольном порядке, в этом случае создается список строк(ключ => значение), передаваемый функции <font color="Green">print</font>. Если сохранить хэш во временном массиве, то он будет выведен как строка:</p>
+<div><pre><font size="2" color="Green">
+{
+my @temp = %hash;
+print "@temp";
+}
+</font></pre></div>
+также можно вывести хэш и таким образом:
+
+<font color="Green">print "@{[%hash]}\n";</font>
+
+<p align="justify">в двух последних случаях мы интерполируем хэш как список, что не позволяет предсказать или управлять порядком вывода пар "ключ/значение". Данные в последних двух случаях выводятся в виде списка ключей и значений, элементы которого разделяются текущим содержимым переменной <font color="Green">$"</font>, т.е. не удастся вывести каждую пару значений на новой строке или отделить ключи от значений каким-либо символом. Приведем программу, которая читает файл почтового ящика и выводит количество сообщений от каждого отправителя, отправитель определяется по строке From(цель программы только проиллюстрировать операции с хешами):</p>
+<div><pre><font size="2" color="Green">
+#!/usr/bin/perl -w
+$file = $ARGV[0] || "-";
+open(FILE, "<$file") or die "$!";
+while(&lt;FILE&gt;){
+	if(/^From: (.*)/) { $from{$1}++ }
+}
+foreach $people(sort keys %from){
+print "$people: $from{$people}\n";
+}
+
+</font></pre></div>
+Запускаем программу чтения почтового ящика: bash-2.03$ ./1.pl /usr/home/vovka/mbox
+<p align="justify">Для перебора элементов хэша в порядке вставки, т.к. <font color="Green">keys</font> и <font color="Green">each</font> выводят элементы хеша неупорядоченно, можно воспользоваться модулем <font color="Green">Tie::IxHash</font></p>
+<div><pre><font size="2" color="Green">
+use Tie::IxHash
+tie %hash, "Tie::IxHash";
+#операции с %hash
+@keys = keys %hash;
+</font></pre></div>
+<p align="justify">Модуль <font color="Green">Tie::IxHash</font> заставляет функции <font color="Green">keys</font>, <font color="Green">each</font> и <font color="Green">values</font> возвращать элементы в порядке занесения их в хэш. Если у Вас нет такого модуля IxHash.pm то нужно зайти на <a href="http://www.perl.com/CPAN-local/modules/index.html">CPAN/modules</a>, найти его и установить, если у вас нет прав на установку библиотек, то в первой строчке скрипта нужно написать <font color="Green">#!/put'/do/perl'a -wT -I/put'/do/nugnogo/modulia</font>. Пример использования <font color="Green">Tie::IxHash</font>:</p>
+<div><pre><font size="2" color="Green">
+use Tie::IxHash
+
+tie %hash, "Tie::IxHash";
+%hash = (
+	'шляпа' => 'серая',
+	'водка' => 'горькая',
+	'вобла' => 'вкусная');
+
+print "В упорядоченной вставке список хеша такой:\n";
+foreach $qwerty (keys %hash){
+	print " $qwerty\n";
+}
+print "Кроме того, предметы обладают некоторыми свойствами:\n";
+while(($predmet, $opredelenie) = each %hash){
+print $predmet $opredelenie,"\n";
+}
+</font></pre></div>
+см. тех документацию по модулю <font color="Green">Tie::IxHash</font>. 
+
+<p align="justify">Хэши с несколькими значениями, ассоциированными одним ключом. Т.к. скалярные величины, содержащиеся в хэше, могут быть ссылками(которые могут быть скалярами), то ассоциировать несколько значений одним ключом можно сохранив в <font color="Green">$hash($key)</font> ссылку на массив со значениями, ассоциированными с ключом <font color="Green">$key</font>. Операции с хэшами(вставка, удаление, перебор и проверка существования(undef)) переписываются для операций с массивами(<font color="Green">push</font>, <font color="Green">splice</font> и <font color="Green">foreach</font>). Пример, реализующий вставку в хэш(обрабатывает выходные данные команды who(1) и выводит краткий список пользователей с терминалами, на которых они зарегестрированы):</p>
+<div><pre><font size="2" color="Green">
+%ttys=();
+open (WHO, "who|");
+while(<WHO>){
+        ($user, $tty) = split;
+        push(@ {$ttys{$user}}, $tty);
+}
+foreach $user (sort keys %ttys){
+	print "$user: @{$ttys{$user}}\n"
+}
+</font></pre></div>
+<p align="justify">в строке <font color="Green">push</font> содержится версия <font color="Green">$tty{$user} = $tty</font> для многозначного хэша. Все имена терминалов интерполируются в строке <font color="Green">print @{$ttys{$user}}</font>. </p>
+
+<p align="justify">Инвертирование хэша производится при помощи функции <font color="Green">reverse</font>, в котором ассоциированные значения исходного хэша являются ключами и наоборот. Воспользуемся списковой эквивалентностью хэшей. В списковом контексте <font color="Green">reverse</font> иетерпретирует <font color="Green">%hash</font> как список и меняет местами составляющие его элементов. Например: имеем хэш <font color="Green">%Glavfish = ("seledka"=>"mokraia","skat"=>"elektricheskij")</font>, если его интерпретировать как список, то получим следующее <font color="Green">("seledka","mokraia","skat","elektricheskij")</font>, после инвертирования список выглядит так: <font color="Green">("elektricheskij","skat","mokraia","seledka")</font>, интерпретация его как хэша дает следующее: <font color="Green">("elektricheskij"=>"skat","mokraia"=>"seledka")</font>. Пример программы, которая на название предмета выдает его свойство и наоборот:</p>
+<div><pre><font size="2" color="Green">
+#!/usr/bin/perl -w 
+$vziat = shift @ARGV or die $!;
+%svojstvo = (
+        "malina" => "vkusnaia",
+        "morkva" => "v_uhi",
+        "kozlodrom" => "rulit",
+        "tupizna" => "tupit");
+%predmet = reverse %svojstvo;
+if (exists $svojstvo{$vziat}){print "$vziat," ", $svojstvo{$vziat}\n";}
+elsif (exists $predmet{$vziat}){print "$vziat," ", $predmet{$vziat}\n";}
+</font></pre></div><div><pre>
+например если ввести в терминале:
+bash-2.03$ ./1.pl malina
+то скрипт выдаст:
+malina  vkusnaia
+или
+bash-2.03$ ./1.pl vkusnaia
+vkusnaia  malina</pre></div>
+
+
+Сортировка хэша:
+<div><pre><font size="2" color="Green">
+%hash = (
+	'шляпа' => 'серая',
+	'водка' => 'горькая',
+	'вобла' => 'вкусная');
+
+foreach $key(sort keys %hash){
+	print "$key => $hash{$key}\n"; #отсортирует в алфавитном порядке по значениям ключа
+}
+
+foreach $value(sort values %hash){
+	print "$value\n"; #сортировка по значению
+}
+</font></pre></div>
+Сортировка ключей по алфавиту ассоциированных значений:
+<div><pre><font size="2" color="Green">
+foreach $key(sort {$hash{$a} cmp $hash{$b}} keys %hash){
+        print $key, " => ", $hash{$key},"\n";
+}</font></pre></div>
+Сортировка по длинне ассоциированных значений:
+<div><pre><font size="2" color="Green">
+@massive = sort{length($hash{$a}) <=> length($hash{$b})}
+	keys %hash;
+foreach $key(@massive){
+	print $key, $hash{$key},"\n";
+}
+</font></pre></div>
+Пример из <a href="http://www.talk.ru/article.html?ID=4642888&hilite=hash">fido7.ru.perl</a>:
+<pre>
+ >> Есть хеш массив (слово, частота), необходимо вывести в файл пары
+ >> (слово,частота) отсортированные по частоте. По ключю - просто, а вот
+ >> по значению затрудняюсь. Подскахите как проще сделать?:-)
+</pre><pre><font size="2" color="Green">
+ my %hash=('for'=>1000,'to'=>1500,'in'=>2000,'do'=>500);
+ foreach(sort {$hash{$a} <=> $hash{$b}} keys %hash) {
+     print $_,'=',$hash{$_},"\n";
+     }</font></pre>
+Слияние хешей выполняется как и слияние массивов:
+<div><pre><font size="2" color="Green">
+%hash1 = (
+	'шляпа' => 'серая',
+	'водка' => 'горькая',
+	'вобла' => 'вкусная');
+%hash2 = (
+	'штаны' => 'широкие',
+	'пиво' => 'темное',
+	'игрушка' => 'любимая');
+%allhash = (%hash1, %hash2);
+</font></pre></div>
+Чтобы сэкономить память, можно воспользоваться таким кодом:
+<div><pre><font size="2" color="Green">
+%hash=(); 
+while (($key, $values) = each(%hash1)){
+	$hash{$key} = $values;
+	}
+while (($key, $values) = each(%hash2)){
+	$hash{$key} = $values;
+	}
+</font></pre></div>
+<p align="justify">Если нужно найти совпадающие ключи или не входящие в другй хэш, то надо организовать перебор ключей хэша при помощи <font color="Green">keys</font> и проверять, если ли текущий ключ в другом хэше. Поиск совпадающих ключей:</p>
+<div><pre><font size="2" color="Green">
+my @common = ();
+foreach(keys %hash1){
+	push(@common, $_) if exists $hash2{$_};
+
+}
+</font></pre></div>
+Поиск ключей, отсутствующих в другм хэше:
+<div><pre><font size="2" color="Green">
+my @test = ();
+foreach(keys %hash1){
+	push(@test, $_) unless exists $hash2{$_};
+}
+</font></pre></div>
+<p align="justify">Если <font color="Green">keys</font> вызывается для хэша, ключи которого представляют собой ссылки, то возвращаемые ей ссылки не работают. Ключи преобразуются в строки, т.е. интерпретируются так, словно они заключены в кавычки, при работе со ссылками они теряют свои свойства. После преобразования в строку ссылка имеет вид </p>
+<div><pre><font size="2" color="Green">
+Class::Somewhere=HASH(0x72048)
+ARRAY(0x72048)
+</font></pre></div>
+<p align="justify">Преобразованную ссылку нельзя вернуть к прежнему виду, т.к. она из ссылки превратилась в строку. Нужно создать специальный хэш, ключами которого являются ссылки, преобразованные в строки, и значениями - настоящие ссылки.Можно воспользоваться модулем <font color="Green">Tie::RefHash</font>. Пример показывает использование объектов ввода/вывода для работы с файловыми манипуляторами.</p>
+<div><pre><font size="2" color="Green">
+use Tie::RefHash;
+use IO::File;
+
+tie %name, "Tie::RefHash";
+foreach $filename("/etc/termcamp/", "/vminux", "/bin/cat"){
+	$fh = IO::File->("<$filename") or next;
+	$name{$fh} = $filename;
+}
+print "open files: ", join(", values %name", "\n");
+foreach $file(keys %name){
+	seek($file, 0, 2);
+	printf("%s is %d bytes long.\n", $name{$file}, $tell{$file});
+}
+</font></pre></div>
+<p align="justify">Если в качестве ключа использована неопределенная величина <font color="Green">undef</font>, то она преобразуется в пустую строку. <font color="Green">undef</font> является вполне допустимым значением в хэше. Но при выборке значения для ключа, отсутствующего в хэше perl выдаст <font color="Green">undef</font>. Проверить наличие ключа можно так: <font color="Green">exist($hash{$key});</font> определенность ассоциированного значения: <font color="Green">defined($hash{$key});</font> истинность: <font color="Green">if($hash{$key});</font>. Иногда <font color="Green">undef</font> нужно сохранять в кэше, т.е. ключ есть, но с ним не связано ничего полезного, например программа, определяющая размер файлов из переданного списка:</p>
+<div><pre><font size="2" color="Green">
+%name =();
+while(<>){
+	chomp;
+	next if exist $name{$_};
+	$name{$_} = -s $_;
+}
+</font></pre></div>
+
+Этот код позволяет пропустить несуществующие и нулевые файлы, но записанные в исходном списке.
+<br><br><br>
+Как можно хеш положить в строку? Например <a href="http://deja.com/=dnc/getdoc.xp?AN=583891180">проблема</a>:<br><br>
+tnc> Спасибо, товарищи :-)<br>
+tnc> До этого я уже допер. Второй вопрос: имеются логи http-gw. Пакостность их<br>
+tnc> заключается в том, что на каждый запрос в логе появляется 4 строки,<br>
+tnc> совершенно не обязательно идущие подряд:<br>
+<br>
+<p align="justify">Создаешь хэш и держишь в нем те строчки, которые еще, грубо говоря,
+не закрыты, а как закроешь - удаляй. Конечно, некий заметный кусок
+файла в памяти будет присутствовать, но не полностью же. Через
+сколько там строк бывает четвертая от первой? Если в среднем через
+пару миллиардов, то - в морг :-)
+</p>
+Что-нибудь типа
+<pre><font size="2" color="Green">
+while(<IN>) {
+  ($key, $no, $data) = parse($_); # расковыряли строчку
+  $buf{$key}->[$no] = $data; # запихнули в хэш в виде массива
+  next if $no < 3; # нумеруем, ессно с нуля
+  analyze($buf{$key}); # обработали
+  delete $buf{key}; # удалили
+}
+</font></pre>
+
+Пример работы с хэшем и базой данных из <a href="http://www.talk.ru/discussion.html?target=5728876&tg=1">fido7.ru.perl</a> (cм. ответ):
+<pre>
+VS>  Скажите, можно ли ввести в dbm-базу данных уже заполненный значениями
+VS> хеш? Если да, то как?
+</pre><pre><font size="2" color="Green">
+ %hash1=("dfadf", "dfadfd");
+ dbmopen (%hash, "hash", 0666);
+ %hash=%hash1;
+ dbmclose (%hash);</font></pre>
+Как передать хэш в функцию? <a href="http://www.talk.ru/discussion.html?target=5781212&tg=1">fido7.ru.perl</a> (см. всю дискуссию)<pre>
+ >  PK> Вобщем то все передаеться, но использовать его нельзяю
+ >  PK> Hа <font color="Green">%_[0]</font> или <font color="Green">$_[0]{??}</font> компилер ругаеться.<font size="2" color="Green">
+ > %a;
+ > &f(\%a);
+ > sub f {
+ >     my $a = $($_[0]){'key'};
+ > }</font>
+ > кажется так, мог ошибится в написании. Смысл в передаче ссылки, а не значения.
+ </pre><pre>
+  Это можно сделать также:
+ 1. Неявной передачей ссылки (использование прототипов):
+ <font size="2" color="Green">sub f(\%) {
+   my $a=$_[0]->{'key'};
+ }
+ f(%a);</font>
+ 2. Передачей хэша как массива с четным числом
+ элементов:
+ <font size="2" color="Green">sub f {
+     my $a={@_}->{'key'};
+ }
+ f(%a);</font>
+</font></pre><pre>
+Пример использования хеша для транслитерации <a href="http://www.talk.ru/discussion.html?target=8289806&tg=1">fido7.ru.perl</a>:<pre>
+ RK> Как сочнить такой <font color="Green">tr/../../</font> (и возможно ли), чтобы
+ RK> "абея" -> "abyoya"
+ RK> Т.е. транслитерацию сделать...</pre>
+<p align="justify">самый простой и топорный вариант - сделать хеш 
+с соответствиями типа я =&gt; ya сплитить строчки и заменять элементы 
+полученного массива на нужные. что-то на подобие:</p>
+<pre><font size="2" color="Green">
+@letters = split //, $str;
+for (@letters){$_ = $hash{$_}};
+</font></pre>
+
+Переменные окружения, использующие встроенные хэши и массивы <font color="Green">%INC</font>, <font color="Green">%SIG</font>, <font color="Green">%ENV</font>, <font color="Green">%FORM{}</font>.
+
+<p align="justify"><font color="Green">%INC</font> содержит имена файлов, включаемых командами do и require. Ключ 
+имя файла, значение путь до включаемого файла. Массив <font color="Green">@INC</font> содержит список дирректорий, которые
+ просматривает perl для выполнения команд do, require или use.</p>
+
+<p align="justify"><font color="Green">%SIG</font> - хэш, в котором хранятся обработчики различных 
+ситуаций, возникающих в perl. Например строка <font color="Green">local $SIG{__WARN__} = sub{};</font> отключает предупреждающие сообщения.</p>
+<p align="justify"><font color="Green">%ENV</font> содержит значения переменных среды(окружения), заданных на момент запуска сценария(скрипта).
+ Ключами обычно бывают имена переменных среды(но их состав зависит от операционной системы), изменение этих значений 
+ вызовет изменение окружения для процессов потомков.<pre><font size="2" color="Green"></p>
+
+#!/usr/bin/perl/ -w
+while (($key, $value) = each(%ENV)){
+print "$key => $value\n";
+}</font></pre>
+программа выдает:
+<pre><font size="2" color="Green">
+SERVER_SOFTWARE => Apache/1.3.11 (FreeBSD) mod_perl/1.21 PHP/3.0.14 
+GATEWAY_INTERFACE => CGI/1.1 
+DOCUMENT_ROOT => /usr/local/www/data 
+UNIQUE_ID => OZaSFsHofQoAAEd@Cn8 
+REMOTE_ADDR => 195.202.122.14 
+SERVER_PROTOCOL => HTTP/1.0 
+SERVER_SIGNATURE => Apache/1.3.11 Server at www.mojdodir.ru Port 80
+REQUEST_METHOD => GET 
+REMOTE_HOST => www.mojdodir.ru
+QUERY_STRING => 
+HTTP_USER_AGENT => Mozilla/4.73 [en] (Win98; I) 
+PATH => /sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin 
+HTTP_ACCEPT => image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, image/png, */* 
+HTTP_CONNECTION => keep-alive 
+REMOTE_PORT => 3633 
+SERVER_ADDR => 195.202.122.14 
+HTTP_ACCEPT_LANGUAGE => en,ru 
+HTTP_CACHE_CONTROL => max-age=259200 
+SCRIPT_NAME => /cgi-bin/1.pl 
+SCRIPT_FILENAME => /usr/local/www/cgi-bin/1.pl 
+HTTP_ACCEPT_ENCODING => gzip 
+SERVER_NAME => www.mojdodir.ru
+HTTP_PRAGMA => no-cache 
+REQUEST_URI => /cgi-bin/1.pl 
+HTTP_ACCEPT_CHARSET => iso-8859-1,*,utf-8 
+HTTP_X_FORWARDED_FOR => 15.0.0.23 
+SERVER_PORT => 30 
+HTTP_HOST => www.mojdodir.ru 
+SERVER_ADMIN => webmaster@www.mojdodir.ru 
+HTTP_VIA => 1.0 cache.www.mojdodir.ru:3363 (Squid/2.3.STABLE1) 
+</font></pre>
+<p align="justify">Непосредственно из скрипта элементы хэша <font color="Green">%ENV</font> можно вызывать 
+<font color="Green">$ENV{'HTTP_CACHE_CONTROL'}</font> или <font color="Green">$ENV{'HTTP_USER_AGENT'}</font>, 
+смотря что нужно вызывать.</p>
+%FORM содержит данные, вводимые из формы методом POST: html форма такая: <br><br><font color="Green">
+&lt;form action="/cgi-bin/1.pl" method="post"&gt;<br>
+&lt;input type="text" name="name1" size=10 maxlength=10&gt;<br>
+&lt;input type="text" name="name2" size=10 maxlength=10&gt;<br>
+&lt;input type="text" name="name3" size=10 maxlength=10&gt;<br>
+&lt;input type="submit" value="send"&gt;<br>
+&lt;input type="reset" value="reset"&gt;&lt;/form&gt;<br><br></font>
+Если мы введем в поле name1 qwe, name2 rty, name3 asd и нажмем send, то через STDIN передаются данные в виде:  name1=qwe&amp;name2=rty&amp;name3=asd и содержимое хэша</p> 
+<pre><font size="2" color="Green">
+%FORM( 
+	name1 => qwe,
+	name2 => rty,
+	name3 => asd);</pre></font>
+Значения полей name* можно получать <font color="Green">$FORM{'name1'}</font>, <font color="Green">$FORM{'name2'}</font> и т.д.<br><br>
+<br><br>Хэши slice (перевод, статья находится по адресу <a href="http://www.sysarch.com/perl/tutorials/hash_slices.txt">http://www.sysarch.com/perl/tutorials/hash_slices.txt</a>)
+<br>
+Насколько хорошим является этот код??
+<pre><font size="2" color="Green">
+@array = qw( a b c d ) ;
+@array{ @array } = ( [ @array ] ) x @array ;
+</font></pre>
+Основное определение хэша slice: <font color="Green">@hash{ @array } = ( list )</font> что эквивалентно (<font color="Green"> $hash{ $array[0] }, ... $hash{ $array[$#array]  } ) = ( list )</font> Префиксный символ (<font color="Green">@</font> ,<font color="Green">%</font>) используется только для обозначения контекста, но не типа данных. Если имеются два массива и мы ходим сопоставлять их данные, то мы поступаем так:
+<pre><font size="2" color="Green">
+@foo_array = qw( abc def ghi ) ;
+@bar_array = qw( jkl mno pqr ) ;
+@foo_to_bar{ @foo_array } = @bar_array
+</font></pre>
+теперь можно работать с массивами немного проще:
+<pre><font size="2" color="Green">
+$foo_value = 'def' ;
+$bar_value = $foo_to_bar{ $foo_value } ;
+</font></pre>
+Можно даже сразу преобразовывать целый массив переменных foo одной конструкцией: <font color="Green">@bar_values = @foo_to_bar{ @foo_values };</font> Еще одно использование хэша slice, производится проверка: находится ли строка в данном массиве строк? Фактически мы не заботимся о том, что находится в хеше slice, но 1 используется для большей ясности. 
+<pre><font size="2" color="Green">
+@foo_array = qw( abc def ghi ) ;
+@is_a_foo{ @foo_array } = (1) x @foo_array ;
+$input = 'def' ;
+if ( $is_a_foo{ $input } ) {
+        ...
+if ( exists( $is_a_foo{ $input } ) ) {
+        ...
+</font></pre>
+Оператор x называется оператором повторения, он дублирует левый операнд значением правого операнда. В скалярном контексте он копирует левый оперант как строку и возвращает его, т.е. мы имеем контекст списка и левый операнд списка. Это позволяет создать новый список с N копиями предыдущего списка. Для foo N = 3 и (скалярное значение @foo_array) и мы получаем список (1, 1, 1) который присваивается хешу slice. Программа, преобразующая строки в нумерованные индексные значения. Используется оператор диапазона (..), создающий список целых чисел, которые присваиваются хэшу slise:  
+<pre><font size="2" color="Green">
+@foo_array = qw( abc def ghi ) ;
+@foo_to_index{ @foo_array } = ( 0 .. $#foo_array ) ;
+@foo_to_index{ @foo_array } = ( 1 .. @foo_array ) ;
+$i_am_a_foo = 'def' ;
+$foo_index = $foo_to_index{ $i_am_a_foo } ;
+</font></pre>
+Названия %foo_to_bar, %is_a_foo, $foo_to_index подобраны так, чтобы нагляднее показать принцип работы slise. Фактически была проведена индексация входных данных и выходных данных в хеш splice. Теперь рассмотрим хэш splice снова <font color="Green">@array{ @array } = ( [ @array ] ) x @array ;</font>. Заметим, что хэш и массив(и скаляр) называются массивами, но это различные переменные, в частности отличные по разделитеям. Левая часть выражения - присваивание хэшу slice, но что-же стоит справа? Оператор x и @array справа дублирует повторения счетчика и некоторый лист слева и мы имеем контекстный список. Хеш slice есть список контекстов, мы создаем скопированный список анонимного массива, который содержит значения в @array. Это значит что хэш %array напоминает такой массив:
+<pre><font size="2" color="Green">
+%array = (
+        'a' => [ 'a', 'b', 'c', 'd' ],  
+        'b' => [ 'a', 'b', 'c', 'd' ],  
+        'c' => [ 'a', 'b', 'c', 'd' ],  
+        'd' => [ 'a', 'b', 'c', 'd' ],  
+) ;
+</font></pre> 
+Если имеется набор псевдонимов(alias), то можно, обращаясь к списку, вывести каждый из них в отдельности(ср. alias для сокращения часто употребляемой команды в unix). Т.е. вводится любой из отдельных элементов и мы получаем список данных. Если имеется список массивов, то их можно обработать таким образом:
+<pre><font size="2" color="Green">
+@foo_list = qw( a b c d );
+@bar_list = qw( j k l m n o );
+@baz_list = qw( w x );
+
+@expand_aliases{ @foo_list } = ( [ @foo_list ] ) x @foo_list;
+@expand_aliases{ @bar_list } = ( [ @bar_list ] ) x @bar_list;
+@expand_aliases{ @baz_list } = ( [ @baz_list ] ) x @baz_list;
+</font></pre>
+Если есть лексемма неопределенного типа, то можно получить список псевдонимов за 1 шаг <font color="Green">@aliases = @{ $expand_aliases{ $alias } } ;</font> Окружение @{} используется, чтобы разыменовать сохраненный анонимный список в список для присвоения @aliases.
+<pre><font size="2" color="Green">
+</font></pre>
+<hr>
+
+<!--#include virtual="/footer.raw"-->
+
+</body></html>

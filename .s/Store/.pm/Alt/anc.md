@@ -1,0 +1,1 @@
+# http://ftp.basealt.ru/pub/distributions/ALTLinux/2.3/Compact/ALTLinux/mdkinst/usr/lib/perl5/

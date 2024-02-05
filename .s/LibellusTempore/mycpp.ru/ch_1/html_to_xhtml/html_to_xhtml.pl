@@ -1,9 +1,13 @@
- #!/usr/bin/perl -w -d
+# #!/usr/bin/perl -w
+ #!/usr/bin/perl
 
  # Проверка переданного имени файла HTML
  die "Не задан файл HTML!" unless @ARGV;
 
  # Открытие, чтение и закрытие файла HTML
+
+ print $ARGV[0];
+ print;
  open(F1,  $ARGV[0]) or die "Ошибка открытия файла:\n $!";
  @file = <F1>;
  close(F1) or die $!;
@@ -18,6 +22,9 @@
 
  # Закрытие нового файла HTML
  close(F1) or die $!;
+
+
+print "\ndone!";
 
  # Определение подпрограммы замены
  sub replace {

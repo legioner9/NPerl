@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TAP::Harness - Run test scripts with statistics - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/TAP::Harness">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./TAP::Harness.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/TAP::Harness">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/TAP::Harness">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/TAP::Harness">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/TAP::Harness">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/TAP::Harness">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/TAP::Harness">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/TAP::Harness">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/TAP::Harness">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/TAP::Harness">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/TAP::Harness">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/TAP::Harness">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/TAP::Harness">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/TAP::Harness">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/TAP::Harness">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/TAP::Harness">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/TAP::Harness">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/TAP::Harness">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/TAP::Harness">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/TAP::Harness">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/TAP::Harness">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/TAP::Harness">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/TAP::Harness">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/TAP::Harness">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/TAP::Harness">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/TAP::Harness">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/TAP::Harness">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/TAP::Harness">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/TAP::Harness">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/TAP::Harness">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/TAP::Harness">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/TAP::Harness">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/TAP::Harness">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/TAP::Harness">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/TAP::Harness">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/TAP::Harness">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/TAP::Harness">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/TAP::Harness">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/TAP::Harness">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/TAP::Harness">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/TAP::Harness">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/TAP::Harness">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/TAP::Harness">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/TAP::Harness">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/TAP::Harness">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/TAP::Harness">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/TAP::Harness">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/TAP::Harness">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/TAP::Harness">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/TAP::Harness">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/TAP::Harness">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/TAP::Harness">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/TAP::Harness">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/TAP::Harness">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/TAP::Harness">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/TAP::Harness">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/TAP::Harness">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/TAP::Harness">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/TAP::Harness">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/TAP::Harness">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/TAP::Harness">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/TAP::Harness">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/TAP::Harness">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/TAP::Harness">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/TAP::Harness">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/TAP::Harness">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/TAP::Harness">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/TAP::Harness">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/TAP::Harness">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/TAP::Harness">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/TAP::Harness">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/TAP::Harness">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/TAP::Harness">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/TAP::Harness">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/TAP::Harness">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/TAP::Harness">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/TAP::Harness">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/TAP::Harness">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/TAP::Harness">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/TAP::Harness">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/TAP::Harness">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./TAP::Harness.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/TAP::Harness">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/TAP::Harness">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/TAP::Harness">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/TAP::Harness">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/TAP::Harness">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/TAP::Harness">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/TAP::Harness">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/TAP::Harness">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/TAP::Harness">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/TAP::Harness">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/TAP::Harness">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/TAP::Harness">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/TAP::Harness">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/TAP::Harness">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/TAP::Harness">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/TAP::Harness">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/TAP::Harness">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/TAP::Harness">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/TAP::Harness">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/TAP::Harness">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/TAP::Harness">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/TAP::Harness">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/TAP::Harness">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/TAP::Harness">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/TAP::Harness">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/TAP::Harness">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/TAP::Harness">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/TAP::Harness">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/TAP::Harness">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/TAP::Harness">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/TAP::Harness">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/TAP::Harness">5.35.1</a>
+          <a class="dropdown-item active" href="./TAP::Harness.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./TAP::Harness.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./TAP::Harness.html">TAP::Harness</a>
+          <div id="more">
+            (<a href="./TAP::Harness.txt">source</a>,
+            <a href="https://metacpan.org/pod/TAP::Harness">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 3.43</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#VERSION">VERSION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#METHODS">METHODS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#Class-Methods">Class Methods</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#new">new</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#Instance-Methods">Instance Methods</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#runtests">runtests</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#summary">summary</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#aggregate_tests">aggregate_tests</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#make_scheduler">make_scheduler</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#jobs">jobs</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#make_parser">make_parser</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#finish_parser">finish_parser</a>
+              </li>
+          </ul>
+
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#CONFIGURING">CONFIGURING</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#Plugins">Plugins</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#Module::Build">Module::Build</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#ExtUtils::MakeMaker">ExtUtils::MakeMaker</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#prove">prove</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#WRITING-PLUGINS">WRITING PLUGINS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#SUBCLASSING">SUBCLASSING</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#Methods">Methods</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#REPLACING">REPLACING</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Harness.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./TAP::Harness.html#NAME">#</a>NAME</h1>
+
+<p>TAP::Harness - Run test scripts with statistics</p>
+
+<h1 id="VERSION"><a class="permalink" href="./TAP::Harness.html#VERSION">#</a>VERSION</h1>
+
+<p>Version 3.43</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./TAP::Harness.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This is a simple test harness which allows tests to be run and results automatically aggregated and output to STDOUT.</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./TAP::Harness.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use TAP::Harness;
+my $harness = TAP::Harness-&gt;new( \%args );
+$harness-&gt;runtests(@tests);</code></pre>
+
+<h1 id="METHODS"><a class="permalink" href="./TAP::Harness.html#METHODS">#</a>METHODS</h1>
+
+<h2 id="Class-Methods"><a class="permalink" href="./TAP::Harness.html#Class-Methods">#</a><a id="Class"></a>Class Methods</h2>
+
+<h3 id="new"><a class="permalink" href="./TAP::Harness.html#new">#</a><code>new</code></h3>
+
+<pre><code>my %args = (
+   verbosity =&gt; 1,
+   lib     =&gt; [ &#39;lib&#39;, &#39;blib/lib&#39;, &#39;blib/arch&#39; ],
+)
+my $harness = TAP::Harness-&gt;new( \%args );</code></pre>
+
+<p>The constructor returns a new <code>TAP::Harness</code> object. It accepts an optional hashref whose allowed keys are:</p>
+
+<ul>
+
+<li><p><code>verbosity</code></p>
+
+<p>Set the verbosity level:</p>
+
+<pre><code class="plaintext"> 1   verbose        Print individual test results to STDOUT.
+ 0   normal
+-1   quiet          Suppress some test output (mostly failures 
+                    while tests are running).
+-2   really quiet   Suppress everything but the tests summary.
+-3   silent         Suppress everything.</code></pre>
+
+</li>
+<li><p><code>timer</code></p>
+
+<p>Append run time for each test to output. Uses <a href="./Time::HiRes.html">Time::HiRes</a> if available.</p>
+
+</li>
+<li><p><code>failures</code></p>
+
+<p>Show test failures (this is a no-op if <code>verbose</code> is selected).</p>
+
+</li>
+<li><p><code>comments</code></p>
+
+<p>Show test comments (this is a no-op if <code>verbose</code> is selected).</p>
+
+</li>
+<li><p><code>show_count</code></p>
+
+<p>Update the running test count during testing.</p>
+
+</li>
+<li><p><code>normalize</code></p>
+
+<p>Set to a true value to normalize the TAP that is emitted in verbose modes.</p>
+
+</li>
+<li><p><code>lib</code></p>
+
+<p>Accepts a scalar value or array ref of scalar values indicating which paths to allowed libraries should be included if Perl tests are executed. Naturally, this only makes sense in the context of tests written in Perl.</p>
+
+</li>
+<li><p><code>switches</code></p>
+
+<p>Accepts a scalar value or array ref of scalar values indicating which switches should be included if Perl tests are executed. Naturally, this only makes sense in the context of tests written in Perl.</p>
+
+</li>
+<li><p><code>test_args</code></p>
+
+<p>A reference to an <code>@INC</code> style array of arguments to be passed to each test program.</p>
+
+<pre><code class="plaintext">test_args =&gt; [&#39;foo&#39;, &#39;bar&#39;],</code></pre>
+
+<p>if you want to pass different arguments to each test then you should pass a hash of arrays, keyed by the alias for each test:</p>
+
+<pre><code>test_args =&gt; {
+  my_test    =&gt; [&#39;foo&#39;, &#39;bar&#39;],
+  other_test =&gt; [&#39;baz&#39;],
+}</code></pre>
+
+</li>
+<li><p><code>color</code></p>
+
+<p>Attempt to produce color output.</p>
+
+</li>
+<li><p><code>exec</code></p>
+
+<p>Typically, Perl tests are run through this. However, anything which spits out TAP is fine. You can use this argument to specify the name of the program (and optional switches) to run your tests with:</p>
+
+<pre><code class="plaintext">exec =&gt; [&#39;/usr/bin/ruby&#39;, &#39;-w&#39;]</code></pre>
+
+<p>You can also pass a subroutine reference in order to determine and return the proper program to run based on a given test script. The subroutine reference should expect the TAP::Harness object itself as the first argument, and the file name as the second argument. It should return an array reference containing the command to be run and including the test file name. It can also simply return <code>undef</code>, in which case TAP::Harness will fall back on executing the test script in Perl:</p>
+
+<pre><code>exec =&gt; sub {
+    my ( $harness, $test_file ) = @_;
+
+    # Let Perl tests run.
+    return undef if $test_file =~ /[.]t$/;
+    return [ qw( /usr/bin/ruby -w ), $test_file ]
+      if $test_file =~ /[.]rb$/;
+  }</code></pre>
+
+<p>If the subroutine returns a scalar with a newline or a filehandle, it will be interpreted as raw TAP or as a TAP stream, respectively.</p>
+
+</li>
+<li><p><code>merge</code></p>
+
+<p>If <code>merge</code> is true the harness will create parsers that merge STDOUT and STDERR together for any processes they start.</p>
+
+</li>
+<li><p><code>sources</code></p>
+
+<p><i>NEW to 3.18</i>.</p>
+
+<p>If set, <code>sources</code> must be a hashref containing the names of the <a href="./TAP::Parser::SourceHandler.html">TAP::Parser::SourceHandler</a>s to load and/or configure. The values are a hash of configuration that will be accessible to the source handlers via <a href="./TAP::Parser::Source.html#config_for">&quot;config_for&quot; in TAP::Parser::Source</a>.</p>
+
+<p>For example:</p>
+
+<pre><code>sources =&gt; {
+  Perl =&gt; { exec =&gt; &#39;/path/to/custom/perl&#39; },
+  File =&gt; { extensions =&gt; [ &#39;.tap&#39;, &#39;.txt&#39; ] },
+  MyCustom =&gt; { some =&gt; &#39;config&#39; },
+}</code></pre>
+
+<p>The <code>sources</code> parameter affects how <code>source</code>, <code>tap</code> and <code>exec</code> parameters are handled.</p>
+
+<p>For more details, see the <code>sources</code> parameter in <a href="./TAP::Parser.html#new">&quot;new&quot; in TAP::Parser</a>, <a href="./TAP::Parser::Source.html">TAP::Parser::Source</a>, and <a href="./TAP::Parser::IteratorFactory.html">TAP::Parser::IteratorFactory</a>.</p>
+
+</li>
+<li><p><code>aggregator_class</code></p>
+
+<p>The name of the class to use to aggregate test results. The default is <a href="./TAP::Parser::Aggregator.html">TAP::Parser::Aggregator</a>.</p>
+
+</li>
+<li><p><code>version</code></p>
+
+<p><i>NEW to 3.22</i>.</p>
+
+<p>Assume this TAP version for <a href="./TAP::Parser.html">TAP::Parser</a> instead of default TAP version 12.</p>
+
+</li>
+<li><p><code>formatter_class</code></p>
+
+<p>The name of the class to use to format output. The default is <a href="./TAP::Formatter::Console.html">TAP::Formatter::Console</a>, or <a href="./TAP::Formatter::File.html">TAP::Formatter::File</a> if the output isn&#39;t a TTY.</p>
+
+</li>
+<li><p><code>multiplexer_class</code></p>
+
+<p>The name of the class to use to multiplex tests during parallel testing. The default is <a href="./TAP::Parser::Multiplexer.html">TAP::Parser::Multiplexer</a>.</p>
+
+</li>
+<li><p><code>parser_class</code></p>
+
+<p>The name of the class to use to parse TAP. The default is <a href="./TAP::Parser.html">TAP::Parser</a>.</p>
+
+</li>
+<li><p><code>scheduler_class</code></p>
+
+<p>The name of the class to use to schedule test execution. The default is <a href="./TAP::Parser::Scheduler.html">TAP::Parser::Scheduler</a>.</p>
+
+</li>
+<li><p><code>formatter</code></p>
+
+<p>If set <code>formatter</code> must be an object that is capable of formatting the TAP output. See <a href="./TAP::Formatter::Console.html">TAP::Formatter::Console</a> for an example.</p>
+
+</li>
+<li><p><code>errors</code></p>
+
+<p>If parse errors are found in the TAP output, a note of this will be made in the summary report. To see all of the parse errors, set this argument to true:</p>
+
+<pre><code class="plaintext">errors =&gt; 1</code></pre>
+
+</li>
+<li><p><code>directives</code></p>
+
+<p>If set to a true value, only test results with directives will be displayed. This overrides other settings such as <code>verbose</code> or <code>failures</code>.</p>
+
+</li>
+<li><p><code>ignore_exit</code></p>
+
+<p>If set to a true value instruct <code>TAP::Parser</code> to ignore exit and wait status from test scripts.</p>
+
+</li>
+<li><p><code>jobs</code></p>
+
+<p>The maximum number of parallel tests to run at any time. Which tests can be run in parallel is controlled by <code>rules</code>. The default is to run only one test at a time.</p>
+
+</li>
+<li><p><code>rules</code></p>
+
+<p>A reference to a hash of rules that control which tests may be executed in parallel. If no rules are declared and <a href="./CPAN::Meta::YAML.html">CPAN::Meta::YAML</a> is available, <code>TAP::Harness</code> attempts to load rules from a YAML file specified by the <code>rulesfile</code> parameter. If no rules file exists, the default is for all tests to be eligible to be run in parallel.</p>
+
+<p>Here some simple examples. For the full details of the data structure and the related glob-style pattern matching, see <a href="./TAP::Parser::Scheduler.html#Rules-data-structure">&quot;Rules data structure&quot; in TAP::Parser::Scheduler</a>.</p>
+
+<pre><code># Run all tests in sequence, except those starting with &quot;p&quot;
+$harness-&gt;rules({
+    par =&gt; &#39;t/p*.t&#39;
+});
+
+# Equivalent YAML file
+---
+par: t/p*.t
+
+# Run all tests in parallel, except those starting with &quot;p&quot;
+$harness-&gt;rules({
+    seq =&gt; [
+              { seq =&gt; &#39;t/p*.t&#39; },
+              { par =&gt; &#39;**&#39;     },
+           ],
+});
+
+# Equivalent YAML file
+---
+seq:
+    - seq: t/p*.t
+    - par: **
+
+# Run some  startup tests in sequence, then some parallel tests than some
+# teardown tests in sequence.
+$harness-&gt;rules({
+    seq =&gt; [
+        { seq =&gt; &#39;t/startup/*.t&#39; },
+        { par =&gt; [&#39;t/a/*.t&#39;,&#39;t/b/*.t&#39;,&#39;t/c/*.t&#39;], }
+        { seq =&gt; &#39;t/shutdown/*.t&#39; },
+    ],
+
+});
+
+# Equivalent YAML file
+---
+seq:
+    - seq: t/startup/*.t
+    - par:
+        - t/a/*.t
+        - t/b/*.t
+        - t/c/*.t
+    - seq: t/shutdown/*.t</code></pre>
+
+<p>This is an experimental feature and the interface may change.</p>
+
+</li>
+<li><p><code>rulesfiles</code></p>
+
+<p>This specifies where to find a YAML file of test scheduling rules. If not provided, it looks for a default file to use. It first checks for a file given in the <code>HARNESS_RULESFILE</code> environment variable, then it checks for <i>testrules.yml</i> and then <i>t/testrules.yml</i>.</p>
+
+</li>
+<li><p><code>stdout</code></p>
+
+<p>A filehandle for catching standard output.</p>
+
+</li>
+<li><p><code>trap</code></p>
+
+<p>Attempt to print summary information if run is interrupted by SIGINT (Ctrl-C).</p>
+
+</li>
+</ul>
+
+<p>Any keys for which the value is <code>undef</code> will be ignored.</p>
+
+<h2 id="Instance-Methods"><a class="permalink" href="./TAP::Harness.html#Instance-Methods">#</a><a id="Instance"></a>Instance Methods</h2>
+
+<h3 id="runtests"><a class="permalink" href="./TAP::Harness.html#runtests">#</a><code>runtests</code></h3>
+
+<pre><code>$harness-&gt;runtests(@tests);</code></pre>
+
+<p>Accepts an array of <code>@tests</code> to be run. This should generally be the names of test files, but this is not required. Each element in <code>@tests</code> will be passed to <code>TAP::Parser::new()</code> as a <code>source</code>. See <a href="./TAP::Parser.html">TAP::Parser</a> for more information.</p>
+
+<p>It is possible to provide aliases that will be displayed in place of the test name by supplying the test as a reference to an array containing <code>[ $test, $alias ]</code>:</p>
+
+<pre><code>$harness-&gt;runtests( [ &#39;t/foo.t&#39;, &#39;Foo Once&#39; ],
+                    [ &#39;t/foo.t&#39;, &#39;Foo Twice&#39; ] );</code></pre>
+
+<p>Normally it is an error to attempt to run the same test twice. Aliases allow you to overcome this limitation by giving each run of the test a unique name.</p>
+
+<p>Tests will be run in the order found.</p>
+
+<p>If the environment variable <code>PERL_TEST_HARNESS_DUMP_TAP</code> is defined it should name a directory into which a copy of the raw TAP for each test will be written. TAP is written to files named for each test. Subdirectories will be created as needed.</p>
+
+<p>Returns a <a href="./TAP::Parser::Aggregator.html">TAP::Parser::Aggregator</a> containing the test results.</p>
+
+<h3 id="summary"><a class="permalink" href="./TAP::Harness.html#summary">#</a><code>summary</code></h3>
+
+<pre><code>$harness-&gt;summary( $aggregator );</code></pre>
+
+<p>Output the summary for a <a href="./TAP::Parser::Aggregator.html">TAP::Parser::Aggregator</a>.</p>
+
+<h3 id="aggregate_tests"><a class="permalink" href="./TAP::Harness.html#aggregate_tests">#</a><code>aggregate_tests</code></h3>
+
+<pre><code>$harness-&gt;aggregate_tests( $aggregate, @tests );</code></pre>
+
+<p>Run the named tests and display a summary of result. Tests will be run in the order found.</p>
+
+<p>Test results will be added to the supplied <a href="./TAP::Parser::Aggregator.html">TAP::Parser::Aggregator</a>. <code>aggregate_tests</code> may be called multiple times to run several sets of tests. Multiple <code>Test::Harness</code> instances may be used to pass results to a single aggregator so that different parts of a complex test suite may be run using different <code>TAP::Harness</code> settings. This is useful, for example, in the case where some tests should run in parallel but others are unsuitable for parallel execution.</p>
+
+<pre><code>my $formatter   = TAP::Formatter::Console-&gt;new;
+my $ser_harness = TAP::Harness-&gt;new( { formatter =&gt; $formatter } );
+my $par_harness = TAP::Harness-&gt;new(
+    {   formatter =&gt; $formatter,
+        jobs      =&gt; 9
+    }
+);
+my $aggregator = TAP::Parser::Aggregator-&gt;new;
+
+$aggregator-&gt;start();
+$ser_harness-&gt;aggregate_tests( $aggregator, @ser_tests );
+$par_harness-&gt;aggregate_tests( $aggregator, @par_tests );
+$aggregator-&gt;stop();
+$formatter-&gt;summary($aggregator);</code></pre>
+
+<p>Note that for simpler testing requirements it will often be possible to replace the above code with a single call to <code>runtests</code>.</p>
+
+<p>Each element of the <code>@tests</code> array is either:</p>
+
+<ul>
+
+<li><p>the source name of a test to run</p>
+
+</li>
+<li><p>a reference to a [ source name, display name ] array</p>
+
+</li>
+</ul>
+
+<p>In the case of a perl test suite, typically <i>source names</i> are simply the file names of the test scripts to run.</p>
+
+<p>When you supply a separate display name it becomes possible to run a test more than once; the display name is effectively the alias by which the test is known inside the harness. The harness doesn&#39;t care if it runs the same test more than once when each invocation uses a different name.</p>
+
+<h3 id="make_scheduler"><a class="permalink" href="./TAP::Harness.html#make_scheduler">#</a><code>make_scheduler</code></h3>
+
+<p>Called by the harness when it needs to create a <a href="./TAP::Parser::Scheduler.html">TAP::Parser::Scheduler</a>. Override in a subclass to provide an alternative scheduler. <code>make_scheduler</code> is passed the list of tests that was passed to <code>aggregate_tests</code>.</p>
+
+<h3 id="jobs"><a class="permalink" href="./TAP::Harness.html#jobs">#</a><code>jobs</code></h3>
+
+<p>Gets or sets the number of concurrent test runs the harness is handling. By default, this value is 1 -- for parallel testing, this should be set higher.</p>
+
+<h3 id="make_parser"><a class="permalink" href="./TAP::Harness.html#make_parser">#</a><code>make_parser</code></h3>
+
+<p>Make a new parser and display formatter session. Typically used and/or overridden in subclasses.</p>
+
+<pre><code>my ( $parser, $session ) = $harness-&gt;make_parser;</code></pre>
+
+<h3 id="finish_parser"><a class="permalink" href="./TAP::Harness.html#finish_parser">#</a><code>finish_parser</code></h3>
+
+<p>Terminate use of a parser. Typically used and/or overridden in subclasses. The parser isn&#39;t destroyed as a result of this.</p>
+
+<h1 id="CONFIGURING"><a class="permalink" href="./TAP::Harness.html#CONFIGURING">#</a>CONFIGURING</h1>
+
+<p><code>TAP::Harness</code> is designed to be easy to configure.</p>
+
+<h2 id="Plugins"><a class="permalink" href="./TAP::Harness.html#Plugins">#</a>Plugins</h2>
+
+<p><code>TAP::Parser</code> plugins let you change the way TAP is <i>input</i> to and <i>output</i> from the parser.</p>
+
+<p><a href="./TAP::Parser::SourceHandler.html">TAP::Parser::SourceHandler</a>s handle TAP <i>input</i>. You can configure them and load custom handlers using the <code>sources</code> parameter to <a href="./TAP::Harness.html#new">&quot;new&quot;</a>.</p>
+
+<p><a href="https://perldoc.perl.org/5.35.0/TAP::Formatter">TAP::Formatter</a>s handle TAP <i>output</i>. You can load custom formatters by using the <code>formatter_class</code> parameter to <a href="./TAP::Harness.html#new">&quot;new&quot;</a>. To configure a formatter, you currently need to instantiate it outside of <a href="./TAP::Harness.html">TAP::Harness</a> and pass it in with the <code>formatter</code> parameter to <a href="./TAP::Harness.html#new">&quot;new&quot;</a>. This <i>may</i> be addressed by adding a <i>formatters</i> parameter to <a href="./TAP::Harness.html#new">&quot;new&quot;</a> in the future.</p>
+
+<h2 id="Module::Build"><a class="permalink" href="./TAP::Harness.html#Module::Build">#</a><a id="Module"></a><code>Module::Build</code></h2>
+
+<p><a href="./Module::Build.html">Module::Build</a> version <code>0.30</code> supports <code>TAP::Harness</code>.</p>
+
+<p>To load <code>TAP::Harness</code> plugins, you&#39;ll need to use the <code>tap_harness_args</code> parameter to <code>new</code>, typically from your <code>Build.PL</code>. For example:</p>
+
+<pre><code>Module::Build-&gt;new(
+    module_name        =&gt; &#39;MyApp&#39;,
+    test_file_exts     =&gt; [qw(.t .tap .txt)],
+    use_tap_harness    =&gt; 1,
+    tap_harness_args   =&gt; {
+        sources =&gt; {
+            MyCustom =&gt; {},
+            File =&gt; {
+                extensions =&gt; [&#39;.tap&#39;, &#39;.txt&#39;],
+            },
+        },
+        formatter_class =&gt; &#39;TAP::Formatter::HTML&#39;,
+    },
+    build_requires     =&gt; {
+        &#39;Module::Build&#39; =&gt; &#39;0.30&#39;,
+        &#39;TAP::Harness&#39;  =&gt; &#39;3.18&#39;,
+    },
+)-&gt;create_build_script;</code></pre>
+
+<p>See <a href="./TAP::Harness.html#new">&quot;new&quot;</a></p>
+
+<h2 id="ExtUtils::MakeMaker"><a class="permalink" href="./TAP::Harness.html#ExtUtils::MakeMaker">#</a><a id="ExtUtils"></a><code>ExtUtils::MakeMaker</code></h2>
+
+<p><a href="./ExtUtils::MakeMaker.html">ExtUtils::MakeMaker</a> does not support <a href="./TAP::Harness.html">TAP::Harness</a> out-of-the-box.</p>
+
+<h2 id="prove"><a class="permalink" href="./TAP::Harness.html#prove">#</a><code>prove</code></h2>
+
+<p><a href="prove.html">prove</a> supports <code>TAP::Harness</code> plugins, and has a plugin system of its own. See <a href="prove.html#FORMATTERS">&quot;FORMATTERS&quot; in prove</a>, <a href="prove.html#SOURCE-HANDLERS">&quot;SOURCE HANDLERS&quot; in prove</a> and <a href="./App::Prove.html">App::Prove</a> for more details.</p>
+
+<h1 id="WRITING-PLUGINS"><a class="permalink" href="./TAP::Harness.html#WRITING-PLUGINS">#</a><a id="WRITING"></a>WRITING PLUGINS</h1>
+
+<p>If you can&#39;t configure <code>TAP::Harness</code> to do what you want, and you can&#39;t find an existing plugin, consider writing one.</p>
+
+<p>The two primary use cases supported by <a href="./TAP::Harness.html">TAP::Harness</a> for plugins are <i>input</i> and <i>output</i>:</p>
+
+<dl>
+
+<dt id="Customize-how-TAP-gets-into-the-parser"><a class="permalink" href="./TAP::Harness.html#Customize-how-TAP-gets-into-the-parser">#</a><a id="Customize"></a>Customize how TAP gets into the parser</dt>
+<dd>
+
+<p>To do this, you can either extend an existing <a href="./TAP::Parser::SourceHandler.html">TAP::Parser::SourceHandler</a>, or write your own. It&#39;s a pretty simple API, and they can be loaded and configured using the <code>sources</code> parameter to <a href="./TAP::Harness.html#new">&quot;new&quot;</a>.</p>
+
+</dd>
+<dt id="Customize-how-TAP-results-are-output-from-the-parser"><a class="permalink" href="./TAP::Harness.html#Customize-how-TAP-results-are-output-from-the-parser">#</a><a id="Customize1"></a>Customize how TAP results are output from the parser</dt>
+<dd>
+
+<p>To do this, you can either extend an existing <a href="https://perldoc.perl.org/5.35.0/TAP::Formatter">TAP::Formatter</a>, or write your own. Writing formatters are a bit more involved than writing a <i>SourceHandler</i>, as you&#39;ll need to understand the <a href="./TAP::Parser.html">TAP::Parser</a> API. A good place to start is by understanding how <a href="./TAP::Harness.html#aggregate_tests">&quot;aggregate_tests&quot;</a> works.</p>
+
+<p>Custom formatters can be loaded configured using the <code>formatter_class</code> parameter to <a href="./TAP::Harness.html#new">&quot;new&quot;</a>.</p>
+
+</dd>
+</dl>
+
+<h1 id="SUBCLASSING"><a class="permalink" href="./TAP::Harness.html#SUBCLASSING">#</a>SUBCLASSING</h1>
+
+<p>If you can&#39;t configure <code>TAP::Harness</code> to do exactly what you want, and writing a plugin isn&#39;t an option, consider extending it. It is designed to be (mostly) easy to subclass, though the cases when sub-classing is necessary should be few and far between.</p>
+
+<h2 id="Methods"><a class="permalink" href="./TAP::Harness.html#Methods">#</a>Methods</h2>
+
+<p>The following methods are ones you may wish to override if you want to subclass <code>TAP::Harness</code>.</p>
+
+<dl>
+
+<dt id="&quot;new&quot;"><a class="permalink" href="./TAP::Harness.html#%22new%22">#</a><a id="new1"></a><a href="./TAP::Harness.html#new">&quot;new&quot;</a></dt>
+<dd>
+
+</dd>
+<dt id="&quot;runtests&quot;"><a class="permalink" href="./TAP::Harness.html#%22runtests%22">#</a><a id="runtests1"></a><a href="./TAP::Harness.html#runtests">&quot;runtests&quot;</a></dt>
+<dd>
+
+</dd>
+<dt id="&quot;summary&quot;"><a class="permalink" href="./TAP::Harness.html#%22summary%22">#</a><a id="summary1"></a><a href="./TAP::Harness.html#summary">&quot;summary&quot;</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="REPLACING"><a class="permalink" href="./TAP::Harness.html#REPLACING">#</a>REPLACING</h1>
+
+<p>If you like the <code>prove</code> utility and <a href="./TAP::Parser.html">TAP::Parser</a> but you want your own harness, all you need to do is write one and provide <code>new</code> and <code>runtests</code> methods. Then you can use the <code>prove</code> utility like so:</p>
+
+<pre><code class="plaintext">prove --harness My::Test::Harness</code></pre>
+
+<p>Note that while <code>prove</code> accepts a list of tests (or things to be tested), <code>new</code> has a fairly rich set of arguments. You&#39;ll probably want to read over this code carefully to see how all of them are being used.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./TAP::Harness.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Test::Harness.html">Test::Harness</a></p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

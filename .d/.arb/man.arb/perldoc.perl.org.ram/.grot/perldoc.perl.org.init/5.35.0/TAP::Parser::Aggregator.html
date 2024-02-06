@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TAP::Parser::Aggregator - Aggregate TAP::Parser results - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/TAP::Parser::Aggregator">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./TAP::Parser::Aggregator.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/TAP::Parser::Aggregator">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/TAP::Parser::Aggregator">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/TAP::Parser::Aggregator">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/TAP::Parser::Aggregator">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/TAP::Parser::Aggregator">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/TAP::Parser::Aggregator">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/TAP::Parser::Aggregator">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/TAP::Parser::Aggregator">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/TAP::Parser::Aggregator">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/TAP::Parser::Aggregator">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/TAP::Parser::Aggregator">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/TAP::Parser::Aggregator">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/TAP::Parser::Aggregator">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/TAP::Parser::Aggregator">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/TAP::Parser::Aggregator">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/TAP::Parser::Aggregator">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/TAP::Parser::Aggregator">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/TAP::Parser::Aggregator">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/TAP::Parser::Aggregator">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/TAP::Parser::Aggregator">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/TAP::Parser::Aggregator">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/TAP::Parser::Aggregator">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/TAP::Parser::Aggregator">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/TAP::Parser::Aggregator">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/TAP::Parser::Aggregator">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/TAP::Parser::Aggregator">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/TAP::Parser::Aggregator">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/TAP::Parser::Aggregator">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/TAP::Parser::Aggregator">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/TAP::Parser::Aggregator">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/TAP::Parser::Aggregator">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/TAP::Parser::Aggregator">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/TAP::Parser::Aggregator">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/TAP::Parser::Aggregator">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/TAP::Parser::Aggregator">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/TAP::Parser::Aggregator">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/TAP::Parser::Aggregator">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/TAP::Parser::Aggregator">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/TAP::Parser::Aggregator">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/TAP::Parser::Aggregator">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/TAP::Parser::Aggregator">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/TAP::Parser::Aggregator">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/TAP::Parser::Aggregator">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/TAP::Parser::Aggregator">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/TAP::Parser::Aggregator">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/TAP::Parser::Aggregator">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/TAP::Parser::Aggregator">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/TAP::Parser::Aggregator">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/TAP::Parser::Aggregator">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/TAP::Parser::Aggregator">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/TAP::Parser::Aggregator">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/TAP::Parser::Aggregator">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/TAP::Parser::Aggregator">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/TAP::Parser::Aggregator">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/TAP::Parser::Aggregator">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/TAP::Parser::Aggregator">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/TAP::Parser::Aggregator">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/TAP::Parser::Aggregator">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/TAP::Parser::Aggregator">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/TAP::Parser::Aggregator">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/TAP::Parser::Aggregator">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/TAP::Parser::Aggregator">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/TAP::Parser::Aggregator">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/TAP::Parser::Aggregator">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/TAP::Parser::Aggregator">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/TAP::Parser::Aggregator">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/TAP::Parser::Aggregator">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/TAP::Parser::Aggregator">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/TAP::Parser::Aggregator">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/TAP::Parser::Aggregator">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/TAP::Parser::Aggregator">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/TAP::Parser::Aggregator">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/TAP::Parser::Aggregator">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/TAP::Parser::Aggregator">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/TAP::Parser::Aggregator">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/TAP::Parser::Aggregator">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/TAP::Parser::Aggregator">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/TAP::Parser::Aggregator">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/TAP::Parser::Aggregator">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/TAP::Parser::Aggregator">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./TAP::Parser::Aggregator.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/TAP::Parser::Aggregator">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/TAP::Parser::Aggregator">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/TAP::Parser::Aggregator">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/TAP::Parser::Aggregator">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/TAP::Parser::Aggregator">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/TAP::Parser::Aggregator">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/TAP::Parser::Aggregator">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/TAP::Parser::Aggregator">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/TAP::Parser::Aggregator">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/TAP::Parser::Aggregator">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/TAP::Parser::Aggregator">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/TAP::Parser::Aggregator">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/TAP::Parser::Aggregator">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/TAP::Parser::Aggregator">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/TAP::Parser::Aggregator">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/TAP::Parser::Aggregator">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/TAP::Parser::Aggregator">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/TAP::Parser::Aggregator">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/TAP::Parser::Aggregator">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/TAP::Parser::Aggregator">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/TAP::Parser::Aggregator">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/TAP::Parser::Aggregator">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/TAP::Parser::Aggregator">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/TAP::Parser::Aggregator">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/TAP::Parser::Aggregator">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/TAP::Parser::Aggregator">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/TAP::Parser::Aggregator">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/TAP::Parser::Aggregator">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/TAP::Parser::Aggregator">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/TAP::Parser::Aggregator">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/TAP::Parser::Aggregator">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/TAP::Parser::Aggregator">5.35.1</a>
+          <a class="dropdown-item active" href="./TAP::Parser::Aggregator.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./TAP::Parser::Aggregator.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./TAP::Parser::Aggregator.html">TAP::Parser::Aggregator</a>
+          <div id="more">
+            (<a href="./TAP::Parser::Aggregator.txt">source</a>,
+            <a href="https://metacpan.org/pod/TAP::Parser::Aggregator">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 3.43</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#VERSION">VERSION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#METHODS">METHODS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#Class-Methods">Class Methods</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#new">new</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#Instance-Methods">Instance Methods</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#add">add</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#parsers">parsers</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#descriptions">descriptions</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#start">start</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#stop">stop</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#elapsed">elapsed</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#elapsed_timestr">elapsed_timestr</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#all_passed">all_passed</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#get_status">get_status</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#Summary-methods">Summary methods</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#total">total</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#has_problems">has_problems</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#has_errors">has_errors</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#todo_failed">todo_failed</a>
+              </li>
+          </ul>
+
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./TAP::Parser::Aggregator.html#See-Also">See Also</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./TAP::Parser::Aggregator.html#NAME">#</a>NAME</h1>
+
+<p>TAP::Parser::Aggregator - Aggregate TAP::Parser results</p>
+
+<h1 id="VERSION"><a class="permalink" href="./TAP::Parser::Aggregator.html#VERSION">#</a>VERSION</h1>
+
+<p>Version 3.43</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./TAP::Parser::Aggregator.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use TAP::Parser::Aggregator;
+
+my $aggregate = TAP::Parser::Aggregator-&gt;new;
+$aggregate-&gt;add( &#39;t/00-load.t&#39;, $load_parser );
+$aggregate-&gt;add( &#39;t/10-lex.t&#39;,  $lex_parser  );
+
+my $summary = &lt;&lt;&#39;END_SUMMARY&#39;;
+Passed:  %s
+Failed:  %s
+Unexpectedly succeeded: %s
+END_SUMMARY
+printf $summary,
+       scalar $aggregate-&gt;passed,
+       scalar $aggregate-&gt;failed,
+       scalar $aggregate-&gt;todo_passed;</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./TAP::Parser::Aggregator.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p><code>TAP::Parser::Aggregator</code> collects parser objects and allows reporting/querying their aggregate results.</p>
+
+<h1 id="METHODS"><a class="permalink" href="./TAP::Parser::Aggregator.html#METHODS">#</a>METHODS</h1>
+
+<h2 id="Class-Methods"><a class="permalink" href="./TAP::Parser::Aggregator.html#Class-Methods">#</a><a id="Class"></a>Class Methods</h2>
+
+<h3 id="new"><a class="permalink" href="./TAP::Parser::Aggregator.html#new">#</a><code>new</code></h3>
+
+<pre><code>my $aggregate = TAP::Parser::Aggregator-&gt;new;</code></pre>
+
+<p>Returns a new <code>TAP::Parser::Aggregator</code> object.</p>
+
+<h2 id="Instance-Methods"><a class="permalink" href="./TAP::Parser::Aggregator.html#Instance-Methods">#</a><a id="Instance"></a>Instance Methods</h2>
+
+<h3 id="add"><a class="permalink" href="./TAP::Parser::Aggregator.html#add">#</a><code>add</code></h3>
+
+<pre><code>$aggregate-&gt;add( $description =&gt; $parser );</code></pre>
+
+<p>The <code>$description</code> is usually a test file name (but only by convention.) It is used as a unique identifier (see e.g. <a href="./TAP::Parser::Aggregator.html#parsers">&quot;parsers&quot;</a>.) Reusing a description is a fatal error.</p>
+
+<p>The <code>$parser</code> is a <a href="./TAP::Parser.html">TAP::Parser</a> object.</p>
+
+<h3 id="parsers"><a class="permalink" href="./TAP::Parser::Aggregator.html#parsers">#</a><code>parsers</code></h3>
+
+<pre><code>my $count   = $aggregate-&gt;parsers;
+my @parsers = $aggregate-&gt;parsers;
+my @parsers = $aggregate-&gt;parsers(@descriptions);</code></pre>
+
+<p>In scalar context without arguments, this method returns the number of parsers aggregated. In list context without arguments, returns the parsers in the order they were added.</p>
+
+<p>If <code>@descriptions</code> is given, these correspond to the keys used in each call to the add() method. Returns an array of the requested parsers (in the requested order) in list context or an array reference in scalar context.</p>
+
+<p>Requesting an unknown identifier is a fatal error.</p>
+
+<h3 id="descriptions"><a class="permalink" href="./TAP::Parser::Aggregator.html#descriptions">#</a><code>descriptions</code></h3>
+
+<p>Get an array of descriptions in the order in which they were added to the aggregator.</p>
+
+<h3 id="start"><a class="permalink" href="./TAP::Parser::Aggregator.html#start">#</a><code>start</code></h3>
+
+<p>Call <code>start</code> immediately before adding any results to the aggregator. Among other times it records the start time for the test run.</p>
+
+<h3 id="stop"><a class="permalink" href="./TAP::Parser::Aggregator.html#stop">#</a><code>stop</code></h3>
+
+<p>Call <code>stop</code> immediately after adding all test results to the aggregator.</p>
+
+<h3 id="elapsed"><a class="permalink" href="./TAP::Parser::Aggregator.html#elapsed">#</a><code>elapsed</code></h3>
+
+<p>Elapsed returns a <a href="Benchmark.html">Benchmark</a> object that represents the running time of the aggregated tests. In order for <code>elapsed</code> to be valid you must call <code>start</code> before running the tests and <code>stop</code> immediately afterwards.</p>
+
+<h3 id="elapsed_timestr"><a class="permalink" href="./TAP::Parser::Aggregator.html#elapsed_timestr">#</a><code>elapsed_timestr</code></h3>
+
+<p>Returns a formatted string representing the runtime returned by <code>elapsed()</code>. This lets the caller not worry about Benchmark.</p>
+
+<h3 id="all_passed"><a class="permalink" href="./TAP::Parser::Aggregator.html#all_passed">#</a><code>all_passed</code></h3>
+
+<p>Return true if all the tests passed and no parse errors were detected.</p>
+
+<h3 id="get_status"><a class="permalink" href="./TAP::Parser::Aggregator.html#get_status">#</a><code>get_status</code></h3>
+
+<p>Get a single word describing the status of the aggregated tests. Depending on the outcome of the tests returns &#39;PASS&#39;, &#39;FAIL&#39; or &#39;NOTESTS&#39;. This token is understood by <a href="./CPAN::Reporter.html">CPAN::Reporter</a>.</p>
+
+<h2 id="Summary-methods"><a class="permalink" href="./TAP::Parser::Aggregator.html#Summary-methods">#</a><a id="Summary"></a>Summary methods</h2>
+
+<p>Each of the following methods will return the total number of corresponding tests if called in scalar context. If called in list context, returns the descriptions of the parsers which contain the corresponding tests (see <code>add</code> for an explanation of description.</p>
+
+<ul>
+
+<li><p>failed</p>
+
+</li>
+<li><p>parse_errors</p>
+
+</li>
+<li><p>passed</p>
+
+</li>
+<li><p>planned</p>
+
+</li>
+<li><p>skipped</p>
+
+</li>
+<li><p>todo</p>
+
+</li>
+<li><p>todo_passed</p>
+
+</li>
+<li><p>wait</p>
+
+</li>
+<li><p>exit</p>
+
+</li>
+</ul>
+
+<p>For example, to find out how many tests unexpectedly succeeded (TODO tests which passed when they shouldn&#39;t):</p>
+
+<pre><code>my $count        = $aggregate-&gt;todo_passed;
+my @descriptions = $aggregate-&gt;todo_passed;</code></pre>
+
+<p>Note that <code>wait</code> and <code>exit</code> are the totals of the wait and exit statuses of each of the tests. These values are totalled only to provide a true value if any of them are non-zero.</p>
+
+<h3 id="total"><a class="permalink" href="./TAP::Parser::Aggregator.html#total">#</a><code>total</code></h3>
+
+<pre><code>my $tests_run = $aggregate-&gt;total;</code></pre>
+
+<p>Returns the total number of tests run.</p>
+
+<h3 id="has_problems"><a class="permalink" href="./TAP::Parser::Aggregator.html#has_problems">#</a><code>has_problems</code></h3>
+
+<pre><code>if ( $parser-&gt;has_problems ) {
+    ...
+}</code></pre>
+
+<p>Identical to <code>has_errors</code>, but also returns true if any TODO tests unexpectedly succeeded. This is more akin to &quot;warnings&quot;.</p>
+
+<h3 id="has_errors"><a class="permalink" href="./TAP::Parser::Aggregator.html#has_errors">#</a><code>has_errors</code></h3>
+
+<pre><code>if ( $parser-&gt;has_errors ) {
+    ...
+}</code></pre>
+
+<p>Returns true if <i>any</i> of the parsers failed. This includes:</p>
+
+<ul>
+
+<li><p>Failed tests</p>
+
+</li>
+<li><p>Parse errors</p>
+
+</li>
+<li><p>Bad exit or wait status</p>
+
+</li>
+</ul>
+
+<h3 id="todo_failed"><a class="permalink" href="./TAP::Parser::Aggregator.html#todo_failed">#</a><code>todo_failed</code></h3>
+
+<pre><code class="plaintext"># deprecated in favor of &#39;todo_passed&#39;.  This method was horribly misnamed.</code></pre>
+
+<p>This was a badly misnamed method. It indicates which TODO tests unexpectedly succeeded. Will now issue a warning and call <code>todo_passed</code>.</p>
+
+<h1 id="See-Also"><a class="permalink" href="./TAP::Parser::Aggregator.html#See-Also">#</a><a id="See"></a>See Also</h1>
+
+<p><a href="./TAP::Parser.html">TAP::Parser</a></p>
+
+<p><a href="./TAP::Harness.html">TAP::Harness</a></p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

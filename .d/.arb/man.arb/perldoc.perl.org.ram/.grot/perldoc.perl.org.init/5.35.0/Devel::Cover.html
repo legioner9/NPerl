@@ -1,0 +1,3122 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Devel::Cover - Code coverage metrics for Perl - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Devel-Cover - MetaCPAN" href="https://metacpan.org/dist/Devel-Cover/releases.rss" />
+        <link rel="canonical" href="./Devel::Cover.html" />
+        <meta name="description" content="Code coverage metrics for Perl" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Devel::Cover" />
+<meta name="twitter:title"       content="Devel::Cover" />
+<meta name="twitter:description" content="Code coverage metrics for Perl" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Devel::Cover.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Devel-Cover was released.">
+      <span class="relatize">30 Apr 2023 18:51:14 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Devel-Cover">Devel-Cover</a>
+  </li>
+  <li>
+    Module version: 1.40
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Devel-Cover/source/lib/Devel/Cover.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Devel-Cover/source/lib/Devel/Cover.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Devel-Cover/source/lib/Devel">Browse</a>
+    (<a href="https://metacpan.org/dist/Devel-Cover/source/lib/Devel?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Devel-Cover/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="http://www.pjcj.net/perl.html">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Devel-Cover/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/pjcj/Devel--Cover">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/pjcj/Devel--Cover/issues">Issues</a>
+      (100)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Devel-Cover+1.40" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-Cover.html?oncpan=1&amp;distmat=1&amp;version=1.40&amp;grade=2" style="color: #090">1429</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-Cover.html?oncpan=1&amp;distmat=1&amp;version=1.40&amp;grade=3" style="color: #900">16</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-Cover.html?oncpan=1&amp;distmat=1&amp;version=1.40&amp;grade=4">3</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/PJCJ/Devel-Cover-1.40">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Devel-Cover who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Devel-Cover-1.40/index.html">% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.10.0
+    </li>
+    <li class="chat-banner">
+      <div><a rel="noopener nofollow" target="_blank" href="https://kiwiirc.com/nextclient/#irc://irc.perl.org/#perl-qa?nick=mc-guest-?">Chat with us!</a></div>
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Devel-Cover/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/P/PJ/PJCJ/Devel-Cover-1.40.tar.gz">
+      Download (<span itemprop="fileSize">204.34KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FPJCJ%2FDevel-Cover-1.40%2Flib%2FDevel%2FCover.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-Cover/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-Cover/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Devel-Cover">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Devel-Cover">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Devel/Cover.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="PJCJ/Devel-Cover-1.40"
+>1.40
+  (PJCJ on 2023-04-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.39"
+>1.39
+  (PJCJ on 2023-04-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.38"
+>1.38
+  (PJCJ on 2022-06-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.37"
+>1.37
+  (PJCJ on 2022-06-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.36"
+>1.36
+  (PJCJ on 2020-05-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.35"
+>1.35
+  (PJCJ on 2020-05-17)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="PJCJ/Devel-Cover-1.34"
+>1.34
+  (PJCJ on 2020-05-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.33"
+>1.33
+  (PJCJ on 2019-04-26)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.32"
+>1.32
+  (PJCJ on 2019-04-25)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.31"
+>1.31
+  (PJCJ on 2018-09-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.30"
+>1.30
+  (PJCJ on 2018-07-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.29"
+>1.29
+  (PJCJ on 2017-10-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.28"
+>1.28
+  (PJCJ on 2017-10-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.27"
+>1.27
+  (PJCJ on 2017-09-20)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.26"
+>1.26
+  (PJCJ on 2017-07-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.25"
+>1.25
+  (PJCJ on 2017-05-11)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.24"
+>1.24
+  (PJCJ on 2017-04-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.23"
+>1.23
+  (PJCJ on 2016-04-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.22"
+>1.22
+  (PJCJ on 2016-04-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.21"
+>1.21
+  (PJCJ on 2015-09-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.20"
+>1.20
+  (PJCJ on 2015-07-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.19"
+>1.19
+  (PJCJ on 2015-07-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.18"
+>1.18
+  (PJCJ on 2015-04-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.17"
+>1.17
+  (PJCJ on 2014-09-20)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.16"
+>1.16
+  (PJCJ on 2014-08-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.15"
+>1.15
+  (PJCJ on 2014-05-31)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.14"
+>1.14
+  (PJCJ on 2014-05-02)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.13"
+>1.13
+  (PJCJ on 2014-04-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.12"
+>1.12
+  (PJCJ on 2014-04-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.11"
+>1.11
+  (PJCJ on 2014-04-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.10"
+>1.10
+  (PJCJ on 2014-04-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.09"
+>1.09
+  (PJCJ on 2014-03-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.08"
+>1.08
+  (PJCJ on 2013-08-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.07"
+>1.07
+  (PJCJ on 2013-08-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.06"
+>1.06
+  (PJCJ on 2013-07-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.05"
+>1.05
+  (PJCJ on 2013-07-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.04"
+>1.04
+  (PJCJ on 2013-06-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.03"
+>1.03
+  (PJCJ on 2013-05-20)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.02"
+>1.02
+  (PJCJ on 2013-04-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.01"
+>1.01
+  (PJCJ on 2013-03-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.00"
+>1.00
+  (PJCJ on 2013-02-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.99"
+>0.99
+  (PJCJ on 2012-12-31)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.98"
+>0.98
+  (PJCJ on 2012-11-25)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.97"
+>0.97
+  (PJCJ on 2012-11-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.96"
+>0.96
+  (PJCJ on 2012-09-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.95"
+>0.95
+  (PJCJ on 2012-09-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.94"
+>0.94
+  (PJCJ on 2012-09-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.93"
+>0.93
+  (PJCJ on 2012-08-04)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.92"
+>0.92
+  (PJCJ on 2012-07-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.91"
+>0.91
+  (PJCJ on 2012-07-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.90"
+>0.90
+  (PJCJ on 2012-07-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.89"
+>0.89
+  (PJCJ on 2012-06-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.88"
+>0.88
+  (PJCJ on 2012-06-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.87"
+>0.87
+  (PJCJ on 2012-05-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.86"
+>0.86
+  (PJCJ on 2012-04-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.85"
+>0.85
+  (PJCJ on 2012-04-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.84"
+>0.84
+  (PJCJ on 2012-03-31)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.83"
+>0.83
+  (PJCJ on 2012-03-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.82"
+>0.82
+  (PJCJ on 2012-03-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.81"
+>0.81
+  (PJCJ on 2012-03-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.80"
+>0.80
+  (PJCJ on 2012-03-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.79"
+>0.79
+  (PJCJ on 2011-08-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.78"
+>0.78
+  (PJCJ on 2011-05-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.77"
+>0.77
+  (PJCJ on 2011-05-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.76"
+>0.76
+  (PJCJ on 2011-04-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.75"
+>0.75
+  (PJCJ on 2011-04-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.74"
+>0.74
+  (PJCJ on 2011-04-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.73"
+>0.73
+  (PJCJ on 2010-10-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.72"
+>0.72
+  (PJCJ on 2010-09-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.71"
+>0.71
+  (PJCJ on 2010-09-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.70"
+>0.70
+  (PJCJ on 2010-08-29)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.69"
+>0.69
+  (PJCJ on 2010-08-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.68"
+>0.68
+  (PJCJ on 2010-08-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.67"
+>0.67
+  (PJCJ on 2010-05-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.66"
+>0.66
+  (PJCJ on 2010-04-12)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.65"
+>0.65
+  (PJCJ on 2009-08-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.64"
+>0.64
+  (PJCJ on 2008-04-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.63"
+>0.63
+  (PJCJ on 2007-11-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.62"
+>0.62
+  (PJCJ on 2007-11-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.61"
+>0.61
+  (PJCJ on 2007-01-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.60"
+>0.60
+  (PJCJ on 2007-01-02)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.59"
+>0.59
+  (PJCJ on 2006-08-23)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.58"
+>0.58
+  (PJCJ on 2006-08-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.57"
+>0.57
+  (PJCJ on 2006-08-03)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.56"
+>0.56
+  (PJCJ on 2006-08-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.55"
+>0.55
+  (PJCJ on 2005-09-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.54"
+>0.54
+  (PJCJ on 2005-09-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.53"
+>0.53
+  (PJCJ on 2005-04-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.52"
+>0.52
+  (PJCJ on 2004-12-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.51"
+>0.51
+  (PJCJ on 2004-11-29)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.50"
+>0.50
+  (PJCJ on 2004-10-25)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.49"
+>0.49
+  (PJCJ on 2004-10-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.48"
+>0.48
+  (PJCJ on 2004-10-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.47"
+>0.47
+  (PJCJ on 2004-06-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.46"
+>0.46
+  (PJCJ on 2004-06-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.45"
+>0.45
+  (PJCJ on 2004-05-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.44"
+>0.44
+  (PJCJ on 2004-05-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.43"
+>0.43
+  (PJCJ on 2004-05-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.42"
+>0.42
+  (PJCJ on 2004-04-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.41"
+>0.41
+  (PJCJ on 2004-04-29)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.40"
+>0.40
+  (PJCJ on 2004-03-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.39"
+>0.39
+  (PJCJ on 2004-03-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.38"
+>0.38
+  (PJCJ on 2004-03-11)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.37"
+>0.37
+  (PJCJ on 2004-03-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.36"
+>0.36
+  (PJCJ on 2004-03-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.35"
+>0.35
+  (PJCJ on 2004-03-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.34"
+>0.34
+  (PJCJ on 2004-01-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.33"
+>0.33
+  (PJCJ on 2004-01-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.32"
+>0.32
+  (PJCJ on 2004-01-04)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.31"
+>0.31
+  (PJCJ on 2003-12-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.30"
+>0.30
+  (PJCJ on 2003-12-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.29"
+>0.29
+  (PJCJ on 2003-12-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.28"
+>0.28
+  (PJCJ on 2003-12-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.27"
+>0.27
+  (PJCJ on 2003-11-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.26"
+>0.26
+  (PJCJ on 2003-10-11)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.25"
+>0.25
+  (PJCJ on 2003-10-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.24"
+>0.24
+  (PJCJ on 2003-10-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.23"
+>0.23
+  (PJCJ on 2003-09-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.22"
+>0.22
+  (PJCJ on 2003-09-02)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.21"
+>0.21
+  (PJCJ on 2003-09-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.20"
+>0.20
+  (PJCJ on 2002-10-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.19"
+>0.19
+  (PJCJ on 2002-09-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.18"
+>0.18
+  (PJCJ on 2002-09-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.17"
+>0.17
+  (PJCJ on 2002-09-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.16"
+>0.16
+  (PJCJ on 2002-09-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.15"
+>0.15
+  (PJCJ on 2002-09-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.14"
+>0.14
+  (PJCJ on 2002-03-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.13"
+>0.13
+  (PJCJ on 2001-10-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.12"
+>0.12
+  (PJCJ on 2001-10-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.11"
+>0.11
+  (PJCJ on 2001-09-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.10"
+>0.10
+  (PJCJ on 2001-08-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.09"
+>0.09
+  (PJCJ on 2001-08-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.07"
+>0.07
+  (PJCJ on 2001-08-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.06"
+>0.06
+  (PJCJ on 2001-08-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.05"
+>0.05
+  (PJCJ on 2001-08-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.04"
+>0.04
+  (PJCJ on 2001-05-13)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/PJCJ/Devel-Cover-1.40/diff/' + encodeURIComponent(this.value) + '/lib/Devel/Cover.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="PJCJ/Devel-Cover-1.40"
+>1.40
+  (PJCJ on 2023-04-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.39"
+>1.39
+  (PJCJ on 2023-04-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.38"
+>1.38
+  (PJCJ on 2022-06-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.37"
+>1.37
+  (PJCJ on 2022-06-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.36"
+>1.36
+  (PJCJ on 2020-05-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.35"
+>1.35
+  (PJCJ on 2020-05-17)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="PJCJ/Devel-Cover-1.34"
+>1.34
+  (PJCJ on 2020-05-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.33"
+>1.33
+  (PJCJ on 2019-04-26)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.32"
+>1.32
+  (PJCJ on 2019-04-25)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.31"
+>1.31
+  (PJCJ on 2018-09-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.30"
+>1.30
+  (PJCJ on 2018-07-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.29"
+>1.29
+  (PJCJ on 2017-10-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.28"
+>1.28
+  (PJCJ on 2017-10-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.27"
+>1.27
+  (PJCJ on 2017-09-20)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.26"
+>1.26
+  (PJCJ on 2017-07-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.25"
+>1.25
+  (PJCJ on 2017-05-11)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.24"
+>1.24
+  (PJCJ on 2017-04-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.23"
+>1.23
+  (PJCJ on 2016-04-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.22"
+>1.22
+  (PJCJ on 2016-04-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.21"
+>1.21
+  (PJCJ on 2015-09-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.20"
+>1.20
+  (PJCJ on 2015-07-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.19"
+>1.19
+  (PJCJ on 2015-07-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.18"
+>1.18
+  (PJCJ on 2015-04-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.17"
+>1.17
+  (PJCJ on 2014-09-20)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.16"
+>1.16
+  (PJCJ on 2014-08-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.15"
+>1.15
+  (PJCJ on 2014-05-31)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.14"
+>1.14
+  (PJCJ on 2014-05-02)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.13"
+>1.13
+  (PJCJ on 2014-04-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.12"
+>1.12
+  (PJCJ on 2014-04-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.11"
+>1.11
+  (PJCJ on 2014-04-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.10"
+>1.10
+  (PJCJ on 2014-04-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.09"
+>1.09
+  (PJCJ on 2014-03-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.08"
+>1.08
+  (PJCJ on 2013-08-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.07"
+>1.07
+  (PJCJ on 2013-08-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.06"
+>1.06
+  (PJCJ on 2013-07-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.05"
+>1.05
+  (PJCJ on 2013-07-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.04"
+>1.04
+  (PJCJ on 2013-06-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.03"
+>1.03
+  (PJCJ on 2013-05-20)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.02"
+>1.02
+  (PJCJ on 2013-04-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.01"
+>1.01
+  (PJCJ on 2013-03-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.00"
+>1.00
+  (PJCJ on 2013-02-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.99"
+>0.99
+  (PJCJ on 2012-12-31)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.98"
+>0.98
+  (PJCJ on 2012-11-25)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.97"
+>0.97
+  (PJCJ on 2012-11-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.96"
+>0.96
+  (PJCJ on 2012-09-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.95"
+>0.95
+  (PJCJ on 2012-09-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.94"
+>0.94
+  (PJCJ on 2012-09-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.93"
+>0.93
+  (PJCJ on 2012-08-04)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.92"
+>0.92
+  (PJCJ on 2012-07-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.91"
+>0.91
+  (PJCJ on 2012-07-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.90"
+>0.90
+  (PJCJ on 2012-07-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.89"
+>0.89
+  (PJCJ on 2012-06-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.88"
+>0.88
+  (PJCJ on 2012-06-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.87"
+>0.87
+  (PJCJ on 2012-05-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.86"
+>0.86
+  (PJCJ on 2012-04-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.85"
+>0.85
+  (PJCJ on 2012-04-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.84"
+>0.84
+  (PJCJ on 2012-03-31)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.83"
+>0.83
+  (PJCJ on 2012-03-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.82"
+>0.82
+  (PJCJ on 2012-03-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.81"
+>0.81
+  (PJCJ on 2012-03-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.80"
+>0.80
+  (PJCJ on 2012-03-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.79"
+>0.79
+  (PJCJ on 2011-08-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.78"
+>0.78
+  (PJCJ on 2011-05-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.77"
+>0.77
+  (PJCJ on 2011-05-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.76"
+>0.76
+  (PJCJ on 2011-04-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.75"
+>0.75
+  (PJCJ on 2011-04-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.74"
+>0.74
+  (PJCJ on 2011-04-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.73"
+>0.73
+  (PJCJ on 2010-10-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.72"
+>0.72
+  (PJCJ on 2010-09-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.71"
+>0.71
+  (PJCJ on 2010-09-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.70"
+>0.70
+  (PJCJ on 2010-08-29)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.69"
+>0.69
+  (PJCJ on 2010-08-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.68"
+>0.68
+  (PJCJ on 2010-08-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.67"
+>0.67
+  (PJCJ on 2010-05-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.66"
+>0.66
+  (PJCJ on 2010-04-12)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.65"
+>0.65
+  (PJCJ on 2009-08-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.64"
+>0.64
+  (PJCJ on 2008-04-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.63"
+>0.63
+  (PJCJ on 2007-11-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.62"
+>0.62
+  (PJCJ on 2007-11-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.61"
+>0.61
+  (PJCJ on 2007-01-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.60"
+>0.60
+  (PJCJ on 2007-01-02)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.59"
+>0.59
+  (PJCJ on 2006-08-23)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.58"
+>0.58
+  (PJCJ on 2006-08-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.57"
+>0.57
+  (PJCJ on 2006-08-03)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.56"
+>0.56
+  (PJCJ on 2006-08-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.55"
+>0.55
+  (PJCJ on 2005-09-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.54"
+>0.54
+  (PJCJ on 2005-09-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.53"
+>0.53
+  (PJCJ on 2005-04-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.52"
+>0.52
+  (PJCJ on 2004-12-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.51"
+>0.51
+  (PJCJ on 2004-11-29)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.50"
+>0.50
+  (PJCJ on 2004-10-25)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.49"
+>0.49
+  (PJCJ on 2004-10-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.48"
+>0.48
+  (PJCJ on 2004-10-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.47"
+>0.47
+  (PJCJ on 2004-06-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.46"
+>0.46
+  (PJCJ on 2004-06-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.45"
+>0.45
+  (PJCJ on 2004-05-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.44"
+>0.44
+  (PJCJ on 2004-05-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.43"
+>0.43
+  (PJCJ on 2004-05-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.42"
+>0.42
+  (PJCJ on 2004-04-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.41"
+>0.41
+  (PJCJ on 2004-04-29)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.40"
+>0.40
+  (PJCJ on 2004-03-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.39"
+>0.39
+  (PJCJ on 2004-03-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.38"
+>0.38
+  (PJCJ on 2004-03-11)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.37"
+>0.37
+  (PJCJ on 2004-03-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.36"
+>0.36
+  (PJCJ on 2004-03-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.35"
+>0.35
+  (PJCJ on 2004-03-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.34"
+>0.34
+  (PJCJ on 2004-01-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.33"
+>0.33
+  (PJCJ on 2004-01-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.32"
+>0.32
+  (PJCJ on 2004-01-04)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.31"
+>0.31
+  (PJCJ on 2003-12-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.30"
+>0.30
+  (PJCJ on 2003-12-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.29"
+>0.29
+  (PJCJ on 2003-12-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.28"
+>0.28
+  (PJCJ on 2003-12-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.27"
+>0.27
+  (PJCJ on 2003-11-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.26"
+>0.26
+  (PJCJ on 2003-10-11)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.25"
+>0.25
+  (PJCJ on 2003-10-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.24"
+>0.24
+  (PJCJ on 2003-10-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.23"
+>0.23
+  (PJCJ on 2003-09-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.22"
+>0.22
+  (PJCJ on 2003-09-02)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.21"
+>0.21
+  (PJCJ on 2003-09-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.20"
+>0.20
+  (PJCJ on 2002-10-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.19"
+>0.19
+  (PJCJ on 2002-09-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.18"
+>0.18
+  (PJCJ on 2002-09-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.17"
+>0.17
+  (PJCJ on 2002-09-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.16"
+>0.16
+  (PJCJ on 2002-09-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.15"
+>0.15
+  (PJCJ on 2002-09-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.14"
+>0.14
+  (PJCJ on 2002-03-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.13"
+>0.13
+  (PJCJ on 2001-10-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.12"
+>0.12
+  (PJCJ on 2001-10-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.11"
+>0.11
+  (PJCJ on 2001-09-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.10"
+>0.10
+  (PJCJ on 2001-08-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.09"
+>0.09
+  (PJCJ on 2001-08-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.07"
+>0.07
+  (PJCJ on 2001-08-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.06"
+>0.06
+  (PJCJ on 2001-08-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.05"
+>0.05
+  (PJCJ on 2001-08-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.04"
+>0.04
+  (PJCJ on 2001-05-13)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Digest::MD5" title="Digest::MD5" class="ellipsis">Digest::MD5</a></li>
+  <li><a href="./HTML::Entities.html" title="HTML::Entities" class="ellipsis">HTML::Entities</a></li>
+  <li><a href="https://metacpan.org/pod/Storable" title="Storable" class="ellipsis">Storable</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Devel::Cover/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Devel%3A%3ACover">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Devel-Cover">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/PJCJ/Devel-Cover-1.40/view/lib/Devel/Cover.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Devel::Cover.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/ZOFFIX"><img src="https://www.gravatar.com/avatar/627d83ef9879f31bdabf448e666a32d5?d=identicon&amp;s=20" title="ZOFFIX" alt="ZOFFIX"></a>
+<a class="display-all" href="https://metacpan.org/author/OALDERS"><img src="https://www.gravatar.com/avatar/7a66ba9f5f4af93dd55fcdc0e69c0b55?d=identicon&amp;s=20" title="OALDERS" alt="OALDERS"></a>
+<a class="display-all" href="https://metacpan.org/author/DANAJ"><img src="https://www.gravatar.com/avatar/4a4266026e031466b19413bd15f805e7?d=identicon&amp;s=20" title="DANAJ" alt="DANAJ"></a>
+<a class="display-all" href="https://metacpan.org/author/WOLFSAGE"><img src="https://www.gravatar.com/avatar/996902078ecbae850d46746731471282?d=identicon&amp;s=20" title="WOLFSAGE" alt="WOLFSAGE"></a>
+<a class="display-all" href="https://metacpan.org/author/BESSARABV"><img src="https://www.gravatar.com/avatar/f848f8b82e51b7a88ca22562639a814b?d=identicon&amp;s=20" title="BESSARABV" alt="BESSARABV"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Devel-Cover/plussers">69 PAUSE users</a>
+</div>
+<div>
+    32 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/PJCJ" class="author-name">Paul Johnson</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Devel/Cover.pm&#39;" class="">
+<option
+  selected
+  value="PJCJ/Devel-Cover-1.40"
+>1.40
+  (PJCJ on 2023-04-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.39"
+>1.39
+  (PJCJ on 2023-04-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.38"
+>1.38
+  (PJCJ on 2022-06-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.37"
+>1.37
+  (PJCJ on 2022-06-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.36"
+>1.36
+  (PJCJ on 2020-05-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.35"
+>1.35
+  (PJCJ on 2020-05-17)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="PJCJ/Devel-Cover-1.34"
+>1.34
+  (PJCJ on 2020-05-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.33"
+>1.33
+  (PJCJ on 2019-04-26)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.32"
+>1.32
+  (PJCJ on 2019-04-25)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.31"
+>1.31
+  (PJCJ on 2018-09-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.30"
+>1.30
+  (PJCJ on 2018-07-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.29"
+>1.29
+  (PJCJ on 2017-10-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.28"
+>1.28
+  (PJCJ on 2017-10-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.27"
+>1.27
+  (PJCJ on 2017-09-20)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.26"
+>1.26
+  (PJCJ on 2017-07-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.25"
+>1.25
+  (PJCJ on 2017-05-11)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.24"
+>1.24
+  (PJCJ on 2017-04-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.23"
+>1.23
+  (PJCJ on 2016-04-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.22"
+>1.22
+  (PJCJ on 2016-04-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.21"
+>1.21
+  (PJCJ on 2015-09-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.20"
+>1.20
+  (PJCJ on 2015-07-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.19"
+>1.19
+  (PJCJ on 2015-07-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.18"
+>1.18
+  (PJCJ on 2015-04-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.17"
+>1.17
+  (PJCJ on 2014-09-20)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.16"
+>1.16
+  (PJCJ on 2014-08-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.15"
+>1.15
+  (PJCJ on 2014-05-31)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.14"
+>1.14
+  (PJCJ on 2014-05-02)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.13"
+>1.13
+  (PJCJ on 2014-04-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.12"
+>1.12
+  (PJCJ on 2014-04-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.11"
+>1.11
+  (PJCJ on 2014-04-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.10"
+>1.10
+  (PJCJ on 2014-04-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.09"
+>1.09
+  (PJCJ on 2014-03-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.08"
+>1.08
+  (PJCJ on 2013-08-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.07"
+>1.07
+  (PJCJ on 2013-08-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.06"
+>1.06
+  (PJCJ on 2013-07-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.05"
+>1.05
+  (PJCJ on 2013-07-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.04"
+>1.04
+  (PJCJ on 2013-06-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.03"
+>1.03
+  (PJCJ on 2013-05-20)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.02"
+>1.02
+  (PJCJ on 2013-04-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.01"
+>1.01
+  (PJCJ on 2013-03-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-1.00"
+>1.00
+  (PJCJ on 2013-02-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.99"
+>0.99
+  (PJCJ on 2012-12-31)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.98"
+>0.98
+  (PJCJ on 2012-11-25)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.97"
+>0.97
+  (PJCJ on 2012-11-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.96"
+>0.96
+  (PJCJ on 2012-09-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.95"
+>0.95
+  (PJCJ on 2012-09-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.94"
+>0.94
+  (PJCJ on 2012-09-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.93"
+>0.93
+  (PJCJ on 2012-08-04)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.92"
+>0.92
+  (PJCJ on 2012-07-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.91"
+>0.91
+  (PJCJ on 2012-07-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.90"
+>0.90
+  (PJCJ on 2012-07-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.89"
+>0.89
+  (PJCJ on 2012-06-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.88"
+>0.88
+  (PJCJ on 2012-06-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.87"
+>0.87
+  (PJCJ on 2012-05-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.86"
+>0.86
+  (PJCJ on 2012-04-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.85"
+>0.85
+  (PJCJ on 2012-04-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.84"
+>0.84
+  (PJCJ on 2012-03-31)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.83"
+>0.83
+  (PJCJ on 2012-03-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.82"
+>0.82
+  (PJCJ on 2012-03-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.81"
+>0.81
+  (PJCJ on 2012-03-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.80"
+>0.80
+  (PJCJ on 2012-03-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.79"
+>0.79
+  (PJCJ on 2011-08-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.78"
+>0.78
+  (PJCJ on 2011-05-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.77"
+>0.77
+  (PJCJ on 2011-05-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.76"
+>0.76
+  (PJCJ on 2011-04-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.75"
+>0.75
+  (PJCJ on 2011-04-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.74"
+>0.74
+  (PJCJ on 2011-04-16)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.73"
+>0.73
+  (PJCJ on 2010-10-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.72"
+>0.72
+  (PJCJ on 2010-09-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.71"
+>0.71
+  (PJCJ on 2010-09-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.70"
+>0.70
+  (PJCJ on 2010-08-29)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.69"
+>0.69
+  (PJCJ on 2010-08-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.68"
+>0.68
+  (PJCJ on 2010-08-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.67"
+>0.67
+  (PJCJ on 2010-05-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.66"
+>0.66
+  (PJCJ on 2010-04-12)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.65"
+>0.65
+  (PJCJ on 2009-08-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.64"
+>0.64
+  (PJCJ on 2008-04-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.63"
+>0.63
+  (PJCJ on 2007-11-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.62"
+>0.62
+  (PJCJ on 2007-11-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.61"
+>0.61
+  (PJCJ on 2007-01-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.60"
+>0.60
+  (PJCJ on 2007-01-02)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.59"
+>0.59
+  (PJCJ on 2006-08-23)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.58"
+>0.58
+  (PJCJ on 2006-08-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.57"
+>0.57
+  (PJCJ on 2006-08-03)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.56"
+>0.56
+  (PJCJ on 2006-08-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.55"
+>0.55
+  (PJCJ on 2005-09-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.54"
+>0.54
+  (PJCJ on 2005-09-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.53"
+>0.53
+  (PJCJ on 2005-04-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.52"
+>0.52
+  (PJCJ on 2004-12-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.51"
+>0.51
+  (PJCJ on 2004-11-29)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.50"
+>0.50
+  (PJCJ on 2004-10-25)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.49"
+>0.49
+  (PJCJ on 2004-10-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.48"
+>0.48
+  (PJCJ on 2004-10-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.47"
+>0.47
+  (PJCJ on 2004-06-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.46"
+>0.46
+  (PJCJ on 2004-06-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.45"
+>0.45
+  (PJCJ on 2004-05-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.44"
+>0.44
+  (PJCJ on 2004-05-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.43"
+>0.43
+  (PJCJ on 2004-05-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.42"
+>0.42
+  (PJCJ on 2004-04-30)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.41"
+>0.41
+  (PJCJ on 2004-04-29)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.40"
+>0.40
+  (PJCJ on 2004-03-24)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.39"
+>0.39
+  (PJCJ on 2004-03-21)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.38"
+>0.38
+  (PJCJ on 2004-03-11)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.37"
+>0.37
+  (PJCJ on 2004-03-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.36"
+>0.36
+  (PJCJ on 2004-03-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.35"
+>0.35
+  (PJCJ on 2004-03-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.34"
+>0.34
+  (PJCJ on 2004-01-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.33"
+>0.33
+  (PJCJ on 2004-01-13)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.32"
+>0.32
+  (PJCJ on 2004-01-04)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.31"
+>0.31
+  (PJCJ on 2003-12-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.30"
+>0.30
+  (PJCJ on 2003-12-22)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.29"
+>0.29
+  (PJCJ on 2003-12-19)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.28"
+>0.28
+  (PJCJ on 2003-12-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.27"
+>0.27
+  (PJCJ on 2003-11-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.26"
+>0.26
+  (PJCJ on 2003-10-11)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.25"
+>0.25
+  (PJCJ on 2003-10-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.24"
+>0.24
+  (PJCJ on 2003-10-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.23"
+>0.23
+  (PJCJ on 2003-09-06)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.22"
+>0.22
+  (PJCJ on 2003-09-02)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.21"
+>0.21
+  (PJCJ on 2003-09-01)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.20"
+>0.20
+  (PJCJ on 2002-10-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.19"
+>0.19
+  (PJCJ on 2002-09-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.18"
+>0.18
+  (PJCJ on 2002-09-28)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.17"
+>0.17
+  (PJCJ on 2002-09-15)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.16"
+>0.16
+  (PJCJ on 2002-09-09)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.15"
+>0.15
+  (PJCJ on 2002-09-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.14"
+>0.14
+  (PJCJ on 2002-03-05)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.13"
+>0.13
+  (PJCJ on 2001-10-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.12"
+>0.12
+  (PJCJ on 2001-10-14)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.11"
+>0.11
+  (PJCJ on 2001-09-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.10"
+>0.10
+  (PJCJ on 2001-08-27)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.09"
+>0.09
+  (PJCJ on 2001-08-18)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.07"
+>0.07
+  (PJCJ on 2001-08-17)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.06"
+>0.06
+  (PJCJ on 2001-08-10)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.05"
+>0.05
+  (PJCJ on 2001-08-08)</option>
+<option
+  
+  value="PJCJ/Devel-Cover-0.04"
+>0.04
+  (PJCJ on 2001-05-13)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Devel-Cover">Devel-Cover-1.40</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 61 direct dependents &#10;          • 117 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Devel-Cover-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Devel-Cover-1.40">
+    <input type="hidden" name="author" value="PJCJ">
+    <input type="hidden" name="distribution" value="Devel-Cover">
+    <button type="submit" class="favorite highlight"><span>101</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Devel::Cover.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>101</span> ++</a>
+</div>
+   / <span>Devel::Cover</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Devel::Cover.html#NAME">NAME</a></li>
+  <li><a href="./Devel::Cover.html#VERSION">VERSION</a></li>
+  <li><a href="./Devel::Cover.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Devel::Cover.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Devel::Cover.html#REQUIREMENTS-AND-RECOMMENDED-MODULES">REQUIREMENTS AND RECOMMENDED MODULES</a>
+    <ul>
+      <li><a href="./Devel::Cover.html#REQUIREMENTS1">REQUIREMENTS</a></li>
+      <li><a href="./Devel::Cover.html#OPTIONAL-MODULES">OPTIONAL MODULES</a></li>
+      <li><a href="./Devel::Cover.html#Use-with-mod_perl">Use with mod_perl</a></li>
+    </ul>
+  </li>
+  <li><a href="./Devel::Cover.html#OPTIONS">OPTIONS</a>
+    <ul>
+      <li><a href="./Devel::Cover.html#More-on-Coverage-Options">More on Coverage Options</a></li>
+    </ul>
+  </li>
+  <li><a href="./Devel::Cover.html#SELECTING-FILES-TO-COVER">SELECTING FILES TO COVER</a></li>
+  <li><a href="./Devel::Cover.html#UNCOVERABLE-CRITERIA">UNCOVERABLE CRITERIA</a>
+    <ul>
+      <li><a href="./Devel::Cover.html#Invasive-specification">Invasive specification</a>
+        <ul>
+          <li><a href="./Devel::Cover.html#Statements">Statements</a></li>
+          <li><a href="./Devel::Cover.html#Branches">Branches</a></li>
+          <li><a href="./Devel::Cover.html#Conditions">Conditions</a></li>
+          <li><a href="./Devel::Cover.html#Subroutines">Subroutines</a></li>
+        </ul>
+      </li>
+      <li><a href="./Devel::Cover.html#Non-invasive-specification">Non-invasive specification</a></li>
+    </ul>
+  </li>
+  <li><a href="./Devel::Cover.html#ENVIRONMENT">ENVIRONMENT</a>
+    <ul>
+      <li><a href="./Devel::Cover.html#User-variables">User variables</a></li>
+      <li><a href="./Devel::Cover.html#Developer-variables">Developer variables</a></li>
+    </ul>
+  </li>
+  <li><a href="./Devel::Cover.html#ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</a></li>
+  <li><a href="./Devel::Cover.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Devel::Cover.html#LIMITATIONS">LIMITATIONS</a>
+    <ul>
+      <li><a href="./Devel::Cover.html#Absence-of-shared-dependencies">Absence of shared dependencies</a></li>
+      <li><a href="./Devel::Cover.html#Redefined-subroutines">Redefined subroutines</a></li>
+    </ul>
+  </li>
+  <li><a href="./Devel::Cover.html#BUGS">BUGS</a></li>
+  <li><a href="./Devel::Cover.html#LICENCE">LICENCE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Devel::Cover - Code coverage metrics for Perl</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>version 1.40</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p>To get coverage for an uninstalled module:</p>
+
+<pre><code> cover -test</code></pre>
+
+<p>or</p>
+
+<pre><code> cover -delete
+ HARNESS_PERL_SWITCHES=-MDevel::Cover make test
+ cover</code></pre>
+
+<p>or if you are using dzil (Dist::Zilla) and have installed <a href="https://metacpan.org/pod/Dist::Zilla::App::Command::cover">Dist::Zilla::App::Command::cover</a>:</p>
+
+<pre><code> dzil cover</code></pre>
+
+<p>To get coverage for an uninstalled module which uses <a href="./Module::Build.html">Module::Build</a> (0.26 or later):</p>
+
+<pre><code> ./Build testcover</code></pre>
+
+<p>If the module does not use the t/*.t framework:</p>
+
+<pre><code> PERL5OPT=-MDevel::Cover make test</code></pre>
+
+<p>If you want to get coverage for a program:</p>
+
+<pre><code> perl -MDevel::Cover yourprog args
+ cover</code></pre>
+
+<p>To alter default values:</p>
+
+<pre><code> perl -MDevel::Cover=-db,cover_db,-coverage,statement,time yourprog args</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module provides code coverage metrics for Perl. Code coverage metrics describe how thoroughly tests exercise code. By using Devel::Cover you can discover areas of code not exercised by your tests and determine which tests to create to increase coverage. Code coverage can be considered an indirect measure of quality.</p>
+
+<p>Devel::Cover is now quite stable and provides many of the features to be expected in a useful coverage tool.</p>
+
+<p>Statement, branch, condition, subroutine, and pod coverage information is reported. Statement and subroutine coverage data should be accurate. Branch and condition coverage data should be mostly accurate too, although not always what one might initially expect. Pod coverage comes from <a href="./Pod::Coverage.html">Pod::Coverage</a>. If <a href="https://metacpan.org/pod/Pod::Coverage::CountParents">Pod::Coverage::CountParents</a> is available it will be used instead.</p>
+
+<p>The <i>cover</i> program can be used to generate coverage reports. Devel::Cover ships with a number of reports including various types of HTML output, textual reports, a report to display missing coverage in the same format as compilation errors and a report to display coverage information within the Vim editor.</p>
+
+<p>It is possible to add annotations to reports, for example you can add a column to an HTML report showing who last changed a line, as determined by git blame. Some annotation modules are shipped with Devel::Cover and you can easily create your own.</p>
+
+<p>The <i>gcov2perl</i> program can be used to convert gcov files to <code>Devel::Cover</code> databases. This allows you to display your C or XS code coverage together with your Perl coverage, or to use any of the Devel::Cover reports to display your C coverage data.</p>
+
+<p>Code coverage data are collected by replacing perl ops with functions which count how many times the ops are executed. These data are then mapped back to reality using the B compiler modules. There is also a statement profiling facility which should not be relied on. For proper profiling use <a href="./Devel::NYTProf.html">Devel::NYTProf</a>. Previous versions of Devel::Cover collected coverage data by replacing perl&#39;s runops function. It is still possible to switch to that mode of operation, but this now gets little testing and will probably be removed soon. You probably don&#39;t care about any of this.</p>
+
+<p>The most appropriate mailing list on which to discuss this module would be perl-qa. See <a href="http://lists.perl.org/list/perl-qa.html">http://lists.perl.org/list/perl-qa.html</a>.</p>
+
+<p>The Devel::Cover repository can be found at <a href="http://github.com/pjcj/Devel--Cover">http://github.com/pjcj/Devel--Cover</a>. This is also where problems should be reported.</p>
+
+<h1 id="REQUIREMENTS-AND-RECOMMENDED-MODULES"><a id="REQUIREMENTS"></a>REQUIREMENTS AND RECOMMENDED MODULES</h1>
+
+<h2 id="REQUIREMENTS1">REQUIREMENTS</h2>
+
+<ul>
+
+<li><p>Perl 5.12.0 or greater.</p>
+
+<p>The latest version of Devel::Cover on which Perl 5.10 was supported was 1.38. The latest version of Devel::Cover on which Perl 5.8 was supported was 1.23. Perl versions 5.6.1 and 5.6.2 were not supported after version 1.22. Perl versions 5.6.0 and earlier were never supported. Using Devel::Cover with Perl 5.8.7 was always problematic and frequently lead to crashes.</p>
+
+<p>Different versions of perl may give slightly different results due to changes in the op tree.</p>
+
+</li>
+<li><p>The ability to compile XS extensions.</p>
+
+<p>This means a working C compiler and make program at least. If you built perl from source you will have these already and they will be used automatically. If your perl was built in some other way, for example you may have installed it using your Operating System&#39;s packaging mechanism, you will need to ensure that the appropriate tools are installed.</p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Storable">Storable</a> and <a href="https://metacpan.org/pod/Digest::MD5">Digest::MD5</a></p>
+
+<p>Both are in the core in Perl 5.8.0 and above.</p>
+
+</li>
+</ul>
+
+<h2 id="OPTIONAL-MODULES"><a id="OPTIONAL"></a>OPTIONAL MODULES</h2>
+
+<ul>
+
+<li><p><a href="Template.html">Template</a>, and either <a href="https://metacpan.org/pod/PPI::HTML">PPI::HTML</a> or <a href="./Perl::Tidy.html">Perl::Tidy</a></p>
+
+<p>Needed if you want syntax highlighted HTML reports.</p>
+
+</li>
+<li><p><a href="./Pod::Coverage.html">Pod::Coverage</a> (0.06 or above) or <a href="https://metacpan.org/pod/Pod::Coverage::CountParents">Pod::Coverage::CountParents</a></p>
+
+<p>One is needed if you want Pod coverage. If <a href="https://metacpan.org/pod/Pod::Coverage::CountParents">Pod::Coverage::CountParents</a> is installed, it is preferred.</p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Test::More">Test::More</a></p>
+
+<p>Required if you want to run Devel::Cover&#39;s own tests.</p>
+
+</li>
+<li><p><a href="./Test::Differences.html">Test::Differences</a></p>
+
+<p>Needed if the tests fail and you would like nice output telling you why.</p>
+
+</li>
+<li><p><a href="Template.html">Template</a> and <a href="https://metacpan.org/pod/Parallel::Iterator">Parallel::Iterator</a></p>
+
+<p>Needed if you want to run cpancover.</p>
+
+</li>
+<li><p><a href="./JSON::MaybeXS.html">JSON::MaybeXS</a></p>
+
+<p>JSON is used to store the coverage database if it is available. JSON::MaybeXS will select the best JSON backend installed.</p>
+
+</li>
+</ul>
+
+<h2 id="Use-with-mod_perl"><a id="Use"></a>Use with mod_perl</h2>
+
+<p>By adding <code>use Devel::Cover;</code> to your mod_perl startup script, you should be able to collect coverage information when running under mod_perl. You can also add any options you need at this point. I would suggest adding this as early as possible in your startup script in order to collect as much coverage information as possible.</p>
+
+<p>Alternatively, add -MDevel::Cover to the parameters for mod_perl. In this example, Devel::Cover will be operating in silent mode.</p>
+
+<pre><code> PerlSwitches -MDevel::Cover=-silent,1</code></pre>
+
+<h1 id="OPTIONS">OPTIONS</h1>
+
+<pre><code> -blib               - &quot;use blib&quot; and ignore files matching \bt/ (default true
+                       if blib directory exists, false otherwise)
+ -coverage criterion - Turn on coverage for the specified criterion.  Criteria
+                       include statement, branch, condition, path, subroutine,
+                       pod, time, all and none (default all available)
+ -db cover_db        - Store results in coverage db (default ./cover_db)
+ -dir path           - Directory in which coverage will be collected (default
+                       cwd)
+ -ignore RE          - Set regular expressions for files to ignore (default
+                       &quot;/Devel/Cover\b&quot;)
+ +ignore RE          - Append to regular expressions of files to ignore
+ -inc path           - Set prefixes of files to include (default @INC)
+ +inc path           - Append to prefixes of files to include
+ -loose_perms val    - Use loose permissions on all files and directories in
+                       the coverage db so that code changing EUID can still
+                       write coverage information (default off)
+ -merge val          - Merge databases, for multiple test benches (default on)
+ -select RE          - Set regular expressions of files to select (default none)
+ +select RE          - Append to regular expressions of files to select
+ -silent val         - Don&#39;t print informational messages (default off)
+ -subs_only val      - Only cover code in subroutine bodies (default off)
+ -replace_ops val    - Use op replacing rather than runops (default on)
+ -summary val        - Print summary information if val is true (default on)</code></pre>
+
+<h2 id="More-on-Coverage-Options"><a id="More"></a>More on Coverage Options</h2>
+
+<p>You can specify options to some coverage criteria. At the moment only pod coverage takes any options. These are the parameters which are passed into the <a href="./Pod::Coverage.html">Pod::Coverage</a> constructor. The extra options are separated by dashes, and you may specify as many as you wish. For example, to specify that all subroutines containing xx are private, call Devel::Cover with the option -coverage,pod-also_private-xx.</p>
+
+<p>Or, to ignore all files in <code>t/lib</code> as well as files ending in <code>Foo.pm</code>:</p>
+
+<pre><code>    cover -test -silent -ignore ^t/lib/,Foo.pm$</code></pre>
+
+<p>Note that <code>-ignore</code> replaces any default ignore regexes. To preserve any ignore regexes which have already been set, use <code>+ignore</code>:</p>
+
+<pre><code>    cover -test -silent +ignore ^t/lib/,Foo.pm$</code></pre>
+
+<h1 id="SELECTING-FILES-TO-COVER"><a id="SELECTING"></a>SELECTING FILES TO COVER</h1>
+
+<p>You may select the files for which you want to collect coverage data using the select, ignore and inc options. The system uses the following procedure to decide whether a file will be included in coverage reports:</p>
+
+<ul>
+
+<li><p>If the file matches a RE given as a select option, it will be included</p>
+
+</li>
+<li><p>Otherwise, if it matches a RE given as an ignore option, it won&#39;t be included</p>
+
+</li>
+<li><p>Otherwise, if it is in one of the inc directories, it won&#39;t be included</p>
+
+</li>
+<li><p>Otherwise, it will be included</p>
+
+</li>
+</ul>
+
+<p>You may add to the REs to select by using +select, or you may reset the selections using -select. The same principle applies to the REs to ignore.</p>
+
+<p>The inc directories are initially populated with the contents of perl&#39;s @INC array. You may reset these directories using -inc, or add to them using +inc.</p>
+
+<p>Although these options take regular expressions, you should not enclose the RE within // or any other quoting characters.</p>
+
+<p>The options -coverage, [+-]select, [+-]ignore and [+-]inc can be specified multiple times, but they can also take multiple comma separated arguments. In any case you should not add a space after the comma, unless you want the argument to start with that literal space.</p>
+
+<h1 id="UNCOVERABLE-CRITERIA"><a id="UNCOVERABLE"></a>UNCOVERABLE CRITERIA</h1>
+
+<p>Sometimes you have code which is uncoverable for some reason. Perhaps it is an else clause that cannot be reached, or a check for an error condition that should never happen. You can tell Devel::Cover that certain criteria are uncoverable and then they are not counted as errors when they are not exercised. In fact, they are counted as errors if they are exercised.</p>
+
+<p>This feature should only be used as something of a last resort. Ideally you would find some way of exercising all your code. But if you have analysed your code and determined that you are not going to be able to exercise it, it may be better to record that fact in some formal fashion and stop Devel::Cover complaining about it, so that real problems are not lost in the noise.</p>
+
+<p>If you have uncoverable criteria I suggest not using the default HTML report (with uses html_minimal at the moment) because this sometimes shows uncoverable points as uncovered. Instead, you should use the html_basic report for HTML output which should behave correctly in this regard.</p>
+
+<p>There are two ways to specify a construct as uncoverable, one invasive and one non-invasive.</p>
+
+<h2 id="Invasive-specification"><a id="Invasive"></a>Invasive specification</h2>
+
+<p>You can use special comments in your code to specify uncoverable criteria. Comments are of the form:</p>
+
+<pre><code> # uncoverable &lt;criterion&gt; [details]</code></pre>
+
+<p>The keyword &quot;uncoverable&quot; must be the first text in the comment. It should be followed by the name of the coverage criterion which is uncoverable. There may then be further information depending on the nature of the uncoverable construct.</p>
+
+<p>In all cases as <a href="https://metacpan.org/pod/class">class</a> attribute may be included in <a href="https://metacpan.org/pod/details">details</a>. At present a single class attribute is recognised: <a href="https://metacpan.org/pod/ignore_covered_err">ignore_covered_err</a>. Normally, an error is flagged if code marked as <a href="https://metacpan.org/pod/uncoverable">uncoverable</a> is covered. When the <a href="https://metacpan.org/pod/ignore_covered_err">ignore_covered_err</a> attribute is specified then such errors will not be flagged. This is a more precise method to flag such exceptions than the global <a href="https://metacpan.org/pod/-ignore_covered_err">-ignore_covered_err</a> flag to the <a href="https://metacpan.org/pod/distribution/Devel-Cover/bin/cover">cover</a> program.</p>
+
+<p>There is also a <a href="https://metacpan.org/pod/note">note</a> attribute which can also be included in <a href="https://metacpan.org/pod/details">details</a>. This should be the final attribute and will consude all the remaining text. Currently this attribute is not used, but it is intented as a form of documentation for the uncoverable data.</p>
+
+<p>Example:</p>
+
+<pre><code>    # uncoverable branch true count:1..3 class:ignore_covered_err note:error chk</code></pre>
+
+<h3 id="Statements">Statements</h3>
+
+<p>The &quot;uncoverable&quot; comment should appear on either the same line as the statement, or on the line before it:</p>
+
+<pre><code>    $impossible++;  # uncoverable statement
+    # uncoverable statement
+    it_has_all_gone_horribly_wrong();</code></pre>
+
+<p>If there are multiple statements (or any other criterion) on a line you can specify which statement is uncoverable by using the &quot;count&quot; attribute, count:n, which indicates that the uncoverable statement is the nth statement on the line.</p>
+
+<pre><code>    # uncoverable statement count:1
+    # uncoverable statement count:2
+    cannot_run_this(); or_this();</code></pre>
+
+<h3 id="Branches">Branches</h3>
+
+<p>The &quot;uncoverable&quot; comment should specify whether the &quot;true&quot; or &quot;false&quot; branch is uncoverable.</p>
+
+<pre><code>    # uncoverable branch true
+    if (pi == 3)</code></pre>
+
+<p>Both branches may be uncoverable:</p>
+
+<pre><code>    # uncoverable branch true
+    # uncoverable branch false
+    if (impossible_thing_happened_one_way()) {
+        handle_it_one_way();      # uncoverable statement
+    } else {
+        handle_it_another_way();  # uncoverable statement
+    }</code></pre>
+
+<p>If there is an elsif in the branch then it can be addressed as the second branch on the line by using the &quot;count&quot; attribute. Further elsifs are the third and fourth &quot;count&quot; value, and so on:</p>
+
+<pre><code>    # uncoverable branch false count:2
+    if ($thing == 1) {
+        handle_thing_being_one();
+    } elsif ($thing == 2) {
+        handle_thing_being_tow();
+    } else {
+        die &quot;thing can only be one or two, not $thing&quot;; # uncoverable statement
+    }</code></pre>
+
+<h3 id="Conditions">Conditions</h3>
+
+<p>Because of the way in which Perl short-circuits boolean operations, there are three ways in which such conditionals can be uncoverable. In the case of <code> $x &amp;&amp; $y</code> for example, the left operator may never be true, the right operator may never be true, and the whole operation may never be false. These conditions may be modelled thus:</p>
+
+<pre><code>    # uncoverable branch true
+    # uncoverable condition left
+    # uncoverable condition false
+    if ($x &amp;&amp; !$y) {
+        $x++;  # uncoverable statement
+    }
+
+    # uncoverable branch true
+    # uncoverable condition right
+    # uncoverable condition false
+    if (!$x &amp;&amp; $y) {
+    }</code></pre>
+
+<p><code>Or</code> conditionals are handled in a similar fashion (TODO - provide some examples) but <code>xor</code> conditionals are not properly handled yet.</p>
+
+<p>As for branches, the &quot;count&quot; value may be used for either conditions in elsif conditionals, or for complex conditions.</p>
+
+<h3 id="Subroutines">Subroutines</h3>
+
+<p>A subroutine should be marked as uncoverable at the point where the first statement is marked as uncoverable. Ideally all other criteria in the subroutine would be marked as uncoverable automatically, but that isn&#39;t the case at the moment.</p>
+
+<pre><code>    sub z {
+        # uncoverable subroutine
+        $y++; # uncoverable statement
+    }</code></pre>
+
+<h2 id="Non-invasive-specification"><a id="Non"></a>Non-invasive specification</h2>
+
+<p>If you can&#39;t, or don&#39;t want to add coverage comments to your code, you can specify the uncoverable information in a separate file. By default the files PWD/.uncoverable and HOME/.uncoverable are checked. If you use the -uncoverable_file parameter then the file you provide is checked as well as those two files.</p>
+
+<p>The interface to managing this file is the <a href="https://metacpan.org/pod/distribution/Devel-Cover/bin/cover">cover</a> program, and the options are:</p>
+
+<pre><code> -uncoverable_file
+ -add_uncoverable_point
+ -delete_uncoverable_point   **UNIMPLEMENTED**
+ -clean_uncoverable_points   **UNIMPLEMENTED**</code></pre>
+
+<p>The parameter for -add_uncoverable_point is a string composed of up to seven space separated elements: &quot;$file $criterion $line $count $type $class $note&quot;.</p>
+
+<p>The contents of the uncoverable file is the same, with one point per line.</p>
+
+<h1 id="ENVIRONMENT">ENVIRONMENT</h1>
+
+<h2 id="User-variables"><a id="User"></a>User variables</h2>
+
+<p>The -silent option is turned on when Devel::Cover is invoked via $HARNESS_PERL_SWITCHES or $PERL5OPT. Devel::Cover tries to do the right thing when $MOD_PERL is set. $DEVEL_COVER_OPTIONS is appended to any options passed into Devel::Cover.</p>
+
+<p>Note that when Devel::Cover is invoked via an environment variable, any modules specified on the command line, such as via the -Mmodule option, will not be covered. This is because the environment variables are processed after the command line and any code to be covered must appear after Devel::Cover has been loaded. To work around this, Devel::Cover can also be specified on the command line.</p>
+
+<h2 id="Developer-variables"><a id="Developer"></a>Developer variables</h2>
+
+<p>When running Devel::Cover&#39;s own test suite, $DEVEL_COVER_DEBUG turns on debugging information, $DEVEL_COVER_GOLDEN_VERSION overrides Devel::Cover&#39;s own idea of which golden results it should test against, and $DEVEL_COVER_NO_COVERAGE runs the tests without collecting coverage. $DEVEL_COVER_DB_FORMAT may be set to &quot;Sereal&quot;, &quot;JSON&quot; or &quot;Storable&quot; to override the default choice of DB format (Sereal, then JSON if either are available, otherwise Storable). $DEVEL_COVER_IO_OPTIONS provides fine-grained control over the DB format. For example, setting it to &quot;pretty&quot; when the format is JSON will store the DB in a readable JSON format. $DEVEL_COVER_CPUS overrides the automated detection of the number of CPUs to use in parallel testing.</p>
+
+<h1 id="ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</h1>
+
+<p>Some code and ideas cribbed from:</p>
+
+<ul>
+
+<li><p><a href="https://metacpan.org/pod/Devel::OpProf">Devel::OpProf</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/B::Concise">B::Concise</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/B::Deparse">B::Deparse</a></p>
+
+</li>
+</ul>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<ul>
+
+<li><p><a href="https://metacpan.org/pod/distribution/Devel-Cover/lib/Devel/Cover/Tutorial.pod">Devel::Cover::Tutorial</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/B">B</a></p>
+
+</li>
+<li><p><a href="./Pod::Coverage.html">Pod::Coverage</a></p>
+
+</li>
+</ul>
+
+<h1 id="LIMITATIONS">LIMITATIONS</h1>
+
+<p>There are things that Devel::Cover can&#39;t cover.</p>
+
+<h2 id="Absence-of-shared-dependencies"><a id="Absence"></a>Absence of shared dependencies</h2>
+
+<p>Perl keeps track of which modules have been loaded (to avoid reloading them). Because of this, it isn&#39;t possible to get coverage for a path where a runtime import fails if the module being imported is one that Devel::Cover uses internally. For example, suppose your program has this function:</p>
+
+<pre><code> sub foo {
+     eval { require Storable };
+     if ($@) {
+         carp &quot;Can&#39;t find Storable&quot;;
+         return;
+     }
+     # ...
+ }</code></pre>
+
+<p>You might write a test for the failure mode as</p>
+
+<pre><code> BEGIN { @INC = () }
+ foo();
+ # check for error message</code></pre>
+
+<p>Because Devel::Cover uses Storable internally, the import will succeed (and the test will fail) under a coverage run.</p>
+
+<p>Modules used by Devel::Cover while gathering coverage:</p>
+
+<ul>
+
+<li><p><a href="https://metacpan.org/pod/B">B</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/B::Deparse">B::Deparse</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Carp">Carp</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Cwd">Cwd</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Digest::MD5">Digest::MD5</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/File::Path">File::Path</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/File::Spec">File::Spec</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Storable">Storable</a> or <a href="./JSON::MaybeXS.html">JSON::MaybeXS</a> (and its backend) or <a href="Sereal.html">Sereal</a></p>
+
+</li>
+</ul>
+
+<h2 id="Redefined-subroutines"><a id="Redefined"></a>Redefined subroutines</h2>
+
+<p>If you redefine a subroutine you may find that the original subroutine is not reported on. This is because I haven&#39;t yet found a way to locate the original CV. Hints, tips or patches to resolve this will be gladly accepted.</p>
+
+<p>The module Test::TestCoverage uses this technique and so should not be used in conjunction with Devel::Cover.</p>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>Almost certainly.</p>
+
+<p>See the BUGS file, the TODO file and the bug trackers at <a href="https://github.com/pjcj/Devel--Cover/issues?sort=created&amp;direction=desc&amp;state=open">https://github.com/pjcj/Devel--Cover/issues?sort=created&amp;direction=desc&amp;state=open</a> and <a href="https://rt.cpan.org/Public/Dist/Display.html?Name=Devel-Cover">https://rt.cpan.org/Public/Dist/Display.html?Name=Devel-Cover</a></p>
+
+<p>Please report new bugs on Github.</p>
+
+<h1 id="LICENCE">LICENCE</h1>
+
+<p>Copyright 2001-2023, Paul Johnson (paul@pjcj.net)</p>
+
+<p>This software is free. It is licensed under the same terms as Perl itself.</p>
+
+<p>The latest version of this software should be available on CPAN and from my homepage: http://www.pjcj.net/.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Devel::Cover, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Devel::Cover</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Devel::Cover</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Devel::Cover.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

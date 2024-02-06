@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlsecpolicy - Perl security report handling policy - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlsecpolicy">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlsecpolicy.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlsecpolicy">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlsecpolicy">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlsecpolicy">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlsecpolicy">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlsecpolicy">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlsecpolicy">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlsecpolicy">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlsecpolicy">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlsecpolicy">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlsecpolicy">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlsecpolicy">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlsecpolicy">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlsecpolicy">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlsecpolicy">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlsecpolicy">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlsecpolicy">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlsecpolicy">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlsecpolicy">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlsecpolicy">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlsecpolicy">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlsecpolicy">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlsecpolicy">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlsecpolicy">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlsecpolicy">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlsecpolicy">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlsecpolicy">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlsecpolicy">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlsecpolicy">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlsecpolicy">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlsecpolicy">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlsecpolicy">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlsecpolicy">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlsecpolicy">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlsecpolicy">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlsecpolicy">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlsecpolicy">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlsecpolicy">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlsecpolicy">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlsecpolicy">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlsecpolicy">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlsecpolicy">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlsecpolicy">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlsecpolicy">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlsecpolicy">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlsecpolicy">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlsecpolicy">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlsecpolicy">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlsecpolicy">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlsecpolicy">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlsecpolicy">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlsecpolicy">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlsecpolicy">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlsecpolicy">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlsecpolicy">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlsecpolicy">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlsecpolicy">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlsecpolicy">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlsecpolicy">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlsecpolicy">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlsecpolicy">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlsecpolicy">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlsecpolicy">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlsecpolicy">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlsecpolicy">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlsecpolicy">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlsecpolicy">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlsecpolicy">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlsecpolicy">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlsecpolicy">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlsecpolicy">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlsecpolicy">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlsecpolicy">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlsecpolicy">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlsecpolicy">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlsecpolicy">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlsecpolicy">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlsecpolicy">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlsecpolicy">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlsecpolicy">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlsecpolicy">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlsecpolicy.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlsecpolicy">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlsecpolicy">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlsecpolicy">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlsecpolicy">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlsecpolicy">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlsecpolicy">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlsecpolicy">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlsecpolicy">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlsecpolicy">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlsecpolicy">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlsecpolicy">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlsecpolicy">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlsecpolicy">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlsecpolicy">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlsecpolicy">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlsecpolicy">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlsecpolicy">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlsecpolicy">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlsecpolicy">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlsecpolicy">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlsecpolicy">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlsecpolicy">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlsecpolicy">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlsecpolicy">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlsecpolicy">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlsecpolicy">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlsecpolicy">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlsecpolicy">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlsecpolicy">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlsecpolicy">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlsecpolicy">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlsecpolicy">5.35.1</a>
+          <a class="dropdown-item active" href="perlsecpolicy.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlsecpolicy.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlsecpolicy.html">perlsecpolicy</a>
+          <div id="more">
+            (<a href="perlsecpolicy.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlsecpolicy">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#REPORTING-SECURITY-ISSUES-IN-PERL">REPORTING SECURITY ISSUES IN PERL</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#WHAT-ARE-SECURITY-ISSUES">WHAT ARE SECURITY ISSUES</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Software-covered-by-the-Perl-security-team">Software covered by the Perl security team</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Bugs-that-may-qualify-as-security-issues-in-Perl">Bugs that may qualify as security issues in Perl</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Bugs-that-do-not-qualify-as-security-issues-in-Perl">Bugs that do not qualify as security issues in Perl</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Feeding-untrusted-code-to-the-interpreter">Feeding untrusted code to the interpreter</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Stack-overflows-due-to-excessive-recursion">Stack overflows due to excessive recursion</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Out-of-memory-errors">Out of memory errors</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Escape-from-a-Safe-compartment">Escape from a Safe compartment</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Use-of-the-p-and-P-pack-templates">Use of the p and P pack templates</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Stack-not-reference-counted-issues">Stack not reference-counted issues</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Thawing-attacker-supplied-data-with-Storable">Thawing attacker-supplied data with Storable</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Using-attacker-supplied-SDBM_File-databases">Using attacker supplied SDBM_File databases</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Badly-encoded-UTF-8-flagged-scalars">Badly encoded UTF-8 flagged scalars</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Issues-that-exist-only-in-blead,-or-in-a-release-candidate">Issues that exist only in blead, or in a release candidate</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#CPAN-modules-or-other-Perl-project-resources">CPAN modules or other Perl project resources</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Emulated-POSIX-behaviors-on-Windows-systems">Emulated POSIX behaviors on Windows systems</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Bugs-that-require-special-categorization">Bugs that require special categorization</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Regular-expressions">Regular expressions</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#DB_File,-ODBM_File,-or-GDBM_File-databases">DB_File, ODBM_File, or GDBM_File databases</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Algorithmic-complexity-attacks">Algorithmic complexity attacks</a>
+              </li>
+          </ul>
+
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#HOW-WE-DEAL-WITH-SECURITY-ISSUES">HOW WE DEAL WITH SECURITY ISSUES</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Perl&#39;s-vulnerability-remediation-workflow">Perl&#39;s vulnerability remediation workflow</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Initial-contact">Initial contact</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Initial-triage">Initial triage</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Issue-ID-assignment">Issue ID assignment</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Development-of-patches">Development of patches</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#CVE-ID-assignment">CVE ID assignment</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Pre-release-notifications">Pre-release notifications</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Pre-release-testing">Pre-release testing</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Release-of-fixes-and-announcements">Release of fixes and announcements</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Publicly-known-and-zero-day-security-issues">Publicly known and zero-day security issues</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Zero-day-security-issues">Zero-day security issues</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Other-leaks-of-security-issue-information">Other leaks of security issue information</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Vulnerability-credit-and-bounties">Vulnerability credit and bounties</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Credits-in-vulnerability-announcements">Credits in vulnerability announcements</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlsecpolicy.html#Bounties-for-Perl-vulnerabilities">Bounties for Perl vulnerabilities</a>
+              </li>
+          </ul>
+
+              </li>
+          </ul>
+
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlsecpolicy.html#NAME">#</a>NAME</h1>
+
+<p>perlsecpolicy - Perl security report handling policy</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlsecpolicy.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>The Perl project takes security issues seriously.</p>
+
+<p>The responsibility for handling security reports in a timely and effective manner has been delegated to a security team composed of a subset of the Perl core developers.</p>
+
+<p>This document describes how the Perl security team operates and how the team evaluates new security reports.</p>
+
+<h1 id="REPORTING-SECURITY-ISSUES-IN-PERL"><a class="permalink" href="perlsecpolicy.html#REPORTING-SECURITY-ISSUES-IN-PERL">#</a><a id="REPORTING"></a>REPORTING SECURITY ISSUES IN PERL</h1>
+
+<p>If you believe you have found a security vulnerability in the Perl interpreter or modules maintained in the core Perl codebase, email the details to <a href="mailto:perl-security@perl.org">perl-security@perl.org</a>. This address is a closed membership mailing list monitored by the Perl security team.</p>
+
+<p>You should receive an initial response to your report within 72 hours. If you do not receive a response in that time, please contact the <a href="mailto:steering-council@perl.org">Perl Steering Council</a>.</p>
+
+<p>When members of the security team reply to your messages, they will generally include the perl-security@perl.org address in the &quot;To&quot; or &quot;CC&quot; fields of the response. This allows all of the security team to follow the discussion and chime in as needed. Use the &quot;Reply-all&quot; functionality of your email client when you send subsequent responses so that the entire security team receives the message.</p>
+
+<p>The security team will evaluate your report and make an initial determination of whether it is likely to fit the scope of issues the team handles. General guidelines about how this is determined are detailed in the <a href="perlsecpolicy.html#WHAT-ARE-SECURITY-ISSUES">&quot;WHAT ARE SECURITY ISSUES&quot;</a> section.</p>
+
+<p>If your report meets the team&#39;s criteria, an issue will be opened in the team&#39;s private issue tracker and you will be provided the issue&#39;s ID number. Issue identifiers have the form perl-security#NNN. Include this identifier with any subsequent messages you send.</p>
+
+<p>The security team will send periodic updates about the status of your issue and guide you through any further action that is required to complete the vulnerability remediation process. The stages vulnerabilities typically go through are explained in the <a href="perlsecpolicy.html#HOW-WE-DEAL-WITH-SECURITY-ISSUES">&quot;HOW WE DEAL WITH SECURITY ISSUES&quot;</a> section.</p>
+
+<h1 id="WHAT-ARE-SECURITY-ISSUES"><a class="permalink" href="perlsecpolicy.html#WHAT-ARE-SECURITY-ISSUES">#</a><a id="WHAT"></a>WHAT ARE SECURITY ISSUES</h1>
+
+<p>A vulnerability is a behavior of a software system that compromises the system&#39;s expected confidentiality, integrity or availability protections.</p>
+
+<p>A security issue is a bug in one or more specific components of a software system that creates a vulnerability.</p>
+
+<p>Software written in the Perl programming language is typically composed of many layers of software written by many different groups. It can be very complicated to determine which specific layer of a complex real-world application was responsible for preventing a vulnerable behavior, but this is an essential part of fixing the vulnerability.</p>
+
+<h2 id="Software-covered-by-the-Perl-security-team"><a class="permalink" href="perlsecpolicy.html#Software-covered-by-the-Perl-security-team">#</a><a id="Software"></a>Software covered by the Perl security team</h2>
+
+<p>The Perl security team handles security issues in:</p>
+
+<ul>
+
+<li><p>The Perl interpreter</p>
+
+</li>
+<li><p>The Perl modules shipped with the interpreter that are developed in the core Perl repository</p>
+
+</li>
+<li><p>The command line tools shipped with the interpreter that are developed in the core Perl repository</p>
+
+</li>
+</ul>
+
+<p>Files under the <i>cpan/</i> directory in Perl&#39;s repository and release tarballs are developed and maintained independently. The Perl security team does not handle security issues for these modules.</p>
+
+<h2 id="Bugs-that-may-qualify-as-security-issues-in-Perl"><a class="permalink" href="perlsecpolicy.html#Bugs-that-may-qualify-as-security-issues-in-Perl">#</a><a id="Bugs"></a>Bugs that may qualify as security issues in Perl</h2>
+
+<p>Perl is designed to be a fast and flexible general purpose programming language. The Perl interpreter and Perl modules make writing safe and secure applications easy, but they do have limitations.</p>
+
+<p>As a general rule, a bug in Perl needs to meet all of the following criteria to be considered a security issue:</p>
+
+<ul>
+
+<li><p>The vulnerable behavior is not mentioned in Perl&#39;s documentation or public issue tracker.</p>
+
+</li>
+<li><p>The vulnerable behavior is not implied by an expected behavior.</p>
+
+</li>
+<li><p>The vulnerable behavior is not a generally accepted limitation of the implementation.</p>
+
+</li>
+<li><p>The vulnerable behavior is likely to be exposed to attack in otherwise secure applications written in Perl.</p>
+
+</li>
+<li><p>The vulnerable behavior provides a specific tangible benefit to an attacker that triggers the behavior.</p>
+
+</li>
+</ul>
+
+<h2 id="Bugs-that-do-not-qualify-as-security-issues-in-Perl"><a class="permalink" href="perlsecpolicy.html#Bugs-that-do-not-qualify-as-security-issues-in-Perl">#</a><a id="Bugs1"></a>Bugs that do not qualify as security issues in Perl</h2>
+
+<p>There are certain categories of bugs that are frequently reported to the security team that do not meet the criteria listed above.</p>
+
+<p>The following is a list of commonly reported bugs that are not handled as security issues.</p>
+
+<h3 id="Feeding-untrusted-code-to-the-interpreter"><a class="permalink" href="perlsecpolicy.html#Feeding-untrusted-code-to-the-interpreter">#</a><a id="Feeding"></a>Feeding untrusted code to the interpreter</h3>
+
+<p>The Perl parser is not designed to evaluate untrusted code. If your application requires the evaluation of untrusted code, it should rely on an operating system level sandbox for its security.</p>
+
+<h3 id="Stack-overflows-due-to-excessive-recursion"><a class="permalink" href="perlsecpolicy.html#Stack-overflows-due-to-excessive-recursion">#</a><a id="Stack"></a>Stack overflows due to excessive recursion</h3>
+
+<p>Excessive recursion is often caused by code that does not enforce limits on inputs. The Perl interpreter assumes limits on recursion will be enforced by the application.</p>
+
+<h3 id="Out-of-memory-errors"><a class="permalink" href="perlsecpolicy.html#Out-of-memory-errors">#</a><a id="Out"></a>Out of memory errors</h3>
+
+<p>Common Perl constructs such as <code>pack</code>, the <code>x</code> operator, and regular expressions accept numeric quantifiers that control how much memory will be allocated to store intermediate values or results. If you allow an attacker to supply these quantifiers and consume all available memory, the Perl interpreter will not prevent it.</p>
+
+<h3 id="Escape-from-a-Safe-compartment"><a class="permalink" href="perlsecpolicy.html#Escape-from-a-Safe-compartment">#</a><a id="Escape"></a>Escape from a <a href="Safe.html">Safe</a> compartment</h3>
+
+<p><a href="Opcode.html">Opcode</a> restrictions and <a href="Safe.html">Safe</a> compartments are not supported as security mechanisms. The Perl parser is not designed to evaluate untrusted code.</p>
+
+<h3 id="Use-of-the-p-and-P-pack-templates"><a class="permalink" href="perlsecpolicy.html#Use-of-the-p-and-P-pack-templates">#</a><a id="Use"></a>Use of the <code>p</code> and <code>P</code> pack templates</h3>
+
+<p>These templates are unsafe by design.</p>
+
+<h3 id="Stack-not-reference-counted-issues"><a class="permalink" href="perlsecpolicy.html#Stack-not-reference-counted-issues">#</a><a id="Stack1"></a>Stack not reference-counted issues</h3>
+
+<p>These bugs typically present as use-after-free errors or as assertion failures on the type of a <code>SV</code>. Stack not reference-counted crashes usually occur because code is both modifying a reference or glob and using the values referenced by that glob or reference.</p>
+
+<p>This type of bug is a long standing issue with the Perl interpreter that seldom occurs in normal code. Examples of this type of bug generally assume that attacker-supplied code will be evaluated by the Perl interpreter.</p>
+
+<h3 id="Thawing-attacker-supplied-data-with-Storable"><a class="permalink" href="perlsecpolicy.html#Thawing-attacker-supplied-data-with-Storable">#</a><a id="Thawing"></a>Thawing attacker-supplied data with <a href="Storable.html">Storable</a></h3>
+
+<p><a href="Storable.html">Storable</a> is designed to be a very fast serialization format. It is not designed to be safe for deserializing untrusted inputs.</p>
+
+<h3 id="Using-attacker-supplied-SDBM_File-databases"><a class="permalink" href="perlsecpolicy.html#Using-attacker-supplied-SDBM_File-databases">#</a><a id="Using"></a>Using attacker supplied <a href="SDBM_File.html">SDBM_File</a> databases</h3>
+
+<p>The <a href="SDBM_File.html">SDBM_File</a> module is not intended for use with untrusted SDBM databases.</p>
+
+<h3 id="Badly-encoded-UTF-8-flagged-scalars"><a class="permalink" href="perlsecpolicy.html#Badly-encoded-UTF-8-flagged-scalars">#</a><a id="Badly"></a>Badly encoded UTF-8 flagged scalars</h3>
+
+<p>This type of bug occurs when the <code>:utf8</code> PerlIO layer is used to read badly encoded data, or other mechanisms are used to directly manipulate the UTF-8 flag on an SV.</p>
+
+<p>A badly encoded UTF-8 flagged SV is not a valid SV. Code that creates SV&#39;s in this fashion is corrupting Perl&#39;s internal state.</p>
+
+<h3 id="Issues-that-exist-only-in-blead,-or-in-a-release-candidate"><a class="permalink" href="perlsecpolicy.html#Issues-that-exist-only-in-blead,-or-in-a-release-candidate">#</a><a id="Issues"></a><a id="Issues-that-exist-only-in-blead-or-in-a-release-candidate"></a>Issues that exist only in blead, or in a release candidate</h3>
+
+<p>The blead branch and Perl release candidates do not receive security support. Security defects that are present only in pre-release versions of Perl are handled through the normal bug reporting and resolution process.</p>
+
+<h3 id="CPAN-modules-or-other-Perl-project-resources"><a class="permalink" href="perlsecpolicy.html#CPAN-modules-or-other-Perl-project-resources">#</a><a id="CPAN"></a>CPAN modules or other Perl project resources</h3>
+
+<p>The Perl security team is focused on the Perl interpreter and modules maintained in the core Perl codebase. The team has no special access to fix CPAN modules, applications written in Perl, Perl project websites, Perl mailing lists or the Perl IRC servers.</p>
+
+<h3 id="Emulated-POSIX-behaviors-on-Windows-systems"><a class="permalink" href="perlsecpolicy.html#Emulated-POSIX-behaviors-on-Windows-systems">#</a><a id="Emulated"></a>Emulated POSIX behaviors on Windows systems</h3>
+
+<p>The Perl interpreter attempts to emulate <code>fork</code>, <code>system</code>, <code>exec</code> and other POSIX behaviors on Windows systems. This emulation has many quirks that are extensively documented in Perl&#39;s public issue tracker. Changing these behaviors would cause significant disruption for existing users on Windows.</p>
+
+<h2 id="Bugs-that-require-special-categorization"><a class="permalink" href="perlsecpolicy.html#Bugs-that-require-special-categorization">#</a><a id="Bugs2"></a>Bugs that require special categorization</h2>
+
+<p>Some bugs in the Perl interpreter occur in areas of the codebase that are both security sensitive and prone to failure during normal usage.</p>
+
+<h3 id="Regular-expressions"><a class="permalink" href="perlsecpolicy.html#Regular-expressions">#</a><a id="Regular"></a>Regular expressions</h3>
+
+<p>Untrusted regular expressions are generally safe to compile and match against with several caveats. The following behaviors of Perl&#39;s regular expression engine are the developer&#39;s responsibility to constrain.</p>
+
+<p>The evaluation of untrusted regular expressions while <code>use re &#39;eval&#39;;</code> is in effect is never safe.</p>
+
+<p>Regular expressions are not guaranteed to compile or evaluate in any specific finite time frame.</p>
+
+<p>Regular expressions may consume all available system memory when they are compiled or evaluated.</p>
+
+<p>Regular expressions may cause excessive recursion that halts the perl interpreter.</p>
+
+<p>As a general rule, do not expect Perl&#39;s regular expression engine to be resistant to denial of service attacks.</p>
+
+<h3 id="DB_File,-ODBM_File,-or-GDBM_File-databases"><a class="permalink" href="perlsecpolicy.html#DB_File,-ODBM_File,-or-GDBM_File-databases">#</a><a id="DB_File"></a><a id="DB_File-ODBM_File-or-GDBM_File-databases"></a><a href="DB_File.html">DB_File</a>, <a href="ODBM_File.html">ODBM_File</a>, or <a href="GDBM_File.html">GDBM_File</a> databases</h3>
+
+<p>These modules rely on external libraries to interact with database files.</p>
+
+<p>Bugs caused by reading and writing these file formats are generally caused by the underlying library implementation and are not security issues in Perl.</p>
+
+<p>Bugs where Perl mishandles unexpected valid return values from the underlying libraries may qualify as security issues in Perl.</p>
+
+<h3 id="Algorithmic-complexity-attacks"><a class="permalink" href="perlsecpolicy.html#Algorithmic-complexity-attacks">#</a><a id="Algorithmic"></a>Algorithmic complexity attacks</h3>
+
+<p>The perl interpreter is reasonably robust to algorithmic complexity attacks. It is not immune to them.</p>
+
+<p>Algorithmic complexity bugs that depend on the interpreter processing extremely large amounts of attacker supplied data are not generally handled as security issues.</p>
+
+<p>See <a href="perlsec.html#Algorithmic-Complexity-Attacks">&quot;Algorithmic Complexity Attacks&quot; in perlsec</a> for additional information.</p>
+
+<h1 id="HOW-WE-DEAL-WITH-SECURITY-ISSUES"><a class="permalink" href="perlsecpolicy.html#HOW-WE-DEAL-WITH-SECURITY-ISSUES">#</a><a id="HOW"></a>HOW WE DEAL WITH SECURITY ISSUES</h1>
+
+<p>The Perl security team follows responsible disclosure practices. Security issues are kept secret until a fix is readily available for most users. This minimizes inherent risks users face from vulnerabilities in Perl.</p>
+
+<p>Hiding problems from the users temporarily is a necessary trade-off to keep them safe. Hiding problems from users permanently is not the goal.</p>
+
+<p>When you report a security issue privately to the <a href="mailto:perl-security@perl.org">perl-security@perl.org</a> contact address, we normally expect you to follow responsible disclosure practices in the handling of the report. If you are unable or unwilling to keep the issue secret until a fix is available to users you should state this clearly in the initial report.</p>
+
+<p>The security team&#39;s vulnerability remediation workflow is intended to be as open and transparent as possible about the state of your security report.</p>
+
+<h2 id="Perl&#39;s-vulnerability-remediation-workflow"><a class="permalink" href="perlsecpolicy.html#Perl&#39;s-vulnerability-remediation-workflow">#</a><a id="Perl"></a><a id="Perls-vulnerability-remediation-workflow"></a>Perl&#39;s vulnerability remediation workflow</h2>
+
+<h3 id="Initial-contact"><a class="permalink" href="perlsecpolicy.html#Initial-contact">#</a><a id="Initial"></a>Initial contact</h3>
+
+<p>New vulnerability reports will receive an initial reply within 72 hours from the time they arrive at the security team&#39;s mailing list. If you do not receive any response in that time, contact the <a href="mailto:steering-council@perl.org">Perl Steering Council</a>.</p>
+
+<p>The initial response sent by the security team will confirm your message was received and provide an estimated time frame for the security team&#39;s triage analysis.</p>
+
+<h3 id="Initial-triage"><a class="permalink" href="perlsecpolicy.html#Initial-triage">#</a><a id="Initial1"></a>Initial triage</h3>
+
+<p>The security team will evaluate the report and determine whether or not it is likely to meet the criteria for handling as a security issue.</p>
+
+<p>The security team aims to complete the initial report triage within two weeks&#39; time. Complex issues that require significant discussion or research may take longer.</p>
+
+<p>If the security report cannot be reproduced or does not meet the team&#39;s criteria for handling as a security issue, you will be notified by email and given an opportunity to respond.</p>
+
+<h3 id="Issue-ID-assignment"><a class="permalink" href="perlsecpolicy.html#Issue-ID-assignment">#</a><a id="Issue"></a>Issue ID assignment</h3>
+
+<p>Security reports that pass initial triage analysis are turned into issues in the security team&#39;s private issue tracker. When a report progresses to this point you will be provided the issue ID for future reference. These identifiers have the format perl-security#NNN or Perl/perl-security#NNN.</p>
+
+<p>The assignment of an issue ID does not confirm that a security report represents a vulnerability in Perl. Many reports require further analysis to reach that determination.</p>
+
+<p>Issues in the security team&#39;s private tracker are used to collect details about the problem and track progress towards a resolution. These notes and other details are not made public when the issue is resolved. Keeping the issue notes private allows the security team to freely discuss attack methods, attack tools, and other related private issues.</p>
+
+<h3 id="Development-of-patches"><a class="permalink" href="perlsecpolicy.html#Development-of-patches">#</a><a id="Development"></a>Development of patches</h3>
+
+<p>Members of the security team will inspect the report and related code in detail to produce fixes for supported versions of Perl.</p>
+
+<p>If the team discovers that the reported issue does not meet the team&#39;s criteria at this stage, you will be notified by email and given an opportunity to respond before the issue is closed.</p>
+
+<p>The team may discuss potential fixes with you or provide you with patches for testing purposes during this time frame. No information should be shared publicly at this stage.</p>
+
+<h3 id="CVE-ID-assignment"><a class="permalink" href="perlsecpolicy.html#CVE-ID-assignment">#</a><a id="CVE"></a>CVE ID assignment</h3>
+
+<p>Once an issue is fully confirmed and a potential fix has been found, the security team will request a CVE identifier for the issue to use in public announcements.</p>
+
+<p>Details like the range of vulnerable Perl versions and identities of the people that discovered the flaw need to be collected to submit the CVE ID request.</p>
+
+<p>The security team may ask you to clarify the exact name we should use when crediting discovery of the issue. The <a href="perlsecpolicy.html#Vulnerability-credit-and-bounties">&quot;Vulnerability credit and bounties&quot;</a> section of this document explains our preferred format for this credit.</p>
+
+<p>Once a CVE ID has been assigned, you will be notified by email. The vulnerability should not be discussed publicly at this stage.</p>
+
+<h3 id="Pre-release-notifications"><a class="permalink" href="perlsecpolicy.html#Pre-release-notifications">#</a><a id="Pre"></a>Pre-release notifications</h3>
+
+<p>When the security team is satisfied that the fix for a security issue is ready to release publicly, a pre-release notification announcement is sent to the major redistributors of Perl.</p>
+
+<p>This pre-release announcement includes a list of Perl versions that are affected by the flaw, an analysis of the risks to users, patches the security team has produced, and any information about mitigations or backporting fixes to older versions of Perl that the security team has available.</p>
+
+<p>The pre-release announcement will include a specific target date when the issue will be announced publicly. The time frame between the pre-release announcement and the release date allows redistributors to prepare and test their own updates and announcements. During this period the vulnerability details and fixes are embargoed and should not be shared publicly. This embargo period may be extended further if problems are discovered during testing.</p>
+
+<p>You will be sent the portions of pre-release announcements that are relevant to the specific issue you reported. This email will include the target release date. Additional updates will be sent if the target release date changes.</p>
+
+<h3 id="Pre-release-testing"><a class="permalink" href="perlsecpolicy.html#Pre-release-testing">#</a><a id="Pre1"></a>Pre-release testing</h3>
+
+<p>The Perl security team does not directly produce official Perl releases. The team releases security fixes by placing commits in Perl&#39;s public git repository and sending announcements.</p>
+
+<p>Many users and redistributors prefer using official Perl releases rather than applying patches to an older release. The security team works with Perl&#39;s release managers to make this possible.</p>
+
+<p>New official releases of Perl are generally produced and tested on private systems during the pre-release embargo period.</p>
+
+<h3 id="Release-of-fixes-and-announcements"><a class="permalink" href="perlsecpolicy.html#Release-of-fixes-and-announcements">#</a><a id="Release"></a>Release of fixes and announcements</h3>
+
+<p>At the end of the embargo period the security fixes will be committed to Perl&#39;s public git repository and announcements will be sent to the <a href="https://lists.perl.org/list/perl5-porters.html">perl5-porters</a> and <a href="https://oss-security.openwall.org/wiki/mailing-lists/oss-security">oss-security</a> mailing lists.</p>
+
+<p>If official Perl releases are ready, they will be published at this time and announced on the <a href="https://lists.perl.org/list/perl5-porters.html">perl5-porters</a> mailing list.</p>
+
+<p>The security team will send a follow-up notification to everyone that participated in the pre-release embargo period once the release process is finished. Vulnerability reporters and Perl redistributors should not publish their own announcements or fixes until the Perl security team&#39;s release process is complete.</p>
+
+<h2 id="Publicly-known-and-zero-day-security-issues"><a class="permalink" href="perlsecpolicy.html#Publicly-known-and-zero-day-security-issues">#</a><a id="Publicly"></a>Publicly known and zero-day security issues</h2>
+
+<p>The security team&#39;s vulnerability remediation workflow assumes that issues are reported privately and kept secret until they are resolved. This isn&#39;t always the case and information occasionally leaks out before a fix is ready.</p>
+
+<p>In these situations the team must decide whether operating in secret increases or decreases the risk to users of Perl. In some cases being open about the risk a security issue creates will allow users to defend against it, in other cases calling attention to an unresolved security issue will make it more likely to be misused.</p>
+
+<h3 id="Zero-day-security-issues"><a class="permalink" href="perlsecpolicy.html#Zero-day-security-issues">#</a><a id="Zero"></a>Zero-day security issues</h3>
+
+<p>If an unresolved critical security issue in Perl is being actively abused to attack systems the security team will send out announcements as rapidly as possible with any mitigations the team has available.</p>
+
+<p>Perl&#39;s public defect tracker will be used to handle the issue so that additional information, fixes, and CVE IDs are visible to affected users as rapidly as possible.</p>
+
+<h3 id="Other-leaks-of-security-issue-information"><a class="permalink" href="perlsecpolicy.html#Other-leaks-of-security-issue-information">#</a><a id="Other"></a>Other leaks of security issue information</h3>
+
+<p>Depending on the prominence of the information revealed about a security issue and the issue&#39;s risk of becoming a zero-day attack, the security team may skip all or part of its normal remediation workflow.</p>
+
+<p>If the security team learns of a significant security issue after it has been identified and resolved in Perl&#39;s public issue tracker, the team will request a CVE ID and send an announcement to inform users.</p>
+
+<h2 id="Vulnerability-credit-and-bounties"><a class="permalink" href="perlsecpolicy.html#Vulnerability-credit-and-bounties">#</a><a id="Vulnerability"></a>Vulnerability credit and bounties</h2>
+
+<p>The Perl project appreciates the effort security researchers invest in making Perl safe and secure.</p>
+
+<p>Since much of this work is hidden from the public, crediting researchers publicly is an important part of the vulnerability remediation process.</p>
+
+<h3 id="Credits-in-vulnerability-announcements"><a class="permalink" href="perlsecpolicy.html#Credits-in-vulnerability-announcements">#</a><a id="Credits"></a>Credits in vulnerability announcements</h3>
+
+<p>When security issues are fixed we will attempt to credit the specific researcher(s) that discovered the flaw in our announcements.</p>
+
+<p>Credits are announced using the researcher&#39;s preferred full name.</p>
+
+<p>If the researcher&#39;s contributions were funded by a specific company or part of an organized vulnerability research project, we will include a short name for this group at the researcher&#39;s request.</p>
+
+<p>Perl&#39;s announcements are written in the English language using the 7bit ASCII character set to be reproducible in a variety of formats. We do not include hyperlinks, domain names or marketing material with these acknowledgments.</p>
+
+<p>In the event that proper credit for vulnerability discovery cannot be established or there is a disagreement between the Perl security team and the researcher about how the credit should be given, it will be omitted from announcements.</p>
+
+<h3 id="Bounties-for-Perl-vulnerabilities"><a class="permalink" href="perlsecpolicy.html#Bounties-for-Perl-vulnerabilities">#</a><a id="Bounties"></a>Bounties for Perl vulnerabilities</h3>
+
+<p>The Perl project is a non-profit volunteer effort. We do not provide any monetary rewards for reporting security issues in Perl.</p>
+
+<p>The <a href="https://internetbugbounty.org/">Internet Bug Bounty</a> offers monetary rewards for some Perl security issues after they are fully resolved. The terms of this program are available at <a href="https://hackerone.com/ibb-perl">HackerOne</a>.</p>
+
+<p>This program is not run by the Perl project or the Perl security team.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

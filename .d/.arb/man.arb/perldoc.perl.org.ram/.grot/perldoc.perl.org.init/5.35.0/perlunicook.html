@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlunicook - cookbookish examples of handling Unicode in Perl - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlunicook">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlunicook.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlunicook">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlunicook">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlunicook">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlunicook">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlunicook">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlunicook">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlunicook">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlunicook">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlunicook">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlunicook">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlunicook">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlunicook">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlunicook">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlunicook">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlunicook">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlunicook">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlunicook">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlunicook">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlunicook">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlunicook">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlunicook">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlunicook">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlunicook">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlunicook">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlunicook">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlunicook">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlunicook">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlunicook">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlunicook">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlunicook">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlunicook">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlunicook">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlunicook">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlunicook">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlunicook">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlunicook">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlunicook">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlunicook">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlunicook">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlunicook">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlunicook">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlunicook">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlunicook">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlunicook">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlunicook">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlunicook">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlunicook">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlunicook">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlunicook">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlunicook">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlunicook">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlunicook">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlunicook">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlunicook">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlunicook">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlunicook">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlunicook">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlunicook">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlunicook">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlunicook">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlunicook">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlunicook">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlunicook">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlunicook">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlunicook">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlunicook">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlunicook">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlunicook">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlunicook">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlunicook">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlunicook">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlunicook">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlunicook">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlunicook">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlunicook">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlunicook">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlunicook">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlunicook">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlunicook">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlunicook">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlunicook.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlunicook">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlunicook">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlunicook">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlunicook">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlunicook">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlunicook">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlunicook">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlunicook">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlunicook">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlunicook">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlunicook">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlunicook">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlunicook">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlunicook">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlunicook">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlunicook">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlunicook">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlunicook">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlunicook">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlunicook">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlunicook">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlunicook">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlunicook">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlunicook">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlunicook">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlunicook">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlunicook">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlunicook">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlunicook">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlunicook">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlunicook">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlunicook">5.35.1</a>
+          <a class="dropdown-item active" href="perlunicook.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlunicook.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlunicook.html">perlunicook</a>
+          <div id="more">
+            (<a href="perlunicook.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlunicook">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#EXAMPLES">EXAMPLES</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-0:-Standard-preamble">℞ 0: Standard preamble</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-1:-Generic-Unicode-savvy-filter">℞ 1: Generic Unicode-savvy filter</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-2:-Fine-tuning-Unicode-warnings">℞ 2: Fine-tuning Unicode warnings</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-3:-Declare-source-in-utf8-for-identifiers-and-literals">℞ 3: Declare source in utf8 for identifiers and literals</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-4:-Characters-and-their-numbers">℞ 4: Characters and their numbers</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-5:-Unicode-literals-by-character-number">℞ 5: Unicode literals by character number</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-6:-Get-character-name-by-number">℞ 6: Get character name by number</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-7:-Get-character-number-by-name">℞ 7: Get character number by name</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-8:-Unicode-named-characters">℞ 8: Unicode named characters</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-9:-Unicode-named-sequences">℞ 9: Unicode named sequences</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-10:-Custom-named-characters">℞ 10: Custom named characters</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-11:-Names-of-CJK-codepoints">℞ 11: Names of CJK codepoints</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-12:-Explicit-encode/decode">℞ 12: Explicit encode/decode</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-13:-Decode-program-arguments-as-utf8">℞ 13: Decode program arguments as utf8</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-14:-Decode-program-arguments-as-locale-encoding">℞ 14: Decode program arguments as locale encoding</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-15:-Declare-STD%7BIN,OUT,ERR%7D-to-be-utf8">℞ 15: Declare STD{IN,OUT,ERR} to be utf8</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-16:-Declare-STD%7BIN,OUT,ERR%7D-to-be-in-locale-encoding">℞ 16: Declare STD{IN,OUT,ERR} to be in locale encoding</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-17:-Make-file-I/O-default-to-utf8">℞ 17: Make file I/O default to utf8</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-18:-Make-all-I/O-and-args-default-to-utf8">℞ 18: Make all I/O and args default to utf8</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-19:-Open-file-with-specific-encoding">℞ 19: Open file with specific encoding</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-20:-Unicode-casing">℞ 20: Unicode casing</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-21:-Unicode-case-insensitive-comparisons">℞ 21: Unicode case-insensitive comparisons</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-22:-Match-Unicode-linebreak-sequence-in-regex">℞ 22: Match Unicode linebreak sequence in regex</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-23:-Get-character-category">℞ 23: Get character category</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-24:-Disabling-Unicode-awareness-in-builtin-charclasses">℞ 24: Disabling Unicode-awareness in builtin charclasses</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-25:-Match-Unicode-properties-in-regex-with-%5Cp,-%5CP">℞ 25: Match Unicode properties in regex with \p, \P</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-26:-Custom-character-properties">℞ 26: Custom character properties</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-27:-Unicode-normalization">℞ 27: Unicode normalization</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-28:-Convert-non-ASCII-Unicode-numerics">℞ 28: Convert non-ASCII Unicode numerics</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-29:-Match-Unicode-grapheme-cluster-in-regex">℞ 29: Match Unicode grapheme cluster in regex</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-30:-Extract-by-grapheme-instead-of-by-codepoint-(regex)">℞ 30: Extract by grapheme instead of by codepoint (regex)</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-31:-Extract-by-grapheme-instead-of-by-codepoint-(substr)">℞ 31: Extract by grapheme instead of by codepoint (substr)</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-32:-Reverse-string-by-grapheme">℞ 32: Reverse string by grapheme</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-33:-String-length-in-graphemes">℞ 33: String length in graphemes</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-34:-Unicode-column-width-for-printing">℞ 34: Unicode column-width for printing</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-35:-Unicode-collation">℞ 35: Unicode collation</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-36:-Case-and-accent-insensitive-Unicode-sort">℞ 36: Case- and accent-insensitive Unicode sort</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-37:-Unicode-locale-collation">℞ 37: Unicode locale collation</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-38:-Making-cmp-work-on-text-instead-of-codepoints">℞ 38: Making cmp work on text instead of codepoints</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-39:-Case-and-accent-insensitive-comparisons">℞ 39: Case- and accent-insensitive comparisons</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-40:-Case-and-accent-insensitive-locale-comparisons">℞ 40: Case- and accent-insensitive locale comparisons</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-41:-Unicode-linebreaking">℞ 41: Unicode linebreaking</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-42:-Unicode-text-in-DBM-hashes,-the-tedious-way">℞ 42: Unicode text in DBM hashes, the tedious way</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-43:-Unicode-text-in-DBM-hashes,-the-easy-way">℞ 43: Unicode text in DBM hashes, the easy way</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#%E2%84%9E-44:-PROGRAM:-Demo-of-Unicode-collation-and-printing">℞ 44: PROGRAM: Demo of Unicode collation and printing</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#COPYRIGHT-AND-LICENCE">COPYRIGHT AND LICENCE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlunicook.html#REVISION-HISTORY">REVISION HISTORY</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlunicook.html#NAME">#</a>NAME</h1>
+
+<p>perlunicook - cookbookish examples of handling Unicode in Perl</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlunicook.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This manpage contains short recipes demonstrating how to handle common Unicode operations in Perl, plus one complete program at the end. Any undeclared variables in individual recipes are assumed to have a previous appropriate value in them.</p>
+
+<h1 id="EXAMPLES"><a class="permalink" href="perlunicook.html#EXAMPLES">#</a>EXAMPLES</h1>
+
+<h2 id="℞-0:-Standard-preamble"><a class="permalink" href="perlunicook.html#%E2%84%9E-0:-Standard-preamble">#</a><a id="Standard-preamble"></a>℞ 0: Standard preamble</h2>
+
+<p>Unless otherwise notes, all examples below require this standard preamble to work correctly, with the <code>#!</code> adjusted to work on your system:</p>
+
+<pre><code>#!/usr/bin/env perl
+
+use utf8;      # so literals and identifiers can be in UTF-8
+use v5.12;     # or later to get &quot;unicode_strings&quot; feature
+use strict;    # quote strings, declare variables
+use warnings;  # on by default
+use warnings  qw(FATAL utf8);    # fatalize encoding glitches
+use open      qw(:std :encoding(UTF-8)); # undeclared streams in UTF-8
+use charnames qw(:full :short);  # unneeded in v5.16</code></pre>
+
+<p>This <i>does</i> make even Unix programmers <code>binmode</code> your binary streams, or open them with <code>:raw</code>, but that&#39;s the only way to get at them portably anyway.</p>
+
+<p><b>WARNING</b>: <code>use autodie</code> (pre 2.26) and <code>use open</code> do not get along with each other.</p>
+
+<h2 id="℞-1:-Generic-Unicode-savvy-filter"><a class="permalink" href="perlunicook.html#%E2%84%9E-1:-Generic-Unicode-savvy-filter">#</a><a id="Generic-Unicode-savvy-filter"></a>℞ 1: Generic Unicode-savvy filter</h2>
+
+<p>Always decompose on the way in, then recompose on the way out.</p>
+
+<pre><code>use Unicode::Normalize;
+
+while (&lt;&gt;) {
+    $_ = NFD($_);   # decompose + reorder canonically
+    ...
+} continue {
+    print NFC($_);  # recompose (where possible) + reorder canonically
+}</code></pre>
+
+<h2 id="℞-2:-Fine-tuning-Unicode-warnings"><a class="permalink" href="perlunicook.html#%E2%84%9E-2:-Fine-tuning-Unicode-warnings">#</a><a id="Fine-tuning-Unicode-warnings"></a>℞ 2: Fine-tuning Unicode warnings</h2>
+
+<p>As of v5.14, Perl distinguishes three subclasses of UTF‑8 warnings.</p>
+
+<pre><code>use v5.14;                  # subwarnings unavailable any earlier
+no warnings &quot;nonchar&quot;;      # the 66 forbidden non-characters
+no warnings &quot;surrogate&quot;;    # UTF-16/CESU-8 nonsense
+no warnings &quot;non_unicode&quot;;  # for codepoints over 0x10_FFFF</code></pre>
+
+<h2 id="℞-3:-Declare-source-in-utf8-for-identifiers-and-literals"><a class="permalink" href="perlunicook.html#%E2%84%9E-3:-Declare-source-in-utf8-for-identifiers-and-literals">#</a><a id="Declare-source-in-utf8-for-identifiers-and-literals"></a>℞ 3: Declare source in utf8 for identifiers and literals</h2>
+
+<p>Without the all-critical <code>use utf8</code> declaration, putting UTF‑8 in your literals and identifiers won’t work right. If you used the standard preamble just given above, this already happened. If you did, you can do things like this:</p>
+
+<pre><code>use utf8;
+
+my $measure   = &quot;Ångström&quot;;
+my @μsoft     = qw( cp852 cp1251 cp1252 );
+my @ὑπέρμεγας = qw( ὑπέρ  μεγας );
+my @鯉        = qw( koi8-f koi8-u koi8-r );
+my $motto     = &quot;👪 💗 🐪&quot;; # FAMILY, GROWING HEART, DROMEDARY CAMEL</code></pre>
+
+<p>If you forget <code>use utf8</code>, high bytes will be misunderstood as separate characters, and nothing will work right.</p>
+
+<h2 id="℞-4:-Characters-and-their-numbers"><a class="permalink" href="perlunicook.html#%E2%84%9E-4:-Characters-and-their-numbers">#</a><a id="Characters-and-their-numbers"></a>℞ 4: Characters and their numbers</h2>
+
+<p>The <code>ord</code> and <code>chr</code> functions work transparently on all codepoints, not just on ASCII alone — nor in fact, not even just on Unicode alone.</p>
+
+<pre><code class="plaintext"># ASCII characters
+ord(&quot;A&quot;)
+chr(65)
+
+# characters from the Basic Multilingual Plane
+ord(&quot;Σ&quot;)
+chr(0x3A3)
+
+# beyond the BMP
+ord(&quot;𝑛&quot;)               # MATHEMATICAL ITALIC SMALL N
+chr(0x1D45B)
+
+# beyond Unicode! (up to MAXINT)
+ord(&quot;\x{20_0000}&quot;)
+chr(0x20_0000)</code></pre>
+
+<h2 id="℞-5:-Unicode-literals-by-character-number"><a class="permalink" href="perlunicook.html#%E2%84%9E-5:-Unicode-literals-by-character-number">#</a><a id="Unicode-literals-by-character-number"></a>℞ 5: Unicode literals by character number</h2>
+
+<p>In an interpolated literal, whether a double-quoted string or a regex, you may specify a character by its number using the <code>\x{<i>HHHHHH</i>}</code> escape.</p>
+
+<pre><code class="plaintext">String: &quot;\x{3a3}&quot;
+Regex:  /\x{3a3}/
+
+String: &quot;\x{1d45b}&quot;
+Regex:  /\x{1d45b}/
+
+# even non-BMP ranges in regex work fine
+/[\x{1D434}-\x{1D467}]/</code></pre>
+
+<h2 id="℞-6:-Get-character-name-by-number"><a class="permalink" href="perlunicook.html#%E2%84%9E-6:-Get-character-name-by-number">#</a><a id="Get-character-name-by-number"></a>℞ 6: Get character name by number</h2>
+
+<pre><code>use charnames ();
+my $name = charnames::viacode(0x03A3);</code></pre>
+
+<h2 id="℞-7:-Get-character-number-by-name"><a class="permalink" href="perlunicook.html#%E2%84%9E-7:-Get-character-number-by-name">#</a><a id="Get-character-number-by-name"></a>℞ 7: Get character number by name</h2>
+
+<pre><code>use charnames ();
+my $number = charnames::vianame(&quot;GREEK CAPITAL LETTER SIGMA&quot;);</code></pre>
+
+<h2 id="℞-8:-Unicode-named-characters"><a class="permalink" href="perlunicook.html#%E2%84%9E-8:-Unicode-named-characters">#</a><a id="Unicode-named-characters"></a>℞ 8: Unicode named characters</h2>
+
+<p>Use the <code>\N{<i>charname</i>}</code> notation to get the character by that name for use in interpolated literals (double-quoted strings and regexes). In v5.16, there is an implicit</p>
+
+<pre><code>use charnames qw(:full :short);</code></pre>
+
+<p>But prior to v5.16, you must be explicit about which set of charnames you want. The <code>:full</code> names are the official Unicode character name, alias, or sequence, which all share a namespace.</p>
+
+<pre><code>use charnames qw(:full :short latin greek);
+
+&quot;\N{MATHEMATICAL ITALIC SMALL N}&quot;      # :full
+&quot;\N{GREEK CAPITAL LETTER SIGMA}&quot;       # :full</code></pre>
+
+<p>Anything else is a Perl-specific convenience abbreviation. Specify one or more scripts by names if you want short names that are script-specific.</p>
+
+<pre><code class="plaintext">&quot;\N{Greek:Sigma}&quot;                      # :short
+&quot;\N{ae}&quot;                               #  latin
+&quot;\N{epsilon}&quot;                          #  greek</code></pre>
+
+<p>The v5.16 release also supports a <code>:loose</code> import for loose matching of character names, which works just like loose matching of property names: that is, it disregards case, whitespace, and underscores:</p>
+
+<pre><code class="plaintext">&quot;\N{euro sign}&quot;                        # :loose (from v5.16)</code></pre>
+
+<p>Starting in v5.32, you can also use</p>
+
+<pre><code class="plaintext">qr/\p{name=euro sign}/</code></pre>
+
+<p>to get official Unicode named characters in regular expressions. Loose matching is always done for these.</p>
+
+<h2 id="℞-9:-Unicode-named-sequences"><a class="permalink" href="perlunicook.html#%E2%84%9E-9:-Unicode-named-sequences">#</a><a id="Unicode-named-sequences"></a>℞ 9: Unicode named sequences</h2>
+
+<p>These look just like character names but return multiple codepoints. Notice the <code>%vx</code> vector-print functionality in <code>printf</code>.</p>
+
+<pre><code>use charnames qw(:full);
+my $seq = &quot;\N{LATIN CAPITAL LETTER A WITH MACRON AND GRAVE}&quot;;
+printf &quot;U+%v04X\n&quot;, $seq;
+U+0100.0300</code></pre>
+
+<h2 id="℞-10:-Custom-named-characters"><a class="permalink" href="perlunicook.html#%E2%84%9E-10:-Custom-named-characters">#</a><a id="Custom-named-characters"></a>℞ 10: Custom named characters</h2>
+
+<p>Use <code>:alias</code> to give your own lexically scoped nicknames to existing characters, or even to give unnamed private-use characters useful names.</p>
+
+<pre><code>use charnames &quot;:full&quot;, &quot;:alias&quot; =&gt; {
+    ecute =&gt; &quot;LATIN SMALL LETTER E WITH ACUTE&quot;,
+    &quot;APPLE LOGO&quot; =&gt; 0xF8FF, # private use character
+};
+
+&quot;\N{ecute}&quot;
+&quot;\N{APPLE LOGO}&quot;</code></pre>
+
+<h2 id="℞-11:-Names-of-CJK-codepoints"><a class="permalink" href="perlunicook.html#%E2%84%9E-11:-Names-of-CJK-codepoints">#</a><a id="Names-of-CJK-codepoints"></a>℞ 11: Names of CJK codepoints</h2>
+
+<p>Sinograms like “東京” come back with character names of <code>CJK UNIFIED IDEOGRAPH-6771</code> and <code>CJK UNIFIED IDEOGRAPH-4EAC</code>, because their “names” vary. The CPAN <code>Unicode::Unihan</code> module has a large database for decoding these (and a whole lot more), provided you know how to understand its output.</p>
+
+<pre><code># cpan -i Unicode::Unihan
+use Unicode::Unihan;
+my $str = &quot;東京&quot;;
+my $unhan = Unicode::Unihan-&gt;new;
+for my $lang (qw(Mandarin Cantonese Korean JapaneseOn JapaneseKun)) {
+    printf &quot;CJK $str in %-12s is &quot;, $lang;
+    say $unhan-&gt;$lang($str);
+}</code></pre>
+
+<p>prints:</p>
+
+<pre><code class="plaintext">CJK 東京 in Mandarin     is DONG1JING1
+CJK 東京 in Cantonese    is dung1ging1
+CJK 東京 in Korean       is TONGKYENG
+CJK 東京 in JapaneseOn   is TOUKYOU KEI KIN
+CJK 東京 in JapaneseKun  is HIGASHI AZUMAMIYAKO</code></pre>
+
+<p>If you have a specific romanization scheme in mind, use the specific module:</p>
+
+<pre><code># cpan -i Lingua::JA::Romanize::Japanese
+use Lingua::JA::Romanize::Japanese;
+my $k2r = Lingua::JA::Romanize::Japanese-&gt;new;
+my $str = &quot;東京&quot;;
+say &quot;Japanese for $str is &quot;, $k2r-&gt;chars($str);</code></pre>
+
+<p>prints</p>
+
+<pre><code class="plaintext">Japanese for 東京 is toukyou</code></pre>
+
+<h2 id="℞-12:-Explicit-encode/decode"><a class="permalink" href="perlunicook.html#%E2%84%9E-12:-Explicit-encode/decode">#</a><a id="Explicit-encode-decode"></a>℞ 12: Explicit encode/decode</h2>
+
+<p>On rare occasion, such as a database read, you may be given encoded text you need to decode.</p>
+
+<pre><code> use Encode qw(encode decode);
+
+ my $chars = decode(&quot;shiftjis&quot;, $bytes, 1);
+# OR
+ my $bytes = encode(&quot;MIME-Header-ISO_2022_JP&quot;, $chars, 1);</code></pre>
+
+<p>For streams all in the same encoding, don&#39;t use encode/decode; instead set the file encoding when you open the file or immediately after with <code>binmode</code> as described later below.</p>
+
+<h2 id="℞-13:-Decode-program-arguments-as-utf8"><a class="permalink" href="perlunicook.html#%E2%84%9E-13:-Decode-program-arguments-as-utf8">#</a><a id="Decode-program-arguments-as-utf8"></a>℞ 13: Decode program arguments as utf8</h2>
+
+<pre><code>    $ perl -CA ...
+or
+    $ export PERL_UNICODE=A
+or
+   use Encode qw(decode);
+   @ARGV = map { decode(&#39;UTF-8&#39;, $_, 1) } @ARGV;</code></pre>
+
+<h2 id="℞-14:-Decode-program-arguments-as-locale-encoding"><a class="permalink" href="perlunicook.html#%E2%84%9E-14:-Decode-program-arguments-as-locale-encoding">#</a><a id="Decode-program-arguments-as-locale-encoding"></a>℞ 14: Decode program arguments as locale encoding</h2>
+
+<pre><code># cpan -i Encode::Locale
+use Encode qw(locale);
+use Encode::Locale;
+
+# use &quot;locale&quot; as an arg to encode/decode
+@ARGV = map { decode(locale =&gt; $_, 1) } @ARGV;</code></pre>
+
+<h2 id="℞-15:-Declare-STD{IN,OUT,ERR}-to-be-utf8"><a class="permalink" href="perlunicook.html#%E2%84%9E-15:-Declare-STD%7BIN,OUT,ERR%7D-to-be-utf8">#</a><a id="Declare-STD-IN-OUT-ERR-to-be-utf8"></a>℞ 15: Declare STD{IN,OUT,ERR} to be utf8</h2>
+
+<p>Use a command-line option, an environment variable, or else call <code>binmode</code> explicitly:</p>
+
+<pre><code>    $ perl -CS ...
+or
+    $ export PERL_UNICODE=S
+or
+    use open qw(:std :encoding(UTF-8));
+or
+    binmode(STDIN,  &quot;:encoding(UTF-8)&quot;);
+    binmode(STDOUT, &quot;:utf8&quot;);
+    binmode(STDERR, &quot;:utf8&quot;);</code></pre>
+
+<h2 id="℞-16:-Declare-STD{IN,OUT,ERR}-to-be-in-locale-encoding"><a class="permalink" href="perlunicook.html#%E2%84%9E-16:-Declare-STD%7BIN,OUT,ERR%7D-to-be-in-locale-encoding">#</a><a id="Declare-STD-IN-OUT-ERR-to-be-in-locale-encoding"></a>℞ 16: Declare STD{IN,OUT,ERR} to be in locale encoding</h2>
+
+<pre><code># cpan -i Encode::Locale
+use Encode;
+use Encode::Locale;
+
+# or as a stream for binmode or open
+binmode STDIN,  &quot;:encoding(console_in)&quot;  if -t STDIN;
+binmode STDOUT, &quot;:encoding(console_out)&quot; if -t STDOUT;
+binmode STDERR, &quot;:encoding(console_out)&quot; if -t STDERR;</code></pre>
+
+<h2 id="℞-17:-Make-file-I/O-default-to-utf8"><a class="permalink" href="perlunicook.html#%E2%84%9E-17:-Make-file-I/O-default-to-utf8">#</a><a id="Make-file-I-O-default-to-utf8"></a>℞ 17: Make file I/O default to utf8</h2>
+
+<p>Files opened without an encoding argument will be in UTF-8:</p>
+
+<pre><code>    $ perl -CD ...
+or
+    $ export PERL_UNICODE=D
+or
+    use open qw(:encoding(UTF-8));</code></pre>
+
+<h2 id="℞-18:-Make-all-I/O-and-args-default-to-utf8"><a class="permalink" href="perlunicook.html#%E2%84%9E-18:-Make-all-I/O-and-args-default-to-utf8">#</a><a id="Make-all-I-O-and-args-default-to-utf8"></a>℞ 18: Make all I/O and args default to utf8</h2>
+
+<pre><code>    $ perl -CSDA ...
+or
+    $ export PERL_UNICODE=SDA
+or
+    use open qw(:std :encoding(UTF-8));
+    use Encode qw(decode);
+    @ARGV = map { decode(&#39;UTF-8&#39;, $_, 1) } @ARGV;</code></pre>
+
+<h2 id="℞-19:-Open-file-with-specific-encoding"><a class="permalink" href="perlunicook.html#%E2%84%9E-19:-Open-file-with-specific-encoding">#</a><a id="Open-file-with-specific-encoding"></a>℞ 19: Open file with specific encoding</h2>
+
+<p>Specify stream encoding. This is the normal way to deal with encoded text, not by calling low-level functions.</p>
+
+<pre><code># input file
+    open(my $in_file, &quot;&lt; :encoding(UTF-16)&quot;, &quot;wintext&quot;);
+OR
+    open(my $in_file, &quot;&lt;&quot;, &quot;wintext&quot;);
+    binmode($in_file, &quot;:encoding(UTF-16)&quot;);
+THEN
+    my $line = &lt;$in_file&gt;;
+
+# output file
+    open($out_file, &quot;&gt; :encoding(cp1252)&quot;, &quot;wintext&quot;);
+OR
+    open(my $out_file, &quot;&gt;&quot;, &quot;wintext&quot;);
+    binmode($out_file, &quot;:encoding(cp1252)&quot;);
+THEN
+    print $out_file &quot;some text\n&quot;;</code></pre>
+
+<p>More layers than just the encoding can be specified here. For example, the incantation <code>&quot;:raw :encoding(UTF-16LE) :crlf&quot;</code> includes implicit CRLF handling.</p>
+
+<h2 id="℞-20:-Unicode-casing"><a class="permalink" href="perlunicook.html#%E2%84%9E-20:-Unicode-casing">#</a><a id="Unicode-casing"></a>℞ 20: Unicode casing</h2>
+
+<p>Unicode casing is very different from ASCII casing.</p>
+
+<pre><code class="plaintext">uc(&quot;henry ⅷ&quot;)  # &quot;HENRY Ⅷ&quot;
+uc(&quot;tschüß&quot;)   # &quot;TSCHÜSS&quot;  notice ß =&gt; SS
+
+# both are true:
+&quot;tschüß&quot;  =~ /TSCHÜSS/i   # notice ß =&gt; SS
+&quot;Σίσυφος&quot; =~ /ΣΊΣΥΦΟΣ/i   # notice Σ,σ,ς sameness</code></pre>
+
+<h2 id="℞-21:-Unicode-case-insensitive-comparisons"><a class="permalink" href="perlunicook.html#%E2%84%9E-21:-Unicode-case-insensitive-comparisons">#</a><a id="Unicode-case-insensitive-comparisons"></a>℞ 21: Unicode case-insensitive comparisons</h2>
+
+<p>Also available in the CPAN <a href="./Unicode::CaseFold.html">Unicode::CaseFold</a> module, the new <code>fc</code> “foldcase” function from v5.16 grants access to the same Unicode casefolding as the <code>/i</code> pattern modifier has always used:</p>
+
+<pre><code>use feature &quot;fc&quot;; # fc() function is from v5.16
+
+# sort case-insensitively
+my @sorted = sort { fc($a) cmp fc($b) } @list;
+
+# both are true:
+fc(&quot;tschüß&quot;)  eq fc(&quot;TSCHÜSS&quot;)
+fc(&quot;Σίσυφος&quot;) eq fc(&quot;ΣΊΣΥΦΟΣ&quot;)</code></pre>
+
+<h2 id="℞-22:-Match-Unicode-linebreak-sequence-in-regex"><a class="permalink" href="perlunicook.html#%E2%84%9E-22:-Match-Unicode-linebreak-sequence-in-regex">#</a><a id="Match-Unicode-linebreak-sequence-in-regex"></a>℞ 22: Match Unicode linebreak sequence in regex</h2>
+
+<p>A Unicode linebreak matches the two-character CRLF grapheme or any of seven vertical whitespace characters. Good for dealing with textfiles coming from different operating systems.</p>
+
+<pre><code>\R
+
+s/\R/\n/g;  # normalize all linebreaks to \n</code></pre>
+
+<h2 id="℞-23:-Get-character-category"><a class="permalink" href="perlunicook.html#%E2%84%9E-23:-Get-character-category">#</a><a id="Get-character-category"></a>℞ 23: Get character category</h2>
+
+<p>Find the general category of a numeric codepoint.</p>
+
+<pre><code>use Unicode::UCD qw(charinfo);
+my $cat = charinfo(0x3A3)-&gt;{category};  # &quot;Lu&quot;</code></pre>
+
+<h2 id="℞-24:-Disabling-Unicode-awareness-in-builtin-charclasses"><a class="permalink" href="perlunicook.html#%E2%84%9E-24:-Disabling-Unicode-awareness-in-builtin-charclasses">#</a><a id="Disabling-Unicode-awareness-in-builtin-charclasses"></a>℞ 24: Disabling Unicode-awareness in builtin charclasses</h2>
+
+<p>Disable <code>\w</code>, <code>\b</code>, <code>\s</code>, <code>\d</code>, and the POSIX classes from working correctly on Unicode either in this scope, or in just one regex.</p>
+
+<pre><code>use v5.14;
+use re &quot;/a&quot;;
+
+# OR
+
+my($num) = $str =~ /(\d+)/a;</code></pre>
+
+<p>Or use specific un-Unicode properties, like <code>\p{ahex}</code> and <code>\p{POSIX_Digit</code>}. Properties still work normally no matter what charset modifiers (<code>/d /u /l /a /aa</code>) should be effect.</p>
+
+<h2 id="℞-25:-Match-Unicode-properties-in-regex-with-\p,-\P"><a class="permalink" href="perlunicook.html#%E2%84%9E-25:-Match-Unicode-properties-in-regex-with-%5Cp,-%5CP">#</a><a id="Match-Unicode-properties-in-regex-with-p-P"></a>℞ 25: Match Unicode properties in regex with \p, \P</h2>
+
+<p>These all match a single codepoint with the given property. Use <code>\P</code> in place of <code>\p</code> to match one codepoint lacking that property.</p>
+
+<pre><code class="plaintext">\pL, \pN, \pS, \pP, \pM, \pZ, \pC
+\p{Sk}, \p{Ps}, \p{Lt}
+\p{alpha}, \p{upper}, \p{lower}
+\p{Latin}, \p{Greek}
+\p{script_extensions=Latin}, \p{scx=Greek}
+\p{East_Asian_Width=Wide}, \p{EA=W}
+\p{Line_Break=Hyphen}, \p{LB=HY}
+\p{Numeric_Value=4}, \p{NV=4}</code></pre>
+
+<h2 id="℞-26:-Custom-character-properties"><a class="permalink" href="perlunicook.html#%E2%84%9E-26:-Custom-character-properties">#</a><a id="Custom-character-properties"></a>℞ 26: Custom character properties</h2>
+
+<p>Define at compile-time your own custom character properties for use in regexes.</p>
+
+<pre><code class="plaintext"># using private-use characters
+sub In_Tengwar { &quot;E000\tE07F\n&quot; }
+
+if (/\p{In_Tengwar}/) { ... }
+
+# blending existing properties
+sub Is_GraecoRoman_Title {&lt;&lt;&#39;END_OF_SET&#39;}
++utf8::IsLatin
++utf8::IsGreek
+&amp;utf8::IsTitle
+END_OF_SET
+
+if (/\p{Is_GraecoRoman_Title}/ { ... }</code></pre>
+
+<h2 id="℞-27:-Unicode-normalization"><a class="permalink" href="perlunicook.html#%E2%84%9E-27:-Unicode-normalization">#</a><a id="Unicode-normalization"></a>℞ 27: Unicode normalization</h2>
+
+<p>Typically render into NFD on input and NFC on output. Using NFKC or NFKD functions improves recall on searches, assuming you&#39;ve already done to the same text to be searched. Note that this is about much more than just pre- combined compatibility glyphs; it also reorders marks according to their canonical combining classes and weeds out singletons.</p>
+
+<pre><code>use Unicode::Normalize;
+my $nfd  = NFD($orig);
+my $nfc  = NFC($orig);
+my $nfkd = NFKD($orig);
+my $nfkc = NFKC($orig);</code></pre>
+
+<h2 id="℞-28:-Convert-non-ASCII-Unicode-numerics"><a class="permalink" href="perlunicook.html#%E2%84%9E-28:-Convert-non-ASCII-Unicode-numerics">#</a><a id="Convert-non-ASCII-Unicode-numerics"></a>℞ 28: Convert non-ASCII Unicode numerics</h2>
+
+<p>Unless you’ve used <code>/a</code> or <code>/aa</code>, <code>\d</code> matches more than ASCII digits only, but Perl’s implicit string-to-number conversion does not current recognize these. Here’s how to convert such strings manually.</p>
+
+<pre><code>use v5.14;  # needed for num() function
+use Unicode::UCD qw(num);
+my $str = &quot;got Ⅻ and ४५६७ and ⅞ and here&quot;;
+my @nums = ();
+while ($str =~ /(\d+|\N)/g) {  # not just ASCII!
+   push @nums, num($1);
+}
+say &quot;@nums&quot;;   #     12      4567      0.875
+
+use charnames qw(:full);
+my $nv = num(&quot;\N{RUMI DIGIT ONE}\N{RUMI DIGIT TWO}&quot;);</code></pre>
+
+<h2 id="℞-29:-Match-Unicode-grapheme-cluster-in-regex"><a class="permalink" href="perlunicook.html#%E2%84%9E-29:-Match-Unicode-grapheme-cluster-in-regex">#</a><a id="Match-Unicode-grapheme-cluster-in-regex"></a>℞ 29: Match Unicode grapheme cluster in regex</h2>
+
+<p>Programmer-visible “characters” are codepoints matched by <code>/./s</code>, but user-visible “characters” are graphemes matched by <code>/\X/</code>.</p>
+
+<pre><code># Find vowel *plus* any combining diacritics,underlining,etc.
+my $nfd = NFD($orig);
+$nfd =~ / (?=[aeiou]) \X /xi</code></pre>
+
+<h2 id="℞-30:-Extract-by-grapheme-instead-of-by-codepoint-(regex)"><a class="permalink" href="perlunicook.html#%E2%84%9E-30:-Extract-by-grapheme-instead-of-by-codepoint-(regex)">#</a><a id="Extract-by-grapheme-instead-of-by-codepoint-regex"></a>℞ 30: Extract by grapheme instead of by codepoint (regex)</h2>
+
+<pre><code># match and grab five first graphemes
+my($first_five) = $str =~ /^ ( \X{5} ) /x;</code></pre>
+
+<h2 id="℞-31:-Extract-by-grapheme-instead-of-by-codepoint-(substr)"><a class="permalink" href="perlunicook.html#%E2%84%9E-31:-Extract-by-grapheme-instead-of-by-codepoint-(substr)">#</a><a id="Extract-by-grapheme-instead-of-by-codepoint-substr"></a>℞ 31: Extract by grapheme instead of by codepoint (substr)</h2>
+
+<pre><code># cpan -i Unicode::GCString
+use Unicode::GCString;
+my $gcs = Unicode::GCString-&gt;new($str);
+my $first_five = $gcs-&gt;substr(0, 5);</code></pre>
+
+<h2 id="℞-32:-Reverse-string-by-grapheme"><a class="permalink" href="perlunicook.html#%E2%84%9E-32:-Reverse-string-by-grapheme">#</a><a id="Reverse-string-by-grapheme"></a>℞ 32: Reverse string by grapheme</h2>
+
+<p>Reversing by codepoint messes up diacritics, mistakenly converting <code>crème brûlée</code> into <code>éel̂urb em̀erc</code> instead of into <code>eélûrb emèrc</code>; so reverse by grapheme instead. Both these approaches work right no matter what normalization the string is in:</p>
+
+<pre><code>$str = join(&quot;&quot;, reverse $str =~ /\X/g);
+
+# OR: cpan -i Unicode::GCString
+use Unicode::GCString;
+$str = reverse Unicode::GCString-&gt;new($str);</code></pre>
+
+<h2 id="℞-33:-String-length-in-graphemes"><a class="permalink" href="perlunicook.html#%E2%84%9E-33:-String-length-in-graphemes">#</a><a id="String-length-in-graphemes"></a>℞ 33: String length in graphemes</h2>
+
+<p>The string <code>brûlée</code> has six graphemes but up to eight codepoints. This counts by grapheme, not by codepoint:</p>
+
+<pre><code>my $str = &quot;brûlée&quot;;
+my $count = 0;
+while ($str =~ /\X/g) { $count++ }
+
+ # OR: cpan -i Unicode::GCString
+use Unicode::GCString;
+my $gcs = Unicode::GCString-&gt;new($str);
+my $count = $gcs-&gt;length;</code></pre>
+
+<h2 id="℞-34:-Unicode-column-width-for-printing"><a class="permalink" href="perlunicook.html#%E2%84%9E-34:-Unicode-column-width-for-printing">#</a><a id="Unicode-column-width-for-printing"></a>℞ 34: Unicode column-width for printing</h2>
+
+<p>Perl’s <code>printf</code>, <code>sprintf</code>, and <code>format</code> think all codepoints take up 1 print column, but many take 0 or 2. Here to show that normalization makes no difference, we print out both forms:</p>
+
+<pre><code>use Unicode::GCString;
+use Unicode::Normalize;
+
+my @words = qw/crème brûlée/;
+@words = map { NFC($_), NFD($_) } @words;
+
+for my $str (@words) {
+    my $gcs = Unicode::GCString-&gt;new($str);
+    my $cols = $gcs-&gt;columns;
+    my $pad = &quot; &quot; x (10 - $cols);
+    say str, $pad, &quot; |&quot;;
+}</code></pre>
+
+<p>generates this to show that it pads correctly no matter the normalization:</p>
+
+<pre><code class="plaintext">crème      |
+crème      |
+brûlée     |
+brûlée     |</code></pre>
+
+<h2 id="℞-35:-Unicode-collation"><a class="permalink" href="perlunicook.html#%E2%84%9E-35:-Unicode-collation">#</a><a id="Unicode-collation"></a>℞ 35: Unicode collation</h2>
+
+<p>Text sorted by numeric codepoint follows no reasonable alphabetic order; use the UCA for sorting text.</p>
+
+<pre><code>use Unicode::Collate;
+my $col = Unicode::Collate-&gt;new();
+my @list = $col-&gt;sort(@old_list);</code></pre>
+
+<p>See the <i>ucsort</i> program from the <a href="./Unicode::Tussle.html">Unicode::Tussle</a> CPAN module for a convenient command-line interface to this module.</p>
+
+<h2 id="℞-36:-Case-and-accent-insensitive-Unicode-sort"><a class="permalink" href="perlunicook.html#%E2%84%9E-36:-Case-and-accent-insensitive-Unicode-sort">#</a><a id="Case--and-accent-insensitive-Unicode-sort"></a>℞ 36: Case- <i>and</i> accent-insensitive Unicode sort</h2>
+
+<p>Specify a collation strength of level 1 to ignore case and diacritics, only looking at the basic character.</p>
+
+<pre><code>use Unicode::Collate;
+my $col = Unicode::Collate-&gt;new(level =&gt; 1);
+my @list = $col-&gt;sort(@old_list);</code></pre>
+
+<h2 id="℞-37:-Unicode-locale-collation"><a class="permalink" href="perlunicook.html#%E2%84%9E-37:-Unicode-locale-collation">#</a><a id="Unicode-locale-collation"></a>℞ 37: Unicode locale collation</h2>
+
+<p>Some locales have special sorting rules.</p>
+
+<pre><code># either use v5.12, OR: cpan -i Unicode::Collate::Locale
+use Unicode::Collate::Locale;
+my $col = Unicode::Collate::Locale-&gt;new(locale =&gt; &quot;de__phonebook&quot;);
+my @list = $col-&gt;sort(@old_list);</code></pre>
+
+<p>The <i>ucsort</i> program mentioned above accepts a <code>--locale</code> parameter.</p>
+
+<h2 id="℞-38:-Making-cmp-work-on-text-instead-of-codepoints"><a class="permalink" href="perlunicook.html#%E2%84%9E-38:-Making-cmp-work-on-text-instead-of-codepoints">#</a><a id="Making-cmp-work-on-text-instead-of-codepoints"></a>℞ 38: Making <code>cmp</code> work on text instead of codepoints</h2>
+
+<p>Instead of this:</p>
+
+<pre><code>@srecs = sort {
+    $b-&gt;{AGE}   &lt;=&gt;  $a-&gt;{AGE}
+                ||
+    $a-&gt;{NAME}  cmp  $b-&gt;{NAME}
+} @recs;</code></pre>
+
+<p>Use this:</p>
+
+<pre><code>my $coll = Unicode::Collate-&gt;new();
+for my $rec (@recs) {
+    $rec-&gt;{NAME_key} = $coll-&gt;getSortKey( $rec-&gt;{NAME} );
+}
+@srecs = sort {
+    $b-&gt;{AGE}       &lt;=&gt;  $a-&gt;{AGE}
+                    ||
+    $a-&gt;{NAME_key}  cmp  $b-&gt;{NAME_key}
+} @recs;</code></pre>
+
+<h2 id="℞-39:-Case-and-accent-insensitive-comparisons"><a class="permalink" href="perlunicook.html#%E2%84%9E-39:-Case-and-accent-insensitive-comparisons">#</a><a id="Case--and-accent-insensitive-comparisons"></a>℞ 39: Case- <i>and</i> accent-insensitive comparisons</h2>
+
+<p>Use a collator object to compare Unicode text by character instead of by codepoint.</p>
+
+<pre><code>use Unicode::Collate;
+my $es = Unicode::Collate-&gt;new(
+    level =&gt; 1,
+    normalization =&gt; undef
+);
+
+ # now both are true:
+$es-&gt;eq(&quot;García&quot;,  &quot;GARCIA&quot; );
+$es-&gt;eq(&quot;Márquez&quot;, &quot;MARQUEZ&quot;);</code></pre>
+
+<h2 id="℞-40:-Case-and-accent-insensitive-locale-comparisons"><a class="permalink" href="perlunicook.html#%E2%84%9E-40:-Case-and-accent-insensitive-locale-comparisons">#</a><a id="Case--and-accent-insensitive-locale-comparisons"></a>℞ 40: Case- <i>and</i> accent-insensitive locale comparisons</h2>
+
+<p>Same, but in a specific locale.</p>
+
+<pre><code>my $de = Unicode::Collate::Locale-&gt;new(
+           locale =&gt; &quot;de__phonebook&quot;,
+         );
+
+# now this is true:
+$de-&gt;eq(&quot;tschüß&quot;, &quot;TSCHUESS&quot;);  # notice ü =&gt; UE, ß =&gt; SS</code></pre>
+
+<h2 id="℞-41:-Unicode-linebreaking"><a class="permalink" href="perlunicook.html#%E2%84%9E-41:-Unicode-linebreaking">#</a><a id="Unicode-linebreaking"></a>℞ 41: Unicode linebreaking</h2>
+
+<p>Break up text into lines according to Unicode rules.</p>
+
+<pre><code># cpan -i Unicode::LineBreak
+use Unicode::LineBreak;
+use charnames qw(:full);
+
+my $para = &quot;This is a super\N{HYPHEN}long string. &quot; x 20;
+my $fmt = Unicode::LineBreak-&gt;new;
+print $fmt-&gt;break($para), &quot;\n&quot;;</code></pre>
+
+<h2 id="℞-42:-Unicode-text-in-DBM-hashes,-the-tedious-way"><a class="permalink" href="perlunicook.html#%E2%84%9E-42:-Unicode-text-in-DBM-hashes,-the-tedious-way">#</a><a id="Unicode-text-in-DBM-hashes-the-tedious-way"></a>℞ 42: Unicode text in DBM hashes, the tedious way</h2>
+
+<p>Using a regular Perl string as a key or value for a DBM hash will trigger a wide character exception if any codepoints won’t fit into a byte. Here’s how to manually manage the translation:</p>
+
+<pre><code>   use DB_File;
+   use Encode qw(encode decode);
+   tie %dbhash, &quot;DB_File&quot;, &quot;pathname&quot;;
+
+# STORE
+
+   # assume $uni_key and $uni_value are abstract Unicode strings
+   my $enc_key   = encode(&quot;UTF-8&quot;, $uni_key, 1);
+   my $enc_value = encode(&quot;UTF-8&quot;, $uni_value, 1);
+   $dbhash{$enc_key} = $enc_value;
+
+# FETCH
+
+   # assume $uni_key holds a normal Perl string (abstract Unicode)
+   my $enc_key   = encode(&quot;UTF-8&quot;, $uni_key, 1);
+   my $enc_value = $dbhash{$enc_key};
+   my $uni_value = decode(&quot;UTF-8&quot;, $enc_value, 1);</code></pre>
+
+<h2 id="℞-43:-Unicode-text-in-DBM-hashes,-the-easy-way"><a class="permalink" href="perlunicook.html#%E2%84%9E-43:-Unicode-text-in-DBM-hashes,-the-easy-way">#</a><a id="Unicode-text-in-DBM-hashes-the-easy-way"></a>℞ 43: Unicode text in DBM hashes, the easy way</h2>
+
+<p>Here’s how to implicitly manage the translation; all encoding and decoding is done automatically, just as with streams that have a particular encoding attached to them:</p>
+
+<pre><code>   use DB_File;
+   use DBM_Filter;
+
+   my $dbobj = tie %dbhash, &quot;DB_File&quot;, &quot;pathname&quot;;
+   $dbobj-&gt;Filter_Value(&quot;utf8&quot;);  # this is the magic bit
+
+# STORE
+
+   # assume $uni_key and $uni_value are abstract Unicode strings
+   $dbhash{$uni_key} = $uni_value;
+
+ # FETCH
+
+   # $uni_key holds a normal Perl string (abstract Unicode)
+   my $uni_value = $dbhash{$uni_key};</code></pre>
+
+<h2 id="℞-44:-PROGRAM:-Demo-of-Unicode-collation-and-printing"><a class="permalink" href="perlunicook.html#%E2%84%9E-44:-PROGRAM:-Demo-of-Unicode-collation-and-printing">#</a><a id="PROGRAM:-Demo-of-Unicode-collation-and-printing"></a>℞ 44: PROGRAM: Demo of Unicode collation and printing</h2>
+
+<p>Here’s a full program showing how to make use of locale-sensitive sorting, Unicode casing, and managing print widths when some of the characters take up zero or two columns, not just one column each time. When run, the following program produces this nicely aligned output:</p>
+
+<pre><code class="plaintext">Crème Brûlée....... €2.00
+Éclair............. €1.60
+Fideuà............. €4.20
+Hamburger.......... €6.00
+Jamón Serrano...... €4.45
+Linguiça........... €7.00
+Pâté............... €4.15
+Pears.............. €2.00
+Pêches............. €2.25
+Smørbrød........... €5.75
+Spätzle............ €5.50
+Xoriço............. €3.00
+Γύρος.............. €6.50
+막걸리............. €4.00
+おもち............. €2.65
+お好み焼き......... €8.00
+シュークリーム..... €1.85
+寿司............... €9.99
+包子............... €7.50</code></pre>
+
+<p>Here&#39;s that program; tested on v5.14.</p>
+
+<pre><code>#!/usr/bin/env perl
+# umenu - demo sorting and printing of Unicode food
+#
+# (obligatory and increasingly long preamble)
+#
+use utf8;
+use v5.14;                       # for locale sorting
+use strict;
+use warnings;
+use warnings  qw(FATAL utf8);    # fatalize encoding faults
+use open      qw(:std :encoding(UTF-8)); # undeclared streams in UTF-8
+use charnames qw(:full :short);  # unneeded in v5.16
+
+# std modules
+use Unicode::Normalize;          # std perl distro as of v5.8
+use List::Util qw(max);          # std perl distro as of v5.10
+use Unicode::Collate::Locale;    # std perl distro as of v5.14
+
+# cpan modules
+use Unicode::GCString;           # from CPAN
+
+# forward defs
+sub pad($$$);
+sub colwidth(_);
+sub entitle(_);
+
+my %price = (
+    &quot;γύρος&quot;             =&gt; 6.50, # gyros
+    &quot;pears&quot;             =&gt; 2.00, # like um, pears
+    &quot;linguiça&quot;          =&gt; 7.00, # spicy sausage, Portuguese
+    &quot;xoriço&quot;            =&gt; 3.00, # chorizo sausage, Catalan
+    &quot;hamburger&quot;         =&gt; 6.00, # burgermeister meisterburger
+    &quot;éclair&quot;            =&gt; 1.60, # dessert, French
+    &quot;smørbrød&quot;          =&gt; 5.75, # sandwiches, Norwegian
+    &quot;spätzle&quot;           =&gt; 5.50, # Bayerisch noodles, little sparrows
+    &quot;包子&quot;              =&gt; 7.50, # bao1 zi5, steamed pork buns, Mandarin
+    &quot;jamón serrano&quot;     =&gt; 4.45, # country ham, Spanish
+    &quot;pêches&quot;            =&gt; 2.25, # peaches, French
+    &quot;シュークリーム&quot;    =&gt; 1.85, # cream-filled pastry like eclair
+    &quot;막걸리&quot;            =&gt; 4.00, # makgeolli, Korean rice wine
+    &quot;寿司&quot;              =&gt; 9.99, # sushi, Japanese
+    &quot;おもち&quot;            =&gt; 2.65, # omochi, rice cakes, Japanese
+    &quot;crème brûlée&quot;      =&gt; 2.00, # crema catalana
+    &quot;fideuà&quot;            =&gt; 4.20, # more noodles, Valencian
+                                 # (Catalan=fideuada)
+    &quot;pâté&quot;              =&gt; 4.15, # gooseliver paste, French
+    &quot;お好み焼き&quot;        =&gt; 8.00, # okonomiyaki, Japanese
+);
+
+my $width = 5 + max map { colwidth } keys %price;
+
+# So the Asian stuff comes out in an order that someone
+# who reads those scripts won&#39;t freak out over; the
+# CJK stuff will be in JIS X 0208 order that way.
+my $coll  = Unicode::Collate::Locale-&gt;new(locale =&gt; &quot;ja&quot;);
+
+for my $item ($coll-&gt;sort(keys %price)) {
+    print pad(entitle($item), $width, &quot;.&quot;);
+    printf &quot; €%.2f\n&quot;, $price{$item};
+}
+
+sub pad($$$) {
+    my($str, $width, $padchar) = @_;
+    return $str . ($padchar x ($width - colwidth($str)));
+}
+
+sub colwidth(_) {
+    my($str) = @_;
+    return Unicode::GCString-&gt;new($str)-&gt;columns;
+}
+
+sub entitle(_) {
+    my($str) = @_;
+    $str =~ s{ (?=\pL)(\S)     (\S*) }
+             { ucfirst($1) . lc($2)  }xge;
+    return $str;
+}</code></pre>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="perlunicook.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p>See these manpages, some of which are CPAN modules: <a href="perlunicode.html">perlunicode</a>, <a href="perluniprops.html">perluniprops</a>, <a href="perlre.html">perlre</a>, <a href="perlrecharclass.html">perlrecharclass</a>, <a href="perluniintro.html">perluniintro</a>, <a href="perlunitut.html">perlunitut</a>, <a href="perlunifaq.html">perlunifaq</a>, <a href="PerlIO.html">PerlIO</a>, <a href="DB_File.html">DB_File</a>, <a href="DBM_Filter.html">DBM_Filter</a>, <a href="./DBM_Filter::utf8.html">DBM_Filter::utf8</a>, <a href="Encode.html">Encode</a>, <a href="./Encode::Locale.html">Encode::Locale</a>, <a href="./Unicode::UCD.html">Unicode::UCD</a>, <a href="./Unicode::Normalize.html">Unicode::Normalize</a>, <a href="./Unicode::GCString.html">Unicode::GCString</a>, <a href="./Unicode::LineBreak.html">Unicode::LineBreak</a>, <a href="./Unicode::Collate.html">Unicode::Collate</a>, <a href="./Unicode::Collate::Locale.html">Unicode::Collate::Locale</a>, <a href="./Unicode::Unihan.html">Unicode::Unihan</a>, <a href="./Unicode::CaseFold.html">Unicode::CaseFold</a>, <a href="./Unicode::Tussle.html">Unicode::Tussle</a>, <a href="./Lingua::JA::Romanize::Japanese.html">Lingua::JA::Romanize::Japanese</a>, <a href="./Lingua::ZH::Romanize::Pinyin.html">Lingua::ZH::Romanize::Pinyin</a>, <a href="./Lingua::KO::Romanize::Hangul.html">Lingua::KO::Romanize::Hangul</a>.</p>
+
+<p>The <a href="./Unicode::Tussle.html">Unicode::Tussle</a> CPAN module includes many programs to help with working with Unicode, including these programs to fully or partly replace standard utilities: <i>tcgrep</i> instead of <i>egrep</i>, <i>uniquote</i> instead of <i>cat -v</i> or <i>hexdump</i>, <i>uniwc</i> instead of <i>wc</i>, <i>unilook</i> instead of <i>look</i>, <i>unifmt</i> instead of <i>fmt</i>, and <i>ucsort</i> instead of <i>sort</i>. For exploring Unicode character names and character properties, see its <i>uniprops</i>, <i>unichars</i>, and <i>uninames</i> programs. It also supplies these programs, all of which are general filters that do Unicode-y things: <i>unititle</i> and <i>unicaps</i>; <i>uniwide</i> and <i>uninarrow</i>; <i>unisupers</i> and <i>unisubs</i>; <i>nfd</i>, <i>nfc</i>, <i>nfkd</i>, and <i>nfkc</i>; and <i>uc</i>, <i>lc</i>, and <i>tc</i>.</p>
+
+<p>Finally, see the published Unicode Standard (page numbers are from version 6.0.0), including these specific annexes and technical reports:</p>
+
+<dl>
+
+<dt id="§3.13-Default-Case-Algorithms,-page-113;-§4.2-Case,-pages-120–122;-Case-Mappings,-page-166–172,-especially-Caseless-Matching-starting-on-page-170."><a class="permalink" href="perlunicook.html#%C2%A73.13-Default-Case-Algorithms,-page-113;-%C2%A74.2-Case,-pages-120%E2%80%93122;-Case-Mappings,-page-166%E2%80%93172,-especially-Caseless-Matching-starting-on-page-170.">#</a><a id="Default-Case-Algorithms-page-113-4.2-Case-pages-120122-Case-Mappings-page-166172-especially-Caseless-Matching-starting-on-page-170"></a>§3.13 Default Case Algorithms, page 113; §4.2 Case, pages 120–122; Case Mappings, page 166–172, especially Caseless Matching starting on page 170.</dt>
+<dd>
+
+</dd>
+<dt id="UAX-#44:-Unicode-Character-Database"><a class="permalink" href="perlunicook.html#UAX-%2344:-Unicode-Character-Database">#</a><a id="UAX"></a><a id="UAX-44:-Unicode-Character-Database"></a>UAX #44: Unicode Character Database</dt>
+<dd>
+
+</dd>
+<dt id="UTS-#18:-Unicode-Regular-Expressions"><a class="permalink" href="perlunicook.html#UTS-%2318:-Unicode-Regular-Expressions">#</a><a id="UTS"></a><a id="UTS-18:-Unicode-Regular-Expressions"></a>UTS #18: Unicode Regular Expressions</dt>
+<dd>
+
+</dd>
+<dt id="UAX-#15:-Unicode-Normalization-Forms"><a class="permalink" href="perlunicook.html#UAX-%2315:-Unicode-Normalization-Forms">#</a><a id="UAX1"></a><a id="UAX-15:-Unicode-Normalization-Forms"></a>UAX #15: Unicode Normalization Forms</dt>
+<dd>
+
+</dd>
+<dt id="UTS-#10:-Unicode-Collation-Algorithm"><a class="permalink" href="perlunicook.html#UTS-%2310:-Unicode-Collation-Algorithm">#</a><a id="UTS1"></a><a id="UTS-10:-Unicode-Collation-Algorithm"></a>UTS #10: Unicode Collation Algorithm</dt>
+<dd>
+
+</dd>
+<dt id="UAX-#29:-Unicode-Text-Segmentation"><a class="permalink" href="perlunicook.html#UAX-%2329:-Unicode-Text-Segmentation">#</a><a id="UAX2"></a><a id="UAX-29:-Unicode-Text-Segmentation"></a>UAX #29: Unicode Text Segmentation</dt>
+<dd>
+
+</dd>
+<dt id="UAX-#14:-Unicode-Line-Breaking-Algorithm"><a class="permalink" href="perlunicook.html#UAX-%2314:-Unicode-Line-Breaking-Algorithm">#</a><a id="UAX3"></a><a id="UAX-14:-Unicode-Line-Breaking-Algorithm"></a>UAX #14: Unicode Line Breaking Algorithm</dt>
+<dd>
+
+</dd>
+<dt id="UAX-#11:-East-Asian-Width"><a class="permalink" href="perlunicook.html#UAX-%2311:-East-Asian-Width">#</a><a id="UAX4"></a><a id="UAX-11:-East-Asian-Width"></a>UAX #11: East Asian Width</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="AUTHOR"><a class="permalink" href="perlunicook.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Tom Christiansen &lt;tchrist@perl.com&gt; wrote this, with occasional kibbitzing from Larry Wall and Jeffrey Friedl in the background.</p>
+
+<h1 id="COPYRIGHT-AND-LICENCE"><a class="permalink" href="perlunicook.html#COPYRIGHT-AND-LICENCE">#</a><a id="COPYRIGHT"></a>COPYRIGHT AND LICENCE</h1>
+
+<p>Copyright © 2012 Tom Christiansen.</p>
+
+<p>This program is free software; you may redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+<p>Most of these examples taken from the current edition of the “Camel Book”; that is, from the 4ᵗʰ Edition of <i>Programming Perl</i>, Copyright © 2012 Tom Christiansen &lt;et al.&gt;, 2012-02-13 by O’Reilly Media. The code itself is freely redistributable, and you are encouraged to transplant, fold, spindle, and mutilate any of the examples in this manpage however you please for inclusion into your own programs without any encumbrance whatsoever. Acknowledgement via code comment is polite but not required.</p>
+
+<h1 id="REVISION-HISTORY"><a class="permalink" href="perlunicook.html#REVISION-HISTORY">#</a><a id="REVISION"></a>REVISION HISTORY</h1>
+
+<p>v1.0.0 – first public release, 2012-02-27</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

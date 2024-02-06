@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Opcode - Disable named opcodes when compiling perl code - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Opcode">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Opcode.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Opcode">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Opcode">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Opcode">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Opcode">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Opcode">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Opcode">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Opcode">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Opcode">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Opcode">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Opcode">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Opcode">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Opcode">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Opcode">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Opcode">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Opcode">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Opcode">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Opcode">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Opcode">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Opcode">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Opcode">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Opcode">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Opcode">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Opcode">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Opcode">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Opcode">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Opcode">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Opcode">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Opcode">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Opcode">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Opcode">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Opcode">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Opcode">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Opcode">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Opcode">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Opcode">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Opcode">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Opcode">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Opcode">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Opcode">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Opcode">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Opcode">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Opcode">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Opcode">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Opcode">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Opcode">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Opcode">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Opcode">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Opcode">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Opcode">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Opcode">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Opcode">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Opcode">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Opcode">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Opcode">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Opcode">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Opcode">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Opcode">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Opcode">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Opcode">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Opcode">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Opcode">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Opcode">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Opcode">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Opcode">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Opcode">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Opcode">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Opcode">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Opcode">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Opcode">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Opcode">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Opcode">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Opcode">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Opcode">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Opcode">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Opcode">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Opcode">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Opcode">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Opcode">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Opcode">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Opcode">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Opcode.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Opcode">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Opcode">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Opcode">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Opcode">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Opcode">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Opcode">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Opcode">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Opcode">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Opcode">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Opcode">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Opcode">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Opcode">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Opcode">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Opcode">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Opcode">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Opcode">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Opcode">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Opcode">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Opcode">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Opcode">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Opcode">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Opcode">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Opcode">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Opcode">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Opcode">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Opcode">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Opcode">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Opcode">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Opcode">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Opcode">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Opcode">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Opcode">5.35.1</a>
+          <a class="dropdown-item active" href="Opcode.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Opcode.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="Opcode.html">Opcode</a>
+          <div id="more">
+            (<a href="Opcode.txt">source</a>,
+            <a href="https://metacpan.org/pod/Opcode">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 1.50</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#NOTE">NOTE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#WARNING">WARNING</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#Operator-Names-and-Operator-Lists">Operator Names and Operator Lists</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#Opcode-Functions">Opcode Functions</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#Manipulating-Opsets">Manipulating Opsets</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#TO-DO-(maybe)">TO DO (maybe)</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#Predefined-Opcode-Tags">Predefined Opcode Tags</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Opcode.html#AUTHORS">AUTHORS</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="Opcode.html#NAME">#</a>NAME</h1>
+
+<p>Opcode - Disable named opcodes when compiling perl code</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="Opcode.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Opcode;</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="Opcode.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>Perl code is always compiled into an internal format before execution.</p>
+
+<p>Evaluating perl code (e.g. via &quot;eval&quot; or &quot;do &#39;file&#39;&quot;) causes the code to be compiled into an internal format and then, provided there was no error in the compilation, executed. The internal format is based on many distinct <i>opcodes</i>.</p>
+
+<p>By default no opmask is in effect and any code can be compiled.</p>
+
+<p>The Opcode module allow you to define an <i>operator mask</i> to be in effect when perl <i>next</i> compiles any code. Attempting to compile code which contains a masked opcode will cause the compilation to fail with an error. The code will not be executed.</p>
+
+<h1 id="NOTE"><a class="permalink" href="Opcode.html#NOTE">#</a>NOTE</h1>
+
+<p>The Opcode module is not usually used directly. See the ops pragma and Safe modules for more typical uses.</p>
+
+<h1 id="WARNING"><a class="permalink" href="Opcode.html#WARNING">#</a>WARNING</h1>
+
+<p>The Opcode module does not implement an effective sandbox for evaluating untrusted code with the perl interpreter.</p>
+
+<p>Bugs in the perl interpreter that could be abused to bypass Opcode restrictions are not treated as vulnerabilities. See <a href="perlsecpolicy.html">perlsecpolicy</a> for additional information.</p>
+
+<p>The authors make <b>no warranty</b>, implied or otherwise, about the suitability of this software for safety or security purposes.</p>
+
+<p>The authors shall not in any case be liable for special, incidental, consequential, indirect or other similar damages arising from the use of this software.</p>
+
+<p>Your mileage will vary. If in any doubt <b>do not use it</b>.</p>
+
+<h1 id="Operator-Names-and-Operator-Lists"><a class="permalink" href="Opcode.html#Operator-Names-and-Operator-Lists">#</a><a id="Operator"></a>Operator Names and Operator Lists</h1>
+
+<p>The canonical list of operator names is the contents of the array PL_op_name defined and initialised in file <i>opcode.h</i> of the Perl source distribution (and installed into the perl library).</p>
+
+<p>Each operator has both a terse name (its opname) and a more verbose or recognisable descriptive name. The opdesc function can be used to return a list of descriptions for a list of operators.</p>
+
+<p>Many of the functions and methods listed below take a list of operators as parameters. Most operator lists can be made up of several types of element. Each element can be one of</p>
+
+<dl>
+
+<dt id="an-operator-name-(opname)"><a class="permalink" href="Opcode.html#an-operator-name-(opname)">#</a><a id="an"></a><a id="an-operator-name-opname"></a>an operator name (opname)</dt>
+<dd>
+
+<p>Operator names are typically small lowercase words like enterloop, leaveloop, last, next, redo etc. Sometimes they are rather cryptic like gv2cv, i_ncmp and ftsvtx.</p>
+
+</dd>
+<dt id="an-operator-tag-name-(optag)"><a class="permalink" href="Opcode.html#an-operator-tag-name-(optag)">#</a><a id="an1"></a><a id="an-operator-tag-name-optag"></a>an operator tag name (optag)</dt>
+<dd>
+
+<p>Operator tags can be used to refer to groups (or sets) of operators. Tag names always begin with a colon. The Opcode module defines several optags and the user can define others using the define_optag function.</p>
+
+</dd>
+<dt id="a-negated-opname-or-optag"><a class="permalink" href="Opcode.html#a-negated-opname-or-optag">#</a><a id="a"></a>a negated opname or optag</dt>
+<dd>
+
+<p>An opname or optag can be prefixed with an exclamation mark, e.g., !mkdir. Negating an opname or optag means remove the corresponding ops from the accumulated set of ops at that point.</p>
+
+</dd>
+<dt id="an-operator-set-(opset)"><a class="permalink" href="Opcode.html#an-operator-set-(opset)">#</a><a id="an2"></a><a id="an-operator-set-opset"></a>an operator set (opset)</dt>
+<dd>
+
+<p>An <i>opset</i> as a binary string of approximately 44 bytes which holds a set or zero or more operators.</p>
+
+<p>The opset and opset_to_ops functions can be used to convert from a list of operators to an opset and <i>vice versa</i>.</p>
+
+<p>Wherever a list of operators can be given you can use one or more opsets. See also Manipulating Opsets below.</p>
+
+</dd>
+</dl>
+
+<h1 id="Opcode-Functions"><a class="permalink" href="Opcode.html#Opcode-Functions">#</a><a id="Opcode"></a>Opcode Functions</h1>
+
+<p>The Opcode package contains functions for manipulating operator names tags and sets. All are available for export by the package.</p>
+
+<dl>
+
+<dt id="opcodes"><a class="permalink" href="Opcode.html#opcodes">#</a>opcodes</dt>
+<dd>
+
+<p>In a scalar context opcodes returns the number of opcodes in this version of perl (around 350 for perl-5.7.0).</p>
+
+<p>In a list context it returns a list of all the operator names. (Not yet implemented, use @names = opset_to_ops(full_opset).)</p>
+
+</dd>
+<dt id="opset-(OP,-...)"><a class="permalink" href="Opcode.html#opset-(OP,-...)">#</a><a id="opset"></a><a id="opset-OP"></a>opset (OP, ...)</dt>
+<dd>
+
+<p>Returns an opset containing the listed operators.</p>
+
+</dd>
+<dt id="opset_to_ops-(OPSET)"><a class="permalink" href="Opcode.html#opset_to_ops-(OPSET)">#</a><a id="opset_to_ops"></a><a id="opset_to_ops-OPSET"></a>opset_to_ops (OPSET)</dt>
+<dd>
+
+<p>Returns a list of operator names corresponding to those operators in the set.</p>
+
+</dd>
+<dt id="opset_to_hex-(OPSET)"><a class="permalink" href="Opcode.html#opset_to_hex-(OPSET)">#</a><a id="opset_to_hex"></a><a id="opset_to_hex-OPSET"></a>opset_to_hex (OPSET)</dt>
+<dd>
+
+<p>Returns a string representation of an opset. Can be handy for debugging.</p>
+
+</dd>
+<dt id="full_opset"><a class="permalink" href="Opcode.html#full_opset">#</a>full_opset</dt>
+<dd>
+
+<p>Returns an opset which includes all operators.</p>
+
+</dd>
+<dt id="empty_opset"><a class="permalink" href="Opcode.html#empty_opset">#</a>empty_opset</dt>
+<dd>
+
+<p>Returns an opset which contains no operators.</p>
+
+</dd>
+<dt id="invert_opset-(OPSET)"><a class="permalink" href="Opcode.html#invert_opset-(OPSET)">#</a><a id="invert_opset"></a><a id="invert_opset-OPSET"></a>invert_opset (OPSET)</dt>
+<dd>
+
+<p>Returns an opset which is the inverse set of the one supplied.</p>
+
+</dd>
+<dt id="verify_opset-(OPSET,-...)"><a class="permalink" href="Opcode.html#verify_opset-(OPSET,-...)">#</a><a id="verify_opset"></a><a id="verify_opset-OPSET"></a>verify_opset (OPSET, ...)</dt>
+<dd>
+
+<p>Returns true if the supplied opset looks like a valid opset (is the right length etc) otherwise it returns false. If an optional second parameter is true then verify_opset will croak on an invalid opset instead of returning false.</p>
+
+<p>Most of the other Opcode functions call verify_opset automatically and will croak if given an invalid opset.</p>
+
+</dd>
+<dt id="define_optag-(OPTAG,-OPSET)"><a class="permalink" href="Opcode.html#define_optag-(OPTAG,-OPSET)">#</a><a id="define_optag"></a><a id="define_optag-OPTAG-OPSET"></a>define_optag (OPTAG, OPSET)</dt>
+<dd>
+
+<p>Define OPTAG as a symbolic name for OPSET. Optag names always start with a colon <code>:</code>.</p>
+
+<p>The optag name used must not be defined already (define_optag will croak if it is already defined). Optag names are global to the perl process and optag definitions cannot be altered or deleted once defined.</p>
+
+<p>It is strongly recommended that applications using Opcode should use a leading capital letter on their tag names since lowercase names are reserved for use by the Opcode module. If using Opcode within a module you should prefix your tags names with the name of your module to ensure uniqueness and thus avoid clashes with other modules.</p>
+
+</dd>
+<dt id="opmask_add-(OPSET)"><a class="permalink" href="Opcode.html#opmask_add-(OPSET)">#</a><a id="opmask_add"></a><a id="opmask_add-OPSET"></a>opmask_add (OPSET)</dt>
+<dd>
+
+<p>Adds the supplied opset to the current opmask. Note that there is currently <i>no</i> mechanism for unmasking ops once they have been masked. This is intentional.</p>
+
+</dd>
+<dt id="opmask"><a class="permalink" href="Opcode.html#opmask">#</a>opmask</dt>
+<dd>
+
+<p>Returns an opset corresponding to the current opmask.</p>
+
+</dd>
+<dt id="opdesc-(OP,-...)"><a class="permalink" href="Opcode.html#opdesc-(OP,-...)">#</a><a id="opdesc"></a><a id="opdesc-OP"></a>opdesc (OP, ...)</dt>
+<dd>
+
+<p>This takes a list of operator names and returns the corresponding list of operator descriptions.</p>
+
+</dd>
+<dt id="opdump-(PAT)"><a class="permalink" href="Opcode.html#opdump-(PAT)">#</a><a id="opdump"></a><a id="opdump-PAT"></a>opdump (PAT)</dt>
+<dd>
+
+<p>Dumps to STDOUT a two column list of op names and op descriptions. If an optional pattern is given then only lines which match the (case insensitive) pattern will be output.</p>
+
+<p>It&#39;s designed to be used as a handy command line utility:</p>
+
+<pre><code class="plaintext">perl -MOpcode=opdump -e opdump
+perl -MOpcode=opdump -e &#39;opdump Eval&#39;</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="Manipulating-Opsets"><a class="permalink" href="Opcode.html#Manipulating-Opsets">#</a><a id="Manipulating"></a>Manipulating Opsets</h1>
+
+<p>Opsets may be manipulated using the perl bit vector operators &amp; (and), | (or), ^ (xor) and ~ (negate/invert).</p>
+
+<p>However you should never rely on the numerical position of any opcode within the opset. In other words both sides of a bit vector operator should be opsets returned from Opcode functions.</p>
+
+<p>Also, since the number of opcodes in your current version of perl might not be an exact multiple of eight, there may be unused bits in the last byte of an upset. This should not cause any problems (Opcode functions ignore those extra bits) but it does mean that using the ~ operator will typically not produce the same &#39;physical&#39; opset &#39;string&#39; as the invert_opset function.</p>
+
+<h1 id="TO-DO-(maybe)"><a class="permalink" href="Opcode.html#TO-DO-(maybe)">#</a><a id="TO"></a><a id="TO-DO-maybe"></a>TO DO (maybe)</h1>
+
+<pre><code>    $bool = opset_eq($opset1, $opset2)	true if opsets are logically
+					equivalent
+    $yes = opset_can($opset, @ops)	true if $opset has all @ops set
+
+    @diff = opset_diff($opset1, $opset2) =&gt; (&#39;foo&#39;, &#39;!bar&#39;, ...)</code></pre>
+
+<h1 id="Predefined-Opcode-Tags"><a class="permalink" href="Opcode.html#Predefined-Opcode-Tags">#</a><a id="Predefined"></a>Predefined Opcode Tags</h1>
+
+<dl>
+
+<dt id=":base_core"><a class="permalink" href="Opcode.html#:base_core">#</a><a id="base_core"></a>:base_core</dt>
+<dd>
+
+<pre><code class="plaintext">    null stub scalar pushmark wantarray const defined undef
+
+    rv2sv sassign
+
+    rv2av aassign aelem aelemfast aelemfast_lex aslice kvaslice
+    av2arylen
+
+    rv2hv helem hslice kvhslice each values keys exists delete
+    aeach akeys avalues multideref argelem argdefelem argcheck
+
+    preinc i_preinc predec i_predec postinc i_postinc
+    postdec i_postdec int hex oct abs pow multiply i_multiply
+    divide i_divide modulo i_modulo add i_add subtract i_subtract
+
+    left_shift right_shift bit_and bit_xor bit_or nbit_and
+    nbit_xor nbit_or sbit_and sbit_xor sbit_or negate i_negate not
+    complement ncomplement scomplement
+
+    lt i_lt gt i_gt le i_le ge i_ge eq i_eq ne i_ne ncmp i_ncmp
+    slt sgt sle sge seq sne scmp
+    isa
+
+    substr vec stringify study pos length index rindex ord chr
+
+    ucfirst lcfirst uc lc fc quotemeta trans transr chop schop
+    chomp schomp
+
+    match split qr
+
+    list lslice splice push pop shift unshift reverse
+
+    cond_expr flip flop andassign orassign dorassign and or dor xor
+
+    warn die lineseq nextstate scope enter leave
+
+    rv2cv anoncode prototype coreargs avhvswitch anonconst
+
+    entersub leavesub leavesublv return method method_named
+    method_super method_redir method_redir_super
+     -- XXX loops via recursion?
+
+    cmpchain_and cmpchain_dup
+
+    leaveeval -- needed for Safe to operate, is safe
+		 without entereval</code></pre>
+
+</dd>
+<dt id=":base_mem"><a class="permalink" href="Opcode.html#:base_mem">#</a><a id="base_mem"></a>:base_mem</dt>
+<dd>
+
+<p>These memory related ops are not included in :base_core because they can easily be used to implement a resource attack (e.g., consume all available memory).</p>
+
+<pre><code class="plaintext">concat multiconcat repeat join range
+
+anonlist anonhash</code></pre>
+
+<p>Note that despite the existence of this optag a memory resource attack may still be possible using only :base_core ops.</p>
+
+<p>Disabling these ops is a <i>very</i> heavy handed way to attempt to prevent a memory resource attack. It&#39;s probable that a specific memory limit mechanism will be added to perl in the near future.</p>
+
+</dd>
+<dt id=":base_loop"><a class="permalink" href="Opcode.html#:base_loop">#</a><a id="base_loop"></a>:base_loop</dt>
+<dd>
+
+<p>These loop ops are not included in :base_core because they can easily be used to implement a resource attack (e.g., consume all available CPU time).</p>
+
+<pre><code class="plaintext">grepstart grepwhile
+mapstart mapwhile
+enteriter iter
+enterloop leaveloop unstack
+last next redo
+goto</code></pre>
+
+</dd>
+<dt id=":base_io"><a class="permalink" href="Opcode.html#:base_io">#</a><a id="base_io"></a>:base_io</dt>
+<dd>
+
+<p>These ops enable <i>filehandle</i> (rather than filename) based input and output. These are safe on the assumption that only pre-existing filehandles are available for use. Usually, to create new filehandles other ops such as open would need to be enabled, if you don&#39;t take into account the magical open of ARGV.</p>
+
+<pre><code class="plaintext">readline rcatline getc read
+
+formline enterwrite leavewrite
+
+print say sysread syswrite send recv
+
+eof tell seek sysseek
+
+readdir telldir seekdir rewinddir</code></pre>
+
+</dd>
+<dt id=":base_orig"><a class="permalink" href="Opcode.html#:base_orig">#</a><a id="base_orig"></a>:base_orig</dt>
+<dd>
+
+<p>These are a hotchpotch of opcodes still waiting to be considered</p>
+
+<pre><code class="plaintext">    gvsv gv gelem
+
+    padsv padav padhv padcv padany padrange introcv clonecv
+
+    once
+
+    rv2gv refgen srefgen ref refassign lvref lvrefslice lvavref
+
+    bless -- could be used to change ownership of objects
+	     (reblessing)
+
+     regcmaybe regcreset regcomp subst substcont
+
+    sprintf prtf -- can core dump
+
+    crypt
+
+    tie untie
+
+    dbmopen dbmclose
+    sselect select
+    pipe_op sockpair
+
+    getppid getpgrp setpgrp getpriority setpriority
+    localtime gmtime
+
+    entertry leavetry -- can be used to &#39;hide&#39; fatal errors
+    entertrycatch poptry catch leavetrycatch -- similar
+
+    entergiven leavegiven
+    enterwhen leavewhen
+    break continue
+    smartmatch
+
+    custom -- where should this go</code></pre>
+
+</dd>
+<dt id=":base_math"><a class="permalink" href="Opcode.html#:base_math">#</a><a id="base_math"></a>:base_math</dt>
+<dd>
+
+<p>These ops are not included in :base_core because of the risk of them being used to generate floating point exceptions (which would have to be caught using a $SIG{FPE} handler).</p>
+
+<pre><code class="plaintext">atan2 sin cos exp log sqrt</code></pre>
+
+<p>These ops are not included in :base_core because they have an effect beyond the scope of the compartment.</p>
+
+<pre><code class="plaintext">rand srand</code></pre>
+
+</dd>
+<dt id=":base_thread"><a class="permalink" href="Opcode.html#:base_thread">#</a><a id="base_thread"></a>:base_thread</dt>
+<dd>
+
+<p>These ops are related to multi-threading.</p>
+
+<pre><code class="plaintext">lock</code></pre>
+
+</dd>
+<dt id=":default"><a class="permalink" href="Opcode.html#:default">#</a><a id="default"></a>:default</dt>
+<dd>
+
+<p>A handy tag name for a <i>reasonable</i> default set of ops. (The current ops allowed are unstable while development continues. It will change.)</p>
+
+<pre><code class="plaintext">:base_core :base_mem :base_loop :base_orig :base_thread</code></pre>
+
+<p>This list used to contain :base_io prior to Opcode 1.07.</p>
+
+<p>If safety matters to you (and why else would you be using the Opcode module?) then you should not rely on the definition of this, or indeed any other, optag!</p>
+
+</dd>
+<dt id=":filesys_read"><a class="permalink" href="Opcode.html#:filesys_read">#</a><a id="filesys_read"></a>:filesys_read</dt>
+<dd>
+
+<pre><code class="plaintext">stat lstat readlink
+
+ftatime ftblk ftchr ftctime ftdir fteexec fteowned
+fteread ftewrite ftfile ftis ftlink ftmtime ftpipe
+ftrexec ftrowned ftrread ftsgid ftsize ftsock ftsuid
+fttty ftzero ftrwrite ftsvtx
+
+fttext ftbinary
+
+fileno</code></pre>
+
+</dd>
+<dt id=":sys_db"><a class="permalink" href="Opcode.html#:sys_db">#</a><a id="sys_db"></a>:sys_db</dt>
+<dd>
+
+<pre><code class="plaintext">ghbyname ghbyaddr ghostent shostent ehostent      -- hosts
+gnbyname gnbyaddr gnetent snetent enetent         -- networks
+gpbyname gpbynumber gprotoent sprotoent eprotoent -- protocols
+gsbyname gsbyport gservent sservent eservent      -- services
+
+gpwnam gpwuid gpwent spwent epwent getlogin       -- users
+ggrnam ggrgid ggrent sgrent egrent                -- groups</code></pre>
+
+</dd>
+<dt id=":browse"><a class="permalink" href="Opcode.html#:browse">#</a><a id="browse"></a>:browse</dt>
+<dd>
+
+<p>A handy tag name for a <i>reasonable</i> default set of ops beyond the :default optag. Like :default (and indeed all the other optags) its current definition is unstable while development continues. It will change.</p>
+
+<p>The :browse tag represents the next step beyond :default. It is a superset of the :default ops and adds :filesys_read the :sys_db. The intent being that scripts can access more (possibly sensitive) information about your system but not be able to change it.</p>
+
+<pre><code class="plaintext">:default :filesys_read :sys_db</code></pre>
+
+</dd>
+<dt id=":filesys_open"><a class="permalink" href="Opcode.html#:filesys_open">#</a><a id="filesys_open"></a>:filesys_open</dt>
+<dd>
+
+<pre><code class="plaintext">sysopen open close
+umask binmode
+
+open_dir closedir -- other dir ops are in :base_io</code></pre>
+
+</dd>
+<dt id=":filesys_write"><a class="permalink" href="Opcode.html#:filesys_write">#</a><a id="filesys_write"></a>:filesys_write</dt>
+<dd>
+
+<pre><code class="plaintext">    link unlink rename symlink truncate
+
+    mkdir rmdir
+
+    utime chmod chown
+
+    fcntl -- not strictly filesys related, but possibly as
+	     dangerous?</code></pre>
+
+</dd>
+<dt id=":subprocess"><a class="permalink" href="Opcode.html#:subprocess">#</a><a id="subprocess"></a>:subprocess</dt>
+<dd>
+
+<pre><code class="plaintext">backtick system
+
+fork
+
+wait waitpid
+
+glob -- access to Cshell via &lt;`rm *`&gt;</code></pre>
+
+</dd>
+<dt id=":ownprocess"><a class="permalink" href="Opcode.html#:ownprocess">#</a><a id="ownprocess"></a>:ownprocess</dt>
+<dd>
+
+<pre><code class="plaintext">exec exit kill
+
+time tms -- could be used for timing attacks (paranoid?)</code></pre>
+
+</dd>
+<dt id=":others"><a class="permalink" href="Opcode.html#:others">#</a><a id="others"></a>:others</dt>
+<dd>
+
+<p>This tag holds groups of assorted specialist opcodes that don&#39;t warrant having optags defined for them.</p>
+
+<p>SystemV Interprocess Communications:</p>
+
+<pre><code class="plaintext">msgctl msgget msgrcv msgsnd
+
+semctl semget semop
+
+shmctl shmget shmread shmwrite</code></pre>
+
+</dd>
+<dt id=":load"><a class="permalink" href="Opcode.html#:load">#</a><a id="load"></a>:load</dt>
+<dd>
+
+<p>This tag holds opcodes related to loading modules and getting information about calling environment and args.</p>
+
+<pre><code class="plaintext">require dofile 
+caller runcv</code></pre>
+
+</dd>
+<dt id=":still_to_be_decided"><a class="permalink" href="Opcode.html#:still_to_be_decided">#</a><a id="still_to_be_decided"></a>:still_to_be_decided</dt>
+<dd>
+
+<pre><code class="plaintext">chdir
+flock ioctl
+
+socket getpeername ssockopt
+bind connect listen accept shutdown gsockopt getsockname
+
+sleep alarm -- changes global timer state and signal handling
+sort -- assorted problems including core dumps
+tied -- can be used to access object implementing a tie
+pack unpack -- can be used to create/use memory pointers
+
+hintseval -- constant op holding eval hints
+
+entereval -- can be used to hide code from initial compile
+
+reset
+
+dbstate -- perl -d version of nextstate(ment) opcode</code></pre>
+
+</dd>
+<dt id=":dangerous"><a class="permalink" href="Opcode.html#:dangerous">#</a><a id="dangerous"></a>:dangerous</dt>
+<dd>
+
+<p>This tag is simply a bucket for opcodes that are unlikely to be used via a tag name but need to be tagged for completeness and documentation.</p>
+
+<pre><code class="plaintext">syscall dump chroot</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="Opcode.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="ops.html">ops</a> -- perl pragma interface to Opcode module.</p>
+
+<p><a href="Safe.html">Safe</a> -- Opcode and namespace limited execution compartments</p>
+
+<h1 id="AUTHORS"><a class="permalink" href="Opcode.html#AUTHORS">#</a>AUTHORS</h1>
+
+<p>Originally designed and implemented by Malcolm Beattie, mbeattie@sable.ox.ac.uk as part of Safe version 1.</p>
+
+<p>Split out from Safe module version 1, named opcode tags and other changes added by Tim Bunce.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

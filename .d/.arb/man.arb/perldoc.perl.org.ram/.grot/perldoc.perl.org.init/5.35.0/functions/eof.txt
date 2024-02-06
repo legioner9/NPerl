@@ -1,0 +1,59 @@
+=over
+
+=item eof FILEHANDLE
+X<eof>
+X<end of file>
+X<end-of-file>
+
+=item eof ()
+
+=item eof
+
+Returns 1 if the next read on FILEHANDLE will return end of file I<or> if
+FILEHANDLE is not open.  FILEHANDLE may be an expression whose value
+gives the real filehandle.  (Note that this function actually
+reads a character and then C<ungetc>s it, so isn't useful in an
+interactive context.)  Do not read from a terminal file (or call
+C<eof(FILEHANDLE)> on it) after end-of-file is reached.  File types such
+as terminals may lose the end-of-file condition if you do.
+
+An L<C<eof>|/eof FILEHANDLE> without an argument uses the last file
+read.  Using L<C<eof()>|/eof FILEHANDLE> with empty parentheses is
+different.  It refers to the pseudo file formed from the files listed on
+the command line and accessed via the C<< <> >> operator.  Since
+C<< <> >> isn't explicitly opened, as a normal filehandle is, an
+L<C<eof()>|/eof FILEHANDLE> before C<< <> >> has been used will cause
+L<C<@ARGV>|perlvar/@ARGV> to be examined to determine if input is
+available.   Similarly, an L<C<eof()>|/eof FILEHANDLE> after C<< <> >>
+has returned end-of-file will assume you are processing another
+L<C<@ARGV>|perlvar/@ARGV> list, and if you haven't set
+L<C<@ARGV>|perlvar/@ARGV>, will read input from C<STDIN>; see
+L<perlop/"I/O Operators">.
+
+In a C<< while (<>) >> loop, L<C<eof>|/eof FILEHANDLE> or C<eof(ARGV)>
+can be used to detect the end of each file, whereas
+L<C<eof()>|/eof FILEHANDLE> will detect the end of the very last file
+only.  Examples:
+
+    # reset line numbering on each input file
+    while (<>) {
+        next if /^\s*#/;  # skip comments
+        print "$.\t$_";
+    } continue {
+        close ARGV if eof;  # Not eof()!
+    }
+
+    # insert dashes just before last line of last file
+    while (<>) {
+        if (eof()) {  # check for end of last file
+            print "--------------\n";
+        }
+        print;
+        last if eof();     # needed if we're reading from a terminal
+    }
+
+Practical hint: you almost never need to use L<C<eof>|/eof FILEHANDLE>
+in Perl, because the input operators typically return L<C<undef>|/undef
+EXPR> when they run out of data or encounter an error.
+
+=back

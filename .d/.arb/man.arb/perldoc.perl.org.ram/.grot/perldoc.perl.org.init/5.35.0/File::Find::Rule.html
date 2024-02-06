@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>File::Find::Rule - Alternative interface to File::Find - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of File-Find-Rule - MetaCPAN" href="https://metacpan.org/dist/File-Find-Rule/releases.rss" />
+        <link rel="canonical" href="./File::Find::Rule.html" />
+        <meta name="description" content="Alternative interface to File::Find" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/File::Find::Rule" />
+<meta name="twitter:title"       content="File::Find::Rule" />
+<meta name="twitter:description" content="Alternative interface to File::Find" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./File::Find::Rule.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of File-Find-Rule was released.">
+      <span class="relatize">03 Dec 2015 14:31:54 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/File-Find-Rule">File-Find-Rule</a>
+  </li>
+  <li>
+    Module version: 0.34
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/File-Find-Rule/source/lib/File/Find/Rule.pm">Source</a>
+    (<a href="https://metacpan.org/dist/File-Find-Rule/source/lib/File/Find/Rule.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/File-Find-Rule/source/lib/File/Find">Browse</a>
+    (<a href="https://metacpan.org/dist/File-Find-Rule/source/lib/File/Find?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/File-Find-Rule/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/File-Find-Rule/contribute">How to Contribute</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=File-Find-Rule">Issues</a>
+      (17)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=File-Find-Rule+0.34" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/F/File-Find-Rule.html?oncpan=1&amp;distmat=1&amp;version=0.34&amp;grade=2" style="color: #090">1648</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/F/File-Find-Rule.html?oncpan=1&amp;distmat=1&amp;version=0.34&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/F/File-Find-Rule.html?oncpan=1&amp;distmat=1&amp;version=0.34&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/RCLAMP/File-Find-Rule-0.34">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on File-Find-Rule who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/File-Find-Rule-0.34/index.html">71.15% Coverage </a>
+    </li>
+    <li>
+      License: unknown
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/File-Find-Rule/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/R/RC/RCLAMP/File-Find-Rule-0.34.tar.gz">
+      Download (<span itemprop="fileSize">15.79KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FRCLAMP%2FFile-Find-Rule-0.34%2Flib%2FFile%2FFind%2FRule.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/File-Find-Rule/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/File-Find-Rule/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:File-Find-Rule">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="File-Find-Rule">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/File/Find/Rule.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="RCLAMP/File-Find-Rule-0.34"
+>0.34
+  (RCLAMP on 2015-12-03)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.33"
+>0.33
+  (RCLAMP on 2011-09-19)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.32"
+>0.32
+  (RCLAMP on 2009-11-28)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.31"
+>0.31
+  (RCLAMP on 2009-11-27)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.30"
+>0.30
+  (RCLAMP on 2006-06-01)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.29"
+>0.29
+  (RCLAMP on 2006-05-16)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.28"
+>0.28
+  (RCLAMP on 2004-05-18)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.27"
+>0.27
+  (RCLAMP on 2004-02-25)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.26"
+>0.26
+  (RCLAMP on 2003-11-10)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.25"
+>0.25
+  (RCLAMP on 2003-10-22)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.24"
+>0.24
+  (RCLAMP on 2003-10-06)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.24_01"
+>0.24_01 DEV
+  (RCLAMP on 2003-10-04)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.23"
+>0.23
+  (RCLAMP on 2003-10-03)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.22"
+>0.22
+  (RCLAMP on 2003-10-03)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.21"
+>0.21
+  (RCLAMP on 2003-09-15)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20"
+>0.20
+  (RCLAMP on 2003-09-08)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20_03"
+>0.20_03 DEV
+  (RCLAMP on 2003-08-04)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.11"
+>0.11
+  (RCLAMP on 2003-07-29)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20_02"
+>0.20_02 DEV
+  (RCLAMP on 2003-06-25)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20_01"
+>0.20_01 DEV
+  (RCLAMP on 2003-06-22)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.10"
+>0.10
+  (RCLAMP on 2003-03-10)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.09"
+>0.09
+  (RCLAMP on 2003-01-21)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.08"
+>0.08
+  (RCLAMP on 2002-12-04)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.07"
+>0.07
+  (RCLAMP on 2002-10-25)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.06"
+>0.06
+  (RCLAMP on 2002-10-22)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.05"
+>0.05
+  (RCLAMP on 2002-10-21)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.04"
+>0.04
+  (RCLAMP on 2002-09-10)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.03"
+>0.03
+  (RCLAMP on 2002-08-24)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.02"
+>0.02
+  (RCLAMP on 2002-08-14)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.01"
+>0.01
+  (RCLAMP on 2002-07-26)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/RCLAMP/File-Find-Rule-0.34/diff/' + encodeURIComponent(this.value) + '/lib/File/Find/Rule.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="RCLAMP/File-Find-Rule-0.34"
+>0.34
+  (RCLAMP on 2015-12-03)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.33"
+>0.33
+  (RCLAMP on 2011-09-19)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.32"
+>0.32
+  (RCLAMP on 2009-11-28)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.31"
+>0.31
+  (RCLAMP on 2009-11-27)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.30"
+>0.30
+  (RCLAMP on 2006-06-01)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.29"
+>0.29
+  (RCLAMP on 2006-05-16)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.28"
+>0.28
+  (RCLAMP on 2004-05-18)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.27"
+>0.27
+  (RCLAMP on 2004-02-25)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.26"
+>0.26
+  (RCLAMP on 2003-11-10)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.25"
+>0.25
+  (RCLAMP on 2003-10-22)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.24"
+>0.24
+  (RCLAMP on 2003-10-06)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.24_01"
+>0.24_01 DEV
+  (RCLAMP on 2003-10-04)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.23"
+>0.23
+  (RCLAMP on 2003-10-03)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.22"
+>0.22
+  (RCLAMP on 2003-10-03)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.21"
+>0.21
+  (RCLAMP on 2003-09-15)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20"
+>0.20
+  (RCLAMP on 2003-09-08)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20_03"
+>0.20_03 DEV
+  (RCLAMP on 2003-08-04)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.11"
+>0.11
+  (RCLAMP on 2003-07-29)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20_02"
+>0.20_02 DEV
+  (RCLAMP on 2003-06-25)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20_01"
+>0.20_01 DEV
+  (RCLAMP on 2003-06-22)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.10"
+>0.10
+  (RCLAMP on 2003-03-10)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.09"
+>0.09
+  (RCLAMP on 2003-01-21)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.08"
+>0.08
+  (RCLAMP on 2002-12-04)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.07"
+>0.07
+  (RCLAMP on 2002-10-25)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.06"
+>0.06
+  (RCLAMP on 2002-10-22)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.05"
+>0.05
+  (RCLAMP on 2002-10-21)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.04"
+>0.04
+  (RCLAMP on 2002-09-10)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.03"
+>0.03
+  (RCLAMP on 2002-08-24)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.02"
+>0.02
+  (RCLAMP on 2002-08-14)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.01"
+>0.01
+  (RCLAMP on 2002-07-26)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/File::Find" title="File::Find" class="ellipsis">File::Find</a></li>
+  <li><a href="https://metacpan.org/pod/File::Spec" title="File::Spec" class="ellipsis">File::Spec</a></li>
+  <li><a href="https://metacpan.org/pod/Number::Compare" title="Number::Compare" class="ellipsis">Number::Compare</a></li>
+  <li><a href="https://metacpan.org/pod/Test::More" title="Test::More" class="ellipsis">Test::More</a></li>
+  <li><a href="https://metacpan.org/pod/Text::Glob" title="Text::Glob" class="ellipsis">Text::Glob</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/File::Find::Rule/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=File%3A%3AFind%3A%3ARule">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=File-Find-Rule">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/RCLAMP/File-Find-Rule-0.34/view/lib/File/Find/Rule.pm">This version</a>
+    </li>
+    <li>
+      <a href="./File::Find::Rule.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/XAOC"><img src="https://www.gravatar.com/avatar/990db8b0e06746b7d54c36f0603140e1?d=identicon&amp;s=20" title="XAOC" alt="XAOC"></a>
+<a class="display-all" href="https://metacpan.org/author/LLAP"><img src="https://www.gravatar.com/avatar/fe83c062043dc4e41c9af07b080e306e?d=identicon&amp;s=20" title="LLAP" alt="LLAP"></a>
+<a class="display-all" href="https://metacpan.org/author/XIAODONG"><img src="https://www.gravatar.com/avatar/0c6eb3fe8066dfe155811840026970e7?d=identicon&amp;s=20" title="XIAODONG" alt="XIAODONG"></a>
+<a class="display-all" href="https://metacpan.org/author/AZAWAWI"><img src="https://www.gravatar.com/avatar/70ebafdecf974e15bcaba4cbe39efef1?d=identicon&amp;s=20" title="AZAWAWI" alt="AZAWAWI"></a>
+<a class="display-all" href="https://metacpan.org/author/AYOUNG"><img src="https://www.gravatar.com/avatar/8d1e4946c288fbe87d1e0394f3e41b24?d=identicon&amp;s=20" title="AYOUNG" alt="AYOUNG"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/File-Find-Rule/plussers">19 PAUSE users</a>
+</div>
+<div>
+    19 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/RCLAMP" class="author-name">Richard Clamp</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/File/Find/Rule.pm&#39;" class="">
+<option
+  selected
+  value="RCLAMP/File-Find-Rule-0.34"
+>0.34
+  (RCLAMP on 2015-12-03)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.33"
+>0.33
+  (RCLAMP on 2011-09-19)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.32"
+>0.32
+  (RCLAMP on 2009-11-28)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.31"
+>0.31
+  (RCLAMP on 2009-11-27)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.30"
+>0.30
+  (RCLAMP on 2006-06-01)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.29"
+>0.29
+  (RCLAMP on 2006-05-16)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.28"
+>0.28
+  (RCLAMP on 2004-05-18)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.27"
+>0.27
+  (RCLAMP on 2004-02-25)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.26"
+>0.26
+  (RCLAMP on 2003-11-10)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.25"
+>0.25
+  (RCLAMP on 2003-10-22)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.24"
+>0.24
+  (RCLAMP on 2003-10-06)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.24_01"
+>0.24_01 DEV
+  (RCLAMP on 2003-10-04)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.23"
+>0.23
+  (RCLAMP on 2003-10-03)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.22"
+>0.22
+  (RCLAMP on 2003-10-03)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.21"
+>0.21
+  (RCLAMP on 2003-09-15)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20"
+>0.20
+  (RCLAMP on 2003-09-08)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20_03"
+>0.20_03 DEV
+  (RCLAMP on 2003-08-04)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.11"
+>0.11
+  (RCLAMP on 2003-07-29)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20_02"
+>0.20_02 DEV
+  (RCLAMP on 2003-06-25)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.20_01"
+>0.20_01 DEV
+  (RCLAMP on 2003-06-22)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.10"
+>0.10
+  (RCLAMP on 2003-03-10)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.09"
+>0.09
+  (RCLAMP on 2003-01-21)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.08"
+>0.08
+  (RCLAMP on 2002-12-04)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.07"
+>0.07
+  (RCLAMP on 2002-10-25)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.06"
+>0.06
+  (RCLAMP on 2002-10-22)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.05"
+>0.05
+  (RCLAMP on 2002-10-21)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.04"
+>0.04
+  (RCLAMP on 2002-09-10)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.03"
+>0.03
+  (RCLAMP on 2002-08-24)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.02"
+>0.02
+  (RCLAMP on 2002-08-14)</option>
+<option
+  
+  value="RCLAMP/File-Find-Rule-0.01"
+>0.01
+  (RCLAMP on 2002-07-26)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/File-Find-Rule">File-Find-Rule-0.34</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage four &#10;
+          • 279 direct dependents &#10;          • 2027 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="File-Find-Rule-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="File-Find-Rule-0.34">
+    <input type="hidden" name="author" value="RCLAMP">
+    <input type="hidden" name="distribution" value="File-Find-Rule">
+    <button type="submit" class="favorite highlight"><span>38</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./File::Find::Rule.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>38</span> ++</a>
+</div>
+   / <span>File::Find::Rule</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./File::Find::Rule.html#NAME">NAME</a></li>
+  <li><a href="./File::Find::Rule.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./File::Find::Rule.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./File::Find::Rule.html#METHODS">METHODS</a>
+    <ul>
+      <li><a href="./File::Find::Rule.html#Matching-Rules">Matching Rules</a></li>
+      <li><a href="./File::Find::Rule.html#Query-Methods">Query Methods</a></li>
+      <li><a href="./File::Find::Rule.html#Extensions">Extensions</a></li>
+      <li><a href="./File::Find::Rule.html#Further-examples">Further examples</a></li>
+    </ul>
+  </li>
+  <li><a href="./File::Find::Rule.html#TWO-FOR-THE-PRICE-OF-ONE">TWO FOR THE PRICE OF ONE</a></li>
+  <li><a href="./File::Find::Rule.html#EXPORTS">EXPORTS</a></li>
+  <li><a href="./File::Find::Rule.html#TAINT-MODE-INTERACTION">TAINT MODE INTERACTION</a></li>
+  <li><a href="./File::Find::Rule.html#BUGS">BUGS</a></li>
+  <li><a href="./File::Find::Rule.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./File::Find::Rule.html#COPYRIGHT">COPYRIGHT</a></li>
+  <li><a href="./File::Find::Rule.html#SEE-ALSO">SEE ALSO</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>File::Find::Rule - Alternative interface to File::Find</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  use File::Find::Rule;
+  # find all the subdirectories of a given directory
+  my @subdirs = File::Find::Rule-&gt;directory-&gt;in( $directory );
+
+  # find all the .pm files in @INC
+  my @files = File::Find::Rule-&gt;file()
+                              -&gt;name( &#39;*.pm&#39; )
+                              -&gt;in( @INC );
+
+  # as above, but without method chaining
+  my $rule =  File::Find::Rule-&gt;new;
+  $rule-&gt;file;
+  $rule-&gt;name( &#39;*.pm&#39; );
+  my @files = $rule-&gt;in( @INC );</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>File::Find::Rule is a friendlier interface to File::Find. It allows you to build rules which specify the desired files and directories.</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<dl>
+
+<dt id="new"><code>new</code></dt>
+<dd>
+
+<p>A constructor. You need not invoke <code>new</code> manually unless you wish to, as each of the rule-making methods will auto-create a suitable object if called as class methods.</p>
+
+</dd>
+</dl>
+
+<h2 id="Matching-Rules"><a id="Matching"></a>Matching Rules</h2>
+
+<dl>
+
+<dt id="name(-@patterns-)"><a id="name"></a><a id="name---patterns"></a><code>name( @patterns )</code></dt>
+<dd>
+
+<p>Specifies names that should match. May be globs or regular expressions.</p>
+
+<pre><code> $set-&gt;name( &#39;*.mp3&#39;, &#39;*.ogg&#39; ); # mp3s or oggs
+ $set-&gt;name( qr/\.(mp3|ogg)$/ ); # the same as a regex
+ $set-&gt;name( &#39;foo.bar&#39; );        # just things named foo.bar</code></pre>
+
+</dd>
+<dt id="-X-tests"><a id="X-tests"></a>-X tests</dt>
+<dd>
+
+<p>Synonyms are provided for each of the -X tests. See <a href="functions/CORE.html#-X">&quot;-X&quot; in perlfunc</a> for details. None of these methods take arguments.</p>
+
+<pre><code>  Test | Method               Test |  Method
+ ------|-------------        ------|----------------
+   -r  |  readable             -R  |  r_readable
+   -w  |  writeable            -W  |  r_writeable
+   -w  |  writable             -W  |  r_writable
+   -x  |  executable           -X  |  r_executable
+   -o  |  owned                -O  |  r_owned
+       |                           |
+   -e  |  exists               -f  |  file
+   -z  |  empty                -d  |  directory
+   -s  |  nonempty             -l  |  symlink
+       |                       -p  |  fifo
+   -u  |  setuid               -S  |  socket
+   -g  |  setgid               -b  |  block
+   -k  |  sticky               -c  |  character
+       |                       -t  |  tty
+   -M  |  modified                 |
+   -A  |  accessed             -T  |  ascii
+   -C  |  changed              -B  |  binary</code></pre>
+
+<p>Though some tests are fairly meaningless as binary flags (<code>modified</code>, <code>accessed</code>, <code>changed</code>), they have been included for completeness.</p>
+
+<pre><code> # find nonempty files
+ $rule-&gt;file,
+      -&gt;nonempty;</code></pre>
+
+</dd>
+<dt id="stat-tests"><a id="stat"></a>stat tests</dt>
+<dd>
+
+<p>The following <code>stat</code> based methods are provided: <code>dev</code>, <code>ino</code>, <code>mode</code>, <code>nlink</code>, <code>uid</code>, <code>gid</code>, <code>rdev</code>, <code>size</code>, <code>atime</code>, <code>mtime</code>, <code>ctime</code>, <code>blksize</code>, and <code>blocks</code>. See <a href="functions/CORE.html#stat">&quot;stat&quot; in perlfunc</a> for details.</p>
+
+<p>Each of these can take a number of targets, which will follow <a href="https://metacpan.org/pod/Number::Compare">Number::Compare</a> semantics.</p>
+
+<pre><code> $rule-&gt;size( 7 );         # exactly 7
+ $rule-&gt;size( &quot;&gt;7Ki&quot; );    # larger than 7 * 1024 * 1024 bytes
+ $rule-&gt;size( &quot;&gt;=7&quot; )
+      -&gt;size( &quot;&lt;=90&quot; );    # between 7 and 90, inclusive
+ $rule-&gt;size( 7, 9, 42 );  # 7, 9 or 42</code></pre>
+
+</dd>
+<dt id="any(-@rules-)"><a id="any"></a><a id="any---rules"></a><code>any( @rules )</code></dt>
+<dd>
+
+</dd>
+<dt id="or(-@rules-)"><a id="or"></a><a id="or---rules"></a><code>or( @rules )</code></dt>
+<dd>
+
+<p>Allows shortcircuiting boolean evaluation as an alternative to the default and-like nature of combined rules. <code>any</code> and <code>or</code> are interchangeable.</p>
+
+<pre><code> # find avis, movs, things over 200M and empty files
+ $rule-&gt;any( File::Find::Rule-&gt;name( &#39;*.avi&#39;, &#39;*.mov&#39; ),
+             File::Find::Rule-&gt;size( &#39;&gt;200M&#39; ),
+             File::Find::Rule-&gt;file-&gt;empty,
+           );</code></pre>
+
+</dd>
+<dt id="none(-@rules-)"><a id="none"></a><a id="none---rules"></a><code>none( @rules )</code></dt>
+<dd>
+
+</dd>
+<dt id="not(-@rules-)"><a id="not"></a><a id="not---rules"></a><code>not( @rules )</code></dt>
+<dd>
+
+<p>Negates a rule. (The inverse of <code>any</code>.) <code>none</code> and <code>not</code> are interchangeable.</p>
+
+<pre><code>  # files that aren&#39;t 8.3 safe
+  $rule-&gt;file
+       -&gt;not( $rule-&gt;new-&gt;name( qr/^[^.]{1,8}(\.[^.]{0,3})?$/ ) );</code></pre>
+
+</dd>
+<dt id="prune"><code>prune</code></dt>
+<dd>
+
+<p>Traverse no further. This rule always matches.</p>
+
+</dd>
+<dt id="discard"><code>discard</code></dt>
+<dd>
+
+<p>Don&#39;t keep this file. This rule always matches.</p>
+
+</dd>
+<dt id="exec(-\&amp;subroutine(-$shortname,-$path,-$fullname-)-)"><a id="exec"></a><a id="exec---subroutine---shortname---path---fullname"></a><code>exec( \&amp;subroutine( $shortname, $path, $fullname ) )</code></dt>
+<dd>
+
+<p>Allows user-defined rules. Your subroutine will be invoked with <code>$_</code> set to the current short name, and with parameters of the name, the path you&#39;re in, and the full relative filename.</p>
+
+<p>Return a true value if your rule matched.</p>
+
+<pre><code> # get things with long names
+ $rules-&gt;exec( sub { length &gt; 20 } );</code></pre>
+
+</dd>
+<dt id="grep(-@specifiers-)"><a id="grep"></a><a id="grep---specifiers"></a><code>grep( @specifiers )</code></dt>
+<dd>
+
+<p>Opens a file and tests it each line at a time.</p>
+
+<p>For each line it evaluates each of the specifiers, stopping at the first successful match. A specifier may be a regular expression or a subroutine. The subroutine will be invoked with the same parameters as an -&gt;exec subroutine.</p>
+
+<p>It is possible to provide a set of negative specifiers by enclosing them in anonymous arrays. Should a negative specifier match the iteration is aborted and the clause is failed. For example:</p>
+
+<pre><code> $rule-&gt;grep( qr/^#!.*\bperl/, [ sub { 1 } ] );</code></pre>
+
+<p>Is a passing clause if the first line of a file looks like a perl shebang line.</p>
+
+</dd>
+<dt id="maxdepth(-$level-)"><a id="maxdepth"></a><a id="maxdepth---level"></a><code>maxdepth( $level )</code></dt>
+<dd>
+
+<p>Descend at most <code>$level</code> (a non-negative integer) levels of directories below the starting point.</p>
+
+<p>May be invoked many times per rule, but only the most recent value is used.</p>
+
+</dd>
+<dt id="mindepth(-$level-)"><a id="mindepth"></a><a id="mindepth---level"></a><code>mindepth( $level )</code></dt>
+<dd>
+
+<p>Do not apply any tests at levels less than <code>$level</code> (a non-negative integer).</p>
+
+</dd>
+<dt id="extras(-\%extras-)"><a id="extras"></a><a id="extras---extras"></a><code>extras( \%extras )</code></dt>
+<dd>
+
+<p>Specifies extra values to pass through to <code>File::File::find</code> as part of the options hash.</p>
+
+<p>For example this allows you to specify following of symlinks like so:</p>
+
+<pre><code> my $rule = File::Find::Rule-&gt;extras({ follow =&gt; 1 });</code></pre>
+
+<p>May be invoked many times per rule, but only the most recent value is used.</p>
+
+</dd>
+<dt id="relative"><code>relative</code></dt>
+<dd>
+
+<p>Trim the leading portion of any path found</p>
+
+</dd>
+<dt id="canonpath"><code>canonpath</code></dt>
+<dd>
+
+<p>Normalize paths found using <code>File::Spec-</code>canonpath&gt;. This will return paths with a file-seperator that is native to your OS (as determined by <a href="https://metacpan.org/pod/File::Spec">File::Spec</a>), instead of the default <code>/</code>.</p>
+
+<p>For example, this will return <code>tmp/foobar</code> on Unix-ish OSes and <code>tmp\foobar</code> on Win32.</p>
+
+</dd>
+<dt id="not_*"><a id="not_"></a><code>not_*</code></dt>
+<dd>
+
+<p>Negated version of the rule. An effective shortand related to ! in the procedural interface.</p>
+
+<pre><code> $foo-&gt;not_name(&#39;*.pl&#39;);
+
+ $foo-&gt;not( $foo-&gt;new-&gt;name(&#39;*.pl&#39; ) );</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="Query-Methods"><a id="Query"></a>Query Methods</h2>
+
+<dl>
+
+<dt id="in(-@directories-)"><a id="in"></a><a id="in---directories"></a><code>in( @directories )</code></dt>
+<dd>
+
+<p>Evaluates the rule, returns a list of paths to matching files and directories.</p>
+
+</dd>
+<dt id="start(-@directories-)"><a id="start"></a><a id="start---directories"></a><code>start( @directories )</code></dt>
+<dd>
+
+<p>Starts a find across the specified directories. Matching items may then be queried using <a href="./File::Find::Rule.html#match">&quot;match&quot;</a>. This allows you to use a rule as an iterator.</p>
+
+<pre><code> my $rule = File::Find::Rule-&gt;file-&gt;name(&quot;*.jpeg&quot;)-&gt;start( &quot;/web&quot; );
+ while ( defined ( my $image = $rule-&gt;match ) ) {
+     ...
+ }</code></pre>
+
+</dd>
+<dt id="match"><code>match</code></dt>
+<dd>
+
+<p>Returns the next file which matches, false if there are no more.</p>
+
+</dd>
+</dl>
+
+<h2 id="Extensions">Extensions</h2>
+
+<p>Extension modules are available from CPAN in the File::Find::Rule namespace. In order to use these extensions either use them directly:</p>
+
+<pre><code> use File::Find::Rule::ImageSize;
+ use File::Find::Rule::MMagic;
+
+ # now your rules can use the clauses supplied by the ImageSize and
+ # MMagic extension</code></pre>
+
+<p>or, specify that File::Find::Rule should load them for you:</p>
+
+<pre><code> use File::Find::Rule qw( :ImageSize :MMagic );</code></pre>
+
+<p>For notes on implementing your own extensions, consult <a href="https://metacpan.org/pod/distribution/File-Find-Rule/lib/File/Find/Rule/Extending.pod">File::Find::Rule::Extending</a></p>
+
+<h2 id="Further-examples"><a id="Further"></a>Further examples</h2>
+
+<dl>
+
+<dt id="Finding-perl-scripts"><a id="Finding"></a>Finding perl scripts</dt>
+<dd>
+
+<pre><code> my $finder = File::Find::Rule-&gt;or
+  (
+   File::Find::Rule-&gt;name( &#39;*.pl&#39; ),
+   File::Find::Rule-&gt;exec(
+                          sub {
+                              if (open my $fh, $_) {
+                                  my $shebang = &lt;$fh&gt;;
+                                  close $fh;
+                                  return $shebang =~ /^#!.*\bperl/;
+                              }
+                              return 0;
+                          } ),
+  );</code></pre>
+
+<p>Based upon this message http://use.perl.org/comments.pl?sid=7052&amp;cid=10842</p>
+
+</dd>
+<dt id="ignore-CVS-directories"><a id="ignore"></a>ignore CVS directories</dt>
+<dd>
+
+<pre><code> my $rule = File::Find::Rule-&gt;new;
+ $rule-&gt;or($rule-&gt;new
+                -&gt;directory
+                -&gt;name(&#39;CVS&#39;)
+                -&gt;prune
+                -&gt;discard,
+           $rule-&gt;new);</code></pre>
+
+<p>Note here the use of a null rule. Null rules match anything they see, so the effect is to match (and discard) directories called &#39;CVS&#39; or to match anything.</p>
+
+</dd>
+</dl>
+
+<h1 id="TWO-FOR-THE-PRICE-OF-ONE"><a id="TWO"></a>TWO FOR THE PRICE OF ONE</h1>
+
+<p>File::Find::Rule also gives you a procedural interface. This is documented in <a href="https://metacpan.org/pod/distribution/File-Find-Rule/lib/File/Find/Rule/Procedural.pod">File::Find::Rule::Procedural</a></p>
+
+<h1 id="EXPORTS">EXPORTS</h1>
+
+<p><a href="./File::Find::Rule.html#find">&quot;find&quot;</a>, <a href="./File::Find::Rule.html#rule">&quot;rule&quot;</a></p>
+
+<h1 id="TAINT-MODE-INTERACTION"><a id="TAINT"></a>TAINT MODE INTERACTION</h1>
+
+<p>As of 0.32 File::Find::Rule doesn&#39;t capture the current working directory in a taint-unsafe manner. File::Find itself still does operations that the taint system will flag as insecure but you can use the <a href="./File::Find::Rule.html#extras">&quot;extras&quot;</a> feature to ask <a href="https://metacpan.org/pod/File::Find">File::Find</a> to internally <code>untaint</code> file paths with a regex like so:</p>
+
+<pre><code>    my $rule = File::Find::Rule-&gt;extras({ untaint =&gt; 1 });</code></pre>
+
+<p>Please consult <a href="https://metacpan.org/pod/File::Find">File::Find</a>&#39;s documentation for <code>untaint</code>, <code>untaint_pattern</code>, and <code>untaint_skip</code> for more information.</p>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>The code makes use of the <code>our</code> keyword and as such requires perl version 5.6.0 or newer.</p>
+
+<p>Currently it isn&#39;t possible to remove a clause from a rule object. If this becomes a significant issue it will be addressed.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Richard Clamp &lt;richardc@unixbeard.net&gt; with input gained from this use.perl discussion: http://use.perl.org/~richardc/journal/6467</p>
+
+<p>Additional proofreading and input provided by Kake, Greg McCarroll, and Andy Lester andy@petdance.com.</p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright (C) 2002, 2003, 2004, 2006, 2009, 2011 Richard Clamp. All Rights Reserved.</p>
+
+<p>This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/File::Find">File::Find</a>, <a href="https://metacpan.org/pod/Text::Glob">Text::Glob</a>, <a href="https://metacpan.org/pod/Number::Compare">Number::Compare</a>, find(1)</p>
+
+<p>If you want to know about the procedural interface, see <a href="https://metacpan.org/pod/distribution/File-Find-Rule/lib/File/Find/Rule/Procedural.pod">File::Find::Rule::Procedural</a>, and if you have an idea for a neat extension <a href="https://metacpan.org/pod/distribution/File-Find-Rule/lib/File/Find/Rule/Extending.pod">File::Find::Rule::Extending</a></p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install File::Find::Rule, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm File::Find::Rule</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install File::Find::Rule</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./File::Find::Rule.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,36 @@
+=over
+
+=item tell FILEHANDLE
+X<tell>
+
+=item tell
+
+Returns the current position I<in bytes> for FILEHANDLE, or -1 on
+error.  FILEHANDLE may be an expression whose value gives the name of
+the actual filehandle.  If FILEHANDLE is omitted, assumes the file
+last read.
+
+Note the emphasis on bytes: even if the filehandle has been set to operate
+on characters (for example using the C<:encoding(UTF-8)> I/O layer), the
+L<C<seek>|/seek FILEHANDLE,POSITION,WHENCE>,
+L<C<tell>|/tell FILEHANDLE>, and
+L<C<sysseek>|/sysseek FILEHANDLE,POSITION,WHENCE>
+family of functions use byte offsets, not character offsets,
+because seeking to a character offset would be very slow in a UTF-8 file.
+
+The return value of L<C<tell>|/tell FILEHANDLE> for the standard streams
+like the STDIN depends on the operating system: it may return -1 or
+something else.  L<C<tell>|/tell FILEHANDLE> on pipes, fifos, and
+sockets usually returns -1.
+
+There is no C<systell> function.  Use
+L<C<sysseek($fh, 0, 1)>|/sysseek FILEHANDLE,POSITION,WHENCE> for that.
+
+Do not use L<C<tell>|/tell FILEHANDLE> (or other buffered I/O
+operations) on a filehandle that has been manipulated by
+L<C<sysread>|/sysread FILEHANDLE,SCALAR,LENGTH,OFFSET>,
+L<C<syswrite>|/syswrite FILEHANDLE,SCALAR,LENGTH,OFFSET>, or
+L<C<sysseek>|/sysseek FILEHANDLE,POSITION,WHENCE>.  Those functions
+ignore the buffering, while L<C<tell>|/tell FILEHANDLE> does not.
+
+=back

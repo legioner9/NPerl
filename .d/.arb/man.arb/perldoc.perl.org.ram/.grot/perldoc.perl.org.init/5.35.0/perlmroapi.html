@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlmroapi - Perl method resolution plugin interface - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlmroapi">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmroapi.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlmroapi">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlmroapi">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlmroapi">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlmroapi">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlmroapi">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlmroapi">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlmroapi">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlmroapi">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlmroapi">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlmroapi">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlmroapi">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlmroapi">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlmroapi">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlmroapi">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlmroapi">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlmroapi">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlmroapi">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlmroapi">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlmroapi">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlmroapi">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlmroapi">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlmroapi">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlmroapi">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlmroapi">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlmroapi">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlmroapi">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlmroapi">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlmroapi">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlmroapi">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlmroapi">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlmroapi">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlmroapi">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlmroapi">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlmroapi">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlmroapi">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlmroapi">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlmroapi">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlmroapi">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlmroapi">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlmroapi">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlmroapi">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlmroapi">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlmroapi">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlmroapi">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlmroapi">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlmroapi">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlmroapi">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlmroapi">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlmroapi">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlmroapi">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlmroapi">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlmroapi">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlmroapi">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlmroapi">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlmroapi">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlmroapi">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlmroapi">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlmroapi">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlmroapi">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlmroapi">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlmroapi">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlmroapi">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlmroapi">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlmroapi">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlmroapi">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlmroapi">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlmroapi">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlmroapi">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlmroapi">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlmroapi">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlmroapi">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlmroapi">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlmroapi">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlmroapi">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlmroapi">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlmroapi">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlmroapi">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlmroapi">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlmroapi">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlmroapi">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmroapi.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlmroapi">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlmroapi">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlmroapi">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlmroapi">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlmroapi">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlmroapi">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlmroapi">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlmroapi">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlmroapi">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlmroapi">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlmroapi">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlmroapi">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlmroapi">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlmroapi">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlmroapi">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlmroapi">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlmroapi">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlmroapi">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlmroapi">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlmroapi">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlmroapi">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlmroapi">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlmroapi">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlmroapi">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlmroapi">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlmroapi">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlmroapi">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlmroapi">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlmroapi">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlmroapi">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlmroapi">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlmroapi">5.35.1</a>
+          <a class="dropdown-item active" href="perlmroapi.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmroapi.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlmroapi.html">perlmroapi</a>
+          <div id="more">
+            (<a href="perlmroapi.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlmroapi">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlmroapi.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmroapi.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmroapi.html#Callbacks">Callbacks</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmroapi.html#Caching">Caching</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmroapi.html#Examples">Examples</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmroapi.html#AUTHORS">AUTHORS</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlmroapi.html#NAME">#</a>NAME</h1>
+
+<p>perlmroapi - Perl method resolution plugin interface</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlmroapi.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>As of Perl 5.10.1 there is a new interface for plugging and using method resolution orders other than the default (linear depth first search). The C3 method resolution order added in 5.10.0 has been re-implemented as a plugin, without changing its Perl-space interface.</p>
+
+<p>Each plugin should register itself by providing the following structure</p>
+
+<pre><code>struct mro_alg {
+    AV *(*resolve)(pTHX_ HV *stash, U32 level);
+    const char *name;
+    U16 length;
+    U16 kflags;
+    U32 hash;
+};</code></pre>
+
+<p>and calling <code>Perl_mro_register</code>:</p>
+
+<pre><code>Perl_mro_register(aTHX_ &amp;my_mro_alg);</code></pre>
+
+<dl>
+
+<dt id="resolve"><a class="permalink" href="perlmroapi.html#resolve">#</a>resolve</dt>
+<dd>
+
+<p>Pointer to the linearisation function, described below.</p>
+
+</dd>
+<dt id="name"><a class="permalink" href="perlmroapi.html#name">#</a>name</dt>
+<dd>
+
+<p>Name of the MRO, either in ISO-8859-1 or UTF-8.</p>
+
+</dd>
+<dt id="length"><a class="permalink" href="perlmroapi.html#length">#</a>length</dt>
+<dd>
+
+<p>Length of the name.</p>
+
+</dd>
+<dt id="kflags"><a class="permalink" href="perlmroapi.html#kflags">#</a>kflags</dt>
+<dd>
+
+<p>If the name is given in UTF-8, set this to <code>HVhek_UTF8</code>. The value is passed direct as the parameter <i>kflags</i> to <code>hv_common()</code>.</p>
+
+</dd>
+<dt id="hash"><a class="permalink" href="perlmroapi.html#hash">#</a>hash</dt>
+<dd>
+
+<p>A precomputed hash value for the MRO&#39;s name, or 0.</p>
+
+</dd>
+</dl>
+
+<h1 id="Callbacks"><a class="permalink" href="perlmroapi.html#Callbacks">#</a>Callbacks</h1>
+
+<p>The <code>resolve</code> function is called to generate a linearised ISA for the given stash, using this MRO. It is called with a pointer to the stash, and a <i>level</i> of 0. The core always sets <i>level</i> to 0 when it calls your function - the parameter is provided to allow your implementation to track depth if it needs to recurse.</p>
+
+<p>The function should return a reference to an array containing the parent classes in order. The names of the classes should be the result of calling <code>HvENAME()</code> on the stash. In those cases where <code>HvENAME()</code> returns null, <code>HvNAME()</code> should be used instead.</p>
+
+<p>The caller is responsible for incrementing the reference count of the array returned if it wants to keep the structure. Hence, if you have created a temporary value that you keep no pointer to, <code>sv_2mortal()</code> to ensure that it is disposed of correctly. If you have cached your return value, then return a pointer to it without changing the reference count.</p>
+
+<h1 id="Caching"><a class="permalink" href="perlmroapi.html#Caching">#</a>Caching</h1>
+
+<p>Computing MROs can be expensive. The implementation provides a cache, in which you can store a single <code>SV *</code>, or anything that can be cast to <code>SV *</code>, such as <code>AV *</code>. To read your private value, use the macro <code>MRO_GET_PRIVATE_DATA()</code>, passing it the <code>mro_meta</code> structure from the stash, and a pointer to your <code>mro_alg</code> structure:</p>
+
+<pre><code>meta = HvMROMETA(stash);
+private_sv = MRO_GET_PRIVATE_DATA(meta, &amp;my_mro_alg);</code></pre>
+
+<p>To set your private value, call <code>Perl_mro_set_private_data()</code>:</p>
+
+<pre><code>Perl_mro_set_private_data(aTHX_ meta, &amp;c3_alg, private_sv);</code></pre>
+
+<p>The private data cache will take ownership of a reference to private_sv, much the same way that <code>hv_store()</code> takes ownership of a reference to the value that you pass it.</p>
+
+<h1 id="Examples"><a class="permalink" href="perlmroapi.html#Examples">#</a>Examples</h1>
+
+<p>For examples of MRO implementations, see <code>S_mro_get_linear_isa_c3()</code> and the <code>BOOT:</code> section of <i>ext/mro/mro.xs</i>, and <code>S_mro_get_linear_isa_dfs()</code> in <i>mro_core.c</i></p>
+
+<h1 id="AUTHORS"><a class="permalink" href="perlmroapi.html#AUTHORS">#</a>AUTHORS</h1>
+
+<p>The implementation of the C3 MRO and switchable MROs within the perl core was written by Brandon L Black. Nicholas Clark created the pluggable interface, refactored Brandon&#39;s implementation to work with it, and wrote this document.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

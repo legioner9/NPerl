@@ -1,0 +1,1749 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Perl::Version - Parse and manipulate Perl version strings - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Perl-Version - MetaCPAN" href="https://metacpan.org/dist/Perl-Version/releases.rss" />
+        <link rel="canonical" href="./Perl::Version.html" />
+        <meta name="description" content="Parse and manipulate Perl version strings" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Perl::Version" />
+<meta name="twitter:title"       content="Perl::Version" />
+<meta name="twitter:description" content="Parse and manipulate Perl version strings" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Perl::Version.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Perl-Version was released.">
+      <span class="relatize">05 Jan 2024 13:57:01 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Perl-Version">Perl-Version</a>
+  </li>
+  <li>
+    Module version: 1.016
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Perl-Version/source/lib/Perl/Version.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Perl-Version/source/lib/Perl/Version.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Perl-Version/source/lib/Perl">Browse</a>
+    (<a href="https://metacpan.org/dist/Perl-Version/source/lib/Perl?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Perl-Version/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://github.com/briandfoy/perl-version">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Perl-Version/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/briandfoy/perl-version">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/briandfoy/perl-version/issues">Issues</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Perl-Version+1.016" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Perl-Version.html?oncpan=1&amp;distmat=1&amp;version=1.016&amp;grade=2" style="color: #090">197</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Perl-Version.html?oncpan=1&amp;distmat=1&amp;version=1.016&amp;grade=3" style="color: #900">1</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Perl-Version.html?oncpan=1&amp;distmat=1&amp;version=1.016&amp;grade=4">2</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/BDFOY/Perl-Version-1.016">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Perl-Version who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      License: artistic_2
+    </li>
+    <li>
+      Perl: v5.10.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Perl-Version/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/B/BD/BDFOY/Perl-Version-1.016.tar.gz">
+      Download (<span itemprop="fileSize">29.66KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FBDFOY%2FPerl-Version-1.016%2Flib%2FPerl%2FVersion.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Perl-Version/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Perl-Version/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Perl-Version">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Perl-Version">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Perl/Version.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="BDFOY/Perl-Version-1.016"
+>1.016
+  (BDFOY on 2024-01-05)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013"
+>1.013
+  (BDFOY on 2014-02-12)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.011"
+>1.011
+  (ANDYA on 2011-02-21)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.010"
+>1.010
+  (ANDYA on 2010-09-19)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.009"
+>1.009
+  (ANDYA on 2009-03-09)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.008"
+>1.008
+  (ANDYA on 2009-03-07)</option>
+<option
+  
+  value="HDP/Perl-Version-1.007"
+>1.007
+  (HDP on 2008-04-07)</option>
+<option
+  
+  value="HDP/Perl-Version-1.006"
+>1.006
+  (HDP on 2008-04-07)</option>
+<option
+  
+  value="HDP/Perl-Version-1.005"
+>1.005
+  (HDP on 2008-04-03)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.004"
+>1.004
+  (ANDYA on 2007-11-08)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.003"
+>1.003
+  (ANDYA on 2007-11-08)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v1.002"
+>v1.002
+  (ANDYA on 2007-09-07)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v1.001"
+>v1.001
+  (ANDYA on 2007-09-07)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v1.000"
+>v1.000
+  (ANDYA on 2007-09-03)</option>
+<option
+  
+  value="ANDYA/Perl-Version-0.0.8"
+>0.0.8
+  (ANDYA on 2007-06-20)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.7"
+>v0.0.7
+  (ANDYA on 2007-02-28)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.6"
+>v0.0.6
+  (ANDYA on 2007-02-27)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.5"
+>v0.0.5
+  (ANDYA on 2007-02-25)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.4"
+>v0.0.4
+  (ANDYA on 2007-02-24)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.3"
+>v0.0.3
+  (ANDYA on 2007-02-23)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.1"
+>v0.0.1
+  (ANDYA on 2007-02-07)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BDFOY/Perl-Version-1.015"
+>1.015
+  (BDFOY on 2024-01-04)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013_03"
+>1.013_03 DEV
+  (BDFOY on 2015-11-21)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013_02"
+>1.013_02 DEV
+  (BDFOY on 2014-02-18)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013_01"
+>1.013_01 DEV
+  (BDFOY on 2014-02-14)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/BDFOY/Perl-Version-1.016/diff/' + encodeURIComponent(this.value) + '/lib/Perl/Version.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="BDFOY/Perl-Version-1.016"
+>1.016
+  (BDFOY on 2024-01-05)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013"
+>1.013
+  (BDFOY on 2014-02-12)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.011"
+>1.011
+  (ANDYA on 2011-02-21)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.010"
+>1.010
+  (ANDYA on 2010-09-19)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.009"
+>1.009
+  (ANDYA on 2009-03-09)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.008"
+>1.008
+  (ANDYA on 2009-03-07)</option>
+<option
+  
+  value="HDP/Perl-Version-1.007"
+>1.007
+  (HDP on 2008-04-07)</option>
+<option
+  
+  value="HDP/Perl-Version-1.006"
+>1.006
+  (HDP on 2008-04-07)</option>
+<option
+  
+  value="HDP/Perl-Version-1.005"
+>1.005
+  (HDP on 2008-04-03)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.004"
+>1.004
+  (ANDYA on 2007-11-08)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.003"
+>1.003
+  (ANDYA on 2007-11-08)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v1.002"
+>v1.002
+  (ANDYA on 2007-09-07)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v1.001"
+>v1.001
+  (ANDYA on 2007-09-07)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v1.000"
+>v1.000
+  (ANDYA on 2007-09-03)</option>
+<option
+  
+  value="ANDYA/Perl-Version-0.0.8"
+>0.0.8
+  (ANDYA on 2007-06-20)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.7"
+>v0.0.7
+  (ANDYA on 2007-02-28)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.6"
+>v0.0.6
+  (ANDYA on 2007-02-27)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.5"
+>v0.0.5
+  (ANDYA on 2007-02-25)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.4"
+>v0.0.4
+  (ANDYA on 2007-02-24)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.3"
+>v0.0.3
+  (ANDYA on 2007-02-23)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.1"
+>v0.0.1
+  (ANDYA on 2007-02-07)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BDFOY/Perl-Version-1.015"
+>1.015
+  (BDFOY on 2024-01-04)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013_03"
+>1.013_03 DEV
+  (BDFOY on 2015-11-21)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013_02"
+>1.013_02 DEV
+  (BDFOY on 2014-02-18)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013_01"
+>1.013_01 DEV
+  (BDFOY on 2014-02-14)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Carp" title="Carp" class="ellipsis">Carp</a></li>
+  <li><a href="https://metacpan.org/pod/Data::Dumper" title="Data::Dumper" class="ellipsis">Data::Dumper</a></li>
+  <li><a href="https://metacpan.org/pod/Getopt::Long" title="Getopt::Long" class="ellipsis">Getopt::Long</a></li>
+  <li><a href="https://metacpan.org/pod/Pod::Usage" title="Pod::Usage" class="ellipsis">Pod::Usage</a></li>
+  <li><a href="https://metacpan.org/pod/Scalar::Util" title="Scalar::Util" class="ellipsis">Scalar::Util</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Perl::Version/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Perl%3A%3AVersion">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Perl-Version">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/BDFOY/Perl-Version-1.016/view/lib/Perl/Version.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Perl::Version.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/SMONFF"><img src="https://www.gravatar.com/avatar/4ede99c3eac52827f5cb4b68b408ca41?d=identicon&amp;s=20" title="SMONFF" alt="SMONFF"></a>
+<a class="display-all" href="https://metacpan.org/author/KUERBIS"><img src="https://www.gravatar.com/avatar/136c77354b6a6d4451c38198dd74d83c?d=identicon&amp;s=20" title="KUERBIS" alt="KUERBIS"></a>
+<a class="display-all" href="https://metacpan.org/author/KRAUTCAT"><img src="https://www.gravatar.com/avatar/efd137d1577aa9df7fc833f6306958d5?d=identicon&amp;s=20" title="KRAUTCAT" alt="KRAUTCAT"></a>
+<a class="display-all" href="https://metacpan.org/author/TOBYINK"><img src="https://www.gravatar.com/avatar/f8faf2a422aecd1007b7d54c19ce7f39?d=identicon&amp;s=20" title="TOBYINK" alt="TOBYINK"></a>
+<a class="display-all" href="https://metacpan.org/author/AYOUNG"><img src="https://www.gravatar.com/avatar/8d1e4946c288fbe87d1e0394f3e41b24?d=identicon&amp;s=20" title="AYOUNG" alt="AYOUNG"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Perl-Version/plussers">8 PAUSE users</a>
+</div>
+<div>
+    2 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="ANDYA"
+      data-contrib-email="andy@hexten.net"
+    >
+      <a href="https://metacpan.org/author/ANDYA" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/0bf43dede29b43014200dd0b0a438877?d=identicon&amp;s=20" />
+      Andy Armstrong
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/BDFOY" class="author-name">brian d foy</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Perl/Version.pm&#39;" class="">
+<option
+  selected
+  value="BDFOY/Perl-Version-1.016"
+>1.016
+  (BDFOY on 2024-01-05)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013"
+>1.013
+  (BDFOY on 2014-02-12)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.011"
+>1.011
+  (ANDYA on 2011-02-21)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.010"
+>1.010
+  (ANDYA on 2010-09-19)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.009"
+>1.009
+  (ANDYA on 2009-03-09)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.008"
+>1.008
+  (ANDYA on 2009-03-07)</option>
+<option
+  
+  value="HDP/Perl-Version-1.007"
+>1.007
+  (HDP on 2008-04-07)</option>
+<option
+  
+  value="HDP/Perl-Version-1.006"
+>1.006
+  (HDP on 2008-04-07)</option>
+<option
+  
+  value="HDP/Perl-Version-1.005"
+>1.005
+  (HDP on 2008-04-03)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.004"
+>1.004
+  (ANDYA on 2007-11-08)</option>
+<option
+  
+  value="ANDYA/Perl-Version-1.003"
+>1.003
+  (ANDYA on 2007-11-08)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v1.002"
+>v1.002
+  (ANDYA on 2007-09-07)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v1.001"
+>v1.001
+  (ANDYA on 2007-09-07)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v1.000"
+>v1.000
+  (ANDYA on 2007-09-03)</option>
+<option
+  
+  value="ANDYA/Perl-Version-0.0.8"
+>0.0.8
+  (ANDYA on 2007-06-20)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.7"
+>v0.0.7
+  (ANDYA on 2007-02-28)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.6"
+>v0.0.6
+  (ANDYA on 2007-02-27)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.5"
+>v0.0.5
+  (ANDYA on 2007-02-25)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.4"
+>v0.0.4
+  (ANDYA on 2007-02-24)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.3"
+>v0.0.3
+  (ANDYA on 2007-02-23)</option>
+<option
+  
+  value="ANDYA/Perl-Version-v0.0.1"
+>v0.0.1
+  (ANDYA on 2007-02-07)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BDFOY/Perl-Version-1.015"
+>1.015
+  (BDFOY on 2024-01-04)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013_03"
+>1.013_03 DEV
+  (BDFOY on 2015-11-21)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013_02"
+>1.013_02 DEV
+  (BDFOY on 2014-02-18)</option>
+<option
+  
+  value="BDFOY/Perl-Version-1.013_01"
+>1.013_01 DEV
+  (BDFOY on 2014-02-14)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Perl-Version">Perl-Version-1.016</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 30 direct dependents &#10;          • 175 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Perl-Version-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Perl-Version-1.016">
+    <input type="hidden" name="author" value="BDFOY">
+    <input type="hidden" name="distribution" value="Perl-Version">
+    <button type="submit" class="favorite highlight"><span>10</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Perl::Version.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>10</span> ++</a>
+</div>
+   / <span>Perl::Version</span>
+</div>
+          </div>
+          <main class="content">
+
+<input id="ADOPTME" type="checkbox" class="notification-toggle-checkbox" />
+<div id="metacpan_notification" class="well collapsed notify-ADOPTME">
+    <label class="remove-notification" for="ADOPTME" >
+      <i class="fa fa-fw fa-times black"></i>
+    </label>
+    <div id="metacpan_notification-container">
+      <h2>Why not adopt me?</h2>
+      <div>
+This distribution is up for adoption!
+        If you're interested then please contact the PAUSE module admins via
+        <a href="mailto:modules@perl.org,andy@hexten.net,briandfoy@pobox.com,bdfoy@cpan.org,hdp@pobox.com?subject=Adopt%20Perl%3A%3AVersion%3F&amp;body=Hello%2C%0A%0AI%27m%20interested%20in%20adopting%20the%20Perl%3A%3AVersion%20module.%20If%20you%20can%20grant%20me%20the%20privilege%20I%20will%20release%20the%20next%20version.%0A%0A">email</a>.
+        <a href="https://metacpan.org/about/faq#howtoadoptadistribution"><i class="fa fa-info-circle"></i></a>
+      </div>
+  </div>
+</div>
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Perl::Version.html#NAME">NAME</a></li>
+  <li><a href="./Perl::Version.html#VERSION">VERSION</a></li>
+  <li><a href="./Perl::Version.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Perl::Version.html#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a href="./Perl::Version.html#Version-Formats">Version Formats</a>
+        <ul>
+          <li><a href="./Perl::Version.html#Real-Numbers">Real Numbers</a></li>
+          <li><a href="./Perl::Version.html#Alpha-Versions">Alpha Versions</a></li>
+        </ul>
+      </li>
+      <li><a href="./Perl::Version.html#Component-Naming">Component Naming</a></li>
+      <li><a href="./Perl::Version.html#Comparison-with-version.pm">Comparison with version.pm</a></li>
+    </ul>
+  </li>
+  <li><a href="./Perl::Version.html#INTERFACE">INTERFACE</a>
+    <ul>
+      <li><a href="./Perl::Version.html#Accessors">Accessors</a></li>
+      <li><a href="./Perl::Version.html#Incrementing">Incrementing</a></li>
+      <li><a href="./Perl::Version.html#Formatting">Formatting</a></li>
+      <li><a href="./Perl::Version.html#Comparison1">Comparison</a></li>
+      <li><a href="./Perl::Version.html#Overloaded-Operators">Overloaded Operators</a></li>
+      <li><a href="./Perl::Version.html#Constants">Constants</a></li>
+    </ul>
+  </li>
+  <li><a href="./Perl::Version.html#DIAGNOSTICS">DIAGNOSTICS</a>
+    <ul>
+      <li><a href="./Perl::Version.html#Error-messages">Error messages</a></li>
+    </ul>
+  </li>
+  <li><a href="./Perl::Version.html#CONFIGURATION-AND-ENVIRONMENT">CONFIGURATION AND ENVIRONMENT</a></li>
+  <li><a href="./Perl::Version.html#DEPENDENCIES">DEPENDENCIES</a></li>
+  <li><a href="./Perl::Version.html#INCOMPATIBILITIES">INCOMPATIBILITIES</a></li>
+  <li><a href="./Perl::Version.html#BUGS-AND-LIMITATIONS">BUGS AND LIMITATIONS</a></li>
+  <li><a href="./Perl::Version.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Perl::Version.html#LICENCE-AND-COPYRIGHT">LICENCE AND COPYRIGHT</a></li>
+  <li><a href="./Perl::Version.html#DISCLAIMER-OF-WARRANTY">DISCLAIMER OF WARRANTY</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Perl::Version - Parse and manipulate Perl version strings</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>This document describes Perl::Version version 1.016</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    use Perl::Version;
+
+    # Init from string
+    my $version = Perl::Version-&gt;new( &#39;1.2.3&#39; );
+
+    # Stringification preserves original format
+    print &quot;$version\n&quot;;                 # prints &#39;1.2.3&#39;
+
+    # Normalised
+    print $version-&gt;normal, &quot;\n&quot;;       # prints &#39;v1.2.3&#39;
+
+    # Numified
+    print $version-&gt;numify, &quot;\n&quot;;       # prints &#39;1.002003&#39;
+
+    # Explicitly stringified
+    print $version-&gt;stringify, &quot;\n&quot;;    # prints &#39;1.2.3&#39;
+
+    # Increment the subversion (the third component)
+    $version-&gt;inc_subversion;
+
+    # Stringification returns the updated version formatted
+    # as the original was
+    print &quot;$version\n&quot;;                 # prints &#39;1.2.4&#39;
+
+    # Normalised
+    print $version-&gt;normal, &quot;\n&quot;;       # prints &#39;v1.2.4&#39;
+
+    # Numified
+    print $version-&gt;numify, &quot;\n&quot;;       # prints &#39;1.002004&#39;
+
+    # Refer to subversion component by position ( zero based )
+    $version-&gt;increment( 2 );
+
+    print &quot;$version\n&quot;;                 # prints &#39;1.2.5&#39;
+
+    # Increment the version (second component) which sets all
+    # components to the right of it to zero.
+    $version-&gt;inc_version;
+
+    print &quot;$version\n&quot;;                 # prints &#39;1.3.0&#39;
+
+    # Increment the revision (main version number)
+    $version-&gt;inc_revision;
+
+    print &quot;$version\n&quot;;                 # prints &#39;2.0.0&#39;
+
+    # Increment the alpha number
+    $version-&gt;inc_alpha;
+
+    print &quot;$version\n&quot;;                 # prints &#39;2.0.0_001&#39;</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>Perl::Version provides a simple interface for parsing, manipulating and formatting Perl version strings.</p>
+
+<p>Unlike version.pm (which concentrates on parsing and comparing version strings) Perl::Version is designed for cases where you&#39;d like to parse a version, modify it and get back the modified version formatted like the original.</p>
+
+<p>For example:</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( &#39;1.2.3&#39; );
+    $version-&gt;inc_version;
+    print &quot;$version\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    1.3.0</code></pre>
+
+<p>whereas</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( &#39;v1.02.03&#39; );
+    $version-&gt;inc_version;
+    print &quot;$version\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    v1.03.00</code></pre>
+
+<p>Both are representations of the same version and they&#39;d compare equal but their formatting is different.</p>
+
+<p>Perl::Version tries hard to guess and recreate the format of the original version and in most cases it succeeds. In rare cases the formatting is ambiguous. Consider</p>
+
+<pre><code>    1.10.03</code></pre>
+
+<p>Do you suppose that second component &#39;10&#39; is zero padded like the third component? Perl::Version will assume that it is:</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( &#39;1.10.03&#39; );
+    $version-&gt;inc_revision;
+    print &quot;$version\n&quot;;</code></pre>
+
+<p>will print</p>
+
+<pre><code>    2.00.00</code></pre>
+
+<p>If all of the components after the first are the same length (two characters in this case) and any of them begins with a zero Perl::Version will assume that they&#39;re all zero padded to the same length.</p>
+
+<p>The first component and any alpha suffix are handled separately. In each case if either of them starts with a zero they will be zero padded to the same length when stringifying the version.</p>
+
+<h2 id="Version-Formats"><a id="Version"></a>Version Formats</h2>
+
+<p>Perl::Version supports a few different version string formats.</p>
+
+<dl>
+
+<dt id="1,-1.2"><a id="1"></a><a id="pod"></a> 1, 1.2</dt>
+<dd>
+
+<p>Versions that look like a number. If you pass a numeric value its string equivalent will be parsed:</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( 1.2 );
+    print &quot;$version\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    1.2</code></pre>
+
+<p>In fact there is no special treatment for versions that resemble decimal numbers. This is worthy of comment only because it differs from version.pm which treats actual numbers used as versions as a special case and performs various transformations on the stored version.</p>
+
+</dd>
+<dt id="1.2.3,-1.2.3.4"><a id="11"></a><a id="pod1"></a> 1.2.3, 1.2.3.4</dt>
+<dd>
+
+<p>Simple versions with three or more components.</p>
+
+</dd>
+<dt id="v1.2.3"><a id="v1"></a> v1.2.3</dt>
+<dd>
+
+<p>Versions with a leading &#39;v&#39;.</p>
+
+</dd>
+<dt id="5.8,-5.08,-5.008006"><a id="5"></a><a id="pod2"></a> 5.8, 5.08, 5.008006</dt>
+<dd>
+
+<p>Fielded numeric versions. If a version string has a single decimal point, it extracts digits in groups of three after the decimal point. If there are fewer than three digits in the final group, the field is left-padded with zeros to make it three digits (for example, 5.8 becomes 5.008 and 5.08 becomes 5.008 too). This is opposite of how Perl and CPAN has historically treated versions by right padding groups of three on.</p>
+
+<p>For example</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( 1.002003004005006 );
+    print $version-&gt;normal;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    v1.2.3.4.5.6</code></pre>
+
+</dd>
+<dt id="vstring">vstring</dt>
+<dd>
+
+<p>Perls later than 5.8.1 support vstring format. A vstring looks like a number with more than one decimal point and (optionally) a leading &#39;v&#39;. The &#39;v&#39; is mandatory for vstrings containing fewer than two decimal points.</p>
+
+<p>Perl::Version will successfully parse vstrings</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( v1.2 );
+    print &quot;$version\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    v1.2</code></pre>
+
+<p>Note that stringifying a Perl::Version constructed from a vstring will result in a regular string. Because it has no way of knowing whether the vstring constant had a &#39;v&#39; prefix it always generates one when stringifying back to a version string.</p>
+
+</dd>
+<dt id="CVS-version"><a id="CVS"></a>CVS version</dt>
+<dd>
+
+<p>A common idiom for users of CVS is to use keyword replacement to generate a version automatically like this:</p>
+
+<pre><code>    $VERSION = version-&gt;new( qw$Revision: 2.7 $ );</code></pre>
+
+<p>Perl::Version does the right thing with such versions so that</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( qw$Revision: 2.7 $ );
+    $version-&gt;inc_revision;
+    print &quot;$version\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    Revision: 3.0</code></pre>
+
+</dd>
+</dl>
+
+<h3 id="Real-Numbers"><a id="Real"></a>Real Numbers</h3>
+
+<p>Real numbers are stringified before parsing. This has two implications: trailing zeros after the decimal point will be lost and any underscore characters in the number are discarded.</p>
+
+<p>Perl allows underscores anywhere in numeric constants as an aid to formatting. These are discarded when Perl converts the number into its internal format. This means that</p>
+
+<pre><code>    # Numeric version
+    print Perl::Version-&gt;new( 1.001_001 )-&gt;stringify;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    1.001001</code></pre>
+
+<p>but</p>
+
+<pre><code>    # String version
+    print Perl::Version-&gt;new( &#39;1.001_001&#39; )-&gt;stringify;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    1.001_001</code></pre>
+
+<p>as expected.</p>
+
+<p>In general you should probably avoid versions expressed either as decimal numbers or vstrings. The safest option is to pass a regular string to Perl::Version-&gt;new().</p>
+
+<h3 id="Alpha-Versions"><a id="Alpha"></a>Alpha Versions</h3>
+
+<p>By convention if a version string has suffix that consists of an underscore followed by one or more digits it represents an alpha or developer release. CPAN treats modules with such version strings specially to reflect their alpha status.</p>
+
+<p>This alpha notation is one reason why using decimal numbers as versions is a bad idea. Underscore is a valid character in numeric constants which is discarded by Perl when a program&#39;s source is parsed so any intended alpha suffix will become part of the version number.</p>
+
+<p>To be considered alpha a version must have a non-zero alpha component like this</p>
+
+<pre><code>    3.0.4_001</code></pre>
+
+<p>Generally the alpha component will be formatted with leading zeros but this is not a requirement.</p>
+
+<h2 id="Component-Naming"><a id="Component"></a>Component Naming</h2>
+
+<p>A version number consists of a series of components. By Perl convention the first three components are named &#39;revision&#39;, &#39;version&#39; and &#39;subversion&#39;:</p>
+
+<pre><code>    $ perl -V
+    Summary of my perl5 (revision 5 version 8 subversion 6) configuration:
+
+    (etc)</code></pre>
+
+<p>Perl::Version follows that convention. Any component may be accessed by passing a number from 0 to N-1 to the <a href="https://metacpan.org/pod/component">component</a> or <a href="https://metacpan.org/pod/increment">increment</a> but for convenience the first three components are aliased as <a href="https://metacpan.org/pod/revision">revision</a>, <a href="https://metacpan.org/pod/version">version</a> and <a href="https://metacpan.org/pod/subversion">subversion</a>.</p>
+
+<pre><code>    $version-&gt;increment( 0 );</code></pre>
+
+<p>is the same as</p>
+
+<pre><code>    $version-&gt;inc_revision;</code></pre>
+
+<p>and</p>
+
+<pre><code>    my $subv = $version-&gt;subversion;</code></pre>
+
+<p>is the same as</p>
+
+<pre><code>    my $subv = $version-&gt;component( 2 );</code></pre>
+
+<p>The alpha component is named &#39;alpha&#39;.</p>
+
+<h2 id="Comparison-with-version.pm"><a id="Comparison"></a>Comparison with version.pm</h2>
+
+<p>If you&#39;re familiar with version.pm you&#39;ll notice that there&#39;s a certain amount of overlap between what it does and this module. I originally created this module as a mutable subclass of version.pm but the requirement to be able to reformat a modified version to match the formatting of the original didn&#39;t sit well with version.pm&#39;s internals.</p>
+
+<p>As a result this module is not dependent or based on version.pm.</p>
+
+<h1 id="INTERFACE">INTERFACE</h1>
+
+<dl>
+
+<dt id="new"><code>new</code></dt>
+<dd>
+
+<p>Create a new Perl::Version by parsing a version string. As discussed above a number of different version formats are supported. Along with the value of the version formatting information is captured so that the version can be modified and the updated value retrieved in the same format as the original.</p>
+
+<pre><code>    my @version = (
+        &#39;1.3.0&#39;,    &#39;v1.03.00&#39;,     &#39;1.10.03&#39;, &#39;2.00.00&#39;,
+        &#39;1.2&#39;,      &#39;v1.2.3.4.5.6&#39;, &#39;v1.2&#39;,    &#39;Revision: 3.0&#39;,
+        &#39;1.001001&#39;, &#39;1.001_001&#39;,    &#39;3.0.4_001&#39;,
+    );
+
+    for my $v ( @version ) {
+        my $version = Perl::Version-&gt;new( $v );
+        $version-&gt;inc_version;
+        print &quot;$version\n&quot;;
+    }</code></pre>
+
+<p>prints</p>
+
+<pre><code>    1.4.0
+    v1.04.00
+    1.11.00
+    2.01.00
+    1.3
+    v1.3.0.0.0.0
+    v1.3
+    Revision: 3.1
+    1.002000
+    1.002
+    3.1.0</code></pre>
+
+<p>In each case the incremented version is formatted in the same way as the original.</p>
+
+<p>If no arguments are passed an empty version intialised to &#39;v0&#39; will be constructed.</p>
+
+<p>In order to support CVS version syntax</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( qw$Revision: 2.7 $ );</code></pre>
+
+<p><code>new</code> may be passed an array in which case it concatenates all of its arguments with spaces before parsing the result.</p>
+
+<p>If the string can&#39;t be parsed as a version <code>new</code> will croak with a suitable error. See <a href="https://metacpan.org/pod/DIAGNOSTICS">DIAGNOSTICS</a> for more information.</p>
+
+</dd>
+</dl>
+
+<h2 id="Accessors">Accessors</h2>
+
+<dl>
+
+<dt id="component"><code>component</code></dt>
+<dd>
+
+<p>Set or get one of the components of a version.</p>
+
+<pre><code>    # Set the subversion
+    $version-&gt;component( 2, 17 );
+
+    # Get the revision
+    my $rev = $version-&gt;component( 0 );</code></pre>
+
+<p>Instead of a component number you may pass a name: &#39;revision&#39;, &#39;version&#39;, &#39;subversion&#39; or &#39;alpha&#39;:</p>
+
+<pre><code>    my $rev = $version-&gt;component( &#39;revision&#39; );</code></pre>
+
+</dd>
+<dt id="components"><code>components</code></dt>
+<dd>
+
+<p>Get or set all of the components of a version.</p>
+
+<pre><code>    # Set the number of components
+    $version-&gt;components( 4 );
+
+    # Get the number of components
+    my $parts = $version-&gt;components;
+
+    # Get the individual components as an array
+    my @parts = $version-&gt;components;
+
+    # Set the components from an array
+    $version-&gt;components( [ 5, 9, 2 ] );</code></pre>
+
+<p>Hmm. That&#39;s a lot of interface for one subroutine. Sorry about that.</p>
+
+</dd>
+<dt id="revision"><code>revision</code></dt>
+<dd>
+
+<p>Alias for <code>component( 0 )</code>. Gets or sets the revision component.</p>
+
+</dd>
+<dt id="version"><code>version</code></dt>
+<dd>
+
+<p>Alias for <code>component( 1 )</code>. Gets or sets the version component.</p>
+
+</dd>
+<dt id="subversion"><code>subversion</code></dt>
+<dd>
+
+<p>Alias for <code>component( 2 )</code>. Gets or sets the subversion component.</p>
+
+</dd>
+<dt id="alpha"><code>alpha</code></dt>
+<dd>
+
+<p>Get or set the alpha component of a version. Returns 0 for versions with no alpha.</p>
+
+<pre><code>    # Set alpha
+    $version-&gt;alpha( 12 );
+
+    # Get alpha
+    my $alp = $version-&gt;alpha;</code></pre>
+
+</dd>
+<dt id="is_alpha"><code>is_alpha</code></dt>
+<dd>
+
+<p>Return true if a version has a non-zero alpha component.</p>
+
+</dd>
+<dt id="set"><code>set</code></dt>
+<dd>
+
+<p>Set the version to match another version preserving the formatting of this version.</p>
+
+<pre><code>    $version-&gt;set( $other_version );</code></pre>
+
+<p>You may also set the version from a literal string:</p>
+
+<pre><code>    $version-&gt;set( &#39;1.2.3&#39; );</code></pre>
+
+<p>The version will be updated to the value of the version string but will retain its current formatting.</p>
+
+</dd>
+</dl>
+
+<h2 id="Incrementing">Incrementing</h2>
+
+<dl>
+
+<dt id="increment"><code>increment</code></dt>
+<dd>
+
+<p>Increment a component of a version.</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( &#39;3.1.4&#39; );
+    $version-&gt;increment( 1 );
+    print &quot;$version\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    3.2.0</code></pre>
+
+<p>Components to the right of the incremented component will be set to zero as will any alpha component.</p>
+
+<p>As an alternative to passing a component number one of the predefined component names &#39;revision&#39;, &#39;version&#39;, &#39;subversion&#39; or &#39;alpha&#39; may be passed.</p>
+
+</dd>
+<dt id="inc_alpha"><code>inc_alpha</code></dt>
+<dd>
+
+<p>Increment a version&#39;s alpha component.</p>
+
+</dd>
+<dt id="inc_revision"><code>inc_revision</code></dt>
+<dd>
+
+<p>Increment a version&#39;s revision component.</p>
+
+</dd>
+<dt id="inc_subversion"><code>inc_subversion</code></dt>
+<dd>
+
+<p>Increment a version&#39;s subversion component.</p>
+
+</dd>
+<dt id="inc_version"><code>inc_version</code></dt>
+<dd>
+
+<p>Increment a version&#39;s version component.</p>
+
+</dd>
+</dl>
+
+<h2 id="Formatting">Formatting</h2>
+
+<dl>
+
+<dt id="normal"><code>normal</code></dt>
+<dd>
+
+<p>Return a normalised representation of a version.</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( &#39;5.008007_01&#39; );
+    print $version-&gt;normal, &quot;\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    v5.8.7_01</code></pre>
+
+</dd>
+<dt id="numify"><code>numify</code></dt>
+<dd>
+
+<p>Return a numeric representation of a version. The numeric form is most frequently used for versions of Perl itself.</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( &#39;5.8.7_1&#39; );
+    print $version-&gt;numify, &quot;\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    5.008007_001</code></pre>
+
+</dd>
+<dt id="stringify"><code>stringify</code></dt>
+<dd>
+
+<p>Return the version formatted as closely as possible to the version from which it was initialised.</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( &#39;5.008007_01&#39; );
+    $version-&gt;inc_alpha;
+    print $version-&gt;stringify, &quot;\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    5.008007_02</code></pre>
+
+<p>and</p>
+
+<pre><code>    my $version = Perl::Version-&gt;new( &#39;5.8.7_1&#39; );
+    $version-&gt;inc_alpha;
+    print $version-&gt;stringify, &quot;\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    5.8.7_2</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="Comparison1">Comparison</h2>
+
+<dl>
+
+<dt id="vcmp"><code>vcmp</code></dt>
+<dd>
+
+<p>Perform &#39;spaceship&#39; comparison between two version and return -1, 0 or 1 depending on their ordering. Comparisons are semantically correct so that</p>
+
+<pre><code>    my $v1 = Perl::Version-&gt;new( &#39;1.002001&#39; );
+    my $v2 = Perl::Version-&gt;new( &#39;1.1.3&#39; );
+
+    print ($v1-&gt;vcmp( $v2 ) &gt; 0 ? &#39;yes&#39; : &#39;no&#39;), &quot;\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    yes</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="Overloaded-Operators"><a id="Overloaded"></a>Overloaded Operators</h2>
+
+<dl>
+
+<dt id="&lt;=&gt;-and-cmp"><a id="and-cmp"></a><code>&lt;=&gt;</code> and <code>cmp</code></dt>
+<dd>
+
+<p>The <code>&lt;=&gt;</code> and <code>cmp</code> operators are overloaded (by the <a href="https://metacpan.org/pod/vcmp">vcmp</a> method) so that comparisons between versions work as expected. This means that the other numeric and string comparison operators also work as expected.</p>
+
+<pre><code>    my $v1 = Perl::Version-&gt;new( &#39;1.002001&#39; );
+    my $v2 = Perl::Version-&gt;new( &#39;1.1.3&#39; );
+
+    print &quot;OK!\n&quot; if $v1 &gt; $v2;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    OK!</code></pre>
+
+</dd>
+<dt id="&quot;&quot;-(stringification)"><a id="stringification"></a><code>&quot;&quot;</code> (stringification)</dt>
+<dd>
+
+<p>Perl::Version objects are converted to strings by calling the <a href="https://metacpan.org/pod/stringify">stringify</a> method. This usually results in formatting close to that of the original version string.</p>
+
+</dd>
+</dl>
+
+<h2 id="Constants">Constants</h2>
+
+<dl>
+
+<dt id="REGEX"><code>REGEX</code></dt>
+<dd>
+
+<p>An unanchored regular expression that matches any of the version formats supported by Perl::Version. Three captures get the prefix part, the main body of the version and any alpha suffix respectively.</p>
+
+<pre><code>    my $version = &#39;v1.2.3.4_5&#39;;
+    my ($prefix, $main, $suffix) = ($version =~ Perl::Version::REGEX);
+    print &quot;$prefix\n$main\n$suffix\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    v
+    1.2.3.4
+    _5</code></pre>
+
+</dd>
+<dt id="MATCH"><code>MATCH</code></dt>
+<dd>
+
+<p>An anchored regular expression that matches a correctly formatted version string. Five captures get any leading whitespace, the prefix part, the main body of the version, any alpha suffix and any trailing spaces respectively.</p>
+
+<pre><code>    my $version = &#39;  v1.2.3.4_5  &#39;;
+    my ($before, $prefix, $main, $suffix, $after)
+                 = ($version =~ Perl::Version::MATCH);
+    print &quot;|$before|$prefix|$main|$suffix|$after|\n&quot;;</code></pre>
+
+<p>prints</p>
+
+<pre><code>    | |v|1.2.3.4|_5| |</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="DIAGNOSTICS">DIAGNOSTICS</h1>
+
+<h2 id="Error-messages"><a id="Error"></a>Error messages</h2>
+
+<dl>
+
+<dt id="Illegal-version-string:-%s"><a id="Illegal"></a><a id="Illegal-version-string:--s"></a><code>Illegal version string: %s</code></dt>
+<dd>
+
+<p>The version string supplied to <code>new</code> can&#39;t be parsed as a valid version. Valid versions match this regex:</p>
+
+<pre><code>    qr/ ( (?i: Revision: \s+ ) | v | )
+          ( \d+ (?: [.] \d+)* )
+          ( (?: _ \d+ )? ) /x;</code></pre>
+
+</dd>
+<dt id="new-must-be-called-as-a-class-or-object-method"><a id="new1"></a><code>new must be called as a class or object method</code></dt>
+<dd>
+
+<p><code>new</code> can&#39;t be called as a normal subroutine. Use</p>
+
+<pre><code>    $version_object-&gt;new( &#39;1.2.3&#39; );</code></pre>
+
+<p>or</p>
+
+<pre><code>    Perl::Version-&gt;new( &#39;1.2.3&#39; );</code></pre>
+
+<p>instead of</p>
+
+<pre><code>    Perl::Version::new( &#39;1.2.3&#39; );</code></pre>
+
+</dd>
+<dt id="Unknown-component-name:-%s"><a id="Unknown"></a><a id="Unknown-component-name:--s"></a><code>Unknown component name: %s</code></dt>
+<dd>
+
+<p>You&#39;ve attempted to access a component by name using a name that isn&#39;t recognised. Valid component names are &#39;revision&#39;, &#39;version&#39;, &#39;subversion&#39; and &#39;alpha&#39;. Case is not significant.</p>
+
+</dd>
+<dt id="Can&#39;t-compare-with-%s"><a id="Can"></a><a id="Can-t-compare-with--s"></a><code>Can&#39;t compare with %s</code></dt>
+<dd>
+
+<p>You&#39;ve tried to compare a Perl::Version with something other than a version string, a number or another Perl::Version.</p>
+
+</dd>
+<dt id="Can&#39;t-set-the-number-of-components-to-0"><a id="Can1"></a><a id="Can-t-set-the-number-of-components-to-0"></a><code>Can&#39;t set the number of components to 0</code></dt>
+<dd>
+
+<p>Versions must have at least one component.</p>
+
+</dd>
+<dt id="You-must-specify-a-component-number"><a id="You"></a><code>You must specify a component number</code></dt>
+<dd>
+
+<p>You&#39;ve called <a href="https://metacpan.org/pod/component">component</a> or <a href="https://metacpan.org/pod/increment">increment</a> without specifying the number (or name) of the component to access.</p>
+
+</dd>
+<dt id="Component-%s-is-out-of-range-0..%s"><a id="Component1"></a><a id="Component--s-is-out-of-range-0..-s"></a><code>Component %s is out of range 0..%s</code></dt>
+<dd>
+
+<p>You&#39;ve attempted to increment a component of a version but you&#39;ve specified a component that doesn&#39;t exist within the version:</p>
+
+<pre><code>    # Fails
+    my $version = Perl::Version-&gt;new( &#39;1.4&#39; );
+    $version-&gt;increment( 2 );</code></pre>
+
+<p>Slightly confusingly you&#39;ll see this message even if you specified the component number implicitly by using one of the named convenience accessors.</p>
+
+</dd>
+</dl>
+
+<h1 id="CONFIGURATION-AND-ENVIRONMENT"><a id="CONFIGURATION"></a>CONFIGURATION AND ENVIRONMENT</h1>
+
+<p>Perl::Version requires no configuration files or environment variables.</p>
+
+<h1 id="DEPENDENCIES">DEPENDENCIES</h1>
+
+<p>No non-core modules.</p>
+
+<h1 id="INCOMPATIBILITIES">INCOMPATIBILITIES</h1>
+
+<p>None reported.</p>
+
+<h1 id="BUGS-AND-LIMITATIONS"><a id="BUGS"></a>BUGS AND LIMITATIONS</h1>
+
+<p>Please report any bugs or feature requests to the GitHub issues queue:</p>
+
+<pre><code>        https://github.com/briandfoy/perl-version/issues</code></pre>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>This module is currently maintained by brian d foy <code>&lt;briandfoy@pobox.com&gt;</code>.</p>
+
+<p>Andy Armstrong <code>&lt;andy@hexten.net&gt;</code></p>
+
+<p>Hans Dieter Pearcey <code>&lt;hdp@cpan.org&gt;</code></p>
+
+<h1 id="LICENCE-AND-COPYRIGHT"><a id="LICENCE"></a>LICENCE AND COPYRIGHT</h1>
+
+<p>Copyright &copy; 2007-2021, Andy Armstrong <code>&lt;andy@hexten.net&gt;</code>. All rights reserved.</p>
+
+<p>This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself. See <a href="https://metacpan.org/pod/perlartistic">perlartistic</a>.</p>
+
+<h1 id="DISCLAIMER-OF-WARRANTY"><a id="DISCLAIMER"></a>DISCLAIMER OF WARRANTY</h1>
+
+<p>BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE SOFTWARE &quot;AS IS&quot; WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.</p>
+
+<p>IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Perl::Version, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Perl::Version</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Perl::Version</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Perl::Version.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,45 @@
+=over
+
+=item evalbytes EXPR
+X<evalbytes>
+
+=item evalbytes
+
+This function is similar to a L<string eval|/eval EXPR>, except it
+always parses its argument (or L<C<$_>|perlvar/$_> if EXPR is omitted)
+as a string of independent bytes.
+
+If called when S<C<use utf8>> is in effect, the string will be assumed
+to be encoded in UTF-8, and C<evalbytes> will make a temporary copy to
+work from, downgraded to non-UTF-8.  If this is not possible
+(because one or more characters in it require UTF-8), the C<evalbytes>
+will fail with the error stored in C<$@>.
+
+Bytes that correspond to ASCII-range code points will have their normal
+meanings for operators in the string.  The treatment of the other bytes
+depends on if the L<C<'unicode_strings"> feature|feature/The
+'unicode_strings' feature> is in effect.
+
+Of course, variables that are UTF-8 and are referred to in the string
+retain that:
+
+ my $a = "\x{100}";
+ evalbytes 'print ord $a, "\n"';
+
+prints
+
+ 256
+
+and C<$@> is empty.
+
+Source filters activated within the evaluated code apply to the code
+itself.
+
+L<C<evalbytes>|/evalbytes EXPR> is available starting in Perl v5.16.  To
+access it, you must say C<CORE::evalbytes>, but you can omit the
+C<CORE::> if the
+L<C<"evalbytes"> feature|feature/The 'unicode_eval' and 'evalbytes' features>
+is enabled.  This is enabled automatically with a C<use v5.16> (or
+higher) declaration in the current scope.
+
+=back

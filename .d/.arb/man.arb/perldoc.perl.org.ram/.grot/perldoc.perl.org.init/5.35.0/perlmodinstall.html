@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlmodinstall - Installing CPAN Modules - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlmodinstall">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmodinstall.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlmodinstall">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlmodinstall">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlmodinstall">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlmodinstall">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlmodinstall">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlmodinstall">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlmodinstall">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlmodinstall">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlmodinstall">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlmodinstall">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlmodinstall">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlmodinstall">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlmodinstall">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlmodinstall">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlmodinstall">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlmodinstall">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlmodinstall">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlmodinstall">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlmodinstall">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlmodinstall">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlmodinstall">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlmodinstall">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlmodinstall">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlmodinstall">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlmodinstall">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlmodinstall">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlmodinstall">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlmodinstall">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlmodinstall">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlmodinstall">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlmodinstall">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlmodinstall">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlmodinstall">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlmodinstall">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlmodinstall">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlmodinstall">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlmodinstall">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlmodinstall">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlmodinstall">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlmodinstall">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlmodinstall">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlmodinstall">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlmodinstall">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlmodinstall">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlmodinstall">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlmodinstall">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlmodinstall">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlmodinstall">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlmodinstall">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlmodinstall">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlmodinstall">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlmodinstall">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlmodinstall">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlmodinstall">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlmodinstall">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlmodinstall">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlmodinstall">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlmodinstall">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlmodinstall">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlmodinstall">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlmodinstall">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlmodinstall">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlmodinstall">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlmodinstall">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlmodinstall">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlmodinstall">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlmodinstall">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlmodinstall">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlmodinstall">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlmodinstall">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlmodinstall">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlmodinstall">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlmodinstall">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlmodinstall">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlmodinstall">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlmodinstall">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlmodinstall">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlmodinstall">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlmodinstall">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlmodinstall">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmodinstall.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlmodinstall">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlmodinstall">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlmodinstall">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlmodinstall">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlmodinstall">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlmodinstall">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlmodinstall">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlmodinstall">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlmodinstall">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlmodinstall">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlmodinstall">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlmodinstall">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlmodinstall">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlmodinstall">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlmodinstall">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlmodinstall">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlmodinstall">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlmodinstall">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlmodinstall">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlmodinstall">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlmodinstall">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlmodinstall">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlmodinstall">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlmodinstall">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlmodinstall">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlmodinstall">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlmodinstall">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlmodinstall">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlmodinstall">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlmodinstall">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlmodinstall">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlmodinstall">5.35.1</a>
+          <a class="dropdown-item active" href="perlmodinstall.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmodinstall.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlmodinstall.html">perlmodinstall</a>
+          <div id="more">
+            (<a href="perlmodinstall.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlmodinstall">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlmodinstall.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodinstall.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlmodinstall.html#PREAMBLE">PREAMBLE</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodinstall.html#PORTABILITY">PORTABILITY</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodinstall.html#HEY">HEY</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodinstall.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodinstall.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlmodinstall.html#NAME">#</a>NAME</h1>
+
+<p>perlmodinstall - Installing CPAN Modules</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlmodinstall.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>You can think of a module as the fundamental unit of reusable Perl code; see <a href="perlmod.html">perlmod</a> for details. Whenever anyone creates a chunk of Perl code that they think will be useful to the world, they register as a Perl developer at <a href="https://www.cpan.org/modules/04pause.html">https://www.cpan.org/modules/04pause.html</a> so that they can then upload their code to the CPAN. The CPAN is the Comprehensive Perl Archive Network and can be accessed at <a href="https://www.cpan.org/">https://www.cpan.org/</a> , and searched at <a href="https://metacpan.org/">https://metacpan.org/</a> .</p>
+
+<p>This documentation is for people who want to download CPAN modules and install them on their own computer.</p>
+
+<h2 id="PREAMBLE"><a class="permalink" href="perlmodinstall.html#PREAMBLE">#</a>PREAMBLE</h2>
+
+<p>First, are you sure that the module isn&#39;t already on your system? Try <code>perl -MFoo -e 1</code>. (Replace &quot;Foo&quot; with the name of the module; for instance, <code>perl -MCGI::Carp -e 1</code>.)</p>
+
+<p>If you don&#39;t see an error message, you have the module. (If you do see an error message, it&#39;s still possible you have the module, but that it&#39;s not in your path, which you can display with <code>perl -e &quot;print qq(@INC)&quot;</code>.) For the remainder of this document, we&#39;ll assume that you really honestly truly lack an installed module, but have found it on the CPAN.</p>
+
+<p>So now you have a file ending in .tar.gz (or, less often, .zip). You know there&#39;s a tasty module inside. There are four steps you must now take:</p>
+
+<dl>
+
+<dt id="DECOMPRESS-the-file"><a class="permalink" href="perlmodinstall.html#DECOMPRESS-the-file">#</a><a id="DECOMPRESS"></a><b>DECOMPRESS</b> the file</dt>
+<dd>
+
+</dd>
+<dt id="UNPACK-the-file-into-a-directory"><a class="permalink" href="perlmodinstall.html#UNPACK-the-file-into-a-directory">#</a><a id="UNPACK"></a><b>UNPACK</b> the file into a directory</dt>
+<dd>
+
+</dd>
+<dt id="BUILD-the-module-(sometimes-unnecessary)"><a class="permalink" href="perlmodinstall.html#BUILD-the-module-(sometimes-unnecessary)">#</a><a id="BUILD"></a><a id="BUILD-the-module-sometimes-unnecessary"></a><b>BUILD</b> the module (sometimes unnecessary)</dt>
+<dd>
+
+</dd>
+<dt id="INSTALL-the-module."><a class="permalink" href="perlmodinstall.html#INSTALL-the-module.">#</a><a id="INSTALL"></a><a id="INSTALL-the-module"></a><b>INSTALL</b> the module.</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>Here&#39;s how to perform each step for each operating system. This is &lt;not&gt; a substitute for reading the README and INSTALL files that might have come with your module!</p>
+
+<p>Also note that these instructions are tailored for installing the module into your system&#39;s repository of Perl modules, but you can install modules into any directory you wish. For instance, where I say <code>perl Makefile.PL</code>, you can substitute <code>perl Makefile.PL PREFIX=/my/perl_directory</code> to install the modules into <i>/my/perl_directory</i>. Then you can use the modules from your Perl programs with <code>use lib &quot;/my/perl_directory/lib/site_perl&quot;;</code> or sometimes just <code>use &quot;/my/perl_directory&quot;;</code>. If you&#39;re on a system that requires superuser/root access to install modules into the directories you see when you type <code>perl -e &quot;print qq(@INC)&quot;</code>, you&#39;ll want to install them into a local directory (such as your home directory) and use this approach.</p>
+
+<ul>
+
+<li><p><b>If you&#39;re on a Unix or Unix-like system,</b></p>
+
+<p>You can use Andreas Koenig&#39;s CPAN module ( <a href="https://metacpan.org/release/CPAN">https://metacpan.org/release/CPAN</a> ) to automate the following steps, from DECOMPRESS through INSTALL.</p>
+
+<p>A. DECOMPRESS</p>
+
+<p>Decompress the file with <code>gzip -d yourmodule.tar.gz</code></p>
+
+<p>You can get gzip from <a href="ftp://prep.ai.mit.edu/pub/gnu/">ftp://prep.ai.mit.edu/pub/gnu/</a></p>
+
+<p>Or, you can combine this step with the next to save disk space:</p>
+
+<pre><code class="plaintext">gzip -dc yourmodule.tar.gz | tar -xof -</code></pre>
+
+<p>B. UNPACK</p>
+
+<p>Unpack the result with <code>tar -xof yourmodule.tar</code></p>
+
+<p>C. BUILD</p>
+
+<p>Go into the newly-created directory and type:</p>
+
+<pre><code class="plaintext">perl Makefile.PL
+make test</code></pre>
+
+<p>or</p>
+
+<pre><code class="plaintext">perl Makefile.PL PREFIX=/my/perl_directory</code></pre>
+
+<p>to install it locally. (Remember that if you do this, you&#39;ll have to put <code>use lib &quot;/my/perl_directory&quot;;</code> near the top of the program that is to use this module.</p>
+
+<p>D. INSTALL</p>
+
+<p>While still in that directory, type:</p>
+
+<pre><code class="plaintext">make install</code></pre>
+
+<p>Make sure you have the appropriate permissions to install the module in your Perl 5 library directory. Often, you&#39;ll need to be root.</p>
+
+<p>That&#39;s all you need to do on Unix systems with dynamic linking. Most Unix systems have dynamic linking. If yours doesn&#39;t, or if for another reason you have a statically-linked perl, <b>and</b> the module requires compilation, you&#39;ll need to build a new Perl binary that includes the module. Again, you&#39;ll probably need to be root.</p>
+
+</li>
+<li><p><b>If you&#39;re running ActivePerl (Win95/98/2K/NT/XP, Linux, Solaris),</b></p>
+
+<p>First, type <code>ppm</code> from a shell and see whether ActiveState&#39;s PPM repository has your module. If so, you can install it with <code>ppm</code> and you won&#39;t have to bother with any of the other steps here. You might be able to use the CPAN instructions from the &quot;Unix or Linux&quot; section above as well; give it a try. Otherwise, you&#39;ll have to follow the steps below.</p>
+
+<pre><code class="plaintext">A. DECOMPRESS</code></pre>
+
+<p>You can use the open source 7-zip ( <a href="https://www.7-zip.org/">https://www.7-zip.org/</a> ) or the shareware Winzip ( <a href="https://www.winzip.com">https://www.winzip.com</a> ) to decompress and unpack modules.</p>
+
+<pre><code class="plaintext">B. UNPACK</code></pre>
+
+<p>If you used WinZip, this was already done for you.</p>
+
+<pre><code class="plaintext">C. BUILD</code></pre>
+
+<p>You&#39;ll need either <code>nmake</code> or <code>gmake</code>.</p>
+
+<p>Does the module require compilation (i.e. does it have files that end in .xs, .c, .h, .y, .cc, .cxx, or .C)? If it does, life is now officially tough for you, because you have to compile the module yourself (no easy feat on Windows). You&#39;ll need a compiler such as Visual C++. Alternatively, you can download a pre-built PPM package from ActiveState. <a href="http://aspn.activestate.com/ASPN/Downloads/ActivePerl/PPM/">http://aspn.activestate.com/ASPN/Downloads/ActivePerl/PPM/</a></p>
+
+<p>Go into the newly-created directory and type:</p>
+
+<pre><code class="plaintext">   perl Makefile.PL
+   nmake test
+
+
+D. INSTALL</code></pre>
+
+<p>While still in that directory, type:</p>
+
+<pre><code class="plaintext">nmake install</code></pre>
+
+</li>
+<li><p><b>If you&#39;re on the DJGPP port of DOS,</b></p>
+
+<pre><code class="plaintext">A. DECOMPRESS</code></pre>
+
+<p>djtarx ( <a href="ftp://ftp.delorie.com/pub/djgpp/current/v2/">ftp://ftp.delorie.com/pub/djgpp/current/v2/</a> ) will both uncompress and unpack.</p>
+
+<pre><code class="plaintext">B. UNPACK</code></pre>
+
+<p>See above.</p>
+
+<pre><code class="plaintext">C. BUILD</code></pre>
+
+<p>Go into the newly-created directory and type:</p>
+
+<pre><code class="plaintext">perl Makefile.PL
+make test</code></pre>
+
+<p>You will need the packages mentioned in <i>README.dos</i> in the Perl distribution.</p>
+
+<pre><code class="plaintext">D. INSTALL</code></pre>
+
+<p>While still in that directory, type:</p>
+
+<pre><code class="plaintext">make install	</code></pre>
+
+<p>You will need the packages mentioned in <i>README.dos</i> in the Perl distribution.</p>
+
+</li>
+<li><p><b>If you&#39;re on OS/2,</b></p>
+
+<p>Get the EMX development suite and gzip/tar from Hobbes ( <a href="http://hobbes.nmsu.edu/h-browse.php?dir=/pub/os2/dev/emx/v0.9d">http://hobbes.nmsu.edu/h-browse.php?dir=/pub/os2/dev/emx/v0.9d</a> ), and then follow the instructions for Unix.</p>
+
+</li>
+<li><p><b>If you&#39;re on VMS,</b></p>
+
+<p>When downloading from CPAN, save your file with a <code>.tgz</code> extension instead of <code>.tar.gz</code>. All other periods in the filename should be replaced with underscores. For example, <code>Your-Module-1.33.tar.gz</code> should be downloaded as <code>Your-Module-1_33.tgz</code>.</p>
+
+<p>A. DECOMPRESS</p>
+
+<p>Type</p>
+
+<pre><code class="plaintext">gzip -d Your-Module.tgz</code></pre>
+
+<p>or, for zipped modules, type</p>
+
+<pre><code class="plaintext">unzip Your-Module.zip</code></pre>
+
+<p>Executables for gzip, zip, and VMStar:</p>
+
+<pre><code class="plaintext">http://www.hp.com/go/openvms/freeware/</code></pre>
+
+<p>and their source code:</p>
+
+<pre><code class="plaintext">http://www.fsf.org/order/ftp.html</code></pre>
+
+<p>Note that GNU&#39;s gzip/gunzip is not the same as Info-ZIP&#39;s zip/unzip package. The former is a simple compression tool; the latter permits creation of multi-file archives.</p>
+
+<p>B. UNPACK</p>
+
+<p>If you&#39;re using VMStar:</p>
+
+<pre><code class="plaintext">VMStar xf Your-Module.tar</code></pre>
+
+<p>Or, if you&#39;re fond of VMS command syntax:</p>
+
+<pre><code class="plaintext">tar/extract/verbose Your_Module.tar</code></pre>
+
+<p>C. BUILD</p>
+
+<p>Make sure you have MMS (from Digital) or the freeware MMK ( available from MadGoat at <a href="http://www.madgoat.com">http://www.madgoat.com</a> ). Then type this to create the DESCRIP.MMS for the module:</p>
+
+<pre><code class="plaintext">perl Makefile.PL</code></pre>
+
+<p>Now you&#39;re ready to build:</p>
+
+<pre><code class="plaintext">mms test</code></pre>
+
+<p>Substitute <code>mmk</code> for <code>mms</code> above if you&#39;re using MMK.</p>
+
+<p>D. INSTALL</p>
+
+<p>Type</p>
+
+<pre><code class="plaintext">mms install</code></pre>
+
+<p>Substitute <code>mmk</code> for <code>mms</code> above if you&#39;re using MMK.</p>
+
+</li>
+<li><p><b>If you&#39;re on MVS</b>,</p>
+
+<p>Introduce the <i>.tar.gz</i> file into an HFS as binary; don&#39;t translate from ASCII to EBCDIC.</p>
+
+<p>A. DECOMPRESS</p>
+
+<p>Decompress the file with <code>gzip -d yourmodule.tar.gz</code></p>
+
+<p>You can get gzip from <a href="http://www.s390.ibm.com/products/oe/bpxqp1.html">http://www.s390.ibm.com/products/oe/bpxqp1.html</a></p>
+
+<p>B. UNPACK</p>
+
+<p>Unpack the result with</p>
+
+<pre><code class="plaintext">pax -o to=IBM-1047,from=ISO8859-1 -r &lt; yourmodule.tar</code></pre>
+
+<p>The BUILD and INSTALL steps are identical to those for Unix. Some modules generate Makefiles that work better with GNU make, which is available from <a href="http://www.mks.com/s390/gnu/">http://www.mks.com/s390/gnu/</a></p>
+
+</li>
+</ul>
+
+<h1 id="PORTABILITY"><a class="permalink" href="perlmodinstall.html#PORTABILITY">#</a>PORTABILITY</h1>
+
+<p>Note that not all modules will work with on all platforms. See <a href="perlport.html">perlport</a> for more information on portability issues. Read the documentation to see if the module will work on your system. There are basically three categories of modules that will not work &quot;out of the box&quot; with all platforms (with some possibility of overlap):</p>
+
+<ul>
+
+<li><p><b>Those that should, but don&#39;t.</b> These need to be fixed; consider contacting the author and possibly writing a patch.</p>
+
+</li>
+<li><p><b>Those that need to be compiled, where the target platform doesn&#39;t have compilers readily available.</b> (These modules contain <i>.xs</i> or <i>.c</i> files, usually.) You might be able to find existing binaries on the CPAN or elsewhere, or you might want to try getting compilers and building it yourself, and then release the binary for other poor souls to use.</p>
+
+</li>
+<li><p><b>Those that are targeted at a specific platform.</b> (Such as the Win32:: modules.) If the module is targeted specifically at a platform other than yours, you&#39;re out of luck, most likely.</p>
+
+</li>
+</ul>
+
+<p>Check the CPAN Testers if a module should work with your platform but it doesn&#39;t behave as you&#39;d expect, or you aren&#39;t sure whether or not a module will work under your platform. If the module you want isn&#39;t listed there, you can test it yourself and let CPAN Testers know, you can join CPAN Testers, or you can request it be tested.</p>
+
+<pre><code class="plaintext">https://cpantesters.org/</code></pre>
+
+<h1 id="HEY"><a class="permalink" href="perlmodinstall.html#HEY">#</a>HEY</h1>
+
+<p>If you have any suggested changes for this page, let me know. Please don&#39;t send me mail asking for help on how to install your modules. There are too many modules, and too few Orwants, for me to be able to answer or even acknowledge all your questions. Contact the module author instead, ask someone familiar with Perl on your operating system, or if all else fails, file a ticket at <a href="https://rt.cpan.org/">https://rt.cpan.org/</a>.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="perlmodinstall.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Jon Orwant</p>
+
+<p>orwant@medita.mit.edu</p>
+
+<p>with invaluable help from Chris Nandor, and valuable help from Brandon Allbery, Charles Bailey, Graham Barr, Dominic Dunlop, Jarkko Hietaniemi, Ben Holzman, Tom Horsley, Nick Ing-Simmons, Tuomas J. Lukka, Laszlo Molnar, Alan Olsen, Peter Prymmer, Gurusamy Sarathy, Christoph Spalinger, Dan Sugalski, Larry Virden, and Ilya Zakharevich.</p>
+
+<p>First version July 22, 1998; last revised November 21, 2001.</p>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="perlmodinstall.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>Copyright (C) 1998, 2002, 2003 Jon Orwant. All Rights Reserved.</p>
+
+<p>This document may be distributed under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

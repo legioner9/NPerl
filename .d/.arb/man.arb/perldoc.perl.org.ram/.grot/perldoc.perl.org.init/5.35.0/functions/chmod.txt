@@ -1,0 +1,38 @@
+=over
+
+=item chmod LIST
+X<chmod> X<permission> X<mode>
+
+Changes the permissions of a list of files.  The first element of the
+list must be the numeric mode, which should probably be an octal
+number, and which definitely should I<not> be a string of octal digits:
+C<0644> is okay, but C<"0644"> is not.  Returns the number of files
+successfully changed.  See also L<C<oct>|/oct EXPR> if all you have is a
+string.
+
+    my $cnt = chmod 0755, "foo", "bar";
+    chmod 0755, @executables;
+    my $mode = "0644"; chmod $mode, "foo";      # !!! sets mode to
+                                                # --w----r-T
+    my $mode = "0644"; chmod oct($mode), "foo"; # this is better
+    my $mode = 0644;   chmod $mode, "foo";      # this is best
+
+On systems that support L<fchmod(2)>, you may pass filehandles among the
+files.  On systems that don't support L<fchmod(2)>, passing filehandles raises
+an exception.  Filehandles must be passed as globs or glob references to be
+recognized; barewords are considered filenames.
+
+    open(my $fh, "<", "foo");
+    my $perm = (stat $fh)[2] & 07777;
+    chmod($perm | 0600, $fh);
+
+You can also import the symbolic C<S_I*> constants from the
+L<C<Fcntl>|Fcntl> module:
+
+    use Fcntl qw( :mode );
+    chmod S_IRWXU|S_IRGRP|S_IXGRP|S_IROTH|S_IXOTH, @executables;
+    # Identical to the chmod 0755 of the example above.
+
+Portability issues: L<perlport/chmod>.
+
+=back

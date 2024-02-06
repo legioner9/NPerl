@@ -1,0 +1,1784 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Try::Tiny - Minimal try/catch with proper preservation of $@ - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Try-Tiny - MetaCPAN" href="https://metacpan.org/dist/Try-Tiny/releases.rss" />
+        <link rel="canonical" href="./Try::Tiny.html" />
+        <meta name="description" content="Minimal try/catch with proper preservation of $@" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Try::Tiny" />
+<meta name="twitter:title"       content="Try::Tiny" />
+<meta name="twitter:description" content="Minimal try/catch with proper preservation of $@" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Try::Tiny.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Try-Tiny was released.">
+      <span class="relatize">23 Nov 2021 20:30:31 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Try-Tiny">Try-Tiny</a>
+  </li>
+  <li>
+    Module version: 0.31
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Try-Tiny/source/lib/Try/Tiny.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Try-Tiny/source/lib/Try/Tiny.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Try-Tiny/source/lib/Try">Browse</a>
+    (<a href="https://metacpan.org/dist/Try-Tiny/source/lib/Try?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Try-Tiny/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://github.com/p5sagit/Try-Tiny">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Try-Tiny/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/p5sagit/Try-Tiny">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Try-Tiny">Issues</a>
+      (5)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Try-Tiny+0.31" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/T/Try-Tiny.html?oncpan=1&amp;distmat=1&amp;version=0.31&amp;grade=2" style="color: #090">4841</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/T/Try-Tiny.html?oncpan=1&amp;distmat=1&amp;version=0.31&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/T/Try-Tiny.html?oncpan=1&amp;distmat=1&amp;version=0.31&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/ETHER/Try-Tiny-0.31">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Try-Tiny who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 2
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Try-Tiny-0.31/index.html">86.21% Coverage </a>
+    </li>
+    <li>
+      License: mit
+    </li>
+    <li>
+      Perl: v5.6.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Try-Tiny/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/E/ET/ETHER/Try-Tiny-0.31.tar.gz">
+      Download (<span itemprop="fileSize">34.95KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FETHER%2FTry-Tiny-0.31%2Flib%2FTry%2FTiny.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Try-Tiny/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Try-Tiny/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Try-Tiny">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Try-Tiny">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Try/Tiny.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="ETHER/Try-Tiny-0.31"
+>0.31
+  (ETHER on 2021-11-23)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.30"
+>0.30
+  (ETHER on 2017-12-21)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.22"
+>0.22
+  (DOY on 2014-04-29)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.21"
+>0.21
+  (DOY on 2014-04-15)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.20"
+>0.20
+  (DOY on 2014-03-21)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.19"
+>0.19
+  (DOY on 2014-01-23)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.06"
+>0.06
+  (NUFFIN on 2010-05-27)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.05"
+>0.05
+  (NUFFIN on 2010-05-26)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.04"
+>0.04
+  (NUFFIN on 2010-01-22)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.03"
+>0.03
+  (NUFFIN on 2010-01-22)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.02"
+>0.02
+  (NUFFIN on 2009-09-02)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.01"
+>0.01
+  (NUFFIN on 2009-08-31)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/Try-Tiny-0.29"
+>0.29
+  (ETHER on 2017-12-19)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.28"
+>0.28
+  (ETHER on 2017-01-09)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.27"
+>0.27
+  (ETHER on 2016-08-16)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.26-TRIAL"
+>0.26-TRIAL DEV
+  (ETHER on 2016-03-15)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.25-TRIAL"
+>0.25-TRIAL DEV
+  (ETHER on 2016-02-22)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.24"
+>0.24
+  (ETHER on 2015-12-11)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.23"
+>0.23
+  (ETHER on 2015-12-11)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.18"
+>0.18
+  (DOY on 2013-08-17)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.17"
+>0.17
+  (DOY on 2013-08-16)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.16"
+>0.16
+  (DOY on 2013-07-10)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.15"
+>0.15
+  (DOY on 2013-07-08)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.14"
+>0.14
+  (DOY on 2013-07-05)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.13"
+>0.13
+  (DOY on 2013-07-04)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.12"
+>0.12
+  (DOY on 2013-01-02)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.11"
+>0.11
+  (DOY on 2011-08-30)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.10"
+>0.10
+  (DOY on 2011-04-27)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.09"
+>0.09
+  (DOY on 2010-11-28)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.08"
+>0.08
+  (DOY on 2010-11-28)</option>
+<option
+  
+  value="RJBS/Try-Tiny-0.07"
+>0.07
+  (RJBS on 2010-10-21)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/ETHER/Try-Tiny-0.31/diff/' + encodeURIComponent(this.value) + '/lib/Try/Tiny.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="ETHER/Try-Tiny-0.31"
+>0.31
+  (ETHER on 2021-11-23)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.30"
+>0.30
+  (ETHER on 2017-12-21)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.22"
+>0.22
+  (DOY on 2014-04-29)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.21"
+>0.21
+  (DOY on 2014-04-15)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.20"
+>0.20
+  (DOY on 2014-03-21)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.19"
+>0.19
+  (DOY on 2014-01-23)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.06"
+>0.06
+  (NUFFIN on 2010-05-27)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.05"
+>0.05
+  (NUFFIN on 2010-05-26)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.04"
+>0.04
+  (NUFFIN on 2010-01-22)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.03"
+>0.03
+  (NUFFIN on 2010-01-22)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.02"
+>0.02
+  (NUFFIN on 2009-09-02)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.01"
+>0.01
+  (NUFFIN on 2009-08-31)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/Try-Tiny-0.29"
+>0.29
+  (ETHER on 2017-12-19)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.28"
+>0.28
+  (ETHER on 2017-01-09)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.27"
+>0.27
+  (ETHER on 2016-08-16)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.26-TRIAL"
+>0.26-TRIAL DEV
+  (ETHER on 2016-03-15)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.25-TRIAL"
+>0.25-TRIAL DEV
+  (ETHER on 2016-02-22)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.24"
+>0.24
+  (ETHER on 2015-12-11)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.23"
+>0.23
+  (ETHER on 2015-12-11)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.18"
+>0.18
+  (DOY on 2013-08-17)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.17"
+>0.17
+  (DOY on 2013-08-16)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.16"
+>0.16
+  (DOY on 2013-07-10)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.15"
+>0.15
+  (DOY on 2013-07-08)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.14"
+>0.14
+  (DOY on 2013-07-05)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.13"
+>0.13
+  (DOY on 2013-07-04)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.12"
+>0.12
+  (DOY on 2013-01-02)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.11"
+>0.11
+  (DOY on 2011-08-30)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.10"
+>0.10
+  (DOY on 2011-04-27)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.09"
+>0.09
+  (DOY on 2010-11-28)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.08"
+>0.08
+  (DOY on 2010-11-28)</option>
+<option
+  
+  value="RJBS/Try-Tiny-0.07"
+>0.07
+  (RJBS on 2010-10-21)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Carp" title="Carp" class="ellipsis">Carp</a></li>
+  <li><a href="https://metacpan.org/pod/Exporter" title="Exporter" class="ellipsis">Exporter</a></li>
+  <li><a href="https://metacpan.org/pod/constant" title="constant" class="ellipsis">constant</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/warnings" title="warnings" class="ellipsis">warnings</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Try::Tiny/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Try%3A%3ATiny">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Try-Tiny">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/ETHER/Try-Tiny-0.31/view/lib/Try/Tiny.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Try::Tiny.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/GETTY"><img src="https://www.gravatar.com/avatar/d374f794bb2f39232c29d0b376b9dcc4?d=identicon&amp;s=20" title="GETTY" alt="GETTY"></a>
+<a class="display-all" href="https://metacpan.org/author/HMA"><img src="https://www.gravatar.com/avatar/eb0885a144e4c9ec1f0c360e9da7f72f?d=identicon&amp;s=20" title="HMA" alt="HMA"></a>
+<a class="display-all" href="https://metacpan.org/author/PINGAN"><img src="https://www.gravatar.com/avatar/a02222e5e0e4fd24d52fc29a08ac6bcb?d=identicon&amp;s=20" title="PINGAN" alt="PINGAN"></a>
+<a class="display-all" href="https://metacpan.org/author/BOWTIE"><img src="https://www.gravatar.com/avatar/9f27e15605c9a2d35a4f307a0bbf5dbf?d=identicon&amp;s=20" title="BOWTIE" alt="BOWTIE"></a>
+<a class="display-all" href="https://metacpan.org/author/BIFFEN"><img src="https://www.gravatar.com/avatar/ceeeed15488c70dd4fd2597cec3d0035?d=identicon&amp;s=20" title="BIFFEN" alt="BIFFEN"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Try-Tiny/plussers">96 PAUSE users</a>
+</div>
+<div>
+    80 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 25 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="NUFFIN"
+      data-contrib-email="nothingmuch@woobling.org"
+    >
+      <a href="https://metacpan.org/author/NUFFIN" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/965ab495ae19eeb538d054ae6caaf1bb?d=identicon&amp;s=20" />
+      יובל קוג&#39;מן (Yuval Kogman)
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="doy@tozt.net"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Jesse Luehrs
+    </li>
+    <li class="contributor"
+      data-cpan-author="RIBASUSHI"
+      data-contrib-email="ribasushi@cpan.org"
+    >
+      <a href="https://metacpan.org/author/RIBASUSHI" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/6a096fdb29481fa7326735fada56c5cf?d=identicon&amp;s=20" />
+      Peter Rabbitson
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="RJBS"
+      data-contrib-email="rjbs@cpan.org"
+    >
+      <a href="https://metacpan.org/author/RJBS" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/cec6b9b88295ead26c65f8747a76561b?d=identicon&amp;s=20" />
+      Ricardo Signes
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="MARKF"
+      data-contrib-email="mark@twoshortplanks.com"
+    >
+      <a href="https://metacpan.org/author/MARKF" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/c78176dc138e2c77b10757b952adf0ee?d=identicon&amp;s=20" />
+      Mark Fowler
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="HAARG"
+      data-contrib-email="haarg@haarg.org"
+    >
+      <a href="https://metacpan.org/author/HAARG" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/5037faf9ba40cf736778820fe83fc2ae?d=identicon&amp;s=20" />
+      Graham Knop
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="ARISTOTLE"
+      data-contrib-email="pagaltzis@gmx.de"
+    >
+      <a href="https://metacpan.org/author/ARISTOTLE" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/81da52fa1b6754867e9056c58afab74d?d=identicon&amp;s=20" />
+      Aristotle Pagaltzis
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="ILMARI"
+      data-contrib-email="ilmari@ilmari.org"
+    >
+      <a href="https://metacpan.org/author/ILMARI" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/a3059acdb28ce93c8b66a5f398b2cb39?d=identicon&amp;s=20" />
+      Dagfinn Ilmari Mannsåker
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="l.mai@web.de"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Lukas Mai
+    </li>
+    <li class="contributor"
+      data-contrib-email="alex@koban.(none)"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Alex
+    </li>
+    <li class="contributor"
+      data-contrib-email="walkeraj@gmail.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      anaxagoras
+    </li>
+    <li class="contributor"
+      data-contrib-email="ayates@haddock.local"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Andrew Yates
+    </li>
+    <li class="contributor"
+      data-contrib-email="awalker@sourcefire.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      awalker
+    </li>
+    <li class="contributor"
+      data-cpan-author="CHROMATIC"
+      data-contrib-email="chromatic@wgz.org"
+    >
+      <a href="https://metacpan.org/author/CHROMATIC" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/2c517b2a26b5f95a8d2160737ae984fb?d=identicon&amp;s=20" />
+      chromatic
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="cm-perl@users.noreply.github.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      cm-perl
+    </li>
+    <li class="contributor"
+      data-contrib-email="davidl@lokku.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      David Lowe
+    </li>
+    <li class="contributor"
+      data-cpan-author="CEBJYRE"
+      data-contrib-email="cebjyre@cpan.org"
+    >
+      <a href="https://metacpan.org/author/CEBJYRE" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/7c94daf4e0838800b125d75be3d05d21?d=identicon&amp;s=20" />
+      Glenn Fowler
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="hdp@weftsoar.net"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Hans Dieter Pearcey
+    </li>
+    <li class="contributor"
+      data-contrib-email="jens@jebecs.de"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Jens Berthold
+    </li>
+    <li class="contributor"
+      data-cpan-author="JAWNSY"
+      data-contrib-email="JAWNSY@cpan.org"
+    >
+      <a href="https://metacpan.org/author/JAWNSY" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/cad8904d605f42dca72dc214e249dd12?d=identicon&amp;s=20" />
+      Jonathan Yu
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="MMIMS"
+      data-contrib-email="marc@questright.com"
+    >
+      <a href="https://metacpan.org/author/MMIMS" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/735a95130e57e93d067e925d77806d8e?d=identicon&amp;s=20" />
+      Marc Mims
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="MARKSTOS"
+      data-contrib-email="mark@stosberg.com"
+    >
+      <a href="https://metacpan.org/author/MARKSTOS" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/795623cd5c352aafe2d8f3d3bdd712ce?d=identicon&amp;s=20" />
+      Mark Stosberg
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="PALI"
+      data-contrib-email="pali@cpan.org"
+    >
+      <a href="https://metacpan.org/author/PALI" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d8f03d10174e68c6f26d9052b79e04e8?d=identicon&amp;s=20" />
+      Pali
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="paul@city-fan.org"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Paul Howarth
+    </li>
+    <li class="contributor"
+      data-contrib-email="rudolf@hatsuseno.org"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Rudolf Leermakers
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/ETHER" class="author-name">Karen Etheridge 🐾 🌋🦑🇹🇼🇭🇰🇺🇦</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Try/Tiny.pm&#39;" class="">
+<option
+  selected
+  value="ETHER/Try-Tiny-0.31"
+>0.31
+  (ETHER on 2021-11-23)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.30"
+>0.30
+  (ETHER on 2017-12-21)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.22"
+>0.22
+  (DOY on 2014-04-29)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.21"
+>0.21
+  (DOY on 2014-04-15)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.20"
+>0.20
+  (DOY on 2014-03-21)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.19"
+>0.19
+  (DOY on 2014-01-23)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.06"
+>0.06
+  (NUFFIN on 2010-05-27)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.05"
+>0.05
+  (NUFFIN on 2010-05-26)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.04"
+>0.04
+  (NUFFIN on 2010-01-22)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.03"
+>0.03
+  (NUFFIN on 2010-01-22)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.02"
+>0.02
+  (NUFFIN on 2009-09-02)</option>
+<option
+  
+  value="NUFFIN/Try-Tiny-0.01"
+>0.01
+  (NUFFIN on 2009-08-31)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/Try-Tiny-0.29"
+>0.29
+  (ETHER on 2017-12-19)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.28"
+>0.28
+  (ETHER on 2017-01-09)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.27"
+>0.27
+  (ETHER on 2016-08-16)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.26-TRIAL"
+>0.26-TRIAL DEV
+  (ETHER on 2016-03-15)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.25-TRIAL"
+>0.25-TRIAL DEV
+  (ETHER on 2016-02-22)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.24"
+>0.24
+  (ETHER on 2015-12-11)</option>
+<option
+  
+  value="ETHER/Try-Tiny-0.23"
+>0.23
+  (ETHER on 2015-12-11)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.18"
+>0.18
+  (DOY on 2013-08-17)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.17"
+>0.17
+  (DOY on 2013-08-16)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.16"
+>0.16
+  (DOY on 2013-07-10)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.15"
+>0.15
+  (DOY on 2013-07-08)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.14"
+>0.14
+  (DOY on 2013-07-05)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.13"
+>0.13
+  (DOY on 2013-07-04)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.12"
+>0.12
+  (DOY on 2013-01-02)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.11"
+>0.11
+  (DOY on 2011-08-30)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.10"
+>0.10
+  (DOY on 2011-04-27)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.09"
+>0.09
+  (DOY on 2010-11-28)</option>
+<option
+  
+  value="DOY/Try-Tiny-0.08"
+>0.08
+  (DOY on 2010-11-28)</option>
+<option
+  
+  value="RJBS/Try-Tiny-0.07"
+>0.07
+  (RJBS on 2010-10-21)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Try-Tiny">Try-Tiny-0.31</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage five &#10;
+          • 1160 direct dependents &#10;          • 16205 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#7ea3f2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Try-Tiny-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Try-Tiny-0.31">
+    <input type="hidden" name="author" value="ETHER">
+    <input type="hidden" name="distribution" value="Try-Tiny">
+    <button type="submit" class="favorite highlight"><span>176</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Try::Tiny.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>176</span> ++</a>
+</div>
+   / <span>Try::Tiny</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Try::Tiny.html#NAME">NAME</a></li>
+  <li><a href="./Try::Tiny.html#VERSION">VERSION</a></li>
+  <li><a href="./Try::Tiny.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Try::Tiny.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Try::Tiny.html#EXPORTS">EXPORTS</a></li>
+  <li><a href="./Try::Tiny.html#BACKGROUND">BACKGROUND</a>
+    <ul>
+      <li><a href="./Try::Tiny.html#Clobbering-$@">Clobbering $@</a></li>
+      <li><a href="./Try::Tiny.html#Localizing-$@-silently-masks-errors">Localizing $@ silently masks errors</a></li>
+      <li><a href="./Try::Tiny.html#$@-might-not-be-a-true-value">$@ might not be a true value</a></li>
+    </ul>
+  </li>
+  <li><a href="./Try::Tiny.html#ALTERNATE-SYNTAX">ALTERNATE SYNTAX</a></li>
+  <li><a href="./Try::Tiny.html#CAVEATS">CAVEATS</a></li>
+  <li><a href="./Try::Tiny.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Try::Tiny.html#LIGHTNING-TALK">LIGHTNING TALK</a></li>
+  <li><a href="./Try::Tiny.html#SUPPORT">SUPPORT</a></li>
+  <li><a href="./Try::Tiny.html#AUTHORS">AUTHORS</a></li>
+  <li><a href="./Try::Tiny.html#CONTRIBUTORS">CONTRIBUTORS</a></li>
+  <li><a href="./Try::Tiny.html#COPYRIGHT-AND-LICENCE">COPYRIGHT AND LICENCE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Try::Tiny - Minimal try/catch with proper preservation of $@</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>version 0.31</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p>You can use Try::Tiny&#39;s <code>try</code> and <code>catch</code> to expect and handle exceptional conditions, avoiding quirks in Perl and common mistakes:</p>
+
+<pre><code>  # handle errors with a catch handler
+  try {
+    die &quot;foo&quot;;
+  } catch {
+    warn &quot;caught error: $_&quot;; # not $@
+  };</code></pre>
+
+<p>You can also use it like a standalone <code>eval</code> to catch and ignore any error conditions. Obviously, this is an extreme measure not to be undertaken lightly:</p>
+
+<pre><code>  # just silence errors
+  try {
+    die &quot;foo&quot;;
+  };</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module provides bare bones <code>try</code>/<code>catch</code>/<code>finally</code> statements that are designed to minimize common mistakes with eval blocks, and NOTHING else.</p>
+
+<p>This is unlike <a href="https://metacpan.org/pod/TryCatch">TryCatch</a> which provides a nice syntax and avoids adding another call stack layer, and supports calling <code>return</code> from the <code>try</code> block to return from the parent subroutine. These extra features come at a cost of a few dependencies, namely <a href="https://metacpan.org/pod/Devel::Declare">Devel::Declare</a> and <a href="https://metacpan.org/pod/Scope::Upper">Scope::Upper</a> which are occasionally problematic, and the additional catch filtering uses <a href="Moose.html">Moose</a> type constraints which may not be desirable either.</p>
+
+<p>The main focus of this module is to provide simple and reliable error handling for those having a hard time installing <a href="https://metacpan.org/pod/TryCatch">TryCatch</a>, but who still want to write correct <code>eval</code> blocks without 5 lines of boilerplate each time.</p>
+
+<p>It&#39;s designed to work as correctly as possible in light of the various pathological edge cases (see <a href="./Try::Tiny.html#BACKGROUND">&quot;BACKGROUND&quot;</a>) and to be compatible with any style of error values (simple strings, references, objects, overloaded objects, etc).</p>
+
+<p>If the <code>try</code> block dies, it returns the value of the last statement executed in the <code>catch</code> block, if there is one. Otherwise, it returns <code>undef</code> in scalar context or the empty list in list context. The following examples all assign <code>&quot;bar&quot;</code> to <code>$x</code>:</p>
+
+<pre><code>  my $x = try { die &quot;foo&quot; } catch { &quot;bar&quot; };
+  my $x = try { die &quot;foo&quot; } || &quot;bar&quot;;
+  my $x = (try { die &quot;foo&quot; }) // &quot;bar&quot;;
+
+  my $x = eval { die &quot;foo&quot; } || &quot;bar&quot;;</code></pre>
+
+<p>You can add <code>finally</code> blocks, yielding the following:</p>
+
+<pre><code>  my $x;
+  try { die &#39;foo&#39; } finally { $x = &#39;bar&#39; };
+  try { die &#39;foo&#39; } catch { warn &quot;Got a die: $_&quot; } finally { $x = &#39;bar&#39; };</code></pre>
+
+<p><code>finally</code> blocks are always executed making them suitable for cleanup code which cannot be handled using local. You can add as many <code>finally</code> blocks to a given <code>try</code> block as you like.</p>
+
+<p>Note that adding a <code>finally</code> block without a preceding <code>catch</code> block suppresses any errors. This behaviour is consistent with using a standalone <code>eval</code>, but it is not consistent with <code>try</code>/<code>finally</code> patterns found in other programming languages, such as Java, Python, Javascript or C#. If you learned the <code>try</code>/<code>finally</code> pattern from one of these languages, watch out for this.</p>
+
+<h1 id="EXPORTS">EXPORTS</h1>
+
+<p>All functions are exported by default using <a href="https://metacpan.org/pod/Exporter">Exporter</a>.</p>
+
+<p>If you need to rename the <code>try</code>, <code>catch</code> or <code>finally</code> keyword consider using <a href="https://metacpan.org/pod/Sub::Import">Sub::Import</a> to get <a href="https://metacpan.org/pod/Sub::Exporter">Sub::Exporter</a>&#39;s flexibility.</p>
+
+<dl>
+
+<dt id="try-(&amp;;@)"><a id="try"></a>try (&amp;;@)</dt>
+<dd>
+
+<p>Takes one mandatory <code>try</code> subroutine, an optional <code>catch</code> subroutine and <code>finally</code> subroutine.</p>
+
+<p>The mandatory subroutine is evaluated in the context of an <code>eval</code> block.</p>
+
+<p>If no error occurred the value from the first block is returned, preserving list/scalar context.</p>
+
+<p>If there was an error and the second subroutine was given it will be invoked with the error in <code>$_</code> (localized) and as that block&#39;s first and only argument.</p>
+
+<p><code>$@</code> does <b>not</b> contain the error. Inside the <code>catch</code> block it has the same value it had before the <code>try</code> block was executed.</p>
+
+<p>Note that the error may be false, but if that happens the <code>catch</code> block will still be invoked.</p>
+
+<p>Once all execution is finished then the <code>finally</code> block, if given, will execute.</p>
+
+</dd>
+<dt id="catch-(&amp;;@)"><a id="catch"></a>catch (&amp;;@)</dt>
+<dd>
+
+<p>Intended to be used in the second argument position of <code>try</code>.</p>
+
+<p>Returns a reference to the subroutine it was given but blessed as <code>Try::Tiny::Catch</code> which allows try to decode correctly what to do with this code reference.</p>
+
+<pre><code>  catch { ... }</code></pre>
+
+<p>Inside the <code>catch</code> block the caught error is stored in <code>$_</code>, while previous value of <code>$@</code> is still available for use. This value may or may not be meaningful depending on what happened before the <code>try</code>, but it might be a good idea to preserve it in an error stack.</p>
+
+<p>For code that captures <code>$@</code> when throwing new errors (i.e. <a href="https://metacpan.org/pod/Class::Throwable">Class::Throwable</a>), you&#39;ll need to do:</p>
+
+<pre><code>  local $@ = $_;</code></pre>
+
+</dd>
+<dt id="finally-(&amp;;@)"><a id="finally"></a>finally (&amp;;@)</dt>
+<dd>
+
+<pre><code>  try     { ... }
+  catch   { ... }
+  finally { ... };</code></pre>
+
+<p>Or</p>
+
+<pre><code>  try     { ... }
+  finally { ... };</code></pre>
+
+<p>Or even</p>
+
+<pre><code>  try     { ... }
+  finally { ... }
+  catch   { ... };</code></pre>
+
+<p>Intended to be the second or third element of <code>try</code>. <code>finally</code> blocks are always executed in the event of a successful <code>try</code> or if <code>catch</code> is run. This allows you to locate cleanup code which cannot be done via <code>local()</code> e.g. closing a file handle.</p>
+
+<p>When invoked, the <code>finally</code> block is passed the error that was caught. If no error was caught, it is passed nothing. (Note that the <code>finally</code> block does not localize <code>$_</code> with the error, since unlike in a <code>catch</code> block, there is no way to know if <code>$_ == undef</code> implies that there were no errors.) In other words, the following code does just what you would expect:</p>
+
+<pre><code>  try {
+    die_sometimes();
+  } catch {
+    # ...code run in case of error
+  } finally {
+    if (@_) {
+      print &quot;The try block died with: @_\n&quot;;
+    } else {
+      print &quot;The try block ran without error.\n&quot;;
+    }
+  };</code></pre>
+
+<p><b>You must always do your own error handling in the <code>finally</code> block</b>. <code>Try::Tiny</code> will not do anything about handling possible errors coming from code located in these blocks.</p>
+
+<p>Furthermore <b>exceptions in <code>finally</code> blocks are not trappable and are unable to influence the execution of your program</b>. This is due to limitation of <code>DESTROY</code>-based scope guards, which <code>finally</code> is implemented on top of. This may change in a future version of Try::Tiny.</p>
+
+<p>In the same way <code>catch()</code> blesses the code reference this subroutine does the same except it bless them as <code>Try::Tiny::Finally</code>.</p>
+
+</dd>
+</dl>
+
+<h1 id="BACKGROUND">BACKGROUND</h1>
+
+<p>There are a number of issues with <code>eval</code>.</p>
+
+<h2 id="Clobbering-$@"><a id="Clobbering"></a>Clobbering $@</h2>
+
+<p>When you run an <code>eval</code> block and it succeeds, <code>$@</code> will be cleared, potentially clobbering an error that is currently being caught.</p>
+
+<p>This causes action at a distance, clearing previous errors your caller may have not yet handled.</p>
+
+<p><code>$@</code> must be properly localized before invoking <code>eval</code> in order to avoid this issue.</p>
+
+<p>More specifically, <a href="https://metacpan.org/pod/perl5140delta#Exception-Handling">before Perl version 5.14.0</a> <code>$@</code> was clobbered at the beginning of the <code>eval</code>, which also made it impossible to capture the previous error before you die (for instance when making exception objects with error stacks).</p>
+
+<p>For this reason <code>try</code> will actually set <code>$@</code> to its previous value (the one available before entering the <code>try</code> block) in the beginning of the <code>eval</code> block.</p>
+
+<h2 id="Localizing-$@-silently-masks-errors"><a id="Localizing"></a><a id="Localizing---silently-masks-errors"></a>Localizing $@ silently masks errors</h2>
+
+<p>Inside an <code>eval</code> block, <code>die</code> behaves sort of like:</p>
+
+<pre><code>  sub die {
+    $@ = $_[0];
+    return_undef_from_eval();
+  }</code></pre>
+
+<p>This means that if you were polite and localized <code>$@</code> you can&#39;t die in that scope, or your error will be discarded (printing &quot;Something&#39;s wrong&quot; instead).</p>
+
+<p>The workaround is very ugly:</p>
+
+<pre><code>  my $error = do {
+    local $@;
+    eval { ... };
+    $@;
+  };
+
+  ...
+  die $error;</code></pre>
+
+<h2 id="$@-might-not-be-a-true-value"><a id="might-not-be-a-true-value"></a>$@ might not be a true value</h2>
+
+<p>This code is wrong:</p>
+
+<pre><code>  if ( $@ ) {
+    ...
+  }</code></pre>
+
+<p>because due to the previous caveats it may have been unset.</p>
+
+<p><code>$@</code> could also be an overloaded error object that evaluates to false, but that&#39;s asking for trouble anyway.</p>
+
+<p>The classic failure mode (fixed in <a href="https://metacpan.org/pod/perl5140delta#Exception-Handling">Perl 5.14.0</a>) is:</p>
+
+<pre><code>  sub Object::DESTROY {
+    eval { ... }
+  }
+
+  eval {
+    my $obj = Object-&gt;new;
+
+    die &quot;foo&quot;;
+  };
+
+  if ( $@ ) {
+
+  }</code></pre>
+
+<p>In this case since <code>Object::DESTROY</code> is not localizing <code>$@</code> but still uses <code>eval</code>, it will set <code>$@</code> to <code>&quot;&quot;</code>.</p>
+
+<p>The destructor is called when the stack is unwound, after <code>die</code> sets <code>$@</code> to <code>&quot;foo at Foo.pm line 42\n&quot;</code>, so by the time <code>if ( $@ )</code> is evaluated it has been cleared by <code>eval</code> in the destructor.</p>
+
+<p>The workaround for this is even uglier than the previous ones. Even though we can&#39;t save the value of <code>$@</code> from code that doesn&#39;t localize, we can at least be sure the <code>eval</code> was aborted due to an error:</p>
+
+<pre><code>  my $failed = not eval {
+    ...
+
+    return 1;
+  };</code></pre>
+
+<p>This is because an <code>eval</code> that caught a <code>die</code> will always return a false value.</p>
+
+<h1 id="ALTERNATE-SYNTAX"><a id="ALTERNATE"></a>ALTERNATE SYNTAX</h1>
+
+<p>Using Perl 5.10 you can use <a href="https://metacpan.org/pod/perlsyn#Switch-statements">&quot;Switch statements&quot; in perlsyn</a> (but please don&#39;t, because that syntax has since been deprecated because there was too much unexpected magical behaviour).</p>
+
+<p>The <code>catch</code> block is invoked in a topicalizer context (like a <code>given</code> block), but note that you can&#39;t return a useful value from <code>catch</code> using the <code>when</code> blocks without an explicit <code>return</code>.</p>
+
+<p>This is somewhat similar to Perl 6&#39;s <code>CATCH</code> blocks. You can use it to concisely match errors:</p>
+
+<pre><code>  try {
+    require Foo;
+  } catch {
+    when (/^Can&#39;t locate .*?\.pm in \@INC/) { } # ignore
+    default { die $_ }
+  };</code></pre>
+
+<h1 id="CAVEATS">CAVEATS</h1>
+
+<ul>
+
+<li><p><code>@_</code> is not available within the <code>try</code> block, so you need to copy your argument list. In case you want to work with argument values directly via <code>@_</code> aliasing (i.e. allow <code>$_[1] = &quot;foo&quot;</code>), you need to pass <code>@_</code> by reference:</p>
+
+<pre><code>  sub foo {
+    my ( $self, @args ) = @_;
+    try { $self-&gt;bar(@args) }
+  }</code></pre>
+
+<p>or</p>
+
+<pre><code>  sub bar_in_place {
+    my $self = shift;
+    my $args = \@_;
+    try { $_ = $self-&gt;bar($_) for @$args }
+  }</code></pre>
+
+</li>
+<li><p><code>return</code> returns from the <code>try</code> block, not from the parent sub (note that this is also how <code>eval</code> works, but not how <a href="https://metacpan.org/pod/TryCatch">TryCatch</a> works):</p>
+
+<pre><code>  sub parent_sub {
+    try {
+      die;
+    }
+    catch {
+      return;
+    };
+
+    say &quot;this text WILL be displayed, even though an exception is thrown&quot;;
+  }</code></pre>
+
+<p>Instead, you should capture the return value:</p>
+
+<pre><code>  sub parent_sub {
+    my $success = try {
+      die;
+      1;
+    };
+    return unless $success;
+
+    say &quot;This text WILL NEVER appear!&quot;;
+  }
+  # OR
+  sub parent_sub_with_catch {
+    my $success = try {
+      die;
+      1;
+    }
+    catch {
+      # do something with $_
+      return undef; #see note
+    };
+    return unless $success;
+
+    say &quot;This text WILL NEVER appear!&quot;;
+  }</code></pre>
+
+<p>Note that if you have a <code>catch</code> block, it must return <code>undef</code> for this to work, since if a <code>catch</code> block exists, its return value is returned in place of <code>undef</code> when an exception is thrown.</p>
+
+</li>
+<li><p><code>try</code> introduces another caller stack frame. <a href="https://metacpan.org/pod/Sub::Uplevel">Sub::Uplevel</a> is not used. <a href="https://metacpan.org/pod/Carp">Carp</a> will not report this when using full stack traces, though, because <code>%Carp::Internal</code> is used. This lack of magic is considered a feature.</p>
+
+</li>
+<li><p>The value of <code>$_</code> in the <code>catch</code> block is not guaranteed to be the value of the exception thrown (<code>$@</code>) in the <code>try</code> block. There is no safe way to ensure this, since <code>eval</code> may be used unhygienically in destructors. The only guarantee is that the <code>catch</code> will be called if an exception is thrown.</p>
+
+</li>
+<li><p>The return value of the <code>catch</code> block is not ignored, so if testing the result of the expression for truth on success, be sure to return a false value from the <code>catch</code> block:</p>
+
+<pre><code>  my $obj = try {
+    MightFail-&gt;new;
+  } catch {
+    ...
+
+    return; # avoid returning a true value;
+  };
+
+  return unless $obj;</code></pre>
+
+</li>
+<li><p><code>$SIG{__DIE__}</code> is still in effect.</p>
+
+<p>Though it can be argued that <code>$SIG{__DIE__}</code> should be disabled inside of <code>eval</code> blocks, since it isn&#39;t people have grown to rely on it. Therefore in the interests of compatibility, <code>try</code> does not disable <code>$SIG{__DIE__}</code> for the scope of the error throwing code.</p>
+
+</li>
+<li><p>Lexical <code>$_</code> may override the one set by <code>catch</code>.</p>
+
+<p>For example Perl 5.10&#39;s <code>given</code> form uses a lexical <code>$_</code>, creating some confusing behavior:</p>
+
+<pre><code>  given ($foo) {
+    when (...) {
+      try {
+        ...
+      } catch {
+        warn $_; # will print $foo, not the error
+        warn $_[0]; # instead, get the error like this
+      }
+    }
+  }</code></pre>
+
+<p>Note that this behavior was changed once again in <a href="https://metacpan.org/module/perldelta#given-now-aliases-the-global-_">Perl5 version 18</a>. However, since the entirety of lexical <code>$_</code> is now <a href="https://metacpan.org/module/perldelta#Lexical-_-is-now-experimental">considered experimental </a>, it is unclear whether the new version 18 behavior is final.</p>
+
+</li>
+</ul>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<dl>
+
+<dt id="Syntax::Keyword::Try"><a id="Syntax"></a><a href="https://metacpan.org/pod/Syntax::Keyword::Try">Syntax::Keyword::Try</a></dt>
+<dd>
+
+<p>Only available on perls &gt;= 5.14, with a slightly different syntax (e.g. no trailing <code>;</code> because it&#39;s actually a keyword, not a sub, but this means you can <code>return</code> and <code>next</code> within it). Use <a href="https://metacpan.org/pod/Feature::Compat::Try">Feature::Compat::Try</a> to automatically switch to the native <code>try</code> syntax in newer perls (when available). See also <a href="https://metacpan.org/pod/perlsyn#Try-Catch-Exception-Handling">Try Catch Exception Handling</a>.</p>
+
+</dd>
+<dt id="TryCatch"><a href="https://metacpan.org/pod/TryCatch">TryCatch</a></dt>
+<dd>
+
+<p>Much more feature complete, more convenient semantics, but at the cost of implementation complexity.</p>
+
+</dd>
+<dt id="autodie"><a href="https://metacpan.org/pod/autodie">autodie</a></dt>
+<dd>
+
+<p>Automatic error throwing for builtin functions and more. Also designed to work well with <code>given</code>/<code>when</code>.</p>
+
+</dd>
+<dt id="Throwable"><a href="https://metacpan.org/pod/Throwable">Throwable</a></dt>
+<dd>
+
+<p>A lightweight role for rolling your own exception classes.</p>
+
+</dd>
+<dt id="Error"><a href="https://metacpan.org/pod/Error">Error</a></dt>
+<dd>
+
+<p>Exception object implementation with a <code>try</code> statement. Does not localize <code>$@</code>.</p>
+
+</dd>
+<dt id="Exception::Class::TryCatch"><a id="Exception"></a><a href="https://metacpan.org/pod/Exception::Class::TryCatch">Exception::Class::TryCatch</a></dt>
+<dd>
+
+<p>Provides a <code>catch</code> statement, but properly calling <code>eval</code> is your responsibility.</p>
+
+<p>The <code>try</code> keyword pushes <code>$@</code> onto an error stack, avoiding some of the issues with <code>$@</code>, but you still need to localize to prevent clobbering.</p>
+
+</dd>
+</dl>
+
+<h1 id="LIGHTNING-TALK"><a id="LIGHTNING"></a>LIGHTNING TALK</h1>
+
+<p>I gave a lightning talk about this module, you can see the slides (Firefox only):</p>
+
+<p><a href="http://web.archive.org/web/20100628040134/http://nothingmuch.woobling.org/talks/takahashi.xul">http://web.archive.org/web/20100628040134/http://nothingmuch.woobling.org/talks/takahashi.xul</a></p>
+
+<p>Or read the source:</p>
+
+<p><a href="http://web.archive.org/web/20100305133605/http://nothingmuch.woobling.org/talks/yapc_asia_2009/try_tiny.yml">http://web.archive.org/web/20100305133605/http://nothingmuch.woobling.org/talks/yapc_asia_2009/try_tiny.yml</a></p>
+
+<h1 id="SUPPORT">SUPPORT</h1>
+
+<p>Bugs may be submitted through <a href="https://rt.cpan.org/Public/Dist/Display.html?Name=Try-Tiny">the RT bug tracker</a> (or <a href="mailto:bug-Try-Tiny@rt.cpan.org">bug-Try-Tiny@rt.cpan.org</a>).</p>
+
+<h1 id="AUTHORS">AUTHORS</h1>
+
+<ul>
+
+<li><p>&#x5D9;&#x5D5;&#x5D1;&#x5DC; &#x5E7;&#x5D5;&#x5D2;&#39;&#x5DE;&#x5DF; (Yuval Kogman) &lt;nothingmuch@woobling.org&gt;</p>
+
+</li>
+<li><p>Jesse Luehrs &lt;doy@tozt.net&gt;</p>
+
+</li>
+</ul>
+
+<h1 id="CONTRIBUTORS">CONTRIBUTORS</h1>
+
+<ul>
+
+<li><p>Karen Etheridge &lt;ether@cpan.org&gt;</p>
+
+</li>
+<li><p>Peter Rabbitson &lt;ribasushi@cpan.org&gt;</p>
+
+</li>
+<li><p>Ricardo Signes &lt;rjbs@cpan.org&gt;</p>
+
+</li>
+<li><p>Mark Fowler &lt;mark@twoshortplanks.com&gt;</p>
+
+</li>
+<li><p>Graham Knop &lt;haarg@haarg.org&gt;</p>
+
+</li>
+<li><p>Aristotle Pagaltzis &lt;pagaltzis@gmx.de&gt;</p>
+
+</li>
+<li><p>Dagfinn Ilmari Manns&aring;ker &lt;ilmari@ilmari.org&gt;</p>
+
+</li>
+<li><p>Lukas Mai &lt;l.mai@web.de&gt;</p>
+
+</li>
+<li><p>Alex &lt;alex@koban.(none)&gt;</p>
+
+</li>
+<li><p>anaxagoras &lt;walkeraj@gmail.com&gt;</p>
+
+</li>
+<li><p>Andrew Yates &lt;ayates@haddock.local&gt;</p>
+
+</li>
+<li><p>awalker &lt;awalker@sourcefire.com&gt;</p>
+
+</li>
+<li><p>chromatic &lt;chromatic@wgz.org&gt;</p>
+
+</li>
+<li><p>cm-perl &lt;cm-perl@users.noreply.github.com&gt;</p>
+
+</li>
+<li><p>David Lowe &lt;davidl@lokku.com&gt;</p>
+
+</li>
+<li><p>Glenn Fowler &lt;cebjyre@cpan.org&gt;</p>
+
+</li>
+<li><p>Hans Dieter Pearcey &lt;hdp@weftsoar.net&gt;</p>
+
+</li>
+<li><p>Jens Berthold &lt;jens@jebecs.de&gt;</p>
+
+</li>
+<li><p>Jonathan Yu &lt;JAWNSY@cpan.org&gt;</p>
+
+</li>
+<li><p>Marc Mims &lt;marc@questright.com&gt;</p>
+
+</li>
+<li><p>Mark Stosberg &lt;mark@stosberg.com&gt;</p>
+
+</li>
+<li><p>Pali &lt;pali@cpan.org&gt;</p>
+
+</li>
+<li><p>Paul Howarth &lt;paul@city-fan.org&gt;</p>
+
+</li>
+<li><p>Rudolf Leermakers &lt;rudolf@hatsuseno.org&gt;</p>
+
+</li>
+</ul>
+
+<h1 id="COPYRIGHT-AND-LICENCE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENCE</h1>
+
+<p>This software is Copyright (c) 2009 by &#x5D9;&#x5D5;&#x5D1;&#x5DC; &#x5E7;&#x5D5;&#x5D2;&#39;&#x5DE;&#x5DF; (Yuval Kogman).</p>
+
+<p>This is free software, licensed under:</p>
+
+<pre><code>  The MIT (X11) License</code></pre></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Try::Tiny, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Try::Tiny</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Try::Tiny</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Try::Tiny.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,5290 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlmodlib - constructing new Perl modules and finding existing ones - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlmodlib">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmodlib.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlmodlib">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlmodlib">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlmodlib">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlmodlib">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlmodlib">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlmodlib">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlmodlib">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlmodlib">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlmodlib">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlmodlib">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlmodlib">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlmodlib">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlmodlib">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlmodlib">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlmodlib">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlmodlib">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlmodlib">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlmodlib">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlmodlib">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlmodlib">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlmodlib">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlmodlib">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlmodlib">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlmodlib">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlmodlib">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlmodlib">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlmodlib">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlmodlib">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlmodlib">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlmodlib">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlmodlib">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlmodlib">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlmodlib">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlmodlib">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlmodlib">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlmodlib">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlmodlib">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlmodlib">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlmodlib">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlmodlib">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlmodlib">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlmodlib">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlmodlib">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlmodlib">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlmodlib">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlmodlib">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlmodlib">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlmodlib">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlmodlib">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlmodlib">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlmodlib">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlmodlib">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlmodlib">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlmodlib">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlmodlib">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlmodlib">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlmodlib">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlmodlib">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlmodlib">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlmodlib">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlmodlib">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlmodlib">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlmodlib">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlmodlib">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlmodlib">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlmodlib">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlmodlib">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlmodlib">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlmodlib">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlmodlib">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlmodlib">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlmodlib">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlmodlib">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlmodlib">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlmodlib">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlmodlib">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlmodlib">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlmodlib">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlmodlib">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlmodlib">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmodlib.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlmodlib">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlmodlib">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlmodlib">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlmodlib">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlmodlib">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlmodlib">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlmodlib">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlmodlib">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlmodlib">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlmodlib">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlmodlib">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlmodlib">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlmodlib">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlmodlib">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlmodlib">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlmodlib">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlmodlib">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlmodlib">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlmodlib">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlmodlib">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlmodlib">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlmodlib">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlmodlib">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlmodlib">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlmodlib">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlmodlib">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlmodlib">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlmodlib">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlmodlib">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlmodlib">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlmodlib">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlmodlib">5.35.1</a>
+          <a class="dropdown-item active" href="perlmodlib.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmodlib.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlmodlib.html">perlmodlib</a>
+          <div id="more">
+            (<a href="perlmodlib.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlmodlib">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#THE-PERL-MODULE-LIBRARY">THE PERL MODULE LIBRARY</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#Pragmatic-Modules">Pragmatic Modules</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#Standard-Modules">Standard Modules</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#Extension-Modules">Extension Modules</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#CPAN1">CPAN</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#Africa">Africa</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#Asia">Asia</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#Europe">Europe</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#North-America">North America</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#Oceania">Oceania</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#South-America">South America</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#RSYNC-Mirrors">RSYNC Mirrors</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#Modules:-Creation,-Use,-and-Abuse">Modules: Creation, Use, and Abuse</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#Guidelines-for-Module-Creation">Guidelines for Module Creation</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#Guidelines-for-Converting-Perl-4-Library-Scripts-into-Modules">Guidelines for Converting Perl 4 Library Scripts into Modules</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#Guidelines-for-Reusing-Application-Code">Guidelines for Reusing Application Code</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmodlib.html#NOTE">NOTE</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlmodlib.html#NAME">#</a>NAME</h1>
+
+<p>perlmodlib - constructing new Perl modules and finding existing ones</p>
+
+<h1 id="THE-PERL-MODULE-LIBRARY"><a class="permalink" href="perlmodlib.html#THE-PERL-MODULE-LIBRARY">#</a><a id="THE"></a>THE PERL MODULE LIBRARY</h1>
+
+<p>Many modules are included in the Perl distribution. These are described below, and all end in <i>.pm</i>. You may discover compiled library files (usually ending in <i>.so</i>) or small pieces of modules to be autoloaded (ending in <i>.al</i>); these were automatically generated by the installation process. You may also discover files in the library directory that end in either <i>.pl</i> or <i>.ph</i>. These are old libraries supplied so that old programs that use them still run. The <i>.pl</i> files will all eventually be converted into standard modules, and the <i>.ph</i> files made by <b>h2ph</b> will probably end up as extension modules made by <b>h2xs</b>. (Some <i>.ph</i> values may already be available through the POSIX, Errno, or Fcntl modules.) The <b>pl2pm</b> file in the distribution may help in your conversion, but it&#39;s just a mechanical process and therefore far from bulletproof.</p>
+
+<h2 id="Pragmatic-Modules"><a class="permalink" href="perlmodlib.html#Pragmatic-Modules">#</a><a id="Pragmatic"></a>Pragmatic Modules</h2>
+
+<p>They work somewhat like compiler directives (pragmata) in that they tend to affect the compilation of your program, and thus will usually work well only when used within a <code>use</code>, or <code>no</code>. Most of these are lexically scoped, so an inner BLOCK may countermand them by saying:</p>
+
+<pre><code>no integer;
+no strict &#39;refs&#39;;
+no warnings;</code></pre>
+
+<p>which lasts until the end of that BLOCK.</p>
+
+<p>Some pragmas are lexically scoped--typically those that affect the <code>$^H</code> hints variable. Others affect the current package instead, like <code>use vars</code> and <code>use subs</code>, which allow you to predeclare a variables or subroutines within a particular <i>file</i> rather than just a block. Such declarations are effective for the entire file for which they were declared. You cannot rescind them with <code>no vars</code> or <code>no subs</code>.</p>
+
+<p>The following pragmas are defined (and have their own documentation).</p>
+
+<dl>
+
+<dt id="attributes"><a class="permalink" href="perlmodlib.html#attributes">#</a>attributes</dt>
+<dd>
+
+<p>Get/set subroutine or variable attributes</p>
+
+</dd>
+<dt id="autodie"><a class="permalink" href="perlmodlib.html#autodie">#</a>autodie</dt>
+<dd>
+
+<p>Replace functions with ones that succeed or die with lexical scope</p>
+
+</dd>
+<dt id="autodie::exception"><a class="permalink" href="perlmodlib.html#autodie::exception">#</a><a id="autodie1"></a>autodie::exception</dt>
+<dd>
+
+<p>Exceptions from autodying functions.</p>
+
+</dd>
+<dt id="autodie::exception::system"><a class="permalink" href="perlmodlib.html#autodie::exception::system">#</a><a id="autodie2"></a>autodie::exception::system</dt>
+<dd>
+
+<p>Exceptions from autodying system().</p>
+
+</dd>
+<dt id="autodie::hints"><a class="permalink" href="perlmodlib.html#autodie::hints">#</a><a id="autodie3"></a>autodie::hints</dt>
+<dd>
+
+<p>Provide hints about user subroutines to autodie</p>
+
+</dd>
+<dt id="autodie::skip"><a class="permalink" href="perlmodlib.html#autodie::skip">#</a><a id="autodie4"></a>autodie::skip</dt>
+<dd>
+
+<p>Skip a package when throwing autodie exceptions</p>
+
+</dd>
+<dt id="autouse"><a class="permalink" href="perlmodlib.html#autouse">#</a>autouse</dt>
+<dd>
+
+<p>Postpone load of modules until a function is used</p>
+
+</dd>
+<dt id="base"><a class="permalink" href="perlmodlib.html#base">#</a>base</dt>
+<dd>
+
+<p>Establish an ISA relationship with base classes at compile time</p>
+
+</dd>
+<dt id="bigint"><a class="permalink" href="perlmodlib.html#bigint">#</a>bigint</dt>
+<dd>
+
+<p>Transparent BigInteger support for Perl</p>
+
+</dd>
+<dt id="bignum"><a class="permalink" href="perlmodlib.html#bignum">#</a>bignum</dt>
+<dd>
+
+<p>Transparent BigNumber support for Perl</p>
+
+</dd>
+<dt id="bigrat"><a class="permalink" href="perlmodlib.html#bigrat">#</a>bigrat</dt>
+<dd>
+
+<p>Transparent BigNumber/BigRational support for Perl</p>
+
+</dd>
+<dt id="blib"><a class="permalink" href="perlmodlib.html#blib">#</a>blib</dt>
+<dd>
+
+<p>Use MakeMaker&#39;s uninstalled version of a package</p>
+
+</dd>
+<dt id="bytes"><a class="permalink" href="perlmodlib.html#bytes">#</a>bytes</dt>
+<dd>
+
+<p>Expose the individual bytes of characters</p>
+
+</dd>
+<dt id="charnames"><a class="permalink" href="perlmodlib.html#charnames">#</a>charnames</dt>
+<dd>
+
+<p>Access to Unicode character names and named character sequences; also define character names</p>
+
+</dd>
+<dt id="constant"><a class="permalink" href="perlmodlib.html#constant">#</a>constant</dt>
+<dd>
+
+<p>Declare constants</p>
+
+</dd>
+<dt id="deprecate"><a class="permalink" href="perlmodlib.html#deprecate">#</a>deprecate</dt>
+<dd>
+
+<p>Perl pragma for deprecating the inclusion of a module in core</p>
+
+</dd>
+<dt id="diagnostics"><a class="permalink" href="perlmodlib.html#diagnostics">#</a>diagnostics</dt>
+<dd>
+
+<p>Produce verbose warning diagnostics</p>
+
+</dd>
+<dt id="encoding"><a class="permalink" href="perlmodlib.html#encoding">#</a>encoding</dt>
+<dd>
+
+<p>Allows you to write your script in non-ASCII and non-UTF-8</p>
+
+</dd>
+<dt id="encoding::warnings"><a class="permalink" href="perlmodlib.html#encoding::warnings">#</a><a id="encoding1"></a>encoding::warnings</dt>
+<dd>
+
+<p>Warn on implicit encoding conversions</p>
+
+</dd>
+<dt id="experimental"><a class="permalink" href="perlmodlib.html#experimental">#</a>experimental</dt>
+<dd>
+
+<p>Experimental features made easy</p>
+
+</dd>
+<dt id="feature"><a class="permalink" href="perlmodlib.html#feature">#</a>feature</dt>
+<dd>
+
+<p>Enable new features</p>
+
+</dd>
+<dt id="fields"><a class="permalink" href="perlmodlib.html#fields">#</a>fields</dt>
+<dd>
+
+<p>Compile-time class fields</p>
+
+</dd>
+<dt id="filetest"><a class="permalink" href="perlmodlib.html#filetest">#</a>filetest</dt>
+<dd>
+
+<p>Control the filetest permission operators</p>
+
+</dd>
+<dt id="if"><a class="permalink" href="perlmodlib.html#if">#</a>if</dt>
+<dd>
+
+<p><code>use</code> a Perl module if a condition holds</p>
+
+</dd>
+<dt id="integer"><a class="permalink" href="perlmodlib.html#integer">#</a>integer</dt>
+<dd>
+
+<p>Use integer arithmetic instead of floating point</p>
+
+</dd>
+<dt id="less"><a class="permalink" href="perlmodlib.html#less">#</a>less</dt>
+<dd>
+
+<p>Request less of something</p>
+
+</dd>
+<dt id="lib"><a class="permalink" href="perlmodlib.html#lib">#</a>lib</dt>
+<dd>
+
+<p>Manipulate @INC at compile time</p>
+
+</dd>
+<dt id="locale"><a class="permalink" href="perlmodlib.html#locale">#</a>locale</dt>
+<dd>
+
+<p>Use or avoid POSIX locales for built-in operations</p>
+
+</dd>
+<dt id="mro"><a class="permalink" href="perlmodlib.html#mro">#</a>mro</dt>
+<dd>
+
+<p>Method Resolution Order</p>
+
+</dd>
+<dt id="ok"><a class="permalink" href="perlmodlib.html#ok">#</a>ok</dt>
+<dd>
+
+<p>Alternative to Test::More::use_ok</p>
+
+</dd>
+<dt id="open"><a class="permalink" href="perlmodlib.html#open">#</a>open</dt>
+<dd>
+
+<p>Set default PerlIO layers for input and output</p>
+
+</dd>
+<dt id="ops"><a class="permalink" href="perlmodlib.html#ops">#</a>ops</dt>
+<dd>
+
+<p>Restrict unsafe operations when compiling</p>
+
+</dd>
+<dt id="overload"><a class="permalink" href="perlmodlib.html#overload">#</a>overload</dt>
+<dd>
+
+<p>Package for overloading Perl operations</p>
+
+</dd>
+<dt id="overloading"><a class="permalink" href="perlmodlib.html#overloading">#</a>overloading</dt>
+<dd>
+
+<p>Lexically control overloading</p>
+
+</dd>
+<dt id="parent"><a class="permalink" href="perlmodlib.html#parent">#</a>parent</dt>
+<dd>
+
+<p>Establish an ISA relationship with base classes at compile time</p>
+
+</dd>
+<dt id="re"><a class="permalink" href="perlmodlib.html#re">#</a>re</dt>
+<dd>
+
+<p>Alter regular expression behaviour</p>
+
+</dd>
+<dt id="sigtrap"><a class="permalink" href="perlmodlib.html#sigtrap">#</a>sigtrap</dt>
+<dd>
+
+<p>Enable simple signal handling</p>
+
+</dd>
+<dt id="sort"><a class="permalink" href="perlmodlib.html#sort">#</a>sort</dt>
+<dd>
+
+<p>Control sort() behaviour</p>
+
+</dd>
+<dt id="strict"><a class="permalink" href="perlmodlib.html#strict">#</a>strict</dt>
+<dd>
+
+<p>Restrict unsafe constructs</p>
+
+</dd>
+<dt id="subs"><a class="permalink" href="perlmodlib.html#subs">#</a>subs</dt>
+<dd>
+
+<p>Predeclare subroutine names</p>
+
+</dd>
+<dt id="threads"><a class="permalink" href="perlmodlib.html#threads">#</a>threads</dt>
+<dd>
+
+<p>Perl interpreter-based threads</p>
+
+</dd>
+<dt id="threads::shared"><a class="permalink" href="perlmodlib.html#threads::shared">#</a><a id="threads1"></a>threads::shared</dt>
+<dd>
+
+<p>Perl extension for sharing data structures between threads</p>
+
+</dd>
+<dt id="utf8"><a class="permalink" href="perlmodlib.html#utf8">#</a>utf8</dt>
+<dd>
+
+<p>Enable/disable UTF-8 (or UTF-EBCDIC) in source code</p>
+
+</dd>
+<dt id="vars"><a class="permalink" href="perlmodlib.html#vars">#</a>vars</dt>
+<dd>
+
+<p>Predeclare global variable names</p>
+
+</dd>
+<dt id="version"><a class="permalink" href="perlmodlib.html#version">#</a>version</dt>
+<dd>
+
+<p>Perl extension for Version Objects</p>
+
+</dd>
+<dt id="vmsish"><a class="permalink" href="perlmodlib.html#vmsish">#</a>vmsish</dt>
+<dd>
+
+<p>Control VMS-specific language features</p>
+
+</dd>
+<dt id="warnings"><a class="permalink" href="perlmodlib.html#warnings">#</a>warnings</dt>
+<dd>
+
+<p>Control optional warnings</p>
+
+</dd>
+<dt id="warnings::register"><a class="permalink" href="perlmodlib.html#warnings::register">#</a><a id="warnings1"></a>warnings::register</dt>
+<dd>
+
+<p>Warnings import function</p>
+
+</dd>
+</dl>
+
+<h2 id="Standard-Modules"><a class="permalink" href="perlmodlib.html#Standard-Modules">#</a><a id="Standard"></a>Standard Modules</h2>
+
+<p>Standard, bundled modules are all expected to behave in a well-defined manner with respect to namespace pollution because they use the Exporter module. See their own documentation for details.</p>
+
+<p>It&#39;s possible that not all modules listed below are installed on your system. For example, the GDBM_File module will not be installed if you don&#39;t have the gdbm library.</p>
+
+<dl>
+
+<dt id="Amiga::ARexx"><a class="permalink" href="perlmodlib.html#Amiga::ARexx">#</a><a id="Amiga"></a>Amiga::ARexx</dt>
+<dd>
+
+<p>Perl extension for ARexx support</p>
+
+</dd>
+<dt id="Amiga::Exec"><a class="permalink" href="perlmodlib.html#Amiga::Exec">#</a><a id="Amiga1"></a>Amiga::Exec</dt>
+<dd>
+
+<p>Perl extension for low level amiga support</p>
+
+</dd>
+<dt id="AnyDBM_File"><a class="permalink" href="perlmodlib.html#AnyDBM_File">#</a>AnyDBM_File</dt>
+<dd>
+
+<p>Provide framework for multiple DBMs</p>
+
+</dd>
+<dt id="App::Cpan"><a class="permalink" href="perlmodlib.html#App::Cpan">#</a><a id="App"></a>App::Cpan</dt>
+<dd>
+
+<p>Easily interact with CPAN from the command line</p>
+
+</dd>
+<dt id="App::Prove"><a class="permalink" href="perlmodlib.html#App::Prove">#</a><a id="App1"></a>App::Prove</dt>
+<dd>
+
+<p>Implements the <code>prove</code> command.</p>
+
+</dd>
+<dt id="App::Prove::State"><a class="permalink" href="perlmodlib.html#App::Prove::State">#</a><a id="App2"></a>App::Prove::State</dt>
+<dd>
+
+<p>State storage for the <code>prove</code> command.</p>
+
+</dd>
+<dt id="App::Prove::State::Result"><a class="permalink" href="perlmodlib.html#App::Prove::State::Result">#</a><a id="App3"></a>App::Prove::State::Result</dt>
+<dd>
+
+<p>Individual test suite results.</p>
+
+</dd>
+<dt id="App::Prove::State::Result::Test"><a class="permalink" href="perlmodlib.html#App::Prove::State::Result::Test">#</a><a id="App4"></a>App::Prove::State::Result::Test</dt>
+<dd>
+
+<p>Individual test results.</p>
+
+</dd>
+<dt id="Archive::Tar"><a class="permalink" href="perlmodlib.html#Archive::Tar">#</a><a id="Archive"></a>Archive::Tar</dt>
+<dd>
+
+<p>Module for manipulations of tar archives</p>
+
+</dd>
+<dt id="Archive::Tar::File"><a class="permalink" href="perlmodlib.html#Archive::Tar::File">#</a><a id="Archive1"></a>Archive::Tar::File</dt>
+<dd>
+
+<p>A subclass for in-memory extracted file from Archive::Tar</p>
+
+</dd>
+<dt id="Attribute::Handlers"><a class="permalink" href="perlmodlib.html#Attribute::Handlers">#</a><a id="Attribute"></a>Attribute::Handlers</dt>
+<dd>
+
+<p>Simpler definition of attribute handlers</p>
+
+</dd>
+<dt id="AutoLoader"><a class="permalink" href="perlmodlib.html#AutoLoader">#</a>AutoLoader</dt>
+<dd>
+
+<p>Load subroutines only on demand</p>
+
+</dd>
+<dt id="AutoSplit"><a class="permalink" href="perlmodlib.html#AutoSplit">#</a>AutoSplit</dt>
+<dd>
+
+<p>Split a package for autoloading</p>
+
+</dd>
+<dt id="B"><a class="permalink" href="perlmodlib.html#B">#</a>B</dt>
+<dd>
+
+<p>The Perl Compiler Backend</p>
+
+</dd>
+<dt id="B::Concise"><a class="permalink" href="perlmodlib.html#B::Concise">#</a><a id="B1"></a>B::Concise</dt>
+<dd>
+
+<p>Walk Perl syntax tree, printing concise info about ops</p>
+
+</dd>
+<dt id="B::Deparse"><a class="permalink" href="perlmodlib.html#B::Deparse">#</a><a id="B2"></a>B::Deparse</dt>
+<dd>
+
+<p>Perl compiler backend to produce perl code</p>
+
+</dd>
+<dt id="B::Op_private"><a class="permalink" href="perlmodlib.html#B::Op_private">#</a><a id="B3"></a>B::Op_private</dt>
+<dd>
+
+<p>OP op_private flag definitions</p>
+
+</dd>
+<dt id="B::Showlex"><a class="permalink" href="perlmodlib.html#B::Showlex">#</a><a id="B4"></a>B::Showlex</dt>
+<dd>
+
+<p>Show lexical variables used in functions or files</p>
+
+</dd>
+<dt id="B::Terse"><a class="permalink" href="perlmodlib.html#B::Terse">#</a><a id="B5"></a>B::Terse</dt>
+<dd>
+
+<p>Walk Perl syntax tree, printing terse info about ops</p>
+
+</dd>
+<dt id="B::Xref"><a class="permalink" href="perlmodlib.html#B::Xref">#</a><a id="B6"></a>B::Xref</dt>
+<dd>
+
+<p>Generates cross reference reports for Perl programs</p>
+
+</dd>
+<dt id="Benchmark"><a class="permalink" href="perlmodlib.html#Benchmark">#</a>Benchmark</dt>
+<dd>
+
+<p>Benchmark running times of Perl code</p>
+
+</dd>
+<dt id="IO::Socket::IP"><a class="permalink" href="perlmodlib.html#IO::Socket::IP">#</a><a id="IO1"></a><code>IO::Socket::IP</code></dt>
+<dd>
+
+<p>Family-neutral IP socket supporting both IPv4 and IPv6</p>
+
+</dd>
+<dt id="Socket"><a class="permalink" href="perlmodlib.html#Socket">#</a><code>Socket</code></dt>
+<dd>
+
+<p>Networking constants and support functions</p>
+
+</dd>
+<dt id="CORE"><a class="permalink" href="perlmodlib.html#CORE">#</a>CORE</dt>
+<dd>
+
+<p>Namespace for Perl&#39;s core routines</p>
+
+</dd>
+<dt id="CPAN"><a class="permalink" href="perlmodlib.html#CPAN">#</a>CPAN</dt>
+<dd>
+
+<p>Query, download and build perl modules from CPAN sites</p>
+
+</dd>
+<dt id="CPAN::API::HOWTO"><a class="permalink" href="perlmodlib.html#CPAN::API::HOWTO">#</a><a id="CPAN2"></a>CPAN::API::HOWTO</dt>
+<dd>
+
+<p>A recipe book for programming with CPAN.pm</p>
+
+</dd>
+<dt id="CPAN::Debug"><a class="permalink" href="perlmodlib.html#CPAN::Debug">#</a><a id="CPAN3"></a>CPAN::Debug</dt>
+<dd>
+
+<p>Internal debugging for CPAN.pm</p>
+
+</dd>
+<dt id="CPAN::Distroprefs"><a class="permalink" href="perlmodlib.html#CPAN::Distroprefs">#</a><a id="CPAN4"></a>CPAN::Distroprefs</dt>
+<dd>
+
+<p>Read and match distroprefs</p>
+
+</dd>
+<dt id="CPAN::FirstTime"><a class="permalink" href="perlmodlib.html#CPAN::FirstTime">#</a><a id="CPAN5"></a>CPAN::FirstTime</dt>
+<dd>
+
+<p>Utility for CPAN::Config file Initialization</p>
+
+</dd>
+<dt id="CPAN::HandleConfig"><a class="permalink" href="perlmodlib.html#CPAN::HandleConfig">#</a><a id="CPAN6"></a>CPAN::HandleConfig</dt>
+<dd>
+
+<p>Internal configuration handling for CPAN.pm</p>
+
+</dd>
+<dt id="CPAN::Kwalify"><a class="permalink" href="perlmodlib.html#CPAN::Kwalify">#</a><a id="CPAN7"></a>CPAN::Kwalify</dt>
+<dd>
+
+<p>Interface between CPAN.pm and Kwalify.pm</p>
+
+</dd>
+<dt id="CPAN::Meta"><a class="permalink" href="perlmodlib.html#CPAN::Meta">#</a><a id="CPAN8"></a>CPAN::Meta</dt>
+<dd>
+
+<p>The distribution metadata for a CPAN dist</p>
+
+</dd>
+<dt id="CPAN::Meta::Converter"><a class="permalink" href="perlmodlib.html#CPAN::Meta::Converter">#</a><a id="CPAN9"></a>CPAN::Meta::Converter</dt>
+<dd>
+
+<p>Convert CPAN distribution metadata structures</p>
+
+</dd>
+<dt id="CPAN::Meta::Feature"><a class="permalink" href="perlmodlib.html#CPAN::Meta::Feature">#</a><a id="CPAN10"></a>CPAN::Meta::Feature</dt>
+<dd>
+
+<p>An optional feature provided by a CPAN distribution</p>
+
+</dd>
+<dt id="CPAN::Meta::History"><a class="permalink" href="perlmodlib.html#CPAN::Meta::History">#</a><a id="CPAN11"></a>CPAN::Meta::History</dt>
+<dd>
+
+<p>History of CPAN Meta Spec changes</p>
+
+</dd>
+<dt id="CPAN::Meta::History::Meta_1_0"><a class="permalink" href="perlmodlib.html#CPAN::Meta::History::Meta_1_0">#</a><a id="CPAN12"></a>CPAN::Meta::History::Meta_1_0</dt>
+<dd>
+
+<p>Version 1.0 metadata specification for META.yml</p>
+
+</dd>
+<dt id="CPAN::Meta::History::Meta_1_1"><a class="permalink" href="perlmodlib.html#CPAN::Meta::History::Meta_1_1">#</a><a id="CPAN13"></a>CPAN::Meta::History::Meta_1_1</dt>
+<dd>
+
+<p>Version 1.1 metadata specification for META.yml</p>
+
+</dd>
+<dt id="CPAN::Meta::History::Meta_1_2"><a class="permalink" href="perlmodlib.html#CPAN::Meta::History::Meta_1_2">#</a><a id="CPAN14"></a>CPAN::Meta::History::Meta_1_2</dt>
+<dd>
+
+<p>Version 1.2 metadata specification for META.yml</p>
+
+</dd>
+<dt id="CPAN::Meta::History::Meta_1_3"><a class="permalink" href="perlmodlib.html#CPAN::Meta::History::Meta_1_3">#</a><a id="CPAN15"></a>CPAN::Meta::History::Meta_1_3</dt>
+<dd>
+
+<p>Version 1.3 metadata specification for META.yml</p>
+
+</dd>
+<dt id="CPAN::Meta::History::Meta_1_4"><a class="permalink" href="perlmodlib.html#CPAN::Meta::History::Meta_1_4">#</a><a id="CPAN16"></a>CPAN::Meta::History::Meta_1_4</dt>
+<dd>
+
+<p>Version 1.4 metadata specification for META.yml</p>
+
+</dd>
+<dt id="CPAN::Meta::Merge"><a class="permalink" href="perlmodlib.html#CPAN::Meta::Merge">#</a><a id="CPAN17"></a>CPAN::Meta::Merge</dt>
+<dd>
+
+<p>Merging CPAN Meta fragments</p>
+
+</dd>
+<dt id="CPAN::Meta::Prereqs"><a class="permalink" href="perlmodlib.html#CPAN::Meta::Prereqs">#</a><a id="CPAN18"></a>CPAN::Meta::Prereqs</dt>
+<dd>
+
+<p>A set of distribution prerequisites by phase and type</p>
+
+</dd>
+<dt id="CPAN::Meta::Requirements"><a class="permalink" href="perlmodlib.html#CPAN::Meta::Requirements">#</a><a id="CPAN19"></a>CPAN::Meta::Requirements</dt>
+<dd>
+
+<p>A set of version requirements for a CPAN dist</p>
+
+</dd>
+<dt id="CPAN::Meta::Spec"><a class="permalink" href="perlmodlib.html#CPAN::Meta::Spec">#</a><a id="CPAN20"></a>CPAN::Meta::Spec</dt>
+<dd>
+
+<p>Specification for CPAN distribution metadata</p>
+
+</dd>
+<dt id="CPAN::Meta::Validator"><a class="permalink" href="perlmodlib.html#CPAN::Meta::Validator">#</a><a id="CPAN21"></a>CPAN::Meta::Validator</dt>
+<dd>
+
+<p>Validate CPAN distribution metadata structures</p>
+
+</dd>
+<dt id="CPAN::Meta::YAML"><a class="permalink" href="perlmodlib.html#CPAN::Meta::YAML">#</a><a id="CPAN22"></a>CPAN::Meta::YAML</dt>
+<dd>
+
+<p>Read and write a subset of YAML for CPAN Meta files</p>
+
+</dd>
+<dt id="CPAN::Nox"><a class="permalink" href="perlmodlib.html#CPAN::Nox">#</a><a id="CPAN23"></a>CPAN::Nox</dt>
+<dd>
+
+<p>Wrapper around CPAN.pm without using any XS module</p>
+
+</dd>
+<dt id="CPAN::Plugin"><a class="permalink" href="perlmodlib.html#CPAN::Plugin">#</a><a id="CPAN24"></a>CPAN::Plugin</dt>
+<dd>
+
+<p>Base class for CPAN shell extensions</p>
+
+</dd>
+<dt id="CPAN::Plugin::Specfile"><a class="permalink" href="perlmodlib.html#CPAN::Plugin::Specfile">#</a><a id="CPAN25"></a>CPAN::Plugin::Specfile</dt>
+<dd>
+
+<p>Proof of concept implementation of a trivial CPAN::Plugin</p>
+
+</dd>
+<dt id="CPAN::Queue"><a class="permalink" href="perlmodlib.html#CPAN::Queue">#</a><a id="CPAN26"></a>CPAN::Queue</dt>
+<dd>
+
+<p>Internal queue support for CPAN.pm</p>
+
+</dd>
+<dt id="CPAN::Tarzip"><a class="permalink" href="perlmodlib.html#CPAN::Tarzip">#</a><a id="CPAN27"></a>CPAN::Tarzip</dt>
+<dd>
+
+<p>Internal handling of tar archives for CPAN.pm</p>
+
+</dd>
+<dt id="CPAN::Version"><a class="permalink" href="perlmodlib.html#CPAN::Version">#</a><a id="CPAN28"></a>CPAN::Version</dt>
+<dd>
+
+<p>Utility functions to compare CPAN versions</p>
+
+</dd>
+<dt id="Carp"><a class="permalink" href="perlmodlib.html#Carp">#</a>Carp</dt>
+<dd>
+
+<p>Alternative warn and die for modules</p>
+
+</dd>
+<dt id="Class::Struct"><a class="permalink" href="perlmodlib.html#Class::Struct">#</a><a id="Class"></a>Class::Struct</dt>
+<dd>
+
+<p>Declare struct-like datatypes as Perl classes</p>
+
+</dd>
+<dt id="Compress::Raw::Bzip2"><a class="permalink" href="perlmodlib.html#Compress::Raw::Bzip2">#</a><a id="Compress"></a>Compress::Raw::Bzip2</dt>
+<dd>
+
+<p>Low-Level Interface to bzip2 compression library</p>
+
+</dd>
+<dt id="Compress::Raw::Zlib"><a class="permalink" href="perlmodlib.html#Compress::Raw::Zlib">#</a><a id="Compress1"></a>Compress::Raw::Zlib</dt>
+<dd>
+
+<p>Low-Level Interface to zlib compression library</p>
+
+</dd>
+<dt id="Compress::Zlib"><a class="permalink" href="perlmodlib.html#Compress::Zlib">#</a><a id="Compress2"></a>Compress::Zlib</dt>
+<dd>
+
+<p>Interface to zlib compression library</p>
+
+</dd>
+<dt id="Config"><a class="permalink" href="perlmodlib.html#Config">#</a>Config</dt>
+<dd>
+
+<p>Access Perl configuration information</p>
+
+</dd>
+<dt id="Config::Extensions"><a class="permalink" href="perlmodlib.html#Config::Extensions">#</a><a id="Config1"></a>Config::Extensions</dt>
+<dd>
+
+<p>Hash lookup of which core extensions were built.</p>
+
+</dd>
+<dt id="Config::Perl::V"><a class="permalink" href="perlmodlib.html#Config::Perl::V">#</a><a id="Config2"></a>Config::Perl::V</dt>
+<dd>
+
+<p>Structured data retrieval of perl -V output</p>
+
+</dd>
+<dt id="Cwd"><a class="permalink" href="perlmodlib.html#Cwd">#</a>Cwd</dt>
+<dd>
+
+<p>Get pathname of current working directory</p>
+
+</dd>
+<dt id="DB"><a class="permalink" href="perlmodlib.html#DB">#</a>DB</dt>
+<dd>
+
+<p>Programmatic interface to the Perl debugging API</p>
+
+</dd>
+<dt id="DBM_Filter"><a class="permalink" href="perlmodlib.html#DBM_Filter">#</a>DBM_Filter</dt>
+<dd>
+
+<p>Filter DBM keys/values</p>
+
+</dd>
+<dt id="DBM_Filter::compress"><a class="permalink" href="perlmodlib.html#DBM_Filter::compress">#</a><a id="DBM_Filter1"></a>DBM_Filter::compress</dt>
+<dd>
+
+<p>Filter for DBM_Filter</p>
+
+</dd>
+<dt id="DBM_Filter::encode"><a class="permalink" href="perlmodlib.html#DBM_Filter::encode">#</a><a id="DBM_Filter2"></a>DBM_Filter::encode</dt>
+<dd>
+
+<p>Filter for DBM_Filter</p>
+
+</dd>
+<dt id="DBM_Filter::int32"><a class="permalink" href="perlmodlib.html#DBM_Filter::int32">#</a><a id="DBM_Filter3"></a>DBM_Filter::int32</dt>
+<dd>
+
+<p>Filter for DBM_Filter</p>
+
+</dd>
+<dt id="DBM_Filter::null"><a class="permalink" href="perlmodlib.html#DBM_Filter::null">#</a><a id="DBM_Filter4"></a>DBM_Filter::null</dt>
+<dd>
+
+<p>Filter for DBM_Filter</p>
+
+</dd>
+<dt id="DBM_Filter::utf8"><a class="permalink" href="perlmodlib.html#DBM_Filter::utf8">#</a><a id="DBM_Filter5"></a>DBM_Filter::utf8</dt>
+<dd>
+
+<p>Filter for DBM_Filter</p>
+
+</dd>
+<dt id="DB_File"><a class="permalink" href="perlmodlib.html#DB_File">#</a>DB_File</dt>
+<dd>
+
+<p>Perl5 access to Berkeley DB version 1.x</p>
+
+</dd>
+<dt id="Data::Dumper"><a class="permalink" href="perlmodlib.html#Data::Dumper">#</a><a id="Data"></a>Data::Dumper</dt>
+<dd>
+
+<p>Stringified perl data structures, suitable for both printing and <code>eval</code></p>
+
+</dd>
+<dt id="Devel::PPPort"><a class="permalink" href="perlmodlib.html#Devel::PPPort">#</a><a id="Devel"></a>Devel::PPPort</dt>
+<dd>
+
+<p>Perl/Pollution/Portability</p>
+
+</dd>
+<dt id="Devel::Peek"><a class="permalink" href="perlmodlib.html#Devel::Peek">#</a><a id="Devel1"></a>Devel::Peek</dt>
+<dd>
+
+<p>A data debugging tool for the XS programmer</p>
+
+</dd>
+<dt id="Devel::SelfStubber"><a class="permalink" href="perlmodlib.html#Devel::SelfStubber">#</a><a id="Devel2"></a>Devel::SelfStubber</dt>
+<dd>
+
+<p>Generate stubs for a SelfLoading module</p>
+
+</dd>
+<dt id="Digest"><a class="permalink" href="perlmodlib.html#Digest">#</a>Digest</dt>
+<dd>
+
+<p>Modules that calculate message digests</p>
+
+</dd>
+<dt id="Digest::MD5"><a class="permalink" href="perlmodlib.html#Digest::MD5">#</a><a id="Digest1"></a>Digest::MD5</dt>
+<dd>
+
+<p>Perl interface to the MD5 Algorithm</p>
+
+</dd>
+<dt id="Digest::SHA"><a class="permalink" href="perlmodlib.html#Digest::SHA">#</a><a id="Digest2"></a>Digest::SHA</dt>
+<dd>
+
+<p>Perl extension for SHA-1/224/256/384/512</p>
+
+</dd>
+<dt id="Digest::base"><a class="permalink" href="perlmodlib.html#Digest::base">#</a><a id="Digest3"></a>Digest::base</dt>
+<dd>
+
+<p>Digest base class</p>
+
+</dd>
+<dt id="Digest::file"><a class="permalink" href="perlmodlib.html#Digest::file">#</a><a id="Digest4"></a>Digest::file</dt>
+<dd>
+
+<p>Calculate digests of files</p>
+
+</dd>
+<dt id="DirHandle"><a class="permalink" href="perlmodlib.html#DirHandle">#</a>DirHandle</dt>
+<dd>
+
+<p>(obsolete) supply object methods for directory handles</p>
+
+</dd>
+<dt id="Dumpvalue"><a class="permalink" href="perlmodlib.html#Dumpvalue">#</a>Dumpvalue</dt>
+<dd>
+
+<p>Provides screen dump of Perl data.</p>
+
+</dd>
+<dt id="DynaLoader"><a class="permalink" href="perlmodlib.html#DynaLoader">#</a>DynaLoader</dt>
+<dd>
+
+<p>Dynamically load C libraries into Perl code</p>
+
+</dd>
+<dt id="Encode"><a class="permalink" href="perlmodlib.html#Encode">#</a>Encode</dt>
+<dd>
+
+<p>Character encodings in Perl</p>
+
+</dd>
+<dt id="Encode::Alias"><a class="permalink" href="perlmodlib.html#Encode::Alias">#</a><a id="Encode1"></a>Encode::Alias</dt>
+<dd>
+
+<p>Alias definitions to encodings</p>
+
+</dd>
+<dt id="Encode::Byte"><a class="permalink" href="perlmodlib.html#Encode::Byte">#</a><a id="Encode2"></a>Encode::Byte</dt>
+<dd>
+
+<p>Single Byte Encodings</p>
+
+</dd>
+<dt id="Encode::CJKConstants"><a class="permalink" href="perlmodlib.html#Encode::CJKConstants">#</a><a id="Encode3"></a>Encode::CJKConstants</dt>
+<dd>
+
+<p>Internally used by Encode::??::ISO_2022_*</p>
+
+</dd>
+<dt id="Encode::CN"><a class="permalink" href="perlmodlib.html#Encode::CN">#</a><a id="Encode4"></a>Encode::CN</dt>
+<dd>
+
+<p>China-based Chinese Encodings</p>
+
+</dd>
+<dt id="Encode::CN::HZ"><a class="permalink" href="perlmodlib.html#Encode::CN::HZ">#</a><a id="Encode5"></a>Encode::CN::HZ</dt>
+<dd>
+
+<p>Internally used by Encode::CN</p>
+
+</dd>
+<dt id="Encode::Config"><a class="permalink" href="perlmodlib.html#Encode::Config">#</a><a id="Encode6"></a>Encode::Config</dt>
+<dd>
+
+<p>Internally used by Encode</p>
+
+</dd>
+<dt id="Encode::EBCDIC"><a class="permalink" href="perlmodlib.html#Encode::EBCDIC">#</a><a id="Encode7"></a>Encode::EBCDIC</dt>
+<dd>
+
+<p>EBCDIC Encodings</p>
+
+</dd>
+<dt id="Encode::Encoder"><a class="permalink" href="perlmodlib.html#Encode::Encoder">#</a><a id="Encode8"></a>Encode::Encoder</dt>
+<dd>
+
+<p>Object Oriented Encoder</p>
+
+</dd>
+<dt id="Encode::Encoding"><a class="permalink" href="perlmodlib.html#Encode::Encoding">#</a><a id="Encode9"></a>Encode::Encoding</dt>
+<dd>
+
+<p>Encode Implementation Base Class</p>
+
+</dd>
+<dt id="Encode::GSM0338"><a class="permalink" href="perlmodlib.html#Encode::GSM0338">#</a><a id="Encode10"></a>Encode::GSM0338</dt>
+<dd>
+
+<p>ETSI GSM 03.38 Encoding</p>
+
+</dd>
+<dt id="Encode::Guess"><a class="permalink" href="perlmodlib.html#Encode::Guess">#</a><a id="Encode11"></a>Encode::Guess</dt>
+<dd>
+
+<p>Guesses encoding from data</p>
+
+</dd>
+<dt id="Encode::JP"><a class="permalink" href="perlmodlib.html#Encode::JP">#</a><a id="Encode12"></a>Encode::JP</dt>
+<dd>
+
+<p>Japanese Encodings</p>
+
+</dd>
+<dt id="Encode::JP::H2Z"><a class="permalink" href="perlmodlib.html#Encode::JP::H2Z">#</a><a id="Encode13"></a>Encode::JP::H2Z</dt>
+<dd>
+
+<p>Internally used by Encode::JP::2022_JP*</p>
+
+</dd>
+<dt id="Encode::JP::JIS7"><a class="permalink" href="perlmodlib.html#Encode::JP::JIS7">#</a><a id="Encode14"></a>Encode::JP::JIS7</dt>
+<dd>
+
+<p>Internally used by Encode::JP</p>
+
+</dd>
+<dt id="Encode::KR"><a class="permalink" href="perlmodlib.html#Encode::KR">#</a><a id="Encode15"></a>Encode::KR</dt>
+<dd>
+
+<p>Korean Encodings</p>
+
+</dd>
+<dt id="Encode::KR::2022_KR"><a class="permalink" href="perlmodlib.html#Encode::KR::2022_KR">#</a><a id="Encode16"></a>Encode::KR::2022_KR</dt>
+<dd>
+
+<p>Internally used by Encode::KR</p>
+
+</dd>
+<dt id="Encode::MIME::Header"><a class="permalink" href="perlmodlib.html#Encode::MIME::Header">#</a><a id="Encode17"></a>Encode::MIME::Header</dt>
+<dd>
+
+<p>MIME encoding for an unstructured email header</p>
+
+</dd>
+<dt id="Encode::MIME::Name"><a class="permalink" href="perlmodlib.html#Encode::MIME::Name">#</a><a id="Encode18"></a>Encode::MIME::Name</dt>
+<dd>
+
+<p>Internally used by Encode</p>
+
+</dd>
+<dt id="Encode::PerlIO"><a class="permalink" href="perlmodlib.html#Encode::PerlIO">#</a><a id="Encode19"></a>Encode::PerlIO</dt>
+<dd>
+
+<p>A detailed document on Encode and PerlIO</p>
+
+</dd>
+<dt id="Encode::Supported"><a class="permalink" href="perlmodlib.html#Encode::Supported">#</a><a id="Encode20"></a>Encode::Supported</dt>
+<dd>
+
+<p>Encodings supported by Encode</p>
+
+</dd>
+<dt id="Encode::Symbol"><a class="permalink" href="perlmodlib.html#Encode::Symbol">#</a><a id="Encode21"></a>Encode::Symbol</dt>
+<dd>
+
+<p>Symbol Encodings</p>
+
+</dd>
+<dt id="Encode::TW"><a class="permalink" href="perlmodlib.html#Encode::TW">#</a><a id="Encode22"></a>Encode::TW</dt>
+<dd>
+
+<p>Taiwan-based Chinese Encodings</p>
+
+</dd>
+<dt id="Encode::Unicode"><a class="permalink" href="perlmodlib.html#Encode::Unicode">#</a><a id="Encode23"></a>Encode::Unicode</dt>
+<dd>
+
+<p>Various Unicode Transformation Formats</p>
+
+</dd>
+<dt id="Encode::Unicode::UTF7"><a class="permalink" href="perlmodlib.html#Encode::Unicode::UTF7">#</a><a id="Encode24"></a>Encode::Unicode::UTF7</dt>
+<dd>
+
+<p>UTF-7 encoding</p>
+
+</dd>
+<dt id="English"><a class="permalink" href="perlmodlib.html#English">#</a>English</dt>
+<dd>
+
+<p>Use nice English (or awk) names for ugly punctuation variables</p>
+
+</dd>
+<dt id="Env"><a class="permalink" href="perlmodlib.html#Env">#</a>Env</dt>
+<dd>
+
+<p>Perl module that imports environment variables as scalars or arrays</p>
+
+</dd>
+<dt id="Errno"><a class="permalink" href="perlmodlib.html#Errno">#</a>Errno</dt>
+<dd>
+
+<p>System errno constants</p>
+
+</dd>
+<dt id="Exporter"><a class="permalink" href="perlmodlib.html#Exporter">#</a>Exporter</dt>
+<dd>
+
+<p>Implements default import method for modules</p>
+
+</dd>
+<dt id="Exporter::Heavy"><a class="permalink" href="perlmodlib.html#Exporter::Heavy">#</a><a id="Exporter1"></a>Exporter::Heavy</dt>
+<dd>
+
+<p>Exporter guts</p>
+
+</dd>
+<dt id="ExtUtils::CBuilder"><a class="permalink" href="perlmodlib.html#ExtUtils::CBuilder">#</a><a id="ExtUtils"></a>ExtUtils::CBuilder</dt>
+<dd>
+
+<p>Compile and link C code for Perl modules</p>
+
+</dd>
+<dt id="ExtUtils::CBuilder::Platform::Windows"><a class="permalink" href="perlmodlib.html#ExtUtils::CBuilder::Platform::Windows">#</a><a id="ExtUtils1"></a>ExtUtils::CBuilder::Platform::Windows</dt>
+<dd>
+
+<p>Builder class for Windows platforms</p>
+
+</dd>
+<dt id="ExtUtils::Command"><a class="permalink" href="perlmodlib.html#ExtUtils::Command">#</a><a id="ExtUtils2"></a>ExtUtils::Command</dt>
+<dd>
+
+<p>Utilities to replace common UNIX commands in Makefiles etc.</p>
+
+</dd>
+<dt id="ExtUtils::Command::MM"><a class="permalink" href="perlmodlib.html#ExtUtils::Command::MM">#</a><a id="ExtUtils3"></a>ExtUtils::Command::MM</dt>
+<dd>
+
+<p>Commands for the MM&#39;s to use in Makefiles</p>
+
+</dd>
+<dt id="ExtUtils::Constant"><a class="permalink" href="perlmodlib.html#ExtUtils::Constant">#</a><a id="ExtUtils4"></a>ExtUtils::Constant</dt>
+<dd>
+
+<p>Generate XS code to import C header constants</p>
+
+</dd>
+<dt id="ExtUtils::Constant::Base"><a class="permalink" href="perlmodlib.html#ExtUtils::Constant::Base">#</a><a id="ExtUtils5"></a>ExtUtils::Constant::Base</dt>
+<dd>
+
+<p>Base class for ExtUtils::Constant objects</p>
+
+</dd>
+<dt id="ExtUtils::Constant::Utils"><a class="permalink" href="perlmodlib.html#ExtUtils::Constant::Utils">#</a><a id="ExtUtils6"></a>ExtUtils::Constant::Utils</dt>
+<dd>
+
+<p>Helper functions for ExtUtils::Constant</p>
+
+</dd>
+<dt id="ExtUtils::Constant::XS"><a class="permalink" href="perlmodlib.html#ExtUtils::Constant::XS">#</a><a id="ExtUtils7"></a>ExtUtils::Constant::XS</dt>
+<dd>
+
+<p>Generate C code for XS modules&#39; constants.</p>
+
+</dd>
+<dt id="ExtUtils::Embed"><a class="permalink" href="perlmodlib.html#ExtUtils::Embed">#</a><a id="ExtUtils8"></a>ExtUtils::Embed</dt>
+<dd>
+
+<p>Utilities for embedding Perl in C/C++ applications</p>
+
+</dd>
+<dt id="ExtUtils::Install"><a class="permalink" href="perlmodlib.html#ExtUtils::Install">#</a><a id="ExtUtils9"></a>ExtUtils::Install</dt>
+<dd>
+
+<p>Install files from here to there</p>
+
+</dd>
+<dt id="ExtUtils::Installed"><a class="permalink" href="perlmodlib.html#ExtUtils::Installed">#</a><a id="ExtUtils10"></a>ExtUtils::Installed</dt>
+<dd>
+
+<p>Inventory management of installed modules</p>
+
+</dd>
+<dt id="ExtUtils::Liblist"><a class="permalink" href="perlmodlib.html#ExtUtils::Liblist">#</a><a id="ExtUtils11"></a>ExtUtils::Liblist</dt>
+<dd>
+
+<p>Determine libraries to use and how to use them</p>
+
+</dd>
+<dt id="ExtUtils::MM"><a class="permalink" href="perlmodlib.html#ExtUtils::MM">#</a><a id="ExtUtils12"></a>ExtUtils::MM</dt>
+<dd>
+
+<p>OS adjusted ExtUtils::MakeMaker subclass</p>
+
+</dd>
+<dt id="ExtUtils::MM_AIX"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_AIX">#</a><a id="ExtUtils13"></a>ExtUtils::MM_AIX</dt>
+<dd>
+
+<p>AIX specific subclass of ExtUtils::MM_Unix</p>
+
+</dd>
+<dt id="ExtUtils::MM_Any"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_Any">#</a><a id="ExtUtils14"></a>ExtUtils::MM_Any</dt>
+<dd>
+
+<p>Platform-agnostic MM methods</p>
+
+</dd>
+<dt id="ExtUtils::MM_BeOS"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_BeOS">#</a><a id="ExtUtils15"></a>ExtUtils::MM_BeOS</dt>
+<dd>
+
+<p>Methods to override UN*X behaviour in ExtUtils::MakeMaker</p>
+
+</dd>
+<dt id="ExtUtils::MM_Cygwin"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_Cygwin">#</a><a id="ExtUtils16"></a>ExtUtils::MM_Cygwin</dt>
+<dd>
+
+<p>Methods to override UN*X behaviour in ExtUtils::MakeMaker</p>
+
+</dd>
+<dt id="ExtUtils::MM_DOS"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_DOS">#</a><a id="ExtUtils17"></a>ExtUtils::MM_DOS</dt>
+<dd>
+
+<p>DOS specific subclass of ExtUtils::MM_Unix</p>
+
+</dd>
+<dt id="ExtUtils::MM_Darwin"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_Darwin">#</a><a id="ExtUtils18"></a>ExtUtils::MM_Darwin</dt>
+<dd>
+
+<p>Special behaviors for OS X</p>
+
+</dd>
+<dt id="ExtUtils::MM_MacOS"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_MacOS">#</a><a id="ExtUtils19"></a>ExtUtils::MM_MacOS</dt>
+<dd>
+
+<p>Once produced Makefiles for MacOS Classic</p>
+
+</dd>
+<dt id="ExtUtils::MM_NW5"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_NW5">#</a><a id="ExtUtils20"></a>ExtUtils::MM_NW5</dt>
+<dd>
+
+<p>Methods to override UN*X behaviour in ExtUtils::MakeMaker</p>
+
+</dd>
+<dt id="ExtUtils::MM_OS2"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_OS2">#</a><a id="ExtUtils21"></a>ExtUtils::MM_OS2</dt>
+<dd>
+
+<p>Methods to override UN*X behaviour in ExtUtils::MakeMaker</p>
+
+</dd>
+<dt id="ExtUtils::MM_OS390"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_OS390">#</a><a id="ExtUtils22"></a>ExtUtils::MM_OS390</dt>
+<dd>
+
+<p>OS390 specific subclass of ExtUtils::MM_Unix</p>
+
+</dd>
+<dt id="ExtUtils::MM_QNX"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_QNX">#</a><a id="ExtUtils23"></a>ExtUtils::MM_QNX</dt>
+<dd>
+
+<p>QNX specific subclass of ExtUtils::MM_Unix</p>
+
+</dd>
+<dt id="ExtUtils::MM_UWIN"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_UWIN">#</a><a id="ExtUtils24"></a>ExtUtils::MM_UWIN</dt>
+<dd>
+
+<p>U/WIN specific subclass of ExtUtils::MM_Unix</p>
+
+</dd>
+<dt id="ExtUtils::MM_Unix"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_Unix">#</a><a id="ExtUtils25"></a>ExtUtils::MM_Unix</dt>
+<dd>
+
+<p>Methods used by ExtUtils::MakeMaker</p>
+
+</dd>
+<dt id="ExtUtils::MM_VMS"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_VMS">#</a><a id="ExtUtils26"></a>ExtUtils::MM_VMS</dt>
+<dd>
+
+<p>Methods to override UN*X behaviour in ExtUtils::MakeMaker</p>
+
+</dd>
+<dt id="ExtUtils::MM_VOS"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_VOS">#</a><a id="ExtUtils27"></a>ExtUtils::MM_VOS</dt>
+<dd>
+
+<p>VOS specific subclass of ExtUtils::MM_Unix</p>
+
+</dd>
+<dt id="ExtUtils::MM_Win32"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_Win32">#</a><a id="ExtUtils28"></a>ExtUtils::MM_Win32</dt>
+<dd>
+
+<p>Methods to override UN*X behaviour in ExtUtils::MakeMaker</p>
+
+</dd>
+<dt id="ExtUtils::MM_Win95"><a class="permalink" href="perlmodlib.html#ExtUtils::MM_Win95">#</a><a id="ExtUtils29"></a>ExtUtils::MM_Win95</dt>
+<dd>
+
+<p>Method to customize MakeMaker for Win9X</p>
+
+</dd>
+<dt id="ExtUtils::MY"><a class="permalink" href="perlmodlib.html#ExtUtils::MY">#</a><a id="ExtUtils30"></a>ExtUtils::MY</dt>
+<dd>
+
+<p>ExtUtils::MakeMaker subclass for customization</p>
+
+</dd>
+<dt id="ExtUtils::MakeMaker"><a class="permalink" href="perlmodlib.html#ExtUtils::MakeMaker">#</a><a id="ExtUtils31"></a>ExtUtils::MakeMaker</dt>
+<dd>
+
+<p>Create a module Makefile</p>
+
+</dd>
+<dt id="ExtUtils::MakeMaker::Config"><a class="permalink" href="perlmodlib.html#ExtUtils::MakeMaker::Config">#</a><a id="ExtUtils32"></a>ExtUtils::MakeMaker::Config</dt>
+<dd>
+
+<p>Wrapper around Config.pm</p>
+
+</dd>
+<dt id="ExtUtils::MakeMaker::FAQ"><a class="permalink" href="perlmodlib.html#ExtUtils::MakeMaker::FAQ">#</a><a id="ExtUtils33"></a>ExtUtils::MakeMaker::FAQ</dt>
+<dd>
+
+<p>Frequently Asked Questions About MakeMaker</p>
+
+</dd>
+<dt id="ExtUtils::MakeMaker::Locale"><a class="permalink" href="perlmodlib.html#ExtUtils::MakeMaker::Locale">#</a><a id="ExtUtils34"></a>ExtUtils::MakeMaker::Locale</dt>
+<dd>
+
+<p>Bundled Encode::Locale</p>
+
+</dd>
+<dt id="ExtUtils::MakeMaker::Tutorial"><a class="permalink" href="perlmodlib.html#ExtUtils::MakeMaker::Tutorial">#</a><a id="ExtUtils35"></a>ExtUtils::MakeMaker::Tutorial</dt>
+<dd>
+
+<p>Writing a module with MakeMaker</p>
+
+</dd>
+<dt id="ExtUtils::Manifest"><a class="permalink" href="perlmodlib.html#ExtUtils::Manifest">#</a><a id="ExtUtils36"></a>ExtUtils::Manifest</dt>
+<dd>
+
+<p>Utilities to write and check a MANIFEST file</p>
+
+</dd>
+<dt id="ExtUtils::Miniperl"><a class="permalink" href="perlmodlib.html#ExtUtils::Miniperl">#</a><a id="ExtUtils37"></a>ExtUtils::Miniperl</dt>
+<dd>
+
+<p>Write the C code for miniperlmain.c and perlmain.c</p>
+
+</dd>
+<dt id="ExtUtils::Mkbootstrap"><a class="permalink" href="perlmodlib.html#ExtUtils::Mkbootstrap">#</a><a id="ExtUtils38"></a>ExtUtils::Mkbootstrap</dt>
+<dd>
+
+<p>Make a bootstrap file for use by DynaLoader</p>
+
+</dd>
+<dt id="ExtUtils::Mksymlists"><a class="permalink" href="perlmodlib.html#ExtUtils::Mksymlists">#</a><a id="ExtUtils39"></a>ExtUtils::Mksymlists</dt>
+<dd>
+
+<p>Write linker options files for dynamic extension</p>
+
+</dd>
+<dt id="ExtUtils::PL2Bat"><a class="permalink" href="perlmodlib.html#ExtUtils::PL2Bat">#</a><a id="ExtUtils40"></a>ExtUtils::PL2Bat</dt>
+<dd>
+
+<p>Batch file creation to run perl scripts on Windows</p>
+
+</dd>
+<dt id="ExtUtils::Packlist"><a class="permalink" href="perlmodlib.html#ExtUtils::Packlist">#</a><a id="ExtUtils41"></a>ExtUtils::Packlist</dt>
+<dd>
+
+<p>Manage .packlist files</p>
+
+</dd>
+<dt id="ExtUtils::ParseXS"><a class="permalink" href="perlmodlib.html#ExtUtils::ParseXS">#</a><a id="ExtUtils42"></a>ExtUtils::ParseXS</dt>
+<dd>
+
+<p>Converts Perl XS code into C code</p>
+
+</dd>
+<dt id="ExtUtils::ParseXS::Constants"><a class="permalink" href="perlmodlib.html#ExtUtils::ParseXS::Constants">#</a><a id="ExtUtils43"></a>ExtUtils::ParseXS::Constants</dt>
+<dd>
+
+<p>Initialization values for some globals</p>
+
+</dd>
+<dt id="ExtUtils::ParseXS::Eval"><a class="permalink" href="perlmodlib.html#ExtUtils::ParseXS::Eval">#</a><a id="ExtUtils44"></a>ExtUtils::ParseXS::Eval</dt>
+<dd>
+
+<p>Clean package to evaluate code in</p>
+
+</dd>
+<dt id="ExtUtils::ParseXS::Utilities"><a class="permalink" href="perlmodlib.html#ExtUtils::ParseXS::Utilities">#</a><a id="ExtUtils45"></a>ExtUtils::ParseXS::Utilities</dt>
+<dd>
+
+<p>Subroutines used with ExtUtils::ParseXS</p>
+
+</dd>
+<dt id="ExtUtils::Typemaps"><a class="permalink" href="perlmodlib.html#ExtUtils::Typemaps">#</a><a id="ExtUtils46"></a>ExtUtils::Typemaps</dt>
+<dd>
+
+<p>Read/Write/Modify Perl/XS typemap files</p>
+
+</dd>
+<dt id="ExtUtils::Typemaps::Cmd"><a class="permalink" href="perlmodlib.html#ExtUtils::Typemaps::Cmd">#</a><a id="ExtUtils47"></a>ExtUtils::Typemaps::Cmd</dt>
+<dd>
+
+<p>Quick commands for handling typemaps</p>
+
+</dd>
+<dt id="ExtUtils::Typemaps::InputMap"><a class="permalink" href="perlmodlib.html#ExtUtils::Typemaps::InputMap">#</a><a id="ExtUtils48"></a>ExtUtils::Typemaps::InputMap</dt>
+<dd>
+
+<p>Entry in the INPUT section of a typemap</p>
+
+</dd>
+<dt id="ExtUtils::Typemaps::OutputMap"><a class="permalink" href="perlmodlib.html#ExtUtils::Typemaps::OutputMap">#</a><a id="ExtUtils49"></a>ExtUtils::Typemaps::OutputMap</dt>
+<dd>
+
+<p>Entry in the OUTPUT section of a typemap</p>
+
+</dd>
+<dt id="ExtUtils::Typemaps::Type"><a class="permalink" href="perlmodlib.html#ExtUtils::Typemaps::Type">#</a><a id="ExtUtils50"></a>ExtUtils::Typemaps::Type</dt>
+<dd>
+
+<p>Entry in the TYPEMAP section of a typemap</p>
+
+</dd>
+<dt id="ExtUtils::XSSymSet"><a class="permalink" href="perlmodlib.html#ExtUtils::XSSymSet">#</a><a id="ExtUtils51"></a>ExtUtils::XSSymSet</dt>
+<dd>
+
+<p>Keep sets of symbol names palatable to the VMS linker</p>
+
+</dd>
+<dt id="ExtUtils::testlib"><a class="permalink" href="perlmodlib.html#ExtUtils::testlib">#</a><a id="ExtUtils52"></a>ExtUtils::testlib</dt>
+<dd>
+
+<p>Add blib/* directories to @INC</p>
+
+</dd>
+<dt id="Fatal"><a class="permalink" href="perlmodlib.html#Fatal">#</a>Fatal</dt>
+<dd>
+
+<p>Replace functions with equivalents which succeed or die</p>
+
+</dd>
+<dt id="Fcntl"><a class="permalink" href="perlmodlib.html#Fcntl">#</a>Fcntl</dt>
+<dd>
+
+<p>Load the C Fcntl.h defines</p>
+
+</dd>
+<dt id="File::Basename"><a class="permalink" href="perlmodlib.html#File::Basename">#</a><a id="File"></a>File::Basename</dt>
+<dd>
+
+<p>Parse file paths into directory, filename and suffix.</p>
+
+</dd>
+<dt id="File::Compare"><a class="permalink" href="perlmodlib.html#File::Compare">#</a><a id="File1"></a>File::Compare</dt>
+<dd>
+
+<p>Compare files or filehandles</p>
+
+</dd>
+<dt id="File::Copy"><a class="permalink" href="perlmodlib.html#File::Copy">#</a><a id="File2"></a>File::Copy</dt>
+<dd>
+
+<p>Copy files or filehandles</p>
+
+</dd>
+<dt id="File::DosGlob"><a class="permalink" href="perlmodlib.html#File::DosGlob">#</a><a id="File3"></a>File::DosGlob</dt>
+<dd>
+
+<p>DOS like globbing and then some</p>
+
+</dd>
+<dt id="File::Fetch"><a class="permalink" href="perlmodlib.html#File::Fetch">#</a><a id="File4"></a>File::Fetch</dt>
+<dd>
+
+<p>A generic file fetching mechanism</p>
+
+</dd>
+<dt id="File::Find"><a class="permalink" href="perlmodlib.html#File::Find">#</a><a id="File5"></a>File::Find</dt>
+<dd>
+
+<p>Traverse a directory tree.</p>
+
+</dd>
+<dt id="File::Glob"><a class="permalink" href="perlmodlib.html#File::Glob">#</a><a id="File6"></a>File::Glob</dt>
+<dd>
+
+<p>Perl extension for BSD glob routine</p>
+
+</dd>
+<dt id="File::GlobMapper"><a class="permalink" href="perlmodlib.html#File::GlobMapper">#</a><a id="File7"></a>File::GlobMapper</dt>
+<dd>
+
+<p>Extend File Glob to Allow Input and Output Files</p>
+
+</dd>
+<dt id="File::Path"><a class="permalink" href="perlmodlib.html#File::Path">#</a><a id="File8"></a>File::Path</dt>
+<dd>
+
+<p>Create or remove directory trees</p>
+
+</dd>
+<dt id="File::Spec"><a class="permalink" href="perlmodlib.html#File::Spec">#</a><a id="File9"></a>File::Spec</dt>
+<dd>
+
+<p>Portably perform operations on file names</p>
+
+</dd>
+<dt id="File::Spec::AmigaOS"><a class="permalink" href="perlmodlib.html#File::Spec::AmigaOS">#</a><a id="File10"></a>File::Spec::AmigaOS</dt>
+<dd>
+
+<p>File::Spec for AmigaOS</p>
+
+</dd>
+<dt id="File::Spec::Cygwin"><a class="permalink" href="perlmodlib.html#File::Spec::Cygwin">#</a><a id="File11"></a>File::Spec::Cygwin</dt>
+<dd>
+
+<p>Methods for Cygwin file specs</p>
+
+</dd>
+<dt id="File::Spec::Epoc"><a class="permalink" href="perlmodlib.html#File::Spec::Epoc">#</a><a id="File12"></a>File::Spec::Epoc</dt>
+<dd>
+
+<p>Methods for Epoc file specs</p>
+
+</dd>
+<dt id="File::Spec::Functions"><a class="permalink" href="perlmodlib.html#File::Spec::Functions">#</a><a id="File13"></a>File::Spec::Functions</dt>
+<dd>
+
+<p>Portably perform operations on file names</p>
+
+</dd>
+<dt id="File::Spec::Mac"><a class="permalink" href="perlmodlib.html#File::Spec::Mac">#</a><a id="File14"></a>File::Spec::Mac</dt>
+<dd>
+
+<p>File::Spec for Mac OS (Classic)</p>
+
+</dd>
+<dt id="File::Spec::OS2"><a class="permalink" href="perlmodlib.html#File::Spec::OS2">#</a><a id="File15"></a>File::Spec::OS2</dt>
+<dd>
+
+<p>Methods for OS/2 file specs</p>
+
+</dd>
+<dt id="File::Spec::Unix"><a class="permalink" href="perlmodlib.html#File::Spec::Unix">#</a><a id="File16"></a>File::Spec::Unix</dt>
+<dd>
+
+<p>File::Spec for Unix, base for other File::Spec modules</p>
+
+</dd>
+<dt id="File::Spec::VMS"><a class="permalink" href="perlmodlib.html#File::Spec::VMS">#</a><a id="File17"></a>File::Spec::VMS</dt>
+<dd>
+
+<p>Methods for VMS file specs</p>
+
+</dd>
+<dt id="File::Spec::Win32"><a class="permalink" href="perlmodlib.html#File::Spec::Win32">#</a><a id="File18"></a>File::Spec::Win32</dt>
+<dd>
+
+<p>Methods for Win32 file specs</p>
+
+</dd>
+<dt id="File::Temp"><a class="permalink" href="perlmodlib.html#File::Temp">#</a><a id="File19"></a>File::Temp</dt>
+<dd>
+
+<p>Return name and handle of a temporary file safely</p>
+
+</dd>
+<dt id="File::stat"><a class="permalink" href="perlmodlib.html#File::stat">#</a><a id="File20"></a>File::stat</dt>
+<dd>
+
+<p>By-name interface to Perl&#39;s built-in stat() functions</p>
+
+</dd>
+<dt id="FileCache"><a class="permalink" href="perlmodlib.html#FileCache">#</a>FileCache</dt>
+<dd>
+
+<p>Keep more files open than the system permits</p>
+
+</dd>
+<dt id="FileHandle"><a class="permalink" href="perlmodlib.html#FileHandle">#</a>FileHandle</dt>
+<dd>
+
+<p>Supply object methods for filehandles</p>
+
+</dd>
+<dt id="Filter::Simple"><a class="permalink" href="perlmodlib.html#Filter::Simple">#</a><a id="Filter"></a>Filter::Simple</dt>
+<dd>
+
+<p>Simplified source filtering</p>
+
+</dd>
+<dt id="Filter::Util::Call"><a class="permalink" href="perlmodlib.html#Filter::Util::Call">#</a><a id="Filter1"></a>Filter::Util::Call</dt>
+<dd>
+
+<p>Perl Source Filter Utility Module</p>
+
+</dd>
+<dt id="FindBin"><a class="permalink" href="perlmodlib.html#FindBin">#</a>FindBin</dt>
+<dd>
+
+<p>Locate directory of original perl script</p>
+
+</dd>
+<dt id="GDBM_File"><a class="permalink" href="perlmodlib.html#GDBM_File">#</a>GDBM_File</dt>
+<dd>
+
+<p>Perl5 access to the gdbm library.</p>
+
+</dd>
+<dt id="Getopt::Long"><a class="permalink" href="perlmodlib.html#Getopt::Long">#</a><a id="Getopt"></a>Getopt::Long</dt>
+<dd>
+
+<p>Extended processing of command line options</p>
+
+</dd>
+<dt id="Getopt::Std"><a class="permalink" href="perlmodlib.html#Getopt::Std">#</a><a id="Getopt1"></a>Getopt::Std</dt>
+<dd>
+
+<p>Process single-character switches with switch clustering</p>
+
+</dd>
+<dt id="HTTP::Tiny"><a class="permalink" href="perlmodlib.html#HTTP::Tiny">#</a><a id="HTTP"></a>HTTP::Tiny</dt>
+<dd>
+
+<p>A small, simple, correct HTTP/1.1 client</p>
+
+</dd>
+<dt id="Hash::Util"><a class="permalink" href="perlmodlib.html#Hash::Util">#</a><a id="Hash"></a>Hash::Util</dt>
+<dd>
+
+<p>A selection of general-utility hash subroutines</p>
+
+</dd>
+<dt id="Hash::Util::FieldHash"><a class="permalink" href="perlmodlib.html#Hash::Util::FieldHash">#</a><a id="Hash1"></a>Hash::Util::FieldHash</dt>
+<dd>
+
+<p>Support for Inside-Out Classes</p>
+
+</dd>
+<dt id="I18N::Collate"><a class="permalink" href="perlmodlib.html#I18N::Collate">#</a><a id="I18N"></a>I18N::Collate</dt>
+<dd>
+
+<p>Compare 8-bit scalar data according to the current locale</p>
+
+</dd>
+<dt id="I18N::LangTags"><a class="permalink" href="perlmodlib.html#I18N::LangTags">#</a><a id="I18N1"></a>I18N::LangTags</dt>
+<dd>
+
+<p>Functions for dealing with RFC3066-style language tags</p>
+
+</dd>
+<dt id="I18N::LangTags::Detect"><a class="permalink" href="perlmodlib.html#I18N::LangTags::Detect">#</a><a id="I18N2"></a>I18N::LangTags::Detect</dt>
+<dd>
+
+<p>Detect the user&#39;s language preferences</p>
+
+</dd>
+<dt id="I18N::LangTags::List"><a class="permalink" href="perlmodlib.html#I18N::LangTags::List">#</a><a id="I18N3"></a>I18N::LangTags::List</dt>
+<dd>
+
+<p>Tags and names for human languages</p>
+
+</dd>
+<dt id="I18N::Langinfo"><a class="permalink" href="perlmodlib.html#I18N::Langinfo">#</a><a id="I18N4"></a>I18N::Langinfo</dt>
+<dd>
+
+<p>Query locale information</p>
+
+</dd>
+<dt id="IO"><a class="permalink" href="perlmodlib.html#IO">#</a>IO</dt>
+<dd>
+
+<p>Load various IO modules</p>
+
+</dd>
+<dt id="IO::Compress::Base"><a class="permalink" href="perlmodlib.html#IO::Compress::Base">#</a><a id="IO2"></a>IO::Compress::Base</dt>
+<dd>
+
+<p>Base Class for IO::Compress modules</p>
+
+</dd>
+<dt id="IO::Compress::Bzip2"><a class="permalink" href="perlmodlib.html#IO::Compress::Bzip2">#</a><a id="IO3"></a>IO::Compress::Bzip2</dt>
+<dd>
+
+<p>Write bzip2 files/buffers</p>
+
+</dd>
+<dt id="IO::Compress::Deflate"><a class="permalink" href="perlmodlib.html#IO::Compress::Deflate">#</a><a id="IO4"></a>IO::Compress::Deflate</dt>
+<dd>
+
+<p>Write RFC 1950 files/buffers</p>
+
+</dd>
+<dt id="IO::Compress::FAQ"><a class="permalink" href="perlmodlib.html#IO::Compress::FAQ">#</a><a id="IO5"></a>IO::Compress::FAQ</dt>
+<dd>
+
+<p>Frequently Asked Questions about IO::Compress</p>
+
+</dd>
+<dt id="IO::Compress::Gzip"><a class="permalink" href="perlmodlib.html#IO::Compress::Gzip">#</a><a id="IO6"></a>IO::Compress::Gzip</dt>
+<dd>
+
+<p>Write RFC 1952 files/buffers</p>
+
+</dd>
+<dt id="IO::Compress::RawDeflate"><a class="permalink" href="perlmodlib.html#IO::Compress::RawDeflate">#</a><a id="IO7"></a>IO::Compress::RawDeflate</dt>
+<dd>
+
+<p>Write RFC 1951 files/buffers</p>
+
+</dd>
+<dt id="IO::Compress::Zip"><a class="permalink" href="perlmodlib.html#IO::Compress::Zip">#</a><a id="IO8"></a>IO::Compress::Zip</dt>
+<dd>
+
+<p>Write zip files/buffers</p>
+
+</dd>
+<dt id="IO::Dir"><a class="permalink" href="perlmodlib.html#IO::Dir">#</a><a id="IO9"></a>IO::Dir</dt>
+<dd>
+
+<p>Supply object methods for directory handles</p>
+
+</dd>
+<dt id="IO::File"><a class="permalink" href="perlmodlib.html#IO::File">#</a><a id="IO10"></a>IO::File</dt>
+<dd>
+
+<p>Supply object methods for filehandles</p>
+
+</dd>
+<dt id="IO::Handle"><a class="permalink" href="perlmodlib.html#IO::Handle">#</a><a id="IO11"></a>IO::Handle</dt>
+<dd>
+
+<p>Supply object methods for I/O handles</p>
+
+</dd>
+<dt id="IO::Pipe"><a class="permalink" href="perlmodlib.html#IO::Pipe">#</a><a id="IO12"></a>IO::Pipe</dt>
+<dd>
+
+<p>Supply object methods for pipes</p>
+
+</dd>
+<dt id="IO::Poll"><a class="permalink" href="perlmodlib.html#IO::Poll">#</a><a id="IO13"></a>IO::Poll</dt>
+<dd>
+
+<p>Object interface to system poll call</p>
+
+</dd>
+<dt id="IO::Seekable"><a class="permalink" href="perlmodlib.html#IO::Seekable">#</a><a id="IO14"></a>IO::Seekable</dt>
+<dd>
+
+<p>Supply seek based methods for I/O objects</p>
+
+</dd>
+<dt id="IO::Select"><a class="permalink" href="perlmodlib.html#IO::Select">#</a><a id="IO15"></a>IO::Select</dt>
+<dd>
+
+<p>OO interface to the select system call</p>
+
+</dd>
+<dt id="IO::Socket"><a class="permalink" href="perlmodlib.html#IO::Socket">#</a><a id="IO16"></a>IO::Socket</dt>
+<dd>
+
+<p>Object interface to socket communications</p>
+
+</dd>
+<dt id="IO::Socket::INET"><a class="permalink" href="perlmodlib.html#IO::Socket::INET">#</a><a id="IO17"></a>IO::Socket::INET</dt>
+<dd>
+
+<p>Object interface for AF_INET domain sockets</p>
+
+</dd>
+<dt id="IO::Socket::UNIX"><a class="permalink" href="perlmodlib.html#IO::Socket::UNIX">#</a><a id="IO18"></a>IO::Socket::UNIX</dt>
+<dd>
+
+<p>Object interface for AF_UNIX domain sockets</p>
+
+</dd>
+<dt id="IO::Uncompress::AnyInflate"><a class="permalink" href="perlmodlib.html#IO::Uncompress::AnyInflate">#</a><a id="IO19"></a>IO::Uncompress::AnyInflate</dt>
+<dd>
+
+<p>Uncompress zlib-based (zip, gzip) file/buffer</p>
+
+</dd>
+<dt id="IO::Uncompress::AnyUncompress"><a class="permalink" href="perlmodlib.html#IO::Uncompress::AnyUncompress">#</a><a id="IO20"></a>IO::Uncompress::AnyUncompress</dt>
+<dd>
+
+<p>Uncompress gzip, zip, bzip2, zstd, xz, lzma, lzip, lzf or lzop file/buffer</p>
+
+</dd>
+<dt id="IO::Uncompress::Base"><a class="permalink" href="perlmodlib.html#IO::Uncompress::Base">#</a><a id="IO21"></a>IO::Uncompress::Base</dt>
+<dd>
+
+<p>Base Class for IO::Uncompress modules</p>
+
+</dd>
+<dt id="IO::Uncompress::Bunzip2"><a class="permalink" href="perlmodlib.html#IO::Uncompress::Bunzip2">#</a><a id="IO22"></a>IO::Uncompress::Bunzip2</dt>
+<dd>
+
+<p>Read bzip2 files/buffers</p>
+
+</dd>
+<dt id="IO::Uncompress::Gunzip"><a class="permalink" href="perlmodlib.html#IO::Uncompress::Gunzip">#</a><a id="IO23"></a>IO::Uncompress::Gunzip</dt>
+<dd>
+
+<p>Read RFC 1952 files/buffers</p>
+
+</dd>
+<dt id="IO::Uncompress::Inflate"><a class="permalink" href="perlmodlib.html#IO::Uncompress::Inflate">#</a><a id="IO24"></a>IO::Uncompress::Inflate</dt>
+<dd>
+
+<p>Read RFC 1950 files/buffers</p>
+
+</dd>
+<dt id="IO::Uncompress::RawInflate"><a class="permalink" href="perlmodlib.html#IO::Uncompress::RawInflate">#</a><a id="IO25"></a>IO::Uncompress::RawInflate</dt>
+<dd>
+
+<p>Read RFC 1951 files/buffers</p>
+
+</dd>
+<dt id="IO::Uncompress::Unzip"><a class="permalink" href="perlmodlib.html#IO::Uncompress::Unzip">#</a><a id="IO26"></a>IO::Uncompress::Unzip</dt>
+<dd>
+
+<p>Read zip files/buffers</p>
+
+</dd>
+<dt id="IO::Zlib"><a class="permalink" href="perlmodlib.html#IO::Zlib">#</a><a id="IO27"></a>IO::Zlib</dt>
+<dd>
+
+<p>IO:: style interface to <a href="./Compress::Zlib.html">Compress::Zlib</a></p>
+
+</dd>
+<dt id="IPC::Cmd"><a class="permalink" href="perlmodlib.html#IPC::Cmd">#</a><a id="IPC"></a>IPC::Cmd</dt>
+<dd>
+
+<p>Finding and running system commands made easy</p>
+
+</dd>
+<dt id="IPC::Msg"><a class="permalink" href="perlmodlib.html#IPC::Msg">#</a><a id="IPC1"></a>IPC::Msg</dt>
+<dd>
+
+<p>SysV Msg IPC object class</p>
+
+</dd>
+<dt id="IPC::Open2"><a class="permalink" href="perlmodlib.html#IPC::Open2">#</a><a id="IPC2"></a>IPC::Open2</dt>
+<dd>
+
+<p>Open a process for both reading and writing using open2()</p>
+
+</dd>
+<dt id="IPC::Open3"><a class="permalink" href="perlmodlib.html#IPC::Open3">#</a><a id="IPC3"></a>IPC::Open3</dt>
+<dd>
+
+<p>Open a process for reading, writing, and error handling using open3()</p>
+
+</dd>
+<dt id="IPC::Semaphore"><a class="permalink" href="perlmodlib.html#IPC::Semaphore">#</a><a id="IPC4"></a>IPC::Semaphore</dt>
+<dd>
+
+<p>SysV Semaphore IPC object class</p>
+
+</dd>
+<dt id="IPC::SharedMem"><a class="permalink" href="perlmodlib.html#IPC::SharedMem">#</a><a id="IPC5"></a>IPC::SharedMem</dt>
+<dd>
+
+<p>SysV Shared Memory IPC object class</p>
+
+</dd>
+<dt id="IPC::SysV"><a class="permalink" href="perlmodlib.html#IPC::SysV">#</a><a id="IPC6"></a>IPC::SysV</dt>
+<dd>
+
+<p>System V IPC constants and system calls</p>
+
+</dd>
+<dt id="Internals"><a class="permalink" href="perlmodlib.html#Internals">#</a>Internals</dt>
+<dd>
+
+<p>Reserved special namespace for internals related functions</p>
+
+</dd>
+<dt id="JSON::PP"><a class="permalink" href="perlmodlib.html#JSON::PP">#</a><a id="JSON"></a>JSON::PP</dt>
+<dd>
+
+<p>JSON::XS compatible pure-Perl module.</p>
+
+</dd>
+<dt id="JSON::PP::Boolean"><a class="permalink" href="perlmodlib.html#JSON::PP::Boolean">#</a><a id="JSON1"></a>JSON::PP::Boolean</dt>
+<dd>
+
+<p>Dummy module providing JSON::PP::Boolean</p>
+
+</dd>
+<dt id="List::Util"><a class="permalink" href="perlmodlib.html#List::Util">#</a><a id="List"></a>List::Util</dt>
+<dd>
+
+<p>A selection of general-utility list subroutines</p>
+
+</dd>
+<dt id="List::Util::XS"><a class="permalink" href="perlmodlib.html#List::Util::XS">#</a><a id="List1"></a>List::Util::XS</dt>
+<dd>
+
+<p>Indicate if List::Util was compiled with a C compiler</p>
+
+</dd>
+<dt id="Locale::Maketext"><a class="permalink" href="perlmodlib.html#Locale::Maketext">#</a><a id="Locale"></a>Locale::Maketext</dt>
+<dd>
+
+<p>Framework for localization</p>
+
+</dd>
+<dt id="Locale::Maketext::Cookbook"><a class="permalink" href="perlmodlib.html#Locale::Maketext::Cookbook">#</a><a id="Locale1"></a>Locale::Maketext::Cookbook</dt>
+<dd>
+
+<p>Recipes for using Locale::Maketext</p>
+
+</dd>
+<dt id="Locale::Maketext::Guts"><a class="permalink" href="perlmodlib.html#Locale::Maketext::Guts">#</a><a id="Locale2"></a>Locale::Maketext::Guts</dt>
+<dd>
+
+<p>Deprecated module to load Locale::Maketext utf8 code</p>
+
+</dd>
+<dt id="Locale::Maketext::GutsLoader"><a class="permalink" href="perlmodlib.html#Locale::Maketext::GutsLoader">#</a><a id="Locale3"></a>Locale::Maketext::GutsLoader</dt>
+<dd>
+
+<p>Deprecated module to load Locale::Maketext utf8 code</p>
+
+</dd>
+<dt id="Locale::Maketext::Simple"><a class="permalink" href="perlmodlib.html#Locale::Maketext::Simple">#</a><a id="Locale4"></a>Locale::Maketext::Simple</dt>
+<dd>
+
+<p>Simple interface to Locale::Maketext::Lexicon</p>
+
+</dd>
+<dt id="Locale::Maketext::TPJ13"><a class="permalink" href="perlmodlib.html#Locale::Maketext::TPJ13">#</a><a id="Locale5"></a>Locale::Maketext::TPJ13</dt>
+<dd>
+
+<p>Article about software localization</p>
+
+</dd>
+<dt id="MIME::Base64"><a class="permalink" href="perlmodlib.html#MIME::Base64">#</a><a id="MIME"></a>MIME::Base64</dt>
+<dd>
+
+<p>Encoding and decoding of base64 strings</p>
+
+</dd>
+<dt id="MIME::QuotedPrint"><a class="permalink" href="perlmodlib.html#MIME::QuotedPrint">#</a><a id="MIME1"></a>MIME::QuotedPrint</dt>
+<dd>
+
+<p>Encoding and decoding of quoted-printable strings</p>
+
+</dd>
+<dt id="Math::BigFloat"><a class="permalink" href="perlmodlib.html#Math::BigFloat">#</a><a id="Math"></a>Math::BigFloat</dt>
+<dd>
+
+<p>Arbitrary size floating point math package</p>
+
+</dd>
+<dt id="Math::BigInt"><a class="permalink" href="perlmodlib.html#Math::BigInt">#</a><a id="Math1"></a>Math::BigInt</dt>
+<dd>
+
+<p>Arbitrary size integer/float math package</p>
+
+</dd>
+<dt id="Math::BigInt::Calc"><a class="permalink" href="perlmodlib.html#Math::BigInt::Calc">#</a><a id="Math2"></a>Math::BigInt::Calc</dt>
+<dd>
+
+<p>Pure Perl module to support Math::BigInt</p>
+
+</dd>
+<dt id="Math::BigInt::FastCalc"><a class="permalink" href="perlmodlib.html#Math::BigInt::FastCalc">#</a><a id="Math3"></a>Math::BigInt::FastCalc</dt>
+<dd>
+
+<p>Math::BigInt::Calc with some XS for more speed</p>
+
+</dd>
+<dt id="Math::BigInt::Lib"><a class="permalink" href="perlmodlib.html#Math::BigInt::Lib">#</a><a id="Math4"></a>Math::BigInt::Lib</dt>
+<dd>
+
+<p>Virtual parent class for Math::BigInt libraries</p>
+
+</dd>
+<dt id="Math::BigRat"><a class="permalink" href="perlmodlib.html#Math::BigRat">#</a><a id="Math5"></a>Math::BigRat</dt>
+<dd>
+
+<p>Arbitrary big rational numbers</p>
+
+</dd>
+<dt id="Math::Complex"><a class="permalink" href="perlmodlib.html#Math::Complex">#</a><a id="Math6"></a>Math::Complex</dt>
+<dd>
+
+<p>Complex numbers and associated mathematical functions</p>
+
+</dd>
+<dt id="Math::Trig"><a class="permalink" href="perlmodlib.html#Math::Trig">#</a><a id="Math7"></a>Math::Trig</dt>
+<dd>
+
+<p>Trigonometric functions</p>
+
+</dd>
+<dt id="Memoize"><a class="permalink" href="perlmodlib.html#Memoize">#</a>Memoize</dt>
+<dd>
+
+<p>Make functions faster by trading space for time</p>
+
+</dd>
+<dt id="Memoize::AnyDBM_File"><a class="permalink" href="perlmodlib.html#Memoize::AnyDBM_File">#</a><a id="Memoize1"></a>Memoize::AnyDBM_File</dt>
+<dd>
+
+<p>Glue to provide EXISTS for AnyDBM_File for Storable use</p>
+
+</dd>
+<dt id="Memoize::Expire"><a class="permalink" href="perlmodlib.html#Memoize::Expire">#</a><a id="Memoize2"></a>Memoize::Expire</dt>
+<dd>
+
+<p>Plug-in module for automatic expiration of memoized values</p>
+
+</dd>
+<dt id="Memoize::ExpireFile"><a class="permalink" href="perlmodlib.html#Memoize::ExpireFile">#</a><a id="Memoize3"></a>Memoize::ExpireFile</dt>
+<dd>
+
+<p>Test for Memoize expiration semantics</p>
+
+</dd>
+<dt id="Memoize::ExpireTest"><a class="permalink" href="perlmodlib.html#Memoize::ExpireTest">#</a><a id="Memoize4"></a>Memoize::ExpireTest</dt>
+<dd>
+
+<p>Test for Memoize expiration semantics</p>
+
+</dd>
+<dt id="Memoize::NDBM_File"><a class="permalink" href="perlmodlib.html#Memoize::NDBM_File">#</a><a id="Memoize5"></a>Memoize::NDBM_File</dt>
+<dd>
+
+<p>Glue to provide EXISTS for NDBM_File for Storable use</p>
+
+</dd>
+<dt id="Memoize::SDBM_File"><a class="permalink" href="perlmodlib.html#Memoize::SDBM_File">#</a><a id="Memoize6"></a>Memoize::SDBM_File</dt>
+<dd>
+
+<p>Glue to provide EXISTS for SDBM_File for Storable use</p>
+
+</dd>
+<dt id="Memoize::Storable"><a class="permalink" href="perlmodlib.html#Memoize::Storable">#</a><a id="Memoize7"></a>Memoize::Storable</dt>
+<dd>
+
+<p>Store Memoized data in Storable database</p>
+
+</dd>
+<dt id="Module::CoreList"><a class="permalink" href="perlmodlib.html#Module::CoreList">#</a><a id="Module"></a>Module::CoreList</dt>
+<dd>
+
+<p>What modules shipped with versions of perl</p>
+
+</dd>
+<dt id="Module::CoreList::Utils"><a class="permalink" href="perlmodlib.html#Module::CoreList::Utils">#</a><a id="Module1"></a>Module::CoreList::Utils</dt>
+<dd>
+
+<p>What utilities shipped with versions of perl</p>
+
+</dd>
+<dt id="Module::Load"><a class="permalink" href="perlmodlib.html#Module::Load">#</a><a id="Module2"></a>Module::Load</dt>
+<dd>
+
+<p>Runtime require of both modules and files</p>
+
+</dd>
+<dt id="Module::Load::Conditional"><a class="permalink" href="perlmodlib.html#Module::Load::Conditional">#</a><a id="Module3"></a>Module::Load::Conditional</dt>
+<dd>
+
+<p>Looking up module information / loading at runtime</p>
+
+</dd>
+<dt id="Module::Loaded"><a class="permalink" href="perlmodlib.html#Module::Loaded">#</a><a id="Module4"></a>Module::Loaded</dt>
+<dd>
+
+<p>Mark modules as loaded or unloaded</p>
+
+</dd>
+<dt id="Module::Metadata"><a class="permalink" href="perlmodlib.html#Module::Metadata">#</a><a id="Module5"></a>Module::Metadata</dt>
+<dd>
+
+<p>Gather package and POD information from perl module files</p>
+
+</dd>
+<dt id="NDBM_File"><a class="permalink" href="perlmodlib.html#NDBM_File">#</a>NDBM_File</dt>
+<dd>
+
+<p>Tied access to ndbm files</p>
+
+</dd>
+<dt id="NEXT"><a class="permalink" href="perlmodlib.html#NEXT">#</a>NEXT</dt>
+<dd>
+
+<p>Provide a pseudo-class NEXT (et al) that allows method redispatch</p>
+
+</dd>
+<dt id="Net::Cmd"><a class="permalink" href="perlmodlib.html#Net::Cmd">#</a><a id="Net"></a>Net::Cmd</dt>
+<dd>
+
+<p>Network Command class (as used by FTP, SMTP etc)</p>
+
+</dd>
+<dt id="Net::Config"><a class="permalink" href="perlmodlib.html#Net::Config">#</a><a id="Net1"></a>Net::Config</dt>
+<dd>
+
+<p>Local configuration data for libnet</p>
+
+</dd>
+<dt id="Net::Domain"><a class="permalink" href="perlmodlib.html#Net::Domain">#</a><a id="Net2"></a>Net::Domain</dt>
+<dd>
+
+<p>Attempt to evaluate the current host&#39;s internet name and domain</p>
+
+</dd>
+<dt id="Net::FTP"><a class="permalink" href="perlmodlib.html#Net::FTP">#</a><a id="Net3"></a>Net::FTP</dt>
+<dd>
+
+<p>FTP Client class</p>
+
+</dd>
+<dt id="Net::FTP::dataconn"><a class="permalink" href="perlmodlib.html#Net::FTP::dataconn">#</a><a id="Net4"></a>Net::FTP::dataconn</dt>
+<dd>
+
+<p>FTP Client data connection class</p>
+
+</dd>
+<dt id="Net::NNTP"><a class="permalink" href="perlmodlib.html#Net::NNTP">#</a><a id="Net5"></a>Net::NNTP</dt>
+<dd>
+
+<p>NNTP Client class</p>
+
+</dd>
+<dt id="Net::Netrc"><a class="permalink" href="perlmodlib.html#Net::Netrc">#</a><a id="Net6"></a>Net::Netrc</dt>
+<dd>
+
+<p>OO interface to users netrc file</p>
+
+</dd>
+<dt id="Net::POP3"><a class="permalink" href="perlmodlib.html#Net::POP3">#</a><a id="Net7"></a>Net::POP3</dt>
+<dd>
+
+<p>Post Office Protocol 3 Client class (RFC1939)</p>
+
+</dd>
+<dt id="Net::Ping"><a class="permalink" href="perlmodlib.html#Net::Ping">#</a><a id="Net8"></a>Net::Ping</dt>
+<dd>
+
+<p>Check a remote host for reachability</p>
+
+</dd>
+<dt id="Net::SMTP"><a class="permalink" href="perlmodlib.html#Net::SMTP">#</a><a id="Net9"></a>Net::SMTP</dt>
+<dd>
+
+<p>Simple Mail Transfer Protocol Client</p>
+
+</dd>
+<dt id="Net::Time"><a class="permalink" href="perlmodlib.html#Net::Time">#</a><a id="Net10"></a>Net::Time</dt>
+<dd>
+
+<p>Time and daytime network client interface</p>
+
+</dd>
+<dt id="Net::hostent"><a class="permalink" href="perlmodlib.html#Net::hostent">#</a><a id="Net11"></a>Net::hostent</dt>
+<dd>
+
+<p>By-name interface to Perl&#39;s built-in gethost*() functions</p>
+
+</dd>
+<dt id="Net::libnetFAQ"><a class="permalink" href="perlmodlib.html#Net::libnetFAQ">#</a><a id="Net12"></a>Net::libnetFAQ</dt>
+<dd>
+
+<p>Libnet Frequently Asked Questions</p>
+
+</dd>
+<dt id="Net::netent"><a class="permalink" href="perlmodlib.html#Net::netent">#</a><a id="Net13"></a>Net::netent</dt>
+<dd>
+
+<p>By-name interface to Perl&#39;s built-in getnet*() functions</p>
+
+</dd>
+<dt id="Net::protoent"><a class="permalink" href="perlmodlib.html#Net::protoent">#</a><a id="Net14"></a>Net::protoent</dt>
+<dd>
+
+<p>By-name interface to Perl&#39;s built-in getproto*() functions</p>
+
+</dd>
+<dt id="Net::servent"><a class="permalink" href="perlmodlib.html#Net::servent">#</a><a id="Net15"></a>Net::servent</dt>
+<dd>
+
+<p>By-name interface to Perl&#39;s built-in getserv*() functions</p>
+
+</dd>
+<dt id="O"><a class="permalink" href="perlmodlib.html#O">#</a>O</dt>
+<dd>
+
+<p>Generic interface to Perl Compiler backends</p>
+
+</dd>
+<dt id="ODBM_File"><a class="permalink" href="perlmodlib.html#ODBM_File">#</a>ODBM_File</dt>
+<dd>
+
+<p>Tied access to odbm files</p>
+
+</dd>
+<dt id="Opcode"><a class="permalink" href="perlmodlib.html#Opcode">#</a>Opcode</dt>
+<dd>
+
+<p>Disable named opcodes when compiling perl code</p>
+
+</dd>
+<dt id="POSIX"><a class="permalink" href="perlmodlib.html#POSIX">#</a>POSIX</dt>
+<dd>
+
+<p>Perl interface to IEEE Std 1003.1</p>
+
+</dd>
+<dt id="Params::Check"><a class="permalink" href="perlmodlib.html#Params::Check">#</a><a id="Params"></a>Params::Check</dt>
+<dd>
+
+<p>A generic input parsing/checking mechanism.</p>
+
+</dd>
+<dt id="Parse::CPAN::Meta"><a class="permalink" href="perlmodlib.html#Parse::CPAN::Meta">#</a><a id="Parse"></a>Parse::CPAN::Meta</dt>
+<dd>
+
+<p>Parse META.yml and META.json CPAN metadata files</p>
+
+</dd>
+<dt id="Perl::OSType"><a class="permalink" href="perlmodlib.html#Perl::OSType">#</a><a id="Perl"></a>Perl::OSType</dt>
+<dd>
+
+<p>Map Perl operating system names to generic types</p>
+
+</dd>
+<dt id="PerlIO"><a class="permalink" href="perlmodlib.html#PerlIO">#</a>PerlIO</dt>
+<dd>
+
+<p>On demand loader for PerlIO layers and root of PerlIO::* name space</p>
+
+</dd>
+<dt id="PerlIO::encoding"><a class="permalink" href="perlmodlib.html#PerlIO::encoding">#</a><a id="PerlIO1"></a>PerlIO::encoding</dt>
+<dd>
+
+<p>Encoding layer</p>
+
+</dd>
+<dt id="PerlIO::mmap"><a class="permalink" href="perlmodlib.html#PerlIO::mmap">#</a><a id="PerlIO2"></a>PerlIO::mmap</dt>
+<dd>
+
+<p>Memory mapped IO</p>
+
+</dd>
+<dt id="PerlIO::scalar"><a class="permalink" href="perlmodlib.html#PerlIO::scalar">#</a><a id="PerlIO3"></a>PerlIO::scalar</dt>
+<dd>
+
+<p>In-memory IO, scalar IO</p>
+
+</dd>
+<dt id="PerlIO::via"><a class="permalink" href="perlmodlib.html#PerlIO::via">#</a><a id="PerlIO4"></a>PerlIO::via</dt>
+<dd>
+
+<p>Helper class for PerlIO layers implemented in perl</p>
+
+</dd>
+<dt id="PerlIO::via::QuotedPrint"><a class="permalink" href="perlmodlib.html#PerlIO::via::QuotedPrint">#</a><a id="PerlIO5"></a>PerlIO::via::QuotedPrint</dt>
+<dd>
+
+<p>PerlIO layer for quoted-printable strings</p>
+
+</dd>
+<dt id="Pod::Checker"><a class="permalink" href="perlmodlib.html#Pod::Checker">#</a><a id="Pod"></a>Pod::Checker</dt>
+<dd>
+
+<p>Check pod documents for syntax errors</p>
+
+</dd>
+<dt id="Pod::Escapes"><a class="permalink" href="perlmodlib.html#Pod::Escapes">#</a><a id="Pod1"></a>Pod::Escapes</dt>
+<dd>
+
+<p>For resolving Pod E&lt;...&gt; sequences</p>
+
+</dd>
+<dt id="Pod::Functions"><a class="permalink" href="perlmodlib.html#Pod::Functions">#</a><a id="Pod2"></a>Pod::Functions</dt>
+<dd>
+
+<p>Group Perl&#39;s functions a la perlfunc.pod</p>
+
+</dd>
+<dt id="Pod::Html"><a class="permalink" href="perlmodlib.html#Pod::Html">#</a><a id="Pod3"></a>Pod::Html</dt>
+<dd>
+
+<p>Module to convert pod files to HTML</p>
+
+</dd>
+<dt id="Pod::Man"><a class="permalink" href="perlmodlib.html#Pod::Man">#</a><a id="Pod4"></a>Pod::Man</dt>
+<dd>
+
+<p>Convert POD data to formatted *roff input</p>
+
+</dd>
+<dt id="Pod::ParseLink"><a class="permalink" href="perlmodlib.html#Pod::ParseLink">#</a><a id="Pod5"></a>Pod::ParseLink</dt>
+<dd>
+
+<p>Parse an L&lt;&gt; formatting code in POD text</p>
+
+</dd>
+<dt id="Pod::Perldoc"><a class="permalink" href="perlmodlib.html#Pod::Perldoc">#</a><a id="Pod6"></a>Pod::Perldoc</dt>
+<dd>
+
+<p>Look up Perl documentation in Pod format.</p>
+
+</dd>
+<dt id="Pod::Perldoc::BaseTo"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::BaseTo">#</a><a id="Pod7"></a>Pod::Perldoc::BaseTo</dt>
+<dd>
+
+<p>Base for Pod::Perldoc formatters</p>
+
+</dd>
+<dt id="Pod::Perldoc::GetOptsOO"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::GetOptsOO">#</a><a id="Pod8"></a>Pod::Perldoc::GetOptsOO</dt>
+<dd>
+
+<p>Customized option parser for Pod::Perldoc</p>
+
+</dd>
+<dt id="Pod::Perldoc::ToANSI"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::ToANSI">#</a><a id="Pod9"></a>Pod::Perldoc::ToANSI</dt>
+<dd>
+
+<p>Render Pod with ANSI color escapes</p>
+
+</dd>
+<dt id="Pod::Perldoc::ToChecker"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::ToChecker">#</a><a id="Pod10"></a>Pod::Perldoc::ToChecker</dt>
+<dd>
+
+<p>Let Perldoc check Pod for errors</p>
+
+</dd>
+<dt id="Pod::Perldoc::ToMan"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::ToMan">#</a><a id="Pod11"></a>Pod::Perldoc::ToMan</dt>
+<dd>
+
+<p>Let Perldoc render Pod as man pages</p>
+
+</dd>
+<dt id="Pod::Perldoc::ToNroff"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::ToNroff">#</a><a id="Pod12"></a>Pod::Perldoc::ToNroff</dt>
+<dd>
+
+<p>Let Perldoc convert Pod to nroff</p>
+
+</dd>
+<dt id="Pod::Perldoc::ToPod"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::ToPod">#</a><a id="Pod13"></a>Pod::Perldoc::ToPod</dt>
+<dd>
+
+<p>Let Perldoc render Pod as ... Pod!</p>
+
+</dd>
+<dt id="Pod::Perldoc::ToRtf"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::ToRtf">#</a><a id="Pod14"></a>Pod::Perldoc::ToRtf</dt>
+<dd>
+
+<p>Let Perldoc render Pod as RTF</p>
+
+</dd>
+<dt id="Pod::Perldoc::ToTerm"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::ToTerm">#</a><a id="Pod15"></a>Pod::Perldoc::ToTerm</dt>
+<dd>
+
+<p>Render Pod with terminal escapes</p>
+
+</dd>
+<dt id="Pod::Perldoc::ToText"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::ToText">#</a><a id="Pod16"></a>Pod::Perldoc::ToText</dt>
+<dd>
+
+<p>Let Perldoc render Pod as plaintext</p>
+
+</dd>
+<dt id="Pod::Perldoc::ToTk"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::ToTk">#</a><a id="Pod17"></a>Pod::Perldoc::ToTk</dt>
+<dd>
+
+<p>Let Perldoc use Tk::Pod to render Pod</p>
+
+</dd>
+<dt id="Pod::Perldoc::ToXml"><a class="permalink" href="perlmodlib.html#Pod::Perldoc::ToXml">#</a><a id="Pod18"></a>Pod::Perldoc::ToXml</dt>
+<dd>
+
+<p>Let Perldoc render Pod as XML</p>
+
+</dd>
+<dt id="Pod::Simple"><a class="permalink" href="perlmodlib.html#Pod::Simple">#</a><a id="Pod19"></a>Pod::Simple</dt>
+<dd>
+
+<p>Framework for parsing Pod</p>
+
+</dd>
+<dt id="Pod::Simple::Checker"><a class="permalink" href="perlmodlib.html#Pod::Simple::Checker">#</a><a id="Pod20"></a>Pod::Simple::Checker</dt>
+<dd>
+
+<p>Check the Pod syntax of a document</p>
+
+</dd>
+<dt id="Pod::Simple::Debug"><a class="permalink" href="perlmodlib.html#Pod::Simple::Debug">#</a><a id="Pod21"></a>Pod::Simple::Debug</dt>
+<dd>
+
+<p>Put Pod::Simple into trace/debug mode</p>
+
+</dd>
+<dt id="Pod::Simple::DumpAsText"><a class="permalink" href="perlmodlib.html#Pod::Simple::DumpAsText">#</a><a id="Pod22"></a>Pod::Simple::DumpAsText</dt>
+<dd>
+
+<p>Dump Pod-parsing events as text</p>
+
+</dd>
+<dt id="Pod::Simple::DumpAsXML"><a class="permalink" href="perlmodlib.html#Pod::Simple::DumpAsXML">#</a><a id="Pod23"></a>Pod::Simple::DumpAsXML</dt>
+<dd>
+
+<p>Turn Pod into XML</p>
+
+</dd>
+<dt id="Pod::Simple::HTML"><a class="permalink" href="perlmodlib.html#Pod::Simple::HTML">#</a><a id="Pod24"></a>Pod::Simple::HTML</dt>
+<dd>
+
+<p>Convert Pod to HTML</p>
+
+</dd>
+<dt id="Pod::Simple::HTMLBatch"><a class="permalink" href="perlmodlib.html#Pod::Simple::HTMLBatch">#</a><a id="Pod25"></a>Pod::Simple::HTMLBatch</dt>
+<dd>
+
+<p>Convert several Pod files to several HTML files</p>
+
+</dd>
+<dt id="Pod::Simple::JustPod"><a class="permalink" href="perlmodlib.html#Pod::Simple::JustPod">#</a><a id="Pod26"></a>Pod::Simple::JustPod</dt>
+<dd>
+
+<p>Just the Pod, the whole Pod, and nothing but the Pod</p>
+
+</dd>
+<dt id="Pod::Simple::LinkSection"><a class="permalink" href="perlmodlib.html#Pod::Simple::LinkSection">#</a><a id="Pod27"></a>Pod::Simple::LinkSection</dt>
+<dd>
+
+<p>Represent &quot;section&quot; attributes of L codes</p>
+
+</dd>
+<dt id="Pod::Simple::Methody"><a class="permalink" href="perlmodlib.html#Pod::Simple::Methody">#</a><a id="Pod28"></a>Pod::Simple::Methody</dt>
+<dd>
+
+<p>Turn Pod::Simple events into method calls</p>
+
+</dd>
+<dt id="Pod::Simple::PullParser"><a class="permalink" href="perlmodlib.html#Pod::Simple::PullParser">#</a><a id="Pod29"></a>Pod::Simple::PullParser</dt>
+<dd>
+
+<p>A pull-parser interface to parsing Pod</p>
+
+</dd>
+<dt id="Pod::Simple::PullParserEndToken"><a class="permalink" href="perlmodlib.html#Pod::Simple::PullParserEndToken">#</a><a id="Pod30"></a>Pod::Simple::PullParserEndToken</dt>
+<dd>
+
+<p>End-tokens from Pod::Simple::PullParser</p>
+
+</dd>
+<dt id="Pod::Simple::PullParserStartToken"><a class="permalink" href="perlmodlib.html#Pod::Simple::PullParserStartToken">#</a><a id="Pod31"></a>Pod::Simple::PullParserStartToken</dt>
+<dd>
+
+<p>Start-tokens from Pod::Simple::PullParser</p>
+
+</dd>
+<dt id="Pod::Simple::PullParserTextToken"><a class="permalink" href="perlmodlib.html#Pod::Simple::PullParserTextToken">#</a><a id="Pod32"></a>Pod::Simple::PullParserTextToken</dt>
+<dd>
+
+<p>Text-tokens from Pod::Simple::PullParser</p>
+
+</dd>
+<dt id="Pod::Simple::PullParserToken"><a class="permalink" href="perlmodlib.html#Pod::Simple::PullParserToken">#</a><a id="Pod33"></a>Pod::Simple::PullParserToken</dt>
+<dd>
+
+<p>Tokens from Pod::Simple::PullParser</p>
+
+</dd>
+<dt id="Pod::Simple::RTF"><a class="permalink" href="perlmodlib.html#Pod::Simple::RTF">#</a><a id="Pod34"></a>Pod::Simple::RTF</dt>
+<dd>
+
+<p>Format Pod as RTF</p>
+
+</dd>
+<dt id="Pod::Simple::Search"><a class="permalink" href="perlmodlib.html#Pod::Simple::Search">#</a><a id="Pod35"></a>Pod::Simple::Search</dt>
+<dd>
+
+<p>Find POD documents in directory trees</p>
+
+</dd>
+<dt id="Pod::Simple::SimpleTree"><a class="permalink" href="perlmodlib.html#Pod::Simple::SimpleTree">#</a><a id="Pod36"></a>Pod::Simple::SimpleTree</dt>
+<dd>
+
+<p>Parse Pod into a simple parse tree</p>
+
+</dd>
+<dt id="Pod::Simple::Subclassing"><a class="permalink" href="perlmodlib.html#Pod::Simple::Subclassing">#</a><a id="Pod37"></a>Pod::Simple::Subclassing</dt>
+<dd>
+
+<p>Write a formatter as a Pod::Simple subclass</p>
+
+</dd>
+<dt id="Pod::Simple::Text"><a class="permalink" href="perlmodlib.html#Pod::Simple::Text">#</a><a id="Pod38"></a>Pod::Simple::Text</dt>
+<dd>
+
+<p>Format Pod as plaintext</p>
+
+</dd>
+<dt id="Pod::Simple::TextContent"><a class="permalink" href="perlmodlib.html#Pod::Simple::TextContent">#</a><a id="Pod39"></a>Pod::Simple::TextContent</dt>
+<dd>
+
+<p>Get the text content of Pod</p>
+
+</dd>
+<dt id="Pod::Simple::XHTML"><a class="permalink" href="perlmodlib.html#Pod::Simple::XHTML">#</a><a id="Pod40"></a>Pod::Simple::XHTML</dt>
+<dd>
+
+<p>Format Pod as validating XHTML</p>
+
+</dd>
+<dt id="Pod::Simple::XMLOutStream"><a class="permalink" href="perlmodlib.html#Pod::Simple::XMLOutStream">#</a><a id="Pod41"></a>Pod::Simple::XMLOutStream</dt>
+<dd>
+
+<p>Turn Pod into XML</p>
+
+</dd>
+<dt id="Pod::Text"><a class="permalink" href="perlmodlib.html#Pod::Text">#</a><a id="Pod42"></a>Pod::Text</dt>
+<dd>
+
+<p>Convert POD data to formatted text</p>
+
+</dd>
+<dt id="Pod::Text::Color"><a class="permalink" href="perlmodlib.html#Pod::Text::Color">#</a><a id="Pod43"></a>Pod::Text::Color</dt>
+<dd>
+
+<p>Convert POD data to formatted color ASCII text</p>
+
+</dd>
+<dt id="Pod::Text::Overstrike"><a class="permalink" href="perlmodlib.html#Pod::Text::Overstrike">#</a><a id="Pod44"></a>Pod::Text::Overstrike</dt>
+<dd>
+
+<p>Convert POD data to formatted overstrike text</p>
+
+</dd>
+<dt id="Pod::Text::Termcap"><a class="permalink" href="perlmodlib.html#Pod::Text::Termcap">#</a><a id="Pod45"></a>Pod::Text::Termcap</dt>
+<dd>
+
+<p>Convert POD data to ASCII text with format escapes</p>
+
+</dd>
+<dt id="Pod::Usage"><a class="permalink" href="perlmodlib.html#Pod::Usage">#</a><a id="Pod46"></a>Pod::Usage</dt>
+<dd>
+
+<p>Extracts POD documentation and shows usage information</p>
+
+</dd>
+<dt id="SDBM_File"><a class="permalink" href="perlmodlib.html#SDBM_File">#</a>SDBM_File</dt>
+<dd>
+
+<p>Tied access to sdbm files</p>
+
+</dd>
+<dt id="Safe"><a class="permalink" href="perlmodlib.html#Safe">#</a>Safe</dt>
+<dd>
+
+<p>Compile and execute code in restricted compartments</p>
+
+</dd>
+<dt id="Scalar::Util"><a class="permalink" href="perlmodlib.html#Scalar::Util">#</a><a id="Scalar"></a>Scalar::Util</dt>
+<dd>
+
+<p>A selection of general-utility scalar subroutines</p>
+
+</dd>
+<dt id="Search::Dict"><a class="permalink" href="perlmodlib.html#Search::Dict">#</a><a id="Search"></a>Search::Dict</dt>
+<dd>
+
+<p>Look - search for key in dictionary file</p>
+
+</dd>
+<dt id="SelectSaver"><a class="permalink" href="perlmodlib.html#SelectSaver">#</a>SelectSaver</dt>
+<dd>
+
+<p>Save and restore selected file handle</p>
+
+</dd>
+<dt id="SelfLoader"><a class="permalink" href="perlmodlib.html#SelfLoader">#</a>SelfLoader</dt>
+<dd>
+
+<p>Load functions only on demand</p>
+
+</dd>
+<dt id="Storable"><a class="permalink" href="perlmodlib.html#Storable">#</a>Storable</dt>
+<dd>
+
+<p>Persistence for Perl data structures</p>
+
+</dd>
+<dt id="Sub::Util"><a class="permalink" href="perlmodlib.html#Sub::Util">#</a><a id="Sub"></a>Sub::Util</dt>
+<dd>
+
+<p>A selection of utility subroutines for subs and CODE references</p>
+
+</dd>
+<dt id="Symbol"><a class="permalink" href="perlmodlib.html#Symbol">#</a>Symbol</dt>
+<dd>
+
+<p>Manipulate Perl symbols and their names</p>
+
+</dd>
+<dt id="Sys::Hostname"><a class="permalink" href="perlmodlib.html#Sys::Hostname">#</a><a id="Sys"></a>Sys::Hostname</dt>
+<dd>
+
+<p>Try every conceivable way to get hostname</p>
+
+</dd>
+<dt id="Sys::Syslog"><a class="permalink" href="perlmodlib.html#Sys::Syslog">#</a><a id="Sys1"></a>Sys::Syslog</dt>
+<dd>
+
+<p>Perl interface to the UNIX syslog(3) calls</p>
+
+</dd>
+<dt id="Sys::Syslog::Win32"><a class="permalink" href="perlmodlib.html#Sys::Syslog::Win32">#</a><a id="Sys2"></a>Sys::Syslog::Win32</dt>
+<dd>
+
+<p>Win32 support for Sys::Syslog</p>
+
+</dd>
+<dt id="TAP::Base"><a class="permalink" href="perlmodlib.html#TAP::Base">#</a><a id="TAP"></a>TAP::Base</dt>
+<dd>
+
+<p>Base class that provides common functionality to <a href="./TAP::Parser.html">TAP::Parser</a></p>
+
+</dd>
+<dt id="TAP::Formatter::Base"><a class="permalink" href="perlmodlib.html#TAP::Formatter::Base">#</a><a id="TAP1"></a>TAP::Formatter::Base</dt>
+<dd>
+
+<p>Base class for harness output delegates</p>
+
+</dd>
+<dt id="TAP::Formatter::Color"><a class="permalink" href="perlmodlib.html#TAP::Formatter::Color">#</a><a id="TAP2"></a>TAP::Formatter::Color</dt>
+<dd>
+
+<p>Run Perl test scripts with color</p>
+
+</dd>
+<dt id="TAP::Formatter::Console"><a class="permalink" href="perlmodlib.html#TAP::Formatter::Console">#</a><a id="TAP3"></a>TAP::Formatter::Console</dt>
+<dd>
+
+<p>Harness output delegate for default console output</p>
+
+</dd>
+<dt id="TAP::Formatter::Console::ParallelSession"><a class="permalink" href="perlmodlib.html#TAP::Formatter::Console::ParallelSession">#</a><a id="TAP4"></a>TAP::Formatter::Console::ParallelSession</dt>
+<dd>
+
+<p>Harness output delegate for parallel console output</p>
+
+</dd>
+<dt id="TAP::Formatter::Console::Session"><a class="permalink" href="perlmodlib.html#TAP::Formatter::Console::Session">#</a><a id="TAP5"></a>TAP::Formatter::Console::Session</dt>
+<dd>
+
+<p>Harness output delegate for default console output</p>
+
+</dd>
+<dt id="TAP::Formatter::File"><a class="permalink" href="perlmodlib.html#TAP::Formatter::File">#</a><a id="TAP6"></a>TAP::Formatter::File</dt>
+<dd>
+
+<p>Harness output delegate for file output</p>
+
+</dd>
+<dt id="TAP::Formatter::File::Session"><a class="permalink" href="perlmodlib.html#TAP::Formatter::File::Session">#</a><a id="TAP7"></a>TAP::Formatter::File::Session</dt>
+<dd>
+
+<p>Harness output delegate for file output</p>
+
+</dd>
+<dt id="TAP::Formatter::Session"><a class="permalink" href="perlmodlib.html#TAP::Formatter::Session">#</a><a id="TAP8"></a>TAP::Formatter::Session</dt>
+<dd>
+
+<p>Abstract base class for harness output delegate</p>
+
+</dd>
+<dt id="TAP::Harness"><a class="permalink" href="perlmodlib.html#TAP::Harness">#</a><a id="TAP9"></a>TAP::Harness</dt>
+<dd>
+
+<p>Run test scripts with statistics</p>
+
+</dd>
+<dt id="TAP::Harness::Env"><a class="permalink" href="perlmodlib.html#TAP::Harness::Env">#</a><a id="TAP10"></a>TAP::Harness::Env</dt>
+<dd>
+
+<p>Parsing harness related environmental variables where appropriate</p>
+
+</dd>
+<dt id="TAP::Object"><a class="permalink" href="perlmodlib.html#TAP::Object">#</a><a id="TAP11"></a>TAP::Object</dt>
+<dd>
+
+<p>Base class that provides common functionality to all <code>TAP::*</code> modules</p>
+
+</dd>
+<dt id="TAP::Parser"><a class="permalink" href="perlmodlib.html#TAP::Parser">#</a><a id="TAP12"></a>TAP::Parser</dt>
+<dd>
+
+<p>Parse <a href="https://perldoc.perl.org/5.35.0/Test::Harness::TAP">TAP</a> output</p>
+
+</dd>
+<dt id="TAP::Parser::Aggregator"><a class="permalink" href="perlmodlib.html#TAP::Parser::Aggregator">#</a><a id="TAP13"></a>TAP::Parser::Aggregator</dt>
+<dd>
+
+<p>Aggregate TAP::Parser results</p>
+
+</dd>
+<dt id="TAP::Parser::Grammar"><a class="permalink" href="perlmodlib.html#TAP::Parser::Grammar">#</a><a id="TAP14"></a>TAP::Parser::Grammar</dt>
+<dd>
+
+<p>A grammar for the Test Anything Protocol.</p>
+
+</dd>
+<dt id="TAP::Parser::Iterator"><a class="permalink" href="perlmodlib.html#TAP::Parser::Iterator">#</a><a id="TAP15"></a>TAP::Parser::Iterator</dt>
+<dd>
+
+<p>Base class for TAP source iterators</p>
+
+</dd>
+<dt id="TAP::Parser::Iterator::Array"><a class="permalink" href="perlmodlib.html#TAP::Parser::Iterator::Array">#</a><a id="TAP16"></a>TAP::Parser::Iterator::Array</dt>
+<dd>
+
+<p>Iterator for array-based TAP sources</p>
+
+</dd>
+<dt id="TAP::Parser::Iterator::Process"><a class="permalink" href="perlmodlib.html#TAP::Parser::Iterator::Process">#</a><a id="TAP17"></a>TAP::Parser::Iterator::Process</dt>
+<dd>
+
+<p>Iterator for process-based TAP sources</p>
+
+</dd>
+<dt id="TAP::Parser::Iterator::Stream"><a class="permalink" href="perlmodlib.html#TAP::Parser::Iterator::Stream">#</a><a id="TAP18"></a>TAP::Parser::Iterator::Stream</dt>
+<dd>
+
+<p>Iterator for filehandle-based TAP sources</p>
+
+</dd>
+<dt id="TAP::Parser::IteratorFactory"><a class="permalink" href="perlmodlib.html#TAP::Parser::IteratorFactory">#</a><a id="TAP19"></a>TAP::Parser::IteratorFactory</dt>
+<dd>
+
+<p>Figures out which SourceHandler objects to use for a given Source</p>
+
+</dd>
+<dt id="TAP::Parser::Multiplexer"><a class="permalink" href="perlmodlib.html#TAP::Parser::Multiplexer">#</a><a id="TAP20"></a>TAP::Parser::Multiplexer</dt>
+<dd>
+
+<p>Multiplex multiple TAP::Parsers</p>
+
+</dd>
+<dt id="TAP::Parser::Result"><a class="permalink" href="perlmodlib.html#TAP::Parser::Result">#</a><a id="TAP21"></a>TAP::Parser::Result</dt>
+<dd>
+
+<p>Base class for TAP::Parser output objects</p>
+
+</dd>
+<dt id="TAP::Parser::Result::Bailout"><a class="permalink" href="perlmodlib.html#TAP::Parser::Result::Bailout">#</a><a id="TAP22"></a>TAP::Parser::Result::Bailout</dt>
+<dd>
+
+<p>Bailout result token.</p>
+
+</dd>
+<dt id="TAP::Parser::Result::Comment"><a class="permalink" href="perlmodlib.html#TAP::Parser::Result::Comment">#</a><a id="TAP23"></a>TAP::Parser::Result::Comment</dt>
+<dd>
+
+<p>Comment result token.</p>
+
+</dd>
+<dt id="TAP::Parser::Result::Plan"><a class="permalink" href="perlmodlib.html#TAP::Parser::Result::Plan">#</a><a id="TAP24"></a>TAP::Parser::Result::Plan</dt>
+<dd>
+
+<p>Plan result token.</p>
+
+</dd>
+<dt id="TAP::Parser::Result::Pragma"><a class="permalink" href="perlmodlib.html#TAP::Parser::Result::Pragma">#</a><a id="TAP25"></a>TAP::Parser::Result::Pragma</dt>
+<dd>
+
+<p>TAP pragma token.</p>
+
+</dd>
+<dt id="TAP::Parser::Result::Test"><a class="permalink" href="perlmodlib.html#TAP::Parser::Result::Test">#</a><a id="TAP26"></a>TAP::Parser::Result::Test</dt>
+<dd>
+
+<p>Test result token.</p>
+
+</dd>
+<dt id="TAP::Parser::Result::Unknown"><a class="permalink" href="perlmodlib.html#TAP::Parser::Result::Unknown">#</a><a id="TAP27"></a>TAP::Parser::Result::Unknown</dt>
+<dd>
+
+<p>Unknown result token.</p>
+
+</dd>
+<dt id="TAP::Parser::Result::Version"><a class="permalink" href="perlmodlib.html#TAP::Parser::Result::Version">#</a><a id="TAP28"></a>TAP::Parser::Result::Version</dt>
+<dd>
+
+<p>TAP syntax version token.</p>
+
+</dd>
+<dt id="TAP::Parser::Result::YAML"><a class="permalink" href="perlmodlib.html#TAP::Parser::Result::YAML">#</a><a id="TAP29"></a>TAP::Parser::Result::YAML</dt>
+<dd>
+
+<p>YAML result token.</p>
+
+</dd>
+<dt id="TAP::Parser::ResultFactory"><a class="permalink" href="perlmodlib.html#TAP::Parser::ResultFactory">#</a><a id="TAP30"></a>TAP::Parser::ResultFactory</dt>
+<dd>
+
+<p>Factory for creating TAP::Parser output objects</p>
+
+</dd>
+<dt id="TAP::Parser::Scheduler"><a class="permalink" href="perlmodlib.html#TAP::Parser::Scheduler">#</a><a id="TAP31"></a>TAP::Parser::Scheduler</dt>
+<dd>
+
+<p>Schedule tests during parallel testing</p>
+
+</dd>
+<dt id="TAP::Parser::Scheduler::Job"><a class="permalink" href="perlmodlib.html#TAP::Parser::Scheduler::Job">#</a><a id="TAP32"></a>TAP::Parser::Scheduler::Job</dt>
+<dd>
+
+<p>A single testing job.</p>
+
+</dd>
+<dt id="TAP::Parser::Scheduler::Spinner"><a class="permalink" href="perlmodlib.html#TAP::Parser::Scheduler::Spinner">#</a><a id="TAP33"></a>TAP::Parser::Scheduler::Spinner</dt>
+<dd>
+
+<p>A no-op job.</p>
+
+</dd>
+<dt id="TAP::Parser::Source"><a class="permalink" href="perlmodlib.html#TAP::Parser::Source">#</a><a id="TAP34"></a>TAP::Parser::Source</dt>
+<dd>
+
+<p>A TAP source &amp; meta data about it</p>
+
+</dd>
+<dt id="TAP::Parser::SourceHandler"><a class="permalink" href="perlmodlib.html#TAP::Parser::SourceHandler">#</a><a id="TAP35"></a>TAP::Parser::SourceHandler</dt>
+<dd>
+
+<p>Base class for different TAP source handlers</p>
+
+</dd>
+<dt id="TAP::Parser::SourceHandler::Executable"><a class="permalink" href="perlmodlib.html#TAP::Parser::SourceHandler::Executable">#</a><a id="TAP36"></a>TAP::Parser::SourceHandler::Executable</dt>
+<dd>
+
+<p>Stream output from an executable TAP source</p>
+
+</dd>
+<dt id="TAP::Parser::SourceHandler::File"><a class="permalink" href="perlmodlib.html#TAP::Parser::SourceHandler::File">#</a><a id="TAP37"></a>TAP::Parser::SourceHandler::File</dt>
+<dd>
+
+<p>Stream TAP from a text file.</p>
+
+</dd>
+<dt id="TAP::Parser::SourceHandler::Handle"><a class="permalink" href="perlmodlib.html#TAP::Parser::SourceHandler::Handle">#</a><a id="TAP38"></a>TAP::Parser::SourceHandler::Handle</dt>
+<dd>
+
+<p>Stream TAP from an IO::Handle or a GLOB.</p>
+
+</dd>
+<dt id="TAP::Parser::SourceHandler::Perl"><a class="permalink" href="perlmodlib.html#TAP::Parser::SourceHandler::Perl">#</a><a id="TAP39"></a>TAP::Parser::SourceHandler::Perl</dt>
+<dd>
+
+<p>Stream TAP from a Perl executable</p>
+
+</dd>
+<dt id="TAP::Parser::SourceHandler::RawTAP"><a class="permalink" href="perlmodlib.html#TAP::Parser::SourceHandler::RawTAP">#</a><a id="TAP40"></a>TAP::Parser::SourceHandler::RawTAP</dt>
+<dd>
+
+<p>Stream output from raw TAP in a scalar/array ref.</p>
+
+</dd>
+<dt id="TAP::Parser::YAMLish::Reader"><a class="permalink" href="perlmodlib.html#TAP::Parser::YAMLish::Reader">#</a><a id="TAP41"></a>TAP::Parser::YAMLish::Reader</dt>
+<dd>
+
+<p>Read YAMLish data from iterator</p>
+
+</dd>
+<dt id="TAP::Parser::YAMLish::Writer"><a class="permalink" href="perlmodlib.html#TAP::Parser::YAMLish::Writer">#</a><a id="TAP42"></a>TAP::Parser::YAMLish::Writer</dt>
+<dd>
+
+<p>Write YAMLish data</p>
+
+</dd>
+<dt id="Term::ANSIColor"><a class="permalink" href="perlmodlib.html#Term::ANSIColor">#</a><a id="Term"></a>Term::ANSIColor</dt>
+<dd>
+
+<p>Color screen output using ANSI escape sequences</p>
+
+</dd>
+<dt id="Term::Cap"><a class="permalink" href="perlmodlib.html#Term::Cap">#</a><a id="Term1"></a>Term::Cap</dt>
+<dd>
+
+<p>Perl termcap interface</p>
+
+</dd>
+<dt id="Term::Complete"><a class="permalink" href="perlmodlib.html#Term::Complete">#</a><a id="Term2"></a>Term::Complete</dt>
+<dd>
+
+<p>Perl word completion module</p>
+
+</dd>
+<dt id="Term::ReadLine"><a class="permalink" href="perlmodlib.html#Term::ReadLine">#</a><a id="Term3"></a>Term::ReadLine</dt>
+<dd>
+
+<p>Perl interface to various <code>readline</code> packages.</p>
+
+</dd>
+<dt id="Test"><a class="permalink" href="perlmodlib.html#Test">#</a>Test</dt>
+<dd>
+
+<p>Provides a simple framework for writing test scripts</p>
+
+</dd>
+<dt id="Test2"><a class="permalink" href="perlmodlib.html#Test2">#</a>Test2</dt>
+<dd>
+
+<p>Framework for writing test tools that all work together.</p>
+
+</dd>
+<dt id="Test2::API"><a class="permalink" href="perlmodlib.html#Test2::API">#</a><a id="Test21"></a>Test2::API</dt>
+<dd>
+
+<p>Primary interface for writing Test2 based testing tools.</p>
+
+</dd>
+<dt id="Test2::API::Breakage"><a class="permalink" href="perlmodlib.html#Test2::API::Breakage">#</a><a id="Test22"></a>Test2::API::Breakage</dt>
+<dd>
+
+<p>What breaks at what version</p>
+
+</dd>
+<dt id="Test2::API::Context"><a class="permalink" href="perlmodlib.html#Test2::API::Context">#</a><a id="Test23"></a>Test2::API::Context</dt>
+<dd>
+
+<p>Object to represent a testing context.</p>
+
+</dd>
+<dt id="Test2::API::Instance"><a class="permalink" href="perlmodlib.html#Test2::API::Instance">#</a><a id="Test24"></a>Test2::API::Instance</dt>
+<dd>
+
+<p>Object used by Test2::API under the hood</p>
+
+</dd>
+<dt id="Test2::API::InterceptResult"><a class="permalink" href="perlmodlib.html#Test2::API::InterceptResult">#</a><a id="Test25"></a>Test2::API::InterceptResult</dt>
+<dd>
+
+<p>Representation of a list of events.</p>
+
+</dd>
+<dt id="Test2::API::InterceptResult::Event"><a class="permalink" href="perlmodlib.html#Test2::API::InterceptResult::Event">#</a><a id="Test26"></a>Test2::API::InterceptResult::Event</dt>
+<dd>
+
+<p>Representation of an event for use in</p>
+
+</dd>
+<dt id="Test2::API::InterceptResult::Hub"><a class="permalink" href="perlmodlib.html#Test2::API::InterceptResult::Hub">#</a><a id="Test27"></a>Test2::API::InterceptResult::Hub</dt>
+<dd>
+
+<p>Hub used by InterceptResult.</p>
+
+</dd>
+<dt id="Test2::API::InterceptResult::Squasher"><a class="permalink" href="perlmodlib.html#Test2::API::InterceptResult::Squasher">#</a><a id="Test28"></a>Test2::API::InterceptResult::Squasher</dt>
+<dd>
+
+<p>Encapsulation of the algorithm that</p>
+
+</dd>
+<dt id="Test2::API::Stack"><a class="permalink" href="perlmodlib.html#Test2::API::Stack">#</a><a id="Test29"></a>Test2::API::Stack</dt>
+<dd>
+
+<p>Object to manage a stack of <a href="./Test2::Hub.html">Test2::Hub</a></p>
+
+</dd>
+<dt id="Test2::Event"><a class="permalink" href="perlmodlib.html#Test2::Event">#</a><a id="Test210"></a>Test2::Event</dt>
+<dd>
+
+<p>Base class for events</p>
+
+</dd>
+<dt id="Test2::Event::Bail"><a class="permalink" href="perlmodlib.html#Test2::Event::Bail">#</a><a id="Test211"></a>Test2::Event::Bail</dt>
+<dd>
+
+<p>Bailout!</p>
+
+</dd>
+<dt id="Test2::Event::Diag"><a class="permalink" href="perlmodlib.html#Test2::Event::Diag">#</a><a id="Test212"></a>Test2::Event::Diag</dt>
+<dd>
+
+<p>Diag event type</p>
+
+</dd>
+<dt id="Test2::Event::Encoding"><a class="permalink" href="perlmodlib.html#Test2::Event::Encoding">#</a><a id="Test213"></a>Test2::Event::Encoding</dt>
+<dd>
+
+<p>Set the encoding for the output stream</p>
+
+</dd>
+<dt id="Test2::Event::Exception"><a class="permalink" href="perlmodlib.html#Test2::Event::Exception">#</a><a id="Test214"></a>Test2::Event::Exception</dt>
+<dd>
+
+<p>Exception event</p>
+
+</dd>
+<dt id="Test2::Event::Fail"><a class="permalink" href="perlmodlib.html#Test2::Event::Fail">#</a><a id="Test215"></a>Test2::Event::Fail</dt>
+<dd>
+
+<p>Event for a simple failed assertion</p>
+
+</dd>
+<dt id="Test2::Event::Generic"><a class="permalink" href="perlmodlib.html#Test2::Event::Generic">#</a><a id="Test216"></a>Test2::Event::Generic</dt>
+<dd>
+
+<p>Generic event type.</p>
+
+</dd>
+<dt id="Test2::Event::Note"><a class="permalink" href="perlmodlib.html#Test2::Event::Note">#</a><a id="Test217"></a>Test2::Event::Note</dt>
+<dd>
+
+<p>Note event type</p>
+
+</dd>
+<dt id="Test2::Event::Ok"><a class="permalink" href="perlmodlib.html#Test2::Event::Ok">#</a><a id="Test218"></a>Test2::Event::Ok</dt>
+<dd>
+
+<p>Ok event type</p>
+
+</dd>
+<dt id="Test2::Event::Pass"><a class="permalink" href="perlmodlib.html#Test2::Event::Pass">#</a><a id="Test219"></a>Test2::Event::Pass</dt>
+<dd>
+
+<p>Event for a simple passing assertion</p>
+
+</dd>
+<dt id="Test2::Event::Plan"><a class="permalink" href="perlmodlib.html#Test2::Event::Plan">#</a><a id="Test220"></a>Test2::Event::Plan</dt>
+<dd>
+
+<p>The event of a plan</p>
+
+</dd>
+<dt id="Test2::Event::Skip"><a class="permalink" href="perlmodlib.html#Test2::Event::Skip">#</a><a id="Test221"></a>Test2::Event::Skip</dt>
+<dd>
+
+<p>Skip event type</p>
+
+</dd>
+<dt id="Test2::Event::Subtest"><a class="permalink" href="perlmodlib.html#Test2::Event::Subtest">#</a><a id="Test222"></a>Test2::Event::Subtest</dt>
+<dd>
+
+<p>Event for subtest types</p>
+
+</dd>
+<dt id="Test2::Event::TAP::Version"><a class="permalink" href="perlmodlib.html#Test2::Event::TAP::Version">#</a><a id="Test223"></a>Test2::Event::TAP::Version</dt>
+<dd>
+
+<p>Event for TAP version.</p>
+
+</dd>
+<dt id="Test2::Event::V2"><a class="permalink" href="perlmodlib.html#Test2::Event::V2">#</a><a id="Test224"></a>Test2::Event::V2</dt>
+<dd>
+
+<p>Second generation event.</p>
+
+</dd>
+<dt id="Test2::Event::Waiting"><a class="permalink" href="perlmodlib.html#Test2::Event::Waiting">#</a><a id="Test225"></a>Test2::Event::Waiting</dt>
+<dd>
+
+<p>Tell all procs/threads it is time to be done</p>
+
+</dd>
+<dt id="Test2::EventFacet"><a class="permalink" href="perlmodlib.html#Test2::EventFacet">#</a><a id="Test226"></a>Test2::EventFacet</dt>
+<dd>
+
+<p>Base class for all event facets.</p>
+
+</dd>
+<dt id="Test2::EventFacet::About"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::About">#</a><a id="Test227"></a>Test2::EventFacet::About</dt>
+<dd>
+
+<p>Facet with event details.</p>
+
+</dd>
+<dt id="Test2::EventFacet::Amnesty"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Amnesty">#</a><a id="Test228"></a>Test2::EventFacet::Amnesty</dt>
+<dd>
+
+<p>Facet for assertion amnesty.</p>
+
+</dd>
+<dt id="Test2::EventFacet::Assert"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Assert">#</a><a id="Test229"></a>Test2::EventFacet::Assert</dt>
+<dd>
+
+<p>Facet representing an assertion.</p>
+
+</dd>
+<dt id="Test2::EventFacet::Control"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Control">#</a><a id="Test230"></a>Test2::EventFacet::Control</dt>
+<dd>
+
+<p>Facet for hub actions and behaviors.</p>
+
+</dd>
+<dt id="Test2::EventFacet::Error"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Error">#</a><a id="Test231"></a>Test2::EventFacet::Error</dt>
+<dd>
+
+<p>Facet for errors that need to be shown.</p>
+
+</dd>
+<dt id="Test2::EventFacet::Hub"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Hub">#</a><a id="Test232"></a>Test2::EventFacet::Hub</dt>
+<dd>
+
+<p>Facet for the hubs an event passes through.</p>
+
+</dd>
+<dt id="Test2::EventFacet::Info"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Info">#</a><a id="Test233"></a>Test2::EventFacet::Info</dt>
+<dd>
+
+<p>Facet for information a developer might care about.</p>
+
+</dd>
+<dt id="Test2::EventFacet::Info::Table"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Info::Table">#</a><a id="Test234"></a>Test2::EventFacet::Info::Table</dt>
+<dd>
+
+<p>Intermediary representation of a table.</p>
+
+</dd>
+<dt id="Test2::EventFacet::Meta"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Meta">#</a><a id="Test235"></a>Test2::EventFacet::Meta</dt>
+<dd>
+
+<p>Facet for meta-data</p>
+
+</dd>
+<dt id="Test2::EventFacet::Parent"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Parent">#</a><a id="Test236"></a>Test2::EventFacet::Parent</dt>
+<dd>
+
+<p>Facet for events contains other events</p>
+
+</dd>
+<dt id="Test2::EventFacet::Plan"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Plan">#</a><a id="Test237"></a>Test2::EventFacet::Plan</dt>
+<dd>
+
+<p>Facet for setting the plan</p>
+
+</dd>
+<dt id="Test2::EventFacet::Render"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Render">#</a><a id="Test238"></a>Test2::EventFacet::Render</dt>
+<dd>
+
+<p>Facet that dictates how to render an event.</p>
+
+</dd>
+<dt id="Test2::EventFacet::Trace"><a class="permalink" href="perlmodlib.html#Test2::EventFacet::Trace">#</a><a id="Test239"></a>Test2::EventFacet::Trace</dt>
+<dd>
+
+<p>Debug information for events</p>
+
+</dd>
+<dt id="Test2::Formatter"><a class="permalink" href="perlmodlib.html#Test2::Formatter">#</a><a id="Test240"></a>Test2::Formatter</dt>
+<dd>
+
+<p>Namespace for formatters.</p>
+
+</dd>
+<dt id="Test2::Formatter::TAP"><a class="permalink" href="perlmodlib.html#Test2::Formatter::TAP">#</a><a id="Test241"></a>Test2::Formatter::TAP</dt>
+<dd>
+
+<p>Standard TAP formatter</p>
+
+</dd>
+<dt id="Test2::Hub"><a class="permalink" href="perlmodlib.html#Test2::Hub">#</a><a id="Test242"></a>Test2::Hub</dt>
+<dd>
+
+<p>The conduit through which all events flow.</p>
+
+</dd>
+<dt id="Test2::Hub::Interceptor"><a class="permalink" href="perlmodlib.html#Test2::Hub::Interceptor">#</a><a id="Test243"></a>Test2::Hub::Interceptor</dt>
+<dd>
+
+<p>Hub used by interceptor to grab results.</p>
+
+</dd>
+<dt id="Test2::Hub::Interceptor::Terminator"><a class="permalink" href="perlmodlib.html#Test2::Hub::Interceptor::Terminator">#</a><a id="Test244"></a>Test2::Hub::Interceptor::Terminator</dt>
+<dd>
+
+<p>Exception class used by</p>
+
+</dd>
+<dt id="Test2::Hub::Subtest"><a class="permalink" href="perlmodlib.html#Test2::Hub::Subtest">#</a><a id="Test245"></a>Test2::Hub::Subtest</dt>
+<dd>
+
+<p>Hub used by subtests</p>
+
+</dd>
+<dt id="Test2::IPC"><a class="permalink" href="perlmodlib.html#Test2::IPC">#</a><a id="Test246"></a>Test2::IPC</dt>
+<dd>
+
+<p>Turn on IPC for threading or forking support.</p>
+
+</dd>
+<dt id="Test2::IPC::Driver"><a class="permalink" href="perlmodlib.html#Test2::IPC::Driver">#</a><a id="Test247"></a>Test2::IPC::Driver</dt>
+<dd>
+
+<p>Base class for Test2 IPC drivers.</p>
+
+</dd>
+<dt id="Test2::IPC::Driver::Files"><a class="permalink" href="perlmodlib.html#Test2::IPC::Driver::Files">#</a><a id="Test248"></a>Test2::IPC::Driver::Files</dt>
+<dd>
+
+<p>Temp dir + Files concurrency model.</p>
+
+</dd>
+<dt id="Test2::Tools::Tiny"><a class="permalink" href="perlmodlib.html#Test2::Tools::Tiny">#</a><a id="Test249"></a>Test2::Tools::Tiny</dt>
+<dd>
+
+<p>Tiny set of tools for unfortunate souls who cannot use</p>
+
+</dd>
+<dt id="Test2::Transition"><a class="permalink" href="perlmodlib.html#Test2::Transition">#</a><a id="Test250"></a>Test2::Transition</dt>
+<dd>
+
+<p>Transition notes when upgrading to Test2</p>
+
+</dd>
+<dt id="Test2::Util"><a class="permalink" href="perlmodlib.html#Test2::Util">#</a><a id="Test251"></a>Test2::Util</dt>
+<dd>
+
+<p>Tools used by Test2 and friends.</p>
+
+</dd>
+<dt id="Test2::Util::ExternalMeta"><a class="permalink" href="perlmodlib.html#Test2::Util::ExternalMeta">#</a><a id="Test252"></a>Test2::Util::ExternalMeta</dt>
+<dd>
+
+<p>Allow third party tools to safely attach meta-data</p>
+
+</dd>
+<dt id="Test2::Util::Facets2Legacy"><a class="permalink" href="perlmodlib.html#Test2::Util::Facets2Legacy">#</a><a id="Test253"></a>Test2::Util::Facets2Legacy</dt>
+<dd>
+
+<p>Convert facet data to the legacy event API.</p>
+
+</dd>
+<dt id="Test2::Util::HashBase"><a class="permalink" href="perlmodlib.html#Test2::Util::HashBase">#</a><a id="Test254"></a>Test2::Util::HashBase</dt>
+<dd>
+
+<p>Build hash based classes.</p>
+
+</dd>
+<dt id="Test2::Util::Trace"><a class="permalink" href="perlmodlib.html#Test2::Util::Trace">#</a><a id="Test255"></a>Test2::Util::Trace</dt>
+<dd>
+
+<p>Legacy wrapper fro <a href="./Test2::EventFacet::Trace.html">Test2::EventFacet::Trace</a>.</p>
+
+</dd>
+<dt id="Test::Builder"><a class="permalink" href="perlmodlib.html#Test::Builder">#</a><a id="Test1"></a>Test::Builder</dt>
+<dd>
+
+<p>Backend for building test libraries</p>
+
+</dd>
+<dt id="Test::Builder::Formatter"><a class="permalink" href="perlmodlib.html#Test::Builder::Formatter">#</a><a id="Test3"></a>Test::Builder::Formatter</dt>
+<dd>
+
+<p>Test::Builder subclass of Test2::Formatter::TAP</p>
+
+</dd>
+<dt id="Test::Builder::IO::Scalar"><a class="permalink" href="perlmodlib.html#Test::Builder::IO::Scalar">#</a><a id="Test4"></a>Test::Builder::IO::Scalar</dt>
+<dd>
+
+<p>A copy of IO::Scalar for Test::Builder</p>
+
+</dd>
+<dt id="Test::Builder::Module"><a class="permalink" href="perlmodlib.html#Test::Builder::Module">#</a><a id="Test5"></a>Test::Builder::Module</dt>
+<dd>
+
+<p>Base class for test modules</p>
+
+</dd>
+<dt id="Test::Builder::Tester"><a class="permalink" href="perlmodlib.html#Test::Builder::Tester">#</a><a id="Test6"></a>Test::Builder::Tester</dt>
+<dd>
+
+<p>Test testsuites that have been built with</p>
+
+</dd>
+<dt id="Test::Builder::Tester::Color"><a class="permalink" href="perlmodlib.html#Test::Builder::Tester::Color">#</a><a id="Test7"></a>Test::Builder::Tester::Color</dt>
+<dd>
+
+<p>Turn on colour in Test::Builder::Tester</p>
+
+</dd>
+<dt id="Test::Builder::TodoDiag"><a class="permalink" href="perlmodlib.html#Test::Builder::TodoDiag">#</a><a id="Test8"></a>Test::Builder::TodoDiag</dt>
+<dd>
+
+<p>Test::Builder subclass of Test2::Event::Diag</p>
+
+</dd>
+<dt id="Test::Harness"><a class="permalink" href="perlmodlib.html#Test::Harness">#</a><a id="Test9"></a>Test::Harness</dt>
+<dd>
+
+<p>Run Perl standard test scripts with statistics</p>
+
+</dd>
+<dt id="Test::Harness::Beyond"><a class="permalink" href="perlmodlib.html#Test::Harness::Beyond">#</a><a id="Test10"></a>Test::Harness::Beyond</dt>
+<dd>
+
+<p>Beyond make test</p>
+
+</dd>
+<dt id="Test::More"><a class="permalink" href="perlmodlib.html#Test::More">#</a><a id="Test11"></a>Test::More</dt>
+<dd>
+
+<p>Yet another framework for writing test scripts</p>
+
+</dd>
+<dt id="Test::Simple"><a class="permalink" href="perlmodlib.html#Test::Simple">#</a><a id="Test12"></a>Test::Simple</dt>
+<dd>
+
+<p>Basic utilities for writing tests.</p>
+
+</dd>
+<dt id="Test::Tester"><a class="permalink" href="perlmodlib.html#Test::Tester">#</a><a id="Test13"></a>Test::Tester</dt>
+<dd>
+
+<p>Ease testing test modules built with Test::Builder</p>
+
+</dd>
+<dt id="Test::Tester::Capture"><a class="permalink" href="perlmodlib.html#Test::Tester::Capture">#</a><a id="Test14"></a>Test::Tester::Capture</dt>
+<dd>
+
+<p>Help testing test modules built with Test::Builder</p>
+
+</dd>
+<dt id="Test::Tester::CaptureRunner"><a class="permalink" href="perlmodlib.html#Test::Tester::CaptureRunner">#</a><a id="Test15"></a>Test::Tester::CaptureRunner</dt>
+<dd>
+
+<p>Help testing test modules built with Test::Builder</p>
+
+</dd>
+<dt id="Test::Tutorial"><a class="permalink" href="perlmodlib.html#Test::Tutorial">#</a><a id="Test16"></a>Test::Tutorial</dt>
+<dd>
+
+<p>A tutorial about writing really basic tests</p>
+
+</dd>
+<dt id="Test::use::ok"><a class="permalink" href="perlmodlib.html#Test::use::ok">#</a><a id="Test17"></a>Test::use::ok</dt>
+<dd>
+
+<p>Alternative to Test::More::use_ok</p>
+
+</dd>
+<dt id="Text::Abbrev"><a class="permalink" href="perlmodlib.html#Text::Abbrev">#</a><a id="Text"></a>Text::Abbrev</dt>
+<dd>
+
+<p>Abbrev - create an abbreviation table from a list</p>
+
+</dd>
+<dt id="Text::Balanced"><a class="permalink" href="perlmodlib.html#Text::Balanced">#</a><a id="Text1"></a>Text::Balanced</dt>
+<dd>
+
+<p>Extract delimited text sequences from strings.</p>
+
+</dd>
+<dt id="Text::ParseWords"><a class="permalink" href="perlmodlib.html#Text::ParseWords">#</a><a id="Text2"></a>Text::ParseWords</dt>
+<dd>
+
+<p>Parse text into an array of tokens or array of arrays</p>
+
+</dd>
+<dt id="Text::Tabs"><a class="permalink" href="perlmodlib.html#Text::Tabs">#</a><a id="Text3"></a>Text::Tabs</dt>
+<dd>
+
+<p>Expand and unexpand tabs like unix expand(1) and unexpand(1)</p>
+
+</dd>
+<dt id="Text::Wrap"><a class="permalink" href="perlmodlib.html#Text::Wrap">#</a><a id="Text4"></a>Text::Wrap</dt>
+<dd>
+
+<p>Line wrapping to form simple paragraphs</p>
+
+</dd>
+<dt id="Thread"><a class="permalink" href="perlmodlib.html#Thread">#</a>Thread</dt>
+<dd>
+
+<p>Manipulate threads in Perl (for old code only)</p>
+
+</dd>
+<dt id="Thread::Queue"><a class="permalink" href="perlmodlib.html#Thread::Queue">#</a><a id="Thread1"></a>Thread::Queue</dt>
+<dd>
+
+<p>Thread-safe queues</p>
+
+</dd>
+<dt id="Thread::Semaphore"><a class="permalink" href="perlmodlib.html#Thread::Semaphore">#</a><a id="Thread2"></a>Thread::Semaphore</dt>
+<dd>
+
+<p>Thread-safe semaphores</p>
+
+</dd>
+<dt id="Tie::Array"><a class="permalink" href="perlmodlib.html#Tie::Array">#</a><a id="Tie"></a>Tie::Array</dt>
+<dd>
+
+<p>Base class for tied arrays</p>
+
+</dd>
+<dt id="Tie::File"><a class="permalink" href="perlmodlib.html#Tie::File">#</a><a id="Tie1"></a>Tie::File</dt>
+<dd>
+
+<p>Access the lines of a disk file via a Perl array</p>
+
+</dd>
+<dt id="Tie::Handle"><a class="permalink" href="perlmodlib.html#Tie::Handle">#</a><a id="Tie2"></a>Tie::Handle</dt>
+<dd>
+
+<p>Base class definitions for tied handles</p>
+
+</dd>
+<dt id="Tie::Hash"><a class="permalink" href="perlmodlib.html#Tie::Hash">#</a><a id="Tie3"></a>Tie::Hash</dt>
+<dd>
+
+<p>Base class definitions for tied hashes</p>
+
+</dd>
+<dt id="Tie::Hash::NamedCapture"><a class="permalink" href="perlmodlib.html#Tie::Hash::NamedCapture">#</a><a id="Tie4"></a>Tie::Hash::NamedCapture</dt>
+<dd>
+
+<p>Named regexp capture buffers</p>
+
+</dd>
+<dt id="Tie::Memoize"><a class="permalink" href="perlmodlib.html#Tie::Memoize">#</a><a id="Tie5"></a>Tie::Memoize</dt>
+<dd>
+
+<p>Add data to hash when needed</p>
+
+</dd>
+<dt id="Tie::RefHash"><a class="permalink" href="perlmodlib.html#Tie::RefHash">#</a><a id="Tie6"></a>Tie::RefHash</dt>
+<dd>
+
+<p>Use references as hash keys</p>
+
+</dd>
+<dt id="Tie::Scalar"><a class="permalink" href="perlmodlib.html#Tie::Scalar">#</a><a id="Tie7"></a>Tie::Scalar</dt>
+<dd>
+
+<p>Base class definitions for tied scalars</p>
+
+</dd>
+<dt id="Tie::StdHandle"><a class="permalink" href="perlmodlib.html#Tie::StdHandle">#</a><a id="Tie8"></a>Tie::StdHandle</dt>
+<dd>
+
+<p>Base class definitions for tied handles</p>
+
+</dd>
+<dt id="Tie::SubstrHash"><a class="permalink" href="perlmodlib.html#Tie::SubstrHash">#</a><a id="Tie9"></a>Tie::SubstrHash</dt>
+<dd>
+
+<p>Fixed-table-size, fixed-key-length hashing</p>
+
+</dd>
+<dt id="Time::HiRes"><a class="permalink" href="perlmodlib.html#Time::HiRes">#</a><a id="Time"></a>Time::HiRes</dt>
+<dd>
+
+<p>High resolution alarm, sleep, gettimeofday, interval timers</p>
+
+</dd>
+<dt id="Time::Local"><a class="permalink" href="perlmodlib.html#Time::Local">#</a><a id="Time1"></a>Time::Local</dt>
+<dd>
+
+<p>Efficiently compute time from local and GMT time</p>
+
+</dd>
+<dt id="Time::Piece"><a class="permalink" href="perlmodlib.html#Time::Piece">#</a><a id="Time2"></a>Time::Piece</dt>
+<dd>
+
+<p>Object Oriented time objects</p>
+
+</dd>
+<dt id="Time::Seconds"><a class="permalink" href="perlmodlib.html#Time::Seconds">#</a><a id="Time3"></a>Time::Seconds</dt>
+<dd>
+
+<p>A simple API to convert seconds to other date values</p>
+
+</dd>
+<dt id="Time::gmtime"><a class="permalink" href="perlmodlib.html#Time::gmtime">#</a><a id="Time4"></a>Time::gmtime</dt>
+<dd>
+
+<p>By-name interface to Perl&#39;s built-in gmtime() function</p>
+
+</dd>
+<dt id="Time::localtime"><a class="permalink" href="perlmodlib.html#Time::localtime">#</a><a id="Time5"></a>Time::localtime</dt>
+<dd>
+
+<p>By-name interface to Perl&#39;s built-in localtime() function</p>
+
+</dd>
+<dt id="Time::tm"><a class="permalink" href="perlmodlib.html#Time::tm">#</a><a id="Time6"></a>Time::tm</dt>
+<dd>
+
+<p>Internal object used by Time::gmtime and Time::localtime</p>
+
+</dd>
+<dt id="UNIVERSAL"><a class="permalink" href="perlmodlib.html#UNIVERSAL">#</a>UNIVERSAL</dt>
+<dd>
+
+<p>Base class for ALL classes (blessed references)</p>
+
+</dd>
+<dt id="Unicode::Collate"><a class="permalink" href="perlmodlib.html#Unicode::Collate">#</a><a id="Unicode"></a>Unicode::Collate</dt>
+<dd>
+
+<p>Unicode Collation Algorithm</p>
+
+</dd>
+<dt id="Unicode::Collate::CJK::Big5"><a class="permalink" href="perlmodlib.html#Unicode::Collate::CJK::Big5">#</a><a id="Unicode1"></a>Unicode::Collate::CJK::Big5</dt>
+<dd>
+
+<p>Weighting CJK Unified Ideographs</p>
+
+</dd>
+<dt id="Unicode::Collate::CJK::GB2312"><a class="permalink" href="perlmodlib.html#Unicode::Collate::CJK::GB2312">#</a><a id="Unicode2"></a>Unicode::Collate::CJK::GB2312</dt>
+<dd>
+
+<p>Weighting CJK Unified Ideographs</p>
+
+</dd>
+<dt id="Unicode::Collate::CJK::JISX0208"><a class="permalink" href="perlmodlib.html#Unicode::Collate::CJK::JISX0208">#</a><a id="Unicode3"></a>Unicode::Collate::CJK::JISX0208</dt>
+<dd>
+
+<p>Weighting JIS KANJI for Unicode::Collate</p>
+
+</dd>
+<dt id="Unicode::Collate::CJK::Korean"><a class="permalink" href="perlmodlib.html#Unicode::Collate::CJK::Korean">#</a><a id="Unicode4"></a>Unicode::Collate::CJK::Korean</dt>
+<dd>
+
+<p>Weighting CJK Unified Ideographs</p>
+
+</dd>
+<dt id="Unicode::Collate::CJK::Pinyin"><a class="permalink" href="perlmodlib.html#Unicode::Collate::CJK::Pinyin">#</a><a id="Unicode5"></a>Unicode::Collate::CJK::Pinyin</dt>
+<dd>
+
+<p>Weighting CJK Unified Ideographs</p>
+
+</dd>
+<dt id="Unicode::Collate::CJK::Stroke"><a class="permalink" href="perlmodlib.html#Unicode::Collate::CJK::Stroke">#</a><a id="Unicode6"></a>Unicode::Collate::CJK::Stroke</dt>
+<dd>
+
+<p>Weighting CJK Unified Ideographs</p>
+
+</dd>
+<dt id="Unicode::Collate::CJK::Zhuyin"><a class="permalink" href="perlmodlib.html#Unicode::Collate::CJK::Zhuyin">#</a><a id="Unicode7"></a>Unicode::Collate::CJK::Zhuyin</dt>
+<dd>
+
+<p>Weighting CJK Unified Ideographs</p>
+
+</dd>
+<dt id="Unicode::Collate::Locale"><a class="permalink" href="perlmodlib.html#Unicode::Collate::Locale">#</a><a id="Unicode8"></a>Unicode::Collate::Locale</dt>
+<dd>
+
+<p>Linguistic tailoring for DUCET via Unicode::Collate</p>
+
+</dd>
+<dt id="Unicode::Normalize"><a class="permalink" href="perlmodlib.html#Unicode::Normalize">#</a><a id="Unicode9"></a>Unicode::Normalize</dt>
+<dd>
+
+<p>Unicode Normalization Forms</p>
+
+</dd>
+<dt id="Unicode::UCD"><a class="permalink" href="perlmodlib.html#Unicode::UCD">#</a><a id="Unicode10"></a>Unicode::UCD</dt>
+<dd>
+
+<p>Unicode character database</p>
+
+</dd>
+<dt id="User::grent"><a class="permalink" href="perlmodlib.html#User::grent">#</a><a id="User"></a>User::grent</dt>
+<dd>
+
+<p>By-name interface to Perl&#39;s built-in getgr*() functions</p>
+
+</dd>
+<dt id="User::pwent"><a class="permalink" href="perlmodlib.html#User::pwent">#</a><a id="User1"></a>User::pwent</dt>
+<dd>
+
+<p>By-name interface to Perl&#39;s built-in getpw*() functions</p>
+
+</dd>
+<dt id="VMS::DCLsym"><a class="permalink" href="perlmodlib.html#VMS::DCLsym">#</a><a id="VMS"></a>VMS::DCLsym</dt>
+<dd>
+
+<p>Perl extension to manipulate DCL symbols</p>
+
+</dd>
+<dt id="VMS::Filespec"><a class="permalink" href="perlmodlib.html#VMS::Filespec">#</a><a id="VMS1"></a>VMS::Filespec</dt>
+<dd>
+
+<p>Convert between VMS and Unix file specification syntax</p>
+
+</dd>
+<dt id="VMS::Stdio"><a class="permalink" href="perlmodlib.html#VMS::Stdio">#</a><a id="VMS2"></a>VMS::Stdio</dt>
+<dd>
+
+<p>Standard I/O functions via VMS extensions</p>
+
+</dd>
+<dt id="Win32"><a class="permalink" href="perlmodlib.html#Win32">#</a>Win32</dt>
+<dd>
+
+<p>Interfaces to some Win32 API Functions</p>
+
+</dd>
+<dt id="Win32API::File"><a class="permalink" href="perlmodlib.html#Win32API::File">#</a><a id="Win32API"></a>Win32API::File</dt>
+<dd>
+
+<p>Low-level access to Win32 system API calls for files/dirs.</p>
+
+</dd>
+<dt id="Win32CORE"><a class="permalink" href="perlmodlib.html#Win32CORE">#</a>Win32CORE</dt>
+<dd>
+
+<p>Win32 CORE function stubs</p>
+
+</dd>
+<dt id="XS::APItest"><a class="permalink" href="perlmodlib.html#XS::APItest">#</a><a id="XS"></a>XS::APItest</dt>
+<dd>
+
+<p>Test the perl C API</p>
+
+</dd>
+<dt id="XS::Typemap"><a class="permalink" href="perlmodlib.html#XS::Typemap">#</a><a id="XS1"></a>XS::Typemap</dt>
+<dd>
+
+<p>Module to test the XS typemaps distributed with perl</p>
+
+</dd>
+<dt id="XSLoader"><a class="permalink" href="perlmodlib.html#XSLoader">#</a>XSLoader</dt>
+<dd>
+
+<p>Dynamically load C libraries into Perl code</p>
+
+</dd>
+<dt id="autodie::Scope::Guard"><a class="permalink" href="perlmodlib.html#autodie::Scope::Guard">#</a><a id="autodie5"></a>autodie::Scope::Guard</dt>
+<dd>
+
+<p>Wrapper class for calling subs at end of scope</p>
+
+</dd>
+<dt id="autodie::Scope::GuardStack"><a class="permalink" href="perlmodlib.html#autodie::Scope::GuardStack">#</a><a id="autodie6"></a>autodie::Scope::GuardStack</dt>
+<dd>
+
+<p>Hook stack for managing scopes via %^H</p>
+
+</dd>
+<dt id="autodie::Util"><a class="permalink" href="perlmodlib.html#autodie::Util">#</a><a id="autodie7"></a>autodie::Util</dt>
+<dd>
+
+<p>Internal Utility subroutines for autodie and Fatal</p>
+
+</dd>
+<dt id="version::Internals"><a class="permalink" href="perlmodlib.html#version::Internals">#</a><a id="version1"></a>version::Internals</dt>
+<dd>
+
+<p>Perl extension for Version Objects</p>
+
+</dd>
+</dl>
+
+<p>To find out <i>all</i> modules installed on your system, including those without documentation or outside the standard release, just use the following command (under the default win32 shell, double quotes should be used instead of single quotes).</p>
+
+<pre><code>% perl -MFile::Find=find -MFile::Spec::Functions -Tlwe \
+  &#39;find { wanted =&gt; sub { print canonpath $_ if /\.pm\z/ },
+  no_chdir =&gt; 1 }, @INC&#39;</code></pre>
+
+<p>(The -T is here to prevent &#39;.&#39; from being listed in @INC.) They should all have their own documentation installed and accessible via your system man(1) command. If you do not have a <b>find</b> program, you can use the Perl <b>find2perl</b> program instead, which generates Perl code as output you can run through perl. If you have a <b>man</b> program but it doesn&#39;t find your modules, you&#39;ll have to fix your manpath. See <a href="perl.html">perl</a> for details. If you have no system <b>man</b> command, you might try the <b>perldoc</b> program.</p>
+
+<p>Note also that the command <code>perldoc perllocal</code> gives you a (possibly incomplete) list of the modules that have been further installed on your system. (The perllocal.pod file is updated by the standard MakeMaker install process.)</p>
+
+<h2 id="Extension-Modules"><a class="permalink" href="perlmodlib.html#Extension-Modules">#</a><a id="Extension"></a>Extension Modules</h2>
+
+<p>Extension modules are written in C (or a mix of Perl and C). They are usually dynamically loaded into Perl if and when you need them, but may also be linked in statically. Supported extension modules include Socket, Fcntl, and POSIX.</p>
+
+<p>Many popular C extension modules do not come bundled (at least, not completely) due to their sizes, volatility, or simply lack of time for adequate testing and configuration across the multitude of platforms on which Perl was beta-tested. You are encouraged to look for them on CPAN (described below), or using web search engines like Google or DuckDuckGo.</p>
+
+<h1 id="CPAN1"><a class="permalink" href="perlmodlib.html#CPAN1">#</a>CPAN</h1>
+
+<p>CPAN stands for Comprehensive Perl Archive Network; it&#39;s a globally replicated trove of Perl materials, including documentation, style guides, tricks and traps, alternate ports to non-Unix systems and occasional binary distributions for these. Search engines for CPAN can be found at https://www.cpan.org/</p>
+
+<p>Most importantly, CPAN includes around a thousand unbundled modules, some of which require a C compiler to build. Major categories of modules are:</p>
+
+<ul>
+
+<li><p>Language Extensions and Documentation Tools</p>
+
+</li>
+<li><p>Development Support</p>
+
+</li>
+<li><p>Operating System Interfaces</p>
+
+</li>
+<li><p>Networking, Device Control (modems) and InterProcess Communication</p>
+
+</li>
+<li><p>Data Types and Data Type Utilities</p>
+
+</li>
+<li><p>Database Interfaces</p>
+
+</li>
+<li><p>User Interfaces</p>
+
+</li>
+<li><p>Interfaces to / Emulations of Other Programming Languages</p>
+
+</li>
+<li><p>File Names, File Systems and File Locking (see also File Handles)</p>
+
+</li>
+<li><p>String Processing, Language Text Processing, Parsing, and Searching</p>
+
+</li>
+<li><p>Option, Argument, Parameter, and Configuration File Processing</p>
+
+</li>
+<li><p>Internationalization and Locale</p>
+
+</li>
+<li><p>Authentication, Security, and Encryption</p>
+
+</li>
+<li><p>World Wide Web, HTML, HTTP, CGI, MIME</p>
+
+</li>
+<li><p>Server and Daemon Utilities</p>
+
+</li>
+<li><p>Archiving and Compression</p>
+
+</li>
+<li><p>Images, Pixmap and Bitmap Manipulation, Drawing, and Graphing</p>
+
+</li>
+<li><p>Mail and Usenet News</p>
+
+</li>
+<li><p>Control Flow Utilities (callbacks and exceptions etc)</p>
+
+</li>
+<li><p>File Handle and Input/Output Stream Utilities</p>
+
+</li>
+<li><p>Miscellaneous Modules</p>
+
+</li>
+</ul>
+
+<p>The list of the registered CPAN sites follows. Please note that the sorting order is alphabetical on fields:</p>
+
+<p>Continent | |--&gt;Country | |--&gt;[state/province] | |--&gt;ftp | |--&gt;[http]</p>
+
+<p>and thus the North American servers happen to be listed between the European and the South American sites.</p>
+
+<p>Registered CPAN sites</p>
+
+<h2 id="Africa"><a class="permalink" href="perlmodlib.html#Africa">#</a>Africa</h2>
+
+<dl>
+
+<dt id="South-Africa"><a class="permalink" href="perlmodlib.html#South-Africa">#</a><a id="South"></a>South Africa</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.is.co.za/pub/cpan/
+ftp://ftp.is.co.za/pub/cpan/
+http://cpan.mirror.ac.za/
+ftp://cpan.mirror.ac.za/
+http://cpan.saix.net/
+ftp://ftp.saix.net/pub/CPAN/
+http://ftp.wa.co.za/pub/CPAN/
+ftp://ftp.wa.co.za/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="Uganda"><a class="permalink" href="perlmodlib.html#Uganda">#</a>Uganda</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.ucu.ac.ug/cpan/</code></pre>
+
+</dd>
+<dt id="Zimbabwe"><a class="permalink" href="perlmodlib.html#Zimbabwe">#</a>Zimbabwe</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.zol.co.zw/CPAN/
+ftp://mirror.zol.co.zw/CPAN/</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="Asia"><a class="permalink" href="perlmodlib.html#Asia">#</a>Asia</h2>
+
+<dl>
+
+<dt id="Bangladesh"><a class="permalink" href="perlmodlib.html#Bangladesh">#</a>Bangladesh</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.dhakacom.com/CPAN/
+ftp://mirror.dhakacom.com/CPAN/</code></pre>
+
+</dd>
+<dt id="China"><a class="permalink" href="perlmodlib.html#China">#</a>China</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.communilink.net/
+http://ftp.cuhk.edu.hk/pub/packages/perl/CPAN/
+ftp://ftp.cuhk.edu.hk/pub/packages/perl/CPAN/
+http://mirrors.hust.edu.cn/CPAN/
+http://mirrors.neusoft.edu.cn/cpan/
+http://mirror.lzu.edu.cn/CPAN/
+http://mirrors.163.com/cpan/
+http://mirrors.sohu.com/CPAN/
+http://mirrors.ustc.edu.cn/CPAN/
+ftp://mirrors.ustc.edu.cn/CPAN/
+http://mirrors.xmu.edu.cn/CPAN/
+ftp://mirrors.xmu.edu.cn/CPAN/
+http://mirrors.zju.edu.cn/CPAN/</code></pre>
+
+</dd>
+<dt id="India"><a class="permalink" href="perlmodlib.html#India">#</a>India</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.excellmedia.net/
+http://perlmirror.indialinks.com/</code></pre>
+
+</dd>
+<dt id="Indonesia"><a class="permalink" href="perlmodlib.html#Indonesia">#</a>Indonesia</dt>
+<dd>
+
+<pre><code class="plaintext">http://kambing.ui.ac.id/cpan/
+http://cpan.pesat.net.id/
+http://mirror.poliwangi.ac.id/CPAN/
+http://kartolo.sby.datautama.net.id/CPAN/
+http://mirror.wanxp.id/cpan/</code></pre>
+
+</dd>
+<dt id="Iran"><a class="permalink" href="perlmodlib.html#Iran">#</a>Iran</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.yazd.ac.ir/cpan/</code></pre>
+
+</dd>
+<dt id="Israel"><a class="permalink" href="perlmodlib.html#Israel">#</a>Israel</dt>
+<dd>
+
+<pre><code class="plaintext">http://biocourse.weizmann.ac.il/CPAN/</code></pre>
+
+</dd>
+<dt id="Japan"><a class="permalink" href="perlmodlib.html#Japan">#</a>Japan</dt>
+<dd>
+
+<pre><code class="plaintext">http://ftp.jaist.ac.jp/pub/CPAN/
+ftp://ftp.jaist.ac.jp/pub/CPAN/
+http://mirror.jre655.com/CPAN/
+ftp://mirror.jre655.com/CPAN/
+ftp://ftp.kddilabs.jp/CPAN/
+http://ftp.nara.wide.ad.jp/pub/CPAN/
+ftp://ftp.nara.wide.ad.jp/pub/CPAN/
+http://ftp.riken.jp/lang/CPAN/
+ftp://ftp.riken.jp/lang/CPAN/
+ftp://ftp.u-aizu.ac.jp/pub/CPAN/
+http://ftp.yz.yamagata-u.ac.jp/pub/lang/cpan/
+ftp://ftp.yz.yamagata-u.ac.jp/pub/lang/cpan/</code></pre>
+
+</dd>
+<dt id="Kazakhstan"><a class="permalink" href="perlmodlib.html#Kazakhstan">#</a>Kazakhstan</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.neolabs.kz/CPAN/
+ftp://mirror.neolabs.kz/CPAN/</code></pre>
+
+</dd>
+<dt id="Philippines"><a class="permalink" href="perlmodlib.html#Philippines">#</a>Philippines</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.pregi.net/CPAN/
+ftp://mirror.pregi.net/CPAN/
+http://mirror.rise.ph/cpan/
+ftp://mirror.rise.ph/cpan/</code></pre>
+
+</dd>
+<dt id="Qatar"><a class="permalink" href="perlmodlib.html#Qatar">#</a>Qatar</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.qnren.qa/CPAN/
+ftp://mirror.qnren.qa/CPAN/</code></pre>
+
+</dd>
+<dt id="Republic-of-Korea"><a class="permalink" href="perlmodlib.html#Republic-of-Korea">#</a><a id="Republic"></a>Republic of Korea</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.mirror.cdnetworks.com/
+ftp://cpan.mirror.cdnetworks.com/CPAN/
+http://ftp.kaist.ac.kr/pub/CPAN/
+ftp://ftp.kaist.ac.kr/CPAN/
+http://ftp.kr.freebsd.org/pub/CPAN/
+ftp://ftp.kr.freebsd.org/pub/CPAN/
+http://mirror.navercorp.com/CPAN/
+http://ftp.neowiz.com/CPAN/
+ftp://ftp.neowiz.com/CPAN/</code></pre>
+
+</dd>
+<dt id="Singapore"><a class="permalink" href="perlmodlib.html#Singapore">#</a>Singapore</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.mirror.choon.net/
+http://mirror.0x.sg/CPAN/
+ftp://mirror.0x.sg/CPAN/</code></pre>
+
+</dd>
+<dt id="Taiwan"><a class="permalink" href="perlmodlib.html#Taiwan">#</a>Taiwan</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.cdpa.nsysu.edu.tw/Unix/Lang/CPAN/
+ftp://cpan.cdpa.nsysu.edu.tw/Unix/Lang/CPAN/
+http://cpan.stu.edu.tw/
+ftp://ftp.stu.edu.tw/CPAN/
+http://ftp.yzu.edu.tw/CPAN/
+ftp://ftp.yzu.edu.tw/CPAN/
+http://cpan.nctu.edu.tw/
+ftp://cpan.nctu.edu.tw/
+http://ftp.ubuntu-tw.org/mirror/CPAN/
+ftp://ftp.ubuntu-tw.org/mirror/CPAN/</code></pre>
+
+</dd>
+<dt id="Turkey"><a class="permalink" href="perlmodlib.html#Turkey">#</a>Turkey</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.ulak.net.tr/
+ftp://ftp.ulak.net.tr/pub/perl/CPAN/
+http://mirror.vit.com.tr/mirror/CPAN/
+ftp://mirror.vit.com.tr/CPAN/</code></pre>
+
+</dd>
+<dt id="Viet-Nam"><a class="permalink" href="perlmodlib.html#Viet-Nam">#</a><a id="Viet"></a>Viet Nam</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirrors.digipower.vn/CPAN/
+http://mirror.downloadvn.com/cpan/
+http://mirrors.vinahost.vn/CPAN/</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="Europe"><a class="permalink" href="perlmodlib.html#Europe">#</a>Europe</h2>
+
+<dl>
+
+<dt id="Austria"><a class="permalink" href="perlmodlib.html#Austria">#</a>Austria</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.inode.at/
+ftp://cpan.inode.at/
+http://mirror.easyname.at/cpan/
+ftp://mirror.easyname.at/cpan/
+http://gd.tuwien.ac.at/languages/perl/CPAN/
+ftp://gd.tuwien.ac.at/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="Belarus"><a class="permalink" href="perlmodlib.html#Belarus">#</a>Belarus</dt>
+<dd>
+
+<pre><code class="plaintext">http://ftp.byfly.by/pub/CPAN/
+ftp://ftp.byfly.by/pub/CPAN/
+http://mirror.datacenter.by/pub/CPAN/
+ftp://mirror.datacenter.by/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="Belgium"><a class="permalink" href="perlmodlib.html#Belgium">#</a>Belgium</dt>
+<dd>
+
+<pre><code class="plaintext">http://ftp.belnet.be/ftp.cpan.org/
+ftp://ftp.belnet.be/mirror/ftp.cpan.org/
+http://cpan.cu.be/
+http://lib.ugent.be/CPAN/
+http://cpan.weepeetelecom.be/</code></pre>
+
+</dd>
+<dt id="Bosnia-and-Herzegovina"><a class="permalink" href="perlmodlib.html#Bosnia-and-Herzegovina">#</a><a id="Bosnia"></a>Bosnia and Herzegovina</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.mirror.ba/
+ftp://ftp.mirror.ba/CPAN/</code></pre>
+
+</dd>
+<dt id="Bulgaria"><a class="permalink" href="perlmodlib.html#Bulgaria">#</a>Bulgaria</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirrors.neterra.net/CPAN/
+ftp://mirrors.neterra.net/CPAN/
+http://mirrors.netix.net/CPAN/
+ftp://mirrors.netix.net/CPAN/</code></pre>
+
+</dd>
+<dt id="Croatia"><a class="permalink" href="perlmodlib.html#Croatia">#</a>Croatia</dt>
+<dd>
+
+<pre><code class="plaintext">http://ftp.carnet.hr/pub/CPAN/
+ftp://ftp.carnet.hr/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="Czech-Republic"><a class="permalink" href="perlmodlib.html#Czech-Republic">#</a><a id="Czech"></a>Czech Republic</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.dkm.cz/cpan/
+ftp://mirror.dkm.cz/cpan/
+ftp://ftp.fi.muni.cz/pub/CPAN/
+http://mirrors.nic.cz/CPAN/
+ftp://mirrors.nic.cz/pub/CPAN/
+http://cpan.mirror.vutbr.cz/
+ftp://mirror.vutbr.cz/cpan/</code></pre>
+
+</dd>
+<dt id="Denmark"><a class="permalink" href="perlmodlib.html#Denmark">#</a>Denmark</dt>
+<dd>
+
+<pre><code class="plaintext">http://www.cpan.dk/
+http://mirrors.dotsrc.org/cpan/
+ftp://mirrors.dotsrc.org/cpan/</code></pre>
+
+</dd>
+<dt id="Finland"><a class="permalink" href="perlmodlib.html#Finland">#</a>Finland</dt>
+<dd>
+
+<pre><code class="plaintext">ftp://ftp.funet.fi/pub/languages/perl/CPAN/</code></pre>
+
+</dd>
+<dt id="France"><a class="permalink" href="perlmodlib.html#France">#</a>France</dt>
+<dd>
+
+<pre><code class="plaintext">http://ftp.ciril.fr/pub/cpan/
+ftp://ftp.ciril.fr/pub/cpan/
+http://distrib-coffee.ipsl.jussieu.fr/pub/mirrors/cpan/
+ftp://distrib-coffee.ipsl.jussieu.fr/pub/mirrors/cpan/
+http://ftp.lip6.fr/pub/perl/CPAN/
+ftp://ftp.lip6.fr/pub/perl/CPAN/
+http://mirror.ibcp.fr/pub/CPAN/
+ftp://ftp.oleane.net/pub/CPAN/
+http://cpan.mirrors.ovh.net/ftp.cpan.org/
+ftp://cpan.mirrors.ovh.net/ftp.cpan.org/
+http://cpan.enstimac.fr/</code></pre>
+
+</dd>
+<dt id="Germany"><a class="permalink" href="perlmodlib.html#Germany">#</a>Germany</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.23media.de/cpan/
+ftp://mirror.23media.de/cpan/
+http://artfiles.org/cpan.org/
+ftp://artfiles.org/cpan.org/
+http://mirror.bibleonline.ru/cpan/
+http://mirror.checkdomain.de/CPAN/
+ftp://mirror.checkdomain.de/CPAN/
+http://cpan.noris.de/
+http://mirror.de.leaseweb.net/CPAN/
+ftp://mirror.de.leaseweb.net/CPAN/
+http://cpan.mirror.euserv.net/
+ftp://mirror.euserv.net/cpan/
+http://ftp-stud.hs-esslingen.de/pub/Mirrors/CPAN/
+ftp://mirror.fraunhofer.de/CPAN/
+ftp://ftp.freenet.de/pub/ftp.cpan.org/pub/CPAN/
+http://ftp.hosteurope.de/pub/CPAN/
+ftp://ftp.hosteurope.de/pub/CPAN/
+ftp://ftp.fu-berlin.de/unix/languages/perl/
+http://ftp.gwdg.de/pub/languages/perl/CPAN/
+ftp://ftp.gwdg.de/pub/languages/perl/CPAN/
+http://ftp.hawo.stw.uni-erlangen.de/CPAN/
+ftp://ftp.hawo.stw.uni-erlangen.de/CPAN/
+http://cpan.mirror.iphh.net/
+ftp://cpan.mirror.iphh.net/pub/CPAN/
+ftp://ftp.mpi-inf.mpg.de/pub/perl/CPAN/
+http://cpan.netbet.org/
+http://mirror.netcologne.de/cpan/
+ftp://mirror.netcologne.de/cpan/
+ftp://mirror.petamem.com/CPAN/
+http://www.planet-elektronik.de/CPAN/
+http://ftp.halifax.rwth-aachen.de/cpan/
+ftp://ftp.halifax.rwth-aachen.de/cpan/
+http://mirror.softaculous.com/cpan/
+http://ftp.u-tx.net/CPAN/
+ftp://ftp.u-tx.net/CPAN/
+http://mirror.reismil.ch/CPAN/</code></pre>
+
+</dd>
+<dt id="Greece"><a class="permalink" href="perlmodlib.html#Greece">#</a>Greece</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.cc.uoc.gr/mirrors/CPAN/
+ftp://ftp.cc.uoc.gr/mirrors/CPAN/
+http://ftp.ntua.gr/pub/lang/perl/
+ftp://ftp.ntua.gr/pub/lang/perl/</code></pre>
+
+</dd>
+<dt id="Hungary"><a class="permalink" href="perlmodlib.html#Hungary">#</a>Hungary</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.met.hu/CPAN/</code></pre>
+
+</dd>
+<dt id="Ireland"><a class="permalink" href="perlmodlib.html#Ireland">#</a>Ireland</dt>
+<dd>
+
+<pre><code class="plaintext">http://ftp.heanet.ie/mirrors/ftp.perl.org/pub/CPAN/
+ftp://ftp.heanet.ie/mirrors/ftp.perl.org/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="Italy"><a class="permalink" href="perlmodlib.html#Italy">#</a>Italy</dt>
+<dd>
+
+<pre><code class="plaintext">http://bo.mirror.garr.it/mirrors/CPAN/
+ftp://ftp.eutelia.it/CPAN_Mirror/
+http://cpan.panu.it/
+ftp://ftp.panu.it/pub/mirrors/perl/CPAN/
+http://cpan.muzzy.it/</code></pre>
+
+</dd>
+<dt id="Latvia"><a class="permalink" href="perlmodlib.html#Latvia">#</a>Latvia</dt>
+<dd>
+
+<pre><code class="plaintext">http://kvin.lv/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="Lithuania"><a class="permalink" href="perlmodlib.html#Lithuania">#</a>Lithuania</dt>
+<dd>
+
+<pre><code class="plaintext">http://ftp.litnet.lt/pub/CPAN/
+ftp://ftp.litnet.lt/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="Moldova"><a class="permalink" href="perlmodlib.html#Moldova">#</a>Moldova</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.as43289.net/pub/CPAN/
+ftp://mirror.as43289.net/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="Netherlands"><a class="permalink" href="perlmodlib.html#Netherlands">#</a>Netherlands</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.cs.uu.nl/
+ftp://ftp.cs.uu.nl/pub/CPAN/
+http://mirror.nl.leaseweb.net/CPAN/
+ftp://mirror.nl.leaseweb.net/CPAN/
+http://ftp.nluug.nl/languages/perl/CPAN/
+ftp://ftp.nluug.nl/pub/languages/perl/CPAN/
+http://mirror.transip.net/CPAN/
+ftp://mirror.transip.net/CPAN/
+http://cpan.mirror.triple-it.nl/
+http://ftp.tudelft.nl/cpan/
+ftp://ftp.tudelft.nl/pub/CPAN/
+ftp://download.xs4all.nl/pub/mirror/CPAN/</code></pre>
+
+</dd>
+<dt id="Norway"><a class="permalink" href="perlmodlib.html#Norway">#</a>Norway</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.uib.no/
+ftp://cpan.uib.no/pub/CPAN/
+ftp://ftp.uninett.no/pub/languages/perl/CPAN/
+http://cpan.vianett.no/</code></pre>
+
+</dd>
+<dt id="Poland"><a class="permalink" href="perlmodlib.html#Poland">#</a>Poland</dt>
+<dd>
+
+<pre><code class="plaintext">http://ftp.agh.edu.pl/CPAN/
+ftp://ftp.agh.edu.pl/CPAN/
+http://ftp.piotrkosoft.net/pub/mirrors/CPAN/
+ftp://ftp.piotrkosoft.net/pub/mirrors/CPAN/
+ftp://ftp.ps.pl/pub/CPAN/
+http://sunsite.icm.edu.pl/pub/CPAN/
+ftp://sunsite.icm.edu.pl/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="Portugal"><a class="permalink" href="perlmodlib.html#Portugal">#</a>Portugal</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.dcc.fc.up.pt/
+http://mirrors.fe.up.pt/pub/CPAN/
+http://cpan.perl-hackers.net/
+http://cpan.perl.pt/</code></pre>
+
+</dd>
+<dt id="Romania"><a class="permalink" href="perlmodlib.html#Romania">#</a>Romania</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirrors.hostingromania.ro/cpan.org/
+ftp://ftp.lug.ro/CPAN/
+http://mirrors.m247.ro/CPAN/
+http://mirrors.evowise.com/CPAN/
+http://mirrors.teentelecom.net/CPAN/
+ftp://mirrors.teentelecom.net/CPAN/
+http://mirrors.xservers.ro/CPAN/</code></pre>
+
+</dd>
+<dt id="Russian-Federation"><a class="permalink" href="perlmodlib.html#Russian-Federation">#</a><a id="Russian"></a>Russian Federation</dt>
+<dd>
+
+<pre><code class="plaintext">ftp://ftp.aha.ru/CPAN/
+http://cpan.rinet.ru/
+ftp://cpan.rinet.ru/pub/mirror/CPAN/
+http://cpan-mirror.rbc.ru/pub/CPAN/
+http://mirror.rol.ru/CPAN/
+http://cpan.uni-altai.ru/
+http://cpan.webdesk.ru/
+ftp://cpan.webdesk.ru/cpan/
+http://mirror.yandex.ru/mirrors/cpan/
+ftp://mirror.yandex.ru/mirrors/cpan/</code></pre>
+
+</dd>
+<dt id="Serbia"><a class="permalink" href="perlmodlib.html#Serbia">#</a>Serbia</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.sbb.rs/CPAN/
+ftp://mirror.sbb.rs/CPAN/</code></pre>
+
+</dd>
+<dt id="Slovakia"><a class="permalink" href="perlmodlib.html#Slovakia">#</a>Slovakia</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.lnx.sk/
+http://tux.rainside.sk/CPAN/
+ftp://tux.rainside.sk/CPAN/</code></pre>
+
+</dd>
+<dt id="Slovenia"><a class="permalink" href="perlmodlib.html#Slovenia">#</a>Slovenia</dt>
+<dd>
+
+<pre><code class="plaintext">http://ftp.arnes.si/software/perl/CPAN/
+ftp://ftp.arnes.si/software/perl/CPAN/</code></pre>
+
+</dd>
+<dt id="Spain"><a class="permalink" href="perlmodlib.html#Spain">#</a>Spain</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirrors.evowise.com/CPAN/
+http://osl.ugr.es/CPAN/
+http://ftp.rediris.es/mirror/CPAN/
+ftp://ftp.rediris.es/mirror/CPAN/</code></pre>
+
+</dd>
+<dt id="Sweden"><a class="permalink" href="perlmodlib.html#Sweden">#</a>Sweden</dt>
+<dd>
+
+<pre><code class="plaintext">http://ftp.acc.umu.se/mirror/CPAN/
+ftp://ftp.acc.umu.se/mirror/CPAN/</code></pre>
+
+</dd>
+<dt id="Switzerland"><a class="permalink" href="perlmodlib.html#Switzerland">#</a>Switzerland</dt>
+<dd>
+
+<pre><code class="plaintext">http://www.pirbot.com/mirrors/cpan/
+http://mirror.switch.ch/ftp/mirror/CPAN/
+ftp://mirror.switch.ch/mirror/CPAN/</code></pre>
+
+</dd>
+<dt id="Ukraine"><a class="permalink" href="perlmodlib.html#Ukraine">#</a>Ukraine</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.ip-connect.vn.ua/
+ftp://cpan.ip-connect.vn.ua/mirror/cpan/</code></pre>
+
+</dd>
+<dt id="United-Kingdom"><a class="permalink" href="perlmodlib.html#United-Kingdom">#</a><a id="United"></a>United Kingdom</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.mirror.anlx.net/
+ftp://ftp.mirror.anlx.net/CPAN/
+http://mirror.bytemark.co.uk/CPAN/
+ftp://mirror.bytemark.co.uk/CPAN/
+http://mirrors.coreix.net/CPAN/
+http://cpan.etla.org/
+ftp://cpan.etla.org/pub/CPAN/
+http://cpan.cpantesters.org/
+http://mirror.sax.uk.as61049.net/CPAN/
+http://mirror.sov.uk.goscomb.net/CPAN/
+http://www.mirrorservice.org/sites/cpan.perl.org/CPAN/
+ftp://ftp.mirrorservice.org/sites/cpan.perl.org/CPAN/
+http://mirror.ox.ac.uk/sites/www.cpan.org/
+ftp://mirror.ox.ac.uk/sites/www.cpan.org/
+http://ftp.ticklers.org/pub/CPAN/
+ftp://ftp.ticklers.org/pub/CPAN/
+http://cpan.mirrors.uk2.net/
+ftp://mirrors.uk2.net/pub/CPAN/
+http://mirror.ukhost4u.com/CPAN/</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="North-America"><a class="permalink" href="perlmodlib.html#North-America">#</a><a id="North"></a>North America</h2>
+
+<dl>
+
+<dt id="Canada"><a class="permalink" href="perlmodlib.html#Canada">#</a>Canada</dt>
+<dd>
+
+<pre><code class="plaintext">http://CPAN.mirror.rafal.ca/
+ftp://CPAN.mirror.rafal.ca/pub/CPAN/
+http://mirror.csclub.uwaterloo.ca/CPAN/
+ftp://mirror.csclub.uwaterloo.ca/CPAN/
+http://mirrors.gossamer-threads.com/CPAN/
+http://mirror.its.dal.ca/cpan/
+ftp://mirror.its.dal.ca/cpan/
+ftp://ftp.ottix.net/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="Costa-Rica"><a class="permalink" href="perlmodlib.html#Costa-Rica">#</a><a id="Costa"></a>Costa Rica</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirrors.ucr.ac.cr/CPAN/</code></pre>
+
+</dd>
+<dt id="Mexico"><a class="permalink" href="perlmodlib.html#Mexico">#</a>Mexico</dt>
+<dd>
+
+<pre><code class="plaintext">http://www.msg.com.mx/CPAN/
+ftp://ftp.msg.com.mx/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="United-States"><a class="permalink" href="perlmodlib.html#United-States">#</a><a id="United1"></a>United States</dt>
+<dd>
+
+<dl>
+
+<dt id="Alabama"><a class="permalink" href="perlmodlib.html#Alabama">#</a>Alabama</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.teklinks.com/CPAN/</code></pre>
+
+</dd>
+<dt id="Arizona"><a class="permalink" href="perlmodlib.html#Arizona">#</a>Arizona</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.n5tech.com/CPAN/
+http://mirrors.namecheap.com/CPAN/
+ftp://mirrors.namecheap.com/CPAN/</code></pre>
+
+</dd>
+<dt id="California"><a class="permalink" href="perlmodlib.html#California">#</a>California</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.develooper.com/
+http://httpupdate127.cpanel.net/CPAN/
+http://mirrors.sonic.net/cpan/
+ftp://mirrors.sonic.net/cpan/
+http://www.perl.com/CPAN/
+http://cpan.yimg.com/</code></pre>
+
+</dd>
+<dt id="Idaho"><a class="permalink" href="perlmodlib.html#Idaho">#</a>Idaho</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirrors.syringanetworks.net/CPAN/
+ftp://mirrors.syringanetworks.net/CPAN/</code></pre>
+
+</dd>
+<dt id="Illinois"><a class="permalink" href="perlmodlib.html#Illinois">#</a>Illinois</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.mirrors.hoobly.com/
+http://mirror.team-cymru.org/CPAN/
+ftp://mirror.team-cymru.org/CPAN/</code></pre>
+
+</dd>
+<dt id="Indiana"><a class="permalink" href="perlmodlib.html#Indiana">#</a>Indiana</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.netnitco.net/
+ftp://cpan.netnitco.net/pub/mirrors/CPAN/
+ftp://ftp.uwsg.iu.edu/pub/perl/CPAN/</code></pre>
+
+</dd>
+<dt id="Kansas"><a class="permalink" href="perlmodlib.html#Kansas">#</a>Kansas</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirrors.concertpass.com/cpan/</code></pre>
+
+</dd>
+<dt id="Massachusetts"><a class="permalink" href="perlmodlib.html#Massachusetts">#</a>Massachusetts</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirrors.ccs.neu.edu/CPAN/</code></pre>
+
+</dd>
+<dt id="Michigan"><a class="permalink" href="perlmodlib.html#Michigan">#</a>Michigan</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.cse.msu.edu/
+ftp://cpan.cse.msu.edu/
+http://httpupdate118.cpanel.net/CPAN/
+http://mirrors-usa.go-parts.com/cpan/
+http://ftp.wayne.edu/CPAN/
+ftp://ftp.wayne.edu/CPAN/</code></pre>
+
+</dd>
+<dt id="New-Hampshire"><a class="permalink" href="perlmodlib.html#New-Hampshire">#</a><a id="New"></a>New Hampshire</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.metrocast.net/cpan/</code></pre>
+
+</dd>
+<dt id="New-Jersey"><a class="permalink" href="perlmodlib.html#New-Jersey">#</a><a id="New1"></a>New Jersey</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.datapipe.net/CPAN/
+ftp://mirror.datapipe.net/pub/CPAN/
+http://www.hoovism.com/CPAN/
+ftp://ftp.hoovism.com/CPAN/
+http://cpan.mirror.nac.net/</code></pre>
+
+</dd>
+<dt id="New-York"><a class="permalink" href="perlmodlib.html#New-York">#</a><a id="New2"></a>New York</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.cc.columbia.edu/pub/software/cpan/
+ftp://mirror.cc.columbia.edu/pub/software/cpan/
+http://cpan.belfry.net/
+http://cpan.erlbaum.net/
+ftp://cpan.erlbaum.net/CPAN/
+http://cpan.hexten.net/
+ftp://cpan.hexten.net/
+http://mirror.nyi.net/CPAN/
+ftp://mirror.nyi.net/pub/CPAN/
+http://noodle.portalus.net/CPAN/
+ftp://noodle.portalus.net/CPAN/
+http://mirrors.rit.edu/CPAN/
+ftp://mirrors.rit.edu/CPAN/</code></pre>
+
+</dd>
+<dt id="North-Carolina"><a class="permalink" href="perlmodlib.html#North-Carolina">#</a><a id="North1"></a>North Carolina</dt>
+<dd>
+
+<pre><code class="plaintext">http://httpupdate140.cpanel.net/CPAN/
+http://mirrors.ibiblio.org/CPAN/</code></pre>
+
+</dd>
+<dt id="Oregon"><a class="permalink" href="perlmodlib.html#Oregon">#</a>Oregon</dt>
+<dd>
+
+<pre><code class="plaintext">http://ftp.osuosl.org/pub/CPAN/
+ftp://ftp.osuosl.org/pub/CPAN/
+http://mirror.uoregon.edu/CPAN/</code></pre>
+
+</dd>
+<dt id="Pennsylvania"><a class="permalink" href="perlmodlib.html#Pennsylvania">#</a>Pennsylvania</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.pair.com/
+ftp://cpan.pair.com/pub/CPAN/
+http://cpan.mirrors.ionfish.org/</code></pre>
+
+</dd>
+<dt id="South-Carolina"><a class="permalink" href="perlmodlib.html#South-Carolina">#</a><a id="South1"></a>South Carolina</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.mirror.clemson.edu/</code></pre>
+
+</dd>
+<dt id="Texas"><a class="permalink" href="perlmodlib.html#Texas">#</a>Texas</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.uta.edu/CPAN/</code></pre>
+
+</dd>
+<dt id="Utah"><a class="permalink" href="perlmodlib.html#Utah">#</a>Utah</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.cs.utah.edu/
+ftp://cpan.cs.utah.edu/CPAN/
+ftp://mirror.xmission.com/CPAN/</code></pre>
+
+</dd>
+<dt id="Virginia"><a class="permalink" href="perlmodlib.html#Virginia">#</a>Virginia</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.cogentco.com/pub/CPAN/
+ftp://mirror.cogentco.com/pub/CPAN/
+http://mirror.jmu.edu/pub/CPAN/
+ftp://mirror.jmu.edu/pub/CPAN/
+http://mirror.us.leaseweb.net/CPAN/
+ftp://mirror.us.leaseweb.net/CPAN/</code></pre>
+
+</dd>
+<dt id="Washington"><a class="permalink" href="perlmodlib.html#Washington">#</a>Washington</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.llarian.net/
+ftp://cpan.llarian.net/pub/CPAN/</code></pre>
+
+</dd>
+<dt id="Wisconsin"><a class="permalink" href="perlmodlib.html#Wisconsin">#</a>Wisconsin</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.mirrors.tds.net/
+ftp://cpan.mirrors.tds.net/pub/CPAN/</code></pre>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<h2 id="Oceania"><a class="permalink" href="perlmodlib.html#Oceania">#</a>Oceania</h2>
+
+<dl>
+
+<dt id="Australia"><a class="permalink" href="perlmodlib.html#Australia">#</a>Australia</dt>
+<dd>
+
+<pre><code class="plaintext">http://mirror.as24220.net/pub/cpan/
+ftp://mirror.as24220.net/pub/cpan/
+http://cpan.mirrors.ilisys.com.au/
+http://cpan.mirror.digitalpacific.com.au/
+ftp://mirror.internode.on.net/pub/cpan/
+http://mirror.optusnet.com.au/CPAN/
+http://cpan.mirror.serversaustralia.com.au/
+http://cpan.uberglobalmirror.com/
+http://mirror.waia.asn.au/pub/cpan/</code></pre>
+
+</dd>
+<dt id="New-Caledonia"><a class="permalink" href="perlmodlib.html#New-Caledonia">#</a><a id="New3"></a>New Caledonia</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.lagoon.nc/pub/CPAN/
+ftp://cpan.lagoon.nc/pub/CPAN/
+http://cpan.nautile.nc/CPAN/
+ftp://cpan.nautile.nc/CPAN/</code></pre>
+
+</dd>
+<dt id="New-Zealand"><a class="permalink" href="perlmodlib.html#New-Zealand">#</a><a id="New4"></a>New Zealand</dt>
+<dd>
+
+<pre><code class="plaintext">ftp://ftp.auckland.ac.nz/pub/perl/CPAN/
+http://cpan.catalyst.net.nz/CPAN/
+ftp://cpan.catalyst.net.nz/pub/CPAN/
+http://cpan.inspire.net.nz/
+ftp://cpan.inspire.net.nz/cpan/
+http://mirror.webtastix.net/CPAN/
+ftp://mirror.webtastix.net/CPAN/</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="South-America"><a class="permalink" href="perlmodlib.html#South-America">#</a><a id="South2"></a>South America</h2>
+
+<dl>
+
+<dt id="Argentina"><a class="permalink" href="perlmodlib.html#Argentina">#</a>Argentina</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.mmgdesigns.com.ar/</code></pre>
+
+</dd>
+<dt id="Brazil"><a class="permalink" href="perlmodlib.html#Brazil">#</a>Brazil</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.kinghost.net/
+http://linorg.usp.br/CPAN/
+http://mirror.nbtelecom.com.br/CPAN/</code></pre>
+
+</dd>
+<dt id="Chile"><a class="permalink" href="perlmodlib.html#Chile">#</a>Chile</dt>
+<dd>
+
+<pre><code class="plaintext">http://cpan.dcc.uchile.cl/
+ftp://cpan.dcc.uchile.cl/pub/lang/cpan/</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="RSYNC-Mirrors"><a class="permalink" href="perlmodlib.html#RSYNC-Mirrors">#</a><a id="RSYNC"></a>RSYNC Mirrors</h2>
+
+<pre><code class="plaintext">rsync://ftp.is.co.za/IS-Mirror/ftp.cpan.org/
+rsync://mirror.ac.za/CPAN/
+rsync://mirror.zol.co.zw/CPAN/
+rsync://mirror.dhakacom.com/CPAN/
+rsync://mirrors.ustc.edu.cn/CPAN/
+rsync://mirrors.xmu.edu.cn/CPAN/
+rsync://kambing.ui.ac.id/CPAN/
+rsync://ftp.jaist.ac.jp/pub/CPAN/
+rsync://mirror.jre655.com/CPAN/
+rsync://ftp.kddilabs.jp/cpan/
+rsync://ftp.nara.wide.ad.jp/cpan/
+rsync://ftp.riken.jp/cpan/
+rsync://mirror.neolabs.kz/CPAN/
+rsync://mirror.qnren.qa/CPAN/
+rsync://ftp.neowiz.com/CPAN/
+rsync://mirror.0x.sg/CPAN/
+rsync://ftp.yzu.edu.tw/pub/CPAN/
+rsync://ftp.ubuntu-tw.org/CPAN/
+rsync://mirrors.digipower.vn/CPAN/
+rsync://cpan.inode.at/CPAN/
+rsync://ftp.byfly.by/CPAN/
+rsync://mirror.datacenter.by/CPAN/
+rsync://ftp.belnet.be/cpan/
+rsync://cpan.mirror.ba/CPAN/
+rsync://mirrors.neterra.net/CPAN/
+rsync://mirrors.netix.net/CPAN/
+rsync://mirror.dkm.cz/cpan/
+rsync://mirrors.nic.cz/CPAN/
+rsync://cpan.mirror.vutbr.cz/cpan/
+rsync://rsync.nic.funet.fi/CPAN/
+rsync://ftp.ciril.fr/pub/cpan/
+rsync://distrib-coffee.ipsl.jussieu.fr/pub/mirrors/cpan/
+rsync://cpan.mirrors.ovh.net/CPAN/
+rsync://mirror.de.leaseweb.net/CPAN/
+rsync://mirror.euserv.net/cpan/
+rsync://ftp-stud.hs-esslingen.de/CPAN/
+rsync://ftp.gwdg.de/pub/languages/perl/CPAN/
+rsync://ftp.hawo.stw.uni-erlangen.de/CPAN/
+rsync://cpan.mirror.iphh.net/CPAN/
+rsync://mirror.netcologne.de/cpan/
+rsync://ftp.halifax.rwth-aachen.de/cpan/
+rsync://ftp.ntua.gr/CPAN/
+rsync://mirror.met.hu/CPAN/
+rsync://ftp.heanet.ie/mirrors/ftp.perl.org/pub/CPAN/
+rsync://rsync.panu.it/CPAN/
+rsync://mirror.as43289.net/CPAN/
+rsync://rsync.cs.uu.nl/CPAN/
+rsync://mirror.nl.leaseweb.net/CPAN/
+rsync://ftp.nluug.nl/CPAN/
+rsync://mirror.transip.net/CPAN/
+rsync://cpan.uib.no/cpan/
+rsync://cpan.vianett.no/CPAN/
+rsync://cpan.perl-hackers.net/CPAN/
+rsync://cpan.perl.pt/cpan/
+rsync://mirrors.m247.ro/CPAN/
+rsync://mirrors.teentelecom.net/CPAN/
+rsync://cpan.webdesk.ru/CPAN/
+rsync://mirror.yandex.ru/mirrors/cpan/
+rsync://mirror.sbb.rs/CPAN/
+rsync://ftp.acc.umu.se/mirror/CPAN/
+rsync://rsync.pirbot.com/ftp/cpan/
+rsync://cpan.ip-connect.vn.ua/CPAN/
+rsync://rsync.mirror.anlx.net/CPAN/
+rsync://mirror.bytemark.co.uk/CPAN/
+rsync://mirror.sax.uk.as61049.net/CPAN/
+rsync://rsync.mirrorservice.org/cpan.perl.org/CPAN/
+rsync://ftp.ticklers.org/CPAN/
+rsync://mirrors.uk2.net/CPAN/
+rsync://CPAN.mirror.rafal.ca/CPAN/
+rsync://mirror.csclub.uwaterloo.ca/CPAN/
+rsync://mirrors.namecheap.com/CPAN/
+rsync://mirrors.syringanetworks.net/CPAN/
+rsync://mirror.team-cymru.org/CPAN/
+rsync://debian.cse.msu.edu/cpan/
+rsync://mirrors-usa.go-parts.com/mirrors/cpan/
+rsync://rsync.hoovism.com/CPAN/
+rsync://mirror.cc.columbia.edu/cpan/
+rsync://noodle.portalus.net/CPAN/
+rsync://mirrors.rit.edu/cpan/
+rsync://mirrors.ibiblio.org/CPAN/
+rsync://cpan.pair.com/CPAN/
+rsync://cpan.cs.utah.edu/CPAN/
+rsync://mirror.cogentco.com/CPAN/
+rsync://mirror.jmu.edu/CPAN/
+rsync://mirror.us.leaseweb.net/CPAN/
+rsync://cpan.mirror.digitalpacific.com.au/cpan/
+rsync://mirror.internode.on.net/cpan/
+rsync://uberglobalmirror.com/cpan/
+rsync://cpan.lagoon.nc/cpan/
+rsync://mirrors.mmgdesigns.com.ar/CPAN/</code></pre>
+
+<p>For an up-to-date listing of CPAN sites, see <a href="https://www.cpan.org/SITES">https://www.cpan.org/SITES</a> or <a href="ftp://www.cpan.org/SITES">ftp://www.cpan.org/SITES</a>.</p>
+
+<h1 id="Modules:-Creation,-Use,-and-Abuse"><a class="permalink" href="perlmodlib.html#Modules:-Creation,-Use,-and-Abuse">#</a><a id="Modules"></a><a id="Modules:-Creation-Use-and-Abuse"></a>Modules: Creation, Use, and Abuse</h1>
+
+<p>(The following section is borrowed directly from Tim Bunce&#39;s modules file, available at your nearest CPAN site.)</p>
+
+<p>Perl implements a class using a package, but the presence of a package doesn&#39;t imply the presence of a class. A package is just a namespace. A class is a package that provides subroutines that can be used as methods. A method is just a subroutine that expects, as its first argument, either the name of a package (for &quot;static&quot; methods), or a reference to something (for &quot;virtual&quot; methods).</p>
+
+<p>A module is a file that (by convention) provides a class of the same name (sans the .pm), plus an import method in that class that can be called to fetch exported symbols. This module may implement some of its methods by loading dynamic C or C++ objects, but that should be totally transparent to the user of the module. Likewise, the module might set up an AUTOLOAD function to slurp in subroutine definitions on demand, but this is also transparent. Only the <i>.pm</i> file is required to exist. See <a href="perlsub.html">perlsub</a>, <a href="perlobj.html">perlobj</a>, and <a href="AutoLoader.html">AutoLoader</a> for details about the AUTOLOAD mechanism.</p>
+
+<h2 id="Guidelines-for-Module-Creation"><a class="permalink" href="perlmodlib.html#Guidelines-for-Module-Creation">#</a><a id="Guidelines"></a>Guidelines for Module Creation</h2>
+
+<ul>
+
+<li><p>Do similar modules already exist in some form?</p>
+
+<p>If so, please try to reuse the existing modules either in whole or by inheriting useful features into a new class. If this is not practical try to get together with the module authors to work on extending or enhancing the functionality of the existing modules. A perfect example is the plethora of packages in perl4 for dealing with command line options.</p>
+
+<p>If you are writing a module to expand an already existing set of modules, please coordinate with the author of the package. It helps if you follow the same naming scheme and module interaction scheme as the original author.</p>
+
+</li>
+<li><p>Try to design the new module to be easy to extend and reuse.</p>
+
+<p>Try to <code>use warnings;</code> (or <code>use warnings qw(...);</code>). Remember that you can add <code>no warnings qw(...);</code> to individual blocks of code that need less warnings.</p>
+
+<p>Use blessed references. Use the two argument form of bless to bless into the class name given as the first parameter of the constructor, e.g.,:</p>
+
+<pre><code>sub new {
+    my $class = shift;
+    return bless {}, $class;
+}</code></pre>
+
+<p>or even this if you&#39;d like it to be used as either a static or a virtual method.</p>
+
+<pre><code>sub new {
+    my $self  = shift;
+    my $class = ref($self) || $self;
+    return bless {}, $class;
+}</code></pre>
+
+<p>Pass arrays as references so more parameters can be added later (it&#39;s also faster). Convert functions into methods where appropriate. Split large methods into smaller more flexible ones. Inherit methods from other modules if appropriate.</p>
+
+<p>Avoid class name tests like: <code>die &quot;Invalid&quot; unless ref $ref eq &#39;FOO&#39;</code>. Generally you can delete the <code>eq &#39;FOO&#39;</code> part with no harm at all. Let the objects look after themselves! Generally, avoid hard-wired class names as far as possible.</p>
+
+<p>Avoid <code>$r-&gt;Class::func()</code> where using <code>@ISA=qw(... Class ...)</code> and <code>$r-&gt;func()</code> would work.</p>
+
+<p>Use autosplit so little used or newly added functions won&#39;t be a burden to programs that don&#39;t use them. Add test functions to the module after __END__ either using AutoSplit or by saying:</p>
+
+<pre><code>eval join(&#39;&#39;,&lt;main::DATA&gt;) || die $@ unless caller();</code></pre>
+
+<p>Does your module pass the &#39;empty subclass&#39; test? If you say <code>@SUBCLASS::ISA = qw(YOURCLASS);</code> your applications should be able to use SUBCLASS in exactly the same way as YOURCLASS. For example, does your application still work if you change: <code>$obj = YOURCLASS-&gt;new();</code> into: <code>$obj = SUBCLASS-&gt;new();</code> ?</p>
+
+<p>Avoid keeping any state information in your packages. It makes it difficult for multiple other packages to use yours. Keep state information in objects.</p>
+
+<p>Always use <b>-w</b>.</p>
+
+<p>Try to <code>use strict;</code> (or <code>use strict qw(...);</code>). Remember that you can add <code>no strict qw(...);</code> to individual blocks of code that need less strictness.</p>
+
+<p>Always use <b>-w</b>.</p>
+
+<p>Follow the guidelines in <a href="perlstyle.html">perlstyle</a>.</p>
+
+<p>Always use <b>-w</b>.</p>
+
+</li>
+<li><p>Some simple style guidelines</p>
+
+<p>The perlstyle manual supplied with Perl has many helpful points.</p>
+
+<p>Coding style is a matter of personal taste. Many people evolve their style over several years as they learn what helps them write and maintain good code. Here&#39;s one set of assorted suggestions that seem to be widely used by experienced developers:</p>
+
+<p>Use underscores to separate words. It is generally easier to read $var_names_like_this than $VarNamesLikeThis, especially for non-native speakers of English. It&#39;s also a simple rule that works consistently with VAR_NAMES_LIKE_THIS.</p>
+
+<p>Package/Module names are an exception to this rule. Perl informally reserves lowercase module names for &#39;pragma&#39; modules like integer and strict. Other modules normally begin with a capital letter and use mixed case with no underscores (need to be short and portable).</p>
+
+<p>You may find it helpful to use letter case to indicate the scope or nature of a variable. For example:</p>
+
+<pre><code>$ALL_CAPS_HERE   constants only (beware clashes with Perl vars)
+$Some_Caps_Here  package-wide global/static
+$no_caps_here    function scope my() or local() variables</code></pre>
+
+<p>Function and method names seem to work best as all lowercase. e.g., <code>$obj-&gt;as_string()</code>.</p>
+
+<p>You can use a leading underscore to indicate that a variable or function should not be used outside the package that defined it.</p>
+
+</li>
+<li><p>Select what to export.</p>
+
+<p>Do NOT export method names!</p>
+
+<p>Do NOT export anything else by default without a good reason!</p>
+
+<p>Exports pollute the namespace of the module user. If you must export try to use @EXPORT_OK in preference to @EXPORT and avoid short or common names to reduce the risk of name clashes.</p>
+
+<p>Generally anything not exported is still accessible from outside the module using the ModuleName::item_name (or <code>$blessed_ref-&gt;method</code>) syntax. By convention you can use a leading underscore on names to indicate informally that they are &#39;internal&#39; and not for public use.</p>
+
+<p>(It is actually possible to get private functions by saying: <code>my $subref = sub { ... }; &amp;$subref;</code>. But there&#39;s no way to call that directly as a method, because a method must have a name in the symbol table.)</p>
+
+<p>As a general rule, if the module is trying to be object oriented then export nothing. If it&#39;s just a collection of functions then @EXPORT_OK anything but use @EXPORT with caution.</p>
+
+</li>
+<li><p>Select a name for the module.</p>
+
+<p>This name should be as descriptive, accurate, and complete as possible. Avoid any risk of ambiguity. Always try to use two or more whole words. Generally the name should reflect what is special about what the module does rather than how it does it. Please use nested module names to group informally or categorize a module. There should be a very good reason for a module not to have a nested name. Module names should begin with a capital letter.</p>
+
+<p>Having 57 modules all called Sort will not make life easy for anyone (though having 23 called Sort::Quick is only marginally better :-). Imagine someone trying to install your module alongside many others.</p>
+
+<p>If you are developing a suite of related modules/classes it&#39;s good practice to use nested classes with a common prefix as this will avoid namespace clashes. For example: Xyz::Control, Xyz::View, Xyz::Model etc. Use the modules in this list as a naming guide.</p>
+
+<p>If adding a new module to a set, follow the original author&#39;s standards for naming modules and the interface to methods in those modules.</p>
+
+<p>If developing modules for private internal or project specific use, that will never be released to the public, then you should ensure that their names will not clash with any future public module. You can do this either by using the reserved Local::* category or by using a category name that includes an underscore like Foo_Corp::*.</p>
+
+<p>To be portable each component of a module name should be limited to 11 characters. If it might be used on MS-DOS then try to ensure each is unique in the first 8 characters. Nested modules make this easier.</p>
+
+<p>For additional guidance on the naming of modules, please consult:</p>
+
+<pre><code class="plaintext">https://pause.perl.org/pause/query?ACTION=pause_namingmodules</code></pre>
+
+<p>or send mail to the &lt;module-authors@perl.org&gt; mailing list.</p>
+
+</li>
+<li><p>Have you got it right?</p>
+
+<p>How do you know that you&#39;ve made the right decisions? Have you picked an interface design that will cause problems later? Have you picked the most appropriate name? Do you have any questions?</p>
+
+<p>The best way to know for sure, and pick up many helpful suggestions, is to ask someone who knows. The &lt;module-authors@perl.org&gt; mailing list is useful for this purpose; it&#39;s also accessible via news interface as perl.module-authors at nntp.perl.org.</p>
+
+<p>All you need to do is post a short summary of the module, its purpose and interfaces. A few lines on each of the main methods is probably enough. (If you post the whole module it might be ignored by busy people - generally the very people you want to read it!)</p>
+
+<p>Don&#39;t worry about posting if you can&#39;t say when the module will be ready - just say so in the message. It might be worth inviting others to help you, they may be able to complete it for you!</p>
+
+</li>
+<li><p>README and other Additional Files.</p>
+
+<p>It&#39;s well known that software developers usually fully document the software they write. If, however, the world is in urgent need of your software and there is not enough time to write the full documentation please at least provide a README file containing:</p>
+
+<ul>
+
+<li><p>A description of the module/package/extension etc.</p>
+
+</li>
+<li><p>A copyright notice - see below.</p>
+
+</li>
+<li><p>Prerequisites - what else you may need to have.</p>
+
+</li>
+<li><p>How to build it - possible changes to Makefile.PL etc.</p>
+
+</li>
+<li><p>How to install it.</p>
+
+</li>
+<li><p>Recent changes in this release, especially incompatibilities</p>
+
+</li>
+<li><p>Changes / enhancements you plan to make in the future.</p>
+
+</li>
+</ul>
+
+<p>If the README file seems to be getting too large you may wish to split out some of the sections into separate files: INSTALL, Copying, ToDo etc.</p>
+
+<ul>
+
+<li><p>Adding a Copyright Notice.</p>
+
+<p>How you choose to license your work is a personal decision. The general mechanism is to assert your Copyright and then make a declaration of how others may copy/use/modify your work.</p>
+
+<p>Perl, for example, is supplied with two types of licence: The GNU GPL and The Artistic Licence (see the files README, Copying, and Artistic, or <a href="perlgpl.html">perlgpl</a> and <a href="perlartistic.html">perlartistic</a>). Larry has good reasons for NOT just using the GNU GPL.</p>
+
+<p>My personal recommendation, out of respect for Larry, Perl, and the Perl community at large is to state something simply like:</p>
+
+<pre><code class="plaintext">Copyright (c) 1995 Your Name. All rights reserved.
+This program is free software; you can redistribute it and/or
+modify it under the same terms as Perl itself.</code></pre>
+
+<p>This statement should at least appear in the README file. You may also wish to include it in a Copying file and your source files. Remember to include the other words in addition to the Copyright.</p>
+
+</li>
+<li><p>Give the module a version/issue/release number.</p>
+
+<p>To be fully compatible with the Exporter and MakeMaker modules you should store your module&#39;s version number in a non-my package variable called $VERSION. This should be a positive floating point number with at least two digits after the decimal (i.e., hundredths, e.g, <code>$VERSION = &quot;0.01&quot;</code>). Don&#39;t use a &quot;1.3.2&quot; style version. See <a href="Exporter.html">Exporter</a> for details.</p>
+
+<p>It may be handy to add a function or method to retrieve the number. Use the number in announcements and archive file names when releasing the module (ModuleName-1.02.tar.Z). See perldoc ExtUtils::MakeMaker.pm for details.</p>
+
+</li>
+<li><p>How to release and distribute a module.</p>
+
+<p>If possible, register the module with CPAN. Follow the instructions and links on:</p>
+
+<pre><code class="plaintext">https://www.cpan.org/modules/04pause.html</code></pre>
+
+<p>and upload to:</p>
+
+<pre><code class="plaintext">https://pause.perl.org/</code></pre>
+
+<p>and notify &lt;modules@perl.org&gt;. This will allow anyone to install your module using the <code>cpan</code> tool distributed with Perl.</p>
+
+<p>By using the WWW interface you can ask the Upload Server to mirror your modules from your ftp or WWW site into your own directory on CPAN!</p>
+
+</li>
+<li><p>Take care when changing a released module.</p>
+
+<p>Always strive to remain compatible with previous released versions. Otherwise try to add a mechanism to revert to the old behavior if people rely on it. Document incompatible changes.</p>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+<h2 id="Guidelines-for-Converting-Perl-4-Library-Scripts-into-Modules"><a class="permalink" href="perlmodlib.html#Guidelines-for-Converting-Perl-4-Library-Scripts-into-Modules">#</a><a id="Guidelines1"></a>Guidelines for Converting Perl 4 Library Scripts into Modules</h2>
+
+<ul>
+
+<li><p>There is no requirement to convert anything.</p>
+
+<p>If it ain&#39;t broke, don&#39;t fix it! Perl 4 library scripts should continue to work with no problems. You may need to make some minor changes (like escaping non-array @&#39;s in double quoted strings) but there is no need to convert a .pl file into a Module for just that.</p>
+
+</li>
+<li><p>Consider the implications.</p>
+
+<p>All Perl applications that make use of the script will need to be changed (slightly) if the script is converted into a module. Is it worth it unless you plan to make other changes at the same time?</p>
+
+</li>
+<li><p>Make the most of the opportunity.</p>
+
+<p>If you are going to convert the script to a module you can use the opportunity to redesign the interface. The guidelines for module creation above include many of the issues you should consider.</p>
+
+</li>
+<li><p>The pl2pm utility will get you started.</p>
+
+<p>This utility will read *.pl files (given as parameters) and write corresponding *.pm files. The pl2pm utilities does the following:</p>
+
+<ul>
+
+<li><p>Adds the standard Module prologue lines</p>
+
+</li>
+<li><p>Converts package specifiers from &#39; to ::</p>
+
+</li>
+<li><p>Converts die(...) to croak(...)</p>
+
+</li>
+<li><p>Several other minor changes</p>
+
+</li>
+</ul>
+
+<p>Being a mechanical process pl2pm is not bullet proof. The converted code will need careful checking, especially any package statements. Don&#39;t delete the original .pl file till the new .pm one works!</p>
+
+</li>
+</ul>
+
+<h2 id="Guidelines-for-Reusing-Application-Code"><a class="permalink" href="perlmodlib.html#Guidelines-for-Reusing-Application-Code">#</a><a id="Guidelines2"></a>Guidelines for Reusing Application Code</h2>
+
+<ul>
+
+<li><p>Complete applications rarely belong in the Perl Module Library.</p>
+
+</li>
+<li><p>Many applications contain some Perl code that could be reused.</p>
+
+<p>Help save the world! Share your code in a form that makes it easy to reuse.</p>
+
+</li>
+<li><p>Break-out the reusable code into one or more separate module files.</p>
+
+</li>
+<li><p>Take the opportunity to reconsider and redesign the interfaces.</p>
+
+</li>
+<li><p>In some cases the &#39;application&#39; can then be reduced to a small</p>
+
+<p>fragment of code built on top of the reusable modules. In these cases the application could invoked as:</p>
+
+<pre><code>% perl -e &#39;use Module::Name; method(@ARGV)&#39; ...
+or
+% perl -mModule::Name ...    (in perl5.002 or higher)</code></pre>
+
+</li>
+</ul>
+
+<h1 id="NOTE"><a class="permalink" href="perlmodlib.html#NOTE">#</a>NOTE</h1>
+
+<p>Perl does not enforce private and public parts of its modules as you may have been used to in other languages like C++, Ada, or Modula-17. Perl doesn&#39;t have an infatuation with enforced privacy. It would prefer that you stayed out of its living room because you weren&#39;t invited, not because it has a shotgun.</p>
+
+<p>The module and its user have a contract, part of which is common law, and part of which is &quot;written&quot;. Part of the common law contract is that a module doesn&#39;t pollute any namespace it wasn&#39;t asked to. The written contract for the module (A.K.A. documentation) may make other provisions. But then you know when you <code>use RedefineTheWorld</code> that you&#39;re redefining the world and willing to take the consequences.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

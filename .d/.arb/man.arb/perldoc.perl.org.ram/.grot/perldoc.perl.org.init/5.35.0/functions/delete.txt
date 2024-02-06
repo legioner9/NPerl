@@ -1,0 +1,88 @@
+=over
+
+=item delete EXPR
+X<delete>
+
+Given an expression that specifies an element or slice of a hash,
+L<C<delete>|/delete EXPR> deletes the specified elements from that hash
+so that L<C<exists>|/exists EXPR> on that element no longer returns
+true.  Setting a hash element to the undefined value does not remove its
+key, but deleting it does; see L<C<exists>|/exists EXPR>.
+
+In list context, usually returns the value or values deleted, or the last such
+element in scalar context.  The return list's length corresponds to that of
+the argument list: deleting non-existent elements returns the undefined value
+in their corresponding positions. When a
+L<keyE<sol>value hash slice|perldata/KeyE<sol>Value Hash Slices> is passed to
+C<delete>, the return value is a list of key/value pairs (two elements for each
+item deleted from the hash).
+
+L<C<delete>|/delete EXPR> may also be used on arrays and array slices,
+but its behavior is less straightforward.  Although
+L<C<exists>|/exists EXPR> will return false for deleted entries,
+deleting array elements never changes indices of existing values; use
+L<C<shift>|/shift ARRAY> or L<C<splice>|/splice
+ARRAY,OFFSET,LENGTH,LIST> for that.  However, if any deleted elements
+fall at the end of an array, the array's size shrinks to the position of
+the highest element that still tests true for L<C<exists>|/exists EXPR>,
+or to 0 if none do.  In other words, an array won't have trailing
+nonexistent elements after a delete.
+
+B<WARNING:> Calling L<C<delete>|/delete EXPR> on array values is
+strongly discouraged.  The
+notion of deleting or checking the existence of Perl array elements is not
+conceptually coherent, and can lead to surprising behavior.
+
+Deleting from L<C<%ENV>|perlvar/%ENV> modifies the environment.
+Deleting from a hash tied to a DBM file deletes the entry from the DBM
+file.  Deleting from a L<C<tied>|/tied VARIABLE> hash or array may not
+necessarily return anything; it depends on the implementation of the
+L<C<tied>|/tied VARIABLE> package's DELETE method, which may do whatever
+it pleases.
+
+The C<delete local EXPR> construct localizes the deletion to the current
+block at run time.  Until the block exits, elements locally deleted
+temporarily no longer exist.  See L<perlsub/"Localized deletion of elements
+of composite types">.
+
+    my %hash = (foo => 11, bar => 22, baz => 33);
+    my $scalar = delete $hash{foo};         # $scalar is 11
+    $scalar = delete @hash{qw(foo bar)}; # $scalar is 22
+    my @array  = delete @hash{qw(foo baz)}; # @array  is (undef,33)
+
+The following (inefficiently) deletes all the values of %HASH and @ARRAY:
+
+    foreach my $key (keys %HASH) {
+        delete $HASH{$key};
+    }
+
+    foreach my $index (0 .. $#ARRAY) {
+        delete $ARRAY[$index];
+    }
+
+And so do these:
+
+    delete @HASH{keys %HASH};
+
+    delete @ARRAY[0 .. $#ARRAY];
+
+But both are slower than assigning the empty list
+or undefining %HASH or @ARRAY, which is the customary
+way to empty out an aggregate:
+
+    %HASH = ();     # completely empty %HASH
+    undef %HASH;    # forget %HASH ever existed
+
+    @ARRAY = ();    # completely empty @ARRAY
+    undef @ARRAY;   # forget @ARRAY ever existed
+
+The EXPR can be arbitrarily complicated provided its
+final operation is an element or slice of an aggregate:
+
+    delete $ref->[$x][$y]{$key};
+    delete $ref->[$x][$y]->@{$key1, $key2, @morekeys};
+
+    delete $ref->[$x][$y][$index];
+    delete $ref->[$x][$y]->@[$index1, $index2, @moreindices];
+
+=back

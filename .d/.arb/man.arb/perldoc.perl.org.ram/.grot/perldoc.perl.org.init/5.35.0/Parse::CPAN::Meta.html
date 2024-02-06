@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Parse::CPAN::Meta - Parse META.yml and META.json CPAN metadata files - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Parse::CPAN::Meta">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Parse::CPAN::Meta.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Parse::CPAN::Meta">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Parse::CPAN::Meta">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Parse::CPAN::Meta">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Parse::CPAN::Meta">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Parse::CPAN::Meta">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Parse::CPAN::Meta">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Parse::CPAN::Meta">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Parse::CPAN::Meta">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Parse::CPAN::Meta">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Parse::CPAN::Meta">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Parse::CPAN::Meta">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Parse::CPAN::Meta">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Parse::CPAN::Meta">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Parse::CPAN::Meta">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Parse::CPAN::Meta">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Parse::CPAN::Meta">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Parse::CPAN::Meta">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Parse::CPAN::Meta">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Parse::CPAN::Meta">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Parse::CPAN::Meta">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Parse::CPAN::Meta">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Parse::CPAN::Meta">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Parse::CPAN::Meta">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Parse::CPAN::Meta">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Parse::CPAN::Meta">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Parse::CPAN::Meta">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Parse::CPAN::Meta">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Parse::CPAN::Meta">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Parse::CPAN::Meta">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Parse::CPAN::Meta">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Parse::CPAN::Meta">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Parse::CPAN::Meta">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Parse::CPAN::Meta">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Parse::CPAN::Meta">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Parse::CPAN::Meta">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Parse::CPAN::Meta">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Parse::CPAN::Meta">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Parse::CPAN::Meta">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Parse::CPAN::Meta">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Parse::CPAN::Meta">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Parse::CPAN::Meta">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Parse::CPAN::Meta">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Parse::CPAN::Meta">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Parse::CPAN::Meta">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Parse::CPAN::Meta">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Parse::CPAN::Meta">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Parse::CPAN::Meta">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Parse::CPAN::Meta">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Parse::CPAN::Meta">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Parse::CPAN::Meta">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Parse::CPAN::Meta">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Parse::CPAN::Meta">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Parse::CPAN::Meta">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Parse::CPAN::Meta">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Parse::CPAN::Meta">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Parse::CPAN::Meta">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Parse::CPAN::Meta">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Parse::CPAN::Meta">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Parse::CPAN::Meta">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Parse::CPAN::Meta">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Parse::CPAN::Meta">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Parse::CPAN::Meta">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Parse::CPAN::Meta">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Parse::CPAN::Meta">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Parse::CPAN::Meta">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Parse::CPAN::Meta">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Parse::CPAN::Meta">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Parse::CPAN::Meta">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Parse::CPAN::Meta">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Parse::CPAN::Meta">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Parse::CPAN::Meta">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Parse::CPAN::Meta">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Parse::CPAN::Meta">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Parse::CPAN::Meta">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Parse::CPAN::Meta">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Parse::CPAN::Meta">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Parse::CPAN::Meta">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Parse::CPAN::Meta">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Parse::CPAN::Meta">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Parse::CPAN::Meta">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Parse::CPAN::Meta.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Parse::CPAN::Meta">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Parse::CPAN::Meta">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Parse::CPAN::Meta">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Parse::CPAN::Meta">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Parse::CPAN::Meta">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Parse::CPAN::Meta">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Parse::CPAN::Meta">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Parse::CPAN::Meta">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Parse::CPAN::Meta">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Parse::CPAN::Meta">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Parse::CPAN::Meta">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Parse::CPAN::Meta">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Parse::CPAN::Meta">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Parse::CPAN::Meta">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Parse::CPAN::Meta">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Parse::CPAN::Meta">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Parse::CPAN::Meta">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Parse::CPAN::Meta">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Parse::CPAN::Meta">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Parse::CPAN::Meta">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Parse::CPAN::Meta">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Parse::CPAN::Meta">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Parse::CPAN::Meta">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Parse::CPAN::Meta">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Parse::CPAN::Meta">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Parse::CPAN::Meta">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Parse::CPAN::Meta">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Parse::CPAN::Meta">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Parse::CPAN::Meta">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Parse::CPAN::Meta">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Parse::CPAN::Meta">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Parse::CPAN::Meta">5.35.1</a>
+          <a class="dropdown-item active" href="./Parse::CPAN::Meta.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Parse::CPAN::Meta.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Parse::CPAN::Meta.html">Parse::CPAN::Meta</a>
+          <div id="more">
+            (<a href="./Parse::CPAN::Meta.txt">source</a>,
+            <a href="https://metacpan.org/pod/Parse::CPAN::Meta">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 2.150010</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#VERSION">VERSION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#METHODS">METHODS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#load_file">load_file</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#load_yaml_string">load_yaml_string</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#load_json_string">load_json_string</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#load_string">load_string</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#yaml_backend">yaml_backend</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#json_backend">json_backend</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#json_decoder">json_decoder</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#FUNCTIONS">FUNCTIONS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#Load">Load</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#LoadFile">LoadFile</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#ENVIRONMENT">ENVIRONMENT</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#CPAN_META_JSON_DECODER">CPAN_META_JSON_DECODER</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#CPAN_META_JSON_BACKEND">CPAN_META_JSON_BACKEND</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#PERL_JSON_BACKEND">PERL_JSON_BACKEND</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#PERL_YAML_BACKEND">PERL_YAML_BACKEND</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#AUTHORS">AUTHORS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Parse::CPAN::Meta.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Parse::CPAN::Meta.html#NAME">#</a>NAME</h1>
+
+<p>Parse::CPAN::Meta - Parse META.yml and META.json CPAN metadata files</p>
+
+<h1 id="VERSION"><a class="permalink" href="./Parse::CPAN::Meta.html#VERSION">#</a>VERSION</h1>
+
+<p>version 2.150010</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Parse::CPAN::Meta.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>#############################################
+# In your file
+
+---
+name: My-Distribution
+version: 1.23
+resources:
+  homepage: &quot;http://example.com/dist/My-Distribution&quot;
+
+
+#############################################
+# In your program
+
+use Parse::CPAN::Meta;
+
+my $distmeta = Parse::CPAN::Meta-&gt;load_file(&#39;META.yml&#39;);
+
+# Reading properties
+my $name     = $distmeta-&gt;{name};
+my $version  = $distmeta-&gt;{version};
+my $homepage = $distmeta-&gt;{resources}{homepage};</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Parse::CPAN::Meta.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p><b>Parse::CPAN::Meta</b> is a parser for <i>META.json</i> and <i>META.yml</i> files, using <a href="./JSON::PP.html">JSON::PP</a> and/or <a href="./CPAN::Meta::YAML.html">CPAN::Meta::YAML</a>.</p>
+
+<p><b>Parse::CPAN::Meta</b> provides three methods: <code>load_file</code>, <code>load_json_string</code>, and <code>load_yaml_string</code>. These will read and deserialize CPAN metafiles, and are described below in detail.</p>
+
+<p><b>Parse::CPAN::Meta</b> provides a legacy API of only two functions, based on the YAML functions of the same name. Wherever possible, identical calling semantics are used. These may only be used with YAML sources.</p>
+
+<p>All error reporting is done with exceptions (die&#39;ing).</p>
+
+<p>Note that META files are expected to be in UTF-8 encoding, only. When converted string data, it must first be decoded from UTF-8.</p>
+
+<h1 id="METHODS"><a class="permalink" href="./Parse::CPAN::Meta.html#METHODS">#</a>METHODS</h1>
+
+<h2 id="load_file"><a class="permalink" href="./Parse::CPAN::Meta.html#load_file">#</a>load_file</h2>
+
+<pre><code>my $metadata_structure = Parse::CPAN::Meta-&gt;load_file(&#39;META.json&#39;);
+
+my $metadata_structure = Parse::CPAN::Meta-&gt;load_file(&#39;META.yml&#39;);</code></pre>
+
+<p>This method will read the named file and deserialize it to a data structure, determining whether it should be JSON or YAML based on the filename. The file will be read using the &quot;:utf8&quot; IO layer.</p>
+
+<h2 id="load_yaml_string"><a class="permalink" href="./Parse::CPAN::Meta.html#load_yaml_string">#</a>load_yaml_string</h2>
+
+<pre><code>my $metadata_structure = Parse::CPAN::Meta-&gt;load_yaml_string($yaml_string);</code></pre>
+
+<p>This method deserializes the given string of YAML and returns the first document in it. (CPAN metadata files should always have only one document.) If the source was UTF-8 encoded, the string must be decoded before calling <code>load_yaml_string</code>.</p>
+
+<h2 id="load_json_string"><a class="permalink" href="./Parse::CPAN::Meta.html#load_json_string">#</a>load_json_string</h2>
+
+<pre><code>my $metadata_structure = Parse::CPAN::Meta-&gt;load_json_string($json_string);</code></pre>
+
+<p>This method deserializes the given string of JSON and the result. If the source was UTF-8 encoded, the string must be decoded before calling <code>load_json_string</code>.</p>
+
+<h2 id="load_string"><a class="permalink" href="./Parse::CPAN::Meta.html#load_string">#</a>load_string</h2>
+
+<pre><code>my $metadata_structure = Parse::CPAN::Meta-&gt;load_string($some_string);</code></pre>
+
+<p>If you don&#39;t know whether a string contains YAML or JSON data, this method will use some heuristics and guess. If it can&#39;t tell, it assumes YAML.</p>
+
+<h2 id="yaml_backend"><a class="permalink" href="./Parse::CPAN::Meta.html#yaml_backend">#</a>yaml_backend</h2>
+
+<pre><code>my $backend = Parse::CPAN::Meta-&gt;yaml_backend;</code></pre>
+
+<p>Returns the module name of the YAML serializer. See <a href="./Parse::CPAN::Meta.html#ENVIRONMENT">&quot;ENVIRONMENT&quot;</a> for details.</p>
+
+<h2 id="json_backend"><a class="permalink" href="./Parse::CPAN::Meta.html#json_backend">#</a>json_backend</h2>
+
+<pre><code>my $backend = Parse::CPAN::Meta-&gt;json_backend;</code></pre>
+
+<p>Returns the module name of the JSON serializer. If <code>CPAN_META_JSON_BACKEND</code> is set, this will be whatever that&#39;s set to. If not, this will either be <a href="./JSON::PP.html">JSON::PP</a> or <a href="JSON.html">JSON</a>. If <code>PERL_JSON_BACKEND</code> is set, this will return <a href="JSON.html">JSON</a> as further delegation is handled by the <a href="JSON.html">JSON</a> module. See <a href="./Parse::CPAN::Meta.html#ENVIRONMENT">&quot;ENVIRONMENT&quot;</a> for details.</p>
+
+<h2 id="json_decoder"><a class="permalink" href="./Parse::CPAN::Meta.html#json_decoder">#</a>json_decoder</h2>
+
+<pre><code>my $decoder = Parse::CPAN::Meta-&gt;json_decoder;</code></pre>
+
+<p>Returns the module name of the JSON decoder. Unlike <a href="./Parse::CPAN::Meta.html#json_backend">&quot;json_backend&quot;</a>, this is not necessarily a full <a href="JSON.html">JSON</a>-style module, but only something that will provide a <code>decode_json</code> subroutine. If <code>CPAN_META_JSON_DECODER</code> is set, this will be whatever that&#39;s set to. If not, this will be whatever has been selected as <a href="./Parse::CPAN::Meta.html#json_backend">&quot;json_backend&quot;</a>. See <a href="./Parse::CPAN::Meta.html#ENVIRONMENT">&quot;ENVIRONMENT&quot;</a> for more notes.</p>
+
+<h1 id="FUNCTIONS"><a class="permalink" href="./Parse::CPAN::Meta.html#FUNCTIONS">#</a>FUNCTIONS</h1>
+
+<p>For maintenance clarity, no functions are exported by default. These functions are available for backwards compatibility only and are best avoided in favor of <code>load_file</code>.</p>
+
+<h2 id="Load"><a class="permalink" href="./Parse::CPAN::Meta.html#Load">#</a>Load</h2>
+
+<pre><code>my @yaml = Parse::CPAN::Meta::Load( $string );</code></pre>
+
+<p>Parses a string containing a valid YAML stream into a list of Perl data structures.</p>
+
+<h2 id="LoadFile"><a class="permalink" href="./Parse::CPAN::Meta.html#LoadFile">#</a>LoadFile</h2>
+
+<pre><code>my @yaml = Parse::CPAN::Meta::LoadFile( &#39;META.yml&#39; );</code></pre>
+
+<p>Reads the YAML stream from a file instead of a string.</p>
+
+<h1 id="ENVIRONMENT"><a class="permalink" href="./Parse::CPAN::Meta.html#ENVIRONMENT">#</a>ENVIRONMENT</h1>
+
+<h2 id="CPAN_META_JSON_DECODER"><a class="permalink" href="./Parse::CPAN::Meta.html#CPAN_META_JSON_DECODER">#</a>CPAN_META_JSON_DECODER</h2>
+
+<p>By default, <a href="./JSON::PP.html">JSON::PP</a> will be used for deserializing JSON data. If the <code>CPAN_META_JSON_DECODER</code> environment variable exists, this is expected to be the name of a loadable module that provides a <code>decode_json</code> subroutine, which will then be used for deserialization. Relying only on the existence of said subroutine allows for maximum compatibility, since this API is provided by all of <a href="./JSON::PP.html">JSON::PP</a>, <a href="./JSON::XS.html">JSON::XS</a>, <a href="./Cpanel::JSON::XS.html">Cpanel::JSON::XS</a>, <a href="./JSON::MaybeXS.html">JSON::MaybeXS</a>, <a href="./JSON::Tiny.html">JSON::Tiny</a>, and <a href="./Mojo::JSON.html">Mojo::JSON</a>.</p>
+
+<h2 id="CPAN_META_JSON_BACKEND"><a class="permalink" href="./Parse::CPAN::Meta.html#CPAN_META_JSON_BACKEND">#</a>CPAN_META_JSON_BACKEND</h2>
+
+<p>By default, <a href="./JSON::PP.html">JSON::PP</a> will be used for deserializing JSON data. If the <code>CPAN_META_JSON_BACKEND</code> environment variable exists, this is expected to be the name of a loadable module that provides the <a href="JSON.html">JSON</a> API, since downstream code expects to be able to call <code>new</code> on this class. As such, while <a href="./JSON::PP.html">JSON::PP</a>, <a href="./JSON::XS.html">JSON::XS</a>, <a href="./Cpanel::JSON::XS.html">Cpanel::JSON::XS</a> and <a href="./JSON::MaybeXS.html">JSON::MaybeXS</a> will work for this, to use <a href="./Mojo::JSON.html">Mojo::JSON</a> or <a href="./JSON::Tiny.html">JSON::Tiny</a> for decoding requires setting <a href="./Parse::CPAN::Meta.html#CPAN_META_JSON_DECODER">&quot;CPAN_META_JSON_DECODER&quot;</a>.</p>
+
+<h2 id="PERL_JSON_BACKEND"><a class="permalink" href="./Parse::CPAN::Meta.html#PERL_JSON_BACKEND">#</a>PERL_JSON_BACKEND</h2>
+
+<p>If the <code>CPAN_META_JSON_BACKEND</code> environment variable does not exist, and if <code>PERL_JSON_BACKEND</code> environment variable exists, is true and is not &quot;JSON::PP&quot;, then the <a href="JSON.html">JSON</a> module (version 2.5 or greater) will be loaded and used to interpret <code>PERL_JSON_BACKEND</code>. If <a href="JSON.html">JSON</a> is not installed or is too old, an exception will be thrown. Note that at the time of writing, the only useful values are 1, which will tell <a href="JSON.html">JSON</a> to guess, or <a href="./JSON::XS.html">JSON::XS</a> - if you want to use a newer JSON module, see <a href="./Parse::CPAN::Meta.html#CPAN_META_JSON_BACKEND">&quot;CPAN_META_JSON_BACKEND&quot;</a>.</p>
+
+<h2 id="PERL_YAML_BACKEND"><a class="permalink" href="./Parse::CPAN::Meta.html#PERL_YAML_BACKEND">#</a>PERL_YAML_BACKEND</h2>
+
+<p>By default, <a href="./CPAN::Meta::YAML.html">CPAN::Meta::YAML</a> will be used for deserializing YAML data. If the <code>PERL_YAML_BACKEND</code> environment variable is defined, then it is interpreted as a module to use for deserialization. The given module must be installed, must load correctly and must implement the <code>Load()</code> function or an exception will be thrown.</p>
+
+<h1 id="AUTHORS"><a class="permalink" href="./Parse::CPAN::Meta.html#AUTHORS">#</a>AUTHORS</h1>
+
+<ul>
+
+<li><p>David Golden &lt;dagolden@cpan.org&gt;</p>
+
+</li>
+<li><p>Ricardo Signes &lt;rjbs@cpan.org&gt;</p>
+
+</li>
+<li><p>Adam Kennedy &lt;adamk@cpan.org&gt;</p>
+
+</li>
+</ul>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a class="permalink" href="./Parse::CPAN::Meta.html#COPYRIGHT-AND-LICENSE">#</a><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>This software is copyright (c) 2010 by David Golden, Ricardo Signes, Adam Kennedy and Contributors.</p>
+
+<p>This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

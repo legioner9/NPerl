@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>prove - Run tests through a TAP harness. - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/prove">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="prove.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/prove">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/prove">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/prove">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/prove">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/prove">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/prove">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/prove">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/prove">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/prove">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/prove">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/prove">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/prove">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/prove">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/prove">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/prove">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/prove">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/prove">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/prove">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/prove">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/prove">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/prove">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/prove">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/prove">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/prove">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/prove">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/prove">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/prove">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/prove">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/prove">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/prove">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/prove">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/prove">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/prove">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/prove">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/prove">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/prove">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/prove">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/prove">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/prove">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/prove">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/prove">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/prove">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/prove">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/prove">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/prove">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/prove">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/prove">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/prove">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/prove">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/prove">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/prove">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/prove">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/prove">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/prove">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/prove">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/prove">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/prove">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/prove">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/prove">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/prove">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/prove">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/prove">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/prove">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/prove">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/prove">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/prove">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/prove">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/prove">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/prove">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/prove">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/prove">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/prove">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/prove">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/prove">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/prove">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/prove">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/prove">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/prove">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/prove">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/prove">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="prove.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/prove">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/prove">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/prove">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/prove">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/prove">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/prove">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/prove">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/prove">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/prove">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/prove">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/prove">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/prove">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/prove">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/prove">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/prove">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/prove">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/prove">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/prove">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/prove">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/prove">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/prove">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/prove">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/prove">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/prove">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/prove">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/prove">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/prove">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/prove">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/prove">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/prove">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/prove">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/prove">5.35.1</a>
+          <a class="dropdown-item active" href="prove.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="prove.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="prove.html">prove</a>
+          <div id="more">
+            (<a href="prove.txt">source</a>,
+            <a href="https://metacpan.org/pod/prove">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="prove.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#USAGE">USAGE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#OPTIONS">OPTIONS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#NOTES">NOTES</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="prove.html#.proverc">.proverc</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#Reading-from-STDIN">Reading from STDIN</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#Default-Test-Directory">Default Test Directory</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#Colored-Test-Output">Colored Test Output</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#Exit-Code">Exit Code</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#Arguments-to-Tests">Arguments to Tests</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#-exec">--exec</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#-merge">--merge</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#-trap">--trap</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#-state">--state</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#-rules">--rules</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="prove.html#-rules-examples">--rules examples</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#-rules-resolution">--rules resolution</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#-rules-Glob-style-pattern-matching">--rules Glob-style pattern matching</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#More-advanced-specifications-for-parallel-vs-sequence-run-rules">More advanced specifications for parallel vs sequence run rules</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#@INC">@INC</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#Taint-Mode">Taint Mode</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#FORMATTERS">FORMATTERS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#SOURCE-HANDLERS">SOURCE HANDLERS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#PLUGINS">PLUGINS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="prove.html#Available-Plugins">Available Plugins</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="prove.html#Writing-Plugins">Writing Plugins</a>
+              </li>
+          </ul>
+
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="prove.html#NAME">#</a>NAME</h1>
+
+<p>prove - Run tests through a TAP harness.</p>
+
+<h1 id="USAGE"><a class="permalink" href="prove.html#USAGE">#</a>USAGE</h1>
+
+<pre><code class="plaintext">prove [options] [files or directories]</code></pre>
+
+<h1 id="OPTIONS"><a class="permalink" href="prove.html#OPTIONS">#</a>OPTIONS</h1>
+
+<p>Boolean options:</p>
+
+<pre><code class="plaintext">-v,  --verbose         Print all test lines.
+-l,  --lib             Add &#39;lib&#39; to the path for your tests (-Ilib).
+-b,  --blib            Add &#39;blib/lib&#39; and &#39;blib/arch&#39; to the path for
+                       your tests
+-s,  --shuffle         Run the tests in random order.
+-c,  --color           Colored test output (default).
+     --nocolor         Do not color test output.
+     --count           Show the X/Y test count when not verbose
+                       (default)
+     --nocount         Disable the X/Y test count.
+-D   --dry             Dry run. Show test that would have run.
+-f,  --failures        Show failed tests.
+-o,  --comments        Show comments.
+     --ignore-exit     Ignore exit status from test scripts.
+-m,  --merge           Merge test scripts&#39; STDERR with their STDOUT.
+-r,  --recurse         Recursively descend into directories.
+     --reverse         Run the tests in reverse order.
+-q,  --quiet           Suppress some test output while running tests.
+-Q,  --QUIET           Only print summary results.
+-p,  --parse           Show full list of TAP parse errors, if any.
+     --directives      Only show results with TODO or SKIP directives.
+     --timer           Print elapsed time after each test.
+     --trap            Trap Ctrl-C and print summary on interrupt.
+     --normalize       Normalize TAP output in verbose output
+-T                     Enable tainting checks.
+-t                     Enable tainting warnings.
+-W                     Enable fatal warnings.
+-w                     Enable warnings.
+-h,  --help            Display this help
+-?,                    Display this help
+-V,  --version         Display the version
+-H,  --man             Longer manpage for prove
+     --norc            Don&#39;t process default .proverc</code></pre>
+
+<p>Options that take arguments:</p>
+
+<pre><code class="plaintext">-I                     Library paths to include.
+-P                     Load plugin (searches App::Prove::Plugin::*.)
+-M                     Load a module.
+-e,  --exec            Interpreter to run the tests (&#39;&#39; for compiled
+                       tests.)
+     --ext             Set the extension for tests (default &#39;.t&#39;)
+     --harness         Define test harness to use.  See TAP::Harness.
+     --formatter       Result formatter to use. See FORMATTERS.
+     --source          Load and/or configure a SourceHandler. See
+                       SOURCE HANDLERS.
+-a,  --archive out.tgz Store the resulting TAP in an archive file.
+-j,  --jobs N          Run N test jobs in parallel (try 9.)
+     --state=opts      Control prove&#39;s persistent state.
+     --statefile=file  Use `file` instead of `.prove` for state
+     --rc=rcfile       Process options from rcfile
+     --rules           Rules for parallel vs sequential processing.</code></pre>
+
+<h1 id="NOTES"><a class="permalink" href="prove.html#NOTES">#</a>NOTES</h1>
+
+<h2 id=".proverc"><a class="permalink" href="prove.html#.proverc">#</a><a id="proverc"></a>.proverc</h2>
+
+<p>If <i>~/.proverc</i> or <i>./.proverc</i> exist they will be read and any options they contain processed before the command line options. Options in <i>.proverc</i> are specified in the same way as command line options:</p>
+
+<pre><code class="plaintext"># .proverc
+--state=hot,fast,save
+-j9</code></pre>
+
+<p>Additional option files may be specified with the <code>--rc</code> option. Default option file processing is disabled by the <code>--norc</code> option.</p>
+
+<p>Under Windows and VMS the option file is named <i>_proverc</i> rather than <i>.proverc</i> and is sought only in the current directory.</p>
+
+<h2 id="Reading-from-STDIN"><a class="permalink" href="prove.html#Reading-from-STDIN">#</a><a id="Reading"></a>Reading from <code>STDIN</code></h2>
+
+<p>If you have a list of tests (or URLs, or anything else you want to test) in a file, you can add them to your tests by using a &#39;-&#39;:</p>
+
+<pre><code class="plaintext">prove - &lt; my_list_of_things_to_test.txt</code></pre>
+
+<p>See the <code>README</code> in the <code>examples</code> directory of this distribution.</p>
+
+<h2 id="Default-Test-Directory"><a class="permalink" href="prove.html#Default-Test-Directory">#</a><a id="Default"></a>Default Test Directory</h2>
+
+<p>If no files or directories are supplied, <code>prove</code> looks for all files matching the pattern <code>t/*.t</code>.</p>
+
+<h2 id="Colored-Test-Output"><a class="permalink" href="prove.html#Colored-Test-Output">#</a><a id="Colored"></a>Colored Test Output</h2>
+
+<p>Colored test output using <a href="./TAP::Formatter::Color.html">TAP::Formatter::Color</a> is the default, but if output is not to a terminal, color is disabled. You can override this by adding the <code>--color</code> switch.</p>
+
+<p>Color support requires <a href="./Term::ANSIColor.html">Term::ANSIColor</a> and, on windows platforms, also <a href="./Win32::Console::ANSI.html">Win32::Console::ANSI</a>. If the necessary module(s) are not installed colored output will not be available.</p>
+
+<h2 id="Exit-Code"><a class="permalink" href="prove.html#Exit-Code">#</a><a id="Exit"></a>Exit Code</h2>
+
+<p>If the tests fail <code>prove</code> will exit with non-zero status.</p>
+
+<h2 id="Arguments-to-Tests"><a class="permalink" href="prove.html#Arguments-to-Tests">#</a><a id="Arguments"></a>Arguments to Tests</h2>
+
+<p>It is possible to supply arguments to tests. To do so separate them from prove&#39;s own arguments with the arisdottle, &#39;::&#39;. For example</p>
+
+<pre><code class="plaintext">prove -v t/mytest.t :: --url http://example.com</code></pre>
+
+<p>would run <i>t/mytest.t</i> with the options &#39;--url http://example.com&#39;. When running multiple tests they will each receive the same arguments.</p>
+
+<h2 id="-exec"><a class="permalink" href="prove.html#-exec">#</a><a id="exec"></a><code>--exec</code></h2>
+
+<p>Normally you can just pass a list of Perl tests and the harness will know how to execute them. However, if your tests are not written in Perl or if you want all tests invoked exactly the same way, use the <code>-e</code>, or <code>--exec</code> switch:</p>
+
+<pre><code class="plaintext">prove --exec &#39;/usr/bin/ruby -w&#39; t/
+prove --exec &#39;/usr/bin/perl -Tw -mstrict -Ilib&#39; t/
+prove --exec &#39;/path/to/my/customer/exec&#39;</code></pre>
+
+<h2 id="-merge"><a class="permalink" href="prove.html#-merge">#</a><a id="merge"></a><code>--merge</code></h2>
+
+<p>If you need to make sure your diagnostics are displayed in the correct order relative to test results you can use the <code>--merge</code> option to merge the test scripts&#39; STDERR into their STDOUT.</p>
+
+<p>This guarantees that STDOUT (where the test results appear) and STDERR (where the diagnostics appear) will stay in sync. The harness will display any diagnostics your tests emit on STDERR.</p>
+
+<p>Caveat: this is a bit of a kludge. In particular note that if anything that appears on STDERR looks like a test result the test harness will get confused. Use this option only if you understand the consequences and can live with the risk.</p>
+
+<h2 id="-trap"><a class="permalink" href="prove.html#-trap">#</a><a id="trap"></a><code>--trap</code></h2>
+
+<p>The <code>--trap</code> option will attempt to trap SIGINT (Ctrl-C) during a test run and display the test summary even if the run is interrupted</p>
+
+<h2 id="-state"><a class="permalink" href="prove.html#-state">#</a><a id="state"></a><code>--state</code></h2>
+
+<p>You can ask <code>prove</code> to remember the state of previous test runs and select and/or order the tests to be run based on that saved state.</p>
+
+<p>The <code>--state</code> switch requires an argument which must be a comma separated list of one or more of the following options.</p>
+
+<dl>
+
+<dt id="last"><a class="permalink" href="prove.html#last">#</a><code>last</code></dt>
+<dd>
+
+<p>Run the same tests as the last time the state was saved. This makes it possible, for example, to recreate the ordering of a shuffled test.</p>
+
+<pre><code class="plaintext"># Run all tests in random order
+$ prove -b --state=save --shuffle
+
+# Run them again in the same order
+$ prove -b --state=last</code></pre>
+
+</dd>
+<dt id="failed"><a class="permalink" href="prove.html#failed">#</a><code>failed</code></dt>
+<dd>
+
+<p>Run only the tests that failed on the last run.</p>
+
+<pre><code class="plaintext"># Run all tests
+$ prove -b --state=save
+
+# Run failures
+$ prove -b --state=failed</code></pre>
+
+<p>If you also specify the <code>save</code> option newly passing tests will be excluded from subsequent runs.</p>
+
+<pre><code class="plaintext"># Repeat until no more failures
+$ prove -b --state=failed,save</code></pre>
+
+</dd>
+<dt id="passed"><a class="permalink" href="prove.html#passed">#</a><code>passed</code></dt>
+<dd>
+
+<p>Run only the passed tests from last time. Useful to make sure that no new problems have been introduced.</p>
+
+</dd>
+<dt id="all"><a class="permalink" href="prove.html#all">#</a><code>all</code></dt>
+<dd>
+
+<p>Run all tests in normal order. Multple options may be specified, so to run all tests with the failures from last time first:</p>
+
+<pre><code class="plaintext">$ prove -b --state=failed,all,save</code></pre>
+
+</dd>
+<dt id="hot"><a class="permalink" href="prove.html#hot">#</a><code>hot</code></dt>
+<dd>
+
+<p>Run the tests that most recently failed first. The last failure time of each test is stored. The <code>hot</code> option causes tests to be run in most-recent- failure order.</p>
+
+<pre><code class="plaintext">$ prove -b --state=hot,save</code></pre>
+
+<p>Tests that have never failed will not be selected. To run all tests with the most recently failed first use</p>
+
+<pre><code class="plaintext">$ prove -b --state=hot,all,save</code></pre>
+
+<p>This combination of options may also be specified thus</p>
+
+<pre><code class="plaintext">$ prove -b --state=adrian</code></pre>
+
+</dd>
+<dt id="todo"><a class="permalink" href="prove.html#todo">#</a><code>todo</code></dt>
+<dd>
+
+<p>Run any tests with todos.</p>
+
+</dd>
+<dt id="slow"><a class="permalink" href="prove.html#slow">#</a><code>slow</code></dt>
+<dd>
+
+<p>Run the tests in slowest to fastest order. This is useful in conjunction with the <code>-j</code> parallel testing switch to ensure that your slowest tests start running first.</p>
+
+<pre><code class="plaintext">$ prove -b --state=slow -j9</code></pre>
+
+</dd>
+<dt id="fast"><a class="permalink" href="prove.html#fast">#</a><code>fast</code></dt>
+<dd>
+
+<p>Run test tests in fastest to slowest order.</p>
+
+</dd>
+<dt id="new"><a class="permalink" href="prove.html#new">#</a><code>new</code></dt>
+<dd>
+
+<p>Run the tests in newest to oldest order based on the modification times of the test scripts.</p>
+
+</dd>
+<dt id="old"><a class="permalink" href="prove.html#old">#</a><code>old</code></dt>
+<dd>
+
+<p>Run the tests in oldest to newest order.</p>
+
+</dd>
+<dt id="fresh"><a class="permalink" href="prove.html#fresh">#</a><code>fresh</code></dt>
+<dd>
+
+<p>Run those test scripts that have been modified since the last test run.</p>
+
+</dd>
+<dt id="save"><a class="permalink" href="prove.html#save">#</a><code>save</code></dt>
+<dd>
+
+<p>Save the state on exit. The state is stored in a file called <i>.prove</i> (<i>_prove</i> on Windows and VMS) in the current directory.</p>
+
+</dd>
+</dl>
+
+<p>The <code>--state</code> switch may be used more than once.</p>
+
+<pre><code class="plaintext">$ prove -b --state=hot --state=all,save</code></pre>
+
+<h2 id="-rules"><a class="permalink" href="prove.html#-rules">#</a><a id="rules"></a>--rules</h2>
+
+<p>The <code>--rules</code> option is used to control which tests are run sequentially and which are run in parallel, if the <code>--jobs</code> option is specified. The option may be specified multiple times, and the order matters.</p>
+
+<p>The most practical use is likely to specify that some tests are not &quot;parallel-ready&quot;. Since mentioning a file with --rules doesn&#39;t cause it to be selected to run as a test, you can &quot;set and forget&quot; some rules preferences in your .proverc file. Then you&#39;ll be able to take maximum advantage of the performance benefits of parallel testing, while some exceptions are still run in parallel.</p>
+
+<h3 id="-rules-examples"><a class="permalink" href="prove.html#-rules-examples">#</a><a id="rules-examples"></a>--rules examples</h3>
+
+<pre><code class="plaintext"># All tests are allowed to run in parallel, except those starting with &quot;p&quot;
+--rules=&#39;seq=t/p*.t&#39; --rules=&#39;par=**&#39;
+
+# All tests must run in sequence except those starting with &quot;p&quot;, which should be run parallel
+--rules=&#39;par=t/p*.t&#39;</code></pre>
+
+<h3 id="-rules-resolution"><a class="permalink" href="prove.html#-rules-resolution">#</a><a id="rules-resolution"></a>--rules resolution</h3>
+
+<ul>
+
+<li><p>By default, all tests are eligible to be run in parallel. Specifying any of your own rules removes this one.</p>
+
+</li>
+<li><p>&quot;First match wins&quot;. The first rule that matches a test will be the one that applies.</p>
+
+</li>
+<li><p>Any test which does not match a rule will be run in sequence at the end of the run.</p>
+
+</li>
+<li><p>The existence of a rule does not imply selecting a test. You must still specify the tests to run.</p>
+
+</li>
+<li><p>Specifying a rule to allow tests to run in parallel does not make them run in parallel. You still need specify the number of parallel <code>jobs</code> in your Harness object.</p>
+
+</li>
+</ul>
+
+<h3 id="-rules-Glob-style-pattern-matching"><a class="permalink" href="prove.html#-rules-Glob-style-pattern-matching">#</a><a id="rules-Glob-style-pattern-matching"></a>--rules Glob-style pattern matching</h3>
+
+<p>We implement our own glob-style pattern matching for --rules. Here are the supported patterns:</p>
+
+<pre><code class="plaintext">** is any number of characters, including /, within a pathname
+* is zero or more characters within a filename/directory name
+? is exactly one character within a filename/directory name
+{foo,bar,baz} is any of foo, bar or baz.
+\ is an escape character</code></pre>
+
+<h3 id="More-advanced-specifications-for-parallel-vs-sequence-run-rules"><a class="permalink" href="prove.html#More-advanced-specifications-for-parallel-vs-sequence-run-rules">#</a><a id="More"></a>More advanced specifications for parallel vs sequence run rules</h3>
+
+<p>If you need more advanced management of what runs in parallel vs in sequence, see the associated &#39;rules&#39; documentation in <a href="./TAP::Harness.html">TAP::Harness</a> and <a href="./TAP::Parser::Scheduler.html">TAP::Parser::Scheduler</a>. If what&#39;s possible directly through <code>prove</code> is not sufficient, you can write your own harness to access these features directly.</p>
+
+<h2 id="@INC"><a class="permalink" href="prove.html#@INC">#</a><a id="INC"></a>@INC</h2>
+
+<p>prove introduces a separation between &quot;options passed to the perl which runs prove&quot; and &quot;options passed to the perl which runs tests&quot;; this distinction is by design. Thus the perl which is running a test starts with the default <code>@INC</code>. Additional library directories can be added via the <code>PERL5LIB</code> environment variable, via -Ifoo in <code>PERL5OPT</code> or via the <code>-Ilib</code> option to <i>prove</i>.</p>
+
+<h2 id="Taint-Mode"><a class="permalink" href="prove.html#Taint-Mode">#</a><a id="Taint"></a>Taint Mode</h2>
+
+<p>Normally when a Perl program is run in taint mode the contents of the <code>PERL5LIB</code> environment variable do not appear in <code>@INC</code>.</p>
+
+<p>Because <code>PERL5LIB</code> is often used during testing to add build directories to <code>@INC</code> prove passes the names of any directories found in <code>PERL5LIB</code> as -I switches. The net effect of this is that <code>PERL5LIB</code> is honoured even when prove is run in taint mode.</p>
+
+<h1 id="FORMATTERS"><a class="permalink" href="prove.html#FORMATTERS">#</a>FORMATTERS</h1>
+
+<p>You can load a custom <a href="https://perldoc.perl.org/5.35.0/TAP::Parser::Formatter">TAP::Parser::Formatter</a>:</p>
+
+<pre><code class="plaintext">prove --formatter MyFormatter</code></pre>
+
+<h1 id="SOURCE-HANDLERS"><a class="permalink" href="prove.html#SOURCE-HANDLERS">#</a><a id="SOURCE"></a>SOURCE HANDLERS</h1>
+
+<p>You can load custom <a href="./TAP::Parser::SourceHandler.html">TAP::Parser::SourceHandler</a>s, to change the way the parser interprets particular <i>sources</i> of TAP.</p>
+
+<pre><code class="plaintext">prove --source MyHandler --source YetAnother t</code></pre>
+
+<p>If you want to provide config to the source you can use:</p>
+
+<pre><code class="plaintext">prove --source MyCustom \
+      --source Perl --perl-option &#39;foo=bar baz&#39; --perl-option avg=0.278 \
+      --source File --file-option extensions=.txt --file-option extensions=.tmp t
+      --source pgTAP --pgtap-option pset=format=html --pgtap-option pset=border=2</code></pre>
+
+<p>Each <code>--$source-option</code> option must specify a key/value pair separated by an <code>=</code>. If an option can take multiple values, just specify it multiple times, as with the <code>extensions=</code> examples above. If the option should be a hash reference, specify the value as a second pair separated by a <code>=</code>, as in the <code>pset=</code> examples above (escape <code>=</code> with a backslash).</p>
+
+<p>All <code>--sources</code> are combined into a hash, and passed to <a href="./TAP::Harness.html#new">&quot;new&quot; in TAP::Harness</a>&#39;s <code>sources</code> parameter.</p>
+
+<p>See <a href="./TAP::Parser::IteratorFactory.html">TAP::Parser::IteratorFactory</a> for more details on how configuration is passed to <i>SourceHandlers</i>.</p>
+
+<h1 id="PLUGINS"><a class="permalink" href="prove.html#PLUGINS">#</a>PLUGINS</h1>
+
+<p>Plugins can be loaded using the <code>-P<i>plugin</i></code> syntax, eg:</p>
+
+<pre><code class="plaintext">prove -PMyPlugin</code></pre>
+
+<p>This will search for a module named <code>App::Prove::Plugin::MyPlugin</code>, or failing that, <code>MyPlugin</code>. If the plugin can&#39;t be found, <code>prove</code> will complain &amp; exit.</p>
+
+<p>You can pass arguments to your plugin by appending <code>=arg1,arg2,etc</code> to the plugin name:</p>
+
+<pre><code class="plaintext">prove -PMyPlugin=fou,du,fafa</code></pre>
+
+<p>Please check individual plugin documentation for more details.</p>
+
+<h2 id="Available-Plugins"><a class="permalink" href="prove.html#Available-Plugins">#</a><a id="Available"></a>Available Plugins</h2>
+
+<p>For an up-to-date list of plugins available, please check CPAN:</p>
+
+<p><a href="http://search.cpan.org/search?query=App%3A%3AProve+Plugin">http://search.cpan.org/search?query=App%3A%3AProve+Plugin</a></p>
+
+<h2 id="Writing-Plugins"><a class="permalink" href="prove.html#Writing-Plugins">#</a><a id="Writing"></a>Writing Plugins</h2>
+
+<p>Please see <a href="./App::Prove.html#PLUGINS">&quot;PLUGINS&quot; in App::Prove</a>.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

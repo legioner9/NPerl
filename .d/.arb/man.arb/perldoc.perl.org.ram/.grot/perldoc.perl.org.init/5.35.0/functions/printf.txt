@@ -1,0 +1,40 @@
+=over
+
+=item printf FILEHANDLE FORMAT, LIST
+X<printf>
+
+=item printf FILEHANDLE
+
+=item printf FORMAT, LIST
+
+=item printf
+
+Equivalent to C<print FILEHANDLE sprintf(FORMAT, LIST)>, except that
+L<C<$\>|perlvar/$\> (the output record separator) is not appended.  The
+FORMAT and the LIST are actually parsed as a single list.  The first
+argument of the list will be interpreted as the
+L<C<printf>|/printf FILEHANDLE FORMAT, LIST> format.  This means that
+C<printf(@_)> will use C<$_[0]> as the format.  See
+L<sprintf|/sprintf FORMAT, LIST> for an explanation of the format
+argument.  If C<use locale> (including C<use locale ':not_characters'>)
+is in effect and L<C<POSIX::setlocale>|POSIX/C<setlocale>> has been
+called, the character used for the decimal separator in formatted
+floating-point numbers is affected by the C<LC_NUMERIC> locale setting.
+See L<perllocale> and L<POSIX>.
+
+For historical reasons, if you omit the list, L<C<$_>|perlvar/$_> is
+used as the format;
+to use FILEHANDLE without a list, you must use a bareword filehandle like
+C<FH>, not an indirect one like C<$fh>.  However, this will rarely do what
+you want; if L<C<$_>|perlvar/$_> contains formatting codes, they will be
+replaced with the empty string and a warning will be emitted if
+L<warnings> are enabled.  Just use L<C<print>|/print FILEHANDLE LIST> if
+you want to print the contents of L<C<$_>|perlvar/$_>.
+
+Don't fall into the trap of using a
+L<C<printf>|/printf FILEHANDLE FORMAT, LIST> when a simple
+L<C<print>|/print FILEHANDLE LIST> would do.  The
+L<C<print>|/print FILEHANDLE LIST> is more efficient and less error
+prone.
+
+=back

@@ -1,0 +1,3121 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>IPC::Run - system() and background procs w/ piping, redirs, ptys (Unix, Win32) - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of IPC-Run - MetaCPAN" href="https://metacpan.org/dist/IPC-Run/releases.rss" />
+        <link rel="canonical" href="./IPC::Run.html" />
+        <meta name="description" content="system() and background procs w/ piping, redirs, ptys (Unix, Win32)" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/IPC::Run" />
+<meta name="twitter:title"       content="IPC::Run" />
+<meta name="twitter:description" content="system() and background procs w/ piping, redirs, ptys (Unix, Win32)" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./IPC::Run.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of IPC-Run was released.">
+      <span class="relatize">03 Oct 2023 01:09:01 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/IPC-Run">IPC-Run</a>
+  </li>
+  <li>
+    Module version: 20231003.0
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/IPC-Run/source/lib/IPC/Run.pm">Source</a>
+    (<a href="https://metacpan.org/dist/IPC-Run/source/lib/IPC/Run.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/IPC-Run/source/lib/IPC">Browse</a>
+    (<a href="https://metacpan.org/dist/IPC-Run/source/lib/IPC?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/IPC-Run/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/IPC-Run/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/toddr/IPC-Run">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/toddr/IPC-Run/issues">Issues</a>
+      (38)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=IPC-Run+20231003.0" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IPC-Run.html?oncpan=1&amp;distmat=1&amp;version=20231003.0&amp;grade=2" style="color: #090">1703</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IPC-Run.html?oncpan=1&amp;distmat=1&amp;version=20231003.0&amp;grade=3" style="color: #900">26</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IPC-Run.html?oncpan=1&amp;distmat=1&amp;version=20231003.0&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/TODDR/IPC-Run-20231003.0">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on IPC-Run who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/IPC-Run-20231003.0/index.html">63.75% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/IPC-Run/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/T/TO/TODDR/IPC-Run-20231003.0.tar.gz">
+      Download (<span itemprop="fileSize">132.32KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FTODDR%2FIPC-Run-20231003.0%2Flib%2FIPC%2FRun.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/IPC-Run/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/IPC-Run/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:IPC-Run">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="IPC-Run">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/IPC/Run.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="TODDR/IPC-Run-20231003.0"
+>20231003.0
+  (TODDR on 2023-10-03)</option>
+<option
+  
+  value="TODDR/IPC-Run-20220807.0"
+>20220807.0
+  (TODDR on 2022-08-07)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.84"
+>0.84
+  (ADAMK on 2009-07-13)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.83"
+>0.83
+  (ADAMK on 2009-07-09)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.82"
+>0.82
+  (ADAMK on 2008-12-18)</option>
+<option
+  
+  value="RSOD/IPC-Run-0.80"
+>0.80
+  (RSOD on 2006-05-10)</option>
+<option
+  
+  value="RSOD/IPC-Run-0.80_91"
+>0.80_91 DEV
+  (RSOD on 2006-03-10)</option>
+<option
+  
+  value="RSOD/IPC-Run-0.79"
+>0.79
+  (RSOD on 2005-01-19)</option>
+<option
+  
+  value="RBS/IPC-Run-0.78"
+>0.78
+  (RBS on 2004-03-09)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="TODDR/IPC-Run-20200505.0"
+>20200505.0
+  (TODDR on 2020-05-05)</option>
+<option
+  
+  value="TODDR/IPC-Run-20180523.0"
+>20180523.0
+  (TODDR on 2018-05-23)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.99"
+>0.99
+  (TODDR on 2018-03-30)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.98"
+>0.98
+  (TODDR on 2018-03-29)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.97"
+>0.97
+  (TODDR on 2018-03-26)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.96"
+>0.96
+  (TODDR on 2017-05-12)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.95"
+>0.95
+  (TODDR on 2017-04-25)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.94_02"
+>0.94_02 DEV
+  (TODDR on 2016-04-14)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.94_01"
+>0.94_01 DEV
+  (TODDR on 2016-04-13)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.94"
+>0.94
+  (TODDR on 2014-12-14)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.93_01"
+>0.93_01 DEV
+  (TODDR on 2014-12-11)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.93"
+>0.93
+  (TODDR on 2014-12-11)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.92"
+>0.92
+  (TODDR on 2012-08-30)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.92_01"
+>0.92_01 DEV
+  (TODDR on 2012-08-22)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.91"
+>0.91
+  (TODDR on 2012-02-15)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.91_01"
+>0.91_01 DEV
+  (TODDR on 2012-01-25)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90"
+>0.90
+  (TODDR on 2011-07-03)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90_03"
+>0.90_03 DEV
+  (TODDR on 2011-07-01)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90_02"
+>0.90_02 DEV
+  (TODDR on 2011-06-29)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90_01"
+>0.90_01 DEV
+  (TODDR on 2011-06-03)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.89"
+>0.89
+  (TODDR on 2010-04-01)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.88"
+>0.88
+  (TODDR on 2010-03-30)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.87"
+>0.87
+  (TODDR on 2010-03-29)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.86"
+>0.86
+  (TODDR on 2010-03-24)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.85"
+>0.85
+  (TODDR on 2010-03-23)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.81_01"
+>0.81_01 DEV
+  (ADAMK on 2008-10-15)</option>
+<option
+  
+  value="RBS/IPC-Run-0.77"
+>0.77
+  (RBS on 2003-09-26)</option>
+<option
+  
+  value="RBS/IPC-Run-0.75"
+>0.75
+  (RBS on 2003-01-28)</option>
+<option
+  
+  value="RBS/IPC-Run-0.74"
+>0.74
+  (RBS on 2002-05-23)</option>
+<option
+  
+  value="RBS/IPC-Run-0.73"
+>0.73
+  (RBS on 2002-05-22)</option>
+<option
+  
+  value="RBS/IPC-Run-0.72"
+>0.72
+  (RBS on 2002-05-09)</option>
+<option
+  
+  value="RBS/IPC-Run-0.71"
+>0.71
+  (RBS on 2002-05-06)</option>
+<option
+  
+  value="RBS/IPC-Run-0.7"
+>0.7
+  (RBS on 2002-04-26)</option>
+<option
+  
+  value="RBS/IPC-Run-0.66"
+>0.66
+  (RBS on 2002-03-27)</option>
+<option
+  
+  value="RBS/IPC-Run-0.64"
+>0.64
+  (RBS on 2002-03-14)</option>
+<option
+  
+  value="RBS/IPC-Run-0.63"
+>0.63
+  (RBS on 2002-02-27)</option>
+<option
+  
+  value="RBS/IPC-Run-0.62"
+>0.62
+  (RBS on 2002-01-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.61"
+>0.61
+  (RBS on 2001-12-07)</option>
+<option
+  
+  value="RBS/IPC-Run-0.6"
+>0.6
+  (RBS on 2001-12-06)</option>
+<option
+  
+  value="RBS/IPC-Run-0.56"
+>0.56
+  (RBS on 2001-12-02)</option>
+<option
+  
+  value="RBS/IPC-Run-0.55"
+>0.55
+  (RBS on 2001-12-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.54"
+>0.54
+  (RBS on 2001-12-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.51"
+>0.51
+  (RBS on 2001-11-12)</option>
+<option
+  
+  value="RBS/IPC-Run-0.5"
+>0.5
+  (RBS on 2001-11-11)</option>
+<option
+  
+  value="RBS/IPC-Run-0.44"
+>0.44
+  (RBS on 2000-10-02)</option>
+<option
+  
+  value="RBS/IPC-Run-0.42"
+>0.42
+  (RBS on 2000-08-17)</option>
+<option
+  
+  value="RBS/IPC-Run-0.4"
+>0.4
+  (RBS on 2000-06-15)</option>
+<option
+  
+  value="RBS/IPC-Run-0.34"
+>0.34
+  (RBS on 2000-06-08)</option>
+<option
+  
+  value="RBS/IPC-Run-0.33"
+>0.33
+  (RBS on 2000-06-08)</option>
+<option
+  
+  value="RBS/IPC-Run-0.32"
+>0.32
+  (RBS on 2000-06-06)</option>
+<option
+  
+  value="RBS/IPC-Run-0.3"
+>0.3
+  (RBS on 2000-06-03)</option>
+<option
+  
+  value="RBS/IPC-Run-0.21"
+>0.21
+  (RBS on 2000-06-02)</option>
+<option
+  
+  value="RBS/IPC-Run-0.2"
+>0.2
+  (RBS on 2000-06-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.1"
+>0.1
+  (RBS on 2000-05-22)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/TODDR/IPC-Run-20231003.0/diff/' + encodeURIComponent(this.value) + '/lib/IPC/Run.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="TODDR/IPC-Run-20231003.0"
+>20231003.0
+  (TODDR on 2023-10-03)</option>
+<option
+  
+  value="TODDR/IPC-Run-20220807.0"
+>20220807.0
+  (TODDR on 2022-08-07)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.84"
+>0.84
+  (ADAMK on 2009-07-13)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.83"
+>0.83
+  (ADAMK on 2009-07-09)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.82"
+>0.82
+  (ADAMK on 2008-12-18)</option>
+<option
+  
+  value="RSOD/IPC-Run-0.80"
+>0.80
+  (RSOD on 2006-05-10)</option>
+<option
+  
+  value="RSOD/IPC-Run-0.80_91"
+>0.80_91 DEV
+  (RSOD on 2006-03-10)</option>
+<option
+  
+  value="RSOD/IPC-Run-0.79"
+>0.79
+  (RSOD on 2005-01-19)</option>
+<option
+  
+  value="RBS/IPC-Run-0.78"
+>0.78
+  (RBS on 2004-03-09)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="TODDR/IPC-Run-20200505.0"
+>20200505.0
+  (TODDR on 2020-05-05)</option>
+<option
+  
+  value="TODDR/IPC-Run-20180523.0"
+>20180523.0
+  (TODDR on 2018-05-23)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.99"
+>0.99
+  (TODDR on 2018-03-30)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.98"
+>0.98
+  (TODDR on 2018-03-29)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.97"
+>0.97
+  (TODDR on 2018-03-26)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.96"
+>0.96
+  (TODDR on 2017-05-12)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.95"
+>0.95
+  (TODDR on 2017-04-25)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.94_02"
+>0.94_02 DEV
+  (TODDR on 2016-04-14)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.94_01"
+>0.94_01 DEV
+  (TODDR on 2016-04-13)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.94"
+>0.94
+  (TODDR on 2014-12-14)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.93_01"
+>0.93_01 DEV
+  (TODDR on 2014-12-11)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.93"
+>0.93
+  (TODDR on 2014-12-11)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.92"
+>0.92
+  (TODDR on 2012-08-30)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.92_01"
+>0.92_01 DEV
+  (TODDR on 2012-08-22)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.91"
+>0.91
+  (TODDR on 2012-02-15)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.91_01"
+>0.91_01 DEV
+  (TODDR on 2012-01-25)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90"
+>0.90
+  (TODDR on 2011-07-03)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90_03"
+>0.90_03 DEV
+  (TODDR on 2011-07-01)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90_02"
+>0.90_02 DEV
+  (TODDR on 2011-06-29)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90_01"
+>0.90_01 DEV
+  (TODDR on 2011-06-03)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.89"
+>0.89
+  (TODDR on 2010-04-01)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.88"
+>0.88
+  (TODDR on 2010-03-30)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.87"
+>0.87
+  (TODDR on 2010-03-29)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.86"
+>0.86
+  (TODDR on 2010-03-24)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.85"
+>0.85
+  (TODDR on 2010-03-23)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.81_01"
+>0.81_01 DEV
+  (ADAMK on 2008-10-15)</option>
+<option
+  
+  value="RBS/IPC-Run-0.77"
+>0.77
+  (RBS on 2003-09-26)</option>
+<option
+  
+  value="RBS/IPC-Run-0.75"
+>0.75
+  (RBS on 2003-01-28)</option>
+<option
+  
+  value="RBS/IPC-Run-0.74"
+>0.74
+  (RBS on 2002-05-23)</option>
+<option
+  
+  value="RBS/IPC-Run-0.73"
+>0.73
+  (RBS on 2002-05-22)</option>
+<option
+  
+  value="RBS/IPC-Run-0.72"
+>0.72
+  (RBS on 2002-05-09)</option>
+<option
+  
+  value="RBS/IPC-Run-0.71"
+>0.71
+  (RBS on 2002-05-06)</option>
+<option
+  
+  value="RBS/IPC-Run-0.7"
+>0.7
+  (RBS on 2002-04-26)</option>
+<option
+  
+  value="RBS/IPC-Run-0.66"
+>0.66
+  (RBS on 2002-03-27)</option>
+<option
+  
+  value="RBS/IPC-Run-0.64"
+>0.64
+  (RBS on 2002-03-14)</option>
+<option
+  
+  value="RBS/IPC-Run-0.63"
+>0.63
+  (RBS on 2002-02-27)</option>
+<option
+  
+  value="RBS/IPC-Run-0.62"
+>0.62
+  (RBS on 2002-01-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.61"
+>0.61
+  (RBS on 2001-12-07)</option>
+<option
+  
+  value="RBS/IPC-Run-0.6"
+>0.6
+  (RBS on 2001-12-06)</option>
+<option
+  
+  value="RBS/IPC-Run-0.56"
+>0.56
+  (RBS on 2001-12-02)</option>
+<option
+  
+  value="RBS/IPC-Run-0.55"
+>0.55
+  (RBS on 2001-12-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.54"
+>0.54
+  (RBS on 2001-12-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.51"
+>0.51
+  (RBS on 2001-11-12)</option>
+<option
+  
+  value="RBS/IPC-Run-0.5"
+>0.5
+  (RBS on 2001-11-11)</option>
+<option
+  
+  value="RBS/IPC-Run-0.44"
+>0.44
+  (RBS on 2000-10-02)</option>
+<option
+  
+  value="RBS/IPC-Run-0.42"
+>0.42
+  (RBS on 2000-08-17)</option>
+<option
+  
+  value="RBS/IPC-Run-0.4"
+>0.4
+  (RBS on 2000-06-15)</option>
+<option
+  
+  value="RBS/IPC-Run-0.34"
+>0.34
+  (RBS on 2000-06-08)</option>
+<option
+  
+  value="RBS/IPC-Run-0.33"
+>0.33
+  (RBS on 2000-06-08)</option>
+<option
+  
+  value="RBS/IPC-Run-0.32"
+>0.32
+  (RBS on 2000-06-06)</option>
+<option
+  
+  value="RBS/IPC-Run-0.3"
+>0.3
+  (RBS on 2000-06-03)</option>
+<option
+  
+  value="RBS/IPC-Run-0.21"
+>0.21
+  (RBS on 2000-06-02)</option>
+<option
+  
+  value="RBS/IPC-Run-0.2"
+>0.2
+  (RBS on 2000-06-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.1"
+>0.1
+  (RBS on 2000-05-22)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="./IO::Pty.html" title="IO::Pty" class="ellipsis">IO::Pty</a></li>
+  <li><a href="https://metacpan.org/pod/Test::More" title="Test::More" class="ellipsis">Test::More</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/IPC::Run/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=IPC%3A%3ARun">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=IPC-Run">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/TODDR/IPC-Run-20231003.0/view/lib/IPC/Run.pm">This version</a>
+    </li>
+    <li>
+      <a href="./IPC::Run.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/LUCAS"><img src="https://www.gravatar.com/avatar/289426c9d3c2ee28c2d157d4401e14db?d=identicon&amp;s=20" title="LUCAS" alt="LUCAS"></a>
+<a class="display-all" href="https://metacpan.org/author/ADAMJS"><img src="https://www.gravatar.com/avatar/62c7b6e864d6509cff5839543c676614?d=identicon&amp;s=20" title="ADAMJS" alt="ADAMJS"></a>
+<a class="display-all" href="https://metacpan.org/author/DMOL"><img src="https://www.gravatar.com/avatar/78b28a931707c0fa696996adc7702db9?d=identicon&amp;s=20" title="DMOL" alt="DMOL"></a>
+<a class="display-all" href="https://metacpan.org/author/DBOEHMER"><img src="https://www.gravatar.com/avatar/220fbe10dba79664fe84771d5ea32763?d=identicon&amp;s=20" title="DBOEHMER" alt="DBOEHMER"></a>
+<a class="display-all" href="https://metacpan.org/author/AVKHOZOV"><img src="https://www.gravatar.com/avatar/da01d883bf132ef2afa22b180b399514?d=identicon&amp;s=20" title="AVKHOZOV" alt="AVKHOZOV"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/IPC-Run/plussers">22 PAUSE users</a>
+</div>
+<div>
+    15 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="RBS"
+      data-contrib-email="barries@slaysys.com"
+    >
+      <a href="https://metacpan.org/author/RBS" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/f049022a275fe8c2da22c4808e5de37b?d=identicon&amp;s=20" />
+      Barrie Slaymaker
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/TODDR" class="author-name">Todd Rinaldo</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/IPC/Run.pm&#39;" class="">
+<option
+  selected
+  value="TODDR/IPC-Run-20231003.0"
+>20231003.0
+  (TODDR on 2023-10-03)</option>
+<option
+  
+  value="TODDR/IPC-Run-20220807.0"
+>20220807.0
+  (TODDR on 2022-08-07)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.84"
+>0.84
+  (ADAMK on 2009-07-13)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.83"
+>0.83
+  (ADAMK on 2009-07-09)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.82"
+>0.82
+  (ADAMK on 2008-12-18)</option>
+<option
+  
+  value="RSOD/IPC-Run-0.80"
+>0.80
+  (RSOD on 2006-05-10)</option>
+<option
+  
+  value="RSOD/IPC-Run-0.80_91"
+>0.80_91 DEV
+  (RSOD on 2006-03-10)</option>
+<option
+  
+  value="RSOD/IPC-Run-0.79"
+>0.79
+  (RSOD on 2005-01-19)</option>
+<option
+  
+  value="RBS/IPC-Run-0.78"
+>0.78
+  (RBS on 2004-03-09)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="TODDR/IPC-Run-20200505.0"
+>20200505.0
+  (TODDR on 2020-05-05)</option>
+<option
+  
+  value="TODDR/IPC-Run-20180523.0"
+>20180523.0
+  (TODDR on 2018-05-23)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.99"
+>0.99
+  (TODDR on 2018-03-30)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.98"
+>0.98
+  (TODDR on 2018-03-29)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.97"
+>0.97
+  (TODDR on 2018-03-26)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.96"
+>0.96
+  (TODDR on 2017-05-12)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.95"
+>0.95
+  (TODDR on 2017-04-25)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.94_02"
+>0.94_02 DEV
+  (TODDR on 2016-04-14)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.94_01"
+>0.94_01 DEV
+  (TODDR on 2016-04-13)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.94"
+>0.94
+  (TODDR on 2014-12-14)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.93_01"
+>0.93_01 DEV
+  (TODDR on 2014-12-11)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.93"
+>0.93
+  (TODDR on 2014-12-11)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.92"
+>0.92
+  (TODDR on 2012-08-30)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.92_01"
+>0.92_01 DEV
+  (TODDR on 2012-08-22)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.91"
+>0.91
+  (TODDR on 2012-02-15)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.91_01"
+>0.91_01 DEV
+  (TODDR on 2012-01-25)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90"
+>0.90
+  (TODDR on 2011-07-03)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90_03"
+>0.90_03 DEV
+  (TODDR on 2011-07-01)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90_02"
+>0.90_02 DEV
+  (TODDR on 2011-06-29)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.90_01"
+>0.90_01 DEV
+  (TODDR on 2011-06-03)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.89"
+>0.89
+  (TODDR on 2010-04-01)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.88"
+>0.88
+  (TODDR on 2010-03-30)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.87"
+>0.87
+  (TODDR on 2010-03-29)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.86"
+>0.86
+  (TODDR on 2010-03-24)</option>
+<option
+  
+  value="TODDR/IPC-Run-0.85"
+>0.85
+  (TODDR on 2010-03-23)</option>
+<option
+  
+  value="ADAMK/IPC-Run-0.81_01"
+>0.81_01 DEV
+  (ADAMK on 2008-10-15)</option>
+<option
+  
+  value="RBS/IPC-Run-0.77"
+>0.77
+  (RBS on 2003-09-26)</option>
+<option
+  
+  value="RBS/IPC-Run-0.75"
+>0.75
+  (RBS on 2003-01-28)</option>
+<option
+  
+  value="RBS/IPC-Run-0.74"
+>0.74
+  (RBS on 2002-05-23)</option>
+<option
+  
+  value="RBS/IPC-Run-0.73"
+>0.73
+  (RBS on 2002-05-22)</option>
+<option
+  
+  value="RBS/IPC-Run-0.72"
+>0.72
+  (RBS on 2002-05-09)</option>
+<option
+  
+  value="RBS/IPC-Run-0.71"
+>0.71
+  (RBS on 2002-05-06)</option>
+<option
+  
+  value="RBS/IPC-Run-0.7"
+>0.7
+  (RBS on 2002-04-26)</option>
+<option
+  
+  value="RBS/IPC-Run-0.66"
+>0.66
+  (RBS on 2002-03-27)</option>
+<option
+  
+  value="RBS/IPC-Run-0.64"
+>0.64
+  (RBS on 2002-03-14)</option>
+<option
+  
+  value="RBS/IPC-Run-0.63"
+>0.63
+  (RBS on 2002-02-27)</option>
+<option
+  
+  value="RBS/IPC-Run-0.62"
+>0.62
+  (RBS on 2002-01-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.61"
+>0.61
+  (RBS on 2001-12-07)</option>
+<option
+  
+  value="RBS/IPC-Run-0.6"
+>0.6
+  (RBS on 2001-12-06)</option>
+<option
+  
+  value="RBS/IPC-Run-0.56"
+>0.56
+  (RBS on 2001-12-02)</option>
+<option
+  
+  value="RBS/IPC-Run-0.55"
+>0.55
+  (RBS on 2001-12-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.54"
+>0.54
+  (RBS on 2001-12-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.51"
+>0.51
+  (RBS on 2001-11-12)</option>
+<option
+  
+  value="RBS/IPC-Run-0.5"
+>0.5
+  (RBS on 2001-11-11)</option>
+<option
+  
+  value="RBS/IPC-Run-0.44"
+>0.44
+  (RBS on 2000-10-02)</option>
+<option
+  
+  value="RBS/IPC-Run-0.42"
+>0.42
+  (RBS on 2000-08-17)</option>
+<option
+  
+  value="RBS/IPC-Run-0.4"
+>0.4
+  (RBS on 2000-06-15)</option>
+<option
+  
+  value="RBS/IPC-Run-0.34"
+>0.34
+  (RBS on 2000-06-08)</option>
+<option
+  
+  value="RBS/IPC-Run-0.33"
+>0.33
+  (RBS on 2000-06-08)</option>
+<option
+  
+  value="RBS/IPC-Run-0.32"
+>0.32
+  (RBS on 2000-06-06)</option>
+<option
+  
+  value="RBS/IPC-Run-0.3"
+>0.3
+  (RBS on 2000-06-03)</option>
+<option
+  
+  value="RBS/IPC-Run-0.21"
+>0.21
+  (RBS on 2000-06-02)</option>
+<option
+  
+  value="RBS/IPC-Run-0.2"
+>0.2
+  (RBS on 2000-06-01)</option>
+<option
+  
+  value="RBS/IPC-Run-0.1"
+>0.1
+  (RBS on 2000-05-22)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/IPC-Run">IPC-Run-20231003.0</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage four &#10;
+          • 157 direct dependents &#10;          • 1806 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="IPC-Run-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="IPC-Run-20231003.0">
+    <input type="hidden" name="author" value="TODDR">
+    <input type="hidden" name="distribution" value="IPC-Run">
+    <button type="submit" class="favorite highlight"><span>37</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./IPC::Run.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>37</span> ++</a>
+</div>
+   / <span>IPC::Run</span>
+</div>
+          </div>
+          <main class="content">
+
+<input id="HANDOFF" type="checkbox" class="notification-toggle-checkbox" />
+<div id="metacpan_notification" class="well collapsed notify-HANDOFF">
+    <label class="remove-notification" for="HANDOFF" >
+      <i class="fa fa-fw fa-times black"></i>
+    </label>
+    <div id="metacpan_notification-container">
+      <h2>Take me over?</h2>
+      <div>
+The maintainer of this distribution is looking for someone to take over!
+        If you're interested then please contact them via
+        <a href="mailto:toddr@cpan.org,todd@rinaldo.us,briandfoy@pobox.com,bdfoy@cpan.org?subject=Take%20over%20IPC%3A%3ARun%3F&amp;body=Hello%2C%0A%0AI%27m%20interested%20in%20taking%20over%20the%20IPC%3A%3ARun%20module.%20If%20you%20can%20grant%20me%20the%20privilege%20I%20will%20release%20the%20next%20version.%0A%0A">email</a>.
+        <a href="https://metacpan.org/about/faq#howtoadoptadistribution"><i class="fa fa-info-circle"></i></a>
+      </div>
+  </div>
+</div>
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./IPC::Run.html#NAME">NAME</a></li>
+  <li><a href="./IPC::Run.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./IPC::Run.html#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a href="./IPC::Run.html#Harnesses">Harnesses</a></li>
+      <li><a href="./IPC::Run.html#run()-vs.-start();-pump();-finish();">run() vs. start(); pump(); finish();</a></li>
+      <li><a href="./IPC::Run.html#Using-regexps-to-match-output">Using regexps to match output</a></li>
+      <li><a href="./IPC::Run.html#Timeouts-and-Timers">Timeouts and Timers</a></li>
+      <li><a href="./IPC::Run.html#Spawning-synchronization,-child-exception-propagation">Spawning synchronization, child exception propagation</a></li>
+      <li><a href="./IPC::Run.html#Syntax">Syntax</a></li>
+    </ul>
+  </li>
+  <li><a href="./IPC::Run.html#OBSTINATE-CHILDREN">OBSTINATE CHILDREN</a></li>
+  <li><a href="./IPC::Run.html#PSEUDO-TERMINALS">PSEUDO TERMINALS</a>
+    <ul>
+      <li><a href="./IPC::Run.html#CAVEATS">CAVEATS</a></li>
+      <li><a href="./IPC::Run.html#Redirection-Operators">Redirection Operators</a></li>
+      <li><a href="./IPC::Run.html#Just-doing-I/O">Just doing I/O</a></li>
+      <li><a href="./IPC::Run.html#Options">Options</a></li>
+    </ul>
+  </li>
+  <li><a href="./IPC::Run.html#RETURN-VALUES">RETURN VALUES</a></li>
+  <li><a href="./IPC::Run.html#ROUTINES">ROUTINES</a></li>
+  <li><a href="./IPC::Run.html#FILTERS">FILTERS</a></li>
+  <li><a href="./IPC::Run.html#FILTER-IMPLEMENTATION-FUNCTIONS">FILTER IMPLEMENTATION FUNCTIONS</a></li>
+  <li><a href="./IPC::Run.html#TODO">TODO</a></li>
+  <li><a href="./IPC::Run.html#Win32-LIMITATIONS">Win32 LIMITATIONS</a></li>
+  <li><a href="./IPC::Run.html#LIMITATIONS">LIMITATIONS</a></li>
+  <li><a href="./IPC::Run.html#TODO1">TODO</a></li>
+  <li><a href="./IPC::Run.html#INSPIRATION">INSPIRATION</a></li>
+  <li><a href="./IPC::Run.html#SUPPORT">SUPPORT</a></li>
+  <li><a href="./IPC::Run.html#AUTHORS">AUTHORS</a></li>
+  <li><a href="./IPC::Run.html#COPYRIGHT">COPYRIGHT</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>IPC::Run - system() and background procs w/ piping, redirs, ptys (Unix, Win32)</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>   ## First,a command to run:
+      my @cat = qw( cat );
+
+   ## Using run() instead of system():
+      use IPC::Run qw( run timeout );
+
+      run \@cat, \$in, \$out, \$err, timeout( 10 ) or die &quot;cat: $?&quot;;
+
+      # Can do I/O to sub refs and filenames, too:
+      run \@cat, &#39;&lt;&#39;, &quot;in.txt&quot;, \&amp;out, \&amp;err or die &quot;cat: $?&quot;;
+      run \@cat, &#39;&lt;&#39;, &quot;in.txt&quot;, &#39;&gt;&gt;&#39;, &quot;out.txt&quot;, &#39;2&gt;&gt;&#39;, &quot;err.txt&quot;;
+
+
+      # Redirecting using pseudo-terminals instead of pipes.
+      run \@cat, &#39;&lt;pty&lt;&#39;, \$in,  &#39;&gt;pty&gt;&#39;, \$out_and_err;
+
+   ## Scripting subprocesses (like Expect):
+
+      use IPC::Run qw( start pump finish timeout );
+
+      # Incrementally read from / write to scalars. 
+      # $in is drained as it is fed to cat&#39;s stdin,
+      # $out accumulates cat&#39;s stdout
+      # $err accumulates cat&#39;s stderr
+      # $h is for &quot;harness&quot;.
+      my $h = start \@cat, \$in, \$out, \$err, timeout( 10 );
+
+      $in .= &quot;some input\n&quot;;
+      pump $h until $out =~ /input\n/g;
+
+      $in .= &quot;some more input\n&quot;;
+      pump $h until $out =~ /\G.*more input\n/;
+
+      $in .= &quot;some final input\n&quot;;
+      finish $h or die &quot;cat returned $?&quot;;
+
+      warn $err if $err; 
+      print $out;         ## All of cat&#39;s output
+
+   # Piping between children
+      run \@cat, &#39;|&#39;, \@gzip;
+
+   # Multiple children simultaneously (run() blocks until all
+   # children exit, use start() for background execution):
+      run \@foo1, &#39;&amp;&#39;, \@foo2;
+
+   # Calling \&amp;set_up_child in the child before it executes the
+   # command (only works on systems with true fork() &amp; exec())
+   # exceptions thrown in set_up_child() will be propagated back
+   # to the parent and thrown from run().
+      run \@cat, \$in, \$out,
+         init =&gt; \&amp;set_up_child;
+
+   # Read from / write to file handles you open and close
+      open IN,  &#39;&lt;in.txt&#39;  or die $!;
+      open OUT, &#39;&gt;out.txt&#39; or die $!;
+      print OUT &quot;preamble\n&quot;;
+      run \@cat, \*IN, \*OUT or die &quot;cat returned $?&quot;;
+      print OUT &quot;postamble\n&quot;;
+      close IN;
+      close OUT;
+
+   # Create pipes for you to read / write (like IPC::Open2 &amp; 3).
+      $h = start
+         \@cat,
+            &#39;&lt;pipe&#39;, \*IN, # may also be a lexical filehandle e.g. \my $infh
+            &#39;&gt;pipe&#39;, \*OUT,
+            &#39;2&gt;pipe&#39;, \*ERR 
+         or die &quot;cat returned $?&quot;;
+      print IN &quot;some input\n&quot;;
+      close IN;
+      print &lt;OUT&gt;, &lt;ERR&gt;;
+      finish $h;
+
+   # Mixing input and output modes
+      run \@cat, &#39;in.txt&#39;, \&amp;catch_some_out, \*ERR_LOG;
+
+   # Other redirection constructs
+      run \@cat, &#39;&gt;&amp;&#39;, \$out_and_err;
+      run \@cat, &#39;2&gt;&amp;1&#39;;
+      run \@cat, &#39;0&lt;&amp;3&#39;;
+      run \@cat, &#39;&lt;&amp;-&#39;;
+      run \@cat, &#39;3&lt;&#39;, \$in3;
+      run \@cat, &#39;4&gt;&#39;, \$out4;
+      # etc.
+
+   # Passing options:
+      run \@cat, &#39;in.txt&#39;, debug =&gt; 1;
+
+   # Call this system&#39;s shell, returns TRUE on 0 exit code
+   # THIS IS THE OPPOSITE SENSE OF system()&#39;s RETURN VALUE
+      run &quot;cat a b c&quot; or die &quot;cat returned $?&quot;;
+
+   # Launch a sub process directly, no shell.  Can&#39;t do redirection
+   # with this form, it&#39;s here to behave like system() with an
+   # inverted result.
+      $r = run &quot;cat a b c&quot;;
+
+   # Read from a file in to a scalar
+      run io( &quot;filename&quot;, &#39;r&#39;, \$recv );
+      run io( \*HANDLE,   &#39;r&#39;, \$recv );</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>IPC::Run allows you to run and interact with child processes using files, pipes, and pseudo-ttys. Both system()-style and scripted usages are supported and may be mixed. Likewise, functional and OO API styles are both supported and may be mixed.</p>
+
+<p>Various redirection operators reminiscent of those seen on common Unix and DOS command lines are provided.</p>
+
+<p>Before digging in to the details a few LIMITATIONS are important enough to be mentioned right up front:</p>
+
+<dl>
+
+<dt id="Win32-Support"><a id="Win32"></a>Win32 Support</dt>
+<dd>
+
+<p>Win32 support is working but <b>EXPERIMENTAL</b>, but does pass all relevant tests on NT 4.0. See <a href="./IPC::Run.html#Win32-LIMITATIONS">&quot;Win32 LIMITATIONS&quot;</a>.</p>
+
+</dd>
+<dt id="pty-Support"><a id="pty"></a>pty Support</dt>
+<dd>
+
+<p>If you need pty support, IPC::Run should work well enough most of the time, but IO::Pty is being improved, and IPC::Run will be improved to use IO::Pty&#39;s new features when it is released.</p>
+
+<p>The basic problem is that the pty needs to initialize itself before the parent writes to the master pty, or the data written gets lost. So IPC::Run does a sleep(1) in the parent after forking to (hopefully) give the child a chance to run. This is a kludge that works well on non heavily loaded systems :(.</p>
+
+<p>ptys are not supported yet under Win32, but will be emulated...</p>
+
+</dd>
+<dt id="Debugging-Tip"><a id="Debugging"></a>Debugging Tip</dt>
+<dd>
+
+<p>You may use the environment variable <code>IPCRUNDEBUG</code> to see what&#39;s going on under the hood:</p>
+
+<pre><code>   $ IPCRUNDEBUG=basic   myscript     # prints minimal debugging
+   $ IPCRUNDEBUG=data    myscript     # prints all data reads/writes
+   $ IPCRUNDEBUG=details myscript     # prints lots of low-level details
+   $ IPCRUNDEBUG=gory    myscript     # (Win32 only) prints data moving through
+                                      # the helper processes.</code></pre>
+
+</dd>
+</dl>
+
+<p>We now return you to your regularly scheduled documentation.</p>
+
+<h2 id="Harnesses">Harnesses</h2>
+
+<p>Child processes and I/O handles are gathered in to a harness, then started and run until the processing is finished or aborted.</p>
+
+<h2 id="run()-vs.-start();-pump();-finish();"><a id="run"></a><a id="run--vs.-start--pump--finish"></a>run() vs. start(); pump(); finish();</h2>
+
+<p>There are two modes you can run harnesses in: run() functions as an enhanced system(), and start()/pump()/finish() allow for background processes and scripted interactions with them.</p>
+
+<p>When using run(), all data to be sent to the harness is set up in advance (though one can feed subprocesses input from subroutine refs to get around this limitation). The harness is run and all output is collected from it, then any child processes are waited for:</p>
+
+<pre><code>   run \@cmd, \&lt;&lt;IN, \$out;
+   blah
+   IN
+
+   ## To precompile harnesses and run them later:
+   my $h = harness \@cmd, \&lt;&lt;IN, \$out;
+   blah
+   IN
+
+   run $h;</code></pre>
+
+<p>The background and scripting API is provided by start(), pump(), and finish(): start() creates a harness if need be (by calling harness()) and launches any subprocesses, pump() allows you to poll them for activity, and finish() then monitors the harnessed activities until they complete.</p>
+
+<pre><code>   ## Build the harness, open all pipes, and launch the subprocesses
+   my $h = start \@cat, \$in, \$out;
+   $in = &quot;first input\n&quot;;
+
+   ## Now do I/O.  start() does no I/O.
+   pump $h while length $in;  ## Wait for all input to go
+
+   ## Now do some more I/O.
+   $in = &quot;second input\n&quot;;
+   pump $h until $out =~ /second input/;
+
+   ## Clean up
+   finish $h or die &quot;cat returned $?&quot;;</code></pre>
+
+<p>You can optionally compile the harness with harness() prior to start()ing or run()ing, and you may omit start() between harness() and pump(). You might want to do these things if you compile your harnesses ahead of time.</p>
+
+<h2 id="Using-regexps-to-match-output"><a id="Using"></a>Using regexps to match output</h2>
+
+<p>As shown in most of the scripting examples, the read-to-scalar facility for gathering subcommand&#39;s output is often used with regular expressions to detect stopping points. This is because subcommand output often arrives in dribbles and drabs, often only a character or line at a time. This output is input for the main program and piles up in variables like the <code>$out</code> and <code>$err</code> in our examples.</p>
+
+<p>Regular expressions can be used to wait for appropriate output in several ways. The <code>cat</code> example in the previous section demonstrates how to pump() until some string appears in the output. Here&#39;s an example that uses <code>smb</code> to fetch files from a remote server:</p>
+
+<pre><code>   $h = harness \@smbclient, \$in, \$out;
+
+   $in = &quot;cd /src\n&quot;;
+   $h-&gt;pump until $out =~ /^smb.*&gt; \Z/m;
+   die &quot;error cding to /src:\n$out&quot; if $out =~ &quot;ERR&quot;;
+   $out = &#39;&#39;;
+
+   $in = &quot;mget *\n&quot;;
+   $h-&gt;pump until $out =~ /^smb.*&gt; \Z/m;
+   die &quot;error retrieving files:\n$out&quot; if $out =~ &quot;ERR&quot;;
+
+   $in = &quot;quit\n&quot;;
+   $h-&gt;finish;</code></pre>
+
+<p>Notice that we carefully clear $out after the first command/response cycle? That&#39;s because IPC::Run does not delete $out when we continue, and we don&#39;t want to trip over the old output in the second command/response cycle.</p>
+
+<p>Say you want to accumulate all the output in $out and analyze it afterwards. Perl offers incremental regular expression matching using the <code>m//gc</code> and pattern matching idiom and the <code>\G</code> assertion. IPC::Run is careful not to disturb the current <code>pos()</code> value for scalars it appends data to, so we could modify the above so as not to destroy $out by adding a couple of <code>/gc</code> modifiers. The <code>/g</code> keeps us from tripping over the previous prompt and the <code>/c</code> keeps us from resetting the prior match position if the expected prompt doesn&#39;t materialize immediately:</p>
+
+<pre><code>   $h = harness \@smbclient, \$in, \$out;
+
+   $in = &quot;cd /src\n&quot;;
+   $h-&gt;pump until $out =~ /^smb.*&gt; \Z/mgc;
+   die &quot;error cding to /src:\n$out&quot; if $out =~ &quot;ERR&quot;;
+
+   $in = &quot;mget *\n&quot;;
+   $h-&gt;pump until $out =~ /^smb.*&gt; \Z/mgc;
+   die &quot;error retrieving files:\n$out&quot; if $out =~ &quot;ERR&quot;;
+
+   $in = &quot;quit\n&quot;;
+   $h-&gt;finish;
+
+   analyze( $out );</code></pre>
+
+<p>When using this technique, you may want to preallocate $out to have plenty of memory or you may find that the act of growing $out each time new input arrives causes an <code>O(length($out)^2)</code> slowdown as $out grows. Say we expect no more than 10,000 characters of input at the most. To preallocate memory to $out, do something like:</p>
+
+<pre><code>   my $out = &quot;x&quot; x 10_000;
+   $out = &quot;&quot;;</code></pre>
+
+<p><code>perl</code> will allocate at least 10,000 characters&#39; worth of space, then mark the $out as having 0 length without freeing all that yummy RAM.</p>
+
+<h2 id="Timeouts-and-Timers"><a id="Timeouts"></a>Timeouts and Timers</h2>
+
+<p>More than likely, you don&#39;t want your subprocesses to run forever, and sometimes it&#39;s nice to know that they&#39;re going a little slowly. Timeouts throw exceptions after a some time has elapsed, timers merely cause pump() to return after some time has elapsed. Neither is reset/restarted automatically.</p>
+
+<p>Timeout objects are created by calling timeout( $interval ) and passing the result to run(), start() or harness(). The timeout period starts ticking just after all the child processes have been fork()ed or spawn()ed, and are polled for expiration in run(), pump() and finish(). If/when they expire, an exception is thrown. This is typically useful to keep a subprocess from taking too long.</p>
+
+<p>If a timeout occurs in run(), all child processes will be terminated and all file/pipe/ptty descriptors opened by run() will be closed. File descriptors opened by the parent process and passed in to run() are not closed in this event.</p>
+
+<p>If a timeout occurs in pump(), pump_nb(), or finish(), it&#39;s up to you to decide whether to kill_kill() all the children or to implement some more graceful fallback. No I/O will be closed in pump(), pump_nb() or finish() by such an exception (though I/O is often closed down in those routines during the natural course of events).</p>
+
+<p>Often an exception is too harsh. timer( $interval ) creates timer objects that merely prevent pump() from blocking forever. This can be useful for detecting stalled I/O or printing a soothing message or &quot;.&quot; to pacify an anxious user.</p>
+
+<p>Timeouts and timers can both be restarted at any time using the timer&#39;s start() method (this is not the start() that launches subprocesses). To restart a timer, you need to keep a reference to the timer:</p>
+
+<pre><code>   ## Start with a nice long timeout to let smbclient connect.  If
+   ## pump or finish take too long, an exception will be thrown.
+
+ my $h;
+ eval {
+   $h = harness \@smbclient, \$in, \$out, \$err, ( my $t = timeout 30 );
+   sleep 11;  # No effect: timer not running yet
+
+   start $h;
+   $in = &quot;cd /src\n&quot;;
+   pump $h until ! length $in;
+
+   $in = &quot;ls\n&quot;;
+   ## Now use a short timeout, since this should be faster
+   $t-&gt;start( 5 );
+   pump $h until ! length $in;
+
+   $t-&gt;start( 10 );  ## Give smbclient a little while to shut down.
+   $h-&gt;finish;
+ };
+ if ( $@ ) {
+   my $x = $@;    ## Preserve $@ in case another exception occurs
+   $h-&gt;kill_kill; ## kill it gently, then brutally if need be, or just
+                   ## brutally on Win32.
+   die $x;
+ }</code></pre>
+
+<p>Timeouts and timers are <i>not</i> checked once the subprocesses are shut down; they will not expire in the interval between the last valid process and when IPC::Run scoops up the processes&#39; result codes, for instance.</p>
+
+<h2 id="Spawning-synchronization,-child-exception-propagation"><a id="Spawning"></a><a id="Spawning-synchronization--child-exception-propagation"></a>Spawning synchronization, child exception propagation</h2>
+
+<p>start() pauses the parent until the child executes the command or CODE reference and propagates any exceptions thrown (including exec() failure) back to the parent. This has several pleasant effects: any exceptions thrown in the child, including exec() failure, come flying out of start() or run() as though they had occurred in the parent.</p>
+
+<p>This includes exceptions your code thrown from init subs. In this example:</p>
+
+<pre><code>   eval {
+      run \@cmd, init =&gt; sub { die &quot;blast it! foiled again!&quot; };
+   };
+   print $@;</code></pre>
+
+<p>the exception &quot;blast it! foiled again&quot; will be thrown from the child process (preventing the exec()) and printed by the parent.</p>
+
+<p>In situations like</p>
+
+<pre><code>   run \@cmd1, &quot;|&quot;, \@cmd2, &quot;|&quot;, \@cmd3;</code></pre>
+
+<p>@cmd1 will be initted and exec()ed before @cmd2, and @cmd2 before @cmd3. This can save time and prevent oddball errors emitted by later commands when earlier commands fail to execute. Note that IPC::Run doesn&#39;t start any commands unless it can find the executables referenced by all commands. These executables must pass both the <code>-f</code> and <code>-x</code> tests described in <a href="functions/CORE.html">perlfunc</a>.</p>
+
+<p>Another nice effect is that init() subs can take their time doing things and there will be no problems caused by a parent continuing to execute before a child&#39;s init() routine is complete. Say the init() routine needs to open a socket or a temp file that the parent wants to connect to; without this synchronization, the parent will need to implement a retry loop to wait for the child to run, since often, the parent gets a lot of things done before the child&#39;s first timeslice is allocated.</p>
+
+<p>This is also quite necessary for pseudo-tty initialization, which needs to take place before the parent writes to the child via pty. Writes that occur before the pty is set up can get lost.</p>
+
+<p>A final, minor, nicety is that debugging output from the child will be emitted before the parent continues on, making for much clearer debugging output in complex situations.</p>
+
+<p>The only drawback I can conceive of is that the parent can&#39;t continue to operate while the child is being initted. If this ever becomes a problem in the field, we can implement an option to avoid this behavior, but I don&#39;t expect it to.</p>
+
+<p><b>Win32</b>: executing CODE references isn&#39;t supported on Win32, see <a href="./IPC::Run.html#Win32-LIMITATIONS">&quot;Win32 LIMITATIONS&quot;</a> for details.</p>
+
+<h2 id="Syntax">Syntax</h2>
+
+<p>run(), start(), and harness() can all take a harness specification as input. A harness specification is either a single string to be passed to the systems&#39; shell:</p>
+
+<pre><code>   run &quot;echo &#39;hi there&#39;&quot;;</code></pre>
+
+<p>or a list of commands, io operations, and/or timers/timeouts to execute. Consecutive commands must be separated by a pipe operator &#39;|&#39; or an &#39;&amp;&#39;. External commands are passed in as array references or <a href="https://metacpan.org/pod/IPC::Run::Win32Process">IPC::Run::Win32Process</a> objects. On systems supporting fork(), Perl code may be passed in as subs:</p>
+
+<pre><code>   run \@cmd;
+   run \@cmd1, &#39;|&#39;, \@cmd2;
+   run \@cmd1, &#39;&amp;&#39;, \@cmd2;
+   run \&amp;sub1;
+   run \&amp;sub1, &#39;|&#39;, \&amp;sub2;
+   run \&amp;sub1, &#39;&amp;&#39;, \&amp;sub2;</code></pre>
+
+<p>&#39;|&#39; pipes the stdout of \@cmd1 the stdin of \@cmd2, just like a shell pipe. &#39;&amp;&#39; does not. Child processes to the right of a &#39;&amp;&#39; will have their stdin closed unless it&#39;s redirected-to.</p>
+
+<p><a href="https://metacpan.org/pod/IPC::Run::IO">IPC::Run::IO</a> objects may be passed in as well, whether or not child processes are also specified:</p>
+
+<pre><code>   run io( &quot;infile&quot;, &quot;&gt;&quot;, \$in ), io( &quot;outfile&quot;, &quot;&lt;&quot;, \$in );
+      </code></pre>
+
+<p>as can <a href="https://metacpan.org/pod/IPC::Run::Timer">IPC::Run::Timer</a> objects:</p>
+
+<pre><code>   run \@cmd, io( &quot;outfile&quot;, &quot;&lt;&quot;, \$in ), timeout( 10 );</code></pre>
+
+<p>Commands may be followed by scalar, sub, or i/o handle references for redirecting child process input &amp; output:</p>
+
+<pre><code>   run \@cmd,  \undef,            \$out;
+   run \@cmd,  \$in,              \$out;
+   run \@cmd1, \&amp;in, &#39;|&#39;, \@cmd2, \*OUT;
+   run \@cmd1, \*IN, &#39;|&#39;, \@cmd2, \&amp;out;</code></pre>
+
+<p>This is known as succinct redirection syntax, since run(), start() and harness(), figure out which file descriptor to redirect and how. File descriptor 0 is presumed to be an input for the child process, all others are outputs. The assumed file descriptor always starts at 0, unless the command is being piped to, in which case it starts at 1.</p>
+
+<p>To be explicit about your redirects, or if you need to do more complex things, there&#39;s also a redirection operator syntax:</p>
+
+<pre><code>   run \@cmd, &#39;&lt;&#39;, \undef, &#39;&gt;&#39;,  \$out;
+   run \@cmd, &#39;&lt;&#39;, \undef, &#39;&gt;&amp;&#39;, \$out_and_err;
+   run(
+      \@cmd1,
+         &#39;&lt;&#39;, \$in,
+      &#39;|&#39;, \@cmd2,
+         \$out
+   );</code></pre>
+
+<p>Operator syntax is required if you need to do something other than simple redirection to/from scalars or subs, like duping or closing file descriptors or redirecting to/from a named file. The operators are covered in detail below.</p>
+
+<p>After each \@cmd (or \&amp;foo), parsing begins in succinct mode and toggles to operator syntax mode when an operator (ie plain scalar, not a ref) is seen. Once in operator syntax mode, parsing only reverts to succinct mode when a &#39;|&#39; or &#39;&amp;&#39; is seen.</p>
+
+<p>In succinct mode, each parameter after the \@cmd specifies what to do with the next highest file descriptor. These File descriptor start with 0 (stdin) unless stdin is being piped to (<code>&#39;|&#39;, \@cmd</code>), in which case they start with 1 (stdout). Currently, being on the left of a pipe (<code>\@cmd, \$out, \$err, &#39;|&#39;</code>) does <i>not</i> cause stdout to be skipped, though this may change since it&#39;s not as DWIMerly as it could be. Only stdin is assumed to be an input in succinct mode, all others are assumed to be outputs.</p>
+
+<p>If no piping or redirection is specified for a child, it will inherit the parent&#39;s open file handles as dictated by your system&#39;s close-on-exec behavior and the $^F flag, except that processes after a &#39;&amp;&#39; will not inherit the parent&#39;s stdin. Also note that $^F does not affect file descriptors obtained via POSIX, since it only applies to full-fledged Perl file handles. Such processes will have their stdin closed unless it has been redirected-to.</p>
+
+<p>If you want to close a child processes stdin, you may do any of:</p>
+
+<pre><code>   run \@cmd, \undef;
+   run \@cmd, \&quot;&quot;;
+   run \@cmd, &#39;&lt;&amp;-&#39;;
+   run \@cmd, &#39;0&lt;&amp;-&#39;;</code></pre>
+
+<p>Redirection is done by placing redirection specifications immediately after a command or child subroutine:</p>
+
+<pre><code>   run \@cmd1,      \$in, &#39;|&#39;, \@cmd2,      \$out;
+   run \@cmd1, &#39;&lt;&#39;, \$in, &#39;|&#39;, \@cmd2, &#39;&gt;&#39;, \$out;</code></pre>
+
+<p>If you omit the redirection operators, descriptors are counted starting at 0. Descriptor 0 is assumed to be input, all others are outputs. A leading &#39;|&#39; consumes descriptor 0, so this works as expected.</p>
+
+<pre><code>   run \@cmd1, \$in, &#39;|&#39;, \@cmd2, \$out;
+   </code></pre>
+
+<p>The parameter following a redirection operator can be a scalar ref, a subroutine ref, a file name, an open filehandle, or a closed filehandle.</p>
+
+<p>If it&#39;s a scalar ref, the child reads input from or sends output to that variable:</p>
+
+<pre><code>   $in = &quot;Hello World.\n&quot;;
+   run \@cat, \$in, \$out;
+   print $out;</code></pre>
+
+<p>Scalars used in incremental (start()/pump()/finish()) applications are treated as queues: input is removed from input scalars, resulting in them dwindling to &#39;&#39;, and output is appended to output scalars. This is not true of harnesses run() in batch mode.</p>
+
+<p>It&#39;s usually wise to append new input to be sent to the child to the input queue, and you&#39;ll often want to zap output queues to &#39;&#39; before pumping.</p>
+
+<pre><code>   $h = start \@cat, \$in;
+   $in = &quot;line 1\n&quot;;
+   pump $h;
+   $in .= &quot;line 2\n&quot;;
+   pump $h;
+   $in .= &quot;line 3\n&quot;;
+   finish $h;</code></pre>
+
+<p>The final call to finish() must be there: it allows the child process(es) to run to completion and waits for their exit values.</p>
+
+<h1 id="OBSTINATE-CHILDREN"><a id="OBSTINATE"></a>OBSTINATE CHILDREN</h1>
+
+<p>Interactive applications are usually optimized for human use. This can help or hinder trying to interact with them through modules like IPC::Run. Frequently, programs alter their behavior when they detect that stdin, stdout, or stderr are not connected to a tty, assuming that they are being run in batch mode. Whether this helps or hurts depends on which optimizations change. And there&#39;s often no way of telling what a program does in these areas other than trial and error and occasionally, reading the source. This includes different versions and implementations of the same program.</p>
+
+<p>All hope is not lost, however. Most programs behave in reasonably tractable manners, once you figure out what it&#39;s trying to do.</p>
+
+<p>Here are some of the issues you might need to be aware of.</p>
+
+<ul>
+
+<li><p>fflush()ing stdout and stderr</p>
+
+<p>This lets the user see stdout and stderr immediately. Many programs undo this optimization if stdout is not a tty, making them harder to manage by things like IPC::Run.</p>
+
+<p>Many programs decline to fflush stdout or stderr if they do not detect a tty there. Some ftp commands do this, for instance.</p>
+
+<p>If this happens to you, look for a way to force interactive behavior, like a command line switch or command. If you can&#39;t, you will need to use a pseudo terminal (&#39;&lt;pty&lt;&#39; and &#39;&gt;pty&gt;&#39;).</p>
+
+</li>
+<li><p>false prompts</p>
+
+<p>Interactive programs generally do not guarantee that output from user commands won&#39;t contain a prompt string. For example, your shell prompt might be a &#39;$&#39;, and a file named &#39;$&#39; might be the only file in a directory listing.</p>
+
+<p>This can make it hard to guarantee that your output parser won&#39;t be fooled into early termination of results.</p>
+
+<p>To help work around this, you can see if the program can alter it&#39;s prompt, and use something you feel is never going to occur in actual practice.</p>
+
+<p>You should also look for your prompt to be the only thing on a line:</p>
+
+<pre><code>   pump $h until $out =~ /^&lt;SILLYPROMPT&gt;\s?\z/m;</code></pre>
+
+<p>(use <code>(?!\n)\Z</code> in place of <code>\z</code> on older perls).</p>
+
+<p>You can also take the approach that IPC::ChildSafe takes and emit a command with known output after each &#39;real&#39; command you issue, then look for this known output. See new_appender() and new_chunker() for filters that can help with this task.</p>
+
+<p>If it&#39;s not convenient or possibly to alter a prompt or use a known command/response pair, you might need to autodetect the prompt in case the local version of the child program is different then the one you tested with, or if the user has control over the look &amp; feel of the prompt.</p>
+
+</li>
+<li><p>Refusing to accept input unless stdin is a tty.</p>
+
+<p>Some programs, for security reasons, will only accept certain types of input from a tty. su, notable, will not prompt for a password unless it&#39;s connected to a tty.</p>
+
+<p>If this is your situation, use a pseudo terminal (&#39;&lt;pty&lt;&#39; and &#39;&gt;pty&gt;&#39;).</p>
+
+</li>
+<li><p>Not prompting unless connected to a tty.</p>
+
+<p>Some programs don&#39;t prompt unless stdin or stdout is a tty. See if you can turn prompting back on. If not, see if you can come up with a command that you can issue after every real command and look for it&#39;s output, as IPC::ChildSafe does. There are two filters included with IPC::Run that can help with doing this: appender and chunker (see new_appender() and new_chunker()).</p>
+
+</li>
+<li><p>Different output format when not connected to a tty.</p>
+
+<p>Some commands alter their formats to ease machine parsability when they aren&#39;t connected to a pipe. This is actually good, but can be surprising.</p>
+
+</li>
+</ul>
+
+<h1 id="PSEUDO-TERMINALS"><a id="PSEUDO"></a>PSEUDO TERMINALS</h1>
+
+<p>On systems providing pseudo terminals under /dev, IPC::Run can use IO::Pty (available on CPAN) to provide a terminal environment to subprocesses. This is necessary when the subprocess really wants to think it&#39;s connected to a real terminal.</p>
+
+<h2 id="CAVEATS">CAVEATS</h2>
+
+<p>Pseudo-terminals are not pipes, though they are similar. Here are some differences to watch out for.</p>
+
+<dl>
+
+<dt id="Echoing">Echoing</dt>
+<dd>
+
+<p>Sending to stdin will cause an echo on stdout, which occurs before each line is passed to the child program. There is currently no way to disable this, although the child process can and should disable it for things like passwords.</p>
+
+</dd>
+<dt id="Shutdown">Shutdown</dt>
+<dd>
+
+<p>IPC::Run cannot close a pty until all output has been collected. This means that it is not possible to send an EOF to stdin by half-closing the pty, as we can when using a pipe to stdin.</p>
+
+<p>This means that you need to send the child process an exit command or signal, or run() / finish() will time out. Be careful not to expect a prompt after sending the exit command.</p>
+
+</dd>
+<dt id="Command-line-editing"><a id="Command"></a>Command line editing</dt>
+<dd>
+
+<p>Some subprocesses, notable shells that depend on the user&#39;s prompt settings, will reissue the prompt plus the command line input so far once for each character.</p>
+
+</dd>
+<dt id="&#39;&gt;pty&gt;&#39;-means-&#39;&amp;&gt;pty&gt;&#39;,-not-&#39;1&gt;pty&gt;&#39;"><a id="pty--means--pty--not--1-pty"></a>&#39;&gt;pty&gt;&#39; means &#39;&amp;&gt;pty&gt;&#39;, not &#39;1&gt;pty&gt;&#39;</dt>
+<dd>
+
+<p>The pseudo terminal redirects both stdout and stderr unless you specify a file descriptor. If you want to grab stderr separately, do this:</p>
+
+<pre><code>   start \@cmd, &#39;&lt;pty&lt;&#39;, \$in, &#39;&gt;pty&gt;&#39;, \$out, &#39;2&gt;&#39;, \$err;</code></pre>
+
+</dd>
+<dt id="stdin,-stdout,-and-stderr-not-inherited"><a id="stdin"></a><a id="stdin--stdout--and-stderr-not-inherited"></a>stdin, stdout, and stderr not inherited</dt>
+<dd>
+
+<p>Child processes harnessed to a pseudo terminal have their stdin, stdout, and stderr completely closed before any redirection operators take effect. This casts off the bonds of the controlling terminal. This is not done when using pipes.</p>
+
+<p>Right now, this affects all children in a harness that has a pty in use, even if that pty would not affect a particular child. That&#39;s a bug and will be fixed. Until it is, it&#39;s best not to mix-and-match children.</p>
+
+</dd>
+</dl>
+
+<h2 id="Redirection-Operators"><a id="Redirection"></a>Redirection Operators</h2>
+
+<pre><code>   Operator       SHNP   Description
+   ========       ====   ===========
+   &lt;, N&lt;          SHN    Redirects input to a child&#39;s fd N (0 assumed)
+
+   &gt;, N&gt;          SHN    Redirects output from a child&#39;s fd N (1 assumed)
+   &gt;&gt;, N&gt;&gt;        SHN    Like &#39;&gt;&#39;, but appends to scalars or named files
+   &gt;&amp;, &amp;&gt;         SHN    Redirects stdout &amp; stderr from a child process
+
+   &lt;pty, N&lt;pty    S      Like &#39;&lt;&#39;, but uses a pseudo-tty instead of a pipe
+   &gt;pty, N&gt;pty    S      Like &#39;&gt;&#39;, but uses a pseudo-tty instead of a pipe
+
+   N&lt;&amp;M                  Dups input fd N to input fd M
+   M&gt;&amp;N                  Dups output fd N to input fd M
+   N&lt;&amp;-                  Closes fd N
+
+   &lt;pipe, N&lt;pipe     P   Pipe opens H for caller to read, write, close.
+   &gt;pipe, N&gt;pipe     P   Pipe opens H for caller to read, write, close.
+                      </code></pre>
+
+<p>&#39;N&#39; and &#39;M&#39; are placeholders for integer file descriptor numbers. The terms &#39;input&#39; and &#39;output&#39; are from the child process&#39;s perspective.</p>
+
+<p>The SHNP field indicates what parameters an operator can take:</p>
+
+<pre><code>   S: \$scalar or \&amp;function references.  Filters may be used with
+      these operators (and only these).
+   H: \*HANDLE or IO::Handle for caller to open, and close
+   N: &quot;file name&quot;.
+   P: \*HANDLE or lexical filehandle opened by IPC::Run as the parent end of a pipe, but read
+      and written to and closed by the caller (like IPC::Open3).</code></pre>
+
+<dl>
+
+<dt id="Redirecting-input:-[n]&lt;,-[n]&lt;pipe"><a id="Redirecting"></a><a id="Redirecting-input:--n---n-pipe"></a>Redirecting input: [n]&lt;, [n]&lt;pipe</dt>
+<dd>
+
+<p>You can input the child reads on file descriptor number n to come from a scalar variable, subroutine, file handle, or a named file. If stdin is not redirected, the parent&#39;s stdin is inherited.</p>
+
+<pre><code>   run \@cat, \undef          ## Closes child&#39;s stdin immediately
+      or die &quot;cat returned $?&quot;; 
+
+   run \@cat, \$in;
+
+   run \@cat, \&lt;&lt;TOHERE;
+   blah
+   TOHERE
+
+   run \@cat, \&amp;input;       ## Calls &amp;input, feeding data returned
+                              ## to child&#39;s.  Closes child&#39;s stdin
+                              ## when undef is returned.</code></pre>
+
+<p>Redirecting from named files requires you to use the input redirection operator:</p>
+
+<pre><code>   run \@cat, &#39;&lt;.profile&#39;;
+   run \@cat, &#39;&lt;&#39;, &#39;.profile&#39;;
+
+   open IN, &quot;&lt;foo&quot;;
+   run \@cat, \*IN;
+   run \@cat, *IN{IO};</code></pre>
+
+<p>The form used second example here is the safest, since filenames like &quot;0&quot; and &quot;&amp;more\n&quot; won&#39;t confuse &amp;run:</p>
+
+<p>You can&#39;t do either of</p>
+
+<pre><code>   run \@a, *IN;      ## INVALID
+   run \@a, &#39;&lt;&#39;, *IN; ## BUGGY: Reads file named like &quot;*main::A&quot;
+   </code></pre>
+
+<p>because perl passes a scalar containing a string that looks like &quot;*main::A&quot; to &amp;run, and &amp;run can&#39;t tell the difference between that and a redirection operator or a file name. &amp;run guarantees that any scalar you pass after a redirection operator is a file name.</p>
+
+<p>If your child process will take input from file descriptors other than 0 (stdin), you can use a redirection operator with any of the valid input forms (scalar ref, sub ref, etc.):</p>
+
+<pre><code>   run \@cat, &#39;3&lt;&#39;, \$in3;</code></pre>
+
+<p>When redirecting input from a scalar ref, the scalar ref is used as a queue. This allows you to use &amp;harness and pump() to feed incremental bits of input to a coprocess. See <a href="./IPC::Run.html#Coprocesses">&quot;Coprocesses&quot;</a> below for more information.</p>
+
+<p>The &lt;pipe operator opens the write half of a pipe on the filehandle glob reference it takes as an argument:</p>
+
+<pre><code>   $h = start \@cat, &#39;&lt;pipe&#39;, \*IN;
+   print IN &quot;hello world\n&quot;;
+   pump $h;
+   close IN;
+   finish $h;</code></pre>
+
+<p>Unlike the other &#39;&lt;&#39; operators, IPC::Run does nothing further with it: you are responsible for it. The previous example is functionally equivalent to:</p>
+
+<pre><code>   pipe( \*R, \*IN ) or die $!;
+   $h = start \@cat, &#39;&lt;&#39;, \*IN;
+   print IN &quot;hello world\n&quot;;
+   pump $h;
+   close IN;
+   finish $h;</code></pre>
+
+<p>This is like the behavior of IPC::Open2 and IPC::Open3.</p>
+
+<p><b>Win32</b>: The handle returned is actually a socket handle, so you can use select() on it.</p>
+
+</dd>
+<dt id="Redirecting-output:-[n]&gt;,-[n]&gt;&gt;,-[n]&gt;&amp;[m],-[n]&gt;pipe"><a id="Redirecting1"></a><a id="Redirecting-output:--n---n---n-m---n-pipe"></a>Redirecting output: [n]&gt;, [n]&gt;&gt;, [n]&gt;&amp;[m], [n]&gt;pipe</dt>
+<dd>
+
+<p>You can redirect any output the child emits to a scalar variable, subroutine, file handle, or file name. You can have &amp;run truncate or append to named files or scalars. If you are redirecting stdin as well, or if the command is on the receiving end of a pipeline (&#39;|&#39;), you can omit the redirection operator:</p>
+
+<pre><code>   @ls = ( &#39;ls&#39; );
+   run \@ls, \undef, \$out
+      or die &quot;ls returned $?&quot;; 
+
+   run \@ls, \undef, \&amp;out;  ## Calls &amp;out each time some output
+                              ## is received from the child&#39;s 
+                              ## when undef is returned.
+
+   run \@ls, \undef, &#39;2&gt;ls.err&#39;;
+   run \@ls, &#39;2&gt;&#39;, &#39;ls.err&#39;;</code></pre>
+
+<p>The two parameter form guarantees that the filename will not be interpreted as a redirection operator:</p>
+
+<pre><code>   run \@ls, &#39;&gt;&#39;, &quot;&amp;more&quot;;
+   run \@ls, &#39;2&gt;&#39;, &quot;&gt;foo\n&quot;;</code></pre>
+
+<p>You can pass file handles you&#39;ve opened for writing:</p>
+
+<pre><code>   open( *OUT, &quot;&gt;out.txt&quot; );
+   open( *ERR, &quot;&gt;err.txt&quot; );
+   run \@cat, \*OUT, \*ERR;</code></pre>
+
+<p>Passing a scalar reference and a code reference requires a little more work, but allows you to capture all of the output in a scalar or each piece of output by a callback:</p>
+
+<p>These two do the same things:</p>
+
+<pre><code>   run( [ &#39;ls&#39; ], &#39;2&gt;&#39;, sub { $err_out .= $_[0] } );</code></pre>
+
+<p>does the same basic thing as:</p>
+
+<pre><code>   run( [ &#39;ls&#39; ], &#39;2&gt;&#39;, \$err_out );</code></pre>
+
+<p>The subroutine will be called each time some data is read from the child.</p>
+
+<p>The &gt;pipe operator is different in concept than the other &#39;&gt;&#39; operators, although it&#39;s syntax is similar:</p>
+
+<pre><code>   $h = start \@cat, $in, &#39;&gt;pipe&#39;, \*OUT, &#39;2&gt;pipe&#39;, \*ERR;
+   $in = &quot;hello world\n&quot;;
+   finish $h;
+   print &lt;OUT&gt;;
+   print &lt;ERR&gt;;
+   close OUT;
+   close ERR;</code></pre>
+
+<p>causes two pipe to be created, with one end attached to cat&#39;s stdout and stderr, respectively, and the other left open on OUT and ERR, so that the script can manually read(), select(), etc. on them. This is like the behavior of IPC::Open2 and IPC::Open3.</p>
+
+<p><b>Win32</b>: The handle returned is actually a socket handle, so you can use select() on it.</p>
+
+</dd>
+<dt id="Duplicating-output-descriptors:-&gt;&amp;m,-n&gt;&amp;m"><a id="Duplicating"></a><a id="Duplicating-output-descriptors:--m--n-m"></a>Duplicating output descriptors: &gt;&amp;m, n&gt;&amp;m</dt>
+<dd>
+
+<p>This duplicates output descriptor number n (default is 1 if n is omitted) from descriptor number m.</p>
+
+</dd>
+<dt id="Duplicating-input-descriptors:-&lt;&amp;m,-n&lt;&amp;m"><a id="Duplicating1"></a><a id="Duplicating-input-descriptors:--m--n-m"></a>Duplicating input descriptors: &lt;&amp;m, n&lt;&amp;m</dt>
+<dd>
+
+<p>This duplicates input descriptor number n (default is 0 if n is omitted) from descriptor number m</p>
+
+</dd>
+<dt id="Closing-descriptors:-&lt;&amp;-,-3&lt;&amp;-"><a id="Closing"></a><a id="Closing-descriptors:-----3"></a>Closing descriptors: &lt;&amp;-, 3&lt;&amp;-</dt>
+<dd>
+
+<p>This closes descriptor number n (default is 0 if n is omitted). The following commands are equivalent:</p>
+
+<pre><code>   run \@cmd, \undef;
+   run \@cmd, &#39;&lt;&amp;-&#39;;
+   run \@cmd, &#39;&lt;in.txt&#39;, &#39;&lt;&amp;-&#39;;</code></pre>
+
+<p>Doing</p>
+
+<pre><code>   run \@cmd, \$in, &#39;&lt;&amp;-&#39;;    ## SIGPIPE recipe.</code></pre>
+
+<p>is dangerous: the parent will get a SIGPIPE if $in is not empty.</p>
+
+</dd>
+<dt id="Redirecting-both-stdout-and-stderr:-&amp;&gt;,-&gt;&amp;,-&amp;&gt;pipe,-&gt;pipe&amp;"><a id="Redirecting2"></a><a id="Redirecting-both-stdout-and-stderr:------pipe---pipe"></a>Redirecting both stdout and stderr: &amp;&gt;, &gt;&amp;, &amp;&gt;pipe, &gt;pipe&amp;</dt>
+<dd>
+
+<p>The following pairs of commands are equivalent:</p>
+
+<pre><code>   run \@cmd, &#39;&gt;&amp;&#39;, \$out;       run \@cmd, &#39;&gt;&#39;, \$out,     &#39;2&gt;&amp;1&#39;;
+   run \@cmd, &#39;&gt;&amp;&#39;, &#39;out.txt&#39;;   run \@cmd, &#39;&gt;&#39;, &#39;out.txt&#39;, &#39;2&gt;&amp;1&#39;;</code></pre>
+
+<p>etc.</p>
+
+<p>File descriptor numbers are not permitted to the left or the right of these operators, and the &#39;&amp;&#39; may occur on either end of the operator.</p>
+
+<p>The &#39;&amp;&gt;pipe&#39; and &#39;&gt;pipe&amp;&#39; variants behave like the &#39;&gt;pipe&#39; operator, except that both stdout and stderr write to the created pipe.</p>
+
+</dd>
+<dt id="Redirection-Filters"><a id="Redirection1"></a>Redirection Filters</dt>
+<dd>
+
+<p>Both input redirections and output redirections that use scalars or subs as endpoints may have an arbitrary number of filter subs placed between them and the child process. This is useful if you want to receive output in chunks, or if you want to massage each chunk of data sent to the child. To use this feature, you must use operator syntax:</p>
+
+<pre><code>   run(
+      \@cmd
+         &#39;&lt;&#39;, \&amp;in_filter_2, \&amp;in_filter_1, $in,
+         &#39;&gt;&#39;, \&amp;out_filter_1, \&amp;in_filter_2, $out,
+   );</code></pre>
+
+<p>This capability is not provided for IO handles or named files.</p>
+
+<p>Two filters are provided by IPC::Run: appender and chunker. Because these may take an argument, you need to use the constructor functions new_appender() and new_chunker() rather than using \&amp; syntax:</p>
+
+<pre><code>   run(
+      \@cmd
+         &#39;&lt;&#39;, new_appender( &quot;\n&quot; ), $in,
+         &#39;&gt;&#39;, new_chunker, $out,
+   );</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="Just-doing-I/O"><a id="Just"></a><a id="Just-doing-I-O"></a>Just doing I/O</h2>
+
+<p>If you just want to do I/O to a handle or file you open yourself, you may specify a filehandle or filename instead of a command in the harness specification:</p>
+
+<pre><code>   run io( &quot;filename&quot;, &#39;&gt;&#39;, \$recv );
+
+   $h = start io( $io, &#39;&gt;&#39;, \$recv );
+
+   $h = harness \@cmd, &#39;&amp;&#39;, io( &quot;file&quot;, &#39;&lt;&#39;, \$send );</code></pre>
+
+<h2 id="Options">Options</h2>
+
+<p>Options are passed in as name/value pairs:</p>
+
+<pre><code>   run \@cat, \$in, debug =&gt; 1;</code></pre>
+
+<p>If you pass the debug option, you may want to pass it in first, so you can see what parsing is going on:</p>
+
+<pre><code>   run debug =&gt; 1, \@cat, \$in;</code></pre>
+
+<dl>
+
+<dt id="debug">debug</dt>
+<dd>
+
+<p>Enables debugging output in parent and child. Debugging info is emitted to the STDERR that was present when IPC::Run was first <code>use()</code>ed (it&#39;s <code>dup()</code>ed out of the way so that it can be redirected in children without having debugging output emitted on it).</p>
+
+</dd>
+</dl>
+
+<h1 id="RETURN-VALUES"><a id="RETURN"></a>RETURN VALUES</h1>
+
+<p>harness() and start() return a reference to an IPC::Run harness. This is blessed in to the IPC::Run package, so you may make later calls to functions as members if you like:</p>
+
+<pre><code>   $h = harness( ... );
+   $h-&gt;start;
+   $h-&gt;pump;
+   $h-&gt;finish;
+
+   $h = start( .... );
+   $h-&gt;pump;
+   ...</code></pre>
+
+<p>Of course, using method call syntax lets you deal with any IPC::Run subclasses that might crop up, but don&#39;t hold your breath waiting for any.</p>
+
+<p>run() and finish() return TRUE when all subcommands exit with a 0 result code. <b>This is the opposite of perl&#39;s system() command</b>.</p>
+
+<p>All routines raise exceptions (via die()) when error conditions are recognized. A non-zero command result is not treated as an error condition, since some commands are tests whose results are reported in their exit codes.</p>
+
+<h1 id="ROUTINES">ROUTINES</h1>
+
+<ul>
+
+<dl>
+
+<dt id="run1">run</dt>
+<dd>
+
+<p>Run takes a harness or harness specification and runs it, pumping all input to the child(ren), closing the input pipes when no more input is available, collecting all output that arrives, until the pipes delivering output are closed, then waiting for the children to exit and reaping their result codes.</p>
+
+<p>You may think of <code>run( ... )</code> as being like</p>
+
+<pre><code>   start( ... )-&gt;finish();</code></pre>
+
+<p>, though there is one subtle difference: run() does not set \$input_scalars to &#39;&#39; like finish() does. If an exception is thrown from run(), all children will be killed off &quot;gently&quot;, and then &quot;annihilated&quot; if they do not go gently (in to that dark night. sorry).</p>
+
+<p>If any exceptions are thrown, this does a <a href="./IPC::Run.html#kill_kill">&quot;kill_kill&quot;</a> before propagating them.</p>
+
+</dd>
+<dt id="signal">signal</dt>
+<dd>
+
+<pre><code>   ## To send it a specific signal by name (&quot;USR1&quot;):
+   signal $h, &quot;USR1&quot;;
+   $h-&gt;signal ( &quot;USR1&quot; );</code></pre>
+
+<p>If $signal is provided and defined, sends a signal to all child processes. Try not to send numeric signals, use <code>&quot;KILL&quot;</code> instead of <code>9</code>, for instance. Numeric signals aren&#39;t portable.</p>
+
+<p>Throws an exception if $signal is undef.</p>
+
+<p>This will <i>not</i> clean up the harness, <code>finish</code> it if you kill it.</p>
+
+<p>Normally TERM kills a process gracefully (this is what the command line utility <code>kill</code> does by default), INT is sent by one of the keys <code>^C</code>, <code>Backspace</code> or <code>&lt;Del&gt;</code>, and <code>QUIT</code> is used to kill a process and make it coredump.</p>
+
+<p>The <code>HUP</code> signal is often used to get a process to &quot;restart&quot;, rereading config files, and <code>USR1</code> and <code>USR2</code> for really application-specific things.</p>
+
+<p>Often, running <code>kill -l</code> (that&#39;s a lower case &quot;L&quot;) on the command line will list the signals present on your operating system.</p>
+
+<p><b>WARNING</b>: The signal subsystem is not at all portable. We *may* offer to simulate <code>TERM</code> and <code>KILL</code> on some operating systems, submit code to me if you want this.</p>
+
+<p><b>WARNING 2</b>: Up to and including perl v5.6.1, doing almost anything in a signal handler could be dangerous. The most safe code avoids all mallocs and system calls, usually by preallocating a flag before entering the signal handler, altering the flag&#39;s value in the handler, and responding to the changed value in the main system:</p>
+
+<pre><code>   my $got_usr1 = 0;
+   sub usr1_handler { ++$got_signal }
+
+   $SIG{USR1} = \&amp;usr1_handler;
+   while () { sleep 1; print &quot;GOT IT&quot; while $got_usr1--; }</code></pre>
+
+<p>Even this approach is perilous if ++ and -- aren&#39;t atomic on your system (I&#39;ve never heard of this on any modern CPU large enough to run perl).</p>
+
+</dd>
+<dt id="kill_kill">kill_kill</dt>
+<dd>
+
+<pre><code>   ## To kill off a process:
+   $h-&gt;kill_kill;
+   kill_kill $h;
+
+   ## To specify the grace period other than 30 seconds:
+   kill_kill $h, grace =&gt; 5;
+
+   ## To send QUIT instead of KILL if a process refuses to die:
+   kill_kill $h, coup_d_grace =&gt; &quot;QUIT&quot;;</code></pre>
+
+<p>Sends a <code>TERM</code>, waits for all children to exit for up to 30 seconds, then sends a <code>KILL</code> to any that survived the <code>TERM</code>.</p>
+
+<p>Will wait for up to 30 more seconds for the OS to successfully <code>KILL</code> the processes.</p>
+
+<p>The 30 seconds may be overridden by setting the <code>grace</code> option, this overrides both timers.</p>
+
+<p>The harness is then cleaned up.</p>
+
+<p>The doubled name indicates that this function may kill again and avoids colliding with the core Perl <code>kill</code> function.</p>
+
+<p>Returns a 1 if the <code>TERM</code> was sufficient, or a 0 if <code>KILL</code> was required. Throws an exception if <code>KILL</code> did not permit the children to be reaped.</p>
+
+<p><b>NOTE</b>: The grace period is actually up to 1 second longer than that given. This is because the granularity of <code>time</code> is 1 second. Let me know if you need finer granularity, we can leverage Time::HiRes here.</p>
+
+<p><b>Win32</b>: Win32 does not know how to send real signals, so <code>TERM</code> is a full-force kill on Win32. Thus all talk of grace periods, etc. do not apply to Win32.</p>
+
+</dd>
+<dt id="harness">harness</dt>
+<dd>
+
+<p>Takes a harness specification and returns a harness. This harness is blessed in to IPC::Run, allowing you to use method call syntax for run(), start(), et al if you like.</p>
+
+<p>harness() is provided so that you can pre-build harnesses if you would like to, but it&#39;s not required..</p>
+
+<p>You may proceed to run(), start() or pump() after calling harness() (pump() calls start() if need be). Alternatively, you may pass your harness specification to run() or start() and let them harness() for you. You can&#39;t pass harness specifications to pump(), though.</p>
+
+</dd>
+<dt id="close_terminal">close_terminal</dt>
+<dd>
+
+<p>This is used as (or in) an init sub to cast off the bonds of a controlling terminal. It must precede all other redirection ops that affect STDIN, STDOUT, or STDERR to be guaranteed effective.</p>
+
+</dd>
+<dt id="start">start</dt>
+<dd>
+
+<pre><code>   $h = start(
+      \@cmd, \$in, \$out, ...,
+      timeout( 30, name =&gt; &quot;process timeout&quot; ),
+      $stall_timeout = timeout( 10, name =&gt; &quot;stall timeout&quot;   ),
+   );
+
+   $h = start \@cmd, &#39;&lt;&#39;, \$in, &#39;|&#39;, \@cmd2, ...;</code></pre>
+
+<p>start() accepts a harness or harness specification and returns a harness after building all of the pipes and launching (via fork()/exec(), or, maybe someday, spawn()) all the child processes. It does not send or receive any data on the pipes, see pump() and finish() for that.</p>
+
+<p>You may call harness() and then pass it&#39;s result to start() if you like, but you only need to if it helps you structure or tune your application. If you do call harness(), you may skip start() and proceed directly to pump.</p>
+
+<p>start() also starts all timers in the harness. See <a href="https://metacpan.org/pod/IPC::Run::Timer">IPC::Run::Timer</a> for more information.</p>
+
+<p>start() flushes STDOUT and STDERR to help you avoid duplicate output. It has no way of asking Perl to flush all your open filehandles, so you are going to need to flush any others you have open. Sorry.</p>
+
+<p>Here&#39;s how if you don&#39;t want to alter the state of $| for your filehandle:</p>
+
+<pre><code>   $ofh = select HANDLE; $of = $|; $| = 1; $| = $of; select $ofh;</code></pre>
+
+<p>If you don&#39;t mind leaving output unbuffered on HANDLE, you can do the slightly shorter</p>
+
+<pre><code>   $ofh = select HANDLE; $| = 1; select $ofh;</code></pre>
+
+<p>Or, you can use IO::Handle&#39;s flush() method:</p>
+
+<pre><code>   use IO::Handle;
+   flush HANDLE;</code></pre>
+
+<p>Perl needs the equivalent of C&#39;s fflush( (FILE *)NULL ).</p>
+
+</dd>
+<dt id="adopt">adopt</dt>
+<dd>
+
+<p>Experimental feature. NOT FUNCTIONAL YET, NEED TO CLOSE FDS BETTER IN CHILDREN. SEE t/adopt.t for a test suite.</p>
+
+</dd>
+<dt id="pump">pump</dt>
+<dd>
+
+<pre><code>   pump $h;
+   $h-&gt;pump;</code></pre>
+
+<p>Pump accepts a single parameter harness. It blocks until it delivers some input or receives some output. It returns TRUE if there is still input or output to be done, FALSE otherwise.</p>
+
+<p>pump() will automatically call start() if need be, so you may call harness() then proceed to pump() if that helps you structure your application.</p>
+
+<p>If pump() is called after all harnessed activities have completed, a &quot;process ended prematurely&quot; exception to be thrown. This allows for simple scripting of external applications without having to add lots of error handling code at each step of the script:</p>
+
+<pre><code>   $h = harness \@smbclient, \$in, \$out, $err;
+
+   $in = &quot;cd /foo\n&quot;;
+   $h-&gt;pump until $out =~ /^smb.*&gt; \Z/m;
+   die &quot;error cding to /foo:\n$out&quot; if $out =~ &quot;ERR&quot;;
+   $out = &#39;&#39;;
+
+   $in = &quot;mget *\n&quot;;
+   $h-&gt;pump until $out =~ /^smb.*&gt; \Z/m;
+   die &quot;error retrieving files:\n$out&quot; if $out =~ &quot;ERR&quot;;
+
+   $h-&gt;finish;
+
+   warn $err if $err;</code></pre>
+
+</dd>
+<dt id="pump_nb">pump_nb</dt>
+<dd>
+
+<pre><code>   pump_nb $h;
+   $h-&gt;pump_nb;</code></pre>
+
+<p>&quot;pump() non-blocking&quot;, pumps if anything&#39;s ready to be pumped, returns immediately otherwise. This is useful if you&#39;re doing some long-running task in the foreground, but don&#39;t want to starve any child processes.</p>
+
+</dd>
+<dt id="pumpable">pumpable</dt>
+<dd>
+
+<p>Returns TRUE if calling pump() won&#39;t throw an immediate &quot;process ended prematurely&quot; exception. This means that there are open I/O channels or active processes. May yield the parent processes&#39; time slice for 0.01 second if all pipes are to the child and all are paused. In this case we can&#39;t tell if the child is dead, so we yield the processor and then attempt to reap the child in a nonblocking way.</p>
+
+</dd>
+<dt id="reap_nb">reap_nb</dt>
+<dd>
+
+<p>Attempts to reap child processes, but does not block.</p>
+
+<p>Does not currently take any parameters, one day it will allow specific children to be reaped.</p>
+
+<p>Only call this from a signal handler if your <code>perl</code> is recent enough to have safe signal handling (5.6.1 did not, IIRC, but it was being discussed on perl5-porters). Calling this (or doing any significant work) in a signal handler on older <code>perl</code>s is asking for seg faults.</p>
+
+</dd>
+<dt id="finish">finish</dt>
+<dd>
+
+<p>This must be called after the last start() or pump() call for a harness, or your system will accumulate defunct processes and you may &quot;leak&quot; file descriptors.</p>
+
+<p>finish() returns TRUE if all children returned 0 (and were not signaled and did not coredump, ie ! $?), and FALSE otherwise (this is like run(), and the opposite of system()).</p>
+
+<p>Once a harness has been finished, it may be run() or start()ed again, including by pump()s auto-start.</p>
+
+<p>If this throws an exception rather than a normal exit, the harness may be left in an unstable state, it&#39;s best to kill the harness to get rid of all the child processes, etc.</p>
+
+<p>Specifically, if a timeout expires in finish(), finish() will not kill all the children. Call <code>$h-&gt;kill_kill</code> in this case if you care. This differs from the behavior of <a href="./IPC::Run.html#run">&quot;run&quot;</a>.</p>
+
+</dd>
+<dt id="result">result</dt>
+<dd>
+
+<pre><code>   $h-&gt;result;</code></pre>
+
+<p>Returns the first non-zero result code (ie $? &gt;&gt; 8). See <a href="./IPC::Run.html#full_result">&quot;full_result&quot;</a> to get the $? value for a child process.</p>
+
+<p>To get the result of a particular child, do:</p>
+
+<pre><code>   $h-&gt;result( 0 );  # first child&#39;s $? &gt;&gt; 8
+   $h-&gt;result( 1 );  # second child</code></pre>
+
+<p>or</p>
+
+<pre><code>   ($h-&gt;results)[0]
+   ($h-&gt;results)[1]</code></pre>
+
+<p>Returns undef if no child processes were spawned and no child number was specified. Throws an exception if an out-of-range child number is passed.</p>
+
+</dd>
+<dt id="results">results</dt>
+<dd>
+
+<p>Returns a list of child exit values. See <a href="./IPC::Run.html#full_results">&quot;full_results&quot;</a> if you want to know if a signal killed the child.</p>
+
+<p>Throws an exception if the harness is not in a finished state.</p>
+
+</dd>
+<dt id="full_result">full_result</dt>
+<dd>
+
+<pre><code>   $h-&gt;full_result;</code></pre>
+
+<p>Returns the first non-zero $?. See <a href="./IPC::Run.html#result">&quot;result&quot;</a> to get the first $? &gt;&gt; 8 value for a child process.</p>
+
+<p>To get the result of a particular child, do:</p>
+
+<pre><code>   $h-&gt;full_result( 0 );  # first child&#39;s $?
+   $h-&gt;full_result( 1 );  # second child</code></pre>
+
+<p>or</p>
+
+<pre><code>   ($h-&gt;full_results)[0]
+   ($h-&gt;full_results)[1]</code></pre>
+
+<p>Returns undef if no child processes were spawned and no child number was specified. Throws an exception if an out-of-range child number is passed.</p>
+
+</dd>
+<dt id="full_results">full_results</dt>
+<dd>
+
+<p>Returns a list of child exit values as returned by <code>wait</code>. See <a href="./IPC::Run.html#results">&quot;results&quot;</a> if you don&#39;t care about coredumps or signals.</p>
+
+<p>Throws an exception if the harness is not in a finished state.</p>
+
+</dd>
+</dl>
+
+</ul>
+
+<h1 id="FILTERS">FILTERS</h1>
+
+<p>These filters are used to modify input our output between a child process and a scalar or subroutine endpoint.</p>
+
+<dl>
+
+<dt id="binary">binary</dt>
+<dd>
+
+<pre><code>   run \@cmd, &quot;&gt;&quot;, binary, \$out;
+   run \@cmd, &quot;&gt;&quot;, binary, \$out;  ## Any TRUE value to enable
+   run \@cmd, &quot;&gt;&quot;, binary 0, \$out;  ## Any FALSE value to disable</code></pre>
+
+<p>This is a constructor for a &quot;binmode&quot; &quot;filter&quot; that tells IPC::Run to keep the carriage returns that would ordinarily be edited out for you (binmode is usually off). This is not a real filter, but an option masquerading as a filter.</p>
+
+<p>It&#39;s not named &quot;binmode&quot; because you&#39;re likely to want to call Perl&#39;s binmode in programs that are piping binary data around.</p>
+
+</dd>
+<dt id="new_chunker">new_chunker</dt>
+<dd>
+
+<p>This breaks a stream of data in to chunks, based on an optional scalar or regular expression parameter. The default is the Perl input record separator in $/, which is a newline be default.</p>
+
+<pre><code>   run \@cmd, &#39;&gt;&#39;, new_chunker, \&amp;lines_handler;
+   run \@cmd, &#39;&gt;&#39;, new_chunker( &quot;\r\n&quot; ), \&amp;lines_handler;</code></pre>
+
+<p>Because this uses $/ by default, you should always pass in a parameter if you are worried about other code (modules, etc) modifying $/.</p>
+
+<p>If this filter is last in a filter chain that dumps in to a scalar, the scalar must be set to &#39;&#39; before a new chunk will be written to it.</p>
+
+<p>As an example of how a filter like this can be written, here&#39;s a chunker that splits on newlines:</p>
+
+<pre><code>   sub line_splitter {
+      my ( $in_ref, $out_ref ) = @_;
+
+      return 0 if length $$out_ref;
+
+      return input_avail &amp;&amp; do {
+         while (1) {
+            if ( $$in_ref =~ s/\A(.*?\n)// ) {
+               $$out_ref .= $1;
+               return 1;
+            }
+            my $hmm = get_more_input;
+            unless ( defined $hmm ) {
+               $$out_ref = $$in_ref;
+               $$in_ref = &#39;&#39;;
+               return length $$out_ref ? 1 : 0;
+            }
+            return 0 if $hmm eq 0;
+         }
+      }
+   };</code></pre>
+
+</dd>
+<dt id="new_appender">new_appender</dt>
+<dd>
+
+<p>This appends a fixed string to each chunk of data read from the source scalar or sub. This might be useful if you&#39;re writing commands to a child process that always must end in a fixed string, like &quot;\n&quot;:</p>
+
+<pre><code>   run( \@cmd,
+      &#39;&lt;&#39;, new_appender( &quot;\n&quot; ), \&amp;commands,
+   );</code></pre>
+
+<p>Here&#39;s a typical filter sub that might be created by new_appender():</p>
+
+<pre><code>   sub newline_appender {
+      my ( $in_ref, $out_ref ) = @_;
+
+      return input_avail &amp;&amp; do {
+         $$out_ref = join( &#39;&#39;, $$out_ref, $$in_ref, &quot;\n&quot; );
+         $$in_ref = &#39;&#39;;
+         1;
+      }
+   };</code></pre>
+
+</dd>
+<dt id="new_string_source">new_string_source</dt>
+<dd>
+
+<p>TODO: Needs confirmation. Was previously undocumented. in this module.</p>
+
+<p>This is a filter which is exportable. Returns a sub which appends the data passed in to the output buffer and returns 1 if data was appended. 0 if it was an empty string and undef if no data was passed.</p>
+
+<p>NOTE: Any additional variables passed to new_string_source will be passed to the sub every time it&#39;s called and appended to the output.</p>
+
+</dd>
+<dt id="new_string_sink">new_string_sink</dt>
+<dd>
+
+<p>TODO: Needs confirmation. Was previously undocumented.</p>
+
+<p>This is a filter which is exportable. Returns a sub which pops the data out of the input stream and pushes it onto the string.</p>
+
+</dd>
+<dt id="io">io</dt>
+<dd>
+
+<p>Takes a filename or filehandle, a redirection operator, optional filters, and a source or destination (depends on the redirection operator). Returns an IPC::Run::IO object suitable for harness()ing (including via start() or run()).</p>
+
+<p>This is shorthand for</p>
+
+<pre><code>   require IPC::Run::IO;
+
+      ... IPC::Run::IO-&gt;new(...) ...</code></pre>
+
+</dd>
+<dt id="timer">timer</dt>
+<dd>
+
+<pre><code>   $h = start( \@cmd, \$in, \$out, $t = timer( 5 ) );
+
+   pump $h until $out =~ /expected stuff/ || $t-&gt;is_expired;</code></pre>
+
+<p>Instantiates a non-fatal timer. pump() returns once each time a timer expires. Has no direct effect on run(), but you can pass a subroutine to fire when the timer expires.</p>
+
+<p>See <a href="./IPC::Run.html#timeout">&quot;timeout&quot;</a> for building timers that throw exceptions on expiration.</p>
+
+<p>See <a href="https://metacpan.org/pod/IPC::Run::Timer#timer">&quot;timer&quot; in IPC::Run::Timer</a> for details.</p>
+
+</dd>
+<dt id="timeout">timeout</dt>
+<dd>
+
+<pre><code>   $h = start( \@cmd, \$in, \$out, $t = timeout( 5 ) );
+
+   pump $h until $out =~ /expected stuff/;</code></pre>
+
+<p>Instantiates a timer that throws an exception when it expires. If you don&#39;t provide an exception, a default exception that matches /^IPC::Run: .*timed out/ is thrown by default. You can pass in your own exception scalar or reference:</p>
+
+<pre><code>   $h = start(
+      \@cmd, \$in, \$out,
+      $t = timeout( 5, exception =&gt; &#39;slowpoke&#39; ),
+   );</code></pre>
+
+<p>or set the name used in debugging message and in the default exception string:</p>
+
+<pre><code>   $h = start(
+      \@cmd, \$in, \$out,
+      timeout( 50, name =&gt; &#39;process timer&#39; ),
+      $stall_timer = timeout( 5, name =&gt; &#39;stall timer&#39; ),
+   );
+
+   pump $h until $out =~ /started/;
+
+   $in = &#39;command 1&#39;;
+   $stall_timer-&gt;start;
+   pump $h until $out =~ /command 1 finished/;
+
+   $in = &#39;command 2&#39;;
+   $stall_timer-&gt;start;
+   pump $h until $out =~ /command 2 finished/;
+
+   $in = &#39;very slow command 3&#39;;
+   $stall_timer-&gt;start( 10 );
+   pump $h until $out =~ /command 3 finished/;
+
+   $stall_timer-&gt;start( 5 );
+   $in = &#39;command 4&#39;;
+   pump $h until $out =~ /command 4 finished/;
+
+   $stall_timer-&gt;reset; # Prevent restarting or expirng
+   finish $h;</code></pre>
+
+<p>See <a href="./IPC::Run.html#timer">&quot;timer&quot;</a> for building non-fatal timers.</p>
+
+<p>See <a href="https://metacpan.org/pod/IPC::Run::Timer#timer">&quot;timer&quot; in IPC::Run::Timer</a> for details.</p>
+
+</dd>
+</dl>
+
+<h1 id="FILTER-IMPLEMENTATION-FUNCTIONS"><a id="FILTER"></a>FILTER IMPLEMENTATION FUNCTIONS</h1>
+
+<p>These functions are for use from within filters.</p>
+
+<dl>
+
+<dt id="input_avail">input_avail</dt>
+<dd>
+
+<p>Returns TRUE if input is available. If none is available, then &amp;get_more_input is called and its result is returned.</p>
+
+<p>This is usually used in preference to &amp;get_more_input so that the calling filter removes all data from the $in_ref before more data gets read in to $in_ref.</p>
+
+<p><code>input_avail</code> is usually used as part of a return expression:</p>
+
+<pre><code>   return input_avail &amp;&amp; do {
+      ## process the input just gotten
+      1;
+   };</code></pre>
+
+<p>This technique allows input_avail to return the undef or 0 that a filter normally returns when there&#39;s no input to process. If a filter stores intermediate values, however, it will need to react to an undef:</p>
+
+<pre><code>   my $got = input_avail;
+   if ( ! defined $got ) {
+      ## No more input ever, flush internal buffers to $out_ref
+   }
+   return $got unless $got;
+   ## Got some input, move as much as need be
+   return 1 if $added_to_out_ref;</code></pre>
+
+</dd>
+<dt id="get_more_input">get_more_input</dt>
+<dd>
+
+<p>This is used to fetch more input in to the input variable. It returns undef if there will never be any more input, 0 if there is none now, but there might be in the future, and TRUE if more input was gotten.</p>
+
+<p><code>get_more_input</code> is usually used as part of a return expression, see <a href="./IPC::Run.html#input_avail">&quot;input_avail&quot;</a> for more information.</p>
+
+</dd>
+</dl>
+
+<h1 id="TODO">TODO</h1>
+
+<p>These will be addressed as needed and as time allows.</p>
+
+<p>Stall timeout.</p>
+
+<p>Expose a list of child process objects. When I do this, each child process is likely to be blessed into IPC::Run::Proc.</p>
+
+<p>$kid-&gt;abort(), $kid-&gt;kill(), $kid-&gt;signal( $num_or_name ).</p>
+
+<p>Write tests for /(full_)?results?/ subs.</p>
+
+<p>Currently, pump() and run() only work on systems where select() works on the filehandles returned by pipe(). This does *not* include ActiveState on Win32, although it does work on cygwin under Win32 (thought the tests whine a bit). I&#39;d like to rectify that, suggestions and patches welcome.</p>
+
+<p>Likewise start() only fully works on fork()/exec() machines (well, just fork() if you only ever pass perl subs as subprocesses). There&#39;s some scaffolding for calling Open3::spawn_with_handles(), but that&#39;s untested, and not that useful with limited select().</p>
+
+<p>Support for <code>\@sub_cmd</code> as an argument to a command which gets replaced with /dev/fd or the name of a temporary file containing foo&#39;s output. This is like &lt;(sub_cmd ...) found in bash and csh (IIRC).</p>
+
+<p>Allow multiple harnesses to be combined as independent sets of processes in to one &#39;meta-harness&#39;.</p>
+
+<p>Allow a harness to be passed in place of an \@cmd. This would allow multiple harnesses to be aggregated.</p>
+
+<p>Ability to add external file descriptors w/ filter chains and endpoints.</p>
+
+<p>Ability to add timeouts and timing generators (i.e. repeating timeouts).</p>
+
+<p>High resolution timeouts.</p>
+
+<h1 id="Win32-LIMITATIONS"><a id="Win321"></a>Win32 LIMITATIONS</h1>
+
+<dl>
+
+<dt id="argument-passing-rules-are-program-specific"><a id="argument"></a>argument-passing rules are program-specific</dt>
+<dd>
+
+<p>Win32 programs receive all arguments in a single &quot;command line&quot; string. IPC::Run assembles this string so programs using <a href="https://docs.microsoft.com/en-us/cpp/cpp/main-function-command-line-args#parsing-c-command-line-arguments">standard command line parsing rules</a> will see an <code>argv</code> that matches the array reference specifying the command. Some programs use different rules to parse their command line. Notable examples include <i>cmd.exe</i>, <i>cscript.exe</i>, and Cygwin programs called from non-Cygwin programs. Use <a href="https://metacpan.org/pod/IPC::Run::Win32Process">IPC::Run::Win32Process</a> to call these and other nonstandard programs.</p>
+
+</dd>
+<dt id="batch-files"><a id="batch"></a>batch files</dt>
+<dd>
+
+<p>Properly escaping a batch file argument depends on how the script will use that argument, because some uses experience multiple levels of caret (escape character) removal. Avoid calling batch files with arguments, particularly when the argument values originate outside your program or contain non-alphanumeric characters. Perl scripts and PowerShell scripts are sound alternatives. If you do use batch file arguments, IPC::Run escapes them so the batch file can pass them, unquoted, to a program having standard command line parsing rules. If the batch file enables delayed environment variable expansion, it must disable that feature before expanding its arguments. For example, if <i>foo.cmd</i> contains <code>perl %*</code>, <code>run [&#39;foo.cmd&#39;, @list]</code> will create a Perl process in which <code>@ARGV</code> matches <code>@list</code>. Prepending a <code>setlocal enabledelayedexpansion</code> line would make the batch file malfunction, silently. Another silent-malfunction example is <code>run [&#39;outer.bat&#39;, @list]</code> for <i>outer.bat</i> containing <code>foo.cmd %*</code>.</p>
+
+</dd>
+<dt id="Fails-on-Win9X"><a id="Fails"></a>Fails on Win9X</dt>
+<dd>
+
+<p>If you want Win9X support, you&#39;ll have to debug it or fund me because I don&#39;t use that system any more. The Win32 subsysem has been extended to use temporary files in simple run() invocations and these may actually work on Win9X too, but I don&#39;t have time to work on it.</p>
+
+</dd>
+<dt id="May-deadlock-on-Win2K-(but-not-WinNT4-or-WinXPPro)"><a id="May"></a><a id="May-deadlock-on-Win2K--but-not-WinNT4-or-WinXPPro"></a>May deadlock on Win2K (but not WinNT4 or WinXPPro)</dt>
+<dd>
+
+<p>Spawning more than one subprocess on Win2K causes a deadlock I haven&#39;t figured out yet, but simple uses of run() often work. Passes all tests on WinXPPro and WinNT.</p>
+
+</dd>
+<dt id="no-support-yet-for-&lt;pty&lt;-and-&gt;pty&gt;"><a id="no"></a><a id="no-support-yet-for--pty--and--pty"></a>no support yet for &lt;pty&lt; and &gt;pty&gt;</dt>
+<dd>
+
+<p>These are likely to be implemented as &quot;&lt;&quot; and &quot;&gt;&quot; with binmode on, not sure.</p>
+
+</dd>
+<dt id="no-support-for-file-descriptors-higher-than-2-(stderr)"><a id="no1"></a><a id="no-support-for-file-descriptors-higher-than-2--stderr"></a>no support for file descriptors higher than 2 (stderr)</dt>
+<dd>
+
+<p>Win32 only allows passing explicit fds 0, 1, and 2. If you really, really need to pass file handles, us Win32API:: GetOsFHandle() or ::FdGetOsFHandle() to get the integer handle and pass it to the child process using the command line, environment, stdin, intermediary file, or other IPC mechanism. Then use that handle in the child (Win32API.pm provides ways to reconstitute Perl file handles from Win32 file handles).</p>
+
+</dd>
+<dt id="no-support-for-subroutine-subprocesses-(CODE-refs)"><a id="no2"></a><a id="no-support-for-subroutine-subprocesses--CODE-refs"></a>no support for subroutine subprocesses (CODE refs)</dt>
+<dd>
+
+<p>Can&#39;t fork(), so the subroutines would have no context, and closures certainly have no meaning</p>
+
+<p>Perhaps with Win32 fork() emulation, this can be supported in a limited fashion, but there are other very serious problems with that: all parent fds get dup()ed in to the thread emulating the forked process, and that keeps the parent from being able to close all of the appropriate fds.</p>
+
+</dd>
+<dt id="no-support-for-init-=&gt;-sub-{}-routines."><a id="no3"></a><a id="no-support-for-init---sub---routines"></a>no support for init =&gt; sub {} routines.</dt>
+<dd>
+
+<p>Win32 processes are created from scratch, there is no way to do an init routine that will affect the running child. Some limited support might be implemented one day, do chdir() and %ENV changes can be made.</p>
+
+</dd>
+<dt id="signals">signals</dt>
+<dd>
+
+<p>Win32 does not fully support signals. signal() is likely to cause errors unless sending a signal that Perl emulates, and <code>kill_kill()</code> is immediately fatal (there is no grace period).</p>
+
+</dd>
+<dt id="$?-cannot-represent-all-Win32-exit-codes"><a id="cannot-represent-all-Win32-exit-codes"></a><code>$?</code> cannot represent all Win32 exit codes</dt>
+<dd>
+
+<p>Prefer <code>full_result( ... )</code>, <code>result( ... )</code>, or other IPC::Run methods.</p>
+
+</dd>
+<dt id="helper-processes"><a id="helper"></a>helper processes</dt>
+<dd>
+
+<p>IPC::Run uses helper processes, one per redirected file, to adapt between the anonymous pipe connected to the child and the TCP socket connected to the parent. This is a waste of resources and will change in the future to either use threads (instead of helper processes) or a WaitForMultipleObjects call (instead of select). Please contact me if you can help with the WaitForMultipleObjects() approach; I haven&#39;t figured out how to get at it without C code.</p>
+
+</dd>
+<dt id="shutdown-pause"><a id="shutdown"></a>shutdown pause</dt>
+<dd>
+
+<p>There seems to be a pause of up to 1 second between when a child program exits and the corresponding sockets indicate that they are closed in the parent. Not sure why.</p>
+
+</dd>
+<dt id="binmode">binmode</dt>
+<dd>
+
+<p>binmode is not supported yet. The underpinnings are implemented, just ask if you need it.</p>
+
+</dd>
+<dt id="IPC::Run::IO"><a id="IPC"></a>IPC::Run::IO</dt>
+<dd>
+
+<p>IPC::Run::IO objects can be used on Unix to read or write arbitrary files. On Win32, they will need to use the same helper processes to adapt from non-select()able filehandles to select()able ones (or perhaps WaitForMultipleObjects() will work with them, not sure).</p>
+
+</dd>
+<dt id="startup-race-conditions"><a id="startup"></a>startup race conditions</dt>
+<dd>
+
+<p>There seems to be an occasional race condition between child process startup and pipe closings. It seems like if the child is not fully created by the time CreateProcess returns and we close the TCP socket being handed to it, the parent socket can also get closed. This is seen with the Win32 pumper applications, not the &quot;real&quot; child process being spawned.</p>
+
+<p>I assume this is because the kernel hasn&#39;t gotten around to incrementing the reference count on the child&#39;s end (since the child was slow in starting), so the parent&#39;s closing of the child end causes the socket to be closed, thus closing the parent socket.</p>
+
+<p>Being a race condition, it&#39;s hard to reproduce, but I encountered it while testing this code on a drive share to a samba box. In this case, it takes t/run.t a long time to spawn it&#39;s child processes (the parent hangs in the first select for several seconds until the child emits any debugging output).</p>
+
+<p>I have not seen it on local drives, and can&#39;t reproduce it at will, unfortunately. The symptom is a &quot;bad file descriptor in select()&quot; error, and, by turning on debugging, it&#39;s possible to see that select() is being called on a no longer open file descriptor that was returned from the _socket() routine in Win32Helper. There&#39;s a new confess() that checks for this (&quot;PARENT_HANDLE no longer open&quot;), but I haven&#39;t been able to reproduce it (typically).</p>
+
+</dd>
+</dl>
+
+<h1 id="LIMITATIONS">LIMITATIONS</h1>
+
+<p>On Unix, requires a system that supports <code>waitpid( $pid, WNOHANG )</code> so it can tell if a child process is still running.</p>
+
+<p>PTYs don&#39;t seem to be non-blocking on some versions of Solaris. Here&#39;s a test script contributed by Borislav Deianov &lt;borislav@ensim.com&gt; to see if you have the problem. If it dies, you have the problem.</p>
+
+<pre><code>   #!/usr/bin/perl
+
+   use IPC::Run qw(run);
+   use Fcntl;
+   use IO::Pty;
+
+   sub makecmd {
+       return [&#39;perl&#39;, &#39;-e&#39;, 
+               &#39;&lt;STDIN&gt;, print &quot;\n&quot; x &#39;.$_[0].&#39;; while(&lt;STDIN&gt;){last if /end/}&#39;];
+   }
+
+   #pipe R, W;
+   #fcntl(W, F_SETFL, O_NONBLOCK);
+   #while (syswrite(W, &quot;\n&quot;, 1)) { $pipebuf++ };
+   #print &quot;pipe buffer size is $pipebuf\n&quot;;
+   my $pipebuf=4096;
+   my $in = &quot;\n&quot; x ($pipebuf * 2) . &quot;end\n&quot;;
+   my $out;
+
+   $SIG{ALRM} = sub { die &quot;Never completed!\n&quot; };
+
+   print &quot;reading from scalar via pipe...&quot;;
+   alarm( 2 );
+   run(makecmd($pipebuf * 2), &#39;&lt;&#39;, \$in, &#39;&gt;&#39;, \$out);
+   alarm( 0 );
+   print &quot;done\n&quot;;
+
+   print &quot;reading from code via pipe... &quot;;
+   alarm( 2 );
+   run(makecmd($pipebuf * 3), &#39;&lt;&#39;, sub { $t = $in; undef $in; $t}, &#39;&gt;&#39;, \$out);
+   alarm( 0 );
+   print &quot;done\n&quot;;
+
+   $pty = IO::Pty-&gt;new();
+   $pty-&gt;blocking(0);
+   $slave = $pty-&gt;slave();
+   while ($pty-&gt;syswrite(&quot;\n&quot;, 1)) { $ptybuf++ };
+   print &quot;pty buffer size is $ptybuf\n&quot;;
+   $in = &quot;\n&quot; x ($ptybuf * 3) . &quot;end\n&quot;;
+
+   print &quot;reading via pty... &quot;;
+   alarm( 2 );
+   run(makecmd($ptybuf * 3), &#39;&lt;pty&lt;&#39;, \$in, &#39;&gt;&#39;, \$out);
+   alarm(0);
+   print &quot;done\n&quot;;</code></pre>
+
+<p>No support for &#39;;&#39;, &#39;&amp;&amp;&#39;, &#39;||&#39;, &#39;{ ... }&#39;, etc: use perl&#39;s, since run() returns TRUE when the command exits with a 0 result code.</p>
+
+<p>Does not provide shell-like string interpolation.</p>
+
+<p>No support for <code>cd</code>, <code>setenv</code>, or <code>export</code>: do these in an init() sub</p>
+
+<pre><code>   run(
+      \cmd,
+         ...
+         init =&gt; sub {
+            chdir $dir or die $!;
+            $ENV{FOO}=&#39;BAR&#39;
+         }
+   );</code></pre>
+
+<p>Timeout calculation does not allow absolute times, or specification of days, months, etc.</p>
+
+<p><b>WARNING:</b> Function coprocesses (<code>run \&amp;foo, ...</code>) suffer from two limitations. The first is that it is difficult to close all filehandles the child inherits from the parent, since there is no way to scan all open FILEHANDLEs in Perl and it both painful and a bit dangerous to close all open file descriptors with <code>POSIX::close()</code>. Painful because we can&#39;t tell which fds are open at the POSIX level, either, so we&#39;d have to scan all possible fds and close any that we don&#39;t want open (normally <code>exec()</code> closes any non-inheritable but we don&#39;t <code>exec()</code> for &amp;sub processes.</p>
+
+<p>The second problem is that Perl&#39;s DESTROY subs and other on-exit cleanup gets run in the child process. If objects are instantiated in the parent before the child is forked, the DESTROY will get run once in the parent and once in the child. When coprocess subs exit, POSIX::_exit is called to work around this, but it means that objects that are still referred to at that time are not cleaned up. So setting package vars or closure vars to point to objects that rely on DESTROY to affect things outside the process (files, etc), will lead to bugs.</p>
+
+<p>I goofed on the syntax: &quot;&lt;pipe&quot; vs. &quot;&lt;pty&lt;&quot; and &quot;&gt;filename&quot; are both oddities.</p>
+
+<h1 id="TODO1">TODO</h1>
+
+<dl>
+
+<dt id="Allow-one-harness-to-&quot;adopt&quot;-another:"><a id="Allow"></a><a id="Allow-one-harness-to--adopt--another"></a>Allow one harness to &quot;adopt&quot; another:</dt>
+<dd>
+
+<pre><code>   $new_h = harness \@cmd2;
+   $h-&gt;adopt( $new_h );</code></pre>
+
+</dd>
+<dt id="Close-all-filehandles-not-explicitly-marked-to-stay-open."><a id="Close"></a><a id="Close-all-filehandles-not-explicitly-marked-to-stay-open"></a>Close all filehandles not explicitly marked to stay open.</dt>
+<dd>
+
+<p>The problem with this one is that there&#39;s no good way to scan all open FILEHANDLEs in Perl, yet you don&#39;t want child processes inheriting handles willy-nilly.</p>
+
+</dd>
+</dl>
+
+<h1 id="INSPIRATION">INSPIRATION</h1>
+
+<p>Well, select() and waitpid() badly needed wrapping, and open3() isn&#39;t open-minded enough for me.</p>
+
+<p>The shell-like API inspired by a message Russ Allbery sent to perl5-porters, which included:</p>
+
+<pre><code>   I&#39;ve thought for some time that it would be
+   nice to have a module that could handle full Bourne shell pipe syntax
+   internally, with fork and exec, without ever invoking a shell.  Something
+   that you could give things like:
+
+   pipeopen (PIPE, [ qw/cat file/ ], &#39;|&#39;, [ &#39;analyze&#39;, @args ], &#39;&gt;&amp;3&#39;);</code></pre>
+
+<p>Message ylln51p2b6.fsf@windlord.stanford.edu, on 2000/02/04.</p>
+
+<h1 id="SUPPORT">SUPPORT</h1>
+
+<p>Bugs should always be submitted via the GitHub bug tracker</p>
+
+<p><a href="https://github.com/toddr/IPC-Run/issues">https://github.com/toddr/IPC-Run/issues</a></p>
+
+<h1 id="AUTHORS">AUTHORS</h1>
+
+<p>Adam Kennedy &lt;adamk@cpan.org&gt;</p>
+
+<p>Barrie Slaymaker &lt;barries@slaysys.com&gt;</p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Some parts copyright 2008 - 2009 Adam Kennedy.</p>
+
+<p>Copyright 1999 Barrie Slaymaker.</p>
+
+<p>You may distribute under the terms of either the GNU General Public License or the Artistic License, as specified in the README file.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install IPC::Run, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm IPC::Run</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install IPC::Run</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./IPC::Run.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

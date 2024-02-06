@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Compress::Raw::Bzip2 - Low-Level Interface to bzip2 compression library - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Compress::Raw::Bzip2">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Compress::Raw::Bzip2.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Compress::Raw::Bzip2">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Compress::Raw::Bzip2">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Compress::Raw::Bzip2">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Compress::Raw::Bzip2">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Compress::Raw::Bzip2">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Compress::Raw::Bzip2">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Compress::Raw::Bzip2">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Compress::Raw::Bzip2">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Compress::Raw::Bzip2">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Compress::Raw::Bzip2">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Compress::Raw::Bzip2">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Compress::Raw::Bzip2">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Compress::Raw::Bzip2">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Compress::Raw::Bzip2">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Compress::Raw::Bzip2">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Compress::Raw::Bzip2">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Compress::Raw::Bzip2">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Compress::Raw::Bzip2">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Compress::Raw::Bzip2">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Compress::Raw::Bzip2">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Compress::Raw::Bzip2">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Compress::Raw::Bzip2">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Compress::Raw::Bzip2">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Compress::Raw::Bzip2">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Compress::Raw::Bzip2">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Compress::Raw::Bzip2">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Compress::Raw::Bzip2">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Compress::Raw::Bzip2">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Compress::Raw::Bzip2">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Compress::Raw::Bzip2">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Compress::Raw::Bzip2">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Compress::Raw::Bzip2">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Compress::Raw::Bzip2">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Compress::Raw::Bzip2">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Compress::Raw::Bzip2">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Compress::Raw::Bzip2">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Compress::Raw::Bzip2">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Compress::Raw::Bzip2">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Compress::Raw::Bzip2">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Compress::Raw::Bzip2">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Compress::Raw::Bzip2">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Compress::Raw::Bzip2">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Compress::Raw::Bzip2">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Compress::Raw::Bzip2">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Compress::Raw::Bzip2">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Compress::Raw::Bzip2">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Compress::Raw::Bzip2">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Compress::Raw::Bzip2">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Compress::Raw::Bzip2">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Compress::Raw::Bzip2">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Compress::Raw::Bzip2">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Compress::Raw::Bzip2">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Compress::Raw::Bzip2">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Compress::Raw::Bzip2">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Compress::Raw::Bzip2">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Compress::Raw::Bzip2">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Compress::Raw::Bzip2">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Compress::Raw::Bzip2">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Compress::Raw::Bzip2">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Compress::Raw::Bzip2">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Compress::Raw::Bzip2">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Compress::Raw::Bzip2">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Compress::Raw::Bzip2">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Compress::Raw::Bzip2">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Compress::Raw::Bzip2">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Compress::Raw::Bzip2">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Compress::Raw::Bzip2">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Compress::Raw::Bzip2">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Compress::Raw::Bzip2">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Compress::Raw::Bzip2">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Compress::Raw::Bzip2">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Compress::Raw::Bzip2">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Compress::Raw::Bzip2">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Compress::Raw::Bzip2">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Compress::Raw::Bzip2">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Compress::Raw::Bzip2">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Compress::Raw::Bzip2">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Compress::Raw::Bzip2">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Compress::Raw::Bzip2">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Compress::Raw::Bzip2">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Compress::Raw::Bzip2.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Compress::Raw::Bzip2">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Compress::Raw::Bzip2">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Compress::Raw::Bzip2">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Compress::Raw::Bzip2">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Compress::Raw::Bzip2">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Compress::Raw::Bzip2">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Compress::Raw::Bzip2">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Compress::Raw::Bzip2">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Compress::Raw::Bzip2">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Compress::Raw::Bzip2">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Compress::Raw::Bzip2">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Compress::Raw::Bzip2">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Compress::Raw::Bzip2">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Compress::Raw::Bzip2">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Compress::Raw::Bzip2">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Compress::Raw::Bzip2">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Compress::Raw::Bzip2">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Compress::Raw::Bzip2">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Compress::Raw::Bzip2">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Compress::Raw::Bzip2">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Compress::Raw::Bzip2">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Compress::Raw::Bzip2">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Compress::Raw::Bzip2">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Compress::Raw::Bzip2">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Compress::Raw::Bzip2">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Compress::Raw::Bzip2">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Compress::Raw::Bzip2">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Compress::Raw::Bzip2">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Compress::Raw::Bzip2">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Compress::Raw::Bzip2">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Compress::Raw::Bzip2">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Compress::Raw::Bzip2">5.35.1</a>
+          <a class="dropdown-item active" href="./Compress::Raw::Bzip2.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Compress::Raw::Bzip2.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Compress::Raw::Bzip2.html">Compress::Raw::Bzip2</a>
+          <div id="more">
+            (<a href="./Compress::Raw::Bzip2.txt">source</a>,
+            <a href="https://metacpan.org/pod/Compress::Raw::Bzip2">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 2.101</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#Compression">Compression</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#($z,-$status)-=-new-Compress::Raw::Bzip2-$appendOutput,-$blockSize100k,-$workfactor;">($z, $status) = new Compress::Raw::Bzip2 $appendOutput, $blockSize100k, $workfactor;</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#$status-=-$bz-%3Ebzdeflate($input,-$output);">$status = $bz-&gt;bzdeflate($input, $output);</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#$status-=-$bz-%3Ebzflush($output);">$status = $bz-&gt;bzflush($output);</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#$status-=-$bz-%3Ebzclose($output);">$status = $bz-&gt;bzclose($output);</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#Example">Example</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#Uncompression">Uncompression</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#($z,-$status)-=-new-Compress::Raw::Bunzip2-$appendOutput,-$consumeInput,-$small,-$verbosity,-$limitOutput;">($z, $status) = new Compress::Raw::Bunzip2 $appendOutput, $consumeInput, $small, $verbosity, $limitOutput;</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#$status-=-$z-%3Ebzinflate($input,-$output);">$status = $z-&gt;bzinflate($input, $output);</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#Misc">Misc</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#my-$version-=-Compress::Raw::Bzip2::bzlibversion();">my $version = Compress::Raw::Bzip2::bzlibversion();</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#Constants">Constants</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#SUPPORT">SUPPORT</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#MODIFICATION-HISTORY">MODIFICATION HISTORY</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Compress::Raw::Bzip2.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Compress::Raw::Bzip2.html#NAME">#</a>NAME</h1>
+
+<p>Compress::Raw::Bzip2 - Low-Level Interface to bzip2 compression library</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Compress::Raw::Bzip2.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Compress::Raw::Bzip2 ;
+
+my ($bz, $status) = new Compress::Raw::Bzip2 [OPTS]
+    or die &quot;Cannot create bzip2 object: $bzerno\n&quot;;
+
+$status = $bz-&gt;bzdeflate($input, $output);
+$status = $bz-&gt;bzflush($output);
+$status = $bz-&gt;bzclose($output);
+
+my ($bz, $status) = new Compress::Raw::Bunzip2 [OPTS]
+    or die &quot;Cannot create bunzip2 object: $bzerno\n&quot;;
+
+$status = $bz-&gt;bzinflate($input, $output);
+
+my $version = Compress::Raw::Bzip2::bzlibversion();</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Compress::Raw::Bzip2.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p><code>Compress::Raw::Bzip2</code> provides an interface to the in-memory compression/uncompression functions from the bzip2 compression library.</p>
+
+<p>Although the primary purpose for the existence of <code>Compress::Raw::Bzip2</code> is for use by the <code>IO::Compress::Bzip2</code> and <code>IO::Compress::Bunzip2</code> modules, it can be used on its own for simple compression/uncompression tasks.</p>
+
+<h1 id="Compression"><a class="permalink" href="./Compress::Raw::Bzip2.html#Compression">#</a>Compression</h1>
+
+<h2 id="($z,-$status)-=-new-Compress::Raw::Bzip2-$appendOutput,-$blockSize100k,-$workfactor;"><a class="permalink" href="./Compress::Raw::Bzip2.html#($z,-$status)-=-new-Compress::Raw::Bzip2-$appendOutput,-$blockSize100k,-$workfactor;">#</a><a id="z-status-new-Compress::Raw::Bzip2-appendOutput-blockSize100k-workfactor"></a>($z, $status) = new Compress::Raw::Bzip2 $appendOutput, $blockSize100k, $workfactor;</h2>
+
+<p>Creates a new compression object.</p>
+
+<p>If successful, it will return the initialised compression object, <code>$z</code> and a <code>$status</code> of <code>BZ_OK</code> in a list context. In scalar context it returns the deflation object, <code>$z</code>, only.</p>
+
+<p>If not successful, the returned compression object, <code>$z</code>, will be <i>undef</i> and <code>$status</code> will hold the a <i>bzip2</i> error code.</p>
+
+<p>Below is a list of the valid options:</p>
+
+<dl>
+
+<dt id="$appendOutput"><a class="permalink" href="./Compress::Raw::Bzip2.html#$appendOutput">#</a><a id="appendOutput"></a><b>$appendOutput</b></dt>
+<dd>
+
+<p>Controls whether the compressed data is appended to the output buffer in the <code>bzdeflate</code>, <code>bzflush</code> and <code>bzclose</code> methods.</p>
+
+<p>Defaults to 1.</p>
+
+</dd>
+<dt id="$blockSize100k"><a class="permalink" href="./Compress::Raw::Bzip2.html#$blockSize100k">#</a><a id="blockSize100k"></a><b>$blockSize100k</b></dt>
+<dd>
+
+<p>To quote the bzip2 documentation</p>
+
+<pre><code class="plaintext">blockSize100k specifies the block size to be used for compression. It
+should be a value between 1 and 9 inclusive, and the actual block size
+used is 100000 x this figure. 9 gives the best compression but takes
+most memory.</code></pre>
+
+<p>Defaults to 1.</p>
+
+</dd>
+<dt id="$workfactor"><a class="permalink" href="./Compress::Raw::Bzip2.html#$workfactor">#</a><a id="workfactor"></a><b>$workfactor</b></dt>
+<dd>
+
+<p>To quote the bzip2 documentation</p>
+
+<pre><code class="plaintext">This parameter controls how the compression phase behaves when
+presented with worst case, highly repetitive, input data. If
+compression runs into difficulties caused by repetitive data, the
+library switches from the standard sorting algorithm to a fallback
+algorithm. The fallback is slower than the standard algorithm by
+perhaps a factor of three, but always behaves reasonably, no matter how
+bad the input.
+
+Lower values of workFactor reduce the amount of effort the standard
+algorithm will expend before resorting to the fallback. You should set
+this parameter carefully; too low, and many inputs will be handled by
+the fallback algorithm and so compress rather slowly, too high, and
+your average-to-worst case compression times can become very large. The
+default value of 30 gives reasonable behaviour over a wide range of
+circumstances.
+
+Allowable values range from 0 to 250 inclusive. 0 is a special case,
+equivalent to using the default value of 30.</code></pre>
+
+<p>Defaults to 0.</p>
+
+</dd>
+</dl>
+
+<h2 id="$status-=-$bz-&gt;bzdeflate($input,-$output);"><a class="permalink" href="./Compress::Raw::Bzip2.html#$status-=-$bz-%3Ebzdeflate($input,-$output);">#</a><a id="status-bz-bzdeflate-input-output"></a>$status = $bz-&gt;bzdeflate($input, $output);</h2>
+
+<p>Reads the contents of <code>$input</code>, compresses it and writes the compressed data to <code>$output</code>.</p>
+
+<p>Returns <code>BZ_RUN_OK</code> on success and a <code>bzip2</code> error code on failure.</p>
+
+<p>If <code>appendOutput</code> is enabled in the constructor for the bzip2 object, the compressed data will be appended to <code>$output</code>. If not enabled, <code>$output</code> will be truncated before the compressed data is written to it.</p>
+
+<h2 id="$status-=-$bz-&gt;bzflush($output);"><a class="permalink" href="./Compress::Raw::Bzip2.html#$status-=-$bz-%3Ebzflush($output);">#</a><a id="status-bz-bzflush-output"></a>$status = $bz-&gt;bzflush($output);</h2>
+
+<p>Flushes any pending compressed data to <code>$output</code>.</p>
+
+<p>Returns <code>BZ_RUN_OK</code> on success and a <code>bzip2</code> error code on failure.</p>
+
+<h2 id="$status-=-$bz-&gt;bzclose($output);"><a class="permalink" href="./Compress::Raw::Bzip2.html#$status-=-$bz-%3Ebzclose($output);">#</a><a id="status-bz-bzclose-output"></a>$status = $bz-&gt;bzclose($output);</h2>
+
+<p>Terminates the compressed data stream and flushes any pending compressed data to <code>$output</code>.</p>
+
+<p>Returns <code>BZ_STREAM_END</code> on success and a <code>bzip2</code> error code on failure.</p>
+
+<h2 id="Example"><a class="permalink" href="./Compress::Raw::Bzip2.html#Example">#</a>Example</h2>
+
+<h1 id="Uncompression"><a class="permalink" href="./Compress::Raw::Bzip2.html#Uncompression">#</a>Uncompression</h1>
+
+<h2 id="($z,-$status)-=-new-Compress::Raw::Bunzip2-$appendOutput,-$consumeInput,-$small,-$verbosity,-$limitOutput;"><a class="permalink" href="./Compress::Raw::Bzip2.html#($z,-$status)-=-new-Compress::Raw::Bunzip2-$appendOutput,-$consumeInput,-$small,-$verbosity,-$limitOutput;">#</a><a id="z-status-new-Compress::Raw::Bunzip2-appendOutput-consumeInput-small-verbosity-limitOutput"></a>($z, $status) = new Compress::Raw::Bunzip2 $appendOutput, $consumeInput, $small, $verbosity, $limitOutput;</h2>
+
+<p>If successful, it will return the initialised uncompression object, <code>$z</code> and a <code>$status</code> of <code>BZ_OK</code> in a list context. In scalar context it returns the deflation object, <code>$z</code>, only.</p>
+
+<p>If not successful, the returned uncompression object, <code>$z</code>, will be <i>undef</i> and <code>$status</code> will hold the a <i>bzip2</i> error code.</p>
+
+<p>Below is a list of the valid options:</p>
+
+<dl>
+
+<dt id="$appendOutput1"><a class="permalink" href="./Compress::Raw::Bzip2.html#$appendOutput1">#</a><a id="appendOutput1"></a><b>$appendOutput</b></dt>
+<dd>
+
+<p>Controls whether the compressed data is appended to the output buffer in the <code>bzinflate</code>, <code>bzflush</code> and <code>bzclose</code> methods.</p>
+
+<p>Defaults to 1.</p>
+
+</dd>
+<dt id="$consumeInput"><a class="permalink" href="./Compress::Raw::Bzip2.html#$consumeInput">#</a><a id="consumeInput"></a><b>$consumeInput</b></dt>
+<dd>
+
+</dd>
+<dt id="$small"><a class="permalink" href="./Compress::Raw::Bzip2.html#$small">#</a><a id="small"></a><b>$small</b></dt>
+<dd>
+
+<p>To quote the bzip2 documentation</p>
+
+<pre><code class="plaintext">If small is nonzero, the library will use an alternative decompression
+algorithm which uses less memory but at the cost of decompressing more
+slowly (roughly speaking, half the speed, but the maximum memory
+requirement drops to around 2300k).</code></pre>
+
+<p>Defaults to 0.</p>
+
+</dd>
+<dt id="$limitOutput"><a class="permalink" href="./Compress::Raw::Bzip2.html#$limitOutput">#</a><a id="limitOutput"></a><b>$limitOutput</b></dt>
+<dd>
+
+<p>The <code>LimitOutput</code> option changes the behavior of the <code>$i-&gt;bzinflate</code> method so that the amount of memory used by the output buffer can be limited.</p>
+
+<p>When <code>LimitOutput</code> is used the size of the output buffer used will either be the 16k or the amount of memory already allocated to <code>$output</code>, whichever is larger. Predicting the output size available is tricky, so don&#39;t rely on getting an exact output buffer size.</p>
+
+<p>When <code>LimitOutout</code> is not specified <code>$i-&gt;bzinflate</code> will use as much memory as it takes to write all the uncompressed data it creates by uncompressing the input buffer.</p>
+
+<p>If <code>LimitOutput</code> is enabled, the <code>ConsumeInput</code> option will also be enabled.</p>
+
+<p>This option defaults to false.</p>
+
+</dd>
+<dt id="$verbosity"><a class="permalink" href="./Compress::Raw::Bzip2.html#$verbosity">#</a><a id="verbosity"></a><b>$verbosity</b></dt>
+<dd>
+
+<p>This parameter is ignored.</p>
+
+<p>Defaults to 0.</p>
+
+</dd>
+</dl>
+
+<h2 id="$status-=-$z-&gt;bzinflate($input,-$output);"><a class="permalink" href="./Compress::Raw::Bzip2.html#$status-=-$z-%3Ebzinflate($input,-$output);">#</a><a id="status-z-bzinflate-input-output"></a>$status = $z-&gt;bzinflate($input, $output);</h2>
+
+<p>Uncompresses <code>$input</code> and writes the uncompressed data to <code>$output</code>.</p>
+
+<p>Returns <code>BZ_OK</code> if the uncompression was successful, but the end of the compressed data stream has not been reached. Returns <code>BZ_STREAM_END</code> on successful uncompression and the end of the compression stream has been reached.</p>
+
+<p>If <code>consumeInput</code> is enabled in the constructor for the bunzip2 object, <code>$input</code> will have all compressed data removed from it after uncompression. On <code>BZ_OK</code> return this will mean that <code>$input</code> will be an empty string; when <code>BZ_STREAM_END</code> <code>$input</code> will either be an empty string or will contain whatever data immediately followed the compressed data stream.</p>
+
+<p>If <code>appendOutput</code> is enabled in the constructor for the bunzip2 object, the uncompressed data will be appended to <code>$output</code>. If not enabled, <code>$output</code> will be truncated before the uncompressed data is written to it.</p>
+
+<h1 id="Misc"><a class="permalink" href="./Compress::Raw::Bzip2.html#Misc">#</a>Misc</h1>
+
+<h2 id="my-$version-=-Compress::Raw::Bzip2::bzlibversion();"><a class="permalink" href="./Compress::Raw::Bzip2.html#my-$version-=-Compress::Raw::Bzip2::bzlibversion();">#</a><a id="my"></a><a id="my-version-Compress::Raw::Bzip2::bzlibversion"></a>my $version = Compress::Raw::Bzip2::bzlibversion();</h2>
+
+<p>Returns the version of the underlying bzip2 library.</p>
+
+<h1 id="Constants"><a class="permalink" href="./Compress::Raw::Bzip2.html#Constants">#</a>Constants</h1>
+
+<p>The following bzip2 constants are exported by this module</p>
+
+<pre><code class="plaintext">BZ_RUN
+BZ_FLUSH
+BZ_FINISH
+
+BZ_OK
+BZ_RUN_OK
+BZ_FLUSH_OK
+BZ_FINISH_OK
+BZ_STREAM_END
+BZ_SEQUENCE_ERROR
+BZ_PARAM_ERROR
+BZ_MEM_ERROR
+BZ_DATA_ERROR
+BZ_DATA_ERROR_MAGIC
+BZ_IO_ERROR
+BZ_UNEXPECTED_EOF
+BZ_OUTBUFF_FULL
+BZ_CONFIG_ERROR</code></pre>
+
+<h1 id="SUPPORT"><a class="permalink" href="./Compress::Raw::Bzip2.html#SUPPORT">#</a>SUPPORT</h1>
+
+<p>General feedback/questions/bug reports should be sent to <a href="https://github.com/pmqs/Compress-Raw-Bzip2/issues">https://github.com/pmqs/Compress-Raw-Bzip2/issues</a> (preferred) or <a href="https://rt.cpan.org/Public/Dist/Display.html?Name=Compress-Raw-Bzip2">https://rt.cpan.org/Public/Dist/Display.html?Name=Compress-Raw-Bzip2</a>.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./Compress::Raw::Bzip2.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Compress::Zlib.html">Compress::Zlib</a>, <a href="./IO::Compress::Gzip.html">IO::Compress::Gzip</a>, <a href="./IO::Uncompress::Gunzip.html">IO::Uncompress::Gunzip</a>, <a href="./IO::Compress::Deflate.html">IO::Compress::Deflate</a>, <a href="./IO::Uncompress::Inflate.html">IO::Uncompress::Inflate</a>, <a href="./IO::Compress::RawDeflate.html">IO::Compress::RawDeflate</a>, <a href="./IO::Uncompress::RawInflate.html">IO::Uncompress::RawInflate</a>, <a href="./IO::Compress::Bzip2.html">IO::Compress::Bzip2</a>, <a href="./IO::Uncompress::Bunzip2.html">IO::Uncompress::Bunzip2</a>, <a href="./IO::Compress::Lzma.html">IO::Compress::Lzma</a>, <a href="./IO::Uncompress::UnLzma.html">IO::Uncompress::UnLzma</a>, <a href="./IO::Compress::Xz.html">IO::Compress::Xz</a>, <a href="./IO::Uncompress::UnXz.html">IO::Uncompress::UnXz</a>, <a href="./IO::Compress::Lzip.html">IO::Compress::Lzip</a>, <a href="./IO::Uncompress::UnLzip.html">IO::Uncompress::UnLzip</a>, <a href="./IO::Compress::Lzop.html">IO::Compress::Lzop</a>, <a href="./IO::Uncompress::UnLzop.html">IO::Uncompress::UnLzop</a>, <a href="./IO::Compress::Lzf.html">IO::Compress::Lzf</a>, <a href="./IO::Uncompress::UnLzf.html">IO::Uncompress::UnLzf</a>, <a href="./IO::Compress::Zstd.html">IO::Compress::Zstd</a>, <a href="./IO::Uncompress::UnZstd.html">IO::Uncompress::UnZstd</a>, <a href="./IO::Uncompress::AnyInflate.html">IO::Uncompress::AnyInflate</a>, <a href="./IO::Uncompress::AnyUncompress.html">IO::Uncompress::AnyUncompress</a></p>
+
+<p><a href="./IO::Compress::FAQ.html">IO::Compress::FAQ</a></p>
+
+<p><a href="./File::GlobMapper.html">File::GlobMapper</a>, <a href="./Archive::Zip.html">Archive::Zip</a>, <a href="./Archive::Tar.html">Archive::Tar</a>, <a href="./IO::Zlib.html">IO::Zlib</a></p>
+
+<p>The primary site for the bzip2 program is <a href="https://sourceware.org/bzip2/">https://sourceware.org/bzip2/</a>.</p>
+
+<p>See the module <a href="./Compress::Bzip2.html">Compress::Bzip2</a></p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./Compress::Raw::Bzip2.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>This module was written by Paul Marquess, <code>pmqs@cpan.org</code>.</p>
+
+<h1 id="MODIFICATION-HISTORY"><a class="permalink" href="./Compress::Raw::Bzip2.html#MODIFICATION-HISTORY">#</a><a id="MODIFICATION"></a>MODIFICATION HISTORY</h1>
+
+<p>See the Changes file.</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a class="permalink" href="./Compress::Raw::Bzip2.html#COPYRIGHT-AND-LICENSE">#</a><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>Copyright (c) 2005-2021 Paul Marquess. All rights reserved.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

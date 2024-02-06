@@ -1,0 +1,41 @@
+=over
+
+=item fileno FILEHANDLE
+X<fileno>
+
+=item fileno DIRHANDLE
+
+Returns the file descriptor for a filehandle or directory handle,
+or undefined if the
+filehandle is not open.  If there is no real file descriptor at the OS
+level, as can happen with filehandles connected to memory objects via
+L<C<open>|/open FILEHANDLE,MODE,EXPR> with a reference for the third
+argument, -1 is returned.
+
+This is mainly useful for constructing bitmaps for
+L<C<select>|/select RBITS,WBITS,EBITS,TIMEOUT> and low-level POSIX
+tty-handling operations.
+If FILEHANDLE is an expression, the value is taken as an indirect
+filehandle, generally its name.
+
+You can use this to find out whether two handles refer to the
+same underlying descriptor:
+
+    if (fileno($this) != -1 && fileno($this) == fileno($that)) {
+        print "\$this and \$that are dups\n";
+    } elsif (fileno($this) != -1 && fileno($that) != -1) {
+        print "\$this and \$that have different " .
+            "underlying file descriptors\n";
+    } else {
+        print "At least one of \$this and \$that does " .
+            "not have a real file descriptor\n";
+    }
+
+The behavior of L<C<fileno>|/fileno FILEHANDLE> on a directory handle
+depends on the operating system.  On a system with L<dirfd(3)> or
+similar, L<C<fileno>|/fileno FILEHANDLE> on a directory
+handle returns the underlying file descriptor associated with the
+handle; on systems with no such support, it returns the undefined value,
+and sets L<C<$!>|perlvar/$!> (errno).
+
+=back

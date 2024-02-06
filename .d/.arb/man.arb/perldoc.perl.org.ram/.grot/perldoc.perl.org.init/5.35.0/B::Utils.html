@@ -1,0 +1,1523 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>B::Utils - Helper functions for op tree manipulation - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of B-Utils - MetaCPAN" href="https://metacpan.org/dist/B-Utils/releases.rss" />
+        <link rel="canonical" href="./B::Utils.html" />
+        <meta name="description" content="Helper functions for op tree manipulation" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/B::Utils" />
+<meta name="twitter:title"       content="B::Utils" />
+<meta name="twitter:description" content="Helper functions for op tree manipulation" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./B::Utils.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of B-Utils was released.">
+      <span class="relatize">22 Jul 2015 19:33:50 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/B-Utils">B-Utils</a>
+  </li>
+  <li>
+    Module version: 0.27
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/B-Utils/source/lib/B/Utils.pm">Source</a>
+    (<a href="https://metacpan.org/dist/B-Utils/source/lib/B/Utils.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/B-Utils/source/lib/B">Browse</a>
+    (<a href="https://metacpan.org/dist/B-Utils/source/lib/B?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/B-Utils/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="http://search.cpan.org/dist/B-Utils">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/B-Utils/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/jbenjore/b-utils">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=B-Utils">Issues</a>
+      (6)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=B-Utils+0.27" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/B/B-Utils.html?oncpan=1&amp;distmat=1&amp;version=0.27&amp;grade=2" style="color: #090">913</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/B/B-Utils.html?oncpan=1&amp;distmat=1&amp;version=0.27&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/B/B-Utils.html?oncpan=1&amp;distmat=1&amp;version=0.27&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/ETHER/B-Utils-0.27">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on B-Utils who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/B-Utils-0.27/index.html">53.97% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.6.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/B-Utils/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/E/ET/ETHER/B-Utils-0.27.tar.gz">
+      Download (<span itemprop="fileSize">72.86KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FETHER%2FB-Utils-0.27%2Flib%2FB%2FUtils.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/B-Utils/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/B-Utils/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:B-Utils">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="B-Utils">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/B/Utils.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="ETHER/B-Utils-0.27"
+>0.27
+  (ETHER on 2015-07-22)</option>
+<option
+  
+  value="JJORE/B-Utils-0.25"
+>0.25
+  (JJORE on 2014-04-25)</option>
+<option
+  
+  value="JJORE/B-Utils-0.24"
+>0.24
+  (JJORE on 2014-04-23)</option>
+<option
+  
+  value="JJORE/B-Utils-0.23"
+>0.23
+  (JJORE on 2014-04-22)</option>
+<option
+  
+  value="JJORE/B-Utils-0.22"
+>0.22
+  (JJORE on 2014-04-21)</option>
+<option
+  
+  value="RURBAN/B-Utils-0.22"
+>0.22
+  (RURBAN on 2013-07-19)</option>
+<option
+  
+  value="JJORE/B-Utils-0.21"
+>0.21
+  (JJORE on 2012-03-25)</option>
+<option
+  
+  value="JJORE/B-Utils-0.19"
+>0.19
+  (JJORE on 2012-03-12)</option>
+<option
+  
+  value="JJORE/B-Utils-0.18"
+>0.18
+  (JJORE on 2012-03-12)</option>
+<option
+  
+  value="JJORE/B-Utils-0.17"
+>0.17
+  (JJORE on 2011-11-28)</option>
+<option
+  
+  value="JJORE/B-Utils-0.16"
+>0.16
+  (JJORE on 2011-07-08)</option>
+<option
+  
+  value="JJORE/B-Utils-0.15"
+>0.15
+  (JJORE on 2011-04-19)</option>
+<option
+  
+  value="JJORE/B-Utils-0.14"
+>0.14
+  (JJORE on 2011-03-19)</option>
+<option
+  
+  value="CLKAO/B-Utils-0.06"
+>0.06
+  (CLKAO on 2008-09-01)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_09"
+>0.05_09 DEV
+  (SMUELLER on 2008-04-09)</option>
+<option
+  
+  value="SIMON/B-Utils-0.04"
+>0.04
+  (SIMON on 2002-05-02)</option>
+<option
+  
+  value="MJD/B-Utils-0.03"
+>0.03
+  (MJD on 2002-02-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RURBAN/B-Utils-0.26"
+>0.26
+  (RURBAN on 2015-06-18)</option>
+<option
+  
+  value="ETHER/B-Utils-0.26"
+>0.26
+  (ETHER on 2015-04-27)</option>
+<option
+  
+  value="JJORE/B-Utils-0.13"
+>0.13
+  (JJORE on 2011-02-02)</option>
+<option
+  
+  value="JJORE/B-Utils-0.12"
+>0.12
+  (JJORE on 2011-01-24)</option>
+<option
+  
+  value="JJORE/B-Utils-0.11"
+>0.11
+  (JJORE on 2010-01-13)</option>
+<option
+  
+  value="JJORE/B-Utils-0.10"
+>0.10
+  (JJORE on 2009-12-20)</option>
+<option
+  
+  value="JJORE/B-Utils-0.09"
+>0.09
+  (JJORE on 2009-12-07)</option>
+<option
+  
+  value="JJORE/B-Utils-0.08"
+>0.08
+  (JJORE on 2009-09-01)</option>
+<option
+  
+  value="JJORE/B-Utils-0.07"
+>0.07
+  (JJORE on 2008-11-13)</option>
+<option
+  
+  value="CLKAO/B-Utils-0.05_10"
+>0.05_10 DEV
+  (CLKAO on 2008-08-31)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_08"
+>0.05_08 DEV
+  (SMUELLER on 2008-04-05)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_07"
+>0.05_07 DEV
+  (SMUELLER on 2008-04-04)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_06"
+>0.05_06 DEV
+  (SMUELLER on 2008-04-03)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_05"
+>0.05_05 DEV
+  (SMUELLER on 2008-04-01)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_04"
+>0.05_04 DEV
+  (SMUELLER on 2008-04-01)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_03"
+>0.05_03 DEV
+  (SMUELLER on 2008-03-30)</option>
+<option
+  
+  value="JJORE/B-Utils-0.05_02"
+>0.05_02 DEV
+  (JJORE on 2005-12-01)</option>
+<option
+  
+  value="JJORE/B-Utils-0.05_01"
+>0.05_01 DEV
+  (JJORE on 2005-11-28)</option>
+<option
+  
+  value="JJORE/B-Utils-0.05"
+>0.05
+  (JJORE on 2004-11-26)</option>
+<option
+  
+  value="SIMON/B-Utils-0.02"
+>0.02
+  (SIMON on 2001-08-15)</option>
+<option
+  
+  value="SIMON/B-Utils-0.01"
+>0.01
+  (SIMON on 2001-08-13)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/ETHER/B-Utils-0.27/diff/' + encodeURIComponent(this.value) + '/lib/B/Utils.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="ETHER/B-Utils-0.27"
+>0.27
+  (ETHER on 2015-07-22)</option>
+<option
+  
+  value="JJORE/B-Utils-0.25"
+>0.25
+  (JJORE on 2014-04-25)</option>
+<option
+  
+  value="JJORE/B-Utils-0.24"
+>0.24
+  (JJORE on 2014-04-23)</option>
+<option
+  
+  value="JJORE/B-Utils-0.23"
+>0.23
+  (JJORE on 2014-04-22)</option>
+<option
+  
+  value="JJORE/B-Utils-0.22"
+>0.22
+  (JJORE on 2014-04-21)</option>
+<option
+  
+  value="RURBAN/B-Utils-0.22"
+>0.22
+  (RURBAN on 2013-07-19)</option>
+<option
+  
+  value="JJORE/B-Utils-0.21"
+>0.21
+  (JJORE on 2012-03-25)</option>
+<option
+  
+  value="JJORE/B-Utils-0.19"
+>0.19
+  (JJORE on 2012-03-12)</option>
+<option
+  
+  value="JJORE/B-Utils-0.18"
+>0.18
+  (JJORE on 2012-03-12)</option>
+<option
+  
+  value="JJORE/B-Utils-0.17"
+>0.17
+  (JJORE on 2011-11-28)</option>
+<option
+  
+  value="JJORE/B-Utils-0.16"
+>0.16
+  (JJORE on 2011-07-08)</option>
+<option
+  
+  value="JJORE/B-Utils-0.15"
+>0.15
+  (JJORE on 2011-04-19)</option>
+<option
+  
+  value="JJORE/B-Utils-0.14"
+>0.14
+  (JJORE on 2011-03-19)</option>
+<option
+  
+  value="CLKAO/B-Utils-0.06"
+>0.06
+  (CLKAO on 2008-09-01)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_09"
+>0.05_09 DEV
+  (SMUELLER on 2008-04-09)</option>
+<option
+  
+  value="SIMON/B-Utils-0.04"
+>0.04
+  (SIMON on 2002-05-02)</option>
+<option
+  
+  value="MJD/B-Utils-0.03"
+>0.03
+  (MJD on 2002-02-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RURBAN/B-Utils-0.26"
+>0.26
+  (RURBAN on 2015-06-18)</option>
+<option
+  
+  value="ETHER/B-Utils-0.26"
+>0.26
+  (ETHER on 2015-04-27)</option>
+<option
+  
+  value="JJORE/B-Utils-0.13"
+>0.13
+  (JJORE on 2011-02-02)</option>
+<option
+  
+  value="JJORE/B-Utils-0.12"
+>0.12
+  (JJORE on 2011-01-24)</option>
+<option
+  
+  value="JJORE/B-Utils-0.11"
+>0.11
+  (JJORE on 2010-01-13)</option>
+<option
+  
+  value="JJORE/B-Utils-0.10"
+>0.10
+  (JJORE on 2009-12-20)</option>
+<option
+  
+  value="JJORE/B-Utils-0.09"
+>0.09
+  (JJORE on 2009-12-07)</option>
+<option
+  
+  value="JJORE/B-Utils-0.08"
+>0.08
+  (JJORE on 2009-09-01)</option>
+<option
+  
+  value="JJORE/B-Utils-0.07"
+>0.07
+  (JJORE on 2008-11-13)</option>
+<option
+  
+  value="CLKAO/B-Utils-0.05_10"
+>0.05_10 DEV
+  (CLKAO on 2008-08-31)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_08"
+>0.05_08 DEV
+  (SMUELLER on 2008-04-05)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_07"
+>0.05_07 DEV
+  (SMUELLER on 2008-04-04)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_06"
+>0.05_06 DEV
+  (SMUELLER on 2008-04-03)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_05"
+>0.05_05 DEV
+  (SMUELLER on 2008-04-01)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_04"
+>0.05_04 DEV
+  (SMUELLER on 2008-04-01)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_03"
+>0.05_03 DEV
+  (SMUELLER on 2008-03-30)</option>
+<option
+  
+  value="JJORE/B-Utils-0.05_02"
+>0.05_02 DEV
+  (JJORE on 2005-12-01)</option>
+<option
+  
+  value="JJORE/B-Utils-0.05_01"
+>0.05_01 DEV
+  (JJORE on 2005-11-28)</option>
+<option
+  
+  value="JJORE/B-Utils-0.05"
+>0.05
+  (JJORE on 2004-11-26)</option>
+<option
+  
+  value="SIMON/B-Utils-0.02"
+>0.02
+  (SIMON on 2001-08-15)</option>
+<option
+  
+  value="SIMON/B-Utils-0.01"
+>0.01
+  (SIMON on 2001-08-13)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Exporter" title="Exporter" class="ellipsis">Exporter</a></li>
+  <li><a href="https://metacpan.org/pod/Scalar::Util" title="Scalar::Util" class="ellipsis">Scalar::Util</a></li>
+  <li><a href="https://metacpan.org/pod/Task::Weaken" title="Task::Weaken" class="ellipsis">Task::Weaken</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/B::Utils/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=B%3A%3AUtils">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=B-Utils">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/ETHER/B-Utils-0.27/view/lib/B/Utils.pm">This version</a>
+    </li>
+    <li>
+      <a href="./B::Utils.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/KES"><img src="https://www.gravatar.com/avatar/e8530f00b43b4f6a056f8ad4ee52ea47?d=identicon&amp;s=20" title="KES" alt="KES"></a>
+<a class="display-all" href="https://metacpan.org/author/RSCHABER"><img src="https://www.gravatar.com/avatar/8735b8d5583ee0a0155a41f993cab4f3?d=identicon&amp;s=20" title="RSCHABER" alt="RSCHABER"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/B-Utils/plussers">2 PAUSE users</a>
+</div>
+<div>
+    2 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="JJORE"
+      data-contrib-email="jjore@cpan.org"
+    >
+      <a href="https://metacpan.org/author/JJORE" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/3241e95bc2abb9c6a0853b51fff3da9f?d=identicon&amp;s=20" />
+      Josh Jore
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/ETHER" class="author-name">Karen Etheridge 🐾 🌋🦑🇹🇼🇭🇰🇺🇦</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/B/Utils.pm&#39;" class="">
+<option
+  selected
+  value="ETHER/B-Utils-0.27"
+>0.27
+  (ETHER on 2015-07-22)</option>
+<option
+  
+  value="JJORE/B-Utils-0.25"
+>0.25
+  (JJORE on 2014-04-25)</option>
+<option
+  
+  value="JJORE/B-Utils-0.24"
+>0.24
+  (JJORE on 2014-04-23)</option>
+<option
+  
+  value="JJORE/B-Utils-0.23"
+>0.23
+  (JJORE on 2014-04-22)</option>
+<option
+  
+  value="JJORE/B-Utils-0.22"
+>0.22
+  (JJORE on 2014-04-21)</option>
+<option
+  
+  value="RURBAN/B-Utils-0.22"
+>0.22
+  (RURBAN on 2013-07-19)</option>
+<option
+  
+  value="JJORE/B-Utils-0.21"
+>0.21
+  (JJORE on 2012-03-25)</option>
+<option
+  
+  value="JJORE/B-Utils-0.19"
+>0.19
+  (JJORE on 2012-03-12)</option>
+<option
+  
+  value="JJORE/B-Utils-0.18"
+>0.18
+  (JJORE on 2012-03-12)</option>
+<option
+  
+  value="JJORE/B-Utils-0.17"
+>0.17
+  (JJORE on 2011-11-28)</option>
+<option
+  
+  value="JJORE/B-Utils-0.16"
+>0.16
+  (JJORE on 2011-07-08)</option>
+<option
+  
+  value="JJORE/B-Utils-0.15"
+>0.15
+  (JJORE on 2011-04-19)</option>
+<option
+  
+  value="JJORE/B-Utils-0.14"
+>0.14
+  (JJORE on 2011-03-19)</option>
+<option
+  
+  value="CLKAO/B-Utils-0.06"
+>0.06
+  (CLKAO on 2008-09-01)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_09"
+>0.05_09 DEV
+  (SMUELLER on 2008-04-09)</option>
+<option
+  
+  value="SIMON/B-Utils-0.04"
+>0.04
+  (SIMON on 2002-05-02)</option>
+<option
+  
+  value="MJD/B-Utils-0.03"
+>0.03
+  (MJD on 2002-02-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RURBAN/B-Utils-0.26"
+>0.26
+  (RURBAN on 2015-06-18)</option>
+<option
+  
+  value="ETHER/B-Utils-0.26"
+>0.26
+  (ETHER on 2015-04-27)</option>
+<option
+  
+  value="JJORE/B-Utils-0.13"
+>0.13
+  (JJORE on 2011-02-02)</option>
+<option
+  
+  value="JJORE/B-Utils-0.12"
+>0.12
+  (JJORE on 2011-01-24)</option>
+<option
+  
+  value="JJORE/B-Utils-0.11"
+>0.11
+  (JJORE on 2010-01-13)</option>
+<option
+  
+  value="JJORE/B-Utils-0.10"
+>0.10
+  (JJORE on 2009-12-20)</option>
+<option
+  
+  value="JJORE/B-Utils-0.09"
+>0.09
+  (JJORE on 2009-12-07)</option>
+<option
+  
+  value="JJORE/B-Utils-0.08"
+>0.08
+  (JJORE on 2009-09-01)</option>
+<option
+  
+  value="JJORE/B-Utils-0.07"
+>0.07
+  (JJORE on 2008-11-13)</option>
+<option
+  
+  value="CLKAO/B-Utils-0.05_10"
+>0.05_10 DEV
+  (CLKAO on 2008-08-31)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_08"
+>0.05_08 DEV
+  (SMUELLER on 2008-04-05)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_07"
+>0.05_07 DEV
+  (SMUELLER on 2008-04-04)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_06"
+>0.05_06 DEV
+  (SMUELLER on 2008-04-03)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_05"
+>0.05_05 DEV
+  (SMUELLER on 2008-04-01)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_04"
+>0.05_04 DEV
+  (SMUELLER on 2008-04-01)</option>
+<option
+  
+  value="SMUELLER/B-Utils-0.05_03"
+>0.05_03 DEV
+  (SMUELLER on 2008-03-30)</option>
+<option
+  
+  value="JJORE/B-Utils-0.05_02"
+>0.05_02 DEV
+  (JJORE on 2005-12-01)</option>
+<option
+  
+  value="JJORE/B-Utils-0.05_01"
+>0.05_01 DEV
+  (JJORE on 2005-11-28)</option>
+<option
+  
+  value="JJORE/B-Utils-0.05"
+>0.05
+  (JJORE on 2004-11-26)</option>
+<option
+  
+  value="SIMON/B-Utils-0.02"
+>0.02
+  (SIMON on 2001-08-15)</option>
+<option
+  
+  value="SIMON/B-Utils-0.01"
+>0.01
+  (SIMON on 2001-08-13)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/B-Utils">B-Utils-0.27</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 12 direct dependents &#10;          • 252 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="B-Utils-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="B-Utils-0.27">
+    <input type="hidden" name="author" value="ETHER">
+    <input type="hidden" name="distribution" value="B-Utils">
+    <button type="submit" class="favorite highlight"><span>4</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./B::Utils.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>4</span> ++</a>
+</div>
+   / <span>B::Utils</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./B::Utils.html#NAME">NAME</a></li>
+  <li><a href="./B::Utils.html#VERSION">VERSION</a></li>
+  <li><a href="./B::Utils.html#INSTALLATION">INSTALLATION</a></li>
+  <li><a href="./B::Utils.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./B::Utils.html#OP-METHODS">OP METHODS</a></li>
+  <li><a href="./B::Utils.html#EXPORTABLE-FUNCTIONS">EXPORTABLE FUNCTIONS</a>
+    <ul>
+      <li><a href="./B::Utils.html#EXPORT">EXPORT</a></li>
+      <li><a href="./B::Utils.html#XS-EXPORT">XS EXPORT</a></li>
+    </ul>
+  </li>
+  <li><a href="./B::Utils.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./B::Utils.html#LICENSE">LICENSE</a></li>
+  <li><a href="./B::Utils.html#SEE-ALSO">SEE ALSO</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>B::Utils - Helper functions for op tree manipulation</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>version 0.27</p>
+
+<h1 id="INSTALLATION">INSTALLATION</h1>
+
+<p>To install this module, run the following commands:</p>
+
+<pre><code>    perl Makefile.PL
+    make
+    make test
+    make install</code></pre>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  use B::Utils;</code></pre>
+
+<h1 id="OP-METHODS"><a id="OP"></a>OP METHODS</h1>
+
+<dl>
+
+<dt id="$op-&gt;oldname"><a id="op--oldname"></a><code>$op-&gt;oldname</code></dt>
+<dd>
+
+<p>Returns the name of the op, even if it is currently optimized to null. This helps you understand the structure of the op tree.</p>
+
+</dd>
+<dt id="$op-&gt;kids"><a id="op--kids"></a><code>$op-&gt;kids</code></dt>
+<dd>
+
+<p>Returns an array of all this op&#39;s non-null children, in order.</p>
+
+</dd>
+<dt id="$op-&gt;parent"><a id="op--parent"></a><code>$op-&gt;parent</code></dt>
+<dd>
+
+<p>Returns the parent node in the op tree, if possible. Currently &quot;possible&quot; means &quot;if the tree has already been optimized&quot;; that is, if we&#39;re during a <code>CHECK</code> block. (and hence, if we have valid <code>next</code> pointers.)</p>
+
+<p>In the future, it may be possible to search for the parent before we have the <code>next</code> pointers in place, but it&#39;ll take me a while to figure out how to do that.</p>
+
+<p>Warning: Since 5.21.2 B comes with its own version of B::OP::parent which returns either B::NULL or the real parent when ccflags contains -DPERL_OP_PARENT. In this case rather use $op-&gt;_parent.</p>
+
+</dd>
+<dt id="$op-&gt;ancestors"><a id="op--ancestors"></a><code>$op-&gt;ancestors</code></dt>
+<dd>
+
+<p>Returns all parents of this node, recursively. The list is ordered from younger/closer parents to older/farther parents.</p>
+
+</dd>
+<dt id="$op-&gt;descendants"><a id="op--descendants"></a><code>$op-&gt;descendants</code></dt>
+<dd>
+
+<p>Returns all children of this node, recursively. The list is unordered.</p>
+
+</dd>
+<dt id="$op-&gt;siblings"><a id="op--siblings"></a><code>$op-&gt;siblings</code></dt>
+<dd>
+
+<p>Returns all younger siblings of this node. The list is ordered from younger/closer siblings to older/farther siblings.</p>
+
+</dd>
+<dt id="$op-&gt;previous"><a id="op--previous"></a><code>$op-&gt;previous</code></dt>
+<dd>
+
+<p>Like <code> $op-&gt;next </code>, but not quite.</p>
+
+</dd>
+<dt id="$op-&gt;stringify"><a id="op--stringify"></a><code>$op-&gt;stringify</code></dt>
+<dd>
+
+<p>Returns a nice stringification of an opcode.</p>
+
+</dd>
+<dt id="$op-&gt;as_opgrep_pattern(%options)"><a id="op--as_opgrep_pattern-options"></a><code>$op-&gt;as_opgrep_pattern(%options)</code></dt>
+<dd>
+
+<p>From the op tree it is called on, <code>as_opgrep_pattern()</code> generates a data structure suitable for use as a condition pattern for the <code>opgrep()</code> function described below in detail. <i>Beware</i>: When using such generated patterns, there may be false positives: The pattern will most likely not match <i>only</i> the op tree it was generated from since by default, not all properties of the op are reproduced.</p>
+
+<p>You can control which properties of the op to include in the pattern by passing named arguments. The default behaviour is as if you passed in the following options:</p>
+
+<pre><code>  my $pattern = $op-&gt;as_opgrep_pattern(
+    attributes          =&gt; [qw(name flags)],
+    max_recursion_depth =&gt; undef,
+  );</code></pre>
+
+<p>So obviously, you can set <code>max_recursion_depth</code> to a number to limit the maximum depth of recursion into the op tree. Setting it to <code>0</code> will limit the dump to the current op.</p>
+
+<p><code>attributes</code> is a list of attributes to include in the produced pattern. The attributes that can be checked against in this way are:</p>
+
+<pre><code>  name targ type seq flags private pmflags pmpermflags.</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="EXPORTABLE-FUNCTIONS"><a id="EXPORTABLE"></a>EXPORTABLE FUNCTIONS</h1>
+
+<dl>
+
+<dt id="all_starts"><code>all_starts</code></dt>
+<dd>
+
+</dd>
+<dt id="all_roots"><code>all_roots</code></dt>
+<dd>
+
+<p>Returns a hash of all of the starting ops or root ops of optrees, keyed to subroutine name; the optree for main program is simply keyed to <code>__MAIN__</code>.</p>
+
+<p><b>Note</b>: Certain &quot;dangerous&quot; stashes are not scanned for subroutines: the list of such stashes can be found in <code>@B::Utils::bad_stashes</code>. Feel free to examine and/or modify this to suit your needs. The intention is that a simple program which uses no modules other than <code>B</code> and <code>B::Utils</code> would show no addition symbols.</p>
+
+<p>This does <b>not</b> return the details of ops in anonymous subroutines compiled at compile time. For instance, given</p>
+
+<pre><code>    $a = sub { ... };</code></pre>
+
+<p>the subroutine will not appear in the hash. This is just as well, since they&#39;re anonymous... If you want to get at them, use...</p>
+
+</dd>
+<dt id="anon_subs"><code>anon_subs</code></dt>
+<dd>
+
+<p>This returns an array of hash references. Each element has the keys &quot;start&quot; and &quot;root&quot;. These are the starting and root ops of all of the anonymous subroutines in the program.</p>
+
+</dd>
+<dt id="recalc_sub_cache"><code>recalc_sub_cache</code></dt>
+<dd>
+
+<p>If PL_sub_generation has changed or you have some other reason to want to force the re-examination of the optrees, everywhere, call this function.</p>
+
+</dd>
+<dt id="walkoptree_simple($op,-\&amp;callback,-[$data])"><a id="walkoptree_simple"></a><a id="walkoptree_simple-op---callback---data"></a><code>walkoptree_simple($op, \&amp;callback, [$data])</code></dt>
+<dd>
+
+<p>The <code>B</code> module provides various functions to walk the op tree, but they&#39;re all rather difficult to use, requiring you to inject methods into the <code>B::OP</code> class. This is a very simple op tree walker with more expected semantics.</p>
+
+<p>All the <code>walk</code> functions set <code>$B::Utils::file</code>, <code>$B::Utils::line</code>, and <code>$B::Utils::sub</code> to the appropriate values of file, line number, and sub name in the program being examined.</p>
+
+</dd>
+<dt id="walkoptree_filtered($op,-\&amp;filter,-\&amp;callback,-[$data])"><a id="walkoptree_filtered"></a><a id="walkoptree_filtered-op---filter---callback---data"></a><code>walkoptree_filtered($op, \&amp;filter, \&amp;callback, [$data])</code></dt>
+<dd>
+
+<p>This is much the same as <code>walkoptree_simple</code>, but will only call the callback if the <code>filter</code> returns true. The <code>filter</code> is passed the op in question as a parameter; the <code>opgrep</code> function is fantastic for building your own filters.</p>
+
+</dd>
+<dt id="walkallops_simple(\&amp;callback,-[$data])"><a id="walkallops_simple"></a><a id="walkallops_simple-callback---data"></a><code>walkallops_simple(\&amp;callback, [$data])</code></dt>
+<dd>
+
+<p>This combines <code>walkoptree_simple</code> with <code>all_roots</code> and <code>anon_subs</code> to examine every op in the program. <code>$B::Utils::sub</code> is set to the subroutine name if you&#39;re in a subroutine, <code>__MAIN__</code> if you&#39;re in the main program and <code>__ANON__</code> if you&#39;re in an anonymous subroutine.</p>
+
+</dd>
+<dt id="walkallops_filtered(\&amp;filter,-\&amp;callback,-[$data])"><a id="walkallops_filtered"></a><a id="walkallops_filtered-filter---callback---data"></a><code>walkallops_filtered(\&amp;filter, \&amp;callback, [$data])</code></dt>
+<dd>
+
+<p>Same as above, but filtered.</p>
+
+</dd>
+<dt id="opgrep(\%conditions,-@ops)"><a id="opgrep"></a><a id="opgrep-conditions---ops"></a><code>opgrep(\%conditions, @ops)</code></dt>
+<dd>
+
+<p>Returns the ops which meet the given conditions. The conditions should be specified like this:</p>
+
+<pre><code>    @barewords = opgrep(
+                        { name =&gt; &quot;const&quot;, private =&gt; OPpCONST_BARE },
+                        @ops
+                       );</code></pre>
+
+<p>where the first argument to <code>opgrep()</code> is the condition to be matched against the op structure. We&#39;ll henceforth refer to it as an op-pattern.</p>
+
+<p>You can specify alternation by giving an arrayref of values:</p>
+
+<pre><code>    @svs = opgrep ( { name =&gt; [&quot;padsv&quot;, &quot;gvsv&quot;] }, @ops)</code></pre>
+
+<p>And you can specify inversion by making the first element of the arrayref a &quot;!&quot;. (Hint: if you want to say &quot;anything&quot;, say &quot;not nothing&quot;: <code>[&quot;!&quot;]</code>)</p>
+
+<p>You may also specify the conditions to be matched in nearby ops as nested patterns.</p>
+
+<pre><code>    walkallops_filtered(
+        sub { opgrep( {name =&gt; &quot;exec&quot;,
+                       next =&gt; {
+                                 name    =&gt; &quot;nextstate&quot;,
+                                 sibling =&gt; { name =&gt; [qw(! exit warn die)] }
+                               }
+                      }, @_)},
+        sub {
+              carp(&quot;Statement unlikely to be reached&quot;);
+              carp(&quot;\t(Maybe you meant system() when you said exec()?)\n&quot;);
+        }
+    )</code></pre>
+
+<p>Get that?</p>
+
+<p>Here are the things that can be tested in this way:</p>
+
+<pre><code>        name targ type seq flags private pmflags pmpermflags
+        first other last sibling next pmreplroot pmreplstart pmnext</code></pre>
+
+<p>Additionally, you can use the <code>kids</code> keyword with an array reference to match the result of a call to <code>$op-&gt;kids()</code>. An example use is given in the documentation for <code>op_or</code> below.</p>
+
+<p>For debugging, you can have many properties of an op that is currently being matched against a given condition dumped to STDERR by specifying <code>dump =</code> 1&gt; in the condition&#39;s hash reference.</p>
+
+<p>If you match a complex condition against an op tree, you may want to extract a specific piece of information from the tree if the condition matches. This normally entails manually walking the tree a second time down to the op you wish to extract, investigate or modify. Since this is tedious duplication of code and information, you can specify a special property in the pattern of the op you wish to extract to capture the sub-op of interest. Example:</p>
+
+<pre><code>  my ($result) = opgrep(
+    { name =&gt; &quot;exec&quot;,
+      next =&gt; { name    =&gt; &quot;nextstate&quot;,
+                sibling =&gt; { name =&gt; [qw(! exit warn die)]
+                             capture =&gt; &quot;notreached&quot;,
+                           },
+              }
+    },
+    $root_op
+  );
+
+  if ($result) {
+    my $name = $result-&gt;{notreached}-&gt;name; # result is *not* the root op
+    carp(&quot;Statement unlikely to be reached (op name: $name)&quot;);
+    carp(&quot;\t(Maybe you meant system() when you said exec()?)\n&quot;);
+  }</code></pre>
+
+<p>While the above is a terribly contrived example, consider the win for a deeply nested pattern or worse yet, a pattern with many disjunctions. If a <code>capture</code> property is found anywhere in the op pattern, <code>opgrep()</code> returns an unblessed hash reference on success instead of the tested op. You can tell them apart using <a href="https://metacpan.org/pod/Scalar::Util">Scalar::Util</a>&#39;s <code>blessed()</code>. That hash reference contains all captured ops plus the tested root up as the hash entry <code>$result-&gt;{op}</code>. Note that you cannot use this feature with <code>walkoptree_filtered</code> since that function was specifically documented to pass the tested op itself to the callback.</p>
+
+<p>You cannot capture disjunctions, but that doesn&#39;t really make sense anyway.</p>
+
+</dd>
+<dt id="opgrep(-\@conditions,-@ops-)"><a id="opgrep1"></a><a id="opgrep---conditions---ops"></a><code>opgrep( \@conditions, @ops )</code></dt>
+<dd>
+
+<p>Same as above, except that you don&#39;t have to chain the conditions yourself. If you pass an array-ref, opgrep will chain the conditions for you using <code>next</code>. The conditions can either be strings (taken as op-names), or hash-refs, with the same testable conditions as given above.</p>
+
+</dd>
+<dt id="op_or(-@conditions-)"><a id="op_or"></a><a id="op_or---conditions"></a><code>op_or( @conditions )</code></dt>
+<dd>
+
+<p>Unlike the chaining of conditions done by <code>opgrep</code> itself if there are multiple conditions, this function creates a disjunction (<code>$cond1 || $cond2 || ...</code>) of the conditions and returns a structure (hash reference) that can be passed to opgrep as a single condition.</p>
+
+<p>Example:</p>
+
+<pre><code>  my $sub_structure = {
+    name =&gt; &#39;helem&#39;,
+    first =&gt; { name =&gt; &#39;rv2hv&#39;, },
+    &#39;last&#39; =&gt; { name =&gt; &#39;const&#39;, },
+  };
+
+  my @ops = opgrep( {
+      name =&gt; &#39;leavesub&#39;,
+      first =&gt; {
+        name =&gt; &#39;lineseq&#39;,
+        kids =&gt; [,
+          { name =&gt; &#39;nextstate&#39;, },
+          op_or(
+            {
+              name =&gt; &#39;return&#39;,
+              first =&gt; { name =&gt; &#39;pushmark&#39; },
+              last =&gt; $sub_structure,
+            },
+            $sub_structure,
+          ),
+        ],
+      },
+  }, $op_obj );</code></pre>
+
+<p>This example matches the code in a typical simplest-possible accessor method (albeit not down to the last bit):</p>
+
+<pre><code>  sub get_foo { $_[0]-&gt;{foo} }</code></pre>
+
+<p>But by adding an alternation we can also match optional op layers. In this case, we optionally match a return statement, so the following implementation is also recognized:</p>
+
+<pre><code>  sub get_foo { return $_[0]-&gt;{foo} }</code></pre>
+
+<p>Essentially, this is syntactic sugar for the following structure recognized by <code>opgrep()</code>:</p>
+
+<pre><code>  { disjunction =&gt; [@conditions] }</code></pre>
+
+</dd>
+<dt id="carp(@args)"><a id="carp"></a><a id="carp-args"></a><code>carp(@args)</code></dt>
+<dd>
+
+</dd>
+<dt id="croak(@args)"><a id="croak"></a><a id="croak-args"></a><code>croak(@args)</code></dt>
+<dd>
+
+<p>Warn and die, respectively, from the perspective of the position of the op in the program. Sounds complicated, but it&#39;s exactly the kind of error reporting you expect when you&#39;re grovelling through an op tree.</p>
+
+</dd>
+</dl>
+
+<h2 id="EXPORT">EXPORT</h2>
+
+<p>None by default.</p>
+
+<h2 id="XS-EXPORT"><a id="XS"></a>XS EXPORT</h2>
+
+<p>This modules uses <a href="https://metacpan.org/pod/ExtUtils::Depends">ExtUtils::Depends</a> to export some useful functions for XS modules to use. To use those, include in your Makefile.PL:</p>
+
+<pre><code>  my $pkg = ExtUtils::Depends-&gt;new(&quot;Your::XSModule&quot;, &quot;B::Utils&quot;);
+  WriteMakefile(
+    ... # your normal makefile flags
+    $pkg-&gt;get_makefile_vars,
+  );</code></pre>
+
+<p>Your XS module can now include <i>BUtils.h</i> and <i>BUtils_op.h</i>. To see document for the functions provided, use:</p>
+
+<pre><code>  perldoc -m B::Utils::Install::BUtils.h
+  perldoc -m B::Utils::Install::BUtils_op.h</code></pre>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Originally written by Simon Cozens, <code>simon@cpan.org</code> Maintained by Joshua ben Jore, <code>jjore@cpan.org</code></p>
+
+<p>Contributions from Mattia Barbon, Jim Cromie, Steffen Mueller, and Chia-liang Kao, Alexandr Ciornii, Reini Urban.</p>
+
+<h1 id="LICENSE">LICENSE</h1>
+
+<p>This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/B">B</a>, <a href="./B::Generate.html">B::Generate</a>.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install B::Utils, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm B::Utils</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install B::Utils</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./B::Utils.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,35 @@
+=over
+
+=item unlink LIST
+X<unlink> X<delete> X<remove> X<rm> X<del>
+
+=item unlink
+
+Deletes a list of files.  On success, it returns the number of files
+it successfully deleted.  On failure, it returns false and sets
+L<C<$!>|perlvar/$!> (errno):
+
+    my $unlinked = unlink 'a', 'b', 'c';
+    unlink @goners;
+    unlink glob "*.bak";
+
+On error, L<C<unlink>|/unlink LIST> will not tell you which files it
+could not remove.
+If you want to know which files you could not remove, try them one
+at a time:
+
+     foreach my $file ( @goners ) {
+         unlink $file or warn "Could not unlink $file: $!";
+     }
+
+Note: L<C<unlink>|/unlink LIST> will not attempt to delete directories
+unless you are
+superuser and the B<-U> flag is supplied to Perl.  Even if these
+conditions are met, be warned that unlinking a directory can inflict
+damage on your filesystem.  Finally, using L<C<unlink>|/unlink LIST> on
+directories is not supported on many operating systems.  Use
+L<C<rmdir>|/rmdir FILENAME> instead.
+
+If LIST is omitted, L<C<unlink>|/unlink LIST> uses L<C<$_>|perlvar/$_>.
+
+=back

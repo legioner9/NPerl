@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>IPC::Shareable - Use shared memory backed variables across processes - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of IPC-Shareable - MetaCPAN" href="https://metacpan.org/dist/IPC-Shareable/releases.rss" />
+        <link rel="canonical" href="./IPC::Shareable.html" />
+        <meta name="description" content="Use shared memory backed variables across processes" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/IPC::Shareable" />
+<meta name="twitter:title"       content="IPC::Shareable" />
+<meta name="twitter:description" content="Use shared memory backed variables across processes" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./IPC::Shareable.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of IPC-Shareable was released.">
+      <span class="relatize">12 Oct 2022 00:11:02 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/IPC-Shareable">IPC-Shareable</a>
+  </li>
+  <li>
+    Module version: 1.13
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/IPC-Shareable/source/lib/IPC/Shareable.pm">Source</a>
+    (<a href="https://metacpan.org/dist/IPC-Shareable/source/lib/IPC/Shareable.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/IPC-Shareable/source/lib/IPC">Browse</a>
+    (<a href="https://metacpan.org/dist/IPC-Shareable/source/lib/IPC?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/IPC-Shareable/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/IPC-Shareable/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/stevieb9/ipc-shareable">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/stevieb9/ipc-shareable/issues">Issues</a>
+      (18)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=IPC-Shareable+1.13" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IPC-Shareable.html?oncpan=1&amp;distmat=1&amp;version=1.13&amp;grade=2" style="color: #090">399</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IPC-Shareable.html?oncpan=1&amp;distmat=1&amp;version=1.13&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IPC-Shareable.html?oncpan=1&amp;distmat=1&amp;version=1.13&amp;grade=4">2</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/STEVEB/IPC-Shareable-1.13">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on IPC-Shareable who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/IPC-Shareable-1.13/index.html">8.37% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.10.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/IPC-Shareable/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/S/ST/STEVEB/IPC-Shareable-1.13.tar.gz">
+      Download (<span itemprop="fileSize">50.47KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FSTEVEB%2FIPC-Shareable-1.13%2Flib%2FIPC%2FShareable.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/IPC-Shareable/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/IPC-Shareable/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:IPC-Shareable">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="IPC-Shareable">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/IPC/Shareable.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="STEVEB/IPC-Shareable-1.13"
+>1.13
+  (STEVEB on 2022-10-12)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.12"
+>1.12
+  (STEVEB on 2022-03-13)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.11"
+>1.11
+  (STEVEB on 2022-03-07)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.10"
+>1.10
+  (STEVEB on 2022-03-07)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.09"
+>1.09
+  (STEVEB on 2022-03-06)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.08"
+>1.08
+  (STEVEB on 2022-03-04)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.07"
+>1.07
+  (STEVEB on 2022-03-04)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.06"
+>1.06
+  (STEVEB on 2021-09-08)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.05"
+>1.05
+  (STEVEB on 2021-07-16)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.04"
+>1.04
+  (STEVEB on 2021-06-28)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.03"
+>1.03
+  (STEVEB on 2021-06-25)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.02"
+>1.02
+  (STEVEB on 2021-06-25)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.01"
+>1.01
+  (STEVEB on 2021-06-25)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.00"
+>1.00
+  (STEVEB on 2021-06-09)</option>
+<option
+  
+  value="MSOUTH/IPC-Shareable-0.61"
+>0.61
+  (MSOUTH on 2012-10-13)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.60"
+>0.60
+  (BSUGARS on 2001-03-05)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.54"
+>0.54
+  (BSUGARS on 2001-01-10)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.53"
+>0.53
+  (BSUGARS on 2000-11-14)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.52"
+>0.52
+  (BSUGARS on 2000-09-15)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.51"
+>0.51
+  (BSUGARS on 2000-05-06)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.50"
+>0.50
+  (BSUGARS on 2000-03-24)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="STEVEB/IPC-Shareable-0.99_01"
+>0.99_01 DEV
+  (STEVEB on 2019-07-12)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/STEVEB/IPC-Shareable-1.13/diff/' + encodeURIComponent(this.value) + '/lib/IPC/Shareable.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="STEVEB/IPC-Shareable-1.13"
+>1.13
+  (STEVEB on 2022-10-12)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.12"
+>1.12
+  (STEVEB on 2022-03-13)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.11"
+>1.11
+  (STEVEB on 2022-03-07)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.10"
+>1.10
+  (STEVEB on 2022-03-07)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.09"
+>1.09
+  (STEVEB on 2022-03-06)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.08"
+>1.08
+  (STEVEB on 2022-03-04)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.07"
+>1.07
+  (STEVEB on 2022-03-04)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.06"
+>1.06
+  (STEVEB on 2021-09-08)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.05"
+>1.05
+  (STEVEB on 2021-07-16)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.04"
+>1.04
+  (STEVEB on 2021-06-28)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.03"
+>1.03
+  (STEVEB on 2021-06-25)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.02"
+>1.02
+  (STEVEB on 2021-06-25)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.01"
+>1.01
+  (STEVEB on 2021-06-25)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.00"
+>1.00
+  (STEVEB on 2021-06-09)</option>
+<option
+  
+  value="MSOUTH/IPC-Shareable-0.61"
+>0.61
+  (MSOUTH on 2012-10-13)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.60"
+>0.60
+  (BSUGARS on 2001-03-05)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.54"
+>0.54
+  (BSUGARS on 2001-01-10)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.53"
+>0.53
+  (BSUGARS on 2000-11-14)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.52"
+>0.52
+  (BSUGARS on 2000-09-15)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.51"
+>0.51
+  (BSUGARS on 2000-05-06)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.50"
+>0.50
+  (BSUGARS on 2000-03-24)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="STEVEB/IPC-Shareable-0.99_01"
+>0.99_01 DEV
+  (STEVEB on 2019-07-12)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="JSON.html" title="JSON" class="ellipsis">JSON</a></li>
+  <li><a href="https://metacpan.org/pod/Scalar::Util" title="Scalar::Util" class="ellipsis">Scalar::Util</a></li>
+  <li><a href="https://metacpan.org/pod/Storable" title="Storable" class="ellipsis">Storable</a></li>
+  <li><a href="https://metacpan.org/pod/String::CRC32" title="String::CRC32" class="ellipsis">String::CRC32</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/IPC::Shareable/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=IPC%3A%3AShareable">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=IPC-Shareable">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/STEVEB/IPC-Shareable-1.13/view/lib/IPC/Shareable.pm">This version</a>
+    </li>
+    <li>
+      <a href="./IPC::Shareable.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+    4 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/STEVEB" class="author-name">Steve Bertrand</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/IPC/Shareable.pm&#39;" class="">
+<option
+  selected
+  value="STEVEB/IPC-Shareable-1.13"
+>1.13
+  (STEVEB on 2022-10-12)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.12"
+>1.12
+  (STEVEB on 2022-03-13)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.11"
+>1.11
+  (STEVEB on 2022-03-07)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.10"
+>1.10
+  (STEVEB on 2022-03-07)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.09"
+>1.09
+  (STEVEB on 2022-03-06)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.08"
+>1.08
+  (STEVEB on 2022-03-04)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.07"
+>1.07
+  (STEVEB on 2022-03-04)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.06"
+>1.06
+  (STEVEB on 2021-09-08)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.05"
+>1.05
+  (STEVEB on 2021-07-16)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.04"
+>1.04
+  (STEVEB on 2021-06-28)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.03"
+>1.03
+  (STEVEB on 2021-06-25)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.02"
+>1.02
+  (STEVEB on 2021-06-25)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.01"
+>1.01
+  (STEVEB on 2021-06-25)</option>
+<option
+  
+  value="STEVEB/IPC-Shareable-1.00"
+>1.00
+  (STEVEB on 2021-06-09)</option>
+<option
+  
+  value="MSOUTH/IPC-Shareable-0.61"
+>0.61
+  (MSOUTH on 2012-10-13)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.60"
+>0.60
+  (BSUGARS on 2001-03-05)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.54"
+>0.54
+  (BSUGARS on 2001-01-10)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.53"
+>0.53
+  (BSUGARS on 2000-11-14)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.52"
+>0.52
+  (BSUGARS on 2000-09-15)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.51"
+>0.51
+  (BSUGARS on 2000-05-06)</option>
+<option
+  
+  value="BSUGARS/IPC-Shareable-0.50"
+>0.50
+  (BSUGARS on 2000-03-24)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="STEVEB/IPC-Shareable-0.99_01"
+>0.99_01 DEV
+  (STEVEB on 2019-07-12)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/IPC-Shareable">IPC-Shareable-1.13</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage two &#10;
+          • 8 direct dependents &#10;          • 11 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="IPC-Shareable-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="IPC-Shareable-1.13">
+    <input type="hidden" name="author" value="STEVEB">
+    <input type="hidden" name="distribution" value="IPC-Shareable">
+    <button type="submit" class="favorite highlight"><span>4</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./IPC::Shareable.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>4</span> ++</a>
+</div>
+   / <span>IPC::Shareable</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./IPC::Shareable.html#NAME">NAME</a></li>
+  <li><a href="./IPC::Shareable.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./IPC::Shareable.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./IPC::Shareable.html#OPTIONS">OPTIONS</a>
+    <ul>
+      <li><a href="./IPC::Shareable.html#key">key</a></li>
+      <li><a href="./IPC::Shareable.html#create">create</a></li>
+      <li><a href="./IPC::Shareable.html#exclusive">exclusive</a></li>
+      <li><a href="./IPC::Shareable.html#graceful">graceful</a></li>
+      <li><a href="./IPC::Shareable.html#warn">warn</a></li>
+      <li><a href="./IPC::Shareable.html#mode">mode</a></li>
+      <li><a href="./IPC::Shareable.html#size">size</a></li>
+      <li><a href="./IPC::Shareable.html#protected">protected</a></li>
+      <li><a href="./IPC::Shareable.html#limit">limit</a></li>
+      <li><a href="./IPC::Shareable.html#destroy">destroy</a></li>
+      <li><a href="./IPC::Shareable.html#tidy">tidy</a></li>
+      <li><a href="./IPC::Shareable.html#serializer">serializer</a></li>
+      <li><a href="./IPC::Shareable.html#Default-Option-Values">Default Option Values</a></li>
+    </ul>
+  </li>
+  <li><a href="./IPC::Shareable.html#METHODS">METHODS</a>
+    <ul>
+      <li><a href="./IPC::Shareable.html#new">new</a></li>
+      <li><a href="./IPC::Shareable.html#singleton($glue,-$warn)">singleton($glue, $warn)</a></li>
+      <li><a href="./IPC::Shareable.html#ipcs">ipcs</a></li>
+      <li><a href="./IPC::Shareable.html#lock($flags)">lock($flags)</a></li>
+      <li><a href="./IPC::Shareable.html#unlock">unlock</a></li>
+      <li><a href="./IPC::Shareable.html#seg">seg</a></li>
+      <li><a href="./IPC::Shareable.html#sem">sem</a></li>
+      <li><a href="./IPC::Shareable.html#attributes">attributes</a></li>
+      <li><a href="./IPC::Shareable.html#global_register">global_register</a></li>
+      <li><a href="./IPC::Shareable.html#process_register">process_register</a></li>
+    </ul>
+  </li>
+  <li><a href="./IPC::Shareable.html#LOCKING">LOCKING</a></li>
+  <li><a href="./IPC::Shareable.html#DESTRUCTION">DESTRUCTION</a>
+    <ul>
+      <li><a href="./IPC::Shareable.html#destroy-Option">destroy Option</a></li>
+      <li><a href="./IPC::Shareable.html#remove">remove</a></li>
+      <li><a href="./IPC::Shareable.html#clean_up">clean_up</a></li>
+      <li><a href="./IPC::Shareable.html#clean_up_all">clean_up_all</a></li>
+      <li><a href="./IPC::Shareable.html#clean_up_protected($protect_key)">clean_up_protected($protect_key)</a></li>
+    </ul>
+  </li>
+  <li><a href="./IPC::Shareable.html#RETURN-VALUES">RETURN VALUES</a></li>
+  <li><a href="./IPC::Shareable.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./IPC::Shareable.html#MAINTAINED-BY">MAINTAINED BY</a></li>
+  <li><a href="./IPC::Shareable.html#NOTES">NOTES</a>
+    <ul>
+      <li><a href="./IPC::Shareable.html#Footnotes-from-the-above-sections">Footnotes from the above sections</a></li>
+      <li><a href="./IPC::Shareable.html#General-Notes">General Notes</a></li>
+    </ul>
+  </li>
+  <li><a href="./IPC::Shareable.html#CREDITS">CREDITS</a></li>
+  <li><a href="./IPC::Shareable.html#SEE-ALSO">SEE ALSO</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>IPC::Shareable - Use shared memory backed variables across processes</p>
+
+
+<a href="https://github.com/stevieb9/ipc-shareable/actions"><img src="https://github.com/stevieb9/ipc-shareable/workflows/CI/badge.svg" /></a>
+<a href="https://coveralls.io/github/stevieb9/ipc-shareable?branch=master"><img alt="Coverage Status" src="https://coveralls.io/repos/stevieb9/ipc-shareable/badge.svg?branch=master&amp;service=github" /></a>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    use IPC::Shareable qw(:lock);
+
+    my $href = IPC::Shareable-&gt;new(%options);
+
+    # ...or
+
+    tie SCALAR, &#39;IPC::Shareable&#39;, OPTIONS;
+    tie ARRAY,  &#39;IPC::Shareable&#39;, OPTIONS;
+    tie HASH,   &#39;IPC::Shareable&#39;, OPTIONS;
+
+    tied(VARIABLE)-&gt;lock;
+    tied(VARIABLE)-&gt;unlock;
+
+    tied(VARIABLE)-&gt;lock(LOCK_SH|LOCK_NB)
+        or print &quot;Resource unavailable\n&quot;;
+
+    my $segment   = tied(VARIABLE)-&gt;seg;
+    my $semaphore = tied(VARIABLE)-&gt;sem;
+
+    tied(VARIABLE)-&gt;remove;
+
+    IPC::Shareable::clean_up;
+    IPC::Shareable::clean_up_all;
+    IPC::Shareable::clean_up_protected;
+
+    # Ensure only one instance of a script can be run at any time
+
+    IPC::Shareable-&gt;singleton(&#39;UNIQUE SCRIPT LOCK STRING&#39;);
+
+    # Get the actual IPC::Shareable tied object
+
+    my $knot = tied(VARIABLE); # Dereference first if using a tied reference</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>IPC::Shareable allows you to tie a variable to shared memory making it easy to share the contents of that variable with other Perl processes and scripts.</p>
+
+<p>Scalars, arrays, hashes and even objects can be tied. The variable being tied may contain arbitrarily complex data structures - including references to arrays, hashes of hashes, etc.</p>
+
+<p>The association between variables in distinct processes is provided by GLUE (aka &quot;key&quot;). This is any arbitrary string or integer that serves as a common identifier for data across process space. Hence the statement:</p>
+
+<pre><code>    tie my $scalar, &#39;IPC::Shareable&#39;, { key =&gt; &#39;GLUE STRING&#39;, create =&gt; 1 };</code></pre>
+
+<p>...in program one and the statement</p>
+
+<pre><code>    tie my $variable, &#39;IPC::Shareable&#39;, { key =&gt; &#39;GLUE STRING&#39; };</code></pre>
+
+<p>...in program two will create and bind <code>$scalar</code> the shared memory in program one and bind it to <code>$variable</code> in program two.</p>
+
+<p>There is no pre-set limit to the number of processes that can bind to data; nor is there a pre-set limit to the complexity of the underlying data of the tied variables. The amount of data that can be shared within a single bound variable is limited by the system&#39;s maximum size for a shared memory segment (the exact value is system-dependent).</p>
+
+<p>The bound data structures are all linearized (using Raphael Manfredi&#39;s <a href="https://metacpan.org/pod/Storable">Storable</a> module or optionally <a href="JSON.html">JSON</a>) before being slurped into shared memory. Upon retrieval, the original format of the data structure is recovered. Semaphore flags can be used for locking data between competing processes.</p>
+
+<h1 id="OPTIONS">OPTIONS</h1>
+
+<p>Options are specified by passing a reference to a hash as the third argument to the <code>tie()</code> function that enchants a variable.</p>
+
+<p>The following fields are recognized in the options hash:</p>
+
+<h2 id="key">key</h2>
+
+<p><b>key</b> is the GLUE that is a direct reference to the shared memory segment that&#39;s to be tied to the variable.</p>
+
+<p>If this option is missing, we&#39;ll default to using <code>IPC_PRIVATE</code>. This default key will not allow sharing of the variable between processes.</p>
+
+<p>Default: <b>IPC_PRIVATE</b></p>
+
+<h2 id="create">create</h2>
+
+<p><b>create</b> is used to control whether the process creates a new shared memory segment or not. If <b>create</b> is set to a true value, <a href="./IPC::Shareable.html">IPC::Shareable</a> will create a new binding associated with GLUE as needed. If <b>create</b> is false, <a href="./IPC::Shareable.html">IPC::Shareable</a> will not attempt to create a new shared memory segment associated with GLUE. In this case, a shared memory segment associated with GLUE must already exist or we&#39;ll <code>croak()</code>.</p>
+
+<p>Defult: <b>false</b></p>
+
+<h2 id="exclusive">exclusive</h2>
+
+<p>If <b>exclusive</b> field is set to a true value, we will <code>croak()</code> if the data binding associated with GLUE already exists. If set to a false value, calls to <code>tie()</code> will succeed even if a shared memory segment associated with GLUE already exists.</p>
+
+<p>See <a href="./IPC::Shareable.html#graceful">&quot;graceful&quot;</a> for a silent, non-exception exit if a second process attempts to obtain an in-use <code>exclusive</code> segment.</p>
+
+<p>Default: <b>false</b></p>
+
+<h2 id="graceful">graceful</h2>
+
+<p>If <b>exclusive</b> is set to a true value, we normally <code>croak()</code> if a second process attempts to obtain the same shared memory segment. Set <b>graceful</b> to true and we&#39;ll <code>exit</code> silently and gracefully. This option does nothing if <code>exclusive</code> isn&#39;t set.</p>
+
+<p>Useful for ensuring only a single process is running at a time.</p>
+
+<p>Default: <b>false</b></p>
+
+<h2 id="warn">warn</h2>
+
+<p>When set to a true value, <b>graceful</b> will output a warning if there are process collisions.</p>
+
+<p>Default: <b>false</b></p>
+
+<h2 id="mode">mode</h2>
+
+<p>The <b>mode</b> argument is an octal number specifying the access permissions when a new data binding is being created. These access permission are the same as file access permissions in that <code>0666</code> is world readable, <code>0600</code> is readable only by the effective UID of the process creating the shared variable, etc.</p>
+
+<p>Default: <b>0666</b> (world read and writeable)</p>
+
+<h2 id="size">size</h2>
+
+<p>This field may be used to specify the size of the shared memory segment allocated.</p>
+
+<p>The maximum size we allow by default is ~1GB. See the <a href="./IPC::Shareable.html#limit">&quot;limit&quot;</a> option to override this default.</p>
+
+<p>Default: <code>IPC::Shareable::SHM_BUFSIZ()</code> (ie. <b>65536</b>)</p>
+
+<h2 id="protected">protected</h2>
+
+<p>If set, the <code>clean_up()</code> and <code>clean_up_all()</code> routines will not remove the segments or semaphores related to the tied object.</p>
+
+<p>Set this to a specific integer so we can pass the value to any child objects created under the main one.</p>
+
+<p>To clean up protected objects, call <code>(tied %object)-&gt;clean_up_protected(integer)</code>, where &#39;integer&#39; is the value you set the <code>protected</code> option to. You can call this cleanup routine in the script you created the segment, or anywhere else, at any time.</p>
+
+<p>Default: <b>0</b></p>
+
+<h2 id="limit">limit</h2>
+
+<p>This field will allow you to set a segment size larger than the default maximum which is 1,073,741,824 bytes (approximately 1 GB). If set, we will <code>croak()</code> if a size specified is larger than the maximum. If it&#39;s set to a false value, we&#39;ll <code>croak()</code> if you send in a size larger than the total system RAM.</p>
+
+<p>Default: <b>true</b></p>
+
+<h2 id="destroy">destroy</h2>
+
+<p>If set to a true value, the shared memory segment underlying the data binding will be removed when the process that initialized the shared memory segment exits (gracefully)[1].</p>
+
+<p>Only those memory segments that were created by the current process will be removed.</p>
+
+<p>Use this option with care. In particular you should not use this option in a program that will fork after binding the data. On the other hand, shared memory is a finite resource and should be released if it is not needed.</p>
+
+<p><b>NOTE</b>: If the segment was created with its <a href="./IPC::Shareable.html#protected">&quot;protected&quot;</a> attribute set, it will not be removed upon program completion, even if <code>destroy</code> is set.</p>
+
+<p>Default: <b>false</b></p>
+
+<h2 id="tidy">tidy</h2>
+
+<p>For long running processes, set this to a true value to clean up unneeded segments from nested data structures. Comes with a slight performance hit.</p>
+
+<p>Default: <b>false</b></p>
+
+<h2 id="serializer">serializer</h2>
+
+<p>By default, we use <a href="https://metacpan.org/pod/Storable">Storable</a> as the data serializer when writing to or reading from the shared memory segments we create. For cross-platform and cross-language purposes, you can optionally use <a href="JSON.html">JSON</a> for this task.</p>
+
+<p>Send in either <code>json</code> or <code>storable</code> as the value to use the respective serializer.</p>
+
+<p>Default: <b>storable</b></p>
+
+<h2 id="Default-Option-Values"><a id="Default"></a>Default Option Values</h2>
+
+<p>Default values for options are:</p>
+
+<pre><code>    key         =&gt; IPC_PRIVATE, # 0
+    create      =&gt; 0,
+    exclusive   =&gt; 0,
+    mode        =&gt; 0666,
+    size        =&gt; IPC::Shareable::SHM_BUFSIZ(), # 65536
+    protected   =&gt; 0,
+    limit       =&gt; 1,
+    destroy     =&gt; 0,
+    graceful    =&gt; 0,
+    warn        =&gt; 0,
+    tidy        =&gt; 0,
+    serializer  =&gt; &#39;storable&#39;,</code></pre>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<p>Instantiates and returns a reference to a hash backed by shared memory.</p>
+
+<pre><code>    my $href = IPC::Shareable-&gt;new(key =&gt; &quot;testing&quot;, create =&gt; 1);
+
+    $href=&gt;{a} = 1;
+
+    # Call tied() on the dereferenced variable to access object methods
+    # and information
+
+    tied(%$href)-&gt;ipcs;</code></pre>
+
+<p>Parameters:</p>
+
+<p>Hash, Optional: See the <a href="./IPC::Shareable.html#OPTIONS">&quot;OPTIONS&quot;</a> section for a list of all available options. Most often, you&#39;ll want to send in the <b>key</b> and <b>create</b> options.</p>
+
+<p>It is possible to get a reference to an array or scalar as well. Simply send in either <code>var = &gt; &#39;ARRAY&#39;</code> or <code>var =&gt; &#39;SCALAR&#39;</code> to do so.</p>
+
+<p>Return: A reference to a hash (or array or scalar) which is backed by shared memory.</p>
+
+<h2 id="singleton($glue,-$warn)"><a id="singleton"></a><a id="singleton-glue---warn"></a>singleton($glue, $warn)</h2>
+
+<p>Class method that ensures that only a single instance of a script can be run at any given time.</p>
+
+<p>Parameters:</p>
+
+<pre><code>    $glue</code></pre>
+
+<p>Mandatory, String: The key/glue that identifies the shared memory segment.</p>
+
+<pre><code>    $warn</code></pre>
+
+<p>Optional, Bool: Send in a true value to have subsequent processes throw a warning that there&#39;s been a shared memory violation and that it will exit.</p>
+
+<p>Default: <b>false</b></p>
+
+<h2 id="ipcs">ipcs</h2>
+
+<p>Returns the number of instantiated shared memory segments that currently exist on the system. This isn&#39;t precise; it simply does a <code>wc -l</code> line count on your system&#39;s <code>ipcs -m</code> call. It is guaranteed though to produce reliable results.</p>
+
+<p>Return: Integer</p>
+
+<h2 id="lock($flags)"><a id="lock"></a><a id="lock-flags"></a>lock($flags)</h2>
+
+<p>Obtains a lock on the shared memory. <code>$flags</code> specifies the type of lock to acquire. If <code>$flags</code> is not specified, an exclusive read/write lock is obtained. Acceptable values for <code>$flags</code> are the same as for the <code>flock()</code> system call.</p>
+
+<p>Returns <code>true</code> on success, and <code>undef</code> on error. For non-blocking calls (see below), the method returns <code>0</code> if it would have blocked.</p>
+
+<p>Obtain an exclusive lock like this:</p>
+
+<pre><code>        tied(%var)-&gt;lock(LOCK_EX); # same as default</code></pre>
+
+<p>Only one process can hold an exclusive lock on the shared memory at a given time.</p>
+
+<p>Obtain a shared (read) lock:</p>
+
+<pre><code>        tied(%var)-&gt;lock(LOCK_SH);</code></pre>
+
+<p>Multiple processes can hold a shared (read) lock at a given time. If a process attempts to obtain an exclusive lock while one or more processes hold shared locks, it will be blocked until they have all finished.</p>
+
+<p>Either of the locks may be specified as non-blocking:</p>
+
+<pre><code>        tied(%var)-&gt;lock( LOCK_EX|LOCK_NB );
+        tied(%var)-&gt;lock( LOCK_SH|LOCK_NB );</code></pre>
+
+<p>A non-blocking lock request will return <code>0</code> if it would have had to wait to obtain the lock.</p>
+
+<p>Note that these locks are advisory (just like flock), meaning that all cooperating processes must coordinate their accesses to shared memory using these calls in order for locking to work. See the <code>flock()</code> call for details.</p>
+
+<p>Locks are inherited through forks, which means that two processes actually can possess an exclusive lock at the same time. Don&#39;t do that.</p>
+
+<p>The constants <code>LOCK_EX</code>, <code>LOCK_SH</code>, <code>LOCK_NB</code>, and <code>LOCK_UN</code> are available for import using any of the following export tags:</p>
+
+<pre><code>        use IPC::Shareable qw(:lock);
+        use IPC::Shareable qw(:flock);
+        use IPC::Shareable qw(:all);</code></pre>
+
+<p>Or, just use the flock constants available in the Fcntl module.</p>
+
+<p>See <a href="./IPC::Shareable.html#LOCKING">&quot;LOCKING&quot;</a> for further details.</p>
+
+<h2 id="unlock">unlock</h2>
+
+<p>Removes a lock. Takes no parameters, returns <code>true</code> on success.</p>
+
+<p>This is equivalent of calling <code>shlock(LOCK_UN)</code>.</p>
+
+<p>See <a href="./IPC::Shareable.html#LOCKING">&quot;LOCKING&quot;</a> for further details.</p>
+
+<h2 id="seg">seg</h2>
+
+<p>Called on either the tied variable or the tie object, returns the shared memory segment object currently in use.</p>
+
+<h2 id="sem">sem</h2>
+
+<p>Called on either the tied variable or the tie object, returns the semaphore object related to the memory segment currently in use.</p>
+
+<h2 id="attributes">attributes</h2>
+
+<p>Retrieves the list of attributes that drive the <a href="./IPC::Shareable.html">IPC::Shareable</a> object.</p>
+
+<p>Parameters:</p>
+
+<pre><code>    $attribute</code></pre>
+
+<p>Optional, String: The name of the attribute. If sent in, we&#39;ll return the value of this specific attribute. Returns <code>undef</code> if the attribute isn&#39;t found.</p>
+
+<p>Attributes are the <code>OPTIONS</code> that were used to create the object.</p>
+
+<p>Returns: A hash reference of all attributes if <code>$attributes</code> isn&#39;t sent in, the value of the specific attribute if it is.</p>
+
+<h2 id="global_register">global_register</h2>
+
+<p>Returns a hash reference of hashes of all in-use shared memory segments across all processes. The key is the memory segment ID, and the value is the segment and semaphore objects.</p>
+
+<h2 id="process_register">process_register</h2>
+
+<p>Returns a hash reference of hashes of all in-use shared memory segments created by the calling process. The key is the memory segment ID, and the value is the segment and semaphore objects.</p>
+
+<h1 id="LOCKING">LOCKING</h1>
+
+<p>IPC::Shareable provides methods to implement application-level advisory locking of the shared data structures. These methods are called <code>lock()</code> and <code>unlock()</code>. To use them you must first get the object underlying the tied variable, either by saving the return value of the original call to <code>tie()</code> or by using the built-in <code>tied()</code> function.</p>
+
+<p>To lock and subsequently unlock a variable, do this:</p>
+
+<pre><code>    my $knot = tie my %hash, &#39;IPC::Shareable&#39;, { %options };
+
+    $knot-&gt;lock;
+    $hash{a} = &#39;foo&#39;;
+    $knot-&gt;unlock;</code></pre>
+
+<p>or equivalently, if you&#39;ve decided to throw away the return of <code>tie()</code>:</p>
+
+<pre><code>    tie my %hash, &#39;IPC::Shareable&#39;, { %options };
+
+    tied(%hash)-&gt;lock;
+    $hash{a} = &#39;foo&#39;;
+    tied(%hash)-&gt;unlock;</code></pre>
+
+<p>This will place an exclusive lock on the data of <code>$scalar</code>. You can also get shared locks or attempt to get a lock without blocking.</p>
+
+<p><a href="./IPC::Shareable.html">IPC::Shareable</a> makes the constants <code>LOCK_EX</code>, <code>LOCK_SH</code>, <code>LOCK_UN</code>, and <code>LOCK_NB</code> exportable to your address space with the export tags <code>:lock</code>, <code>:flock</code>, or <code>:all</code>. The values should be the same as the standard <code>flock</code> option arguments.</p>
+
+<pre><code>    if (tied(%hash)-&gt;lock(LOCK_SH|LOCK_NB)){
+        print &quot;The value is $hash{a}\n&quot;;
+        tied(%hash)-&gt;unlock;
+    } else {
+        print &quot;Another process has an exclusive lock.\n&quot;;
+    }</code></pre>
+
+<p>If no argument is provided to <code>lock</code>, it defaults to <code>LOCK_EX</code>.</p>
+
+<p>There are some pitfalls regarding locking and signals about which you should make yourself aware; these are discussed in <a href="./IPC::Shareable.html#NOTES">&quot;NOTES&quot;</a>.</p>
+
+<p>Note that in the background, we perform lock optimization when reading and writing to the shared storage even if the advisory locks aren&#39;t being used.</p>
+
+<p>Using the advisory locks can speed up processes that are doing several writes/ reads at the same time.</p>
+
+<h1 id="DESTRUCTION">DESTRUCTION</h1>
+
+<p>perl(1) will destroy the object underlying a tied variable when then tied variable goes out of scope. Unfortunately for <a href="./IPC::Shareable.html">IPC::Shareable</a>, this may not be desirable: other processes may still need a handle on the relevant shared memory segment.</p>
+
+<p><a href="./IPC::Shareable.html">IPC::Shareable</a> therefore provides several options to control the timing of removal of shared memory segments.</p>
+
+<h2 id="destroy-Option"><a id="destroy1"></a>destroy Option</h2>
+
+<p>As described in <a href="./IPC::Shareable.html#OPTIONS">&quot;OPTIONS&quot;</a>, specifying the <b>destroy</b> option when <code>tie()</code>ing a variable coerces <a href="./IPC::Shareable.html">IPC::Shareable</a> to remove the underlying shared memory segment when the process calling <code>tie()</code> exits gracefully.</p>
+
+<p><b>NOTE</b>: The destruction is handled in an <code>END</code> block. Only those memory segments that are tied to the current process will be removed.</p>
+
+<p><b>NOTE</b>: If the segment was created with its <a href="./IPC::Shareable.html#protected">&quot;protected&quot;</a> attribute set, it will not be removed in the <code>END</code> block, even if <code>destroy</code> is set.</p>
+
+<h2 id="remove">remove</h2>
+
+<pre><code>    tied($var)-&gt;remove;
+
+    # or
+
+    $knot-&gt;remove;</code></pre>
+
+<p>Calling <code>remove()</code> on the object underlying a <code>tie()</code>d variable removes the associated shared memory segments. The segment is removed irrespective of whether it has the <b>destroy</b> option set or not and irrespective of whether the calling process created the segment.</p>
+
+<h2 id="clean_up">clean_up</h2>
+
+<pre><code>    IPC::Shareable-&gt;clean_up;
+
+    # or
+
+    tied($var)-&gt;clean_up;
+
+    # or
+
+    $knot-&gt;clean_up;</code></pre>
+
+<p>This is a class method that provokes <a href="./IPC::Shareable.html">IPC::Shareable</a> to remove all shared memory segments created by the process. Segments not created by the calling process are not removed.</p>
+
+<p>This method will not clean up segments created with the <code>protected</code> option.</p>
+
+<h2 id="clean_up_all">clean_up_all</h2>
+
+<pre><code>    IPC::Shareable-&gt;clean_up_all;
+
+    # or
+
+    tied($var)-&gt;clean_up_all;
+
+    # or
+
+    $knot-&gt;clean_up_all</code></pre>
+
+<p>This is a class method that provokes <a href="./IPC::Shareable.html">IPC::Shareable</a> to remove all shared memory segments encountered by the process. Segments are removed even if they were not created by the calling process.</p>
+
+<p>This method will not clean up segments created with the <code>protected</code> option.</p>
+
+<h2 id="clean_up_protected($protect_key)"><a id="clean_up_protected"></a><a id="clean_up_protected-protect_key"></a>clean_up_protected($protect_key)</h2>
+
+<p>If a segment is created with the <code>protected</code> option, it, nor its children will be removed during calls of <code>clean_up()</code> or <code>clean_up_all()</code>.</p>
+
+<p>When setting <a href="./IPC::Shareable.html#protected">&quot;protected&quot;</a>, you specified a lock key integer. When calling this method, you must send that integer in as a parameter so we know which segments to clean up.</p>
+
+<pre><code>    my $protect_key = 93432;
+
+    IPC::Shareable-&gt;clean_up_protected($protect_key);
+
+    # or
+
+    tied($var)-&gt;clean_up_protected($protect_key;
+
+    # or
+
+    $knot-&gt;clean_up_protected($protect_key)</code></pre>
+
+<p>Parameters:</p>
+
+<pre><code>    $protect_key</code></pre>
+
+<p>Mandatory, Integer: The integer protect key you assigned wit the <code>protected</code> option</p>
+
+<h1 id="RETURN-VALUES"><a id="RETURN"></a>RETURN VALUES</h1>
+
+<p>Calls to <code>tie()</code> that try to implement <a href="./IPC::Shareable.html">IPC::Shareable</a> will return an instance of <code>IPC::Shareable</code> on success, and <code>undef</code> otherwise.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Benjamin Sugars &lt;bsugars@canoe.ca&gt;</p>
+
+<h1 id="MAINTAINED-BY"><a id="MAINTAINED"></a>MAINTAINED BY</h1>
+
+<p>Steve Bertrand &lt;steveb@cpan.org&gt;</p>
+
+<h1 id="NOTES">NOTES</h1>
+
+<h2 id="Footnotes-from-the-above-sections"><a id="Footnotes"></a>Footnotes from the above sections</h2>
+
+<ol>
+
+<li><p>If the process has been smoked by an untrapped signal, the binding will remain in shared memory. If you&#39;re cautious, you might try:</p>
+
+<pre><code> $SIG{INT} = \&amp;catch_int;
+ sub catch_int {
+     die;
+ }
+ ...
+ tie $variable, IPC::Shareable, { key =&gt; &#39;GLUE&#39;, create =&gt; 1, &#39;destroy&#39; =&gt; 1 };</code></pre>
+
+<p>which will at least clean up after your user hits CTRL-C because IPC::Shareable&#39;s END method will be called. Or, maybe you&#39;d like to leave the binding in shared memory, so subsequent process can recover the data...</p>
+
+</li>
+</ol>
+
+<h2 id="General-Notes"><a id="General"></a>General Notes</h2>
+
+<dl>
+
+<dt id="o">o</dt>
+<dd>
+
+<p>When using <code>lock()</code> to lock a variable, be careful to guard against signals. Under normal circumstances, <code>IPC::Shareable</code>&#39;s <code>END</code> method unlocks any locked variables when the process exits. However, if an untrapped signal is received while a process holds an exclusive lock, <code>END</code> will not be called and the lock may be maintained even though the process has exited. If this scares you, you might be better off implementing your own locking methods.</p>
+
+<p>One advantage of using <code>flock</code> on some known file instead of the locking implemented with semaphores in <code>IPC::Shareable</code> is that when a process dies, it automatically releases any locks. This only happens with <code>IPC::Shareable</code> if the process dies gracefully.</p>
+
+<p>The alternative is to attempt to account for every possible calamitous ending for your process (robust signal handling in Perl is a source of much debate, though it usually works just fine) or to become familiar with your system&#39;s tools for removing shared memory and semaphores. This concern should be balanced against the significant performance improvements you can gain for larger data structures by using the locking mechanism implemented in IPC::Shareable.</p>
+
+</dd>
+<dt id="o1">o</dt>
+<dd>
+
+<p>There is a program called <code>ipcs</code>(1/8) (and <code>ipcrm</code>(1/8)) that is available on at least Solaris and Linux that might be useful for cleaning moribund shared memory segments or semaphore sets produced by bugs in either <a href="./IPC::Shareable.html">IPC::Shareable</a> or applications using it.</p>
+
+<p>Examples:</p>
+
+<pre><code>    # List all semaphores and memory segments in use on the system
+
+    ipcs -a
+
+    # List all memory segments and semaphores along with each one&#39;s associated process ID
+
+    ipcs -ap
+
+    # List just the shared memory segments
+
+    ipcs -m
+
+    # List the details of an individual memory segment
+
+    ipcs -i 12345678
+
+    # Remove *all* semaphores and memory segments
+
+    ipcrm -a</code></pre>
+
+</dd>
+<dt id="o2">o</dt>
+<dd>
+
+<p>This version of <a href="./IPC::Shareable.html">IPC::Shareable</a> does not understand the format of shared memory segments created by versions prior to <code>0.60</code>. If you try to tie to such segments, you will get an error. The only work around is to clear the shared memory segments and start with a fresh set.</p>
+
+</dd>
+<dt id="o3">o</dt>
+<dd>
+
+<p>Iterating over a hash causes a special optimization if you have not obtained a lock (it is better to obtain a read (or write) lock before iterating over a hash tied to <a href="./IPC::Shareable.html">IPC::Shareable</a>, but we attempt this optimization if you do not).</p>
+
+<p>For tied hashes, the <code>fetch</code>/<code>thaw</code> operation is performed when the first key is accessed. Subsequent key and and value accesses are done without accessing shared memory. Doing an assignment to the hash or fetching another value between key accesses causes the hash to be replaced from shared memory. The state of the iterator in this case is not defined by the Perl documentation. Caveat Emptor.</p>
+
+</dd>
+</dl>
+
+<h1 id="CREDITS">CREDITS</h1>
+
+<p>Thanks to all those with comments or bug fixes, especially</p>
+
+<pre><code>    Maurice Aubrey      &lt;maurice@hevanet.com&gt;
+    Stephane Bortzmeyer &lt;bortzmeyer@pasteur.fr&gt;
+    Doug MacEachern     &lt;dougm@telebusiness.co.nz&gt;
+    Robert Emmery       &lt;roberte@netscape.com&gt;
+    Mohammed J. Kabir   &lt;kabir@intevo.com&gt;
+    Terry Ewing         &lt;terry@intevo.com&gt;
+    Tim Fries           &lt;timf@dicecorp.com&gt;
+    Joe Thomas          &lt;jthomas@women.com&gt;
+    Paul Makepeace      &lt;Paul.Makepeace@realprogrammers.com&gt;
+    Raphael Manfredi    &lt;Raphael_Manfredi@pobox.com&gt;
+    Lee Lindley         &lt;Lee.Lindley@bigfoot.com&gt;
+    Dave Rolsky         &lt;autarch@urth.org&gt;
+    Steve Bertrand      &lt;steveb@cpan.org&gt;</code></pre>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/perltie">perltie</a>, <a href="https://metacpan.org/pod/Storable">Storable</a>, <code>shmget</code>, <code>ipcs</code>, <code>ipcrm</code> and other SysV IPC manual pages.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install IPC::Shareable, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm IPC::Shareable</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install IPC::Shareable</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./IPC::Shareable.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

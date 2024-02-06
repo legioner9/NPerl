@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>encoding - allows you to write your script in non-ASCII and non-UTF-8 - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/encoding">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="encoding.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/encoding">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/encoding">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/encoding">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/encoding">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/encoding">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/encoding">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/encoding">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/encoding">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/encoding">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/encoding">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/encoding">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/encoding">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/encoding">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/encoding">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/encoding">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/encoding">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/encoding">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/encoding">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/encoding">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/encoding">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/encoding">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/encoding">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/encoding">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/encoding">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/encoding">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/encoding">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/encoding">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/encoding">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/encoding">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/encoding">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/encoding">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/encoding">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/encoding">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/encoding">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/encoding">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/encoding">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/encoding">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/encoding">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/encoding">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/encoding">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/encoding">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/encoding">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/encoding">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/encoding">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/encoding">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/encoding">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/encoding">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/encoding">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/encoding">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/encoding">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/encoding">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/encoding">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/encoding">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/encoding">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/encoding">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/encoding">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/encoding">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/encoding">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/encoding">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/encoding">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/encoding">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/encoding">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/encoding">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/encoding">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/encoding">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/encoding">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/encoding">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/encoding">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/encoding">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/encoding">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/encoding">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/encoding">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/encoding">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/encoding">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/encoding">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/encoding">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/encoding">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/encoding">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/encoding">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/encoding">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="encoding.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/encoding">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/encoding">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/encoding">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/encoding">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/encoding">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/encoding">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/encoding">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/encoding">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/encoding">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/encoding">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/encoding">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/encoding">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/encoding">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/encoding">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/encoding">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/encoding">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/encoding">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/encoding">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/encoding">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/encoding">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/encoding">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/encoding">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/encoding">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/encoding">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/encoding">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/encoding">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/encoding">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/encoding">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/encoding">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/encoding">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/encoding">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/encoding">5.35.1</a>
+          <a class="dropdown-item active" href="encoding.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="encoding.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="encoding.html">encoding</a>
+          <div id="more">
+            (<a href="encoding.txt">source</a>,
+            <a href="https://metacpan.org/pod/encoding">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 3.00</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#WARNING">WARNING</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#OPTIONS">OPTIONS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#Setting-STDIN-and/or-STDOUT-individually">Setting STDIN and/or STDOUT individually</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#The-:locale-sub-pragma">The :locale sub-pragma</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#CAVEATS">CAVEATS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#SIDE-EFFECTS">SIDE EFFECTS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#DO-NOT-MIX-MULTIPLE-ENCODINGS">DO NOT MIX MULTIPLE ENCODINGS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#Prior-to-Perl-v5.22">Prior to Perl v5.22</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#Prior-to-Encode-version-1.87">Prior to Encode version 1.87</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#Prior-to-Perl-v5.8.1">Prior to Perl v5.8.1</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#EXAMPLE-Greekperl">EXAMPLE - Greekperl</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#BUGS">BUGS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#HISTORY">HISTORY</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="encoding.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="encoding.html#NAME">#</a>NAME</h1>
+
+<p>encoding - allows you to write your script in non-ASCII and non-UTF-8</p>
+
+<h1 id="WARNING"><a class="permalink" href="encoding.html#WARNING">#</a>WARNING</h1>
+
+<p>This module has been deprecated since perl v5.18. See <a href="encoding.html#DESCRIPTION">&quot;DESCRIPTION&quot;</a> and <a href="encoding.html#BUGS">&quot;BUGS&quot;</a>.</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="encoding.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use encoding &quot;greek&quot;;  # Perl like Greek to you?
+use encoding &quot;euc-jp&quot;; # Jperl!
+
+# or you can even do this if your shell supports your native encoding
+
+perl -Mencoding=latin2 -e&#39;...&#39; # Feeling centrally European?
+perl -Mencoding=euc-kr -e&#39;...&#39; # Or Korean?
+
+# more control
+
+# A simple euc-cn =&gt; utf-8 converter
+use encoding &quot;euc-cn&quot;, STDOUT =&gt; &quot;utf8&quot;;  while(&lt;&gt;){print};
+
+# &quot;no encoding;&quot; supported
+no encoding;
+
+# an alternate way, Filter
+use encoding &quot;euc-jp&quot;, Filter=&gt;1;
+# now you can use kanji identifiers -- in euc-jp!
+
+# encode based on the current locale - specialized purposes only;
+# fraught with danger!!
+use encoding &#39;:locale&#39;;</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="encoding.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This pragma is used to enable a Perl script to be written in encodings that aren&#39;t strictly ASCII nor UTF-8. It translates all or portions of the Perl program script from a given encoding into UTF-8, and changes the PerlIO layers of <code>STDIN</code> and <code>STDOUT</code> to the encoding specified.</p>
+
+<p>This pragma dates from the days when UTF-8-enabled editors were uncommon. But that was long ago, and the need for it is greatly diminished. That, coupled with the fact that it doesn&#39;t work with threads, along with other problems, (see <a href="encoding.html#BUGS">&quot;BUGS&quot;</a>) have led to its being deprecated. It is planned to remove this pragma in a future Perl version. New code should be written in UTF-8, and the <code>use utf8</code> pragma used instead (see <a href="perluniintro.html">perluniintro</a> and <a href="utf8.html">utf8</a> for details). Old code should be converted to UTF-8, via something like the recipe in the <a href="encoding.html#SYNOPSIS">&quot;SYNOPSIS&quot;</a> (though this simple approach may require manual adjustments afterwards).</p>
+
+<p>If UTF-8 is not an option, it is recommended that one use a simple source filter, such as that provided by <a href="./Filter::Encoding.html">Filter::Encoding</a> on CPAN or this pragma&#39;s own <code>Filter</code> option (see below).</p>
+
+<p>The only legitimate use of this pragma is almost certainly just one per file, near the top, with file scope, as the file is likely going to only be written in one encoding. Further restrictions apply in Perls before v5.22 (see <a href="encoding.html#Prior-to-Perl-v5.22">&quot;Prior to Perl v5.22&quot;</a>).</p>
+
+<p>There are two basic modes of operation (plus turning if off):</p>
+
+<dl>
+
+<dt id="use-encoding-[&#39;ENCNAME&#39;]-;"><a class="permalink" href="encoding.html#use-encoding-%5B&#39;ENCNAME&#39;%5D-;">#</a><a id="use"></a><a id="use-encoding-ENCNAME"></a><code>use encoding [&#39;<i>ENCNAME</i>&#39;] ;</code></dt>
+<dd>
+
+<p>Please note: This mode of operation is no longer supported as of Perl v5.26.</p>
+
+<p>This is the normal operation. It translates various literals encountered in the Perl source file from the encoding <i>ENCNAME</i> into UTF-8, and similarly converts character code points. This is used when the script is a combination of ASCII (for the variable names and punctuation, <i>etc</i>), but the literal data is in the specified encoding.</p>
+
+<p><i>ENCNAME</i> is optional. If omitted, the encoding specified in the environment variable <a href="perlrun.html#PERL_ENCODING"><code>PERL_ENCODING</code></a> is used. If this isn&#39;t set, or the resolved-to encoding is not known to <code><a href="Encode.html">Encode</a></code>, the error <code>Unknown encoding &#39;<i>ENCNAME</i>&#39;</code> will be thrown.</p>
+
+<p>Starting in Perl v5.8.6 (<code>Encode</code> version 2.0.1), <i>ENCNAME</i> may be the name <code>:locale</code>. This is for very specialized applications, and is documented in <a href="encoding.html#The-%3Alocale-sub-pragma">&quot;The <code>:locale</code> sub-pragma&quot;</a> below.</p>
+
+<p>The literals that are converted are <code>q//, qq//, qr//, qw///, qx//</code>, and starting in v5.8.1, <code>tr///</code>. Operations that do conversions include <code>chr</code>, <code>ord</code>, <code>utf8::upgrade</code> (but not <code>utf8::downgrade</code>), and <code>chomp</code>.</p>
+
+<p>Also starting in v5.8.1, the <code>DATA</code> pseudo-filehandle is translated from the encoding into UTF-8.</p>
+
+<p>For example, you can write code in EUC-JP as follows:</p>
+
+<pre><code>my $Rakuda = &quot;\xF1\xD1\xF1\xCC&quot;; # Camel in Kanji
+             #&lt;-char-&gt;&lt;-char-&gt;   # 4 octets
+s/\bCamel\b/$Rakuda/;</code></pre>
+
+<p>And with <code>use encoding &quot;euc-jp&quot;</code> in effect, it is the same thing as that code in UTF-8:</p>
+
+<pre><code>my $Rakuda = &quot;\x{99F1}\x{99DD}&quot;; # two Unicode Characters
+s/\bCamel\b/$Rakuda/;</code></pre>
+
+<p>See <a href="encoding.html#EXAMPLE">&quot;EXAMPLE&quot;</a> below for a more complete example.</p>
+
+<p>Unless <code>${^UNICODE}</code> (available starting in v5.8.2) exists and is non-zero, the PerlIO layers of <code>STDIN</code> and <code>STDOUT</code> are set to &quot;<code>:encoding(<i>ENCNAME</i>)</code>&quot;. Therefore,</p>
+
+<pre><code>use encoding &quot;euc-jp&quot;;
+my $message = &quot;Camel is the symbol of perl.\n&quot;;
+my $Rakuda = &quot;\xF1\xD1\xF1\xCC&quot;; # Camel in Kanji
+$message =~ s/\bCamel\b/$Rakuda/;
+print $message;</code></pre>
+
+<p>will print</p>
+
+<pre><code class="plaintext">&quot;\xF1\xD1\xF1\xCC is the symbol of perl.\n&quot;</code></pre>
+
+<p>not</p>
+
+<pre><code class="plaintext">&quot;\x{99F1}\x{99DD} is the symbol of perl.\n&quot;</code></pre>
+
+<p>You can override this by giving extra arguments; see below.</p>
+
+<p>Note that <code>STDERR</code> WILL NOT be changed, regardless.</p>
+
+<p>Also note that non-STD file handles remain unaffected. Use <code>use open</code> or <code>binmode</code> to change the layers of those.</p>
+
+</dd>
+<dt id="use-encoding-ENCNAME,-Filter=&gt;1;"><a class="permalink" href="encoding.html#use-encoding-ENCNAME,-Filter=%3E1;">#</a><a id="use1"></a><a id="use-encoding-ENCNAME-Filter-1"></a><code>use encoding <i>ENCNAME</i>, Filter=&gt;1;</code></dt>
+<dd>
+
+<p>This operates as above, but the <code>Filter</code> argument with a non-zero value causes the entire script, and not just literals, to be translated from the encoding into UTF-8. This allows identifiers in the source to be in that encoding as well. (Problems may occur if the encoding is not a superset of ASCII; imagine all your semi-colons being translated into something different.) One can use this form to make</p>
+
+<pre><code class="plaintext">${&quot;\x{4eba}&quot;}++</code></pre>
+
+<p>work. (This is equivalent to <code>$<i>human</i>++</code>, where <i>human</i> is a single Han ideograph).</p>
+
+<p>This effectively means that your source code behaves as if it were written in UTF-8 with <code>&#39;use utf8</code>&#39; in effect. So even if your editor only supports Shift_JIS, for example, you can still try examples in Chapter 15 of <code>Programming Perl, 3rd Ed.</code>.</p>
+
+<p>This option is significantly slower than the other one.</p>
+
+</dd>
+<dt id="no-encoding;"><a class="permalink" href="encoding.html#no-encoding;">#</a><a id="no"></a><a id="no-encoding"></a><code>no encoding;</code></dt>
+<dd>
+
+<p>Unsets the script encoding. The layers of <code>STDIN</code>, <code>STDOUT</code> are reset to &quot;<code>:raw</code>&quot; (the default unprocessed raw stream of bytes).</p>
+
+</dd>
+</dl>
+
+<h1 id="OPTIONS"><a class="permalink" href="encoding.html#OPTIONS">#</a>OPTIONS</h1>
+
+<h2 id="Setting-STDIN-and/or-STDOUT-individually"><a class="permalink" href="encoding.html#Setting-STDIN-and/or-STDOUT-individually">#</a><a id="Setting"></a><a id="Setting-STDIN-and-or-STDOUT-individually"></a>Setting <code>STDIN</code> and/or <code>STDOUT</code> individually</h2>
+
+<p>The encodings of <code>STDIN</code> and <code>STDOUT</code> are individually settable by parameters to the pragma:</p>
+
+<pre><code>use encoding &#39;euc-tw&#39;, STDIN =&gt; &#39;greek&#39;  ...;</code></pre>
+
+<p>In this case, you cannot omit the first <i>ENCNAME</i>. <code>STDIN =&gt; undef</code> turns the I/O transcoding completely off for that filehandle.</p>
+
+<p>When <code>${^UNICODE}</code> (available starting in v5.8.2) exists and is non-zero, these options will be completely ignored. See <a href="perlvar.html#%24%7B%5EUNICODE%7D">&quot;<code>${^UNICODE}</code>&quot; in perlvar</a> and <a href="perlrun.html#-C-%5Bnumber%2Flist%5D">&quot;<code>-C</code>&quot; in perlrun</a> for details.</p>
+
+<h2 id="The-:locale-sub-pragma"><a class="permalink" href="encoding.html#The-:locale-sub-pragma">#</a><a id="The"></a>The <code>:locale</code> sub-pragma</h2>
+
+<p>Starting in v5.8.6, the encoding name may be <code>:locale</code>. This means that the encoding is taken from the current locale, and not hard-coded by the pragma. Since a script really can only be encoded in exactly one encoding, this option is dangerous. It makes sense only if the script itself is written in ASCII, and all the possible locales that will be in use when the script is executed are supersets of ASCII. That means that the script itself doesn&#39;t get changed, but the I/O handles have the specified encoding added, and the operations like <code>chr</code> and <code>ord</code> use that encoding.</p>
+
+<p>The logic of finding which locale <code>:locale</code> uses is as follows:</p>
+
+<ol>
+
+<li><p>If the platform supports the <code>langinfo(CODESET)</code> interface, the codeset returned is used as the default encoding for the open pragma.</p>
+
+</li>
+<li><p>If 1. didn&#39;t work but we are under the locale pragma, the environment variables <code>LC_ALL</code> and <code>LANG</code> (in that order) are matched for encodings (the part after &quot;<code>.</code>&quot;, if any), and if any found, that is used as the default encoding for the open pragma.</p>
+
+</li>
+<li><p>If 1. and 2. didn&#39;t work, the environment variables <code>LC_ALL</code> and <code>LANG</code> (in that order) are matched for anything looking like UTF-8, and if any found, <code>:utf8</code> is used as the default encoding for the open pragma.</p>
+
+</li>
+</ol>
+
+<p>If your locale environment variables (<code>LC_ALL</code>, <code>LC_CTYPE</code>, <code>LANG</code>) contain the strings &#39;UTF-8&#39; or &#39;UTF8&#39; (case-insensitive matching), the default encoding of your <code>STDIN</code>, <code>STDOUT</code>, and <code>STDERR</code>, and of <b>any subsequent file open</b>, is UTF-8.</p>
+
+<h1 id="CAVEATS"><a class="permalink" href="encoding.html#CAVEATS">#</a>CAVEATS</h1>
+
+<h2 id="SIDE-EFFECTS"><a class="permalink" href="encoding.html#SIDE-EFFECTS">#</a><a id="SIDE"></a>SIDE EFFECTS</h2>
+
+<ul>
+
+<li><p>If the <code>encoding</code> pragma is in scope then the lengths returned are calculated from the length of <code>$/</code> in Unicode characters, which is not always the same as the length of <code>$/</code> in the native encoding.</p>
+
+</li>
+<li><p>Without this pragma, if strings operating under byte semantics and strings with Unicode character data are concatenated, the new string will be created by decoding the byte strings as <i>ISO 8859-1 (Latin-1)</i>.</p>
+
+<p>The <b>encoding</b> pragma changes this to use the specified encoding instead. For example:</p>
+
+<pre><code>use encoding &#39;utf8&#39;;
+my $string = chr(20000); # a Unicode string
+utf8::encode($string);   # now it&#39;s a UTF-8 encoded byte string
+# concatenate with another Unicode string
+print length($string . chr(20000));</code></pre>
+
+<p>Will print <code>2</code>, because <code>$string</code> is upgraded as UTF-8. Without <code>use encoding &#39;utf8&#39;;</code>, it will print <code>4</code> instead, since <code>$string</code> is three octets when interpreted as Latin-1.</p>
+
+</li>
+</ul>
+
+<h2 id="DO-NOT-MIX-MULTIPLE-ENCODINGS"><a class="permalink" href="encoding.html#DO-NOT-MIX-MULTIPLE-ENCODINGS">#</a><a id="DO"></a>DO NOT MIX MULTIPLE ENCODINGS</h2>
+
+<p>Notice that only literals (string or regular expression) having only legacy code points are affected: if you mix data like this</p>
+
+<pre><code class="plaintext">\x{100}\xDF
+\xDF\x{100}</code></pre>
+
+<p>the data is assumed to be in (Latin 1 and) Unicode, not in your native encoding. In other words, this will match in &quot;greek&quot;:</p>
+
+<pre><code class="plaintext">&quot;\xDF&quot; =~ /\x{3af}/</code></pre>
+
+<p>but this will not</p>
+
+<pre><code class="plaintext">&quot;\xDF\x{100}&quot; =~ /\x{3af}\x{100}/</code></pre>
+
+<p>since the <code>\xDF</code> (ISO 8859-7 GREEK SMALL LETTER IOTA WITH TONOS) on the left will <b>not</b> be upgraded to <code>\x{3af}</code> (Unicode GREEK SMALL LETTER IOTA WITH TONOS) because of the <code>\x{100}</code> on the left. You should not be mixing your legacy data and Unicode in the same string.</p>
+
+<p>This pragma also affects encoding of the 0x80..0xFF code point range: normally characters in that range are left as eight-bit bytes (unless they are combined with characters with code points 0x100 or larger, in which case all characters need to become UTF-8 encoded), but if the <code>encoding</code> pragma is present, even the 0x80..0xFF range always gets UTF-8 encoded.</p>
+
+<p>After all, the best thing about this pragma is that you don&#39;t have to resort to \x{....} just to spell your name in a native encoding. So feel free to put your strings in your encoding in quotes and regexes.</p>
+
+<h2 id="Prior-to-Perl-v5.22"><a class="permalink" href="encoding.html#Prior-to-Perl-v5.22">#</a><a id="Prior"></a>Prior to Perl v5.22</h2>
+
+<p>The pragma was a per script, not a per block lexical. Only the last <code>use encoding</code> or <code>no encoding</code> mattered, and it affected <b>the whole script</b>. However, the <code>no encoding</code> pragma was supported and <code>use encoding</code> could appear as many times as you want in a given script (though only the last was effective).</p>
+
+<p>Since the scope wasn&#39;t lexical, other modules&#39; use of <code>chr</code>, <code>ord</code>, <i>etc.</i> were affected. This leads to spooky, incorrect action at a distance that is hard to debug.</p>
+
+<p>This means you would have to be very careful of the load order:</p>
+
+<pre><code># called module
+package Module_IN_BAR;
+use encoding &quot;bar&quot;;
+# stuff in &quot;bar&quot; encoding here
+1;
+
+# caller script
+use encoding &quot;foo&quot;
+use Module_IN_BAR;
+# surprise! use encoding &quot;bar&quot; is in effect.</code></pre>
+
+<p>The best way to avoid this oddity is to use this pragma RIGHT AFTER other modules are loaded. i.e.</p>
+
+<pre><code>use Module_IN_BAR;
+use encoding &quot;foo&quot;;</code></pre>
+
+<h2 id="Prior-to-Encode-version-1.87"><a class="permalink" href="encoding.html#Prior-to-Encode-version-1.87">#</a><a id="Prior1"></a>Prior to Encode version 1.87</h2>
+
+<ul>
+
+<li><p><code>STDIN</code> and <code>STDOUT</code> were not set under the filter option. And <code>STDIN=&gt;<i>ENCODING</i></code> and <code>STDOUT=&gt;<i>ENCODING</i></code> didn&#39;t work like non-filter version.</p>
+
+</li>
+<li><p><code>use utf8</code> wasn&#39;t implicitly declared so you have to <code>use utf8</code> to do</p>
+
+<pre><code class="plaintext">${&quot;\x{4eba}&quot;}++</code></pre>
+
+</li>
+</ul>
+
+<h2 id="Prior-to-Perl-v5.8.1"><a class="permalink" href="encoding.html#Prior-to-Perl-v5.8.1">#</a><a id="Prior2"></a>Prior to Perl v5.8.1</h2>
+
+<dl>
+
+<dt id="&quot;NON-EUC&quot;-doublebyte-encodings"><a class="permalink" href="encoding.html#%22NON-EUC%22-doublebyte-encodings">#</a><a id="NON-EUC-doublebyte-encodings"></a>&quot;NON-EUC&quot; doublebyte encodings</dt>
+<dd>
+
+<p>Because perl needs to parse the script before applying this pragma, such encodings as Shift_JIS and Big-5 that may contain <code>&#39;\&#39;</code> (BACKSLASH; <code>\x5c</code>) in the second byte fail because the second byte may accidentally escape the quoting character that follows.</p>
+
+</dd>
+<dt id="tr///"><a class="permalink" href="encoding.html#tr///">#</a><a id="tr"></a><code>tr///</code></dt>
+<dd>
+
+<p>The <b>encoding</b> pragma works by decoding string literals in <code>q//,qq//,qr//,qw///, qx//</code> and so forth. In perl v5.8.0, this does not apply to <code>tr///</code>. Therefore,</p>
+
+<pre><code>use encoding &#39;euc-jp&#39;;
+#....
+$kana =~ tr/\xA4\xA1-\xA4\xF3/\xA5\xA1-\xA5\xF3/;
+#           -------- -------- -------- --------</code></pre>
+
+<p>Does not work as</p>
+
+<pre><code>$kana =~ tr/\x{3041}-\x{3093}/\x{30a1}-\x{30f3}/;</code></pre>
+
+<dl>
+
+<dt id="Legend-of-characters-above"><a class="permalink" href="encoding.html#Legend-of-characters-above">#</a><a id="Legend"></a>Legend of characters above</dt>
+<dd>
+
+<pre><code class="plaintext">utf8     euc-jp   charnames::viacode()
+-----------------------------------------
+\x{3041} \xA4\xA1 HIRAGANA LETTER SMALL A
+\x{3093} \xA4\xF3 HIRAGANA LETTER N
+\x{30a1} \xA5\xA1 KATAKANA LETTER SMALL A
+\x{30f3} \xA5\xF3 KATAKANA LETTER N</code></pre>
+
+</dd>
+</dl>
+
+<p>This counterintuitive behavior has been fixed in perl v5.8.1.</p>
+
+<p>In perl v5.8.0, you can work around this as follows;</p>
+
+<pre><code>use encoding &#39;euc-jp&#39;;
+#  ....
+eval qq{ \$kana =~ tr/\xA4\xA1-\xA4\xF3/\xA5\xA1-\xA5\xF3/ };</code></pre>
+
+<p>Note the <code>tr//</code> expression is surrounded by <code>qq{}</code>. The idea behind this is the same as the classic idiom that makes <code>tr///</code> &#39;interpolate&#39;:</p>
+
+<pre><code>tr/$from/$to/;            # wrong!
+eval qq{ tr/$from/$to/ }; # workaround.</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="EXAMPLE-Greekperl"><a class="permalink" href="encoding.html#EXAMPLE-Greekperl">#</a><a id="EXAMPLE"></a><a id="EXAMPLE---Greekperl"></a>EXAMPLE - Greekperl</h1>
+
+<pre><code>use encoding &quot;iso 8859-7&quot;;
+
+# \xDF in ISO 8859-7 (Greek) is \x{3af} in Unicode.
+
+$a = &quot;\xDF&quot;;
+$b = &quot;\x{100}&quot;;
+
+printf &quot;%#x\n&quot;, ord($a); # will print 0x3af, not 0xdf
+
+$c = $a . $b;
+
+# $c will be &quot;\x{3af}\x{100}&quot;, not &quot;\x{df}\x{100}&quot;.
+
+# chr() is affected, and ...
+
+print &quot;mega\n&quot;  if ord(chr(0xdf)) == 0x3af;
+
+# ... ord() is affected by the encoding pragma ...
+
+print &quot;tera\n&quot; if ord(pack(&quot;C&quot;, 0xdf)) == 0x3af;
+
+# ... as are eq and cmp ...
+
+print &quot;peta\n&quot; if &quot;\x{3af}&quot; eq  pack(&quot;C&quot;, 0xdf);
+print &quot;exa\n&quot;  if &quot;\x{3af}&quot; cmp pack(&quot;C&quot;, 0xdf) == 0;
+
+# ... but pack/unpack C are not affected, in case you still
+# want to go back to your native encoding
+
+print &quot;zetta\n&quot; if unpack(&quot;C&quot;, (pack(&quot;C&quot;, 0xdf))) == 0xdf;</code></pre>
+
+<h1 id="BUGS"><a class="permalink" href="encoding.html#BUGS">#</a>BUGS</h1>
+
+<dl>
+
+<dt id="Thread-safety"><a class="permalink" href="encoding.html#Thread-safety">#</a><a id="Thread"></a>Thread safety</dt>
+<dd>
+
+<p><code>use encoding ...</code> is not thread-safe (i.e., do not use in threaded applications).</p>
+
+</dd>
+<dt id="Can&#39;t-be-used-by-more-than-one-module-in-a-single-program."><a class="permalink" href="encoding.html#Can&#39;t-be-used-by-more-than-one-module-in-a-single-program.">#</a><a id="Can"></a><a id="Cant-be-used-by-more-than-one-module-in-a-single-program"></a>Can&#39;t be used by more than one module in a single program.</dt>
+<dd>
+
+<p>Only one encoding is allowed. If you combine modules in a program that have different encodings, only one will be actually used.</p>
+
+</dd>
+<dt id="Other-modules-using-STDIN-and-STDOUT-get-the-encoded-stream"><a class="permalink" href="encoding.html#Other-modules-using-STDIN-and-STDOUT-get-the-encoded-stream">#</a><a id="Other"></a>Other modules using <code>STDIN</code> and <code>STDOUT</code> get the encoded stream</dt>
+<dd>
+
+<p>They may be expecting something completely different.</p>
+
+</dd>
+<dt id="literals-in-regex-that-are-longer-than-127-bytes"><a class="permalink" href="encoding.html#literals-in-regex-that-are-longer-than-127-bytes">#</a><a id="literals"></a>literals in regex that are longer than 127 bytes</dt>
+<dd>
+
+<p>For native multibyte encodings (either fixed or variable length), the current implementation of the regular expressions may introduce recoding errors for regular expression literals longer than 127 bytes.</p>
+
+</dd>
+<dt id="EBCDIC"><a class="permalink" href="encoding.html#EBCDIC">#</a>EBCDIC</dt>
+<dd>
+
+<p>The encoding pragma is not supported on EBCDIC platforms.</p>
+
+</dd>
+<dt id="format"><a class="permalink" href="encoding.html#format">#</a><code>format</code></dt>
+<dd>
+
+<p>This pragma doesn&#39;t work well with <code>format</code> because PerlIO does not get along very well with it. When <code>format</code> contains non-ASCII characters it prints funny or gets &quot;wide character warnings&quot;. To understand it, try the code below.</p>
+
+<pre><code># Save this one in utf8
+# replace *non-ascii* with a non-ascii string
+my $camel;
+format STDOUT =
+*non-ascii*@&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+$camel
+.
+$camel = &quot;*non-ascii*&quot;;
+binmode(STDOUT=&gt;&#39;:encoding(utf8)&#39;); # bang!
+write;              # funny
+print $camel, &quot;\n&quot;; # fine</code></pre>
+
+<p>Without binmode this happens to work but without binmode, print() fails instead of write().</p>
+
+<p>At any rate, the very use of <code>format</code> is questionable when it comes to unicode characters since you have to consider such things as character width (i.e. double-width for ideographs) and directions (i.e. BIDI for Arabic and Hebrew).</p>
+
+</dd>
+<dt id="See-also-&quot;CAVEATS&quot;"><a class="permalink" href="encoding.html#See-also-%22CAVEATS%22">#</a><a id="See"></a><a id="See-also-CAVEATS"></a>See also <a href="encoding.html#CAVEATS">&quot;CAVEATS&quot;</a></dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="HISTORY"><a class="permalink" href="encoding.html#HISTORY">#</a>HISTORY</h1>
+
+<p>This pragma first appeared in Perl v5.8.0. It has been enhanced in later releases as specified above.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="encoding.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="perlunicode.html">perlunicode</a>, <a href="Encode.html">Encode</a>, <a href="open.html">open</a>, <a href="./Filter::Util::Call.html">Filter::Util::Call</a>,</p>
+
+<p>Ch. 15 of <code>Programming Perl (3rd Edition)</code> by Larry Wall, Tom Christiansen, Jon Orwant; O&#39;Reilly &amp; Associates; ISBN 0-596-00027-8</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

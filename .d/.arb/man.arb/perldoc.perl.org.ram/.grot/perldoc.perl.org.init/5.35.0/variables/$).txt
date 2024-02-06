@@ -1,0 +1,35 @@
+=over
+
+=item $EFFECTIVE_GROUP_ID
+
+=item $EGID
+
+=item $)
+X<$)> X<$EGID> X<$EFFECTIVE_GROUP_ID>
+
+The effective gid of this process.  If you are on a machine that
+supports membership in multiple groups simultaneously, gives a space
+separated list of groups you are in.  The first number is the one
+returned by C<getegid()>, and the subsequent ones by C<getgroups()>,
+one of which may be the same as the first number.
+
+Similarly, a value assigned to C<$)> must also be a space-separated
+list of numbers.  The first number sets the effective gid, and
+the rest (if any) are passed to C<setgroups()>.  To get the effect of an
+empty list for C<setgroups()>, just repeat the new effective gid; that is,
+to force an effective gid of 5 and an effectively empty C<setgroups()>
+list, say C< $) = "5 5" >.
+
+You can change both the effective gid and the real gid at the same
+time by using C<POSIX::setgid()> (use only a single numeric argument).
+Changes to C<$)> require a check to C<$!> to detect any possible errors
+after an attempted change.
+
+C<< $< >>, C<< $> >>, C<$(> and C<$)> can be set only on
+machines that support the corresponding I<set[re][ug]id()> routine.  C<$(>
+and C<$)> can be swapped only on machines supporting C<setregid()>.
+
+Mnemonic: parentheses are used to I<group> things.  The effective gid
+is the group that's I<right> for you, if you're running setgid.
+
+=back

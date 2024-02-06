@@ -1,0 +1,2652 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>YAML::Syck - Fast, lightweight YAML loader and dumper - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of YAML-Syck - MetaCPAN" href="https://metacpan.org/dist/YAML-Syck/releases.rss" />
+        <link rel="canonical" href="./YAML::Syck.html" />
+        <meta name="description" content="Fast, lightweight YAML loader and dumper" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/YAML::Syck" />
+<meta name="twitter:title"       content="YAML::Syck" />
+<meta name="twitter:description" content="Fast, lightweight YAML loader and dumper" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./YAML::Syck.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of YAML-Syck was released.">
+      <span class="relatize">26 Oct 2020 20:20:42 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/YAML-Syck">YAML-Syck</a>
+  </li>
+  <li>
+    Module version: 1.34
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/YAML-Syck/source/lib/YAML/Syck.pm">Source</a>
+    (<a href="https://metacpan.org/dist/YAML-Syck/source/lib/YAML/Syck.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/YAML-Syck/source/lib/YAML">Browse</a>
+    (<a href="https://metacpan.org/dist/YAML-Syck/source/lib/YAML?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/YAML-Syck/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="http://github.com/toddr/YAML-Syck">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/YAML-Syck/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/toddr/YAML-Syck">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/toddr/YAML-Syck/issues">Issues</a>
+      (26)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=YAML-Syck+1.34" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/Y/YAML-Syck.html?oncpan=1&amp;distmat=1&amp;version=1.34&amp;grade=2" style="color: #090">4669</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/Y/YAML-Syck.html?oncpan=1&amp;distmat=1&amp;version=1.34&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/Y/YAML-Syck.html?oncpan=1&amp;distmat=1&amp;version=1.34&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/TODDR/YAML-Syck-1.34">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on YAML-Syck who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 3
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/YAML-Syck-1.34/index.html">% Coverage </a>
+    </li>
+    <li>
+      License: mit
+    </li>
+    <li>
+      Perl: v5.6.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/YAML-Syck/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/T/TO/TODDR/YAML-Syck-1.34.tar.gz">
+      Download (<span itemprop="fileSize">162.97KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FTODDR%2FYAML-Syck-1.34%2Flib%2FYAML%2FSyck.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/YAML-Syck/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/YAML-Syck/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:YAML-Syck">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="YAML-Syck">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/YAML/Syck.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="TODDR/YAML-Syck-1.34"
+>1.34
+  (TODDR on 2020-10-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.32"
+>1.32
+  (TODDR on 2020-01-27)</option>
+<option
+  
+  value="SMUELLER/YAML-Syck-1.19"
+>1.19
+  (SMUELLER on 2011-11-08)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.17"
+>1.17
+  (AVAR on 2010-11-21)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.16"
+>1.16
+  (AVAR on 2010-11-21)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.15"
+>1.15
+  (AVAR on 2010-09-23)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.10_01"
+>1.10_01 DEV
+  (AVAR on 2010-07-16)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.10"
+>1.10
+  (AVAR on 2010-06-06)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.09"
+>1.09
+  (AVAR on 2010-05-29)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.08_01"
+>1.08_01 DEV
+  (AVAR on 2010-05-23)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.08"
+>1.08
+  (AVAR on 2010-05-23)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.07_01"
+>1.07_01 DEV
+  (AVAR on 2010-05-20)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.07"
+>1.07
+  (AUDREYT on 2009-04-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.06"
+>1.06
+  (AUDREYT on 2009-04-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.05"
+>1.05
+  (AUDREYT on 2008-06-09)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.04"
+>1.04
+  (AUDREYT on 2008-02-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.03"
+>1.03
+  (AUDREYT on 2008-02-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.02"
+>1.02
+  (AUDREYT on 2008-02-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.01"
+>1.01
+  (AUDREYT on 2008-01-18)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.00"
+>1.00
+  (AUDREYT on 2007-12-09)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.99"
+>0.99
+  (AUDREYT on 2007-10-22)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.98"
+>0.98
+  (AUDREYT on 2007-10-13)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.97"
+>0.97
+  (AUDREYT on 2007-09-02)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.96"
+>0.96
+  (AUDREYT on 2007-08-07)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.95"
+>0.95
+  (AUDREYT on 2007-08-03)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.94"
+>0.94
+  (AUDREYT on 2007-07-10)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.91"
+>0.91
+  (AUDREYT on 2007-06-23)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.90"
+>0.90
+  (AUDREYT on 2007-06-21)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.88"
+>0.88
+  (AUDREYT on 2007-06-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.87"
+>0.87
+  (AUDREYT on 2007-06-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.86"
+>0.86
+  (AUDREYT on 2007-06-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.85"
+>0.85
+  (AUDREYT on 2007-04-20)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.84"
+>0.84
+  (AUDREYT on 2007-04-01)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.82"
+>0.82
+  (AUDREYT on 2007-01-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.81"
+>0.81
+  (AUDREYT on 2007-01-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.80"
+>0.80
+  (AUDREYT on 2007-01-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.72"
+>0.72
+  (AUDREYT on 2006-11-26)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.71"
+>0.71
+  (AUDREYT on 2006-10-03)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.70"
+>0.70
+  (AUDREYT on 2006-10-02)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.66"
+>0.66
+  (AUDREYT on 2006-07-29)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.65"
+>0.65
+  (AUDREYT on 2006-07-29)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.64"
+>0.64
+  (AUDREYT on 2006-07-23)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.63"
+>0.63
+  (AUDREYT on 2006-07-20)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.62"
+>0.62
+  (AUDREYT on 2006-07-12)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.61"
+>0.61
+  (AUTRIJUS on 2006-07-01)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.60"
+>0.60
+  (AUTRIJUS on 2006-07-01)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.45"
+>0.45
+  (AUTRIJUS on 2006-05-27)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.44"
+>0.44
+  (AUTRIJUS on 2006-05-03)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.43"
+>0.43
+  (AUTRIJUS on 2006-04-29)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.42"
+>0.42
+  (AUTRIJUS on 2006-04-25)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.41"
+>0.41
+  (AUTRIJUS on 2006-04-01)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.40"
+>0.40
+  (AUTRIJUS on 2006-03-31)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.38"
+>0.38
+  (AUTRIJUS on 2006-03-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.37"
+>0.37
+  (AUTRIJUS on 2006-03-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.36"
+>0.36
+  (AUTRIJUS on 2006-03-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.35"
+>0.35
+  (AUTRIJUS on 2006-03-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.34"
+>0.34
+  (AUTRIJUS on 2006-03-06)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.33"
+>0.33
+  (AUTRIJUS on 2006-02-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.32"
+>0.32
+  (AUTRIJUS on 2006-02-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.31"
+>0.31
+  (AUTRIJUS on 2006-02-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.30"
+>0.30
+  (AUTRIJUS on 2006-02-06)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.29"
+>0.29
+  (AUTRIJUS on 2006-02-05)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.28"
+>0.28
+  (AUTRIJUS on 2006-01-16)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.27"
+>0.27
+  (AUTRIJUS on 2006-01-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.26"
+>0.26
+  (AUTRIJUS on 2006-01-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.25"
+>0.25
+  (AUTRIJUS on 2006-01-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.24"
+>0.24
+  (AUTRIJUS on 2006-01-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.23"
+>0.23
+  (AUTRIJUS on 2006-01-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.22"
+>0.22
+  (AUTRIJUS on 2006-01-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.21"
+>0.21
+  (AUTRIJUS on 2006-01-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.20"
+>0.20
+  (AUTRIJUS on 2006-01-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.19"
+>0.19
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.18"
+>0.18
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.17"
+>0.17
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.16"
+>0.16
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.15"
+>0.15
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.14"
+>0.14
+  (AUTRIJUS on 2006-01-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.13"
+>0.13
+  (AUTRIJUS on 2006-01-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.12"
+>0.12
+  (AUTRIJUS on 2006-01-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.11"
+>0.11
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.10"
+>0.10
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.09"
+>0.09
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.08"
+>0.08
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.07"
+>0.07
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.06"
+>0.06
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.05"
+>0.05
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.04"
+>0.04
+  (AUTRIJUS on 2005-12-28)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.03"
+>0.03
+  (AUTRIJUS on 2005-12-27)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.02"
+>0.02
+  (AUTRIJUS on 2005-12-26)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.01"
+>0.01
+  (AUTRIJUS on 2005-12-25)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="TODDR/YAML-Syck-1.33"
+>1.33
+  (TODDR on 2020-10-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.31"
+>1.31
+  (TODDR on 2018-10-25)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.30"
+>1.30
+  (TODDR on 2017-04-20)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.30_01"
+>1.30_01 DEV
+  (TODDR on 2017-04-18)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.29"
+>1.29
+  (TODDR on 2014-12-15)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.29_01"
+>1.29_01 DEV
+  (TODDR on 2014-12-14)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.28"
+>1.28
+  (TODDR on 2014-12-11)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.28_01"
+>1.28_01 DEV
+  (TODDR on 2014-06-11)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.27"
+>1.27
+  (TODDR on 2013-05-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.26"
+>1.26
+  (TODDR on 2013-05-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.25"
+>1.25
+  (TODDR on 2013-03-11)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.24"
+>1.24
+  (TODDR on 2013-03-07)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.24_02"
+>1.24_02 DEV
+  (TODDR on 2013-03-02)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.24_01"
+>1.24_01 DEV
+  (TODDR on 2013-03-02)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.23"
+>1.23
+  (TODDR on 2013-02-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.23_01"
+>1.23_01 DEV
+  (TODDR on 2013-02-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.22"
+>1.22
+  (TODDR on 2012-12-04)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.22_01"
+>1.22_01 DEV
+  (TODDR on 2012-11-28)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.21"
+>1.21
+  (TODDR on 2012-09-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.21_01"
+>1.21_01 DEV
+  (TODDR on 2012-08-22)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.20"
+>1.20
+  (TODDR on 2012-02-15)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.20_01"
+>1.20_01 DEV
+  (TODDR on 2012-02-11)</option>
+<option
+  
+  value="SMUELLER/YAML-Syck-1.18"
+>1.18
+  (SMUELLER on 2011-11-05)</option>
+<option
+  
+  value="SMUELLER/YAML-Syck-1.17_02"
+>1.17_02 DEV
+  (SMUELLER on 2011-11-03)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.14"
+>1.14
+  (TODDR on 2010-08-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.13"
+>1.13
+  (TODDR on 2010-08-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.12"
+>1.12
+  (TODDR on 2010-08-04)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.11"
+>1.11
+  (TODDR on 2010-08-03)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_07"
+>1.10_07 DEV
+  (TODDR on 2010-07-29)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_06"
+>1.10_06 DEV
+  (TODDR on 2010-07-29)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_05"
+>1.10_05 DEV
+  (TODDR on 2010-07-28)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_04"
+>1.10_04 DEV
+  (TODDR on 2010-07-19)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_03"
+>1.10_03 DEV
+  (TODDR on 2010-07-19)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_02"
+>1.10_02 DEV
+  (TODDR on 2010-07-19)</option>
+<option
+  
+  value="NUFFIN/YAML-Syck-0.67"
+>0.67
+  (NUFFIN on 2006-07-30)</option>
+<option
+  
+  value="NUFFIN/YAML-Syck-0.46_01"
+>0.46_01 DEV
+  (NUFFIN on 2006-06-24)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/TODDR/YAML-Syck-1.34/diff/' + encodeURIComponent(this.value) + '/lib/YAML/Syck.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="TODDR/YAML-Syck-1.34"
+>1.34
+  (TODDR on 2020-10-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.32"
+>1.32
+  (TODDR on 2020-01-27)</option>
+<option
+  
+  value="SMUELLER/YAML-Syck-1.19"
+>1.19
+  (SMUELLER on 2011-11-08)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.17"
+>1.17
+  (AVAR on 2010-11-21)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.16"
+>1.16
+  (AVAR on 2010-11-21)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.15"
+>1.15
+  (AVAR on 2010-09-23)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.10_01"
+>1.10_01 DEV
+  (AVAR on 2010-07-16)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.10"
+>1.10
+  (AVAR on 2010-06-06)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.09"
+>1.09
+  (AVAR on 2010-05-29)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.08_01"
+>1.08_01 DEV
+  (AVAR on 2010-05-23)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.08"
+>1.08
+  (AVAR on 2010-05-23)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.07_01"
+>1.07_01 DEV
+  (AVAR on 2010-05-20)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.07"
+>1.07
+  (AUDREYT on 2009-04-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.06"
+>1.06
+  (AUDREYT on 2009-04-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.05"
+>1.05
+  (AUDREYT on 2008-06-09)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.04"
+>1.04
+  (AUDREYT on 2008-02-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.03"
+>1.03
+  (AUDREYT on 2008-02-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.02"
+>1.02
+  (AUDREYT on 2008-02-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.01"
+>1.01
+  (AUDREYT on 2008-01-18)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.00"
+>1.00
+  (AUDREYT on 2007-12-09)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.99"
+>0.99
+  (AUDREYT on 2007-10-22)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.98"
+>0.98
+  (AUDREYT on 2007-10-13)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.97"
+>0.97
+  (AUDREYT on 2007-09-02)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.96"
+>0.96
+  (AUDREYT on 2007-08-07)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.95"
+>0.95
+  (AUDREYT on 2007-08-03)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.94"
+>0.94
+  (AUDREYT on 2007-07-10)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.91"
+>0.91
+  (AUDREYT on 2007-06-23)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.90"
+>0.90
+  (AUDREYT on 2007-06-21)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.88"
+>0.88
+  (AUDREYT on 2007-06-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.87"
+>0.87
+  (AUDREYT on 2007-06-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.86"
+>0.86
+  (AUDREYT on 2007-06-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.85"
+>0.85
+  (AUDREYT on 2007-04-20)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.84"
+>0.84
+  (AUDREYT on 2007-04-01)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.82"
+>0.82
+  (AUDREYT on 2007-01-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.81"
+>0.81
+  (AUDREYT on 2007-01-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.80"
+>0.80
+  (AUDREYT on 2007-01-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.72"
+>0.72
+  (AUDREYT on 2006-11-26)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.71"
+>0.71
+  (AUDREYT on 2006-10-03)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.70"
+>0.70
+  (AUDREYT on 2006-10-02)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.66"
+>0.66
+  (AUDREYT on 2006-07-29)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.65"
+>0.65
+  (AUDREYT on 2006-07-29)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.64"
+>0.64
+  (AUDREYT on 2006-07-23)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.63"
+>0.63
+  (AUDREYT on 2006-07-20)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.62"
+>0.62
+  (AUDREYT on 2006-07-12)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.61"
+>0.61
+  (AUTRIJUS on 2006-07-01)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.60"
+>0.60
+  (AUTRIJUS on 2006-07-01)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.45"
+>0.45
+  (AUTRIJUS on 2006-05-27)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.44"
+>0.44
+  (AUTRIJUS on 2006-05-03)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.43"
+>0.43
+  (AUTRIJUS on 2006-04-29)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.42"
+>0.42
+  (AUTRIJUS on 2006-04-25)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.41"
+>0.41
+  (AUTRIJUS on 2006-04-01)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.40"
+>0.40
+  (AUTRIJUS on 2006-03-31)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.38"
+>0.38
+  (AUTRIJUS on 2006-03-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.37"
+>0.37
+  (AUTRIJUS on 2006-03-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.36"
+>0.36
+  (AUTRIJUS on 2006-03-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.35"
+>0.35
+  (AUTRIJUS on 2006-03-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.34"
+>0.34
+  (AUTRIJUS on 2006-03-06)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.33"
+>0.33
+  (AUTRIJUS on 2006-02-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.32"
+>0.32
+  (AUTRIJUS on 2006-02-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.31"
+>0.31
+  (AUTRIJUS on 2006-02-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.30"
+>0.30
+  (AUTRIJUS on 2006-02-06)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.29"
+>0.29
+  (AUTRIJUS on 2006-02-05)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.28"
+>0.28
+  (AUTRIJUS on 2006-01-16)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.27"
+>0.27
+  (AUTRIJUS on 2006-01-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.26"
+>0.26
+  (AUTRIJUS on 2006-01-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.25"
+>0.25
+  (AUTRIJUS on 2006-01-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.24"
+>0.24
+  (AUTRIJUS on 2006-01-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.23"
+>0.23
+  (AUTRIJUS on 2006-01-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.22"
+>0.22
+  (AUTRIJUS on 2006-01-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.21"
+>0.21
+  (AUTRIJUS on 2006-01-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.20"
+>0.20
+  (AUTRIJUS on 2006-01-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.19"
+>0.19
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.18"
+>0.18
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.17"
+>0.17
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.16"
+>0.16
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.15"
+>0.15
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.14"
+>0.14
+  (AUTRIJUS on 2006-01-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.13"
+>0.13
+  (AUTRIJUS on 2006-01-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.12"
+>0.12
+  (AUTRIJUS on 2006-01-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.11"
+>0.11
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.10"
+>0.10
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.09"
+>0.09
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.08"
+>0.08
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.07"
+>0.07
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.06"
+>0.06
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.05"
+>0.05
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.04"
+>0.04
+  (AUTRIJUS on 2005-12-28)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.03"
+>0.03
+  (AUTRIJUS on 2005-12-27)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.02"
+>0.02
+  (AUTRIJUS on 2005-12-26)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.01"
+>0.01
+  (AUTRIJUS on 2005-12-25)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="TODDR/YAML-Syck-1.33"
+>1.33
+  (TODDR on 2020-10-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.31"
+>1.31
+  (TODDR on 2018-10-25)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.30"
+>1.30
+  (TODDR on 2017-04-20)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.30_01"
+>1.30_01 DEV
+  (TODDR on 2017-04-18)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.29"
+>1.29
+  (TODDR on 2014-12-15)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.29_01"
+>1.29_01 DEV
+  (TODDR on 2014-12-14)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.28"
+>1.28
+  (TODDR on 2014-12-11)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.28_01"
+>1.28_01 DEV
+  (TODDR on 2014-06-11)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.27"
+>1.27
+  (TODDR on 2013-05-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.26"
+>1.26
+  (TODDR on 2013-05-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.25"
+>1.25
+  (TODDR on 2013-03-11)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.24"
+>1.24
+  (TODDR on 2013-03-07)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.24_02"
+>1.24_02 DEV
+  (TODDR on 2013-03-02)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.24_01"
+>1.24_01 DEV
+  (TODDR on 2013-03-02)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.23"
+>1.23
+  (TODDR on 2013-02-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.23_01"
+>1.23_01 DEV
+  (TODDR on 2013-02-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.22"
+>1.22
+  (TODDR on 2012-12-04)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.22_01"
+>1.22_01 DEV
+  (TODDR on 2012-11-28)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.21"
+>1.21
+  (TODDR on 2012-09-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.21_01"
+>1.21_01 DEV
+  (TODDR on 2012-08-22)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.20"
+>1.20
+  (TODDR on 2012-02-15)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.20_01"
+>1.20_01 DEV
+  (TODDR on 2012-02-11)</option>
+<option
+  
+  value="SMUELLER/YAML-Syck-1.18"
+>1.18
+  (SMUELLER on 2011-11-05)</option>
+<option
+  
+  value="SMUELLER/YAML-Syck-1.17_02"
+>1.17_02 DEV
+  (SMUELLER on 2011-11-03)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.14"
+>1.14
+  (TODDR on 2010-08-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.13"
+>1.13
+  (TODDR on 2010-08-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.12"
+>1.12
+  (TODDR on 2010-08-04)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.11"
+>1.11
+  (TODDR on 2010-08-03)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_07"
+>1.10_07 DEV
+  (TODDR on 2010-07-29)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_06"
+>1.10_06 DEV
+  (TODDR on 2010-07-29)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_05"
+>1.10_05 DEV
+  (TODDR on 2010-07-28)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_04"
+>1.10_04 DEV
+  (TODDR on 2010-07-19)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_03"
+>1.10_03 DEV
+  (TODDR on 2010-07-19)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_02"
+>1.10_02 DEV
+  (TODDR on 2010-07-19)</option>
+<option
+  
+  value="NUFFIN/YAML-Syck-0.67"
+>0.67
+  (NUFFIN on 2006-07-30)</option>
+<option
+  
+  value="NUFFIN/YAML-Syck-0.46_01"
+>0.46_01 DEV
+  (NUFFIN on 2006-06-24)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><i class="ttip" title="dynamic_config enabled">unknown</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/YAML::Syck/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=YAML%3A%3ASyck">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=YAML-Syck">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/TODDR/YAML-Syck-1.34/view/lib/YAML/Syck.pm">This version</a>
+    </li>
+    <li>
+      <a href="./YAML::Syck.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/ECARROLL"><img src="https://www.gravatar.com/avatar/5cac64b33d070e3736a62bbc2b4bdba4?d=identicon&amp;s=20" title="ECARROLL" alt="ECARROLL"></a>
+<a class="display-all" href="https://metacpan.org/author/TODDR"><img src="https://www.gravatar.com/avatar/593351ab4ba45a73fb5de512d89432d2?d=identicon&amp;s=20" title="TODDR" alt="TODDR"></a>
+<a class="display-all" href="https://metacpan.org/author/HANENKAMP"><img src="https://www.gravatar.com/avatar/e5b51c69496e22e3e2d037604cc6d8c9?d=identicon&amp;s=20" title="HANENKAMP" alt="HANENKAMP"></a>
+<a class="display-all" href="https://metacpan.org/author/MISHIN"><img src="https://www.gravatar.com/avatar/7aefe037fc617ef89780ad89de3deb87?d=identicon&amp;s=20" title="MISHIN" alt="MISHIN"></a>
+<a class="display-all" href="https://metacpan.org/author/HMBRAND"><img src="https://www.gravatar.com/avatar/a5e0d99fa9567ce0042126931972770a?d=identicon&amp;s=20" title="HMBRAND" alt="HMBRAND"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/YAML-Syck/plussers">7 PAUSE users</a>
+</div>
+<div>
+    10 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/TODDR" class="author-name">Todd Rinaldo</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/YAML/Syck.pm&#39;" class="">
+<option
+  selected
+  value="TODDR/YAML-Syck-1.34"
+>1.34
+  (TODDR on 2020-10-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.32"
+>1.32
+  (TODDR on 2020-01-27)</option>
+<option
+  
+  value="SMUELLER/YAML-Syck-1.19"
+>1.19
+  (SMUELLER on 2011-11-08)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.17"
+>1.17
+  (AVAR on 2010-11-21)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.16"
+>1.16
+  (AVAR on 2010-11-21)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.15"
+>1.15
+  (AVAR on 2010-09-23)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.10_01"
+>1.10_01 DEV
+  (AVAR on 2010-07-16)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.10"
+>1.10
+  (AVAR on 2010-06-06)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.09"
+>1.09
+  (AVAR on 2010-05-29)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.08_01"
+>1.08_01 DEV
+  (AVAR on 2010-05-23)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.08"
+>1.08
+  (AVAR on 2010-05-23)</option>
+<option
+  
+  value="AVAR/YAML-Syck-1.07_01"
+>1.07_01 DEV
+  (AVAR on 2010-05-20)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.07"
+>1.07
+  (AUDREYT on 2009-04-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.06"
+>1.06
+  (AUDREYT on 2009-04-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.05"
+>1.05
+  (AUDREYT on 2008-06-09)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.04"
+>1.04
+  (AUDREYT on 2008-02-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.03"
+>1.03
+  (AUDREYT on 2008-02-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.02"
+>1.02
+  (AUDREYT on 2008-02-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.01"
+>1.01
+  (AUDREYT on 2008-01-18)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-1.00"
+>1.00
+  (AUDREYT on 2007-12-09)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.99"
+>0.99
+  (AUDREYT on 2007-10-22)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.98"
+>0.98
+  (AUDREYT on 2007-10-13)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.97"
+>0.97
+  (AUDREYT on 2007-09-02)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.96"
+>0.96
+  (AUDREYT on 2007-08-07)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.95"
+>0.95
+  (AUDREYT on 2007-08-03)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.94"
+>0.94
+  (AUDREYT on 2007-07-10)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.91"
+>0.91
+  (AUDREYT on 2007-06-23)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.90"
+>0.90
+  (AUDREYT on 2007-06-21)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.88"
+>0.88
+  (AUDREYT on 2007-06-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.87"
+>0.87
+  (AUDREYT on 2007-06-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.86"
+>0.86
+  (AUDREYT on 2007-06-16)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.85"
+>0.85
+  (AUDREYT on 2007-04-20)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.84"
+>0.84
+  (AUDREYT on 2007-04-01)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.82"
+>0.82
+  (AUDREYT on 2007-01-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.81"
+>0.81
+  (AUDREYT on 2007-01-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.80"
+>0.80
+  (AUDREYT on 2007-01-25)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.72"
+>0.72
+  (AUDREYT on 2006-11-26)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.71"
+>0.71
+  (AUDREYT on 2006-10-03)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.70"
+>0.70
+  (AUDREYT on 2006-10-02)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.66"
+>0.66
+  (AUDREYT on 2006-07-29)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.65"
+>0.65
+  (AUDREYT on 2006-07-29)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.64"
+>0.64
+  (AUDREYT on 2006-07-23)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.63"
+>0.63
+  (AUDREYT on 2006-07-20)</option>
+<option
+  
+  value="AUDREYT/YAML-Syck-0.62"
+>0.62
+  (AUDREYT on 2006-07-12)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.61"
+>0.61
+  (AUTRIJUS on 2006-07-01)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.60"
+>0.60
+  (AUTRIJUS on 2006-07-01)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.45"
+>0.45
+  (AUTRIJUS on 2006-05-27)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.44"
+>0.44
+  (AUTRIJUS on 2006-05-03)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.43"
+>0.43
+  (AUTRIJUS on 2006-04-29)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.42"
+>0.42
+  (AUTRIJUS on 2006-04-25)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.41"
+>0.41
+  (AUTRIJUS on 2006-04-01)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.40"
+>0.40
+  (AUTRIJUS on 2006-03-31)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.38"
+>0.38
+  (AUTRIJUS on 2006-03-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.37"
+>0.37
+  (AUTRIJUS on 2006-03-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.36"
+>0.36
+  (AUTRIJUS on 2006-03-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.35"
+>0.35
+  (AUTRIJUS on 2006-03-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.34"
+>0.34
+  (AUTRIJUS on 2006-03-06)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.33"
+>0.33
+  (AUTRIJUS on 2006-02-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.32"
+>0.32
+  (AUTRIJUS on 2006-02-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.31"
+>0.31
+  (AUTRIJUS on 2006-02-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.30"
+>0.30
+  (AUTRIJUS on 2006-02-06)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.29"
+>0.29
+  (AUTRIJUS on 2006-02-05)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.28"
+>0.28
+  (AUTRIJUS on 2006-01-16)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.27"
+>0.27
+  (AUTRIJUS on 2006-01-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.26"
+>0.26
+  (AUTRIJUS on 2006-01-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.25"
+>0.25
+  (AUTRIJUS on 2006-01-15)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.24"
+>0.24
+  (AUTRIJUS on 2006-01-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.23"
+>0.23
+  (AUTRIJUS on 2006-01-14)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.22"
+>0.22
+  (AUTRIJUS on 2006-01-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.21"
+>0.21
+  (AUTRIJUS on 2006-01-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.20"
+>0.20
+  (AUTRIJUS on 2006-01-11)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.19"
+>0.19
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.18"
+>0.18
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.17"
+>0.17
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.16"
+>0.16
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.15"
+>0.15
+  (AUTRIJUS on 2006-01-10)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.14"
+>0.14
+  (AUTRIJUS on 2006-01-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.13"
+>0.13
+  (AUTRIJUS on 2006-01-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.12"
+>0.12
+  (AUTRIJUS on 2006-01-09)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.11"
+>0.11
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.10"
+>0.10
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.09"
+>0.09
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.08"
+>0.08
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.07"
+>0.07
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.06"
+>0.06
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.05"
+>0.05
+  (AUTRIJUS on 2006-01-08)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.04"
+>0.04
+  (AUTRIJUS on 2005-12-28)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.03"
+>0.03
+  (AUTRIJUS on 2005-12-27)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.02"
+>0.02
+  (AUTRIJUS on 2005-12-26)</option>
+<option
+  
+  value="AUTRIJUS/YAML-Syck-0.01"
+>0.01
+  (AUTRIJUS on 2005-12-25)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="TODDR/YAML-Syck-1.33"
+>1.33
+  (TODDR on 2020-10-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.31"
+>1.31
+  (TODDR on 2018-10-25)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.30"
+>1.30
+  (TODDR on 2017-04-20)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.30_01"
+>1.30_01 DEV
+  (TODDR on 2017-04-18)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.29"
+>1.29
+  (TODDR on 2014-12-15)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.29_01"
+>1.29_01 DEV
+  (TODDR on 2014-12-14)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.28"
+>1.28
+  (TODDR on 2014-12-11)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.28_01"
+>1.28_01 DEV
+  (TODDR on 2014-06-11)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.27"
+>1.27
+  (TODDR on 2013-05-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.26"
+>1.26
+  (TODDR on 2013-05-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.25"
+>1.25
+  (TODDR on 2013-03-11)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.24"
+>1.24
+  (TODDR on 2013-03-07)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.24_02"
+>1.24_02 DEV
+  (TODDR on 2013-03-02)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.24_01"
+>1.24_01 DEV
+  (TODDR on 2013-03-02)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.23"
+>1.23
+  (TODDR on 2013-02-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.23_01"
+>1.23_01 DEV
+  (TODDR on 2013-02-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.22"
+>1.22
+  (TODDR on 2012-12-04)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.22_01"
+>1.22_01 DEV
+  (TODDR on 2012-11-28)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.21"
+>1.21
+  (TODDR on 2012-09-21)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.21_01"
+>1.21_01 DEV
+  (TODDR on 2012-08-22)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.20"
+>1.20
+  (TODDR on 2012-02-15)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.20_01"
+>1.20_01 DEV
+  (TODDR on 2012-02-11)</option>
+<option
+  
+  value="SMUELLER/YAML-Syck-1.18"
+>1.18
+  (SMUELLER on 2011-11-05)</option>
+<option
+  
+  value="SMUELLER/YAML-Syck-1.17_02"
+>1.17_02 DEV
+  (SMUELLER on 2011-11-03)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.14"
+>1.14
+  (TODDR on 2010-08-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.13"
+>1.13
+  (TODDR on 2010-08-26)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.12"
+>1.12
+  (TODDR on 2010-08-04)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.11"
+>1.11
+  (TODDR on 2010-08-03)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_07"
+>1.10_07 DEV
+  (TODDR on 2010-07-29)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_06"
+>1.10_06 DEV
+  (TODDR on 2010-07-29)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_05"
+>1.10_05 DEV
+  (TODDR on 2010-07-28)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_04"
+>1.10_04 DEV
+  (TODDR on 2010-07-19)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_03"
+>1.10_03 DEV
+  (TODDR on 2010-07-19)</option>
+<option
+  
+  value="TODDR/YAML-Syck-1.10_02"
+>1.10_02 DEV
+  (TODDR on 2010-07-19)</option>
+<option
+  
+  value="NUFFIN/YAML-Syck-0.67"
+>0.67
+  (NUFFIN on 2006-07-30)</option>
+<option
+  
+  value="NUFFIN/YAML-Syck-0.46_01"
+>0.46_01 DEV
+  (NUFFIN on 2006-06-24)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/YAML-Syck">YAML-Syck-1.34</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 187 direct dependents &#10;          • 771 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="YAML-Syck-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="YAML-Syck-1.34">
+    <input type="hidden" name="author" value="TODDR">
+    <input type="hidden" name="distribution" value="YAML-Syck">
+    <button type="submit" class="favorite highlight"><span>17</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./YAML::Syck.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>17</span> ++</a>
+</div>
+   / <span>YAML::Syck</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./YAML::Syck.html#NAME">NAME</a></li>
+  <li><a href="./YAML::Syck.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./YAML::Syck.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./YAML::Syck.html#Differences-Between-YAML::Syck-and-YAML">Differences Between YAML::Syck and YAML</a>
+    <ul>
+      <li><a href="./YAML::Syck.html#Error-handling">Error handling</a></li>
+    </ul>
+  </li>
+  <li><a href="./YAML::Syck.html#FLAGS">FLAGS</a>
+    <ul>
+      <li><a href="./YAML::Syck.html#$YAML::Syck::Headless">$YAML::Syck::Headless</a></li>
+      <li><a href="./YAML::Syck.html#$YAML::Syck::SortKeys">$YAML::Syck::SortKeys</a></li>
+      <li><a href="./YAML::Syck.html#$YAML::Syck::SingleQuote">$YAML::Syck::SingleQuote</a></li>
+      <li><a href="./YAML::Syck.html#$YAML::Syck::ImplicitTyping">$YAML::Syck::ImplicitTyping</a></li>
+      <li><a href="./YAML::Syck.html#$YAML::Syck::ImplicitUnicode">$YAML::Syck::ImplicitUnicode</a></li>
+      <li><a href="./YAML::Syck.html#$YAML::Syck::ImplicitBinary">$YAML::Syck::ImplicitBinary</a></li>
+      <li><a href="./YAML::Syck.html#$YAML::Syck::UseCode-/-$YAML::Syck::LoadCode-/-$YAML::Syck::DumpCode">$YAML::Syck::UseCode / $YAML::Syck::LoadCode / $YAML::Syck::DumpCode</a></li>
+      <li><a href="./YAML::Syck.html#$YAML::Syck::LoadBlessed">$YAML::Syck::LoadBlessed</a></li>
+    </ul>
+  </li>
+  <li><a href="./YAML::Syck.html#BUGS">BUGS</a></li>
+  <li><a href="./YAML::Syck.html#CAVEATS">CAVEATS</a></li>
+  <li><a href="./YAML::Syck.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./YAML::Syck.html#AUTHORS">AUTHORS</a></li>
+  <li><a href="./YAML::Syck.html#COPYRIGHT">COPYRIGHT</a>
+    <ul>
+      <li><a href="./YAML::Syck.html#The-%22MIT%22-License">The &quot;MIT&quot; License</a></li>
+    </ul>
+  </li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>YAML::Syck - Fast, lightweight YAML loader and dumper</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    use YAML::Syck;
+
+    # Set this for interoperability with other YAML/Syck bindings:
+    # e.g. Load(&#39;Yes&#39;) becomes 1 and Load(&#39;No&#39;) becomes &#39;&#39;.
+    $YAML::Syck::ImplicitTyping = 1;
+
+    $data = Load($yaml);
+    $yaml = Dump($data);
+
+    # $file can be an IO object, or a filename
+    $data = LoadFile($file);
+    DumpFile($file, $data);
+
+    # A string with multiple YAML streams in it
+    $yaml = Dump(@data);
+    @data = Load($yaml);
+
+    # Dumping into a pre-existing output buffer
+    my $yaml;
+    DumpInto(\$yaml, @data);</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module provides a Perl interface to the <b>libsyck</b> data serialization library. It exports the <code>Dump</code> and <code>Load</code> functions for converting Perl data structures to YAML strings, and the other way around.</p>
+
+<p><b>NOTE</b>: If you are working with other language&#39;s YAML/Syck bindings (such as Ruby), please set <code>$YAML::Syck::ImplicitTyping</code> to <code>1</code> before calling the <code>Load</code>/<code>Dump</code> functions. The default setting is for preserving backward-compatibility with <code>YAML.pm</code>.</p>
+
+<h1 id="Differences-Between-YAML::Syck-and-YAML"><a id="Differences"></a>Differences Between YAML::Syck and YAML</h1>
+
+<h2 id="Error-handling"><a id="Error"></a>Error handling</h2>
+
+<p>Some calls are designed to die rather than returning YAML. You should wrap your calls in eval to assure you do not get unexpected results.</p>
+
+<h1 id="FLAGS">FLAGS</h1>
+
+<h2 id="$YAML::Syck::Headless"><a id="YAML::Syck::Headless"></a>$YAML::Syck::Headless</h2>
+
+<p>Defaults to false. Setting this to a true value will make <code>Dump</code> omit the leading <code>---\n</code> marker.</p>
+
+<h2 id="$YAML::Syck::SortKeys"><a id="YAML::Syck::SortKeys"></a>$YAML::Syck::SortKeys</h2>
+
+<p>Defaults to false. Setting this to a true value will make <code>Dump</code> sort hash keys.</p>
+
+<h2 id="$YAML::Syck::SingleQuote"><a id="YAML::Syck::SingleQuote"></a>$YAML::Syck::SingleQuote</h2>
+
+<p>Defaults to false. Setting this to a true value will make <code>Dump</code> always emit single quotes instead of bare strings.</p>
+
+<h2 id="$YAML::Syck::ImplicitTyping"><a id="YAML::Syck::ImplicitTyping"></a>$YAML::Syck::ImplicitTyping</h2>
+
+<p>Defaults to false. Setting this to a true value will make <code>Load</code> recognize various implicit types in YAML, such as unquoted <code>true</code>, <code>false</code>, as well as integers and floating-point numbers. Otherwise, only <code>~</code> is recognized to be <code>undef</code>.</p>
+
+<h2 id="$YAML::Syck::ImplicitUnicode"><a id="YAML::Syck::ImplicitUnicode"></a>$YAML::Syck::ImplicitUnicode</h2>
+
+<p>Defaults to false. For Perl 5.8.0 or later, setting this to a true value will make <code>Load</code> set Unicode flag on for every string that contains valid UTF8 sequences, and make <code>Dump</code> return a unicode string.</p>
+
+<p>Regardless of this flag, Unicode strings are dumped verbatim without escaping; byte strings with high-bit set will be dumped with backslash escaping.</p>
+
+<p>However, because YAML does not distinguish between these two kinds of strings, so this flag will affect loading of both variants of strings.</p>
+
+<p>If you want to use LoadFile or DumpFile with unicode, you are required to open your own file in order to assure it&#39;s UTF8 encoded:</p>
+
+<pre><code>  open(my $fh, &quot;&gt;:encoding(UTF-8)&quot;, &quot;out.yml&quot;);
+  DumpFile($fh, $hashref);</code></pre>
+
+<h2 id="$YAML::Syck::ImplicitBinary"><a id="YAML::Syck::ImplicitBinary"></a>$YAML::Syck::ImplicitBinary</h2>
+
+<p>Defaults to false. For Perl 5.8.0 or later, setting this to a true value will make <code>Dump</code> generate Base64-encoded <code>!!binary</code> data for all non-Unicode scalars containing high-bit bytes.</p>
+
+<h2 id="$YAML::Syck::UseCode-/-$YAML::Syck::LoadCode-/-$YAML::Syck::DumpCode"><a id="YAML::Syck::UseCode----YAML::Syck::LoadCode----YAML::Syck::DumpCode"></a>$YAML::Syck::UseCode / $YAML::Syck::LoadCode / $YAML::Syck::DumpCode</h2>
+
+<p>These flags control whether or not to try and eval/deparse perl source code; each of them defaults to false.</p>
+
+<p>Setting <code>$YAML::Syck::UseCode</code> to a true value is equivalent to setting both <code>$YAML::Syck::LoadCode</code> and <code>$YAML::Syck::DumpCode</code> to true.</p>
+
+<h2 id="$YAML::Syck::LoadBlessed"><a id="YAML::Syck::LoadBlessed"></a>$YAML::Syck::LoadBlessed</h2>
+
+<p>Defaults to false. Setting to true will allow YAML::Syck to bless objects as it imports objects. This default changed in 1.32.</p>
+
+<p>You can create any kind of object with YAML. The creation itself is not the critical part. If the class has a DESTROY method, it will be called once the object is deleted. An example with File::Temp removing files can be found at <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=862373">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=862373</a></p>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>Dumping Glob/IO values do not work yet.</p>
+
+<p>Dumping of Tied variables is unsupported.</p>
+
+<p>Dumping into tied (or other magic variables) with <code>DumpInto</code> might not work properly in all cases.</p>
+
+<h1 id="CAVEATS">CAVEATS</h1>
+
+<p>This module implements the YAML 1.0 spec. To deal with data in YAML 1.1, please use the <code>YAML::XS</code> module instead.</p>
+
+<p>The current implementation bundles libsyck source code; if your system has a site-wide shared libsyck, it will <i>not</i> be used.</p>
+
+<p>Tag names such as <code>!!perl/hash:Foo</code> is blessed into the package <code>Foo</code>, but the <code>!hs/foo</code> and <code>!!hs/Foo</code> tags are blessed into <code>hs::Foo</code>. Note that this holds true even if the tag contains non-word characters; for example, <code>!haskell.org/Foo</code> is blessed into <code>haskell.org::Foo</code>. Please use <a href="https://metacpan.org/pod/Class::Rebless">Class::Rebless</a> to cast it into other user-defined packages. You can also set the LoadBlessed flag false to disable all blessing.</p>
+
+<p>This module has <a href="https://rt.cpan.org/Public/Dist/Display.html?Name=YAML-Syck">a lot of known issues</a> and has only been semi-actively maintained since 2007. If you encounter an issue with it probably won&#39;t be fixed unless you <a href="http://github.com/toddr/YAML-Syck">offer up a patch</a> in Git that&#39;s ready for release.</p>
+
+<p>There are still good reasons to use this module, such as better interoperability with other syck wrappers (like Ruby&#39;s), or some edge case of YAML&#39;s syntax that it handles better. It&#39;ll probably work perfectly for you, but if it doesn&#39;t you may want to look at <a href="./YAML::XS.html">YAML::XS</a>, or perhaps at looking another serialization format like <a href="JSON.html">JSON</a>.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="YAML.html">YAML</a>, <a href="https://metacpan.org/pod/JSON::Syck">JSON::Syck</a></p>
+
+<p><a href="http://www.yaml.org/">http://www.yaml.org/</a></p>
+
+<h1 id="AUTHORS">AUTHORS</h1>
+
+<p>Audrey Tang &lt;cpan@audreyt.org&gt;</p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright 2005-2009 by Audrey Tang &lt;cpan@audreyt.org&gt;.</p>
+
+<p>This software is released under the MIT license cited below.</p>
+
+<p>The <i>libsyck</i> code bundled with this library is released by &quot;why the lucky stiff&quot;, under a BSD-style license. See the <i>COPYING</i> file for details.</p>
+
+<h2 id="The-&quot;MIT&quot;-License"><a id="The"></a><a id="The--MIT--License"></a>The &quot;MIT&quot; License</h2>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the &quot;Software&quot;), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install YAML::Syck, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm YAML::Syck</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install YAML::Syck</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./YAML::Syck.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

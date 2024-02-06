@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DBM_Filter -- Filter DBM keys/values - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/DBM_Filter">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="DBM_Filter.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/DBM_Filter">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/DBM_Filter">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/DBM_Filter">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/DBM_Filter">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/DBM_Filter">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/DBM_Filter">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/DBM_Filter">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/DBM_Filter">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/DBM_Filter">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/DBM_Filter">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/DBM_Filter">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/DBM_Filter">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/DBM_Filter">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/DBM_Filter">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/DBM_Filter">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/DBM_Filter">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/DBM_Filter">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/DBM_Filter">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/DBM_Filter">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/DBM_Filter">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/DBM_Filter">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/DBM_Filter">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/DBM_Filter">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/DBM_Filter">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/DBM_Filter">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/DBM_Filter">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/DBM_Filter">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/DBM_Filter">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/DBM_Filter">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/DBM_Filter">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/DBM_Filter">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/DBM_Filter">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/DBM_Filter">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/DBM_Filter">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/DBM_Filter">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/DBM_Filter">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/DBM_Filter">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/DBM_Filter">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/DBM_Filter">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/DBM_Filter">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/DBM_Filter">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/DBM_Filter">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/DBM_Filter">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/DBM_Filter">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/DBM_Filter">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/DBM_Filter">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/DBM_Filter">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/DBM_Filter">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/DBM_Filter">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/DBM_Filter">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/DBM_Filter">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/DBM_Filter">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/DBM_Filter">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/DBM_Filter">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/DBM_Filter">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/DBM_Filter">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/DBM_Filter">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/DBM_Filter">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/DBM_Filter">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/DBM_Filter">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/DBM_Filter">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/DBM_Filter">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/DBM_Filter">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/DBM_Filter">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/DBM_Filter">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/DBM_Filter">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/DBM_Filter">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/DBM_Filter">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/DBM_Filter">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/DBM_Filter">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/DBM_Filter">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/DBM_Filter">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/DBM_Filter">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/DBM_Filter">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/DBM_Filter">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/DBM_Filter">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/DBM_Filter">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/DBM_Filter">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/DBM_Filter">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/DBM_Filter">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="DBM_Filter.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/DBM_Filter">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/DBM_Filter">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/DBM_Filter">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/DBM_Filter">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/DBM_Filter">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/DBM_Filter">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/DBM_Filter">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/DBM_Filter">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/DBM_Filter">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/DBM_Filter">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/DBM_Filter">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/DBM_Filter">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/DBM_Filter">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/DBM_Filter">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/DBM_Filter">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/DBM_Filter">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/DBM_Filter">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/DBM_Filter">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/DBM_Filter">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/DBM_Filter">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/DBM_Filter">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/DBM_Filter">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/DBM_Filter">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/DBM_Filter">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/DBM_Filter">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/DBM_Filter">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/DBM_Filter">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/DBM_Filter">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/DBM_Filter">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/DBM_Filter">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/DBM_Filter">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/DBM_Filter">5.35.1</a>
+          <a class="dropdown-item active" href="DBM_Filter.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="DBM_Filter.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="DBM_Filter.html">DBM_Filter</a>
+          <div id="more">
+            (<a href="DBM_Filter.txt">source</a>,
+            <a href="https://metacpan.org/pod/DBM_Filter">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 0.06</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#What-is-a-DBM-Filter?">What is a DBM Filter?</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#So-what&#39;s-new?">So what&#39;s new?</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#METHODS">METHODS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#$db-%3EFilter_Push()-/-$db-%3EFilter_Key_Push()-/-$db-%3EFilter_Value_Push()">$db-&gt;Filter_Push() / $db-&gt;Filter_Key_Push() / $db-&gt;Filter_Value_Push()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#$db-%3EFilter_Pop()">$db-&gt;Filter_Pop()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#$db-%3EFiltered()">$db-&gt;Filtered()</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#Writing-a-Filter">Writing a Filter</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#Immediate-Filters">Immediate Filters</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#Canned-Filters">Canned Filters</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#Filters-Included">Filters Included</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#NOTES">NOTES</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#Maintain-Round-Trip-Integrity">Maintain Round Trip Integrity</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#Don&#39;t-mix-filtered-&amp;-non-filtered-data-in-the-same-database-file.">Don&#39;t mix filtered &amp; non-filtered data in the same database file.</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#EXAMPLE">EXAMPLE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DBM_Filter.html#AUTHOR">AUTHOR</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="DBM_Filter.html#NAME">#</a>NAME</h1>
+
+<p>DBM_Filter -- Filter DBM keys/values</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="DBM_Filter.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use DBM_Filter ;
+use SDBM_File; # or DB_File, GDBM_File, NDBM_File, or ODBM_File
+
+$db = tie %hash, ...
+
+$db-&gt;Filter_Push(Fetch =&gt; sub {...},
+                 Store =&gt; sub {...});
+
+$db-&gt;Filter_Push(&#39;my_filter1&#39;);
+$db-&gt;Filter_Push(&#39;my_filter2&#39;, params...);
+
+$db-&gt;Filter_Key_Push(...) ;
+$db-&gt;Filter_Value_Push(...) ;
+
+$db-&gt;Filter_Pop();
+$db-&gt;Filtered();
+
+package DBM_Filter::my_filter1;
+
+sub Store { ... }
+sub Fetch { ... }
+
+1;
+
+package DBM_Filter::my_filter2;
+
+sub Filter
+{
+    my @opts = @_;
+    ...
+    return (
+        sub Store { ... },
+        sub Fetch { ... } );
+}
+
+1;</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="DBM_Filter.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This module provides an interface that allows filters to be applied to tied Hashes associated with DBM files. It builds on the DBM Filter hooks that are present in all the *DB*_File modules included with the standard Perl source distribution from version 5.6.1 onwards. In addition to the *DB*_File modules distributed with Perl, the BerkeleyDB module, available on CPAN, supports the DBM Filter hooks. See <a href="perldbmfilter.html">perldbmfilter</a> for more details on the DBM Filter hooks.</p>
+
+<h1 id="What-is-a-DBM-Filter?"><a class="permalink" href="DBM_Filter.html#What-is-a-DBM-Filter?">#</a><a id="What"></a><a id="What-is-a-DBM-Filter"></a>What is a DBM Filter?</h1>
+
+<p>A DBM Filter allows the keys and/or values in a tied hash to be modified by some user-defined code just before it is written to the DBM file and just after it is read back from the DBM file. For example, this snippet of code</p>
+
+<pre><code>$some_hash{&quot;abc&quot;} = 42;</code></pre>
+
+<p>could potentially trigger two filters, one for the writing of the key &quot;abc&quot; and another for writing the value 42. Similarly, this snippet</p>
+
+<pre><code>my ($key, $value) = each %some_hash</code></pre>
+
+<p>will trigger two filters, one for the reading of the key and one for the reading of the value.</p>
+
+<p>Like the existing DBM Filter functionality, this module arranges for the <code>$_</code> variable to be populated with the key or value that a filter will check. This usually means that most DBM filters tend to be very short.</p>
+
+<h2 id="So-what&#39;s-new?"><a class="permalink" href="DBM_Filter.html#So-what&#39;s-new?">#</a><a id="So"></a><a id="So-whats-new"></a>So what&#39;s new?</h2>
+
+<p>The main enhancements over the standard DBM Filter hooks are:</p>
+
+<ul>
+
+<li><p>A cleaner interface.</p>
+
+</li>
+<li><p>The ability to easily apply multiple filters to a single DBM file.</p>
+
+</li>
+<li><p>The ability to create &quot;canned&quot; filters. These allow commonly used filters to be packaged into a stand-alone module.</p>
+
+</li>
+</ul>
+
+<h1 id="METHODS"><a class="permalink" href="DBM_Filter.html#METHODS">#</a>METHODS</h1>
+
+<p>This module will arrange for the following methods to be available via the object returned from the <code>tie</code> call.</p>
+
+<h2 id="$db-&gt;Filter_Push()-/-$db-&gt;Filter_Key_Push()-/-$db-&gt;Filter_Value_Push()"><a class="permalink" href="DBM_Filter.html#$db-%3EFilter_Push()-/-$db-%3EFilter_Key_Push()-/-$db-%3EFilter_Value_Push()">#</a><a id="Filter_Push1"></a><a id="db-Filter_Push-db-Filter_Key_Push-db-Filter_Value_Push"></a>$db-&gt;Filter_Push() / $db-&gt;Filter_Key_Push() / $db-&gt;Filter_Value_Push()</h2>
+
+<p>Add a filter to filter stack for the database, <code>$db</code>. The three formats vary only in whether they apply to the DBM key, the DBM value or both.</p>
+
+<dl>
+
+<dt id="Filter_Push"><a class="permalink" href="DBM_Filter.html#Filter_Push">#</a>Filter_Push</dt>
+<dd>
+
+<p>The filter is applied to <i>both</i> keys and values.</p>
+
+</dd>
+<dt id="Filter_Key_Push"><a class="permalink" href="DBM_Filter.html#Filter_Key_Push">#</a>Filter_Key_Push</dt>
+<dd>
+
+<p>The filter is applied to the key <i>only</i>.</p>
+
+</dd>
+<dt id="Filter_Value_Push"><a class="permalink" href="DBM_Filter.html#Filter_Value_Push">#</a>Filter_Value_Push</dt>
+<dd>
+
+<p>The filter is applied to the value <i>only</i>.</p>
+
+</dd>
+</dl>
+
+<h2 id="$db-&gt;Filter_Pop()"><a class="permalink" href="DBM_Filter.html#$db-%3EFilter_Pop()">#</a><a id="Filter_Pop"></a><a id="db-Filter_Pop"></a>$db-&gt;Filter_Pop()</h2>
+
+<p>Removes the last filter that was applied to the DBM file associated with <code>$db</code>, if present.</p>
+
+<h2 id="$db-&gt;Filtered()"><a class="permalink" href="DBM_Filter.html#$db-%3EFiltered()">#</a><a id="Filtered"></a><a id="db-Filtered"></a>$db-&gt;Filtered()</h2>
+
+<p>Returns TRUE if there are any filters applied to the DBM associated with <code>$db</code>. Otherwise returns FALSE.</p>
+
+<h1 id="Writing-a-Filter"><a class="permalink" href="DBM_Filter.html#Writing-a-Filter">#</a><a id="Writing"></a>Writing a Filter</h1>
+
+<p>Filters can be created in two main ways</p>
+
+<h2 id="Immediate-Filters"><a class="permalink" href="DBM_Filter.html#Immediate-Filters">#</a><a id="Immediate"></a>Immediate Filters</h2>
+
+<p>An immediate filter allows you to specify the filter code to be used at the point where the filter is applied to a dbm. In this mode the Filter_*_Push methods expects to receive exactly two parameters.</p>
+
+<pre><code>my $db = tie %hash, &#39;SDBM_File&#39;, ...
+$db-&gt;Filter_Push( Store =&gt; sub { },
+                  Fetch =&gt; sub { });</code></pre>
+
+<p>The code reference associated with <code>Store</code> will be called before any key/value is written to the database and the code reference associated with <code>Fetch</code> will be called after any key/value is read from the database.</p>
+
+<p>For example, here is a sample filter that adds a trailing NULL character to all strings before they are written to the DBM file, and removes the trailing NULL when they are read from the DBM file</p>
+
+<pre><code>my $db = tie %hash, &#39;SDBM_File&#39;, ...
+$db-&gt;Filter_Push( Store =&gt; sub { $_ .= &quot;\x00&quot; ; },
+                  Fetch =&gt; sub { s/\x00$// ;    });</code></pre>
+
+<p>Points to note:</p>
+
+<ol>
+
+<li><p>Both the Store and Fetch filters manipulate <code>$_</code>.</p>
+
+</li>
+</ol>
+
+<h2 id="Canned-Filters"><a class="permalink" href="DBM_Filter.html#Canned-Filters">#</a><a id="Canned"></a>Canned Filters</h2>
+
+<p>Immediate filters are useful for one-off situations. For more generic problems it can be useful to package the filter up in its own module.</p>
+
+<p>The usage is for a canned filter is:</p>
+
+<pre><code>$db-&gt;Filter_Push(&quot;name&quot;, params)</code></pre>
+
+<p>where</p>
+
+<dl>
+
+<dt id="&quot;name&quot;"><a class="permalink" href="DBM_Filter.html#%22name%22">#</a><a id="name"></a>&quot;name&quot;</dt>
+<dd>
+
+<p>is the name of the module to load. If the string specified does not contain the package separator characters &quot;::&quot;, it is assumed to refer to the full module name &quot;DBM_Filter::name&quot;. This means that the full names for canned filters, &quot;null&quot; and &quot;utf8&quot;, included with this module are:</p>
+
+<pre><code class="plaintext">DBM_Filter::null
+DBM_Filter::utf8</code></pre>
+
+</dd>
+<dt id="params"><a class="permalink" href="DBM_Filter.html#params">#</a>params</dt>
+<dd>
+
+<p>any optional parameters that need to be sent to the filter. See the encode filter for an example of a module that uses parameters.</p>
+
+</dd>
+</dl>
+
+<p>The module that implements the canned filter can take one of two forms. Here is a template for the first</p>
+
+<pre><code>package DBM_Filter::null ;
+
+use strict;
+use warnings;
+
+sub Store 
+{
+    # store code here    
+}
+
+sub Fetch
+{
+    # fetch code here
+}
+
+1;</code></pre>
+
+<p>Notes:</p>
+
+<ol>
+
+<li><p>The package name uses the <code>DBM_Filter::</code> prefix.</p>
+
+</li>
+<li><p>The module <i>must</i> have both a Store and a Fetch method. If only one is present, or neither are present, a fatal error will be thrown.</p>
+
+</li>
+</ol>
+
+<p>The second form allows the filter to hold state information using a closure, thus:</p>
+
+<pre><code>package DBM_Filter::encoding ;
+
+use strict;
+use warnings;
+
+sub Filter
+{
+    my @params = @_ ;
+
+    ...
+    return {
+        Store   =&gt; sub { $_ = $encoding-&gt;encode($_) },
+        Fetch   =&gt; sub { $_ = $encoding-&gt;decode($_) }
+        } ;
+}
+
+1;</code></pre>
+
+<p>In this instance the &quot;Store&quot; and &quot;Fetch&quot; methods are encapsulated inside a &quot;Filter&quot; method.</p>
+
+<h1 id="Filters-Included"><a class="permalink" href="DBM_Filter.html#Filters-Included">#</a><a id="Filters"></a>Filters Included</h1>
+
+<p>A number of canned filers are provided with this module. They cover a number of the main areas that filters are needed when interfacing with DBM files. They also act as templates for your own filters.</p>
+
+<p>The filter included are:</p>
+
+<ul>
+
+<li><p>utf8</p>
+
+<p>This module will ensure that all data written to the DBM will be encoded in UTF-8.</p>
+
+<p>This module needs the Encode module.</p>
+
+</li>
+<li><p>encode</p>
+
+<p>Allows you to choose the character encoding will be store in the DBM file.</p>
+
+</li>
+<li><p>compress</p>
+
+<p>This filter will compress all data before it is written to the database and uncompressed it on reading.</p>
+
+<p>This module needs Compress::Zlib.</p>
+
+</li>
+<li><p>int32</p>
+
+<p>This module is used when interoperating with a C/C++ application that uses a C int as either the key and/or value in the DBM file.</p>
+
+</li>
+<li><p>null</p>
+
+<p>This module ensures that all data written to the DBM file is null terminated. This is useful when you have a perl script that needs to interoperate with a DBM file that a C program also uses. A fairly common issue is for the C application to include the terminating null in a string when it writes to the DBM file. This filter will ensure that all data written to the DBM file can be read by the C application.</p>
+
+</li>
+</ul>
+
+<h1 id="NOTES"><a class="permalink" href="DBM_Filter.html#NOTES">#</a>NOTES</h1>
+
+<h2 id="Maintain-Round-Trip-Integrity"><a class="permalink" href="DBM_Filter.html#Maintain-Round-Trip-Integrity">#</a><a id="Maintain"></a>Maintain Round Trip Integrity</h2>
+
+<p>When writing a DBM filter it is <i>very</i> important to ensure that it is possible to retrieve all data that you have written when the DBM filter is in place. In practice, this means that whatever transformation is applied to the data in the Store method, the <i>exact</i> inverse operation should be applied in the Fetch method.</p>
+
+<p>If you don&#39;t provide an exact inverse transformation, you will find that code like this will not behave as you expect.</p>
+
+<pre><code>while (my ($k, $v) = each %hash)
+{
+    ...
+}</code></pre>
+
+<p>Depending on the transformation, you will find that one or more of the following will happen</p>
+
+<ol>
+
+<li><p>The loop will never terminate.</p>
+
+</li>
+<li><p>Too few records will be retrieved.</p>
+
+</li>
+<li><p>Too many will be retrieved.</p>
+
+</li>
+<li><p>The loop will do the right thing for a while, but it will unexpectedly fail.</p>
+
+</li>
+</ol>
+
+<h2 id="Don&#39;t-mix-filtered-&amp;-non-filtered-data-in-the-same-database-file."><a class="permalink" href="DBM_Filter.html#Don&#39;t-mix-filtered-&amp;-non-filtered-data-in-the-same-database-file.">#</a><a id="Don"></a><a id="Dont-mix-filtered-non-filtered-data-in-the-same-database-file"></a>Don&#39;t mix filtered &amp; non-filtered data in the same database file.</h2>
+
+<p>This is just a restatement of the previous section. Unless you are completely certain you know what you are doing, avoid mixing filtered &amp; non-filtered data.</p>
+
+<h1 id="EXAMPLE"><a class="permalink" href="DBM_Filter.html#EXAMPLE">#</a>EXAMPLE</h1>
+
+<p>Say you need to interoperate with a legacy C application that stores keys as C ints and the values and null terminated UTF-8 strings. Here is how you would set that up</p>
+
+<pre><code>my $db = tie %hash, &#39;SDBM_File&#39;, ...
+
+$db-&gt;Filter_Key_Push(&#39;int32&#39;) ;
+
+$db-&gt;Filter_Value_Push(&#39;utf8&#39;);
+$db-&gt;Filter_Value_Push(&#39;null&#39;);</code></pre>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="DBM_Filter.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p>&lt;DB_File&gt;, <a href="GDBM_File.html">GDBM_File</a>, <a href="NDBM_File.html">NDBM_File</a>, <a href="ODBM_File.html">ODBM_File</a>, <a href="SDBM_File.html">SDBM_File</a>, <a href="perldbmfilter.html">perldbmfilter</a></p>
+
+<h1 id="AUTHOR"><a class="permalink" href="DBM_Filter.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Paul Marquess &lt;pmqs@cpan.org&gt;</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>MRO::Compat - mro::* interface compatibility for Perls &lt; 5.9.5 - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of MRO-Compat - MetaCPAN" href="https://metacpan.org/dist/MRO-Compat/releases.rss" />
+        <link rel="canonical" href="./MRO::Compat.html" />
+        <meta name="description" content="mro::* interface compatibility for Perls &lt; 5.9.5" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/MRO::Compat" />
+<meta name="twitter:title"       content="MRO::Compat" />
+<meta name="twitter:description" content="mro::* interface compatibility for Perls &lt; 5.9.5" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./MRO::Compat.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of MRO-Compat was released.">
+      <span class="relatize">06 Jan 2022 15:22:06 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/MRO-Compat">MRO-Compat</a>
+  </li>
+  <li>
+    Module version: 0.15
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/MRO-Compat/source/lib/MRO/Compat.pm">Source</a>
+    (<a href="https://metacpan.org/dist/MRO-Compat/source/lib/MRO/Compat.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/MRO-Compat/source/lib/MRO">Browse</a>
+    (<a href="https://metacpan.org/dist/MRO-Compat/source/lib/MRO?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/MRO-Compat/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://metacpan.org/release/MRO-Compat">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/MRO-Compat/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/moose/MRO-Compat">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=MRO-Compat">Issues</a>
+      (0)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=MRO-Compat+0.15" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/M/MRO-Compat.html?oncpan=1&amp;distmat=1&amp;version=0.15&amp;grade=2" style="color: #090">4936</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/M/MRO-Compat.html?oncpan=1&amp;distmat=1&amp;version=0.15&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/M/MRO-Compat.html?oncpan=1&amp;distmat=1&amp;version=0.15&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/HAARG/MRO-Compat-0.15">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on MRO-Compat who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 3
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/MRO-Compat-0.15/index.html">17.13% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.6.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/MRO-Compat/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/H/HA/HAARG/MRO-Compat-0.15.tar.gz">
+      Download (<span itemprop="fileSize">16.12KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FHAARG%2FMRO-Compat-0.15%2Flib%2FMRO%2FCompat.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/MRO-Compat/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/MRO-Compat/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:MRO-Compat">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="MRO-Compat">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/MRO/Compat.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="HAARG/MRO-Compat-0.15"
+>0.15
+  (HAARG on 2022-01-06)</option>
+<option
+  
+  value="HAARG/MRO-Compat-0.14_01"
+>0.14_01 DEV
+  (HAARG on 2020-11-16)</option>
+<option
+  
+  value="HAARG/MRO-Compat-0.13"
+>0.13
+  (HAARG on 2017-03-28)</option>
+<option
+  
+  value="BOBTFISH/MRO-Compat-0.12"
+>0.12
+  (BOBTFISH on 2012-12-04)</option>
+<option
+  
+  value="FLORA/MRO-Compat-0.11"
+>0.11
+  (FLORA on 2009-05-27)</option>
+<option
+  
+  value="FLORA/MRO-Compat-0.10"
+>0.10
+  (FLORA on 2009-03-24)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.09"
+>0.09
+  (BLBLACK on 2008-06-05)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.08_01"
+>0.08_01 DEV
+  (BLBLACK on 2008-06-02)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.07"
+>0.07
+  (BLBLACK on 2008-05-20)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.06_01"
+>0.06_01 DEV
+  (BLBLACK on 2008-05-19)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.05"
+>0.05
+  (BLBLACK on 2007-09-09)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.04"
+>0.04
+  (BLBLACK on 2007-07-18)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.03"
+>0.03
+  (BLBLACK on 2007-06-04)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.02"
+>0.02
+  (BLBLACK on 2007-05-13)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BLBLACK/MRO-Compat-0.01_01"
+>0.01_01 DEV
+  (BLBLACK on 2007-05-11)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/HAARG/MRO-Compat-0.15/diff/' + encodeURIComponent(this.value) + '/lib/MRO/Compat.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="HAARG/MRO-Compat-0.15"
+>0.15
+  (HAARG on 2022-01-06)</option>
+<option
+  
+  value="HAARG/MRO-Compat-0.14_01"
+>0.14_01 DEV
+  (HAARG on 2020-11-16)</option>
+<option
+  
+  value="HAARG/MRO-Compat-0.13"
+>0.13
+  (HAARG on 2017-03-28)</option>
+<option
+  
+  value="BOBTFISH/MRO-Compat-0.12"
+>0.12
+  (BOBTFISH on 2012-12-04)</option>
+<option
+  
+  value="FLORA/MRO-Compat-0.11"
+>0.11
+  (FLORA on 2009-05-27)</option>
+<option
+  
+  value="FLORA/MRO-Compat-0.10"
+>0.10
+  (FLORA on 2009-03-24)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.09"
+>0.09
+  (BLBLACK on 2008-06-05)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.08_01"
+>0.08_01 DEV
+  (BLBLACK on 2008-06-02)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.07"
+>0.07
+  (BLBLACK on 2008-05-20)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.06_01"
+>0.06_01 DEV
+  (BLBLACK on 2008-05-19)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.05"
+>0.05
+  (BLBLACK on 2007-09-09)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.04"
+>0.04
+  (BLBLACK on 2007-07-18)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.03"
+>0.03
+  (BLBLACK on 2007-06-04)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.02"
+>0.02
+  (BLBLACK on 2007-05-13)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BLBLACK/MRO-Compat-0.01_01"
+>0.01_01 DEV
+  (BLBLACK on 2007-05-11)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><i class="ttip" title="dynamic_config enabled">unknown</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/MRO::Compat/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=MRO%3A%3ACompat">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=MRO-Compat">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/HAARG/MRO-Compat-0.15/view/lib/MRO/Compat.pm">This version</a>
+    </li>
+    <li>
+      <a href="./MRO::Compat.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/KEEDI"><img src="https://www.gravatar.com/avatar/95f905a7a4ccc573c711e9d264c0fde8?d=identicon&amp;s=20" title="KEEDI" alt="KEEDI"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/MRO-Compat/plussers">1 PAUSE user</a>
+</div>
+<div>
+    2 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="BLBLACK"
+      data-contrib-email="blblack@gmail.com"
+    >
+      <a href="https://metacpan.org/author/BLBLACK" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/5496172744d8328f4b950e2f19caa503?d=identicon&amp;s=20" />
+      Brandon L. Black
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/HAARG" class="author-name">Graham Knop</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/MRO/Compat.pm&#39;" class="">
+<option
+  selected
+  value="HAARG/MRO-Compat-0.15"
+>0.15
+  (HAARG on 2022-01-06)</option>
+<option
+  
+  value="HAARG/MRO-Compat-0.14_01"
+>0.14_01 DEV
+  (HAARG on 2020-11-16)</option>
+<option
+  
+  value="HAARG/MRO-Compat-0.13"
+>0.13
+  (HAARG on 2017-03-28)</option>
+<option
+  
+  value="BOBTFISH/MRO-Compat-0.12"
+>0.12
+  (BOBTFISH on 2012-12-04)</option>
+<option
+  
+  value="FLORA/MRO-Compat-0.11"
+>0.11
+  (FLORA on 2009-05-27)</option>
+<option
+  
+  value="FLORA/MRO-Compat-0.10"
+>0.10
+  (FLORA on 2009-03-24)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.09"
+>0.09
+  (BLBLACK on 2008-06-05)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.08_01"
+>0.08_01 DEV
+  (BLBLACK on 2008-06-02)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.07"
+>0.07
+  (BLBLACK on 2008-05-20)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.06_01"
+>0.06_01 DEV
+  (BLBLACK on 2008-05-19)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.05"
+>0.05
+  (BLBLACK on 2007-09-09)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.04"
+>0.04
+  (BLBLACK on 2007-07-18)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.03"
+>0.03
+  (BLBLACK on 2007-06-04)</option>
+<option
+  
+  value="BLBLACK/MRO-Compat-0.02"
+>0.02
+  (BLBLACK on 2007-05-13)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BLBLACK/MRO-Compat-0.01_01"
+>0.01_01 DEV
+  (BLBLACK on 2007-05-11)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/MRO-Compat">MRO-Compat-0.15</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage four &#10;
+          • 172 direct dependents &#10;          • 7480 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="MRO-Compat-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="MRO-Compat-0.15">
+    <input type="hidden" name="author" value="HAARG">
+    <input type="hidden" name="distribution" value="MRO-Compat">
+    <button type="submit" class="favorite highlight"><span>3</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./MRO::Compat.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>3</span> ++</a>
+</div>
+   / <span>MRO::Compat</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./MRO::Compat.html#NAME">NAME</a></li>
+  <li><a href="./MRO::Compat.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./MRO::Compat.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./MRO::Compat.html#Functions">Functions</a>
+    <ul>
+      <li><a href="./MRO::Compat.html#mro::get_linear_isa($classname%5B,-$type%5D)">mro::get_linear_isa($classname[, $type])</a></li>
+      <li><a href="./MRO::Compat.html#mro::import">mro::import</a></li>
+      <li><a href="./MRO::Compat.html#mro::set_mro($classname,-$type)">mro::set_mro($classname, $type)</a></li>
+      <li><a href="./MRO::Compat.html#mro::get_mro($classname)">mro::get_mro($classname)</a></li>
+      <li><a href="./MRO::Compat.html#mro::get_isarev($classname)">mro::get_isarev($classname)</a></li>
+      <li><a href="./MRO::Compat.html#mro::is_universal($classname)">mro::is_universal($classname)</a></li>
+      <li><a href="./MRO::Compat.html#mro::invalidate_all_method_caches">mro::invalidate_all_method_caches</a></li>
+      <li><a href="./MRO::Compat.html#mro::method_changed_in($classname)">mro::method_changed_in($classname)</a></li>
+      <li><a href="./MRO::Compat.html#mro::get_pkg_gen($classname)">mro::get_pkg_gen($classname)</a></li>
+    </ul>
+  </li>
+  <li><a href="./MRO::Compat.html#USING-C3">USING C3</a></li>
+  <li><a href="./MRO::Compat.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./MRO::Compat.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./MRO::Compat.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>MRO::Compat - mro::* interface compatibility for Perls &lt; 5.9.5</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>   package PPP;      use base qw/Exporter/;
+   package X;        use base qw/PPP/;
+   package Y;        use base qw/PPP/;
+   package Z;        use base qw/PPP/;
+
+   package FooClass; use base qw/X Y Z/;
+
+   package main;
+   use MRO::Compat;
+   my $linear = mro::get_linear_isa(&#39;FooClass&#39;);
+   print join(q{, }, @$linear);
+
+   # Prints: FooClass, X, PPP, Exporter, Y, Z</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>The &quot;mro&quot; namespace provides several utilities for dealing with method resolution order and method caching in general in Perl 5.9.5 and higher.</p>
+
+<p>This module provides those interfaces for earlier versions of Perl (back to 5.6.0 anyways).</p>
+
+<p>It is a harmless no-op to use this module on 5.9.5+. That is to say, code which properly uses <a href="./MRO::Compat.html">MRO::Compat</a> will work unmodified on both older Perls and 5.9.5+.</p>
+
+<p>If you&#39;re writing a piece of software that would like to use the parts of 5.9.5+&#39;s mro:: interfaces that are supported here, and you want compatibility with older Perls, this is the module for you.</p>
+
+<p>Some parts of this code will work better and/or faster with <a href="https://metacpan.org/pod/Class::C3::XS">Class::C3::XS</a> installed (which is an optional prereq of <a href="./Class::C3.html">Class::C3</a>, which is in turn a prereq of this package), but it&#39;s not a requirement.</p>
+
+<p>This module never exports any functions. All calls must be fully qualified with the <code>mro::</code> prefix.</p>
+
+<p>The interface documentation here serves only as a quick reference of what the function basically does, and what differences between <a href="./MRO::Compat.html">MRO::Compat</a> and 5.9.5+ one should look out for. The main docs in 5.9.5&#39;s <a href="https://metacpan.org/pod/mro">mro</a> are the real interface docs, and contain a lot of other useful information.</p>
+
+<h1 id="Functions">Functions</h1>
+
+<h2 id="mro::get_linear_isa($classname[,-$type])"><a id="mro"></a><a id="mro::get_linear_isa-classname---type"></a>mro::get_linear_isa($classname[, $type])</h2>
+
+<p>Returns an arrayref which is the linearized &quot;ISA&quot; of the given class. Uses whichever MRO is currently in effect for that class by default, or the given MRO (either <code>c3</code> or <code>dfs</code> if specified as <code>$type</code>).</p>
+
+<p>The linearized ISA of a class is a single ordered list of all of the classes that would be visited in the process of resolving a method on the given class, starting with itself. It does not include any duplicate entries.</p>
+
+<p>Note that <code>UNIVERSAL</code> (and any members of <code>UNIVERSAL</code>&#39;s MRO) are not part of the MRO of a class, even though all classes implicitly inherit methods from <code>UNIVERSAL</code> and its parents.</p>
+
+<h2 id="mro::import"><a id="mro1"></a>mro::import</h2>
+
+<p>This allows the <code>use mro &#39;dfs&#39;</code> and <code>use mro &#39;c3&#39;</code> syntaxes, providing you <code>use MRO::Compat</code> first. Please see the <a href="./MRO::Compat.html#USING-C3">&quot;USING C3&quot;</a> section for additional details.</p>
+
+<h2 id="mro::set_mro($classname,-$type)"><a id="mro2"></a><a id="mro::set_mro-classname---type"></a>mro::set_mro($classname, $type)</h2>
+
+<p>Sets the mro of <code>$classname</code> to one of the types <code>dfs</code> or <code>c3</code>. Please see the <a href="./MRO::Compat.html#USING-C3">&quot;USING C3&quot;</a> section for additional details.</p>
+
+<h2 id="mro::get_mro($classname)"><a id="mro3"></a><a id="mro::get_mro-classname"></a>mro::get_mro($classname)</h2>
+
+<p>Returns the MRO of the given class (either <code>c3</code> or <code>dfs</code>).</p>
+
+<p>It considers any Class::C3-using class to have C3 MRO even before <a href="https://metacpan.org/pod/Class::C3::initialize()">Class::C3::initialize()</a> is called.</p>
+
+<h2 id="mro::get_isarev($classname)"><a id="mro4"></a><a id="mro::get_isarev-classname"></a>mro::get_isarev($classname)</h2>
+
+<p>Returns an arrayref of classes who are subclasses of the given classname. In other words, classes in whose @ISA hierarchy we appear, no matter how indirectly.</p>
+
+<p>This is much slower on pre-5.9.5 Perls with MRO::Compat than it is on 5.9.5+, as it has to search the entire package namespace.</p>
+
+<h2 id="mro::is_universal($classname)"><a id="mro5"></a><a id="mro::is_universal-classname"></a>mro::is_universal($classname)</h2>
+
+<p>Returns a boolean status indicating whether or not the given classname is either <code>UNIVERSAL</code> itself, or one of <code>UNIVERSAL</code>&#39;s parents by <code>@ISA</code> inheritance.</p>
+
+<p>Any class for which this function returns true is &quot;universal&quot; in the sense that all classes potentially inherit methods from it.</p>
+
+<h2 id="mro::invalidate_all_method_caches"><a id="mro6"></a>mro::invalidate_all_method_caches</h2>
+
+<p>Increments <code>PL_sub_generation</code>, which invalidates method caching in all packages.</p>
+
+<p>Please note that this is rarely necessary, unless you are dealing with a situation which is known to confuse Perl&#39;s method caching.</p>
+
+<h2 id="mro::method_changed_in($classname)"><a id="mro7"></a><a id="mro::method_changed_in-classname"></a>mro::method_changed_in($classname)</h2>
+
+<p>Invalidates the method cache of any classes dependent on the given class. In <a href="./MRO::Compat.html">MRO::Compat</a> on pre-5.9.5 Perls, this is an alias for <code>mro::invalidate_all_method_caches</code> above, as pre-5.9.5 Perls have no other way to do this. It will still enforce the requirement that you pass it a classname, for compatibility.</p>
+
+<p>Please note that this is rarely necessary, unless you are dealing with a situation which is known to confuse Perl&#39;s method caching.</p>
+
+<h2 id="mro::get_pkg_gen($classname)"><a id="mro8"></a><a id="mro::get_pkg_gen-classname"></a>mro::get_pkg_gen($classname)</h2>
+
+<p>Returns an integer which is incremented every time a local method of or the <code>@ISA</code> of the given package changes on Perl 5.9.5+. On earlier Perls with this <a href="./MRO::Compat.html">MRO::Compat</a> module, it will probably increment a lot more often than necessary.</p>
+
+<h1 id="USING-C3"><a id="USING"></a>USING C3</h1>
+
+<p>While this module makes the 5.9.5+ syntaxes <code>use mro &#39;c3&#39;</code> and <code>mro::set_mro(&quot;Foo&quot;, &#39;c3&#39;)</code> available on older Perls, it does so merely by passing off the work to <a href="./Class::C3.html">Class::C3</a>.</p>
+
+<p>It does not remove the need for you to call <code>Class::C3::initialize()</code>, <code>Class::C3::reinitialize()</code>, and/or <code>Class::C3::uninitialize()</code> at the appropriate times as documented in the <a href="./Class::C3.html">Class::C3</a> docs. These three functions are always provided by <a href="./MRO::Compat.html">MRO::Compat</a>, either via <a href="./Class::C3.html">Class::C3</a> itself on older Perls, or directly as no-ops on 5.9.5+.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Class::C3.html">Class::C3</a></p>
+
+<p><a href="https://metacpan.org/pod/mro">mro</a></p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Brandon L. Black, &lt;blblack@gmail.com&gt;</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>Copyright 2007-2008 Brandon L. Black &lt;blblack@gmail.com&gt;</p>
+
+<p>This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install MRO::Compat, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm MRO::Compat</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install MRO::Compat</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./MRO::Compat.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

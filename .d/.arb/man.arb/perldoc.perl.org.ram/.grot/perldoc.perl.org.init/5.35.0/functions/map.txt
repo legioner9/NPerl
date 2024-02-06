@@ -1,0 +1,80 @@
+=over
+
+=item map BLOCK LIST
+X<map>
+
+=item map EXPR,LIST
+
+Evaluates the BLOCK or EXPR for each element of LIST (locally setting
+L<C<$_>|perlvar/$_> to each element) and composes a list of the results of
+each such evaluation.  Each element of LIST may produce zero, one, or more
+elements in the generated list, so the number of elements in the generated
+list may differ from that in LIST.  In scalar context, returns the total
+number of elements so generated.  In list context, returns the generated list.
+
+    my @chars = map(chr, @numbers);
+
+translates a list of numbers to the corresponding characters.
+
+    my @squares = map { $_ * $_ } @numbers;
+
+translates a list of numbers to their squared values.
+
+    my @squares = map { $_ > 5 ? ($_ * $_) : () } @numbers;
+
+shows that number of returned elements can differ from the number of
+input elements.  To omit an element, return an empty list ().
+This could also be achieved by writing
+
+    my @squares = map { $_ * $_ } grep { $_ > 5 } @numbers;
+
+which makes the intention more clear.
+
+Map always returns a list, which can be
+assigned to a hash such that the elements
+become key/value pairs.  See L<perldata> for more details.
+
+    my %hash = map { get_a_key_for($_) => $_ } @array;
+
+is just a funny way to write
+
+    my %hash;
+    foreach (@array) {
+        $hash{get_a_key_for($_)} = $_;
+    }
+
+Note that L<C<$_>|perlvar/$_> is an alias to the list value, so it can
+be used to modify the elements of the LIST.  While this is useful and
+supported, it can cause bizarre results if the elements of LIST are not
+variables.  Using a regular C<foreach> loop for this purpose would be
+clearer in most cases.  See also L<C<grep>|/grep BLOCK LIST> for a
+list composed of those items of the original list for which the BLOCK
+or EXPR evaluates to true.
+
+C<{> starts both hash references and blocks, so C<map { ...> could be either
+the start of map BLOCK LIST or map EXPR, LIST.  Because Perl doesn't look
+ahead for the closing C<}> it has to take a guess at which it's dealing with
+based on what it finds just after the
+C<{>.  Usually it gets it right, but if it
+doesn't it won't realize something is wrong until it gets to the C<}> and
+encounters the missing (or unexpected) comma.  The syntax error will be
+reported close to the C<}>, but you'll need to change something near the C<{>
+such as using a unary C<+> or semicolon to give Perl some help:
+
+ my %hash = map {  "\L$_" => 1  } @array # perl guesses EXPR. wrong
+ my %hash = map { +"\L$_" => 1  } @array # perl guesses BLOCK. right
+ my %hash = map {; "\L$_" => 1  } @array # this also works
+ my %hash = map { ("\L$_" => 1) } @array # as does this
+ my %hash = map {  lc($_) => 1  } @array # and this.
+ my %hash = map +( lc($_) => 1 ), @array # this is EXPR and works!
+
+ my %hash = map  ( lc($_), 1 ),   @array # evaluates to (1, @array)
+
+or to force an anon hash constructor use C<+{>:
+
+    my @hashes = map +{ lc($_) => 1 }, @array # EXPR, so needs
+                                              # comma at end
+
+to get a list of anonymous hashes each with only one entry apiece.
+
+=back

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ExtUtils::MM_VMS - methods to override UN*X behaviour in ExtUtils::MakeMaker - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/ExtUtils::MM_VMS">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./ExtUtils::MM_VMS.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/ExtUtils::MM_VMS">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/ExtUtils::MM_VMS">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/ExtUtils::MM_VMS">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/ExtUtils::MM_VMS">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/ExtUtils::MM_VMS">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/ExtUtils::MM_VMS">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/ExtUtils::MM_VMS">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/ExtUtils::MM_VMS">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/ExtUtils::MM_VMS">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/ExtUtils::MM_VMS">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/ExtUtils::MM_VMS">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/ExtUtils::MM_VMS">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/ExtUtils::MM_VMS">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/ExtUtils::MM_VMS">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/ExtUtils::MM_VMS">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/ExtUtils::MM_VMS">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/ExtUtils::MM_VMS">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/ExtUtils::MM_VMS">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/ExtUtils::MM_VMS">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/ExtUtils::MM_VMS">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/ExtUtils::MM_VMS">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/ExtUtils::MM_VMS">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/ExtUtils::MM_VMS">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/ExtUtils::MM_VMS">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/ExtUtils::MM_VMS">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/ExtUtils::MM_VMS">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/ExtUtils::MM_VMS">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/ExtUtils::MM_VMS">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/ExtUtils::MM_VMS">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/ExtUtils::MM_VMS">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/ExtUtils::MM_VMS">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/ExtUtils::MM_VMS">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/ExtUtils::MM_VMS">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/ExtUtils::MM_VMS">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/ExtUtils::MM_VMS">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/ExtUtils::MM_VMS">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/ExtUtils::MM_VMS">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/ExtUtils::MM_VMS">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/ExtUtils::MM_VMS">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/ExtUtils::MM_VMS">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/ExtUtils::MM_VMS">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/ExtUtils::MM_VMS">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/ExtUtils::MM_VMS">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/ExtUtils::MM_VMS">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/ExtUtils::MM_VMS">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/ExtUtils::MM_VMS">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/ExtUtils::MM_VMS">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/ExtUtils::MM_VMS">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/ExtUtils::MM_VMS">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/ExtUtils::MM_VMS">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/ExtUtils::MM_VMS">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/ExtUtils::MM_VMS">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/ExtUtils::MM_VMS">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/ExtUtils::MM_VMS">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/ExtUtils::MM_VMS">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/ExtUtils::MM_VMS">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/ExtUtils::MM_VMS">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/ExtUtils::MM_VMS">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/ExtUtils::MM_VMS">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/ExtUtils::MM_VMS">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/ExtUtils::MM_VMS">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/ExtUtils::MM_VMS">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/ExtUtils::MM_VMS">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/ExtUtils::MM_VMS">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/ExtUtils::MM_VMS">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/ExtUtils::MM_VMS">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/ExtUtils::MM_VMS">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/ExtUtils::MM_VMS">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/ExtUtils::MM_VMS">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/ExtUtils::MM_VMS">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/ExtUtils::MM_VMS">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/ExtUtils::MM_VMS">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/ExtUtils::MM_VMS">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/ExtUtils::MM_VMS">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/ExtUtils::MM_VMS">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/ExtUtils::MM_VMS">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/ExtUtils::MM_VMS">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/ExtUtils::MM_VMS">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/ExtUtils::MM_VMS">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/ExtUtils::MM_VMS">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./ExtUtils::MM_VMS.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/ExtUtils::MM_VMS">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/ExtUtils::MM_VMS">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/ExtUtils::MM_VMS">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/ExtUtils::MM_VMS">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/ExtUtils::MM_VMS">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/ExtUtils::MM_VMS">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/ExtUtils::MM_VMS">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/ExtUtils::MM_VMS">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/ExtUtils::MM_VMS">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/ExtUtils::MM_VMS">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/ExtUtils::MM_VMS">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/ExtUtils::MM_VMS">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/ExtUtils::MM_VMS">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/ExtUtils::MM_VMS">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/ExtUtils::MM_VMS">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/ExtUtils::MM_VMS">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/ExtUtils::MM_VMS">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/ExtUtils::MM_VMS">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/ExtUtils::MM_VMS">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/ExtUtils::MM_VMS">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/ExtUtils::MM_VMS">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/ExtUtils::MM_VMS">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/ExtUtils::MM_VMS">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/ExtUtils::MM_VMS">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/ExtUtils::MM_VMS">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/ExtUtils::MM_VMS">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/ExtUtils::MM_VMS">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/ExtUtils::MM_VMS">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/ExtUtils::MM_VMS">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/ExtUtils::MM_VMS">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/ExtUtils::MM_VMS">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/ExtUtils::MM_VMS">5.35.1</a>
+          <a class="dropdown-item active" href="./ExtUtils::MM_VMS.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./ExtUtils::MM_VMS.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./ExtUtils::MM_VMS.html">ExtUtils::MM_VMS</a>
+          <div id="more">
+            (<a href="./ExtUtils::MM_VMS.txt">source</a>,
+            <a href="https://metacpan.org/pod/ExtUtils::MM_VMS">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 7.62</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::MM_VMS.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::MM_VMS.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::MM_VMS.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::MM_VMS.html#Methods-always-loaded">Methods always loaded</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::MM_VMS.html#Methods">Methods</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::MM_VMS.html#AUTHOR">AUTHOR</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./ExtUtils::MM_VMS.html#NAME">#</a>NAME</h1>
+
+<p>ExtUtils::MM_VMS - methods to override UN*X behaviour in ExtUtils::MakeMaker</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./ExtUtils::MM_VMS.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code class="plaintext">Do not use this directly.
+Instead, use ExtUtils::MM and it will figure out which MM_*
+class to use for you.</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./ExtUtils::MM_VMS.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>See <a href="./ExtUtils::MM_Unix.html">ExtUtils::MM_Unix</a> for a documentation of the methods provided there. This package overrides the implementation of these methods, not the semantics.</p>
+
+<h2 id="Methods-always-loaded"><a class="permalink" href="./ExtUtils::MM_VMS.html#Methods-always-loaded">#</a><a id="Methods1"></a>Methods always loaded</h2>
+
+<dl>
+
+<dt id="wraplist"><a class="permalink" href="./ExtUtils::MM_VMS.html#wraplist">#</a>wraplist</dt>
+<dd>
+
+<p>Converts a list into a string wrapped at approximately 80 columns.</p>
+
+</dd>
+</dl>
+
+<h2 id="Methods"><a class="permalink" href="./ExtUtils::MM_VMS.html#Methods">#</a>Methods</h2>
+
+<p>Those methods which override default MM_Unix methods are marked &quot;(override)&quot;, while methods unique to MM_VMS are marked &quot;(specific)&quot;. For overridden methods, documentation is limited to an explanation of why this method overrides the MM_Unix method; see the <a href="./ExtUtils::MM_Unix.html">ExtUtils::MM_Unix</a> documentation for more details.</p>
+
+<dl>
+
+<dt id="guess_name-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#guess_name-(override)">#</a><a id="guess_name"></a><a id="guess_name-override"></a>guess_name (override)</dt>
+<dd>
+
+<p>Try to determine name of extension being built. We begin with the name of the current directory. Since VMS filenames are case-insensitive, however, we look for a <i>.pm</i> file whose name matches that of the current directory (presumably the &#39;main&#39; <i>.pm</i> file for this extension), and try to find a <code>package</code> statement from which to obtain the Mixed::Case package name.</p>
+
+</dd>
+<dt id="find_perl-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#find_perl-(override)">#</a><a id="find_perl"></a><a id="find_perl-override"></a>find_perl (override)</dt>
+<dd>
+
+<p>Use VMS file specification syntax and CLI commands to find and invoke Perl images.</p>
+
+</dd>
+<dt id="_fixin_replace_shebang-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#_fixin_replace_shebang-(override)">#</a><a id="_fixin_replace_shebang"></a><a id="fixin_replace_shebang-override"></a>_fixin_replace_shebang (override)</dt>
+<dd>
+
+<p>Helper routine for <a href="./ExtUtils::MM_Unix.html#fixin">MM-&gt;fixin()</a>, overridden because there&#39;s no such thing as an actual shebang line that will be interpreted by the shell, so we just prepend $Config{startperl} and preserve the shebang line argument for any switches it may contain.</p>
+
+</dd>
+<dt id="maybe_command-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#maybe_command-(override)">#</a><a id="maybe_command"></a><a id="maybe_command-override"></a>maybe_command (override)</dt>
+<dd>
+
+<p>Follows VMS naming conventions for executable files. If the name passed in doesn&#39;t exactly match an executable file, appends <i>.Exe</i> (or equivalent) to check for executable image, and <i>.Com</i> to check for DCL procedure. If this fails, checks directories in DCL$PATH and finally <i>Sys$System:</i> for an executable file having the name specified, with or without the <i>.Exe</i>-equivalent suffix.</p>
+
+</dd>
+<dt id="pasthru-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#pasthru-(override)">#</a><a id="pasthru"></a><a id="pasthru-override"></a>pasthru (override)</dt>
+<dd>
+
+<p>The list of macro definitions to be passed through must be specified using the /MACRO qualifier and must not add another /DEFINE qualifier. We prepend our own comma here to the contents of $(PASTHRU_DEFINE) because it is often empty and a comma always present in CCFLAGS would generate a missing qualifier value error.</p>
+
+</dd>
+<dt id="pm_to_blib-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#pm_to_blib-(override)">#</a><a id="pm_to_blib"></a><a id="pm_to_blib-override"></a>pm_to_blib (override)</dt>
+<dd>
+
+<p>VMS wants a dot in every file so we can&#39;t have one called &#39;pm_to_blib&#39;, it becomes &#39;pm_to_blib.&#39; and MMS/K isn&#39;t smart enough to know that when you have a target called &#39;pm_to_blib&#39; it should look for &#39;pm_to_blib.&#39;.</p>
+
+<p>So in VMS its pm_to_blib.ts.</p>
+
+</dd>
+<dt id="perl_script-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#perl_script-(override)">#</a><a id="perl_script"></a><a id="perl_script-override"></a>perl_script (override)</dt>
+<dd>
+
+<p>If name passed in doesn&#39;t specify a readable file, appends <i>.com</i> or <i>.pl</i> and tries again, since it&#39;s customary to have file types on all files under VMS.</p>
+
+</dd>
+<dt id="replace_manpage_separator"><a class="permalink" href="./ExtUtils::MM_VMS.html#replace_manpage_separator">#</a>replace_manpage_separator</dt>
+<dd>
+
+<p>Use as separator a character which is legal in a VMS-syntax file name.</p>
+
+</dd>
+<dt id="init_DEST"><a class="permalink" href="./ExtUtils::MM_VMS.html#init_DEST">#</a>init_DEST</dt>
+<dd>
+
+<p>(override) Because of the difficulty concatenating VMS filepaths we must pre-expand the DEST* variables.</p>
+
+</dd>
+<dt id="init_DIRFILESEP"><a class="permalink" href="./ExtUtils::MM_VMS.html#init_DIRFILESEP">#</a>init_DIRFILESEP</dt>
+<dd>
+
+<p>No separator between a directory path and a filename on VMS.</p>
+
+</dd>
+<dt id="init_main-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#init_main-(override)">#</a><a id="init_main"></a><a id="init_main-override"></a>init_main (override)</dt>
+<dd>
+
+</dd>
+<dt id="init_tools-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#init_tools-(override)">#</a><a id="init_tools"></a><a id="init_tools-override"></a>init_tools (override)</dt>
+<dd>
+
+<p>Provide VMS-specific forms of various utility commands.</p>
+
+<p>Sets DEV_NULL to nothing because I don&#39;t know how to do it on VMS.</p>
+
+<p>Changes EQUALIZE_TIMESTAMP to set revision date of target file to one second later than source file, since MMK interprets precisely equal revision dates for a source and target file as a sign that the target needs to be updated.</p>
+
+</dd>
+<dt id="init_platform-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#init_platform-(override)">#</a><a id="init_platform"></a><a id="init_platform-override"></a>init_platform (override)</dt>
+<dd>
+
+<p>Add PERL_VMS, MM_VMS_REVISION and MM_VMS_VERSION.</p>
+
+<p>MM_VMS_REVISION is for backwards compatibility before MM_VMS had a $VERSION.</p>
+
+</dd>
+<dt id="platform_constants"><a class="permalink" href="./ExtUtils::MM_VMS.html#platform_constants">#</a>platform_constants</dt>
+<dd>
+
+</dd>
+<dt id="init_VERSION-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#init_VERSION-(override)">#</a><a id="init_VERSION"></a><a id="init_VERSION-override"></a>init_VERSION (override)</dt>
+<dd>
+
+<p>Override the *DEFINE_VERSION macros with VMS semantics. Translate the MAKEMAKER filepath to VMS style.</p>
+
+</dd>
+<dt id="constants-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#constants-(override)">#</a><a id="constants"></a><a id="constants-override"></a>constants (override)</dt>
+<dd>
+
+<p>Fixes up numerous file and directory macros to insure VMS syntax regardless of input syntax. Also makes lists of files comma-separated.</p>
+
+</dd>
+<dt id="special_targets"><a class="permalink" href="./ExtUtils::MM_VMS.html#special_targets">#</a>special_targets</dt>
+<dd>
+
+<p>Clear the default .SUFFIXES and put in our own list.</p>
+
+</dd>
+<dt id="cflags-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#cflags-(override)">#</a><a id="cflags"></a><a id="cflags-override"></a>cflags (override)</dt>
+<dd>
+
+<p>Bypass shell script and produce qualifiers for CC directly (but warn user if a shell script for this extension exists). Fold multiple /Defines into one, since some C compilers pay attention to only one instance of this qualifier on the command line.</p>
+
+</dd>
+<dt id="const_cccmd-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#const_cccmd-(override)">#</a><a id="const_cccmd"></a><a id="const_cccmd-override"></a>const_cccmd (override)</dt>
+<dd>
+
+<p>Adds directives to point C preprocessor to the right place when handling #include &lt;sys/foo.h&gt; directives. Also constructs CC command line a bit differently than MM_Unix method.</p>
+
+</dd>
+<dt id="tools_other-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#tools_other-(override)">#</a><a id="tools_other"></a><a id="tools_other-override"></a>tools_other (override)</dt>
+<dd>
+
+<p>Throw in some dubious extra macros for Makefile args.</p>
+
+<p>Also keep around the old $(SAY) macro in case somebody&#39;s using it.</p>
+
+</dd>
+<dt id="init_dist-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#init_dist-(override)">#</a><a id="init_dist"></a><a id="init_dist-override"></a>init_dist (override)</dt>
+<dd>
+
+<p>VMSish defaults for some values.</p>
+
+<pre><code class="plaintext">macro         description                     default
+
+ZIPFLAGS      flags to pass to ZIP            -Vu
+
+COMPRESS      compression command to          gzip
+              use for tarfiles
+SUFFIX        suffix to put on                -gz
+              compressed files
+
+SHAR          shar command to use             vms_share
+
+DIST_DEFAULT  default target to use to        tardist
+              create a distribution
+
+DISTVNAME     Use VERSION_SYM instead of      $(DISTNAME)-$(VERSION_SYM)
+              VERSION for the name</code></pre>
+
+</dd>
+<dt id="c_o-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#c_o-(override)">#</a><a id="c_o"></a><a id="c_o-override"></a>c_o (override)</dt>
+<dd>
+
+<p>Use VMS syntax on command line. In particular, $(DEFINE) and $(PERL_INC) have been pulled into $(CCCMD). Also use MM[SK] macros.</p>
+
+</dd>
+<dt id="xs_c-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#xs_c-(override)">#</a><a id="xs_c"></a><a id="xs_c-override"></a>xs_c (override)</dt>
+<dd>
+
+<p>Use MM[SK] macros.</p>
+
+</dd>
+<dt id="xs_o-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#xs_o-(override)">#</a><a id="xs_o"></a><a id="xs_o-override"></a>xs_o (override)</dt>
+<dd>
+
+<p>Use MM[SK] macros, and VMS command line for C compiler.</p>
+
+</dd>
+<dt id="_xsbuild_replace_macro-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#_xsbuild_replace_macro-(override)">#</a><a id="_xsbuild_replace_macro"></a><a id="xsbuild_replace_macro-override"></a>_xsbuild_replace_macro (override)</dt>
+<dd>
+
+<p>There is no simple replacement possible since a qualifier and all its subqualifiers must be considered together, so we use our own utility routine for the replacement.</p>
+
+</dd>
+<dt id="_xsbuild_value-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#_xsbuild_value-(override)">#</a><a id="_xsbuild_value"></a><a id="xsbuild_value-override"></a>_xsbuild_value (override)</dt>
+<dd>
+
+<p>Convert the extension spec to Unix format, as that&#39;s what will match what&#39;s in the XSBUILD data structure.</p>
+
+</dd>
+<dt id="dlsyms-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#dlsyms-(override)">#</a><a id="dlsyms"></a><a id="dlsyms-override"></a>dlsyms (override)</dt>
+<dd>
+
+<p>Create VMS linker options files specifying universal symbols for this extension&#39;s shareable image(s), and listing other shareable images or libraries to which it should be linked.</p>
+
+</dd>
+<dt id="xs_obj_opt"><a class="permalink" href="./ExtUtils::MM_VMS.html#xs_obj_opt">#</a>xs_obj_opt</dt>
+<dd>
+
+<p>Override to fixup -o flags.</p>
+
+</dd>
+<dt id="dynamic_lib-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#dynamic_lib-(override)">#</a><a id="dynamic_lib"></a><a id="dynamic_lib-override"></a>dynamic_lib (override)</dt>
+<dd>
+
+<p>Use VMS Link command.</p>
+
+</dd>
+<dt id="xs_make_static_lib-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#xs_make_static_lib-(override)">#</a><a id="xs_make_static_lib"></a><a id="xs_make_static_lib-override"></a>xs_make_static_lib (override)</dt>
+<dd>
+
+<p>Use VMS commands to manipulate object library.</p>
+
+</dd>
+<dt id="static_lib_pure_cmd-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#static_lib_pure_cmd-(override)">#</a><a id="static_lib_pure_cmd"></a><a id="static_lib_pure_cmd-override"></a>static_lib_pure_cmd (override)</dt>
+<dd>
+
+<p>Use VMS commands to manipulate object library.</p>
+
+</dd>
+<dt id="xs_static_lib_is_xs"><a class="permalink" href="./ExtUtils::MM_VMS.html#xs_static_lib_is_xs">#</a>xs_static_lib_is_xs</dt>
+<dd>
+
+</dd>
+<dt id="extra_clean_files"><a class="permalink" href="./ExtUtils::MM_VMS.html#extra_clean_files">#</a>extra_clean_files</dt>
+<dd>
+
+<p>Clean up some OS specific files. Plus the temp file used to shorten a lot of commands. And the name mangler database.</p>
+
+</dd>
+<dt id="zipfile_target"><a class="permalink" href="./ExtUtils::MM_VMS.html#zipfile_target">#</a>zipfile_target</dt>
+<dd>
+
+</dd>
+<dt id="tarfile_target"><a class="permalink" href="./ExtUtils::MM_VMS.html#tarfile_target">#</a>tarfile_target</dt>
+<dd>
+
+</dd>
+<dt id="shdist_target"><a class="permalink" href="./ExtUtils::MM_VMS.html#shdist_target">#</a>shdist_target</dt>
+<dd>
+
+<p>Syntax for invoking shar, tar and zip differs from that for Unix.</p>
+
+</dd>
+<dt id="install-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#install-(override)">#</a><a id="install"></a><a id="install-override"></a>install (override)</dt>
+<dd>
+
+<p>Work around DCL&#39;s 255 character limit several times,and use VMS-style command line quoting in a few cases.</p>
+
+</dd>
+<dt id="perldepend-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#perldepend-(override)">#</a><a id="perldepend"></a><a id="perldepend-override"></a>perldepend (override)</dt>
+<dd>
+
+<p>Use VMS-style syntax for files; it&#39;s cheaper to just do it directly here than to have the <a href="./ExtUtils::MM_Unix.html">MM_Unix</a> method call <code>catfile</code> repeatedly. Also, if we have to rebuild Config.pm, use MM[SK] to do it.</p>
+
+</dd>
+<dt id="makeaperl-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#makeaperl-(override)">#</a><a id="makeaperl"></a><a id="makeaperl-override"></a>makeaperl (override)</dt>
+<dd>
+
+<p>Undertake to build a new set of Perl images using VMS commands. Since VMS does dynamic loading, it&#39;s not necessary to statically link each extension into the Perl image, so this isn&#39;t the normal build path. Consequently, it hasn&#39;t really been tested, and may well be incomplete.</p>
+
+</dd>
+<dt id="maketext_filter-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#maketext_filter-(override)">#</a><a id="maketext_filter"></a><a id="maketext_filter-override"></a>maketext_filter (override)</dt>
+<dd>
+
+<p>Ensure that colons marking targets are preceded by space, in order to distinguish the target delimiter from a colon appearing as part of a filespec.</p>
+
+</dd>
+<dt id="prefixify-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#prefixify-(override)">#</a><a id="prefixify"></a><a id="prefixify-override"></a>prefixify (override)</dt>
+<dd>
+
+<p>prefixifying on VMS is simple. Each should simply be:</p>
+
+<pre><code class="plaintext">perl_root:[some.dir]</code></pre>
+
+<p>which can just be converted to:</p>
+
+<pre><code class="plaintext">volume:[your.prefix.some.dir]</code></pre>
+
+<p>otherwise you get the default layout.</p>
+
+<p>In effect, your search prefix is ignored and $Config{vms_prefix} is used instead.</p>
+
+</dd>
+<dt id="cd"><a class="permalink" href="./ExtUtils::MM_VMS.html#cd">#</a>cd</dt>
+<dd>
+
+</dd>
+<dt id="oneliner"><a class="permalink" href="./ExtUtils::MM_VMS.html#oneliner">#</a>oneliner</dt>
+<dd>
+
+</dd>
+<dt id="echo"><a class="permalink" href="./ExtUtils::MM_VMS.html#echo">#</a><b>echo</b></dt>
+<dd>
+
+<p>perl trips up on &quot;&lt;foo&gt;&quot; thinking it&#39;s an input redirect. So we use the native Write command instead. Besides, it&#39;s faster.</p>
+
+</dd>
+<dt id="quote_literal"><a class="permalink" href="./ExtUtils::MM_VMS.html#quote_literal">#</a>quote_literal</dt>
+<dd>
+
+</dd>
+<dt id="escape_dollarsigns"><a class="permalink" href="./ExtUtils::MM_VMS.html#escape_dollarsigns">#</a>escape_dollarsigns</dt>
+<dd>
+
+<p>Quote, don&#39;t escape.</p>
+
+</dd>
+<dt id="escape_all_dollarsigns"><a class="permalink" href="./ExtUtils::MM_VMS.html#escape_all_dollarsigns">#</a>escape_all_dollarsigns</dt>
+<dd>
+
+<p>Quote, don&#39;t escape.</p>
+
+</dd>
+<dt id="escape_newlines"><a class="permalink" href="./ExtUtils::MM_VMS.html#escape_newlines">#</a>escape_newlines</dt>
+<dd>
+
+</dd>
+<dt id="max_exec_len"><a class="permalink" href="./ExtUtils::MM_VMS.html#max_exec_len">#</a>max_exec_len</dt>
+<dd>
+
+<p>256 characters.</p>
+
+</dd>
+<dt id="init_linker"><a class="permalink" href="./ExtUtils::MM_VMS.html#init_linker">#</a>init_linker</dt>
+<dd>
+
+</dd>
+<dt id="catdir-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#catdir-(override)">#</a><a id="catdir"></a><a id="catdir-override"></a>catdir (override)</dt>
+<dd>
+
+</dd>
+<dt id="catfile-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#catfile-(override)">#</a><a id="catfile"></a><a id="catfile-override"></a>catfile (override)</dt>
+<dd>
+
+<p>Eliminate the macros in the output to the MMS/MMK file.</p>
+
+<p>(<a href="./File::Spec::VMS.html">File::Spec::VMS</a> used to do this for us, but it&#39;s being removed)</p>
+
+</dd>
+<dt id="eliminate_macros"><a class="permalink" href="./ExtUtils::MM_VMS.html#eliminate_macros">#</a>eliminate_macros</dt>
+<dd>
+
+<p>Expands MM[KS]/Make macros in a text string, using the contents of identically named elements of <code>%$self</code>, and returns the result as a file specification in Unix syntax.</p>
+
+<p>NOTE: This is the canonical version of the method. The version in <a href="./File::Spec::VMS.html">File::Spec::VMS</a> is deprecated.</p>
+
+</dd>
+<dt id="fixpath"><a class="permalink" href="./ExtUtils::MM_VMS.html#fixpath">#</a>fixpath</dt>
+<dd>
+
+<pre><code>my $path = $mm-&gt;fixpath($path);
+my $path = $mm-&gt;fixpath($path, $is_dir);</code></pre>
+
+<p>Catchall routine to clean up problem MM[SK]/Make macros. Expands macros in any directory specification, in order to avoid juxtaposing two VMS-syntax directories when MM[SK] is run. Also expands expressions which are all macro, so that we can tell how long the expansion is, and avoid overrunning DCL&#39;s command buffer when MM[KS] is running.</p>
+
+<p>fixpath() checks to see whether the result matches the name of a directory in the current default directory and returns a directory or file specification accordingly. <code>$is_dir</code> can be set to true to force fixpath() to consider the path to be a directory or false to force it to be a file.</p>
+
+<p>NOTE: This is the canonical version of the method. The version in <a href="./File::Spec::VMS.html">File::Spec::VMS</a> is deprecated.</p>
+
+</dd>
+<dt id="os_flavor"><a class="permalink" href="./ExtUtils::MM_VMS.html#os_flavor">#</a>os_flavor</dt>
+<dd>
+
+<p>VMS is VMS.</p>
+
+</dd>
+<dt id="is_make_type-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#is_make_type-(override)">#</a><a id="is_make_type"></a><a id="is_make_type-override"></a>is_make_type (override)</dt>
+<dd>
+
+<p>None of the make types being checked for is viable on VMS, plus our $self-&gt;{MAKE} is an unexpanded (and unexpandable) macro whose value is known only to the make utility itself.</p>
+
+</dd>
+<dt id="make_type-(override)"><a class="permalink" href="./ExtUtils::MM_VMS.html#make_type-(override)">#</a><a id="make_type"></a><a id="make_type-override"></a>make_type (override)</dt>
+<dd>
+
+<p>Returns a suitable string describing the type of makefile being written.</p>
+
+</dd>
+</dl>
+
+<h1 id="AUTHOR"><a class="permalink" href="./ExtUtils::MM_VMS.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Original author Charles Bailey <i>bailey@newman.upenn.edu</i></p>
+
+<p>Maintained by Michael G Schwern <i>schwern@pobox.com</i></p>
+
+<p>See <a href="./ExtUtils::MakeMaker.html">ExtUtils::MakeMaker</a> for patching and contact information.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Lexical::Var - static variables without namespace pollution - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Lexical-Var - MetaCPAN" href="https://metacpan.org/dist/Lexical-Var/releases.rss" />
+        <link rel="canonical" href="./Lexical::Var.html" />
+        <meta name="description" content="static variables without namespace pollution" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Lexical::Var" />
+<meta name="twitter:title"       content="Lexical::Var" />
+<meta name="twitter:description" content="static variables without namespace pollution" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Lexical::Var.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Lexical-Var was released.">
+      <span class="relatize">24 Mar 2023 10:11:08 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Lexical-Var">Lexical-Var</a>
+  </li>
+  <li>
+    Module version: 0.010
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Lexical-Var/source/lib/Lexical/Var.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Lexical-Var/source/lib/Lexical/Var.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Lexical-Var/source/lib/Lexical">Browse</a>
+    (<a href="https://metacpan.org/dist/Lexical-Var/source/lib/Lexical?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Lexical-Var/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Lexical-Var/contribute">How to Contribute</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Lexical-Var">Issues</a>
+      (1)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Lexical-Var+0.010" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/L/Lexical-Var.html?oncpan=1&amp;distmat=1&amp;version=0.010&amp;grade=2" style="color: #090">831</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/L/Lexical-Var.html?oncpan=1&amp;distmat=1&amp;version=0.010&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/L/Lexical-Var.html?oncpan=1&amp;distmat=1&amp;version=0.010&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/ZEFRAM/Lexical-Var-0.010">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Lexical-Var who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Lexical-Var-0.010/index.html">% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.6.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Lexical-Var/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/Lexical-Var-0.010.tar.gz">
+      Download (<span itemprop="fileSize">39.8KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FZEFRAM%2FLexical-Var-0.010%2Flib%2FLexical%2FVar.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Lexical-Var/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Lexical-Var/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Lexical-Var">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Lexical-Var">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Lexical/Var.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="ZEFRAM/Lexical-Var-0.010"
+>0.010
+  (ZEFRAM on 2023-03-24)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.009"
+>0.009
+  (ZEFRAM on 2013-08-25)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.008"
+>0.008
+  (ZEFRAM on 2013-08-17)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.007"
+>0.007
+  (ZEFRAM on 2012-02-04)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.006"
+>0.006
+  (ZEFRAM on 2011-07-27)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.005"
+>0.005
+  (ZEFRAM on 2011-02-27)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.004"
+>0.004
+  (ZEFRAM on 2010-04-11)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.003"
+>0.003
+  (ZEFRAM on 2010-01-11)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.002"
+>0.002
+  (ZEFRAM on 2009-10-26)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.001"
+>0.001
+  (ZEFRAM on 2009-09-30)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.000"
+>0.000
+  (ZEFRAM on 2009-09-23)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/ZEFRAM/Lexical-Var-0.010/diff/' + encodeURIComponent(this.value) + '/lib/Lexical/Var.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="ZEFRAM/Lexical-Var-0.010"
+>0.010
+  (ZEFRAM on 2023-03-24)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.009"
+>0.009
+  (ZEFRAM on 2013-08-25)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.008"
+>0.008
+  (ZEFRAM on 2013-08-17)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.007"
+>0.007
+  (ZEFRAM on 2012-02-04)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.006"
+>0.006
+  (ZEFRAM on 2011-07-27)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.005"
+>0.005
+  (ZEFRAM on 2011-02-27)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.004"
+>0.004
+  (ZEFRAM on 2010-04-11)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.003"
+>0.003
+  (ZEFRAM on 2010-01-11)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.002"
+>0.002
+  (ZEFRAM on 2009-10-26)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.001"
+>0.001
+  (ZEFRAM on 2009-09-30)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.000"
+>0.000
+  (ZEFRAM on 2009-09-23)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Lexical::SealRequireHints" title="Lexical::SealRequireHints" class="ellipsis">Lexical::SealRequireHints</a></li>
+  <li><a href="https://metacpan.org/pod/XSLoader" title="XSLoader" class="ellipsis">XSLoader</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/warnings" title="warnings" class="ellipsis">warnings</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Lexical::Var/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Lexical%3A%3AVar">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Lexical-Var">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/ZEFRAM/Lexical-Var-0.010/view/lib/Lexical/Var.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Lexical::Var.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/HANNIBAL"><img src="https://www.gravatar.com/avatar/325c153e70a65543b9496e0ad7cdca29?d=identicon&amp;s=20" title="HANNIBAL" alt="HANNIBAL"></a>
+<a class="display-all" href="https://metacpan.org/author/ARISTOTLE"><img src="https://www.gravatar.com/avatar/81da52fa1b6754867e9056c58afab74d?d=identicon&amp;s=20" title="ARISTOTLE" alt="ARISTOTLE"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Lexical-Var/plussers">2 PAUSE users</a>
+</div>
+<div>
+    1 non-PAUSE user
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/ZEFRAM" class="author-name">Andrew Main (Zefram)</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Lexical/Var.pm&#39;" class="">
+<option
+  selected
+  value="ZEFRAM/Lexical-Var-0.010"
+>0.010
+  (ZEFRAM on 2023-03-24)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.009"
+>0.009
+  (ZEFRAM on 2013-08-25)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.008"
+>0.008
+  (ZEFRAM on 2013-08-17)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.007"
+>0.007
+  (ZEFRAM on 2012-02-04)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.006"
+>0.006
+  (ZEFRAM on 2011-07-27)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.005"
+>0.005
+  (ZEFRAM on 2011-02-27)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.004"
+>0.004
+  (ZEFRAM on 2010-04-11)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.003"
+>0.003
+  (ZEFRAM on 2010-01-11)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.002"
+>0.002
+  (ZEFRAM on 2009-10-26)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.001"
+>0.001
+  (ZEFRAM on 2009-09-30)</option>
+<option
+  
+  value="ZEFRAM/Lexical-Var-0.000"
+>0.000
+  (ZEFRAM on 2009-09-23)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Lexical-Var">Lexical-Var-0.010</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage two &#10;
+          • 6 direct dependents &#10;          • 10 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Lexical-Var-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Lexical-Var-0.010">
+    <input type="hidden" name="author" value="ZEFRAM">
+    <input type="hidden" name="distribution" value="Lexical-Var">
+    <button type="submit" class="favorite highlight"><span>3</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Lexical::Var.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>3</span> ++</a>
+</div>
+   / <span>Lexical::Var</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Lexical::Var.html#NAME">NAME</a></li>
+  <li><a href="./Lexical::Var.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Lexical::Var.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Lexical::Var.html#PACKAGE-METHODS">PACKAGE METHODS</a></li>
+  <li><a href="./Lexical::Var.html#BUGS">BUGS</a></li>
+  <li><a href="./Lexical::Var.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Lexical::Var.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Lexical::Var.html#COPYRIGHT">COPYRIGHT</a></li>
+  <li><a href="./Lexical::Var.html#LICENSE">LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Lexical::Var - static variables without namespace pollution</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    use Lexical::Var &#39;$foo&#39; =&gt; \$Remote::foo;
+    use Lexical::Var &#39;$const&#39; =&gt; \123;
+    use Lexical::Var &#39;@bar&#39; =&gt; [];
+    use Lexical::Var &#39;%baz&#39; =&gt; { a =&gt; 1, b =&gt; 2 };
+    use Lexical::Var &#39;&amp;quux&#39; =&gt; sub { $_[0] + 1 };
+    use Lexical::Var &#39;*wibble&#39; =&gt; Symbol::gensym();</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module implements lexical scoping of static variables and subroutines. Although it can be used directly, it is mainly intended to be infrastructure for modules that manage namespaces.</p>
+
+<p>This module influences the meaning of single-part variable names that appear directly in code, such as &quot;<code>$foo</code>&quot;. Normally, in the absence of any particular declaration, or under the effect of an <code>our</code> declaration, this would refer to the scalar variable of that name located in the current package. A <code>Lexical::Var</code> declaration can change this to refer to any particular scalar, bypassing the package system entirely. A variable name that includes an explicit package part, such as &quot;<code>$main::foo</code>&quot;, always refers to the variable in the specified package, and is unaffected by this module. A symbolic reference through a string value, such as &quot;<code>${&#39;foo&#39;}</code>&quot;, also looks in the package system, and so is unaffected by this module.</p>
+
+<p>The types of name that can be influenced are scalar (&quot;<code>$foo</code>&quot;), array (&quot;<code>@foo</code>&quot;), hash (&quot;<code>%foo</code>&quot;), subroutine (&quot;<code>&amp;foo</code>&quot;), and glob (&quot;<code>*foo</code>&quot;). A definition for any of these names also affects code that logically refers to the same entity, even when the name is spelled without its usual sigil. For example, any definition of &quot;<code>@foo</code>&quot; affects element references such as &quot;<code>$foo[0]</code>&quot;. Barewords in filehandle context actually refer to the glob variable. Bareword references to subroutines, such as &quot;<code>foo(123)</code>&quot;, only work on Perl 5.11.2 and later; on earlier Perls you must use the <code>&amp;</code> sigil, as in &quot;<code>&amp;foo(123)</code>&quot;.</p>
+
+<p>Where a scalar name is defined to refer to a constant (read-only) scalar, references to the constant through the lexical namespace can participate in compile-time constant folding. This can avoid the need to check configuration values (such as whether debugging is enabled) at runtime.</p>
+
+<p>A name definition supplied by this module takes effect from the end of the definition statement up to the end of the immediately enclosing block, except where it is shadowed within a nested block. This is the same lexical scoping that the <code>my</code>, <code>our</code>, and <code>state</code> keywords supply. Definitions from <a href="./Lexical::Var.html">Lexical::Var</a> and from <code>my</code>/<code>our</code>/<code>state</code> can shadow each other (except that <a href="./Lexical::Var.html">Lexical::Var</a> can&#39;t shadow a <code>my</code>/<code>our</code>/<code>state</code> subroutine prior to Perl 5.19.1). These lexical definitions propagate into string <code>eval</code>s, on Perl versions that support it (5.9.3 and later).</p>
+
+<p>This module only manages variables of static duration (the kind of duration that <code>our</code> and <code>state</code> variables have). To get a fresh variable for each invocation of a function, use <code>my</code>.</p>
+
+<h1 id="PACKAGE-METHODS"><a id="PACKAGE"></a>PACKAGE METHODS</h1>
+
+<p>These methods are meant to be invoked on the <code>Lexical::Var</code> package.</p>
+
+<dl>
+
+<dt id="Lexical::Var-&gt;import(NAME-=&gt;-REF,-...)"><a id="Lexical"></a><a id="Lexical::Var--import-NAME---REF"></a>Lexical::Var-&gt;import(NAME =&gt; REF, ...)</dt>
+<dd>
+
+<p>Sets up lexical variable declarations, in the lexical environment that is currently compiling. Each <i>NAME</i> must be a variable name (e.g., &quot;<b>$foo</b>&quot;) including sigil, and each <i>REF</i> must be a reference to a variable/value of the appropriate type. The name is lexically associated with the referenced variable/value.</p>
+
+<p><a href="https://metacpan.org/pod/Scalar::Construct">Scalar::Construct</a> can be helpful in generating appropriate <i>REF</i>s, especially to create constants. There are Perl core bugs to beware of around compile-time constants; see <a href="./Lexical::Var.html#BUGS">&quot;BUGS&quot;</a>.</p>
+
+</dd>
+<dt id="Lexical::Var-&gt;unimport(NAME-[=&gt;-REF],-...)"><a id="Lexical1"></a><a id="Lexical::Var--unimport-NAME---REF"></a>Lexical::Var-&gt;unimport(NAME [=&gt; REF], ...)</dt>
+<dd>
+
+<p>Sets up negative lexical variable declarations, in the lexical environment that is currently compiling. Each <i>NAME</i> must be a variable name (e.g., &quot;<b>$foo</b>&quot;) including sigil. If the name is given on its own, it is lexically dissociated from any value. Within the resulting scope, the variable name will not be recognised. If a <i>REF</i> (which must be a reference to a value of the appropriate type) is specified with a name, the name will be dissociated if and only if it is currently associated with that value.</p>
+
+</dd>
+</dl>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>Subroutine invocations without the <code>&amp;</code> sigil cannot be correctly processed on Perl versions earlier than 5.11.2. This is because the parser needs to look up the subroutine early, in order to let any prototype affect parsing, and it looks up the subroutine by a different mechanism than is used to generate the call op. (Some forms of sigilless call have other complications of a similar nature.) If an attempt is made to call a <a href="./Lexical::Var.html">Lexical::Var</a> lexical subroutine via a bareword on an older Perl, this module will probably still be able to intercept the call op, and will throw an exception to indicate that the parsing has gone wrong. However, in some cases compilation goes further wrong before this module can catch it, resulting in either a confusing parse error or (in rare situations) silent compilation to an incorrect op sequence. On Perl 5.11.2 and later, sigilless subroutine calls work correctly, except for an issue noted below.</p>
+
+<p>Subroutine calls that have neither sigil nor parentheses (around the argument list) are subject to an ambiguity with indirect object syntax. If the first argument expression begins with a bareword or a scalar variable reference then the Perl parser is liable to interpret the call as an indirect method call. Normally this syntax would be interpreted as a subroutine call if the subroutine exists, but the parser doesn&#39;t look at lexically-defined subroutines for this purpose. The call interpretation can be forced by prefixing the first argument expression with a <code>+</code>, or by wrapping the whole argument list in parentheses.</p>
+
+<p>In the earlier Perl versions that support <code>my</code>/<code>our</code>/<code>state</code> subroutines, starting from Perl 5.17.4, the mechanism for core lexical subroutines suffers a couple of bugs that mean that <a href="./Lexical::Var.html">Lexical::Var</a> can&#39;t shadow subroutines declared that way. This was fixed in Perl 5.19.1.</p>
+
+<p>On Perls built for threading (even if threading is not actually used), scalar constants that are defined by literals in the Perl source don&#39;t reliably maintain their object identity. What appear to be multiple references to a single object can end up behaving as references to multiple objects, in surprising ways. The multiple objects all initially have the correct value, but they can be writable even though the original object is a constant. See Perl bug reports [perl #109744] and [perl #109746]. This can affect objects that are placed in the lexical namespace, just as it can affect those in package namespaces or elsewhere. <code>Lexical::Var</code> avoids contributing to the problem itself, but certain ways of building the parameters to <code>Lexical::Var</code> can result in the object in the lexical namespace not being the one that was intended, or can damage the named object so that later referencing operations on it misbehave. <a href="https://metacpan.org/pod/Scalar::Construct">Scalar::Construct</a> can be used to avoid this problem.</p>
+
+<p>Bogus redefinition warnings occur in some cases when <code>our</code> declarations and <code>Lexical::Var</code> declarations shadow each other.</p>
+
+<p>Package hash entries get created for subroutine and glob names that are used, even though the subroutines and globs are not actually being stored or looked up in the package. This can occasionally result in a &quot;used only once&quot; warning failing to occur when it should.</p>
+
+<p>On Perls prior to 5.15.5, if this package&#39;s <code>import</code> or <code>unimport</code> method is called from inside a string <code>eval</code> inside a <code>BEGIN</code> block, it does not have proper access to the compiling environment, and will complain that it is being invoked outside compilation. Calling from the body of a <code>require</code>d or <code>do</code>ed file causes the same problem on the same Perl versions. Other kinds of indirection within a <code>BEGIN</code> block, such as calling via a normal function, do not cause this problem.</p>
+
+<p>When judging whether the <code>unimport</code> method should hide a subroutine, this module can&#39;t distinguish between a lexical subroutine established by this module and a <code>state</code> subroutine. This may change in the future.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/Attribute::Lexical">Attribute::Lexical</a>, <a href="https://metacpan.org/pod/Lexical::Import">Lexical::Import</a>, <a href="https://metacpan.org/pod/Lexical::Sub">Lexical::Sub</a>, <a href="https://metacpan.org/pod/Scalar::Construct">Scalar::Construct</a></p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Andrew Main (Zefram) &lt;zefram@fysh.org&gt;</p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright (C) 2009, 2010, 2011, 2012, 2013, 2023 Andrew Main (Zefram) &lt;zefram@fysh.org&gt;</p>
+
+<h1 id="LICENSE">LICENSE</h1>
+
+<p>This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Lexical::Var, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Lexical::Var</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Lexical::Var</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Lexical::Var.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

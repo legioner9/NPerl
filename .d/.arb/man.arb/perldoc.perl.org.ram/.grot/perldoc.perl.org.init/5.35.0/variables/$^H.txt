@@ -1,0 +1,53 @@
+=over
+
+=item $^H
+X<$^H>
+
+WARNING: This variable is strictly for
+internal use only.  Its availability,
+behavior, and contents are subject to change without notice.
+
+This variable contains compile-time hints for the Perl interpreter.  At the
+end of compilation of a BLOCK the value of this variable is restored to the
+value when the interpreter started to compile the BLOCK.
+
+When perl begins to parse any block construct that provides a lexical scope
+(e.g., eval body, required file, subroutine body, loop body, or conditional
+block), the existing value of C<$^H> is saved, but its value is left unchanged.
+When the compilation of the block is completed, it regains the saved value.
+Between the points where its value is saved and restored, code that
+executes within BEGIN blocks is free to change the value of C<$^H>.
+
+This behavior provides the semantic of lexical scoping, and is used in,
+for instance, the C<use strict> pragma.
+
+The contents should be an integer; different bits of it are used for
+different pragmatic flags.  Here's an example:
+
+    sub add_100 { $^H |= 0x100 }
+
+    sub foo {
+	BEGIN { add_100() }
+	bar->baz($boon);
+    }
+
+Consider what happens during execution of the BEGIN block.  At this point
+the BEGIN block has already been compiled, but the body of C<foo()> is still
+being compiled.  The new value of C<$^H>
+will therefore be visible only while
+the body of C<foo()> is being compiled.
+
+Substitution of C<BEGIN { add_100() }> block with:
+
+    BEGIN { require strict; strict->import('vars') }
+
+demonstrates how C<use strict 'vars'> is implemented.  Here's a conditional
+version of the same lexical pragma:
+
+    BEGIN {
+	require strict; strict->import('vars') if $condition
+    }
+
+This variable was added in Perl 5.003.
+
+=back

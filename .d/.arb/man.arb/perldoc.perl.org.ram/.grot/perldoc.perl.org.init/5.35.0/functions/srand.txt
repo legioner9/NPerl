@@ -1,0 +1,54 @@
+=over
+
+=item srand EXPR
+X<srand> X<seed> X<randseed>
+
+=item srand
+
+Sets and returns the random number seed for the L<C<rand>|/rand EXPR>
+operator.
+
+The point of the function is to "seed" the L<C<rand>|/rand EXPR>
+function so that L<C<rand>|/rand EXPR> can produce a different sequence
+each time you run your program.  When called with a parameter,
+L<C<srand>|/srand EXPR> uses that for the seed; otherwise it
+(semi-)randomly chooses a seed.  In either case, starting with Perl 5.14,
+it returns the seed.  To signal that your code will work I<only> on Perls
+of a recent vintage:
+
+    use 5.014;	# so srand returns the seed
+
+If L<C<srand>|/srand EXPR> is not called explicitly, it is called
+implicitly without a parameter at the first use of the
+L<C<rand>|/rand EXPR> operator.  However, there are a few situations
+where programs are likely to want to call L<C<srand>|/srand EXPR>.  One
+is for generating predictable results, generally for testing or
+debugging.  There, you use C<srand($seed)>, with the same C<$seed> each
+time.  Another case is that you may want to call L<C<srand>|/srand EXPR>
+after a L<C<fork>|/fork> to avoid child processes sharing the same seed
+value as the parent (and consequently each other).
+
+Do B<not> call C<srand()> (i.e., without an argument) more than once per
+process.  The internal state of the random number generator should
+contain more entropy than can be provided by any seed, so calling
+L<C<srand>|/srand EXPR> again actually I<loses> randomness.
+
+Most implementations of L<C<srand>|/srand EXPR> take an integer and will
+silently
+truncate decimal numbers.  This means C<srand(42)> will usually
+produce the same results as C<srand(42.1)>.  To be safe, always pass
+L<C<srand>|/srand EXPR> an integer.
+
+A typical use of the returned seed is for a test program which has too many
+combinations to test comprehensively in the time available to it each run.  It
+can test a random subset each time, and should there be a failure, log the seed
+used for that run so that it can later be used to reproduce the same results.
+
+B<L<C<rand>|/rand EXPR> is not cryptographically secure.  You should not rely
+on it in security-sensitive situations.>  As of this writing, a
+number of third-party CPAN modules offer random number generators
+intended by their authors to be cryptographically secure,
+including: L<Data::Entropy>, L<Crypt::Random>, L<Math::Random::Secure>,
+and L<Math::TrulyRandom>.
+
+=back

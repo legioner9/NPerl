@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Devel::REPL - A modern perl interactive shell - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Devel-REPL - MetaCPAN" href="https://metacpan.org/dist/Devel-REPL/releases.rss" />
+        <link rel="canonical" href="./Devel::REPL.html" />
+        <meta name="description" content="A modern perl interactive shell" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Devel::REPL" />
+<meta name="twitter:title"       content="Devel::REPL" />
+<meta name="twitter:description" content="A modern perl interactive shell" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Devel::REPL.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Devel-REPL was released.">
+      <span class="relatize">28 May 2022 03:34:49 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Devel-REPL">Devel-REPL</a>
+  </li>
+  <li>
+    Module version: 1.003029
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Devel-REPL/source/lib/Devel/REPL.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Devel-REPL/source/lib/Devel/REPL.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Devel-REPL/source/lib/Devel">Browse</a>
+    (<a href="https://metacpan.org/dist/Devel-REPL/source/lib/Devel?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Devel-REPL/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://github.com/p5sagit/Devel-REPL">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Devel-REPL/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/p5sagit/Devel-REPL">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Devel-REPL">Issues</a>
+      (31)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Devel-REPL+1.003029" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-REPL.html?oncpan=1&amp;distmat=1&amp;version=1.003029&amp;grade=2" style="color: #090">1284</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-REPL.html?oncpan=1&amp;distmat=1&amp;version=1.003029&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-REPL.html?oncpan=1&amp;distmat=1&amp;version=1.003029&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/ETHER/Devel-REPL-1.003029">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Devel-REPL who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 8
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Devel-REPL-1.003029/index.html">57.32% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.8.1
+    </li>
+    <li class="chat-banner">
+      <div><a rel="noopener nofollow" target="_blank" href="https://kiwiirc.com/nextclient/#irc://irc.perl.org/#devel-repl?nick=mc-guest-?">Chat with us!</a></div>
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Devel-REPL/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/E/ET/ETHER/Devel-REPL-1.003029.tar.gz">
+      Download (<span itemprop="fileSize">60.77KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FETHER%2FDevel-REPL-1.003029%2Flib%2FDevel%2FREPL.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-REPL/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-REPL/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Devel-REPL">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Devel-REPL">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Devel/REPL.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="ETHER/Devel-REPL-1.003029"
+>1.003029
+  (ETHER on 2022-05-28)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003028"
+>1.003028
+  (ETHER on 2016-02-16)</option>
+<option
+  
+  value="DOY/Devel-REPL-1.003012"
+>1.003012
+  (DOY on 2010-09-27)</option>
+<option
+  
+  value="FREW/Devel-REPL-1.003011"
+>1.003011
+  (FREW on 2010-06-15)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.003007"
+>1.003007
+  (MSTROUT on 2009-07-02)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.003001"
+>1.003001
+  (MSTROUT on 2009-01-08)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.002001"
+>1.002001
+  (MSTROUT on 2008-02-24)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/Devel-REPL-1.003027"
+>1.003027
+  (ETHER on 2015-08-16)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003026"
+>1.003026
+  (ETHER on 2014-07-16)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003025"
+>1.003025
+  (ETHER on 2013-09-29)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003024"
+>1.003024
+  (ETHER on 2013-09-25)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003023"
+>1.003023
+  (ETHER on 2013-09-12)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003022"
+>1.003022
+  (ETHER on 2013-09-10)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003021"
+>1.003021
+  (ETHER on 2013-09-09)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003020"
+>1.003020
+  (ETHER on 2013-07-08)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003019"
+>1.003019
+  (ETHER on 2013-06-27)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003018"
+>1.003018
+  (ETHER on 2013-05-19)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003017"
+>1.003017
+  (ETHER on 2013-04-03)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003016"
+>1.003016
+  (ETHER on 2013-03-26)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003015"
+>1.003015
+  (ETHER on 2013-03-01)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003014"
+>1.003014
+  (ETHER on 2012-10-31)</option>
+<option
+  
+  value="CHM/Devel-REPL-1.003013"
+>1.003013
+  (CHM on 2012-05-19)</option>
+<option
+  
+  value="FREW/Devel-REPL-1.003010"
+>1.003010
+  (FREW on 2010-05-23)</option>
+<option
+  
+  value="DHOUSTON/Devel-REPL-1.003009"
+>1.003009
+  (DHOUSTON on 2010-03-08)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003006"
+>1.003006
+  (OLIVER on 2009-04-10)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003005"
+>1.003005
+  (OLIVER on 2009-04-09)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003004"
+>1.003004
+  (OLIVER on 2009-02-15)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003003"
+>1.003003
+  (OLIVER on 2009-02-07)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003002"
+>1.003002
+  (OLIVER on 2009-01-21)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.002000"
+>1.002000
+  (MSTROUT on 2008-02-24)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.001000"
+>1.001000
+  (MSTROUT on 2007-06-27)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.000001"
+>1.000001
+  (MSTROUT on 2007-05-29)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.000000"
+>1.000000
+  (MSTROUT on 2007-05-29)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/ETHER/Devel-REPL-1.003029/diff/' + encodeURIComponent(this.value) + '/lib/Devel/REPL.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="ETHER/Devel-REPL-1.003029"
+>1.003029
+  (ETHER on 2022-05-28)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003028"
+>1.003028
+  (ETHER on 2016-02-16)</option>
+<option
+  
+  value="DOY/Devel-REPL-1.003012"
+>1.003012
+  (DOY on 2010-09-27)</option>
+<option
+  
+  value="FREW/Devel-REPL-1.003011"
+>1.003011
+  (FREW on 2010-06-15)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.003007"
+>1.003007
+  (MSTROUT on 2009-07-02)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.003001"
+>1.003001
+  (MSTROUT on 2009-01-08)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.002001"
+>1.002001
+  (MSTROUT on 2008-02-24)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/Devel-REPL-1.003027"
+>1.003027
+  (ETHER on 2015-08-16)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003026"
+>1.003026
+  (ETHER on 2014-07-16)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003025"
+>1.003025
+  (ETHER on 2013-09-29)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003024"
+>1.003024
+  (ETHER on 2013-09-25)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003023"
+>1.003023
+  (ETHER on 2013-09-12)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003022"
+>1.003022
+  (ETHER on 2013-09-10)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003021"
+>1.003021
+  (ETHER on 2013-09-09)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003020"
+>1.003020
+  (ETHER on 2013-07-08)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003019"
+>1.003019
+  (ETHER on 2013-06-27)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003018"
+>1.003018
+  (ETHER on 2013-05-19)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003017"
+>1.003017
+  (ETHER on 2013-04-03)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003016"
+>1.003016
+  (ETHER on 2013-03-26)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003015"
+>1.003015
+  (ETHER on 2013-03-01)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003014"
+>1.003014
+  (ETHER on 2012-10-31)</option>
+<option
+  
+  value="CHM/Devel-REPL-1.003013"
+>1.003013
+  (CHM on 2012-05-19)</option>
+<option
+  
+  value="FREW/Devel-REPL-1.003010"
+>1.003010
+  (FREW on 2010-05-23)</option>
+<option
+  
+  value="DHOUSTON/Devel-REPL-1.003009"
+>1.003009
+  (DHOUSTON on 2010-03-08)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003006"
+>1.003006
+  (OLIVER on 2009-04-10)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003005"
+>1.003005
+  (OLIVER on 2009-04-09)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003004"
+>1.003004
+  (OLIVER on 2009-02-15)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003003"
+>1.003003
+  (OLIVER on 2009-02-07)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003002"
+>1.003002
+  (OLIVER on 2009-01-21)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.002000"
+>1.002000
+  (MSTROUT on 2008-02-24)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.001000"
+>1.001000
+  (MSTROUT on 2007-06-27)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.000001"
+>1.000001
+  (MSTROUT on 2007-05-29)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.000000"
+>1.000000
+  (MSTROUT on 2007-05-29)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/B::Concise" title="B::Concise" class="ellipsis">B::Concise</a></li>
+  <li><a href="https://metacpan.org/pod/Devel::Peek" title="Devel::Peek" class="ellipsis">Devel::Peek</a></li>
+  <li><a href="https://metacpan.org/pod/File::Spec" title="File::Spec" class="ellipsis">File::Spec</a></li>
+  <li><a href="./Module::Runtime.html" title="Module::Runtime" class="ellipsis">Module::Runtime</a></li>
+  <li><a href="Moose.html" title="Moose" class="ellipsis">Moose</a></li>
+  <li><a href="https://metacpan.org/pod/Moose::Meta::Role" title="Moose::Meta::Role" class="ellipsis">Moose::Meta::Role</a></li>
+  <li><a href="https://metacpan.org/pod/Moose::Role" title="Moose::Role" class="ellipsis">Moose::Role</a></li>
+  <li><a href="https://metacpan.org/pod/MooseX::Getopt" title="MooseX::Getopt" class="ellipsis">MooseX::Getopt</a></li>
+  <li><a href="https://metacpan.org/pod/MooseX::Object::Pluggable" title="MooseX::Object::Pluggable" class="ellipsis">MooseX::Object::Pluggable</a></li>
+  <li><a href="https://metacpan.org/pod/Scalar::Util" title="Scalar::Util" class="ellipsis">Scalar::Util</a></li>
+  <li><a href="https://metacpan.org/pod/Task::Weaken" title="Task::Weaken" class="ellipsis">Task::Weaken</a></li>
+  <li><a href="https://metacpan.org/pod/Term::ANSIColor" title="Term::ANSIColor" class="ellipsis">Term::ANSIColor</a></li>
+  <li><a href="https://metacpan.org/pod/Term::ReadLine" title="Term::ReadLine" class="ellipsis">Term::ReadLine</a></li>
+  <li><a href="https://metacpan.org/pod/Time::HiRes" title="Time::HiRes" class="ellipsis">Time::HiRes</a></li>
+  <li><a href="https://metacpan.org/pod/namespace::autoclean" title="namespace::autoclean" class="ellipsis">namespace::autoclean</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/warnings" title="warnings" class="ellipsis">warnings</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Devel::REPL/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Devel%3A%3AREPL">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Devel-REPL">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/ETHER/Devel-REPL-1.003029/view/lib/Devel/REPL.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Devel::REPL.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/DRAEGTUN"><img src="https://www.gravatar.com/avatar/6f1ae19bf6507a7bd1ea0d0f6abfeb01?d=identicon&amp;s=20" title="DRAEGTUN" alt="DRAEGTUN"></a>
+<a class="display-all" href="https://metacpan.org/author/GARU"><img src="https://www.gravatar.com/avatar/14c751a7de307f3f50a2cb67b38a6796?d=identicon&amp;s=20" title="GARU" alt="GARU"></a>
+<a class="display-all" href="https://metacpan.org/author/ANTIPASTA"><img src="https://www.gravatar.com/avatar/6e53eff17383bb2a3c2d57f6bb268fac?d=identicon&amp;s=20" title="ANTIPASTA" alt="ANTIPASTA"></a>
+<a class="display-all" href="https://metacpan.org/author/SKAUFMAN"><img src="https://www.gravatar.com/avatar/2caf2787e235f58a65576632f93ef6c3?d=identicon&amp;s=20" title="SKAUFMAN" alt="SKAUFMAN"></a>
+<a class="display-all" href="https://metacpan.org/author/GORTAN"><img src="https://www.gravatar.com/avatar/daab631886edac0124bc38e4ec03b874?d=identicon&amp;s=20" title="GORTAN" alt="GORTAN"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Devel-REPL/plussers">33 PAUSE users</a>
+</div>
+<div>
+    36 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 22 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+    >
+      Matt S Trout - mst (at) shadowcatsystems.co.uk (L&lt;http://www.shadowcatsystems.co.uk/&gt;)
+    </li>
+    <li class="contributor"
+      data-contrib-email="code@sartak.org"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Shawn M Moore
+    </li>
+    <li class="contributor"
+      data-contrib-email="devel.chm.01@gmail.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Chris Marshall
+    </li>
+    <li class="contributor"
+      data-contrib-email="mst@shadowcat.co.uk"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Matt S Trout
+    </li>
+    <li class="contributor"
+      data-cpan-author="OLIVER"
+      data-contrib-email="oliver@cpan.org"
+    >
+      <a href="https://metacpan.org/author/OLIVER" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/faccc3f86794342524eaa1997256b3b5?d=identicon&amp;s=20" />
+      Oliver Gorwits
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="NUFFIN"
+      data-contrib-email="nothingmuch@woobling.org"
+    >
+      <a href="https://metacpan.org/author/NUFFIN" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/965ab495ae19eeb538d054ae6caaf1bb?d=identicon&amp;s=20" />
+      יובל קוג&#39;מן (Yuval Kogman)
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="FREW"
+      data-contrib-email="frioux@gmail.com"
+    >
+      <a href="https://metacpan.org/author/FREW" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/99d7d0aba169ea255ffa5c8c63f652ae?d=identicon&amp;s=20" />
+      Arthur Axel &#39;fREW&#39; Schmidt
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="sukria+perl@sukria.net"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Alexis Sukrieh
+    </li>
+    <li class="contributor"
+      data-cpan-author="AMOORE"
+      data-contrib-email="amoore@cpan.org"
+    >
+      <a href="https://metacpan.org/author/AMOORE" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/c370c1b1420067611deb3448b5eaf08c?d=identicon&amp;s=20" />
+      Andrew Moore
+      </a>
+    </li>
+    <li class="contributor"
+    >
+      epitaph &lt;unknown&gt;
+    </li>
+    <li class="contributor"
+      data-contrib-email="doy@tozt.net"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Jesse Luehrs
+    </li>
+    <li class="contributor"
+      data-contrib-email="norbi@nix.hu"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Norbert Buchmuller
+    </li>
+    <li class="contributor"
+      data-cpan-author="BOBTFISH"
+      data-contrib-email="bobtfish@bobtfish.net"
+    >
+      <a href="https://metacpan.org/author/BOBTFISH" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d7a84fd18529fb8ba3a05cede8ea5dcc?d=identicon&amp;s=20" />
+      Tomas Doran (t0m)
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="ILMARI"
+      data-contrib-email="ilmari@ilmari.org"
+    >
+      <a href="https://metacpan.org/author/ILMARI" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/a3059acdb28ce93c8b66a5f398b2cb39?d=identicon&amp;s=20" />
+      Dagfinn Ilmari Mannsåker
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="DHOUSTON"
+      data-contrib-email="dhouston@cpan.org"
+    >
+      <a href="https://metacpan.org/author/DHOUSTON" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/66a3dd8163f628335ca58b00d05c4975?d=identicon&amp;s=20" />
+      Dave Houston
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="ZMUGHAL"
+      data-contrib-email="zaki.mughal@gmail.com"
+    >
+      <a href="https://metacpan.org/author/ZMUGHAL" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/82e7c54d334bfdfd32594d34583d32bc?d=identicon&amp;s=20" />
+      Zakariyya Mughal
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="ash_github@firemirror.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Ash Berlin
+    </li>
+    <li class="contributor"
+      data-cpan-author="ARCANEZ"
+      data-contrib-email="justin.d.hunter@gmail.com"
+    >
+      <a href="https://metacpan.org/author/ARCANEZ" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/9fa6faba89a1a98b52e867a4b8595de2?d=identicon&amp;s=20" />
+      Justin Hunter
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="MGRIMES"
+      data-contrib-email="mgrimes@cpan.org"
+    >
+      <a href="https://metacpan.org/author/MGRIMES" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/2d21985c5ff44e763fd0321cbabdc265?d=identicon&amp;s=20" />
+      mgrimes
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="naquad@bd8105ee-0ff8-0310-8827-fb3f25b6796d"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      naquad
+    </li>
+    <li class="contributor"
+      data-contrib-email="ryan@debian.org"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Ryan Niebur
+    </li>
+    <li class="contributor"
+      data-contrib-email="stevan.little@iinteractive.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Stevan Little
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/ETHER" class="author-name">Karen Etheridge 🐾 🌋🦑🇹🇼🇭🇰🇺🇦</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Devel/REPL.pm&#39;" class="">
+<option
+  selected
+  value="ETHER/Devel-REPL-1.003029"
+>1.003029
+  (ETHER on 2022-05-28)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003028"
+>1.003028
+  (ETHER on 2016-02-16)</option>
+<option
+  
+  value="DOY/Devel-REPL-1.003012"
+>1.003012
+  (DOY on 2010-09-27)</option>
+<option
+  
+  value="FREW/Devel-REPL-1.003011"
+>1.003011
+  (FREW on 2010-06-15)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.003007"
+>1.003007
+  (MSTROUT on 2009-07-02)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.003001"
+>1.003001
+  (MSTROUT on 2009-01-08)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.002001"
+>1.002001
+  (MSTROUT on 2008-02-24)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/Devel-REPL-1.003027"
+>1.003027
+  (ETHER on 2015-08-16)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003026"
+>1.003026
+  (ETHER on 2014-07-16)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003025"
+>1.003025
+  (ETHER on 2013-09-29)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003024"
+>1.003024
+  (ETHER on 2013-09-25)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003023"
+>1.003023
+  (ETHER on 2013-09-12)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003022"
+>1.003022
+  (ETHER on 2013-09-10)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003021"
+>1.003021
+  (ETHER on 2013-09-09)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003020"
+>1.003020
+  (ETHER on 2013-07-08)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003019"
+>1.003019
+  (ETHER on 2013-06-27)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003018"
+>1.003018
+  (ETHER on 2013-05-19)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003017"
+>1.003017
+  (ETHER on 2013-04-03)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003016"
+>1.003016
+  (ETHER on 2013-03-26)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003015"
+>1.003015
+  (ETHER on 2013-03-01)</option>
+<option
+  
+  value="ETHER/Devel-REPL-1.003014"
+>1.003014
+  (ETHER on 2012-10-31)</option>
+<option
+  
+  value="CHM/Devel-REPL-1.003013"
+>1.003013
+  (CHM on 2012-05-19)</option>
+<option
+  
+  value="FREW/Devel-REPL-1.003010"
+>1.003010
+  (FREW on 2010-05-23)</option>
+<option
+  
+  value="DHOUSTON/Devel-REPL-1.003009"
+>1.003009
+  (DHOUSTON on 2010-03-08)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003006"
+>1.003006
+  (OLIVER on 2009-04-10)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003005"
+>1.003005
+  (OLIVER on 2009-04-09)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003004"
+>1.003004
+  (OLIVER on 2009-02-15)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003003"
+>1.003003
+  (OLIVER on 2009-02-07)</option>
+<option
+  
+  value="OLIVER/Devel-REPL-1.003002"
+>1.003002
+  (OLIVER on 2009-01-21)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.002000"
+>1.002000
+  (MSTROUT on 2008-02-24)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.001000"
+>1.001000
+  (MSTROUT on 2007-06-27)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.000001"
+>1.000001
+  (MSTROUT on 2007-05-29)</option>
+<option
+  
+  value="MSTROUT/Devel-REPL-1.000000"
+>1.000000
+  (MSTROUT on 2007-05-29)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Devel-REPL">Devel-REPL-1.003029</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage two &#10;
+          • 23 direct dependents &#10;          • 34 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Devel-REPL-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Devel-REPL-1.003029">
+    <input type="hidden" name="author" value="ETHER">
+    <input type="hidden" name="distribution" value="Devel-REPL">
+    <button type="submit" class="favorite highlight"><span>69</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Devel::REPL.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>69</span> ++</a>
+</div>
+   / <span>Devel::REPL</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Devel::REPL.html#NAME">NAME</a></li>
+  <li><a href="./Devel::REPL.html#VERSION">VERSION</a></li>
+  <li><a href="./Devel::REPL.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Devel::REPL.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Devel::REPL.html#USAGE">USAGE</a>
+    <ul>
+      <li><a href="./Devel::REPL.html#Run-Control-Files">Run Control Files</a></li>
+      <li><a href="./Devel::REPL.html#Profiles">Profiles</a></li>
+      <li><a href="./Devel::REPL.html#Plugins">Plugins</a></li>
+      <li><a href="./Devel::REPL.html#The-REPL-shell-object">The REPL shell object</a></li>
+    </ul>
+  </li>
+  <li><a href="./Devel::REPL.html#OPTIONAL-FEATURES">OPTIONAL FEATURES</a></li>
+  <li><a href="./Devel::REPL.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Devel::REPL.html#SUPPORT">SUPPORT</a></li>
+  <li><a href="./Devel::REPL.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Devel::REPL.html#CONTRIBUTORS">CONTRIBUTORS</a></li>
+  <li><a href="./Devel::REPL.html#COPYRIGHT-AND-LICENCE">COPYRIGHT AND LICENCE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Devel::REPL - A modern perl interactive shell</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>version 1.003029</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  my $repl = Devel::REPL-&gt;new;
+  $repl-&gt;load_plugin($_) for qw(History LexEnv);
+  $repl-&gt;run</code></pre>
+
+<p>Alternatively, use the &#39;re.pl&#39; script installed with the distribution</p>
+
+<pre><code>  system$ re.pl</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This is an interactive shell for Perl, commonly known as a REPL - Read, Evaluate, Print, Loop. The shell provides for rapid development or testing of code without the need to create a temporary source code file.</p>
+
+<p>Through a plugin system, many features are available on demand. You can also tailor the environment through the use of profiles and run control files, for example to pre-load certain Perl modules when working on a particular project.</p>
+
+<h1 id="USAGE">USAGE</h1>
+
+<p>To start a shell, follow one of the examples in the <a href="./Devel::REPL.html#SYNOPSIS">&quot;SYNOPSIS&quot;</a> above.</p>
+
+<p>Once running, the shell accepts and will attempt to execute any code given. If the code executes successfully you&#39;ll be shown the result, otherwise an error message will be returned. Here are a few examples:</p>
+
+<pre><code> $_ print &quot;Hello, world!\n&quot;
+ Hello, world!
+ 1
+ $_ nosuchfunction
+ Compile error: Bareword &quot;nosuchfunction&quot; not allowed while &quot;strict subs&quot; in use at (eval 130) line 5.
+
+ $_</code></pre>
+
+<p>In the first example above you see the output of the command (<code>Hello, world!</code>), if any, and then the return value of the statement (<code>1</code>). Following that example, an error is returned when the execution of some code fails.</p>
+
+<p>Note that the lack of semicolon on the end is not a mistake - the code is run inside a Block structure (to protect the REPL in case the code blows up), which means a single statement doesn&#39;t require the semicolon. You can add one if you like, though.</p>
+
+<p>If you followed the first example in the <a href="./Devel::REPL.html#SYNOPSIS">&quot;SYNOPSIS&quot;</a> above, you&#39;ll have the <a href="https://metacpan.org/pod/Devel::REPL::Plugin::History">History</a> and <a href="https://metacpan.org/pod/Devel::REPL::Plugin::LexEnv">LexEnv</a> plugins loaded (and there are many more available). Although the shell might support &quot;up-arrow&quot; history, the History plugin adds &quot;bang&quot; history to that so you can re-execute chosen commands (with e.g. <code>!53</code>). The LexEnv plugin ensures that lexical variables declared with the <code>my</code> keyword will automatically persist between statements executed in the REPL shell.</p>
+
+<p>When you <code>use</code> any Perl module, the <code>import()</code> will work as expected - the exported functions from that module are available for immediate use:</p>
+
+<pre><code> $_ carp &quot;I&#39;m dieeeing!\n&quot;
+ String found where operator expected at (eval 129) line 5, near &quot;carp &quot;I&#39;m dieeeing!\n&quot;&quot;
+         (Do you need to predeclare carp?)
+ Compile error: syntax error at (eval 129) line 5, near &quot;carp &quot;I&#39;m dieeeing!\n&quot;&quot;
+ BEGIN not safe after errors--compilation aborted at (eval 129) line 5.
+
+ $_ use Carp
+
+ $_ carp &quot;I&#39;m dieeeing!\n&quot;
+ I&#39;m dieeeing!
+  at /usr/share/perl5/Lexical/Persistence.pm line 327
+ 1
+ $_</code></pre>
+
+<p>To quit from the shell, hit <code>Ctrl+D</code> or <code>Ctrl+C</code>.</p>
+
+<pre><code>  MSWin32 NOTE: control keys won&#39;t work if TERM=dumb
+  because readline functionality will be disabled.</code></pre>
+
+<h2 id="Run-Control-Files"><a id="Run"></a>Run Control Files</h2>
+
+<p>For particular projects you might well end up running the same commands each time the REPL shell starts up - loading Perl modules, setting configuration, and so on. A run control file lets you have this done automatically, and you can have multiple files for different projects.</p>
+
+<p>By default the <code>re.pl</code> program looks for <code>$HOME/.re.pl/repl.rc</code>, and runs whatever code is in there as if you had entered it at the REPL shell yourself.</p>
+
+<p>To set a new run control file that&#39;s also in that directory, pass it as a filename like so:</p>
+
+<pre><code> system$ re.pl --rcfile myproject.pc</code></pre>
+
+<p>If the filename happens to contain a forward slash, then it&#39;s used absolutely, or realive to the current working directory:</p>
+
+<pre><code> system$ re.pl --rcfile /path/to/my/project/repl.rc</code></pre>
+
+<p>Within the run control file you might want to load plugins. This is covered in <a href="./Devel::REPL.html#The-REPL-shell-object">&quot;The REPL shell object&quot;</a> section, below.</p>
+
+<h2 id="Profiles">Profiles</h2>
+
+<p>To allow for the sharing of run control files, you can fashion them into a Perl module for distribution (perhaps via the CPAN). For more information on this feature, please see the <a href="https://metacpan.org/pod/Devel::REPL::Profile">Devel::REPL::Profile</a> manual page.</p>
+
+<p>A <code>Standard</code> profile ships with <code>Devel::REPL</code>; it loads the following plugins (note that some of these require optional features -- or you can also use the <code>Minimal</code> profile):</p>
+
+<ul>
+
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::History">Devel::REPL::Plugin::History</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::LexEnv">Devel::REPL::Plugin::LexEnv</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::DDS">Devel::REPL::Plugin::DDS</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::Packages">Devel::REPL::Plugin::Packages</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::Commands">Devel::REPL::Plugin::Commands</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::MultiLine::PPI">Devel::REPL::Plugin::MultiLine::PPI</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::Colors">Devel::REPL::Plugin::Colors</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::Completion">Devel::REPL::Plugin::Completion</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::CompletionDriver::INC">Devel::REPL::Plugin::CompletionDriver::INC</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::CompletionDriver::LexEnv">Devel::REPL::Plugin::CompletionDriver::LexEnv</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::CompletionDriver::Keywords">Devel::REPL::Plugin::CompletionDriver::Keywords</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::CompletionDriver::Methods">Devel::REPL::Plugin::CompletionDriver::Methods</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Devel::REPL::Plugin::ReadlineHistory">Devel::REPL::Plugin::ReadlineHistory</a></p>
+
+</li>
+</ul>
+
+<h2 id="Plugins">Plugins</h2>
+
+<p>Plugins are a way to add functionality to the REPL shell, and take advantage of <code>Devel::REPL</code> being based on the <a href="Moose.html">Moose</a> object system for Perl 5. This means it&#39;s simple to &#39;hook into&#39; many steps of the R-E-P-L process. Plugins can change the way commands are interpreted, or the way their results are output, or even add commands to the shell environment.</p>
+
+<p>A number of plugins ship with <code>Devel::REPL</code>, and more are available on the CPAN. Some of the shipped plugins are loaded in the default profile, mentioned above. These plugins can be loaded in your <i> $HOME/.re.pl/repl.rc </i> like:</p>
+
+<pre><code>  load_plugin qw( CompletionDriver::Global DumpHistory );</code></pre>
+
+<p>Writing your own plugins is not difficult, and is discussed in the <a href="https://metacpan.org/pod/Devel::REPL::Plugin">Devel::REPL::Plugin</a> manual page, along with links to the manual pages of all the plugins shipped with <code>Devel::REPL</code>.</p>
+
+<h2 id="The-REPL-shell-object"><a id="The"></a>The REPL shell object</h2>
+
+<p>From time to time you&#39;ll want to interact with or manipulate the <code>Devel::REPL</code> shell object itself; that is, the instance of the shell you&#39;re currently running.</p>
+
+<p>The object is always available through the <code>$_REPL</code> variable. One common requirement is to load an additional plugin, after your profile and run control files have already been executed:</p>
+
+<pre><code> $_ $_REPL-&gt;load_plugin(&#39;Timing&#39;);
+ 1
+ $_ print &quot;Hello again, world!\n&quot;
+ Hello again, world!
+ Took 0.00148296356201172 seconds.
+ 1
+ $_</code></pre>
+
+<h1 id="OPTIONAL-FEATURES"><a id="OPTIONAL"></a>OPTIONAL FEATURES</h1>
+
+<p>In addition to the prerequisites declared in this distribution, which should be automatically installed by your <a href="https://metacpan.org/pod/CPAN">CPAN</a> client, there are a number of optional features, used by additional plugins. You can install any of these features by installing this distribution interactively (e.g. <code>cpanm --interactive Devel::REPL</code>).</p>
+
+<ul>
+
+<li><p>Completion plugin - extensible tab completion</p>
+
+</li>
+<li><p>DDS plugin - better format results with Data::Dump::Streamer</p>
+
+</li>
+<li><p>DDC plugin - even better format results with Data::Dumper::Concise</p>
+
+</li>
+<li><p>INC completion driver - tab complete module names in use and require</p>
+
+</li>
+<li><p>Interrupt plugin - traps SIGINT to kill long-running lines</p>
+
+</li>
+<li><p>Keywords completion driver - tab complete Perl keywords and operators</p>
+
+</li>
+<li><p>LexEnv plugin - variables declared with &quot;my&quot; persist between statements</p>
+
+</li>
+<li><p>MultiLine::PPI plugin - continue reading lines until all blocks are closed</p>
+
+</li>
+<li><p>Nopaste plugin - upload a session\&#39;s input and output to a Pastebin</p>
+
+</li>
+<li><p>PPI plugin - PPI dumping of Perl code</p>
+
+</li>
+<li><p>Refresh plugin - automatically reload libraries with Module::Refresh</p>
+
+</li>
+</ul>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<ul>
+
+<li><p><a href="https://www.shadowcat.co.uk/blog/matt-s-trout/mstpan-17/">A comparison of various REPLs</a></p>
+
+</li>
+</ul>
+
+<h1 id="SUPPORT">SUPPORT</h1>
+
+<p>Bugs may be submitted through <a href="https://rt.cpan.org/Public/Dist/Display.html?Name=Devel-REPL">the RT bug tracker</a> (or <a href="mailto:bug-Devel-REPL@rt.cpan.org">bug-Devel-REPL@rt.cpan.org</a>).</p>
+
+<p>There is also an irc channel available for users of this distribution, at <a href="irc://irc.perl.org/#devel-repl"><code>#devel</code> on <code>irc.perl.org</code></a>.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Matt S Trout - mst (at) shadowcatsystems.co.uk (<a href="http://www.shadowcatsystems.co.uk/">http://www.shadowcatsystems.co.uk/</a>)</p>
+
+<h1 id="CONTRIBUTORS">CONTRIBUTORS</h1>
+
+<ul>
+
+<li><p>Karen Etheridge &lt;ether@cpan.org&gt;</p>
+
+</li>
+<li><p>Shawn M Moore &lt;code@sartak.org&gt;</p>
+
+</li>
+<li><p>Chris Marshall &lt;devel.chm.01@gmail.com&gt;</p>
+
+</li>
+<li><p>Matt S Trout &lt;mst@shadowcat.co.uk&gt;</p>
+
+</li>
+<li><p>Oliver Gorwits &lt;oliver@cpan.org&gt;</p>
+
+</li>
+<li><p>&#x5D9;&#x5D5;&#x5D1;&#x5DC; &#x5E7;&#x5D5;&#x5D2;&#39;&#x5DE;&#x5DF; (Yuval Kogman) &lt;nothingmuch@woobling.org&gt;</p>
+
+</li>
+<li><p>Arthur Axel &#39;fREW&#39; Schmidt &lt;frioux@gmail.com&gt;</p>
+
+</li>
+<li><p>Alexis Sukrieh &lt;sukria+perl@sukria.net&gt;</p>
+
+</li>
+<li><p>Andrew Moore &lt;amoore@cpan.org&gt;</p>
+
+</li>
+<li><p>epitaph &lt;unknown&gt;</p>
+
+</li>
+<li><p>Jesse Luehrs &lt;doy@tozt.net&gt;</p>
+
+</li>
+<li><p>Norbert Buchmuller &lt;norbi@nix.hu&gt;</p>
+
+</li>
+<li><p>Tomas Doran (t0m) &lt;bobtfish@bobtfish.net&gt;</p>
+
+</li>
+<li><p>Dagfinn Ilmari Manns&aring;ker &lt;ilmari@ilmari.org&gt;</p>
+
+</li>
+<li><p>Dave Houston &lt;dhouston@cpan.org&gt;</p>
+
+</li>
+<li><p>Zakariyya Mughal &lt;zaki.mughal@gmail.com&gt;</p>
+
+</li>
+<li><p>Ash Berlin &lt;ash_github@firemirror.com&gt;</p>
+
+</li>
+<li><p>Justin Hunter &lt;justin.d.hunter@gmail.com&gt;</p>
+
+</li>
+<li><p>mgrimes &lt;mgrimes@cpan.org&gt;</p>
+
+</li>
+<li><p>naquad &lt;naquad@bd8105ee-0ff8-0310-8827-fb3f25b6796d&gt;</p>
+
+</li>
+<li><p>Ryan Niebur &lt;ryan@debian.org&gt;</p>
+
+</li>
+<li><p>Stevan Little &lt;stevan.little@iinteractive.com&gt;</p>
+
+</li>
+</ul>
+
+<h1 id="COPYRIGHT-AND-LICENCE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENCE</h1>
+
+<p>This software is copyright (c) 2007 by Matt S Trout - mst (at) shadowcatsystems.co.uk (<a href="http://www.shadowcatsystems.co.uk/">http://www.shadowcatsystems.co.uk/</a>).</p>
+
+<p>This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Devel::REPL, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Devel::REPL</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Devel::REPL</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Devel::REPL.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

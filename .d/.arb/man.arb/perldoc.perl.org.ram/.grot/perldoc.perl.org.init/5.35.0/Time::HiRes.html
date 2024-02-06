@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Time::HiRes - High resolution alarm, sleep, gettimeofday, interval timers - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Time::HiRes">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Time::HiRes.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Time::HiRes">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Time::HiRes">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Time::HiRes">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Time::HiRes">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Time::HiRes">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Time::HiRes">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Time::HiRes">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Time::HiRes">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Time::HiRes">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Time::HiRes">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Time::HiRes">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Time::HiRes">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Time::HiRes">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Time::HiRes">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Time::HiRes">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Time::HiRes">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Time::HiRes">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Time::HiRes">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Time::HiRes">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Time::HiRes">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Time::HiRes">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Time::HiRes">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Time::HiRes">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Time::HiRes">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Time::HiRes">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Time::HiRes">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Time::HiRes">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Time::HiRes">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Time::HiRes">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Time::HiRes">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Time::HiRes">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Time::HiRes">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Time::HiRes">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Time::HiRes">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Time::HiRes">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Time::HiRes">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Time::HiRes">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Time::HiRes">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Time::HiRes">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Time::HiRes">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Time::HiRes">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Time::HiRes">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Time::HiRes">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Time::HiRes">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Time::HiRes">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Time::HiRes">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Time::HiRes">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Time::HiRes">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Time::HiRes">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Time::HiRes">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Time::HiRes">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Time::HiRes">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Time::HiRes">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Time::HiRes">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Time::HiRes">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Time::HiRes">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Time::HiRes">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Time::HiRes">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Time::HiRes">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Time::HiRes">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Time::HiRes">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Time::HiRes">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Time::HiRes">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Time::HiRes">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Time::HiRes">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Time::HiRes">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Time::HiRes">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Time::HiRes">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Time::HiRes">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Time::HiRes">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Time::HiRes">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Time::HiRes">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Time::HiRes">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Time::HiRes">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Time::HiRes">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Time::HiRes">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Time::HiRes">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Time::HiRes">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Time::HiRes">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Time::HiRes">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Time::HiRes.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Time::HiRes">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Time::HiRes">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Time::HiRes">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Time::HiRes">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Time::HiRes">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Time::HiRes">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Time::HiRes">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Time::HiRes">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Time::HiRes">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Time::HiRes">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Time::HiRes">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Time::HiRes">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Time::HiRes">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Time::HiRes">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Time::HiRes">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Time::HiRes">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Time::HiRes">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Time::HiRes">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Time::HiRes">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Time::HiRes">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Time::HiRes">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Time::HiRes">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Time::HiRes">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Time::HiRes">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Time::HiRes">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Time::HiRes">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Time::HiRes">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Time::HiRes">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Time::HiRes">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Time::HiRes">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Time::HiRes">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Time::HiRes">5.35.1</a>
+          <a class="dropdown-item active" href="./Time::HiRes.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Time::HiRes.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Time::HiRes.html">Time::HiRes</a>
+          <div id="more">
+            (<a href="./Time::HiRes.txt">source</a>,
+            <a href="https://metacpan.org/pod/Time::HiRes">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 1.9767</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#EXAMPLES">EXAMPLES</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#C-API">C API</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#DIAGNOSTICS">DIAGNOSTICS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#useconds-or-interval-more-than-...">useconds or interval more than ...</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#negative-time-not-invented-yet">negative time not invented yet</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#internal-error:-useconds-%3C-0-(unsigned-...-signed-...)">internal error: useconds &lt; 0 (unsigned ... signed ...)</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#useconds-or-uinterval-equal-to-or-more-than-1000000">useconds or uinterval equal to or more than 1000000</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#unimplemented-in-this-platform">unimplemented in this platform</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#CAVEATS">CAVEATS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#AUTHORS">AUTHORS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::HiRes.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Time::HiRes.html#NAME">#</a>NAME</h1>
+
+<p>Time::HiRes - High resolution alarm, sleep, gettimeofday, interval timers</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Time::HiRes.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Time::HiRes qw( usleep ualarm gettimeofday tv_interval nanosleep
+                    clock_gettime clock_getres clock_nanosleep clock
+                    stat lstat utime);
+
+usleep ($microseconds);
+nanosleep ($nanoseconds);
+
+ualarm ($microseconds);
+ualarm ($microseconds, $interval_microseconds);
+
+$t0 = [gettimeofday];
+($seconds, $microseconds) = gettimeofday;
+
+$elapsed = tv_interval ( $t0, [$seconds, $microseconds]);
+$elapsed = tv_interval ( $t0, [gettimeofday]);
+$elapsed = tv_interval ( $t0 );
+
+use Time::HiRes qw ( time alarm sleep );
+
+$now_fractions = time;
+sleep ($floating_seconds);
+alarm ($floating_seconds);
+alarm ($floating_seconds, $floating_interval);
+
+use Time::HiRes qw( setitimer getitimer );
+
+setitimer ($which, $floating_seconds, $floating_interval );
+getitimer ($which);
+
+use Time::HiRes qw( clock_gettime clock_getres clock_nanosleep
+                    ITIMER_REAL ITIMER_VIRTUAL ITIMER_PROF
+                    ITIMER_REALPROF );
+
+$realtime   = clock_gettime(CLOCK_REALTIME);
+$resolution = clock_getres(CLOCK_REALTIME);
+
+clock_nanosleep(CLOCK_REALTIME, 1.5e9);
+clock_nanosleep(CLOCK_REALTIME, time()*1e9 + 10e9, TIMER_ABSTIME);
+
+my $ticktock = clock();
+
+use Time::HiRes qw( stat lstat );
+
+my @stat = stat(&quot;file&quot;);
+my @stat = stat(FH);
+my @stat = lstat(&quot;file&quot;);
+
+use Time::HiRes qw( utime );
+utime $floating_seconds, $floating_seconds, file...;</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Time::HiRes.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>The <code>Time::HiRes</code> module implements a Perl interface to the <code>usleep</code>, <code>nanosleep</code>, <code>ualarm</code>, <code>gettimeofday</code>, and <code>setitimer</code>/<code>getitimer</code> system calls, in other words, high resolution time and timers. See the <a href="./Time::HiRes.html#EXAMPLES">&quot;EXAMPLES&quot;</a> section below and the test scripts for usage; see your system documentation for the description of the underlying <code>nanosleep</code> or <code>usleep</code>, <code>ualarm</code>, <code>gettimeofday</code>, and <code>setitimer</code>/<code>getitimer</code> calls.</p>
+
+<p>If your system lacks <code>gettimeofday()</code> or an emulation of it you don&#39;t get <code>gettimeofday()</code> or the one-argument form of <code>tv_interval()</code>. If your system lacks all of <code>nanosleep()</code>, <code>usleep()</code>, <code>select()</code>, and <code>poll</code>, you don&#39;t get <code>Time::HiRes::usleep()</code>, <code>Time::HiRes::nanosleep()</code>, or <code>Time::HiRes::sleep()</code>. If your system lacks both <code>ualarm()</code> and <code>setitimer()</code> you don&#39;t get <code>Time::HiRes::ualarm()</code> or <code>Time::HiRes::alarm()</code>.</p>
+
+<p>If you try to import an unimplemented function in the <code>use</code> statement it will fail at compile time.</p>
+
+<p>If your subsecond sleeping is implemented with <code>nanosleep()</code> instead of <code>usleep()</code>, you can mix subsecond sleeping with signals since <code>nanosleep()</code> does not use signals. This, however, is not portable, and you should first check for the truth value of <code>&amp;Time::HiRes::d_nanosleep</code> to see whether you have nanosleep, and then carefully read your <code>nanosleep()</code> C API documentation for any peculiarities.</p>
+
+<p>If you are using <code>nanosleep</code> for something else than mixing sleeping with signals, give some thought to whether Perl is the tool you should be using for work requiring nanosecond accuracies.</p>
+
+<p>Remember that unless you are working on a <i>hard realtime</i> system, any clocks and timers will be imprecise, especially so if you are working in a pre-emptive multiuser system. Understand the difference between <i>wallclock time</i> and process time (in UNIX-like systems the sum of <i>user</i> and <i>system</i> times). Any attempt to sleep for X seconds will most probably end up sleeping <b>more</b> than that, but don&#39;t be surprised if you end up sleeping slightly <b>less</b>.</p>
+
+<p>The following functions can be imported from this module. No functions are exported by default.</p>
+
+<dl>
+
+<dt id="gettimeofday-()"><a class="permalink" href="./Time::HiRes.html#gettimeofday-()">#</a><a id="gettimeofday"></a>gettimeofday ()</dt>
+<dd>
+
+<p>In array context returns a two-element array with the seconds and microseconds since the epoch. In scalar context returns floating seconds like <code>Time::HiRes::time()</code> (see below).</p>
+
+</dd>
+<dt id="usleep-(-$useconds-)"><a class="permalink" href="./Time::HiRes.html#usleep-(-$useconds-)">#</a><a id="usleep"></a><a id="usleep-useconds"></a>usleep ( $useconds )</dt>
+<dd>
+
+<p>Sleeps for the number of microseconds (millionths of a second) specified. Returns the number of microseconds actually slept. Can sleep for more than one second, unlike the <code>usleep</code> system call. Can also sleep for zero seconds, which often works like a <i>thread yield</i>. See also <a href="./Time::HiRes.html#sleep-%28-%24floating_seconds-%29"><code>Time::HiRes::sleep()</code></a>, and <a href="./Time::HiRes.html#clock_nanosleep-%28-%24which%2C-%24nanoseconds%2C-%24flags-%3D-0%29"><code>clock_nanosleep()</code></a>.</p>
+
+<p>Do not expect usleep() to be exact down to one microsecond.</p>
+
+</dd>
+<dt id="nanosleep-(-$nanoseconds-)"><a class="permalink" href="./Time::HiRes.html#nanosleep-(-$nanoseconds-)">#</a><a id="nanosleep"></a><a id="nanosleep-nanoseconds"></a>nanosleep ( $nanoseconds )</dt>
+<dd>
+
+<p>Sleeps for the number of nanoseconds (1e9ths of a second) specified. Returns the number of nanoseconds actually slept (accurate only to microseconds, the nearest thousand of them). Can sleep for more than one second. Can also sleep for zero seconds, which often works like a <i>thread yield</i>. See also <a href="./Time::HiRes.html#sleep-%28-%24floating_seconds-%29"><code>Time::HiRes::sleep()</code></a>, <a href="./Time::HiRes.html#usleep-%28-%24useconds-%29"><code>Time::HiRes::usleep()</code></a>, and <a href="./Time::HiRes.html#clock_nanosleep-%28-%24which%2C-%24nanoseconds%2C-%24flags-%3D-0%29"><code>clock_nanosleep()</code></a>.</p>
+
+<p>Do not expect nanosleep() to be exact down to one nanosecond. Getting even accuracy of one thousand nanoseconds is good.</p>
+
+</dd>
+<dt id="ualarm-(-$useconds-[,-$interval_useconds-]-)"><a class="permalink" href="./Time::HiRes.html#ualarm-(-$useconds-%5B,-$interval_useconds-%5D-)">#</a><a id="ualarm"></a><a id="ualarm-useconds-interval_useconds"></a>ualarm ( $useconds [, $interval_useconds ] )</dt>
+<dd>
+
+<p>Issues a <code>ualarm</code> call; the <code>$interval_useconds</code> is optional and will be zero if unspecified, resulting in <code>alarm</code>-like behaviour.</p>
+
+<p>Returns the remaining time in the alarm in microseconds, or <code>undef</code> if an error occurred.</p>
+
+<p>ualarm(0) will cancel an outstanding ualarm().</p>
+
+<p>Note that the interaction between alarms and sleeps is unspecified.</p>
+
+</dd>
+<dt id="tv_interval"><a class="permalink" href="./Time::HiRes.html#tv_interval">#</a>tv_interval</dt>
+<dd>
+
+<p>tv_interval ( $ref_to_gettimeofday [, $ref_to_later_gettimeofday] )</p>
+
+<p>Returns the floating seconds between the two times, which should have been returned by <code>gettimeofday()</code>. If the second argument is omitted, then the current time is used.</p>
+
+</dd>
+<dt id="time-()"><a class="permalink" href="./Time::HiRes.html#time-()">#</a><a id="time"></a>time ()</dt>
+<dd>
+
+<p>Returns a floating seconds since the epoch. This function can be imported, resulting in a nice drop-in replacement for the <code>time</code> provided with core Perl; see the <a href="./Time::HiRes.html#EXAMPLES">&quot;EXAMPLES&quot;</a> below.</p>
+
+<p><b>NOTE 1</b>: This higher resolution timer can return values either less or more than the core <code>time()</code>, depending on whether your platform rounds the higher resolution timer values up, down, or to the nearest second to get the core <code>time()</code>, but naturally the difference should be never more than half a second. See also <a href="./Time::HiRes.html#clock_getres">&quot;clock_getres&quot;</a>, if available in your system.</p>
+
+<p><b>NOTE 2</b>: Since Sunday, September 9th, 2001 at 01:46:40 AM GMT, when the <code>time()</code> seconds since epoch rolled over to 1_000_000_000, the default floating point format of Perl and the seconds since epoch have conspired to produce an apparent bug: if you print the value of <code>Time::HiRes::time()</code> you seem to be getting only five decimals, not six as promised (microseconds). Not to worry, the microseconds are there (assuming your platform supports such granularity in the first place). What is going on is that the default floating point format of Perl only outputs 15 digits. In this case that means ten digits before the decimal separator and five after. To see the microseconds you can use either <code>printf</code>/<code>sprintf</code> with <code>&quot;%.6f&quot;</code>, or the <code>gettimeofday()</code> function in list context, which will give you the seconds and microseconds as two separate values.</p>
+
+</dd>
+<dt id="sleep-(-$floating_seconds-)"><a class="permalink" href="./Time::HiRes.html#sleep-(-$floating_seconds-)">#</a><a id="sleep"></a><a id="sleep-floating_seconds"></a>sleep ( $floating_seconds )</dt>
+<dd>
+
+<p>Sleeps for the specified amount of seconds. Returns the number of seconds actually slept (a floating point value). This function can be imported, resulting in a nice drop-in replacement for the <code>sleep</code> provided with perl, see the <a href="./Time::HiRes.html#EXAMPLES">&quot;EXAMPLES&quot;</a> below.</p>
+
+<p>Note that the interaction between alarms and sleeps is unspecified.</p>
+
+</dd>
+<dt id="alarm-(-$floating_seconds-[,-$interval_floating_seconds-]-)"><a class="permalink" href="./Time::HiRes.html#alarm-(-$floating_seconds-%5B,-$interval_floating_seconds-%5D-)">#</a><a id="alarm"></a><a id="alarm-floating_seconds-interval_floating_seconds"></a>alarm ( $floating_seconds [, $interval_floating_seconds ] )</dt>
+<dd>
+
+<p>The <code>SIGALRM</code> signal is sent after the specified number of seconds. Implemented using <code>setitimer()</code> if available, <code>ualarm()</code> if not. The <code>$interval_floating_seconds</code> argument is optional and will be zero if unspecified, resulting in <code>alarm()</code>-like behaviour. This function can be imported, resulting in a nice drop-in replacement for the <code>alarm</code> provided with perl, see the <a href="./Time::HiRes.html#EXAMPLES">&quot;EXAMPLES&quot;</a> below.</p>
+
+<p>Returns the remaining time in the alarm in seconds, or <code>undef</code> if an error occurred.</p>
+
+<p><b>NOTE 1</b>: With some combinations of operating systems and Perl releases <code>SIGALRM</code> restarts <code>select()</code>, instead of interrupting it. This means that an <code>alarm()</code> followed by a <code>select()</code> may together take the sum of the times specified for the <code>alarm()</code> and the <code>select()</code>, not just the time of the <code>alarm()</code>.</p>
+
+<p>Note that the interaction between alarms and sleeps is unspecified.</p>
+
+</dd>
+<dt id="setitimer-(-$which,-$floating_seconds-[,-$interval_floating_seconds-]-)"><a class="permalink" href="./Time::HiRes.html#setitimer-(-$which,-$floating_seconds-%5B,-$interval_floating_seconds-%5D-)">#</a><a id="setitimer"></a><a id="setitimer-which-floating_seconds-interval_floating_seconds"></a>setitimer ( $which, $floating_seconds [, $interval_floating_seconds ] )</dt>
+<dd>
+
+<p>Start up an interval timer: after a certain time, a signal ($which) arrives, and more signals may keep arriving at certain intervals. To disable an &quot;itimer&quot;, use <code>$floating_seconds</code> of zero. If the <code>$interval_floating_seconds</code> is set to zero (or unspecified), the timer is disabled <b>after</b> the next delivered signal.</p>
+
+<p>Use of interval timers may interfere with <code>alarm()</code>, <code>sleep()</code>, and <code>usleep()</code>. In standard-speak the &quot;interaction is unspecified&quot;, which means that <i>anything</i> may happen: it may work, it may not.</p>
+
+<p>In scalar context, the remaining time in the timer is returned.</p>
+
+<p>In list context, both the remaining time and the interval are returned.</p>
+
+<p>There are usually three or four interval timers (signals) available: the <code>$which</code> can be <code>ITIMER_REAL</code>, <code>ITIMER_VIRTUAL</code>, <code>ITIMER_PROF</code>, or <code>ITIMER_REALPROF</code>. Note that which ones are available depends: true UNIX platforms usually have the first three, but only Solaris seems to have <code>ITIMER_REALPROF</code> (which is used to profile multithreaded programs). Win32 unfortunately does not have interval timers.</p>
+
+<p><code>ITIMER_REAL</code> results in <code>alarm()</code>-like behaviour. Time is counted in <i>real time</i>; that is, wallclock time. <code>SIGALRM</code> is delivered when the timer expires.</p>
+
+<p><code>ITIMER_VIRTUAL</code> counts time in (process) <i>virtual time</i>; that is, only when the process is running. In multiprocessor/user/CPU systems this may be more or less than real or wallclock time. (This time is also known as the <i>user time</i>.) <code>SIGVTALRM</code> is delivered when the timer expires.</p>
+
+<p><code>ITIMER_PROF</code> counts time when either the process virtual time or when the operating system is running on behalf of the process (such as I/O). (This time is also known as the <i>system time</i>.) (The sum of user time and system time is known as the <i>CPU time</i>.) <code>SIGPROF</code> is delivered when the timer expires. <code>SIGPROF</code> can interrupt system calls.</p>
+
+<p>The semantics of interval timers for multithreaded programs are system-specific, and some systems may support additional interval timers. For example, it is unspecified which thread gets the signals. See your <a href="https://perldoc.perl.org/5.35.0/setitimer(2)"><code>setitimer(2)</code></a> documentation.</p>
+
+</dd>
+<dt id="getitimer-(-$which-)"><a class="permalink" href="./Time::HiRes.html#getitimer-(-$which-)">#</a><a id="getitimer"></a><a id="getitimer-which"></a>getitimer ( $which )</dt>
+<dd>
+
+<p>Return the remaining time in the interval timer specified by <code>$which</code>.</p>
+
+<p>In scalar context, the remaining time is returned.</p>
+
+<p>In list context, both the remaining time and the interval are returned. The interval is always what you put in using <code>setitimer()</code>.</p>
+
+</dd>
+<dt id="clock_gettime-(-$which-)"><a class="permalink" href="./Time::HiRes.html#clock_gettime-(-$which-)">#</a><a id="clock_gettime"></a><a id="clock_gettime-which"></a>clock_gettime ( $which )</dt>
+<dd>
+
+<p>Return as seconds the current value of the POSIX high resolution timer specified by <code>$which</code>. All implementations that support POSIX high resolution timers are supposed to support at least the <code>$which</code> value of <code>CLOCK_REALTIME</code>, which is supposed to return results close to the results of <code>gettimeofday</code>, or the number of seconds since 00:00:00:00 January 1, 1970 Greenwich Mean Time (GMT). Do not assume that CLOCK_REALTIME is zero, it might be one, or something else. Another potentially useful (but not available everywhere) value is <code>CLOCK_MONOTONIC</code>, which guarantees a monotonically increasing time value (unlike time() or gettimeofday(), which can be adjusted). See your system documentation for other possibly supported values.</p>
+
+</dd>
+<dt id="clock_getres-(-$which-)"><a class="permalink" href="./Time::HiRes.html#clock_getres-(-$which-)">#</a><a id="clock_getres"></a><a id="clock_getres-which"></a>clock_getres ( $which )</dt>
+<dd>
+
+<p>Return as seconds the resolution of the POSIX high resolution timer specified by <code>$which</code>. All implementations that support POSIX high resolution timers are supposed to support at least the <code>$which</code> value of <code>CLOCK_REALTIME</code>, see <a href="./Time::HiRes.html#clock_gettime">&quot;clock_gettime&quot;</a>.</p>
+
+<p><b>NOTE</b>: the resolution returned may be highly optimistic. Even if the resolution is high (a small number), all it means is that you&#39;ll be able to specify the arguments to clock_gettime() and clock_nanosleep() with that resolution. The system might not actually be able to measure events at that resolution, and the various overheads and the overall system load are certain to affect any timings.</p>
+
+</dd>
+<dt id="clock_nanosleep-(-$which,-$nanoseconds,-$flags-=-0)"><a class="permalink" href="./Time::HiRes.html#clock_nanosleep-(-$which,-$nanoseconds,-$flags-=-0)">#</a><a id="clock_nanosleep"></a><a id="clock_nanosleep-which-nanoseconds-flags-0"></a>clock_nanosleep ( $which, $nanoseconds, $flags = 0)</dt>
+<dd>
+
+<p>Sleeps for the number of nanoseconds (1e9ths of a second) specified. Returns the number of nanoseconds actually slept. The $which is the &quot;clock id&quot;, as with clock_gettime() and clock_getres(). The flags default to zero but <code>TIMER_ABSTIME</code> can specified (must be exported explicitly) which means that <code>$nanoseconds</code> is not a time interval (as is the default) but instead an absolute time. Can sleep for more than one second. Can also sleep for zero seconds, which often works like a <i>thread yield</i>. See also <a href="./Time::HiRes.html#sleep-%28-%24floating_seconds-%29"><code>Time::HiRes::sleep()</code></a>, <a href="./Time::HiRes.html#usleep-%28-%24useconds-%29"><code>Time::HiRes::usleep()</code></a>, and <a href="./Time::HiRes.html#nanosleep-%28-%24nanoseconds-%29"><code>Time::HiRes::nanosleep()</code></a>.</p>
+
+<p>Do not expect clock_nanosleep() to be exact down to one nanosecond. Getting even accuracy of one thousand nanoseconds is good.</p>
+
+</dd>
+<dt id="clock()"><a class="permalink" href="./Time::HiRes.html#clock()">#</a><a id="clock"></a>clock()</dt>
+<dd>
+
+<p>Return as seconds the <i>process time</i> (user + system time) spent by the process since the first call to clock() (the definition is <b>not</b> &quot;since the start of the process&quot;, though if you are lucky these times may be quite close to each other, depending on the system). What this means is that you probably need to store the result of your first call to clock(), and subtract that value from the following results of clock().</p>
+
+<p>The time returned also includes the process times of the terminated child processes for which wait() has been executed. This value is somewhat like the second value returned by the times() of core Perl, but not necessarily identical. Note that due to backward compatibility limitations the returned value may wrap around at about 2147 seconds or at about 36 minutes.</p>
+
+</dd>
+<dt id="stat"><a class="permalink" href="./Time::HiRes.html#stat">#</a>stat</dt>
+<dd>
+
+</dd>
+<dt id="stat-FH"><a class="permalink" href="./Time::HiRes.html#stat-FH">#</a><a id="stat1"></a>stat FH</dt>
+<dd>
+
+</dd>
+<dt id="stat-EXPR"><a class="permalink" href="./Time::HiRes.html#stat-EXPR">#</a><a id="stat2"></a>stat EXPR</dt>
+<dd>
+
+</dd>
+<dt id="lstat"><a class="permalink" href="./Time::HiRes.html#lstat">#</a>lstat</dt>
+<dd>
+
+</dd>
+<dt id="lstat-FH"><a class="permalink" href="./Time::HiRes.html#lstat-FH">#</a><a id="lstat1"></a>lstat FH</dt>
+<dd>
+
+</dd>
+<dt id="lstat-EXPR"><a class="permalink" href="./Time::HiRes.html#lstat-EXPR">#</a><a id="lstat2"></a>lstat EXPR</dt>
+<dd>
+
+<p>As <a href="perlfunc.html#stat">&quot;stat&quot; in perlfunc</a> or <a href="perlfunc.html#lstat">&quot;lstat&quot; in perlfunc</a> but with the access/modify/change file timestamps in subsecond resolution, if the operating system and the filesystem both support such timestamps. To override the standard stat():</p>
+
+<pre><code>use Time::HiRes qw(stat);</code></pre>
+
+<p>Test for the value of &amp;Time::HiRes::d_hires_stat to find out whether the operating system supports subsecond file timestamps: a value larger than zero means yes. There are unfortunately no easy ways to find out whether the filesystem supports such timestamps. UNIX filesystems often do; NTFS does; FAT doesn&#39;t (FAT timestamp granularity is <b>two</b> seconds).</p>
+
+<p>A zero return value of &amp;Time::HiRes::d_hires_stat means that Time::HiRes::stat is a no-op passthrough for CORE::stat() (and likewise for lstat), and therefore the timestamps will stay integers. The same thing will happen if the filesystem does not do subsecond timestamps, even if the &amp;Time::HiRes::d_hires_stat is non-zero.</p>
+
+<p>In any case do not expect nanosecond resolution, or even a microsecond resolution. Also note that the modify/access timestamps might have different resolutions, and that they need not be synchronized, e.g. if the operations are</p>
+
+<pre><code class="plaintext">write
+stat # t1
+read
+stat # t2</code></pre>
+
+<p>the access time stamp from t2 need not be greater-than the modify time stamp from t1: it may be equal or <i>less</i>.</p>
+
+</dd>
+<dt id="utime-LIST"><a class="permalink" href="./Time::HiRes.html#utime-LIST">#</a><a id="utime"></a>utime LIST</dt>
+<dd>
+
+<p>As <a href="perlfunc.html#utime">&quot;utime&quot; in perlfunc</a> but with the ability to set the access/modify file timestamps in subsecond resolution, if the operating system and the filesystem, and the mount options of the filesystem, all support such timestamps.</p>
+
+<p>To override the standard utime():</p>
+
+<pre><code>use Time::HiRes qw(utime);</code></pre>
+
+<p>Test for the value of &amp;Time::HiRes::d_hires_utime to find out whether the operating system supports setting subsecond file timestamps.</p>
+
+<p>As with CORE::utime(), passing undef as both the atime and mtime will call the syscall with a NULL argument.</p>
+
+<p>The actual achievable subsecond resolution depends on the combination of the operating system and the filesystem.</p>
+
+<p>Modifying the timestamps may not be possible at all: for example, the <code>noatime</code> filesystem mount option may prohibit you from changing the access time timestamp.</p>
+
+<p>Returns the number of files successfully changed.</p>
+
+</dd>
+</dl>
+
+<h1 id="EXAMPLES"><a class="permalink" href="./Time::HiRes.html#EXAMPLES">#</a>EXAMPLES</h1>
+
+<pre><code>use Time::HiRes qw(usleep ualarm gettimeofday tv_interval);
+
+$microseconds = 750_000;
+usleep($microseconds);
+
+# signal alarm in 2.5s &amp; every .1s thereafter
+ualarm(2_500_000, 100_000);
+# cancel that ualarm
+ualarm(0);
+
+# get seconds and microseconds since the epoch
+($s, $usec) = gettimeofday();
+
+# measure elapsed time
+# (could also do by subtracting 2 gettimeofday return values)
+$t0 = [gettimeofday];
+# do bunch of stuff here
+$t1 = [gettimeofday];
+# do more stuff here
+$t0_t1 = tv_interval $t0, $t1;
+
+$elapsed = tv_interval ($t0, [gettimeofday]);
+$elapsed = tv_interval ($t0); # equivalent code
+
+#
+# replacements for time, alarm and sleep that know about
+# floating seconds
+#
+use Time::HiRes;
+$now_fractions = Time::HiRes::time;
+Time::HiRes::sleep (2.5);
+Time::HiRes::alarm (10.6666666);
+
+use Time::HiRes qw ( time alarm sleep );
+$now_fractions = time;
+sleep (2.5);
+alarm (10.6666666);
+
+# Arm an interval timer to go off first at 10 seconds and
+# after that every 2.5 seconds, in process virtual time
+
+use Time::HiRes qw ( setitimer ITIMER_VIRTUAL time );
+
+$SIG{VTALRM} = sub { print time, &quot;\n&quot; };
+setitimer(ITIMER_VIRTUAL, 10, 2.5);
+
+use Time::HiRes qw( clock_gettime clock_getres CLOCK_REALTIME );
+# Read the POSIX high resolution timer.
+my $high = clock_gettime(CLOCK_REALTIME);
+# But how accurate we can be, really?
+my $reso = clock_getres(CLOCK_REALTIME);
+
+use Time::HiRes qw( clock_nanosleep TIMER_ABSTIME );
+clock_nanosleep(CLOCK_REALTIME, 1e6);
+clock_nanosleep(CLOCK_REALTIME, 2e9, TIMER_ABSTIME);
+
+use Time::HiRes qw( clock );
+my $clock0 = clock();
+... # Do something.
+my $clock1 = clock();
+my $clockd = $clock1 - $clock0;
+
+use Time::HiRes qw( stat );
+my ($atime, $mtime, $ctime) = (stat(&quot;istics&quot;))[8, 9, 10];</code></pre>
+
+<h1 id="C-API"><a class="permalink" href="./Time::HiRes.html#C-API">#</a><a id="C"></a>C API</h1>
+
+<p>In addition to the perl API described above, a C API is available for extension writers. The following C functions are available in the modglobal hash:</p>
+
+<pre><code class="plaintext">name             C prototype
+---------------  ----------------------
+Time::NVtime     NV (*)()
+Time::U2time     void (*)(pTHX_ UV ret[2])</code></pre>
+
+<p>Both functions return equivalent information (like <code>gettimeofday</code>) but with different representations. The names <code>NVtime</code> and <code>U2time</code> were selected mainly because they are operating system independent. (<code>gettimeofday</code> is Unix-centric, though some platforms like Win32 and VMS have emulations for it.)</p>
+
+<p>Here is an example of using <code>NVtime</code> from C:</p>
+
+<pre><code>NV (*myNVtime)(); /* Returns -1 on failure. */
+SV **svp = hv_fetchs(PL_modglobal, &quot;Time::NVtime&quot;, 0);
+if (!svp)         croak(&quot;Time::HiRes is required&quot;);
+if (!SvIOK(*svp)) croak(&quot;Time::NVtime isn&#39;t a function pointer&quot;);
+myNVtime = INT2PTR(NV(*)(), SvIV(*svp));
+printf(&quot;The current time is: %&quot; NVff &quot;\n&quot;, (*myNVtime)());</code></pre>
+
+<h1 id="DIAGNOSTICS"><a class="permalink" href="./Time::HiRes.html#DIAGNOSTICS">#</a>DIAGNOSTICS</h1>
+
+<h2 id="useconds-or-interval-more-than-..."><a class="permalink" href="./Time::HiRes.html#useconds-or-interval-more-than-...">#</a><a id="useconds"></a><a id="useconds-or-interval-more-than"></a>useconds or interval more than ...</h2>
+
+<p>In ualarm() you tried to use number of microseconds or interval (also in microseconds) more than 1_000_000 and setitimer() is not available in your system to emulate that case.</p>
+
+<h2 id="negative-time-not-invented-yet"><a class="permalink" href="./Time::HiRes.html#negative-time-not-invented-yet">#</a><a id="negative"></a>negative time not invented yet</h2>
+
+<p>You tried to use a negative time argument.</p>
+
+<h2 id="internal-error:-useconds-&lt;-0-(unsigned-...-signed-...)"><a class="permalink" href="./Time::HiRes.html#internal-error:-useconds-%3C-0-(unsigned-...-signed-...)">#</a><a id="internal"></a><a id="internal-error:-useconds-0-unsigned-...-signed"></a>internal error: useconds &lt; 0 (unsigned ... signed ...)</h2>
+
+<p>Something went horribly wrong-- the number of microseconds that cannot become negative just became negative. Maybe your compiler is broken?</p>
+
+<h2 id="useconds-or-uinterval-equal-to-or-more-than-1000000"><a class="permalink" href="./Time::HiRes.html#useconds-or-uinterval-equal-to-or-more-than-1000000">#</a><a id="useconds1"></a>useconds or uinterval equal to or more than 1000000</h2>
+
+<p>In some platforms it is not possible to get an alarm with subsecond resolution and later than one second.</p>
+
+<h2 id="unimplemented-in-this-platform"><a class="permalink" href="./Time::HiRes.html#unimplemented-in-this-platform">#</a><a id="unimplemented"></a>unimplemented in this platform</h2>
+
+<p>Some calls simply aren&#39;t available, real or emulated, on every platform.</p>
+
+<h1 id="CAVEATS"><a class="permalink" href="./Time::HiRes.html#CAVEATS">#</a>CAVEATS</h1>
+
+<p>Notice that the core <code>time()</code> maybe rounding rather than truncating. What this means is that the core <code>time()</code> may be reporting the time as one second later than <code>gettimeofday()</code> and <code>Time::HiRes::time()</code>.</p>
+
+<p>Adjusting the system clock (either manually or by services like ntp) may cause problems, especially for long running programs that assume a monotonously increasing time (note that all platforms do not adjust time as gracefully as UNIX ntp does). For example in Win32 (and derived platforms like Cygwin and MinGW) the Time::HiRes::time() may temporarily drift off from the system clock (and the original time()) by up to 0.5 seconds. Time::HiRes will notice this eventually and recalibrate. Note that since Time::HiRes 1.77 the clock_gettime(CLOCK_MONOTONIC) might help in this (in case your system supports CLOCK_MONOTONIC).</p>
+
+<p>Some systems have APIs but not implementations: for example QNX and Haiku have the interval timer APIs but not the functionality.</p>
+
+<p>In pre-Sierra macOS (pre-10.12, OS X) clock_getres(), clock_gettime() and clock_nanosleep() are emulated using the Mach timers; as a side effect of being emulated the CLOCK_REALTIME and CLOCK_MONOTONIC are the same timer.</p>
+
+<p>gnukfreebsd seems to have non-functional futimens() and utimensat() (at least as of 10.1): therefore the hires utime() does not work.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./Time::HiRes.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p>Perl modules <a href="./BSD::Resource.html">BSD::Resource</a>, <a href="./Time::TAI64.html">Time::TAI64</a>.</p>
+
+<p>Your system documentation for <a href="https://perldoc.perl.org/5.35.0/clock(3)"><code>clock(3)</code></a>, <a href="https://perldoc.perl.org/5.35.0/clock_gettime(2)"><code>clock_gettime(2)</code></a>, <a href="https://perldoc.perl.org/5.35.0/clock_getres(3)"><code>clock_getres(3)</code></a>, <a href="https://perldoc.perl.org/5.35.0/clock_nanosleep(3)"><code>clock_nanosleep(3)</code></a>, <a href="https://perldoc.perl.org/5.35.0/clock_settime(2)"><code>clock_settime(2)</code></a>, <a href="https://perldoc.perl.org/5.35.0/getitimer(2)"><code>getitimer(2)</code></a>, <a href="https://perldoc.perl.org/5.35.0/gettimeofday(2)"><code>gettimeofday(2)</code></a>, <a href="https://perldoc.perl.org/5.35.0/setitimer(2)"><code>setitimer(2)</code></a>, <a href="https://perldoc.perl.org/5.35.0/sleep(3)"><code>sleep(3)</code></a>, <a href="https://perldoc.perl.org/5.35.0/stat(2)"><code>stat(2)</code></a>, <a href="https://perldoc.perl.org/5.35.0/ualarm(3)"><code>ualarm(3)</code></a>.</p>
+
+<h1 id="AUTHORS"><a class="permalink" href="./Time::HiRes.html#AUTHORS">#</a>AUTHORS</h1>
+
+<p>D. Wegscheid &lt;wegscd@whirlpool.com&gt; R. Schertler &lt;roderick@argon.org&gt; J. Hietaniemi &lt;jhi@iki.fi&gt; G. Aas &lt;gisle@aas.no&gt;</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a class="permalink" href="./Time::HiRes.html#COPYRIGHT-AND-LICENSE">#</a><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>Copyright (c) 1996-2002 Douglas E. Wegscheid. All rights reserved.</p>
+
+<p>Copyright (c) 2002, 2003, 2004, 2005, 2006, 2007, 2008 Jarkko Hietaniemi. All rights reserved.</p>
+
+<p>Copyright (C) 2011, 2012, 2013 Andrew Main (Zefram) &lt;zefram@fysh.org&gt;</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

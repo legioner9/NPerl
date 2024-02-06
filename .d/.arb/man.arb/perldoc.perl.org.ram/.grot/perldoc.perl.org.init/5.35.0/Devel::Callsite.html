@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Devel::Callsite - Get caller return OP address and Perl interpreter context - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Devel-Callsite - MetaCPAN" href="https://metacpan.org/dist/Devel-Callsite/releases.rss" />
+        <link rel="canonical" href="./Devel::Callsite.html" />
+        <meta name="description" content="Get caller return OP address and Perl interpreter context" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Devel::Callsite" />
+<meta name="twitter:title"       content="Devel::Callsite" />
+<meta name="twitter:description" content="Get caller return OP address and Perl interpreter context" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Devel::Callsite.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Devel-Callsite was released.">
+      <span class="relatize">17 Jul 2018 23:16:58 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Devel-Callsite">Devel-Callsite</a>
+  </li>
+  <li>
+    Module version: 1.0.1
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Devel-Callsite/source/Callsite.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Devel-Callsite/source/Callsite.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Devel-Callsite/source">Browse</a>
+    (<a href="https://metacpan.org/dist/Devel-Callsite/source?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Devel-Callsite/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Devel-Callsite/contribute">How to Contribute</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Devel-Callsite">Issues</a>
+      (0)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Devel-Callsite+1.0.1" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-Callsite.html?oncpan=1&amp;distmat=1&amp;version=1.0.1&amp;grade=2" style="color: #090">3571</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-Callsite.html?oncpan=1&amp;distmat=1&amp;version=1.0.1&amp;grade=3" style="color: #900">14</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-Callsite.html?oncpan=1&amp;distmat=1&amp;version=1.0.1&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/ROCKY/Devel-Callsite-1.0.1">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Devel-Callsite who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 0
+      </div>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Devel-Callsite/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/R/RO/ROCKY/Devel-Callsite-1.0.1.tar.gz">
+      Download (<span itemprop="fileSize">62.47KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FROCKY%2FDevel-Callsite-1.0.1%2FCallsite.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-Callsite/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-Callsite/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Devel-Callsite">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Devel-Callsite">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/Callsite.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="ROCKY/Devel-Callsite-1.0.1"
+>1.0.1
+  (ROCKY on 2018-07-17)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.10"
+>0.10
+  (ROCKY on 2017-03-19)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.08"
+>0.08
+  (ROCKY on 2014-03-11)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.07"
+>0.07
+  (ROCKY on 2013-10-05)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.06"
+>0.06
+  (ROCKY on 2012-10-01)</option>
+<option
+  
+  value="TEODOR/Devel-Callsite-0.04"
+>0.04
+  (TEODOR on 2008-08-14)</option>
+<option
+  
+  value="TEODOR/Devel-Callsite-0.02"
+>0.02
+  (TEODOR on 2008-08-06)</option>
+<option
+  
+  value="TEODOR/Devel-Callsite-0.01"
+>0.01
+  (TEODOR on 2008-08-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ROCKY/Devel-Callsite-1.0.0"
+>1.0.0
+  (ROCKY on 2018-07-17)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.09"
+>0.09
+  (ROCKY on 2017-03-16)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.05"
+>0.05
+  (ROCKY on 2012-09-15)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/ROCKY/Devel-Callsite-1.0.1/diff/' + encodeURIComponent(this.value) + '/Callsite.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="ROCKY/Devel-Callsite-1.0.1"
+>1.0.1
+  (ROCKY on 2018-07-17)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.10"
+>0.10
+  (ROCKY on 2017-03-19)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.08"
+>0.08
+  (ROCKY on 2014-03-11)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.07"
+>0.07
+  (ROCKY on 2013-10-05)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.06"
+>0.06
+  (ROCKY on 2012-10-01)</option>
+<option
+  
+  value="TEODOR/Devel-Callsite-0.04"
+>0.04
+  (TEODOR on 2008-08-14)</option>
+<option
+  
+  value="TEODOR/Devel-Callsite-0.02"
+>0.02
+  (TEODOR on 2008-08-06)</option>
+<option
+  
+  value="TEODOR/Devel-Callsite-0.01"
+>0.01
+  (TEODOR on 2008-08-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ROCKY/Devel-Callsite-1.0.0"
+>1.0.0
+  (ROCKY on 2018-07-17)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.09"
+>0.09
+  (ROCKY on 2017-03-16)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.05"
+>0.05
+  (ROCKY on 2012-09-15)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Test::More" title="Test::More" class="ellipsis">Test::More</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Devel::Callsite/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Devel%3A%3ACallsite">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Devel-Callsite">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/ROCKY/Devel-Callsite-1.0.1/view/Callsite.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Devel::Callsite.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/TOBYINK"><img src="https://www.gravatar.com/avatar/f8faf2a422aecd1007b7d54c19ce7f39?d=identicon&amp;s=20" title="TOBYINK" alt="TOBYINK"></a>
+<a class="display-all" href="https://metacpan.org/author/NGLENN"><img src="https://www.gravatar.com/avatar/d760ed3250a704f6ae9e2c9b4d73cc1f?d=identicon&amp;s=20" title="NGLENN" alt="NGLENN"></a>
+<a class="display-all" href="https://metacpan.org/author/KES"><img src="https://www.gravatar.com/avatar/e8530f00b43b4f6a056f8ad4ee52ea47?d=identicon&amp;s=20" title="KES" alt="KES"></a>
+<a class="display-all" href="https://metacpan.org/author/RSCHABER"><img src="https://www.gravatar.com/avatar/8735b8d5583ee0a0155a41f993cab4f3?d=identicon&amp;s=20" title="RSCHABER" alt="RSCHABER"></a>
+<a class="display-all" href="https://metacpan.org/author/ZMUGHAL"><img src="https://www.gravatar.com/avatar/82e7c54d334bfdfd32594d34583d32bc?d=identicon&amp;s=20" title="ZMUGHAL" alt="ZMUGHAL"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Devel-Callsite/plussers">5 PAUSE users</a>
+</div>
+<div>
+    1 non-PAUSE user
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/ROCKY" class="author-name">Rocky Bernstein</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/Callsite.pm&#39;" class="">
+<option
+  selected
+  value="ROCKY/Devel-Callsite-1.0.1"
+>1.0.1
+  (ROCKY on 2018-07-17)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.10"
+>0.10
+  (ROCKY on 2017-03-19)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.08"
+>0.08
+  (ROCKY on 2014-03-11)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.07"
+>0.07
+  (ROCKY on 2013-10-05)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.06"
+>0.06
+  (ROCKY on 2012-10-01)</option>
+<option
+  
+  value="TEODOR/Devel-Callsite-0.04"
+>0.04
+  (TEODOR on 2008-08-14)</option>
+<option
+  
+  value="TEODOR/Devel-Callsite-0.02"
+>0.02
+  (TEODOR on 2008-08-06)</option>
+<option
+  
+  value="TEODOR/Devel-Callsite-0.01"
+>0.01
+  (TEODOR on 2008-08-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ROCKY/Devel-Callsite-1.0.0"
+>1.0.0
+  (ROCKY on 2018-07-17)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.09"
+>0.09
+  (ROCKY on 2017-03-16)</option>
+<option
+  
+  value="ROCKY/Devel-Callsite-0.05"
+>0.05
+  (ROCKY on 2012-09-15)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Devel-Callsite">Devel-Callsite-1.0.1</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage one &#10;
+          • 5 direct dependents &#10;          • 8 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Devel-Callsite-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Devel-Callsite-1.0.1">
+    <input type="hidden" name="author" value="ROCKY">
+    <input type="hidden" name="distribution" value="Devel-Callsite">
+    <button type="submit" class="favorite highlight"><span>6</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Devel::Callsite.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>6</span> ++</a>
+</div>
+   / <span>Devel::Callsite</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Devel::Callsite.html#NAME">NAME</a></li>
+  <li><a href="./Devel::Callsite.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Devel::Callsite.html#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a href="./Devel::Callsite.html#callsite">callsite</a></li>
+      <li><a href="./Devel::Callsite.html#addr_to_op">addr_to_op</a></li>
+      <li><a href="./Devel::Callsite.html#caller_nextop">caller_nextop</a></li>
+      <li><a href="./Devel::Callsite.html#context">context</a></li>
+    </ul>
+  </li>
+  <li><a href="./Devel::Callsite.html#HISTORY">HISTORY</a></li>
+  <li><a href="./Devel::Callsite.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Devel::Callsite.html#AUTHORS">AUTHORS</a></li>
+  <li><a href="./Devel::Callsite.html#LICENSE-AND-COPYRIGHT">LICENSE AND COPYRIGHT</a></li>
+</ul></nav>
+<div class="pod anchors">
+<a href="https://travis-ci.org/rocky/Perl-Devel-Callsite"><img src="https://travis-ci.org/rocky/Perl-Devel-Callsite.png" /></a>
+
+<h1 id="NAME">NAME</h1>
+
+<p>Devel::Callsite - Get caller return OP address and Perl interpreter context</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  use Devel::Callsite;
+  my $site = sub { return callsite() };
+  my $op_addr = $site-&gt;();
+  printf &quot;OP location: 0x%x\n&quot;, $op_addr;   # prints caller OP location
+  printf &quot;OP location: 0x%x\n&quot;, $site-&gt;(); # prints a different OP location
+
+  sub foo { return callsite(1) };
+  sub bar { foo() };
+  # print this OP location even though it is 2 levels up the call chain.
+  printf &quot;OP location: 0x%x\n&quot;, bar();
+
+  if ($] &gt;= 5.025) {
+    printf &quot;OP is: %s\n&quot;, addr_to_op($addr);
+    my $get_op = sub { return caller_nextop() };
+    printf &quot;OP is now: %s\n&quot;, $get_op-&gt;();
+  }
+
+  print context(), &quot;\n&quot;; # prints the interpreter context, an unsigned number</code></pre>
+
+<p>Running the above gives:</p>
+
+<pre><code>  OP location: 0x5572e41f89f8
+  OP location: 0x5572e421f5b0
+  OP is: B::NULL=SCALAR(0x5572e41d0578)
+  OP location: 0x5572e421f010
+  OP is now: B::LISTOP=SCALAR(0x5572e41d0578)
+  93951941730912</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<h2 id="callsite">callsite</h2>
+
+<pre><code>    $callsite = callsite();
+    $callsite = callsite($level);</code></pre>
+
+<p>This function returns the the OP address of the caller, a number. It can take an optional integer specifying the number of levels back to get the OP address. If no parameter is given, a value of 0 is used which means to go up one level in the call chain. This behavior is like the built-in function <a href="functions/CORE.html#caller"><code>caller</code></a>.</p>
+
+<p>This value is useful for functions that need to uniquely know where they were called, such as <code>Every::every()</code>; see <a href="https://metacpan.org/pod/Every">Every</a>. Or it can be used to <a href="http://www.perlmonks.com/?node_id=987268">pinpoint a location with finer granularity than a line number</a>. In conjunction with an OP tree disassembly you can know exactly where the caller is located in the Perl source.</p>
+
+<p>As of version 0.08, this function will return the expected call site for functions called via <code>DB::sub</code>. (Previously it returned a call site inside the debugger.) If <code>callsite</code> is called from package <code>DB</code> in list context, it will return two numbers. The first is the ordinary return value; the second is the &#39;true&#39; call site of the function in question, which may be different if <code>DB::sub</code> is in use.</p>
+
+<h2 id="addr_to_op">addr_to_op</h2>
+
+<p><i>For now this is only in 5.026 or greater</i>.</p>
+
+<pre><code>    $op = caller_nextop();
+    $op = caller_nextop($level);</code></pre>
+
+<h2 id="caller_nextop">caller_nextop</h2>
+
+<p><i>For now this is only in 5.026 or greater</i>.</p>
+
+<pre><code>    $op = caller_nextop();
+    $op = caller_nextop($level);</code></pre>
+
+<p>This function returns the the <code>B::OP</code>, not the address, of the next OP to get run after the call is made. It is equivalent to:</p>
+
+<pre><code>    addr_to_op(callsite($level));</code></pre>
+
+<h2 id="context">context</h2>
+
+<pre><code>    $context = context()</code></pre>
+
+<p>This function returns the interpreter context as a number. Using <code>callsite</code> alone to identify the call site is not reliable in programs which may include multiple Perl interpreters, such as when using ithreads. Combining <code>callsite</code> with <code>context</code> gives a unique location.</p>
+
+<h1 id="HISTORY">HISTORY</h1>
+
+<p>Ben Morrow conceived this and posted it to perl5-porters. Ted Zlatanov then turned it into a CPAN module which he maintained for the first 3 revisions. Ben also added the level parameter to callsite.</p>
+
+<p>ikegami provided the function to turn the address into a real <code>B::OP</code>.</p>
+
+<p>It is currently maintained (or not) by Rocky Bernstein.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/B::Concise">B::Concise</a> to disassemble the OP tree. <a href="https://metacpan.org/pod/Devel::Trepan">Devel::Trepan</a> optionally uses <i>Devel::Callsite</i> to show you exactly where you are stopped inside the debugger.</p>
+
+<h1 id="AUTHORS">AUTHORS</h1>
+
+<p>Rocky Bernstein &lt;rocky@cpan.org&gt; (current maintainer) Ted Zlatanov &lt;tzz@lifelogs.com&gt; Ben Morrow ikegami</p>
+
+<h1 id="LICENSE-AND-COPYRIGHT"><a id="LICENSE"></a>LICENSE AND COPYRIGHT</h1>
+
+<p>Copyright (C) 2013, 2018 Rocky Bernstein &lt;rocky@cpan.org&gt;, Ted Zlatanov, &lt;tzz@lifelogs.com&gt;, Ben Morrow</p>
+
+<p>This program is distributed WITHOUT ANY WARRANTY, including but not limited to the implied warranties of merchantability or fitness for a particular purpose.</p>
+
+<p>The program is free software. You may distribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation (either version 2 or any later version) and the Perl Artistic License as published by O&rsquo;Reilly Media, Inc. Please open the files named gpl-2.0.txt and Artistic for a copy of these licenses.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Devel::Callsite, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Devel::Callsite</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Devel::Callsite</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Devel::Callsite.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

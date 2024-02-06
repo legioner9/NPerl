@@ -1,0 +1,44 @@
+=over
+
+=item syscall NUMBER, LIST
+X<syscall> X<system call>
+
+Calls the system call specified as the first element of the list,
+passing the remaining elements as arguments to the system call.  If
+unimplemented, raises an exception.  The arguments are interpreted
+as follows: if a given argument is numeric, the argument is passed as
+an int.  If not, the pointer to the string value is passed.  You are
+responsible to make sure a string is pre-extended long enough to
+receive any result that might be written into a string.  You can't use a
+string literal (or other read-only string) as an argument to
+L<C<syscall>|/syscall NUMBER, LIST> because Perl has to assume that any
+string pointer might be written through.  If your
+integer arguments are not literals and have never been interpreted in a
+numeric context, you may need to add C<0> to them to force them to look
+like numbers.  This emulates the
+L<C<syswrite>|/syswrite FILEHANDLE,SCALAR,LENGTH,OFFSET> function (or
+vice versa):
+
+    require 'syscall.ph';        # may need to run h2ph
+    my $s = "hi there\n";
+    syscall(SYS_write(), fileno(STDOUT), $s, length $s);
+
+Note that Perl supports passing of up to only 14 arguments to your syscall,
+which in practice should (usually) suffice.
+
+Syscall returns whatever value returned by the system call it calls.
+If the system call fails, L<C<syscall>|/syscall NUMBER, LIST> returns
+C<-1> and sets L<C<$!>|perlvar/$!> (errno).
+Note that some system calls I<can> legitimately return C<-1>.  The proper
+way to handle such calls is to assign C<$! = 0> before the call, then
+check the value of L<C<$!>|perlvar/$!> if
+L<C<syscall>|/syscall NUMBER, LIST> returns C<-1>.
+
+There's a problem with C<syscall(SYS_pipe())>: it returns the file
+number of the read end of the pipe it creates, but there is no way
+to retrieve the file number of the other end.  You can avoid this
+problem by using L<C<pipe>|/pipe READHANDLE,WRITEHANDLE> instead.
+
+Portability issues: L<perlport/syscall>.
+
+=back

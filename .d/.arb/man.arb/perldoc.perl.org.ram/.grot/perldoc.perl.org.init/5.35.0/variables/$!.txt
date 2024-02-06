@@ -1,0 +1,45 @@
+=over
+
+=item $OS_ERROR
+
+=item $ERRNO
+
+=item $!
+X<$!> X<$ERRNO> X<$OS_ERROR>
+
+When referenced, C<$!> retrieves the current value
+of the C C<errno> integer variable.
+If C<$!> is assigned a numerical value, that value is stored in C<errno>.
+When referenced as a string, C<$!> yields the system error string
+corresponding to C<errno>.
+
+Many system or library calls set C<errno> if they fail,
+to indicate the cause of failure.  They usually do B<not>
+set C<errno> to zero if they succeed and may set C<errno> to a
+non-zero value on success.  This means C<errno>, hence C<$!>, is
+meaningful only I<immediately> after a B<failure>:
+
+    if (open my $fh, "<", $filename) {
+		# Here $! is meaningless.
+		...
+    }
+    else {
+		# ONLY here is $! meaningful.
+		...
+		# Already here $! might be meaningless.
+    }
+    # Since here we might have either success or failure,
+    # $! is meaningless.
+
+Here, I<meaningless> means that C<$!> may be unrelated to the outcome
+of the C<open()> operator.  Assignment to C<$!> is similarly ephemeral.
+It can be used immediately before invoking the C<die()> operator,
+to set the exit value, or to inspect the system error string
+corresponding to error I<n>, or to restore C<$!> to a meaningful state.
+
+Perl itself may set C<errno> to a non-zero on failure even if no
+system call is performed.
+
+Mnemonic: What just went bang?
+
+=back

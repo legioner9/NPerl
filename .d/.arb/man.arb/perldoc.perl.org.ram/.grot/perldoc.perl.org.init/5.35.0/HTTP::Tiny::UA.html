@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>HTTP::Tiny::UA - Higher-level UA features for HTTP::Tiny - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of HTTP-Tiny-UA - MetaCPAN" href="https://metacpan.org/dist/HTTP-Tiny-UA/releases.rss" />
+        <link rel="canonical" href="./HTTP::Tiny::UA.html" />
+        <meta name="description" content="Higher-level UA features for HTTP::Tiny" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/HTTP::Tiny::UA" />
+<meta name="twitter:title"       content="HTTP::Tiny::UA" />
+<meta name="twitter:description" content="Higher-level UA features for HTTP::Tiny" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./HTTP::Tiny::UA.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of HTTP-Tiny-UA was released.">
+      <span class="relatize">22 Apr 2018 20:24:09 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/HTTP-Tiny-UA">HTTP-Tiny-UA</a>
+  </li>
+  <li>
+    Module version: 0.006
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/HTTP-Tiny-UA/source/lib/HTTP/Tiny/UA.pm">Source</a>
+    (<a href="https://metacpan.org/dist/HTTP-Tiny-UA/source/lib/HTTP/Tiny/UA.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/HTTP-Tiny-UA/source/lib/HTTP/Tiny">Browse</a>
+    (<a href="https://metacpan.org/dist/HTTP-Tiny-UA/source/lib/HTTP/Tiny?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/HTTP-Tiny-UA/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://github.com/dagolden/HTTP-Tiny-UA">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/HTTP-Tiny-UA/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/dagolden/HTTP-Tiny-UA">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/dagolden/HTTP-Tiny-UA/issues">Issues</a>
+      (8)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=HTTP-Tiny-UA+0.006" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/H/HTTP-Tiny-UA.html?oncpan=1&amp;distmat=1&amp;version=0.006&amp;grade=2" style="color: #090">2396</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/H/HTTP-Tiny-UA.html?oncpan=1&amp;distmat=1&amp;version=0.006&amp;grade=3" style="color: #900">49</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/H/HTTP-Tiny-UA.html?oncpan=1&amp;distmat=1&amp;version=0.006&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/DAGOLDEN/HTTP-Tiny-UA-0.006">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on HTTP-Tiny-UA who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/HTTP-Tiny-UA-0.006/index.html">81.48% Coverage </a>
+    </li>
+    <li>
+      License: apache_2_0
+    </li>
+    <li>
+      Perl: v5.6.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/HTTP-Tiny-UA/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/HTTP-Tiny-UA-0.006.tar.gz">
+      Download (<span itemprop="fileSize">18.89KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FDAGOLDEN%2FHTTP-Tiny-UA-0.006%2Flib%2FHTTP%2FTiny%2FUA.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/HTTP-Tiny-UA/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/HTTP-Tiny-UA/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:HTTP-Tiny-UA">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="HTTP-Tiny-UA">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/HTTP/Tiny/UA.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="DAGOLDEN/HTTP-Tiny-UA-0.006"
+>0.006
+  (DAGOLDEN on 2018-04-22)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.005"
+>0.005
+  (DAGOLDEN on 2018-01-17)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.004"
+>0.004
+  (DAGOLDEN on 2015-08-12)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.003"
+>0.003
+  (DAGOLDEN on 2014-11-13)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.002"
+>0.002
+  (DAGOLDEN on 2014-02-22)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.001"
+>0.001
+  (DAGOLDEN on 2013-10-06)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/DAGOLDEN/HTTP-Tiny-UA-0.006/diff/' + encodeURIComponent(this.value) + '/lib/HTTP/Tiny/UA.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="DAGOLDEN/HTTP-Tiny-UA-0.006"
+>0.006
+  (DAGOLDEN on 2018-04-22)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.005"
+>0.005
+  (DAGOLDEN on 2018-01-17)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.004"
+>0.004
+  (DAGOLDEN on 2015-08-12)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.003"
+>0.003
+  (DAGOLDEN on 2014-11-13)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.002"
+>0.002
+  (DAGOLDEN on 2014-02-22)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.001"
+>0.001
+  (DAGOLDEN on 2013-10-06)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="./Class::Tiny.html" title="Class::Tiny" class="ellipsis">Class::Tiny</a></li>
+  <li><a href="https://metacpan.org/pod/HTTP::Tiny" title="HTTP::Tiny" class="ellipsis">HTTP::Tiny</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/subs" title="subs" class="ellipsis">subs</a></li>
+  <li><a href="https://metacpan.org/pod/superclass" title="superclass" class="ellipsis">superclass</a></li>
+  <li><a href="https://metacpan.org/pod/warnings" title="warnings" class="ellipsis">warnings</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/HTTP::Tiny::UA/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=HTTP%3A%3ATiny%3A%3AUA">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=HTTP-Tiny-UA">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/DAGOLDEN/HTTP-Tiny-UA-0.006/view/lib/HTTP/Tiny/UA.pm">This version</a>
+    </li>
+    <li>
+      <a href="./HTTP::Tiny::UA.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/KEEDI"><img src="https://www.gravatar.com/avatar/95f905a7a4ccc573c711e9d264c0fde8?d=identicon&amp;s=20" title="KEEDI" alt="KEEDI"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/HTTP-Tiny-UA/plussers">1 PAUSE user</a>
+</div>
+<div>
+    3 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 3 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-contrib-email="felipe@felipegasper.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Felipe Gasper
+    </li>
+    <li class="contributor"
+      data-contrib-email="perl@wdlabs.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Graham Ollis
+    </li>
+    <li class="contributor"
+      data-contrib-email="schwern@pobox.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Michael G. Schwern
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/DAGOLDEN" class="author-name">David Golden</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/HTTP/Tiny/UA.pm&#39;" class="">
+<option
+  selected
+  value="DAGOLDEN/HTTP-Tiny-UA-0.006"
+>0.006
+  (DAGOLDEN on 2018-04-22)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.005"
+>0.005
+  (DAGOLDEN on 2018-01-17)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.004"
+>0.004
+  (DAGOLDEN on 2015-08-12)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.003"
+>0.003
+  (DAGOLDEN on 2014-11-13)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.002"
+>0.002
+  (DAGOLDEN on 2014-02-22)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="DAGOLDEN/HTTP-Tiny-UA-0.001"
+>0.001
+  (DAGOLDEN on 2013-10-06)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/HTTP-Tiny-UA">HTTP-Tiny-UA-0.006</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage one &#10;
+          • 2 direct dependents &#10;          • 9 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="HTTP-Tiny-UA-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="HTTP-Tiny-UA-0.006">
+    <input type="hidden" name="author" value="DAGOLDEN">
+    <input type="hidden" name="distribution" value="HTTP-Tiny-UA">
+    <button type="submit" class="favorite highlight"><span>4</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./HTTP::Tiny::UA.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>4</span> ++</a>
+</div>
+   / <span>HTTP::Tiny::UA</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./HTTP::Tiny::UA.html#NAME">NAME</a></li>
+  <li><a href="./HTTP::Tiny::UA.html#VERSION">VERSION</a></li>
+  <li><a href="./HTTP::Tiny::UA.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./HTTP::Tiny::UA.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./HTTP::Tiny::UA.html#METHODS">METHODS</a>
+    <ul>
+      <li><a href="./HTTP::Tiny::UA.html#new">new</a></li>
+      <li><a href="./HTTP::Tiny::UA.html#get%7Chead%7Cput%7Cpost%7Cpost_form%7Cmirror%7Cdelete">get|head|put|post|post_form|mirror|delete</a></li>
+      <li><a href="./HTTP::Tiny::UA.html#request">request</a></li>
+    </ul>
+  </li>
+  <li><a href="./HTTP::Tiny::UA.html#EXCEPTIONS">EXCEPTIONS</a></li>
+  <li><a href="./HTTP::Tiny::UA.html#CONTRIBUTING">CONTRIBUTING</a></li>
+  <li><a href="./HTTP::Tiny::UA.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./HTTP::Tiny::UA.html#SUPPORT">SUPPORT</a>
+    <ul>
+      <li><a href="./HTTP::Tiny::UA.html#Bugs-/-Feature-Requests">Bugs / Feature Requests</a></li>
+      <li><a href="./HTTP::Tiny::UA.html#Source-Code">Source Code</a></li>
+    </ul>
+  </li>
+  <li><a href="./HTTP::Tiny::UA.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./HTTP::Tiny::UA.html#CONTRIBUTORS">CONTRIBUTORS</a></li>
+  <li><a href="./HTTP::Tiny::UA.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>HTTP::Tiny::UA - Higher-level UA features for HTTP::Tiny</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>version 0.006</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    use HTTP::Tiny::UA;
+    
+    my $ua = HTTP::Tiny::UA-&gt;new(
+        ...
+    );</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module extends <a href="https://metacpan.org/pod/HTTP::Tiny">HTTP::Tiny</a> with higher-level convenience features.</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    $http = HTTP::Tiny::UA-&gt;new( %attributes );</code></pre>
+
+<p>This is inherited from <a href="https://metacpan.org/pod/HTTP::Tiny">HTTP::Tiny</a>. The only difference so far is that <code>agent</code> will be <code>HTTP-Tiny-UA/$VERSION</code>.</p>
+
+<ul>
+
+<li><p><code>agent</code></p>
+
+<p>A user-agent string (defaults to &#39;HTTP-Tiny-UA/$VERSION&#39;). If <code>agent</code> ends in a space character, the default user-agent string is appended.</p>
+
+</li>
+<li><p><code>cookie_jar</code></p>
+
+<p>An instance of <a href="./HTTP::CookieJar.html">HTTP::CookieJar</a> or equivalent class that supports the <code>add</code> and <code>cookie_header</code> methods</p>
+
+</li>
+<li><p><code>default_headers</code></p>
+
+<p>A hashref of default headers to apply to requests</p>
+
+</li>
+<li><p><code>local_address</code></p>
+
+<p>The local IP address to bind to</p>
+
+</li>
+<li><p><code>max_redirect</code></p>
+
+<p>Maximum number of redirects allowed (defaults to 5)</p>
+
+</li>
+<li><p><code>max_size</code></p>
+
+<p>Maximum response size (only when not using a data callback). If defined, responses larger than this will return an exception.</p>
+
+</li>
+<li><p><code>proxy</code></p>
+
+<p>URL of a proxy server to use (default is <code>$ENV{http_proxy}</code> if set)</p>
+
+</li>
+<li><p><code>no_proxy</code></p>
+
+<p>List of domain suffixes that should not be proxied. Must be a comma-separated string or an array reference. (default is <code>$ENV{no_proxy}</code>)</p>
+
+</li>
+<li><p><code>timeout</code></p>
+
+<p>Request timeout in seconds (default is 60)</p>
+
+</li>
+<li><p><code>verify_SSL</code></p>
+
+<p>A boolean that indicates whether to validate the SSL certificate of an <code>https</code> connection (default is false)</p>
+
+</li>
+<li><p><code>SSL_options</code></p>
+
+<p>A hashref of <code>SSL_*</code> options to pass through to <a href="./IO::Socket::SSL.html">IO::Socket::SSL</a></p>
+
+</li>
+</ul>
+
+<p>See <a href="https://metacpan.org/pod/HTTP::Tiny#SSL-SUPPORT">SSL SUPPORT in HTTP::Tiny</a> for more on the <code>verify_SSL</code> and <code>SSL_options</code> attributes.</p>
+
+<h2 id="get|head|put|post|post_form|mirror|delete"><a id="get"></a><a id="get-head-put-post-post_form-mirror-delete"></a>get|head|put|post|post_form|mirror|delete</h2>
+
+<p>These methods are inherited from <a href="https://metacpan.org/pod/HTTP::Tiny">HTTP::Tiny</a> and work the same, except they invoke the <a href="./HTTP::Tiny::UA.html#request">HTTP::Tiny::UA request</a> method and return a <a href="https://metacpan.org/pod/HTTP::Tiny::UA::Response">HTTP::Tiny::UA::Response</a> object.</p>
+
+<h2 id="request">request</h2>
+
+<pre><code>    my $res = HTTP::Tiny-&gt;new-&gt;get( $url );</code></pre>
+
+<p>Just like <a href="https://metacpan.org/pod/HTTP::Tiny#request">HTTP::Tiny::request</a>, but returns a <a href="https://metacpan.org/pod/HTTP::Tiny::UA::Response">HTTP::Tiny::UA::Response</a> object. All other <code>get</code>, <code>post</code>, etc. methods eventually invoke this one so all such methods return response objects now.</p>
+
+<h1 id="EXCEPTIONS">EXCEPTIONS</h1>
+
+<p>Exceptions from <code>max_size</code>, <code>timeout</code> or other error conditions will result in a pseudo-HTTP status code of 599 and a reason of &quot;Internal Exception&quot;. The content field in the response will contain the text of the exception.</p>
+
+<h1 id="CONTRIBUTING">CONTRIBUTING</h1>
+
+<p>Unlike <a href="https://metacpan.org/pod/HTTP::Tiny">HTTP::Tiny</a>, this module is open to additional features. Please discuss new ideas on the bug tracker for feedback before implementing.</p>
+
+<p>While this module is not strictly &quot;Tiny&quot;, here are some general guidelines:</p>
+
+<ul>
+
+<li><p>The goal for this module is <b>not</b> feature/API equivalence with <a href="./LWP::UserAgent.html">LWP::UserAgent</a></p>
+
+</li>
+<li><p>Core module dependencies and &quot;Tiny&quot;-ish module dependencies are OK</p>
+
+</li>
+<li><p>Other CPAN modules should be used sparingly and only for good reasons</p>
+
+</li>
+<li><p>Any XS dependencies must be optional</p>
+
+</li>
+</ul>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<ul>
+
+<li><p><a href="https://metacpan.org/pod/HTTP::Tiny">HTTP::Tiny</a> &mdash; the underlying client</p>
+
+</li>
+<li><p><a href="./HTTP::Thin.html">HTTP::Thin</a> &mdash; another HTTP::Tiny extension that uses <a href="https://metacpan.org/pod/HTTP::Message">HTTP::Message</a> objects</p>
+
+</li>
+<li><p><a href="./LWP::UserAgent.html">LWP::UserAgent</a> &mdash; when you outgrow HTTP::Tiny, use this</p>
+
+</li>
+</ul>
+
+<h1 id="SUPPORT">SUPPORT</h1>
+
+<h2 id="Bugs-/-Feature-Requests"><a id="Bugs"></a><a id="Bugs---Feature-Requests"></a>Bugs / Feature Requests</h2>
+
+<p>Please report any bugs or feature requests through the issue tracker at <a href="https://github.com/dagolden/HTTP-Tiny-UA/issues">https://github.com/dagolden/HTTP-Tiny-UA/issues</a>. You will be notified automatically of any progress on your issue.</p>
+
+<h2 id="Source-Code"><a id="Source"></a>Source Code</h2>
+
+<p>This is open source software. The code repository is available for public review and contribution under the terms of the license.</p>
+
+<p><a href="https://github.com/dagolden/HTTP-Tiny-UA">https://github.com/dagolden/HTTP-Tiny-UA</a></p>
+
+<pre><code>  git clone https://github.com/dagolden/HTTP-Tiny-UA.git</code></pre>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>David Golden &lt;dagolden@cpan.org&gt;</p>
+
+<h1 id="CONTRIBUTORS">CONTRIBUTORS</h1>
+
+<ul>
+
+<li><p>Felipe Gasper &lt;felipe@felipegasper.com&gt;</p>
+
+</li>
+<li><p>Graham Ollis &lt;perl@wdlabs.com&gt;</p>
+
+</li>
+<li><p>Michael G. Schwern &lt;schwern@pobox.com&gt;</p>
+
+</li>
+</ul>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>This software is Copyright (c) 2013 by David Golden.</p>
+
+<p>This is free software, licensed under:</p>
+
+<pre><code>  The Apache License, Version 2.0, January 2004</code></pre></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install HTTP::Tiny::UA, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm HTTP::Tiny::UA</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install HTTP::Tiny::UA</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./HTTP::Tiny::UA.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

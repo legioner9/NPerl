@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Carp - alternative warn and die for modules - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Carp">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Carp.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Carp">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Carp">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Carp">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Carp">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Carp">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Carp">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Carp">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Carp">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Carp">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Carp">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Carp">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Carp">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Carp">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Carp">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Carp">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Carp">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Carp">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Carp">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Carp">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Carp">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Carp">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Carp">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Carp">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Carp">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Carp">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Carp">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Carp">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Carp">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Carp">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Carp">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Carp">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Carp">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Carp">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Carp">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Carp">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Carp">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Carp">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Carp">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Carp">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Carp">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Carp">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Carp">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Carp">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Carp">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Carp">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Carp">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Carp">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Carp">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Carp">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Carp">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Carp">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Carp">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Carp">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Carp">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Carp">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Carp">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Carp">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Carp">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Carp">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Carp">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Carp">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Carp">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Carp">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Carp">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Carp">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Carp">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Carp">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Carp">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Carp">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Carp">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Carp">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Carp">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Carp">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Carp">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Carp">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Carp">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Carp">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Carp">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Carp">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Carp">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Carp.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Carp">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Carp">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Carp">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Carp">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Carp">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Carp">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Carp">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Carp">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Carp">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Carp">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Carp">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Carp">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Carp">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Carp">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Carp">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Carp">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Carp">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Carp">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Carp">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Carp">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Carp">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Carp">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Carp">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Carp">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Carp">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Carp">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Carp">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Carp">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Carp">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Carp">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Carp">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Carp">5.35.1</a>
+          <a class="dropdown-item active" href="Carp.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Carp.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="Carp.html">Carp</a>
+          <div id="more">
+            (<a href="Carp.txt">source</a>,
+            <a href="https://metacpan.org/pod/Carp">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 1.52</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#Forcing-a-Stack-Trace">Forcing a Stack Trace</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#Stack-Trace-formatting">Stack Trace formatting</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#GLOBAL-VARIABLES">GLOBAL VARIABLES</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#$Carp::MaxEvalLen">$Carp::MaxEvalLen</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#$Carp::MaxArgLen">$Carp::MaxArgLen</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#$Carp::MaxArgNums">$Carp::MaxArgNums</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#$Carp::Verbose">$Carp::Verbose</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#$Carp::RefArgFormatter">$Carp::RefArgFormatter</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#@CARP_NOT">@CARP_NOT</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#%25Carp::Internal">%Carp::Internal</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#%25Carp::CarpInternal">%Carp::CarpInternal</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#$Carp::CarpLevel">$Carp::CarpLevel</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#BUGS">BUGS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#CONTRIBUTING">CONTRIBUTING</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Carp.html#LICENSE">LICENSE</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="Carp.html#NAME">#</a>NAME</h1>
+
+<p>Carp - alternative warn and die for modules</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="Carp.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Carp;
+
+# warn user (from perspective of caller)
+carp &quot;string trimmed to 80 chars&quot;;
+
+# die of errors (from perspective of caller)
+croak &quot;We&#39;re outta here!&quot;;
+
+# die of errors with stack backtrace
+confess &quot;not implemented&quot;;
+
+# cluck, longmess and shortmess not exported by default
+use Carp qw(cluck longmess shortmess);
+cluck &quot;This is how we got here!&quot;; # warn with stack backtrace
+$long_message   = longmess( &quot;message from cluck() or confess()&quot; );
+$short_message  = shortmess( &quot;message from carp() or croak()&quot; );</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="Carp.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>The Carp routines are useful in your own modules because they act like <code>die()</code> or <code>warn()</code>, but with a message which is more likely to be useful to a user of your module. In the case of <code>cluck()</code> and <code>confess()</code>, that context is a summary of every call in the call-stack; <code>longmess()</code> returns the contents of the error message.</p>
+
+<p>For a shorter message you can use <code>carp()</code> or <code>croak()</code> which report the error as being from where your module was called. <code>shortmess()</code> returns the contents of this error message. There is no guarantee that that is where the error was, but it is a good educated guess.</p>
+
+<p><code>Carp</code> takes care not to clobber the status variables <code>$!</code> and <code>$^E</code> in the course of assembling its error messages. This means that a <code>$SIG{__DIE__}</code> or <code>$SIG{__WARN__}</code> handler can capture the error information held in those variables, if it is required to augment the error message, and if the code calling <code>Carp</code> left useful values there. Of course, <code>Carp</code> can&#39;t guarantee the latter.</p>
+
+<p>You can also alter the way the output and logic of <code>Carp</code> works, by changing some global variables in the <code>Carp</code> namespace. See the section on <code>GLOBAL VARIABLES</code> below.</p>
+
+<p>Here is a more complete description of how <code>carp</code> and <code>croak</code> work. What they do is search the call-stack for a function call stack where they have not been told that there shouldn&#39;t be an error. If every call is marked safe, they give up and give a full stack backtrace instead. In other words they presume that the first likely looking potential suspect is guilty. Their rules for telling whether a call shouldn&#39;t generate errors work as follows:</p>
+
+<ol>
+
+<li><p>Any call from a package to itself is safe.</p>
+
+</li>
+<li><p>Packages claim that there won&#39;t be errors on calls to or from packages explicitly marked as safe by inclusion in <code>@CARP_NOT</code>, or (if that array is empty) <code>@ISA</code>. The ability to override what @ISA says is new in 5.8.</p>
+
+</li>
+<li><p>The trust in item 2 is transitive. If A trusts B, and B trusts C, then A trusts C. So if you do not override <code>@ISA</code> with <code>@CARP_NOT</code>, then this trust relationship is identical to, &quot;inherits from&quot;.</p>
+
+</li>
+<li><p>Any call from an internal Perl module is safe. (Nothing keeps user modules from marking themselves as internal to Perl, but this practice is discouraged.)</p>
+
+</li>
+<li><p>Any call to Perl&#39;s warning system (eg Carp itself) is safe. (This rule is what keeps it from reporting the error at the point where you call <code>carp</code> or <code>croak</code>.)</p>
+
+</li>
+<li><p><code>$Carp::CarpLevel</code> can be set to skip a fixed number of additional call levels. Using this is not recommended because it is very difficult to get it to behave correctly.</p>
+
+</li>
+</ol>
+
+<h2 id="Forcing-a-Stack-Trace"><a class="permalink" href="Carp.html#Forcing-a-Stack-Trace">#</a><a id="Forcing"></a>Forcing a Stack Trace</h2>
+
+<p>As a debugging aid, you can force Carp to treat a croak as a confess and a carp as a cluck across <i>all</i> modules. In other words, force a detailed stack trace to be given. This can be very helpful when trying to understand why, or from where, a warning or error is being generated.</p>
+
+<p>This feature is enabled by &#39;importing&#39; the non-existent symbol &#39;verbose&#39;. You would typically enable it by saying</p>
+
+<pre><code class="plaintext">perl -MCarp=verbose script.pl</code></pre>
+
+<p>or by including the string <code>-MCarp=verbose</code> in the PERL5OPT environment variable.</p>
+
+<p>Alternately, you can set the global variable <code>$Carp::Verbose</code> to true. See the <code>GLOBAL VARIABLES</code> section below.</p>
+
+<h2 id="Stack-Trace-formatting"><a class="permalink" href="Carp.html#Stack-Trace-formatting">#</a><a id="Stack"></a>Stack Trace formatting</h2>
+
+<p>At each stack level, the subroutine&#39;s name is displayed along with its parameters. For simple scalars, this is sufficient. For complex data types, such as objects and other references, this can simply display <code>&#39;HASH(0x1ab36d8)&#39;</code>.</p>
+
+<p>Carp gives two ways to control this.</p>
+
+<ol>
+
+<li><p>For objects, a method, <code>CARP_TRACE</code>, will be called, if it exists. If this method doesn&#39;t exist, or it recurses into <code>Carp</code>, or it otherwise throws an exception, this is skipped, and Carp moves on to the next option, otherwise checking stops and the string returned is used. It is recommended that the object&#39;s type is part of the string to make debugging easier.</p>
+
+</li>
+<li><p>For any type of reference, <code>$Carp::RefArgFormatter</code> is checked (see below). This variable is expected to be a code reference, and the current parameter is passed in. If this function doesn&#39;t exist (the variable is undef), or it recurses into <code>Carp</code>, or it otherwise throws an exception, this is skipped, and Carp moves on to the next option, otherwise checking stops and the string returned is used.</p>
+
+</li>
+<li><p>Otherwise, if neither <code>CARP_TRACE</code> nor <code>$Carp::RefArgFormatter</code> is available, stringify the value ignoring any overloading.</p>
+
+</li>
+</ol>
+
+<h1 id="GLOBAL-VARIABLES"><a class="permalink" href="Carp.html#GLOBAL-VARIABLES">#</a><a id="GLOBAL"></a>GLOBAL VARIABLES</h1>
+
+<h2 id="$Carp::MaxEvalLen"><a class="permalink" href="Carp.html#$Carp::MaxEvalLen">#</a><a id="Carp::MaxEvalLen"></a>$Carp::MaxEvalLen</h2>
+
+<p>This variable determines how many characters of a string-eval are to be shown in the output. Use a value of <code>0</code> to show all text.</p>
+
+<p>Defaults to <code>0</code>.</p>
+
+<h2 id="$Carp::MaxArgLen"><a class="permalink" href="Carp.html#$Carp::MaxArgLen">#</a><a id="Carp::MaxArgLen"></a>$Carp::MaxArgLen</h2>
+
+<p>This variable determines how many characters of each argument to a function to print. Use a value of <code>0</code> to show the full length of the argument.</p>
+
+<p>Defaults to <code>64</code>.</p>
+
+<h2 id="$Carp::MaxArgNums"><a class="permalink" href="Carp.html#$Carp::MaxArgNums">#</a><a id="Carp::MaxArgNums"></a>$Carp::MaxArgNums</h2>
+
+<p>This variable determines how many arguments to each function to show. Use a false value to show all arguments to a function call. To suppress all arguments, use <code>-1</code> or <code>&#39;0 but true&#39;</code>.</p>
+
+<p>Defaults to <code>8</code>.</p>
+
+<h2 id="$Carp::Verbose"><a class="permalink" href="Carp.html#$Carp::Verbose">#</a><a id="Carp::Verbose"></a>$Carp::Verbose</h2>
+
+<p>This variable makes <code>carp()</code> and <code>croak()</code> generate stack backtraces just like <code>cluck()</code> and <code>confess()</code>. This is how <code>use Carp &#39;verbose&#39;</code> is implemented internally.</p>
+
+<p>Defaults to <code>0</code>.</p>
+
+<h2 id="$Carp::RefArgFormatter"><a class="permalink" href="Carp.html#$Carp::RefArgFormatter">#</a><a id="Carp::RefArgFormatter"></a>$Carp::RefArgFormatter</h2>
+
+<p>This variable sets a general argument formatter to display references. Plain scalars and objects that implement <code>CARP_TRACE</code> will not go through this formatter. Calling <code>Carp</code> from within this function is not supported.</p>
+
+<pre><code>local $Carp::RefArgFormatter = sub {
+    require Data::Dumper;
+    Data::Dumper-&gt;Dump($_[0]); # not necessarily safe
+};</code></pre>
+
+<h2 id="@CARP_NOT"><a class="permalink" href="Carp.html#@CARP_NOT">#</a><a id="CARP_NOT"></a>@CARP_NOT</h2>
+
+<p>This variable, <i>in your package</i>, says which packages are <i>not</i> to be considered as the location of an error. The <code>carp()</code> and <code>cluck()</code> functions will skip over callers when reporting where an error occurred.</p>
+
+<p>NB: This variable must be in the package&#39;s symbol table, thus:</p>
+
+<pre><code># These work
+our @CARP_NOT; # file scope
+use vars qw(@CARP_NOT); # package scope
+@My::Package::CARP_NOT = ... ; # explicit package variable
+
+# These don&#39;t work
+sub xyz { ... @CARP_NOT = ... } # w/o declarations above
+my @CARP_NOT; # even at top-level</code></pre>
+
+<p>Example of use:</p>
+
+<pre><code>package My::Carping::Package;
+use Carp;
+our @CARP_NOT;
+sub bar     { .... or _error(&#39;Wrong input&#39;) }
+sub _error  {
+    # temporary control of where&#39;ness, __PACKAGE__ is implicit
+    local @CARP_NOT = qw(My::Friendly::Caller);
+    carp(@_)
+}</code></pre>
+
+<p>This would make <code>Carp</code> report the error as coming from a caller not in <code>My::Carping::Package</code>, nor from <code>My::Friendly::Caller</code>.</p>
+
+<p>Also read the <a href="Carp.html#DESCRIPTION">&quot;DESCRIPTION&quot;</a> section above, about how <code>Carp</code> decides where the error is reported from.</p>
+
+<p>Use <code>@CARP_NOT</code>, instead of <code>$Carp::CarpLevel</code>.</p>
+
+<p>Overrides <code>Carp</code>&#39;s use of <code>@ISA</code>.</p>
+
+<h2 id="%Carp::Internal"><a class="permalink" href="Carp.html#%25Carp::Internal">#</a><a id="Carp::Internal"></a>%Carp::Internal</h2>
+
+<p>This says what packages are internal to Perl. <code>Carp</code> will never report an error as being from a line in a package that is internal to Perl. For example:</p>
+
+<pre><code>$Carp::Internal{ (__PACKAGE__) }++;
+# time passes...
+sub foo { ... or confess(&quot;whatever&quot;) };</code></pre>
+
+<p>would give a full stack backtrace starting from the first caller outside of __PACKAGE__. (Unless that package was also internal to Perl.)</p>
+
+<h2 id="%Carp::CarpInternal"><a class="permalink" href="Carp.html#%25Carp::CarpInternal">#</a><a id="Carp::CarpInternal"></a>%Carp::CarpInternal</h2>
+
+<p>This says which packages are internal to Perl&#39;s warning system. For generating a full stack backtrace this is the same as being internal to Perl, the stack backtrace will not start inside packages that are listed in <code>%Carp::CarpInternal</code>. But it is slightly different for the summary message generated by <code>carp</code> or <code>croak</code>. There errors will not be reported on any lines that are calling packages in <code>%Carp::CarpInternal</code>.</p>
+
+<p>For example <code>Carp</code> itself is listed in <code>%Carp::CarpInternal</code>. Therefore the full stack backtrace from <code>confess</code> will not start inside of <code>Carp</code>, and the short message from calling <code>croak</code> is not placed on the line where <code>croak</code> was called.</p>
+
+<h2 id="$Carp::CarpLevel"><a class="permalink" href="Carp.html#$Carp::CarpLevel">#</a><a id="Carp::CarpLevel"></a>$Carp::CarpLevel</h2>
+
+<p>This variable determines how many additional call frames are to be skipped that would not otherwise be when reporting where an error occurred on a call to one of <code>Carp</code>&#39;s functions. It is fairly easy to count these call frames on calls that generate a full stack backtrace. However it is much harder to do this accounting for calls that generate a short message. Usually people skip too many call frames. If they are lucky they skip enough that <code>Carp</code> goes all of the way through the call stack, realizes that something is wrong, and then generates a full stack backtrace. If they are unlucky then the error is reported from somewhere misleading very high in the call stack.</p>
+
+<p>Therefore it is best to avoid <code>$Carp::CarpLevel</code>. Instead use <code>@CARP_NOT</code>, <code>%Carp::Internal</code> and <code>%Carp::CarpInternal</code>.</p>
+
+<p>Defaults to <code>0</code>.</p>
+
+<h1 id="BUGS"><a class="permalink" href="Carp.html#BUGS">#</a>BUGS</h1>
+
+<p>The Carp routines don&#39;t handle exception objects currently. If called with a first argument that is a reference, they simply call die() or warn(), as appropriate.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="Carp.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Carp::Always.html">Carp::Always</a>, <a href="./Carp::Clan.html">Carp::Clan</a></p>
+
+<h1 id="CONTRIBUTING"><a class="permalink" href="Carp.html#CONTRIBUTING">#</a>CONTRIBUTING</h1>
+
+<p><a href="Carp.html">Carp</a> is maintained by the perl 5 porters as part of the core perl 5 version control repository. Please see the <a href="perlhack.html">perlhack</a> perldoc for how to submit patches and contribute to it.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="Carp.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>The Carp module first appeared in Larry Wall&#39;s perl 5.000 distribution. Since then it has been modified by several of the perl 5 porters. Andrew Main (Zefram) &lt;zefram@fysh.org&gt; divested Carp into an independent distribution.</p>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="Carp.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>Copyright (C) 1994-2013 Larry Wall</p>
+
+<p>Copyright (C) 2011, 2012, 2013 Andrew Main (Zefram) &lt;zefram@fysh.org&gt;</p>
+
+<h1 id="LICENSE"><a class="permalink" href="Carp.html#LICENSE">#</a>LICENSE</h1>
+
+<p>This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

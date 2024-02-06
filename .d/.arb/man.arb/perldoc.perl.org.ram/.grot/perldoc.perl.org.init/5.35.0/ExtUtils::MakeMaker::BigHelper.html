@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>ExtUtils::MakeMaker::BigHelper - for helping ExtUtils::MakeMaker with big XS projects. - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of ExtUtils-MakeMaker-BigHelper - MetaCPAN" href="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper/releases.rss" />
+        <link rel="canonical" href="./ExtUtils::MakeMaker::BigHelper.html" />
+        <meta name="description" content="for helping ExtUtils::MakeMaker with big XS projects." />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/ExtUtils::MakeMaker::BigHelper" />
+<meta name="twitter:title"       content="ExtUtils::MakeMaker::BigHelper" />
+<meta name="twitter:description" content="for helping ExtUtils::MakeMaker with big XS projects." />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./ExtUtils::MakeMaker::BigHelper.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of ExtUtils-MakeMaker-BigHelper was released.">
+      <span class="relatize">28 Feb 2013 13:57:08 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper">ExtUtils-MakeMaker-BigHelper</a>
+  </li>
+  <li>
+    Module version: 0.92
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper/source/lib/ExtUtils/MakeMaker/BigHelper.pm">Source</a>
+    (<a href="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper/source/lib/ExtUtils/MakeMaker/BigHelper.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper/source/lib/ExtUtils/MakeMaker">Browse</a>
+    (<a href="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper/source/lib/ExtUtils/MakeMaker?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper/contribute">How to Contribute</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=ExtUtils-MakeMaker-BigHelper">Issues</a>
+      (2)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=ExtUtils-MakeMaker-BigHelper+0.92" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/E/ExtUtils-MakeMaker-BigHelper.html?oncpan=1&amp;distmat=1&amp;version=0.92&amp;grade=2" style="color: #090">17</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/E/ExtUtils-MakeMaker-BigHelper.html?oncpan=1&amp;distmat=1&amp;version=0.92&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/E/ExtUtils-MakeMaker-BigHelper.html?oncpan=1&amp;distmat=1&amp;version=0.92&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.92">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on ExtUtils-MakeMaker-BigHelper who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 0
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/ExtUtils-MakeMaker-BigHelper-0.92/index.html">4.71% Coverage </a>
+    </li>
+    <li>
+      License: unknown
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/E/ED/EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.92.tar.gz">
+      Download (<span itemprop="fileSize">10.45KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FEDGEWISE%2FExtUtils-MakeMaker-BigHelper-0.92%2Flib%2FExtUtils%2FMakeMaker%2FBigHelper.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:ExtUtils-MakeMaker-BigHelper">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="ExtUtils-MakeMaker-BigHelper">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/ExtUtils/MakeMaker/BigHelper.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.92"
+>0.92
+  (EDGEWISE on 2013-02-28)</option>
+<option
+  
+  value="EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.91"
+>0.91
+  (EDGEWISE on 2013-02-27)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.90"
+>0.90
+  (EDGEWISE on 2013-02-26)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.92/diff/' + encodeURIComponent(this.value) + '/lib/ExtUtils/MakeMaker/BigHelper.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.92"
+>0.92
+  (EDGEWISE on 2013-02-28)</option>
+<option
+  
+  value="EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.91"
+>0.91
+  (EDGEWISE on 2013-02-27)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.90"
+>0.90
+  (EDGEWISE on 2013-02-26)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/ExtUtils::MakeMaker" title="ExtUtils::MakeMaker" class="ellipsis">ExtUtils::MakeMaker</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/ExtUtils::MakeMaker::BigHelper/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=ExtUtils%3A%3AMakeMaker%3A%3ABigHelper">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=ExtUtils-MakeMaker-BigHelper">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.92/view/lib/ExtUtils/MakeMaker/BigHelper.pm">This version</a>
+    </li>
+    <li>
+      <a href="./ExtUtils::MakeMaker::BigHelper.html">Latest version</a>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/EDGEWISE" class="author-name">Rubin Charns</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/ExtUtils/MakeMaker/BigHelper.pm&#39;" class="">
+<option
+  selected
+  value="EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.92"
+>0.92
+  (EDGEWISE on 2013-02-28)</option>
+<option
+  
+  value="EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.91"
+>0.91
+  (EDGEWISE on 2013-02-27)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="EDGEWISE/ExtUtils-MakeMaker-BigHelper-0.90"
+>0.90
+  (EDGEWISE on 2013-02-26)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/ExtUtils-MakeMaker-BigHelper">ExtUtils-MakeMaker-BigHelper-0.92</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage zero &#10;
+          No dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="ExtUtils-MakeMaker-BigHelper-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="ExtUtils-MakeMaker-BigHelper-0.92">
+    <input type="hidden" name="author" value="EDGEWISE">
+    <input type="hidden" name="distribution" value="ExtUtils-MakeMaker-BigHelper">
+    <button type="submit" class="favorite"><span></span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./ExtUtils::MakeMaker::BigHelper.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite">
+<span></span> ++</a>
+</div>
+   / <span>ExtUtils::MakeMaker::BigHelper</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./ExtUtils::MakeMaker::BigHelper.html#NAME">NAME</a></li>
+  <li><a href="./ExtUtils::MakeMaker::BigHelper.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./ExtUtils::MakeMaker::BigHelper.html#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#$found-=-find_files($regex,-@directories)">$found = find_files($regex, @directories)</a></li>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#$found-=-find_directories($regex,-@directories)">$found = find_directories($regex, @directories)</a></li>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#$obj-init_dirscan%3E">$obj-init_dirscan&gt;</a></li>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#$obj-test%3E">$obj-test&gt;</a></li>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#$obj-init_PM%3E">$obj-init_PM&gt;</a></li>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#$obj-init_XS%3E">$obj-init_XS&gt;</a></li>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#$obj-clean_subdirs%3E">$obj-clean_subdirs&gt;</a></li>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#$obj-clean%3E">$obj-clean&gt;</a></li>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#$obj-postamble%3E">$obj-postamble&gt;</a></li>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#$obj-dynamic_bs%3E">$obj-dynamic_bs&gt;</a></li>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#$obj-dynamic_lib%3E">$obj-dynamic_lib&gt;</a></li>
+      <li><a href="./ExtUtils::MakeMaker::BigHelper.html#EXPORT">EXPORT</a></li>
+    </ul>
+  </li>
+  <li><a href="./ExtUtils::MakeMaker::BigHelper.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./ExtUtils::MakeMaker::BigHelper.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./ExtUtils::MakeMaker::BigHelper.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>ExtUtils::MakeMaker::BigHelper - for helping ExtUtils::MakeMaker with big XS projects.</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  use ExtUtils::MakeMaker::BigHelper qw(:find);
+
+    This exports find_files and find_directories, which might be useful with
+    WriteMakefile from ExtUtils::MakeMaker.
+
+  use ExtUtils::MakeMaker::BigHelper qw(:MY);
+
+    Use this after a &quot;package MY;&quot; statement.  It will export methods that
+    are used by ExtUtils::MakeMaker and available for customization.  These
+    customized methods will alter the behaviour of ExtUtils::MakeMaker as
+    documented below.</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This package extends or alters the functionality of ExtUtils::MakeMaker, in a way more suitable perhaps for large projects using a lot of perl XS.</p>
+
+<p>This allows multiple .xs files in your project, strewn about the lib directory hierarchy, hopefully side by each with the corresponding .pm file. Multiple t directories are also allowed, hopefully located next to the .pm files they test.</p>
+
+<p>See the man page for perlxs for more information about perl XS.</p>
+
+<p>With ExtUtils::MakeMaker there can only be one .xs file, which limits the size of the project. Well, there is a way to have more, but you&#39;re left with one master .xs file responsible for bootstrapping all the other ones. The way to have two .xs files is documented, but not easy, and the way to have more than two is, well, unnatural.</p>
+
+<p>With ExtUtils::MakeMaker you&#39;re allowed to provide customizations for various MakeMaker methods in the package MY. This gives you the ability to make a total overhaul of ExtUtils::MakeMaker.</p>
+
+<p>This package uses the customization facility built in to ExtUtils::MakeMaker to allow multiple .xs files, multiple t files, and multiple subproject (Makefile.PL and Build.PL) directories in the lib hierarchy rather than at the top level of the project. This allows you to more conveniently use perlxs in your project, without having to package up multiple Makefile.PL projects embedded in your directories. It also allows you to convert all those .pm files with Inline code into real perlxs without using dynamite.</p>
+
+<p>The methods here are meant to be exported into the package MY, to provide customizations of the ExtUtils::MakeMaker methods.</p>
+
+<p>For example, here&#39;s a possible project layout:</p>
+
+<pre><code>  Changes
+  lib/Big/Project.pm
+  lib/Big/Project/Collections/MyLRU.xs
+  lib/Big/Project/Collections/MyLRU.pm
+  lib/Big/Project/Collections/t/00-usage.t
+  lib/Big/Project/Collections/t/10-testlru.t
+  lib/Big/Project/Worker.pm
+  lib/Big/Project/Slave.pm
+  lib/Big/Project/Dispatcher/Scheduler.xs
+  lib/Big/Project/Dispatcher/Scheduler.pm
+  lib/Big/Project/Dispatcher/t/00-usage.t
+  lib/Big/Project/Dispatcher/t/10-roundrobin.t
+  lib/Big/Project/clib/Makefile
+  lib/Big/Project/clib/toolbox.c
+  lib/Big/Project/clib/toolbox.h
+  lib/Big/Project/clib/hashmaker.c
+  lib/Big/Project/clib/hashmaker.h
+  Makefile.PL
+  MANIFEST
+  README</code></pre>
+
+<p>The Makefile.PL would look like this:</p>
+
+<pre><code>  use ExtUtils::MakeMaker;
+
+  WriteMakefile(
+    NAME =&gt; &quot;Big::Project&quot;,
+    VERSION_FROM =&gt; &quot;lib/Big/Project.pm&quot;,
+    ($] &gt;= 5.005 ?     ## Add these new keywords supported since 5.005
+      (ABSTRACT       =&gt; &#39;Big Project&#39;,
+       AUTHOR         =&gt; &#39;John Bigbooty &lt;john.bigbooty@yoyodyne.com&gt;&#39;) : ()),
+    DEFINE            =&gt; &#39;&#39;,
+    LIBS              =&gt; [&#39;-lm&#39; ], # e.g., &#39;-lm&#39;
+    INC               =&gt; &#39;-I. -Ilib/Big/Project/clib&#39;,
+    MYEXTLIB          =&gt; &#39;lib/Big/Project/clib/libmyextlib.a&#39;,
+  );
+
+  package MY;
+
+  use ExtUtils::MakeMaker::BigHelper qw(:MY);</code></pre>
+
+<p>That should do it. It uses File::Find to descend the hierarchy and find all the .xs files and t directories.</p>
+
+<h2 id="$found-=-find_files($regex,-@directories)"><a id="found---find_files-regex---directories"></a><b>$found = find_files($regex, @directories)</b></h2>
+
+<p>This function is exported by the :find tag, and looks up all files matching the regex, under the listed directories. It returns them in a hashref where the keys are the files found and the value is 1.</p>
+
+<h2 id="$found-=-find_directories($regex,-@directories)"><a id="found---find_directories-regex---directories"></a><b>$found = find_directories($regex, @directories)</b></h2>
+
+<p>This function is exported by the :find tag, and looks up all directories matching the regex, under the listed directories. It returns them in a hashref where the keys are the directories found and the value is 1.</p>
+
+<h2 id="$obj-init_dirscan&gt;"><a id="obj-init_dirscan"></a><b>$obj-</b>init_dirscan&gt;</h2>
+
+<p>This function is exported by the :MY tag. It extends the MM init_dirscan.</p>
+
+<p>The MM init_dirscan only looks for .xs files in the top level directory. This extension descends into lib to find all .xs files, and sets them into the $self XS setting.</p>
+
+<p>Note that the XS setting is supposed to be a hashref of .xs files, where the value is the corresponding .c file. However, with these overrides, the value need only be 1 if the .c file is as expected.</p>
+
+<h2 id="$obj-test&gt;"><a id="obj-test"></a><b>$obj-</b>test&gt;</h2>
+
+<p>This function is exported by the :MY tag. It extends the MM test.</p>
+
+<p>The MM test only looks for t directories at the top level directory. This extension descends into lib to find all t directories, and sets them into the $self TESTS setting.</p>
+
+<p>The $self TESTS setting is supposed to be a blank separated list of t files (with shell wildcards) to run.</p>
+
+<p>Note that the XS setting is supposed to be a hashref of .xs files, where the value is the corresponding .c file. However, with these overrides, the value need only be 1 if the .c file is as expected.</p>
+
+<h2 id="$obj-init_PM&gt;"><a id="obj-init_PM"></a><b>$obj-</b>init_PM&gt;</h2>
+
+<p>This function is exported by the :MY tag. It extends/replaces the MM init_PM.</p>
+
+<p>This method only puts .pm files into the $self PM setting.</p>
+
+<p>The default init_PM puts all files into the $self PM setting.</p>
+
+<h2 id="$obj-init_XS&gt;"><a id="obj-init_XS"></a><b>$obj-</b>init_XS&gt;</h2>
+
+<p>This function is exported by the :MY tag. It extends the MM init_XS.</p>
+
+<p>This sets up macros INST_STATIC, INST_DYNAMIC, INST_BOOT, and uses INST_ARCHLIB.</p>
+
+<p>note: init_dirscan will set XS and DIR to defaults. However, init_dirscan has limitations, mostly that it cannot handle large projects.</p>
+
+<p>input and output:</p>
+
+<pre><code>  XS          as documented in ExtUtils::MakeMaker, this is a hashref.
+              the key is the relative path of the xs file.
+              the value can be the target c file as documented.
+              EXTENSION: the value can be simply 1 if the c file can be
+                         simply generated from the xs file.
+              EXTENSION: the value can be the package name XXX::YYY::ZZZ for
+                         the xs code.
+              EXTENSION: the value can be an array of c dependencies
+              EXTENSION: the XS hash is reworked by this code.
+
+  DIR         as documented, an arrayref of subdirectories containing
+              Makefile.PL
+              EXTENSION: may be an arrayref of pathnames for Makefile.PLs
+                         and Build.PLs init_dirscan only looks one deep for
+                         Makefile.PLs, and does not look for Build.PLs.
+                         With this extension, you could do a recursive file
+                         find for all Makefile.PLs and Build.PLs no matter
+                         how deep.
+              
+  MYEXTLIB</code></pre>
+
+<p>output</p>
+
+<pre><code>  MY_XS_DEPENDENCIES
+  MY_SUBDIRS
+  MY_EXTENSION_LIBS
+  MY_XS_TARGETS</code></pre>
+
+<h2 id="$obj-clean_subdirs&gt;"><a id="obj-clean_subdirs"></a><b>$obj-</b>clean_subdirs&gt;</h2>
+
+<p>This function is exported by the :MY tag. It replaces the MM clean_subdirs.</p>
+
+<p>This handles cleaning up subdirectories with their own Makefile, such as Makefile.PL, Build.PL, and extension libraries.</p>
+
+<h2 id="$obj-clean&gt;"><a id="obj-clean"></a><b>$obj-</b>clean&gt;</h2>
+
+<p>This function is exported by the :MY tag. It extends the MM clean.</p>
+
+<p>This handles cleaning up all the debris left by building .xs files, without having to have the .c files named explicitly in the $self XS setting.</p>
+
+<h2 id="$obj-postamble&gt;"><a id="obj-postamble"></a><b>$obj-</b>postamble&gt;</h2>
+
+<p>This function is exported by the :MY tag. It extends the MM postamble.</p>
+
+<p>This handles setting up the compilation of the .xs files with a VERSION for each. The bootstrap code checks the VERSION, and it has to match.</p>
+
+<h2 id="$obj-dynamic_bs&gt;"><a id="obj-dynamic_bs"></a><b>$obj-</b>dynamic_bs&gt;</h2>
+
+<p>This function is exported by the :MY tag. It extends the MM dynamic_bs.</p>
+
+<p>This handles the .bs files for multiple non-chained .xs files.</p>
+
+<h2 id="$obj-dynamic_lib&gt;"><a id="obj-dynamic_lib"></a><b>$obj-</b>dynamic_lib&gt;</h2>
+
+<p>This function is exported by the :MY tag. It extends the MM dynamic_lib.</p>
+
+<p>This handles building multiple .xs files into .so.</p>
+
+<h2 id="EXPORT">EXPORT</h2>
+
+<p>None by default. Use the tags :find and :MY to export the useful things.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p>Mention other useful documentation such as the documentation of related modules or operating system documentation (such as man pages in UNIX), or any relevant external documentation such as RFCs or standards.</p>
+
+<p>If you have a mailing list set up for your module, mention it here.</p>
+
+<p>If you have a web site set up for your module, mention it here.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Rob Janes, &lt;edgewise@cpan.org&gt;</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>Copyright (C) 2013 by Rob Janes</p>
+
+<p>This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself, either Perl version 5.12.3 or, at your option, any later version of Perl 5 you may have available.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install ExtUtils::MakeMaker::BigHelper, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm ExtUtils::MakeMaker::BigHelper</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install ExtUtils::MakeMaker::BigHelper</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./ExtUtils::MakeMaker::BigHelper.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlhack - How to hack on Perl - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlhack">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlhack.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlhack">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlhack">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlhack">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlhack">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlhack">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlhack">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlhack">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlhack">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlhack">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlhack">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlhack">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlhack">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlhack">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlhack">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlhack">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlhack">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlhack">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlhack">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlhack">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlhack">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlhack">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlhack">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlhack">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlhack">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlhack">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlhack">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlhack">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlhack">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlhack">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlhack">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlhack">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlhack">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlhack">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlhack">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlhack">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlhack">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlhack">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlhack">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlhack">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlhack">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlhack">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlhack">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlhack">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlhack">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlhack">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlhack">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlhack">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlhack">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlhack">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlhack">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlhack">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlhack">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlhack">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlhack">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlhack">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlhack">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlhack">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlhack">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlhack">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlhack">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlhack">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlhack">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlhack">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlhack">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlhack">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlhack">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlhack">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlhack">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlhack">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlhack">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlhack">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlhack">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlhack">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlhack">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlhack">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlhack">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlhack">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlhack">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlhack">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlhack">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlhack.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlhack">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlhack">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlhack">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlhack">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlhack">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlhack">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlhack">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlhack">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlhack">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlhack">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlhack">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlhack">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlhack">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlhack">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlhack">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlhack">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlhack">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlhack">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlhack">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlhack">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlhack">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlhack">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlhack">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlhack">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlhack">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlhack">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlhack">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlhack">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlhack">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlhack">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlhack">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlhack">5.35.1</a>
+          <a class="dropdown-item active" href="perlhack.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlhack.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlhack.html">perlhack</a>
+          <div id="more">
+            (<a href="perlhack.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlhack">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#SUPER-QUICK-PATCH-GUIDE">SUPER QUICK PATCH GUIDE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#BUG-REPORTING">BUG REPORTING</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#PERL-5-PORTERS">PERL 5 PORTERS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#perl-changes-mailing-list">perl-changes mailing list</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#%23p5p-on-IRC">#p5p on IRC</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#GETTING-THE-PERL-SOURCE">GETTING THE PERL SOURCE</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Read-access-via-Git">Read access via Git</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Read-access-via-the-web">Read access via the web</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Read-access-via-rsync">Read access via rsync</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Write-access-via-git">Write access via git</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#PATCHING-PERL">PATCHING PERL</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Submitting-patches">Submitting patches</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Getting-your-patch-accepted">Getting your patch accepted</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Patch-style">Patch style</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Commit-message">Commit message</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Comments,-Comments,-Comments">Comments, Comments, Comments</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Style">Style</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Test-suite">Test suite</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Patching-a-core-module">Patching a core module</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Updating-perldelta">Updating perldelta</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#What-makes-for-a-good-patch?">What makes for a good patch?</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Does-the-concept-match-the-general-goals-of-Perl?">Does the concept match the general goals of Perl?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Where-is-the-implementation?">Where is the implementation?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Backwards-compatibility">Backwards compatibility</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Could-it-be-a-module-instead?">Could it be a module instead?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Is-the-feature-generic-enough?">Is the feature generic enough?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Does-it-potentially-introduce-new-bugs?">Does it potentially introduce new bugs?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#How-big-is-it?">How big is it?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Does-it-preclude-other-desirable-features?">Does it preclude other desirable features?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Is-the-implementation-robust?">Is the implementation robust?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Is-the-implementation-generic-enough-to-be-portable?">Is the implementation generic enough to be portable?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Is-the-implementation-tested?">Is the implementation tested?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Is-there-enough-documentation?">Is there enough documentation?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Is-there-another-way-to-do-it?">Is there another way to do it?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Does-it-create-too-much-work?">Does it create too much work?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Patches-speak-louder-than-words">Patches speak louder than words</a>
+              </li>
+          </ul>
+
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#TESTING">TESTING</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Special-make-test-targets">Special make test targets</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Parallel-tests">Parallel tests</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Running-tests-by-hand">Running tests by hand</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Using-t/harness-for-testing">Using t/harness for testing</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Other-environment-variables-that-may-influence-tests">Other environment variables that may influence tests</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Performance-testing">Performance testing</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Building-perl-at-older-commits">Building perl at older commits</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#MORE-READING-FOR-GUTS-HACKERS">MORE READING FOR GUTS HACKERS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#CPAN-TESTERS-AND-PERL-SMOKERS">CPAN TESTERS AND PERL SMOKERS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#WHAT-NEXT?">WHAT NEXT?</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#%22The-Road-goes-ever-on-and-on,-down-from-the-door-where-it-began.%22">&quot;The Road goes ever on and on, down from the door where it began.&quot;</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#Metaphoric-Quotations">Metaphoric Quotations</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlhack.html#AUTHOR">AUTHOR</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlhack.html#NAME">#</a>NAME</h1>
+
+<p>perlhack - How to hack on Perl</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlhack.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This document explains how Perl development works. It includes details about the Perl 5 Porters email list, the Perl repository, the Perl bug tracker, patch guidelines, and commentary on Perl development philosophy.</p>
+
+<h1 id="SUPER-QUICK-PATCH-GUIDE"><a class="permalink" href="perlhack.html#SUPER-QUICK-PATCH-GUIDE">#</a><a id="SUPER"></a>SUPER QUICK PATCH GUIDE</h1>
+
+<p>If you just want to submit a single small patch like a pod fix, a test for a bug, comment fixes, etc., it&#39;s easy! Here&#39;s how:</p>
+
+<ul>
+
+<li><p>Check out the source repository</p>
+
+<p>The perl source is in a git repository. You can clone the repository with the following command:</p>
+
+<pre><code class="plaintext">% git clone https://github.com/Perl/perl5.git perl</code></pre>
+
+</li>
+<li><p>Ensure you&#39;re following the latest advice</p>
+
+<p>In case the advice in this guide has been updated recently, read the latest version directly from the perl source:</p>
+
+<pre><code class="plaintext">% perldoc pod/perlhack.pod</code></pre>
+
+</li>
+<li><p>Create a branch for your change</p>
+
+<p>Create a branch based on blead to commit your change to, which will later be used to send it to the Perl issue tracker.</p>
+
+<pre><code class="plaintext">% git checkout -b mychange</code></pre>
+
+</li>
+<li><p>Make your change</p>
+
+<p>Hack, hack, hack. Keep in mind that Perl runs on many different platforms, with different operating systems that have different capabilities, different filesystem organizations, and even different character sets. <a href="perlhacktips.html">perlhacktips</a> gives advice on this.</p>
+
+</li>
+<li><p>Test your change</p>
+
+<p>You can run all the tests with the following commands:</p>
+
+<pre><code class="plaintext">% ./Configure -des -Dusedevel
+% make test</code></pre>
+
+<p>Keep hacking until the tests pass.</p>
+
+</li>
+<li><p>Commit your change</p>
+
+<p>Committing your work will save the change <i>on your local system</i>:</p>
+
+<pre><code class="plaintext">% git commit -a -m &#39;Commit message goes here&#39;</code></pre>
+
+<p>Make sure the commit message describes your change in a single sentence. For example, &quot;Fixed spelling errors in perlhack.pod&quot;.</p>
+
+</li>
+<li><p>Send your change to the Perl issue tracker</p>
+
+<p>The next step is to submit your patch to the Perl core ticket system.</p>
+
+<p>Create a GitHub fork of the perl5 repository and add it as a remote, if you haven&#39;t already, as described in the GitHub documentation at <a href="https://help.github.com/en/articles/working-with-forks">https://help.github.com/en/articles/working-with-forks</a>.</p>
+
+<pre><code>% git remote add fork git@github.com:MyUser/perl5.git</code></pre>
+
+<p>For more information, see <a href="https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/connecting-to-github-with-ssh">&quot;Connecting to GitHub with SSH&quot;</a>.</p>
+
+<p>If you&#39;d rather use an HTTPS URL for your <code>git push</code> see <a href="https://docs.github.com/en/free-pro-team@latest/github/using-git/which-remote-url-should-i-use#cloning-with-https-urls">&quot;Cloning with HTTPS URLs&quot;</a>.</p>
+
+<pre><code class="plaintext">% git remote add fork https://github.com/MyUser/perl5.git</code></pre>
+
+<p>Then, push your new branch to your fork.</p>
+
+<pre><code class="plaintext">% git push -u fork mychange</code></pre>
+
+<p>Finally, create a Pull Request on GitHub from your branch to blead as described in the GitHub documentation at <a href="https://help.github.com/en/articles/creating-a-pull-request-from-a-fork">https://help.github.com/en/articles/creating-a-pull-request-from-a-fork</a>.</p>
+
+</li>
+<li><p>Thank you</p>
+
+<p>The porters appreciate the time you spent helping to make Perl better. Thank you!</p>
+
+</li>
+<li><p>Acknowledgement</p>
+
+<p>All contributors are credited (by name and email address) in the AUTHORS file, which is part of the perl distribution, as well as the Git commit history.</p>
+
+<p>If you don’t want to be included in the AUTHORS file, just let us know. Otherwise we will take your submission of a patch as permission to credit you in the AUTHORS file.</p>
+
+</li>
+<li><p>Next time</p>
+
+<p>The next time you wish to make a patch, you need to start from the latest perl in a pristine state. Check you don&#39;t have any local changes or added files in your perl check-out which you wish to keep, then run these commands:</p>
+
+<pre><code class="plaintext">% git checkout blead
+% git pull
+% git reset --hard origin/blead
+% git clean -dxf</code></pre>
+
+</li>
+</ul>
+
+<h1 id="BUG-REPORTING"><a class="permalink" href="perlhack.html#BUG-REPORTING">#</a><a id="BUG"></a>BUG REPORTING</h1>
+
+<p>If you want to report a bug in Perl, or browse existing Perl bugs and patches, use the GitHub issue tracker at <a href="https://github.com/perl/perl5/issues">https://github.com/perl/perl5/issues</a>.</p>
+
+<p>Please check the archive of the perl5-porters list (see below) and/or the bug tracking system before submitting a bug report. Often, you&#39;ll find that the bug has been reported already.</p>
+
+<p>You can log in to the bug tracking system and comment on existing bug reports. If you have additional information regarding an existing bug, please add it. This will help the porters fix the bug.</p>
+
+<h1 id="PERL-5-PORTERS"><a class="permalink" href="perlhack.html#PERL-5-PORTERS">#</a><a id="PERL"></a>PERL 5 PORTERS</h1>
+
+<p>The perl5-porters (p5p) mailing list is where the Perl standard distribution is maintained and developed. The people who maintain Perl are also referred to as the &quot;Perl 5 Porters&quot;, &quot;p5p&quot; or just the &quot;porters&quot;.</p>
+
+<p>A searchable archive of the list is available at <a href="https://markmail.org/search/?q=perl5-porters">https://markmail.org/search/?q=perl5-porters</a>. There is also an archive at <a href="https://archive.develooper.com/perl5-porters@perl.org/">https://archive.develooper.com/perl5-porters@perl.org/</a>.</p>
+
+<h2 id="perl-changes-mailing-list"><a class="permalink" href="perlhack.html#perl-changes-mailing-list">#</a><a id="perl"></a>perl-changes mailing list</h2>
+
+<p>The perl5-changes mailing list receives a copy of each patch that gets submitted to the maintenance and development branches of the perl repository. See <a href="https://lists.perl.org/list/perl5-changes.html">https://lists.perl.org/list/perl5-changes.html</a> for subscription and archive information.</p>
+
+<h2 id="#p5p-on-IRC"><a class="permalink" href="perlhack.html#%23p5p-on-IRC">#</a><a id="p5p-on-IRC"></a>#p5p on IRC</h2>
+
+<p>Many porters are also active on the <a href="irc://irc.perl.org/#p5p">irc://irc.perl.org/#p5p</a> channel. Feel free to join the channel and ask questions about hacking on the Perl core.</p>
+
+<h1 id="GETTING-THE-PERL-SOURCE"><a class="permalink" href="perlhack.html#GETTING-THE-PERL-SOURCE">#</a><a id="GETTING"></a>GETTING THE PERL SOURCE</h1>
+
+<p>All of Perl&#39;s source code is kept centrally in a Git repository at <i>github.com</i>. The repository contains many Perl revisions from Perl 1 onwards and all the revisions from Perforce, the previous version control system.</p>
+
+<p>For much more detail on using git with the Perl repository, please see <a href="perlgit.html">perlgit</a>.</p>
+
+<h2 id="Read-access-via-Git"><a class="permalink" href="perlhack.html#Read-access-via-Git">#</a><a id="Read"></a>Read access via Git</h2>
+
+<p>You will need a copy of Git for your computer. You can fetch a copy of the repository using the git protocol:</p>
+
+<pre><code class="plaintext">% git clone git://github.com/Perl/perl5.git perl</code></pre>
+
+<p>This clones the repository and makes a local copy in the <i>perl</i> directory.</p>
+
+<p>If you cannot use the git protocol for firewall reasons, you can also clone via http:</p>
+
+<pre><code class="plaintext">% git clone https://github.com/Perl/perl5.git perl</code></pre>
+
+<h2 id="Read-access-via-the-web"><a class="permalink" href="perlhack.html#Read-access-via-the-web">#</a><a id="Read1"></a>Read access via the web</h2>
+
+<p>You may access the repository over the web. This allows you to browse the tree, see recent commits, subscribe to repository notifications, search for particular commits and more. You may access it at <a href="https://github.com/Perl/perl5">https://github.com/Perl/perl5</a>.</p>
+
+<h2 id="Read-access-via-rsync"><a class="permalink" href="perlhack.html#Read-access-via-rsync">#</a><a id="Read2"></a>Read access via rsync</h2>
+
+<p>You can also choose to use rsync to get a copy of the current source tree for the bleadperl branch and all maintenance branches:</p>
+
+<pre><code class="plaintext">% rsync -avz rsync://perl5.git.perl.org/perl-current .
+% rsync -avz rsync://perl5.git.perl.org/perl-5.12.x .
+% rsync -avz rsync://perl5.git.perl.org/perl-5.10.x .
+% rsync -avz rsync://perl5.git.perl.org/perl-5.8.x .
+% rsync -avz rsync://perl5.git.perl.org/perl-5.6.x .
+% rsync -avz rsync://perl5.git.perl.org/perl-5.005xx .</code></pre>
+
+<p>(Add the <code>--delete</code> option to remove leftover files.)</p>
+
+<p>To get a full list of the available sync points:</p>
+
+<pre><code class="plaintext">% rsync perl5.git.perl.org::</code></pre>
+
+<h2 id="Write-access-via-git"><a class="permalink" href="perlhack.html#Write-access-via-git">#</a><a id="Write"></a>Write access via git</h2>
+
+<p>If you have a commit bit, please see <a href="perlgit.html">perlgit</a> for more details on using git.</p>
+
+<h1 id="PATCHING-PERL"><a class="permalink" href="perlhack.html#PATCHING-PERL">#</a><a id="PATCHING"></a>PATCHING PERL</h1>
+
+<p>If you&#39;re planning to do more extensive work than a single small fix, we encourage you to read the documentation below. This will help you focus your work and make your patches easier to incorporate into the Perl source.</p>
+
+<h2 id="Submitting-patches"><a class="permalink" href="perlhack.html#Submitting-patches">#</a><a id="Submitting"></a>Submitting patches</h2>
+
+<p>If you have a small patch to submit, please submit it via the GitHub Pull Request workflow. You may also send patches to the p5p list.</p>
+
+<p>Patches are reviewed and discussed on GitHub or the p5p list. Simple, uncontroversial patches will usually be applied without any discussion. When the patch is applied, the ticket will be updated and you will receive email.</p>
+
+<p>In other cases, the patch will need more work or discussion. You are encouraged to participate in the discussion and advocate for your patch. Sometimes your patch may get lost in the shuffle. It&#39;s appropriate to send a reminder email to p5p if no action has been taken in a month. Please remember that the Perl 5 developers are all volunteers, and be polite.</p>
+
+<p>Changes are always applied directly to the main development branch, called &quot;blead&quot;. Some patches may be backported to a maintenance branch. If you think your patch is appropriate for the maintenance branch (see <a href="perlpolicy.html#MAINTENANCE-BRANCHES">&quot;MAINTENANCE BRANCHES&quot; in perlpolicy</a>), please explain why when you submit it.</p>
+
+<h2 id="Getting-your-patch-accepted"><a class="permalink" href="perlhack.html#Getting-your-patch-accepted">#</a><a id="Getting"></a>Getting your patch accepted</h2>
+
+<p>If you are submitting a code patch there are several things that you can do to help the Perl 5 Porters accept your patch.</p>
+
+<h3 id="Patch-style"><a class="permalink" href="perlhack.html#Patch-style">#</a><a id="Patch"></a>Patch style</h3>
+
+<p>Using the GitHub Pull Request workflow, your patch will automatically be available in a suitable format. If you wish to submit a patch to the p5p list for review, make sure to create it appropriately.</p>
+
+<p>If you used git to check out the Perl source, then using <code>git format-patch</code> will produce a patch in a style suitable for Perl. The <code>format-patch</code> command produces one patch file for each commit you made. If you prefer to send a single patch for all commits, you can use <code>git diff</code>.</p>
+
+<pre><code class="plaintext">% git checkout blead
+% git pull
+% git diff blead my-branch-name</code></pre>
+
+<p>This produces a patch based on the difference between blead and your current branch. It&#39;s important to make sure that blead is up to date before producing the diff, that&#39;s why we call <code>git pull</code> first.</p>
+
+<p>We strongly recommend that you use git if possible. It will make your life easier, and ours as well.</p>
+
+<p>However, if you&#39;re not using git, you can still produce a suitable patch. You&#39;ll need a pristine copy of the Perl source to diff against. The porters prefer unified diffs. Using GNU <code>diff</code>, you can produce a diff like this:</p>
+
+<pre><code class="plaintext">% diff -Npurd perl.pristine perl.mine</code></pre>
+
+<p>Make sure that you <code>make realclean</code> in your copy of Perl to remove any build artifacts, or you may get a confusing result.</p>
+
+<h3 id="Commit-message"><a class="permalink" href="perlhack.html#Commit-message">#</a><a id="Commit"></a>Commit message</h3>
+
+<p>As you craft each patch you intend to submit to the Perl core, it&#39;s important to write a good commit message. This is especially important if your submission will consist of a series of commits.</p>
+
+<p>The first line of the commit message should be a short description without a period. It should be no longer than the subject line of an email, 50 characters being a good rule of thumb.</p>
+
+<p>A lot of Git tools (Gitweb, GitHub, git log --pretty=oneline, ...) will only display the first line (cut off at 50 characters) when presenting commit summaries.</p>
+
+<p>The commit message should include a description of the problem that the patch corrects or new functionality that the patch adds.</p>
+
+<p>As a general rule of thumb, your commit message should help a programmer who knows the Perl core quickly understand what you were trying to do, how you were trying to do it, and why the change matters to Perl.</p>
+
+<ul>
+
+<li><p>Why</p>
+
+<p>Your commit message should describe why the change you are making is important. When someone looks at your change in six months or six years, your intent should be clear.</p>
+
+<p>If you&#39;re deprecating a feature with the intent of later simplifying another bit of code, say so. If you&#39;re fixing a performance problem or adding a new feature to support some other bit of the core, mention that.</p>
+
+</li>
+<li><p>What</p>
+
+<p>Your commit message should describe what part of the Perl core you&#39;re changing and what you expect your patch to do.</p>
+
+</li>
+<li><p>How</p>
+
+<p>While it&#39;s not necessary for documentation changes, new tests or trivial patches, it&#39;s often worth explaining how your change works. Even if it&#39;s clear to you today, it may not be clear to a porter next month or next year.</p>
+
+</li>
+</ul>
+
+<p>A commit message isn&#39;t intended to take the place of comments in your code. Commit messages should describe the change you made, while code comments should describe the current state of the code.</p>
+
+<p>If you&#39;ve just implemented a new feature, complete with doc, tests and well-commented code, a brief commit message will often suffice. If, however, you&#39;ve just changed a single character deep in the parser or lexer, you might need to write a small novel to ensure that future readers understand what you did and why you did it.</p>
+
+<h3 id="Comments,-Comments,-Comments"><a class="permalink" href="perlhack.html#Comments,-Comments,-Comments">#</a><a id="Comments"></a><a id="Comments-Comments-Comments"></a>Comments, Comments, Comments</h3>
+
+<p>Be sure to adequately comment your code. While commenting every line is unnecessary, anything that takes advantage of side effects of operators, that creates changes that will be felt outside of the function being patched, or that others may find confusing should be documented. If you are going to err, it is better to err on the side of adding too many comments than too few.</p>
+
+<p>The best comments explain <i>why</i> the code does what it does, not <i>what it does</i>.</p>
+
+<h3 id="Style"><a class="permalink" href="perlhack.html#Style">#</a>Style</h3>
+
+<p>In general, please follow the particular style of the code you are patching.</p>
+
+<p>In particular, follow these general guidelines for patching Perl sources:</p>
+
+<ul>
+
+<li><p>4-wide indents for code, 2-wide indents for nested CPP <code>#define</code>s, with 8-wide tabstops.</p>
+
+</li>
+<li><p>Use spaces for indentation, not tab characters.</p>
+
+<p>The codebase is a mixture of tabs and spaces for indentation, and we are moving to spaces only. Converting lines you&#39;re patching from 8-wide tabs to spaces will help this migration.</p>
+
+</li>
+<li><p>Try hard not to exceed 79-columns</p>
+
+</li>
+<li><p>ANSI C prototypes</p>
+
+</li>
+<li><p>Uncuddled elses and &quot;K&amp;R&quot; style for indenting control constructs</p>
+
+</li>
+<li><p>No C++ style (//) comments</p>
+
+</li>
+<li><p>Mark places that need to be revisited with XXX (and revisit often!)</p>
+
+</li>
+<li><p>Opening brace lines up with &quot;if&quot; when conditional spans multiple lines; should be at end-of-line otherwise</p>
+
+</li>
+<li><p>In function definitions, name starts in column 0 (return value-type is on previous line)</p>
+
+</li>
+<li><p>Single space after keywords that are followed by parens, no space between function name and following paren</p>
+
+</li>
+<li><p>Avoid assignments in conditionals, but if they&#39;re unavoidable, use extra paren, e.g. &quot;if (a &amp;&amp; (b = c)) ...&quot;</p>
+
+</li>
+<li><p>&quot;return foo;&quot; rather than &quot;return(foo);&quot;</p>
+
+</li>
+<li><p>&quot;if (!foo) ...&quot; rather than &quot;if (foo == FALSE) ...&quot; etc.</p>
+
+</li>
+<li><p>Do not declare variables using &quot;register&quot;. It may be counterproductive with modern compilers, and is deprecated in C++, under which the Perl source is regularly compiled.</p>
+
+</li>
+<li><p>In-line functions that are in headers that are accessible to XS code need to be able to compile without warnings with commonly used extra compilation flags, such as gcc&#39;s <code>-Wswitch-default</code> which warns whenever a switch statement does not have a &quot;default&quot; case. The use of these extra flags is to catch potential problems in legal C code, and is often used by Perl aggregators, such as Linux distributors.</p>
+
+</li>
+</ul>
+
+<h3 id="Test-suite"><a class="permalink" href="perlhack.html#Test-suite">#</a><a id="Test"></a>Test suite</h3>
+
+<p>If your patch changes code (rather than just changing documentation), you should also include one or more test cases which illustrate the bug you&#39;re fixing or validate the new functionality you&#39;re adding. In general, you should update an existing test file rather than create a new one.</p>
+
+<p>Your test suite additions should generally follow these guidelines (courtesy of Gurusamy Sarathy &lt;gsar@activestate.com&gt;):</p>
+
+<ul>
+
+<li><p>Know what you&#39;re testing. Read the docs, and the source.</p>
+
+</li>
+<li><p>Tend to fail, not succeed.</p>
+
+</li>
+<li><p>Interpret results strictly.</p>
+
+</li>
+<li><p>Use unrelated features (this will flush out bizarre interactions).</p>
+
+</li>
+<li><p>Use non-standard idioms (otherwise you are not testing TIMTOWTDI).</p>
+
+</li>
+<li><p>Avoid using hardcoded test numbers whenever possible (the EXPECTED/GOT found in t/op/tie.t is much more maintainable, and gives better failure reports).</p>
+
+</li>
+<li><p>Give meaningful error messages when a test fails.</p>
+
+</li>
+<li><p>Avoid using qx// and system() unless you are testing for them. If you do use them, make sure that you cover _all_ perl platforms.</p>
+
+</li>
+<li><p>Unlink any temporary files you create.</p>
+
+</li>
+<li><p>Promote unforeseen warnings to errors with $SIG{__WARN__}.</p>
+
+</li>
+<li><p>Be sure to use the libraries and modules shipped with the version being tested, not those that were already installed.</p>
+
+</li>
+<li><p>Add comments to the code explaining what you are testing for.</p>
+
+</li>
+<li><p>Make updating the &#39;1..42&#39; string unnecessary. Or make sure that you update it.</p>
+
+</li>
+<li><p>Test _all_ behaviors of a given operator, library, or function.</p>
+
+<p>Test all optional arguments.</p>
+
+<p>Test return values in various contexts (boolean, scalar, list, lvalue).</p>
+
+<p>Use both global and lexical variables.</p>
+
+<p>Don&#39;t forget the exceptional, pathological cases.</p>
+
+</li>
+</ul>
+
+<h2 id="Patching-a-core-module"><a class="permalink" href="perlhack.html#Patching-a-core-module">#</a><a id="Patching"></a>Patching a core module</h2>
+
+<p>This works just like patching anything else, with one extra consideration.</p>
+
+<p>Modules in the <i>cpan/</i> directory of the source tree are maintained outside of the Perl core. When the author updates the module, the updates are simply copied into the core. See that module&#39;s documentation or its listing on <a href="https://metacpan.org/">https://metacpan.org/</a> for more information on reporting bugs and submitting patches.</p>
+
+<p>In most cases, patches to modules in <i>cpan/</i> should be sent upstream and should not be applied to the Perl core individually. If a patch to a file in <i>cpan/</i> absolutely cannot wait for the fix to be made upstream, released to CPAN and copied to blead, you must add (or update) a <code>CUSTOMIZED</code> entry in the <i>&quot;Porting/Maintainers.pl&quot;</i> file to flag that a local modification has been made. See <i>&quot;Porting/Maintainers.pl&quot;</i> for more details.</p>
+
+<p>In contrast, modules in the <i>dist/</i> directory are maintained in the core.</p>
+
+<h2 id="Updating-perldelta"><a class="permalink" href="perlhack.html#Updating-perldelta">#</a><a id="Updating"></a>Updating perldelta</h2>
+
+<p>For changes significant enough to warrant a <i>pod/perldelta.pod</i> entry, the porters will greatly appreciate it if you submit a delta entry along with your actual change. Significant changes include, but are not limited to:</p>
+
+<ul>
+
+<li><p>Adding, deprecating, or removing core features</p>
+
+</li>
+<li><p>Adding, deprecating, removing, or upgrading core or dual-life modules</p>
+
+</li>
+<li><p>Adding new core tests</p>
+
+</li>
+<li><p>Fixing security issues and user-visible bugs in the core</p>
+
+</li>
+<li><p>Changes that might break existing code, either on the perl or C level</p>
+
+</li>
+<li><p>Significant performance improvements</p>
+
+</li>
+<li><p>Adding, removing, or significantly changing documentation in the <i>pod/</i> directory</p>
+
+</li>
+<li><p>Important platform-specific changes</p>
+
+</li>
+</ul>
+
+<p>Please make sure you add the perldelta entry to the right section within <i>pod/perldelta.pod</i>. More information on how to write good perldelta entries is available in the <code>Style</code> section of <i>Porting/how_to_write_a_perldelta.pod</i>.</p>
+
+<h2 id="What-makes-for-a-good-patch?"><a class="permalink" href="perlhack.html#What-makes-for-a-good-patch?">#</a><a id="What"></a><a id="What-makes-for-a-good-patch"></a>What makes for a good patch?</h2>
+
+<p>New features and extensions to the language can be contentious. There is no specific set of criteria which determine what features get added, but here are some questions to consider when developing a patch:</p>
+
+<h3 id="Does-the-concept-match-the-general-goals-of-Perl?"><a class="permalink" href="perlhack.html#Does-the-concept-match-the-general-goals-of-Perl?">#</a><a id="Does"></a><a id="Does-the-concept-match-the-general-goals-of-Perl"></a>Does the concept match the general goals of Perl?</h3>
+
+<p>Our goals include, but are not limited to:</p>
+
+<ol>
+
+<li><p>Keep it fast, simple, and useful.</p>
+
+</li>
+<li><p>Keep features/concepts as orthogonal as possible.</p>
+
+</li>
+<li><p>No arbitrary limits (platforms, data sizes, cultures).</p>
+
+</li>
+<li><p>Keep it open and exciting to use/patch/advocate Perl everywhere.</p>
+
+</li>
+<li><p>Either assimilate new technologies, or build bridges to them.</p>
+
+</li>
+</ol>
+
+<h3 id="Where-is-the-implementation?"><a class="permalink" href="perlhack.html#Where-is-the-implementation?">#</a><a id="Where"></a><a id="Where-is-the-implementation"></a>Where is the implementation?</h3>
+
+<p>All the talk in the world is useless without an implementation. In almost every case, the person or people who argue for a new feature will be expected to be the ones who implement it. Porters capable of coding new features have their own agendas, and are not available to implement your (possibly good) idea.</p>
+
+<h3 id="Backwards-compatibility"><a class="permalink" href="perlhack.html#Backwards-compatibility">#</a><a id="Backwards"></a>Backwards compatibility</h3>
+
+<p>It&#39;s a cardinal sin to break existing Perl programs. New warnings can be contentious--some say that a program that emits warnings is not broken, while others say it is. Adding keywords has the potential to break programs, changing the meaning of existing token sequences or functions might break programs.</p>
+
+<p>The Perl 5 core includes mechanisms to help porters make backwards incompatible changes more compatible such as the <a href="feature.html">feature</a> and <a href="deprecate.html">deprecate</a> modules. Please use them when appropriate.</p>
+
+<h3 id="Could-it-be-a-module-instead?"><a class="permalink" href="perlhack.html#Could-it-be-a-module-instead?">#</a><a id="Could"></a><a id="Could-it-be-a-module-instead"></a>Could it be a module instead?</h3>
+
+<p>Perl 5 has extension mechanisms, modules and XS, specifically to avoid the need to keep changing the Perl interpreter. You can write modules that export functions, you can give those functions prototypes so they can be called like built-in functions, you can even write XS code to mess with the runtime data structures of the Perl interpreter if you want to implement really complicated things.</p>
+
+<p>Whenever possible, new features should be prototyped in a CPAN module before they will be considered for the core.</p>
+
+<h3 id="Is-the-feature-generic-enough?"><a class="permalink" href="perlhack.html#Is-the-feature-generic-enough?">#</a><a id="Is"></a><a id="Is-the-feature-generic-enough"></a>Is the feature generic enough?</h3>
+
+<p>Is this something that only the submitter wants added to the language, or is it broadly useful? Sometimes, instead of adding a feature with a tight focus, the porters might decide to wait until someone implements the more generalized feature.</p>
+
+<h3 id="Does-it-potentially-introduce-new-bugs?"><a class="permalink" href="perlhack.html#Does-it-potentially-introduce-new-bugs?">#</a><a id="Does1"></a><a id="Does-it-potentially-introduce-new-bugs"></a>Does it potentially introduce new bugs?</h3>
+
+<p>Radical rewrites of large chunks of the Perl interpreter have the potential to introduce new bugs.</p>
+
+<h3 id="How-big-is-it?"><a class="permalink" href="perlhack.html#How-big-is-it?">#</a><a id="How"></a><a id="How-big-is-it"></a>How big is it?</h3>
+
+<p>The smaller and more localized the change, the better. Similarly, a series of small patches is greatly preferred over a single large patch.</p>
+
+<h3 id="Does-it-preclude-other-desirable-features?"><a class="permalink" href="perlhack.html#Does-it-preclude-other-desirable-features?">#</a><a id="Does2"></a><a id="Does-it-preclude-other-desirable-features"></a>Does it preclude other desirable features?</h3>
+
+<p>A patch is likely to be rejected if it closes off future avenues of development. For instance, a patch that placed a true and final interpretation on prototypes is likely to be rejected because there are still options for the future of prototypes that haven&#39;t been addressed.</p>
+
+<h3 id="Is-the-implementation-robust?"><a class="permalink" href="perlhack.html#Is-the-implementation-robust?">#</a><a id="Is1"></a><a id="Is-the-implementation-robust"></a>Is the implementation robust?</h3>
+
+<p>Good patches (tight code, complete, correct) stand more chance of going in. Sloppy or incorrect patches might be placed on the back burner until fixes can be made, or they might be discarded altogether without further notice.</p>
+
+<h3 id="Is-the-implementation-generic-enough-to-be-portable?"><a class="permalink" href="perlhack.html#Is-the-implementation-generic-enough-to-be-portable?">#</a><a id="Is2"></a><a id="Is-the-implementation-generic-enough-to-be-portable"></a>Is the implementation generic enough to be portable?</h3>
+
+<p>The worst patches make use of system-specific features. It&#39;s highly unlikely that non-portable additions to the Perl language will be accepted.</p>
+
+<h3 id="Is-the-implementation-tested?"><a class="permalink" href="perlhack.html#Is-the-implementation-tested?">#</a><a id="Is3"></a><a id="Is-the-implementation-tested"></a>Is the implementation tested?</h3>
+
+<p>Patches which change behaviour (fixing bugs or introducing new features) must include regression tests to verify that everything works as expected.</p>
+
+<p>Without tests provided by the original author, how can anyone else changing perl in the future be sure that they haven&#39;t unwittingly broken the behaviour the patch implements? And without tests, how can the patch&#39;s author be confident that his/her hard work put into the patch won&#39;t be accidentally thrown away by someone in the future?</p>
+
+<h3 id="Is-there-enough-documentation?"><a class="permalink" href="perlhack.html#Is-there-enough-documentation?">#</a><a id="Is4"></a><a id="Is-there-enough-documentation"></a>Is there enough documentation?</h3>
+
+<p>Patches without documentation are probably ill-thought out or incomplete. No features can be added or changed without documentation, so submitting a patch for the appropriate pod docs as well as the source code is important.</p>
+
+<h3 id="Is-there-another-way-to-do-it?"><a class="permalink" href="perlhack.html#Is-there-another-way-to-do-it?">#</a><a id="Is5"></a><a id="Is-there-another-way-to-do-it"></a>Is there another way to do it?</h3>
+
+<p>Larry said &quot;Although the Perl Slogan is <i>There&#39;s More Than One Way to Do It</i>, I hesitate to make 10 ways to do something&quot;. This is a tricky heuristic to navigate, though--one man&#39;s essential addition is another man&#39;s pointless cruft.</p>
+
+<h3 id="Does-it-create-too-much-work?"><a class="permalink" href="perlhack.html#Does-it-create-too-much-work?">#</a><a id="Does3"></a><a id="Does-it-create-too-much-work"></a>Does it create too much work?</h3>
+
+<p>Work for the committers, work for Perl programmers, work for module authors, ... Perl is supposed to be easy.</p>
+
+<h3 id="Patches-speak-louder-than-words"><a class="permalink" href="perlhack.html#Patches-speak-louder-than-words">#</a><a id="Patches"></a>Patches speak louder than words</h3>
+
+<p>Working code is always preferred to pie-in-the-sky ideas. A patch to add a feature stands a much higher chance of making it to the language than does a random feature request, no matter how fervently argued the request might be. This ties into &quot;Will it be useful?&quot;, as the fact that someone took the time to make the patch demonstrates a strong desire for the feature.</p>
+
+<h1 id="TESTING"><a class="permalink" href="perlhack.html#TESTING">#</a>TESTING</h1>
+
+<p>The core uses the same testing style as the rest of Perl, a simple &quot;ok/not ok&quot; run through Test::Harness, but there are a few special considerations.</p>
+
+<p>There are three ways to write a test in the core: <a href="./Test::More.html">Test::More</a>, <i>t/test.pl</i> and ad hoc <code>print $test ? &quot;ok 42\n&quot; : &quot;not ok 42\n&quot;</code>. The decision of which to use depends on what part of the test suite you&#39;re working on. This is a measure to prevent a high-level failure (such as Config.pm breaking) from causing basic functionality tests to fail.</p>
+
+<p>The <i>t/test.pl</i> library provides some of the features of <a href="./Test::More.html">Test::More</a>, but avoids loading most modules and uses as few core features as possible.</p>
+
+<p>If you write your own test, use the <a href="https://testanything.org">Test Anything Protocol</a>.</p>
+
+<ul>
+
+<li><p><i>t/base</i>, <i>t/comp</i> and <i>t/opbasic</i></p>
+
+<p>Since we don&#39;t know if <code>require</code> works, or even subroutines, use ad hoc tests for these three. Step carefully to avoid using the feature being tested. Tests in <i>t/opbasic</i>, for instance, have been placed there rather than in <i>t/op</i> because they test functionality which <i>t/test.pl</i> presumes has already been demonstrated to work.</p>
+
+</li>
+<li><p>All other subdirectories of <i>t/</i></p>
+
+<p>Now that basic require() and subroutines are tested, you can use the <i>t/test.pl</i> library.</p>
+
+<p>You can also use certain libraries like <a href="Config.html">Config</a> conditionally, but be sure to skip the test gracefully if it&#39;s not there.</p>
+
+</li>
+<li><p>Test files not found under <i>t/</i></p>
+
+<p>This category includes <i>.t</i> files underneath directories such as <i>dist</i>, <i>ext</i> and <i>lib</i>. Since the core of Perl has now been tested, <a href="./Test::More.html">Test::More</a> can and now should be used. You can also use the full suite of core modules in the tests. (As noted in <a href="perlhack.html#Patching-a-core-module">&quot;Patching a core module&quot;</a> above, changes to <i>.t</i> files found under <i>cpan/</i> should be submitted to the upstream maintainers of those modules.)</p>
+
+</li>
+</ul>
+
+<p>When you say &quot;make test&quot;, Perl uses the <i>t/TEST</i> program to run the test suite (except under Win32 where it uses <i>t/harness</i> instead). All tests are run from the <i>t/</i> directory, <b>not</b> the directory which contains the test. This causes some problems with the tests in <i>lib/</i>, so here&#39;s some opportunity for some patching.</p>
+
+<p>You must be triply conscious of cross-platform concerns. This usually boils down to using <a href="./File::Spec.html">File::Spec</a>, avoiding things like <code>fork()</code> and <code>system()</code> unless absolutely necessary, and not assuming that a given character has a particular ordinal value (code point) or that its UTF-8 representation is composed of particular bytes.</p>
+
+<p>There are several functions available to specify characters and code points portably in tests. The always-preloaded functions <code>utf8::unicode_to_native()</code> and its inverse <code>utf8::native_to_unicode()</code> take code points and translate appropriately. The file <i>t/charset_tools.pl</i> has several functions that can be useful. It has versions of the previous two functions that take strings as inputs -- not single numeric code points: <code>uni_to_native()</code> and <code>native_to_uni()</code>. If you must look at the individual bytes comprising a UTF-8 encoded string, <code>byte_utf8a_to_utf8n()</code> takes as input a string of those bytes encoded for an ASCII platform, and returns the equivalent string in the native platform. For example, <code>byte_utf8a_to_utf8n(&quot;\xC2\xA0&quot;)</code> returns the byte sequence on the current platform that form the UTF-8 for <code>U+00A0</code>, since <code>&quot;\xC2\xA0&quot;</code> are the UTF-8 bytes on an ASCII platform for that code point. This function returns <code>&quot;\xC2\xA0&quot;</code> on an ASCII platform, and <code>&quot;\x80\x41&quot;</code> on an EBCDIC 1047 one.</p>
+
+<p>But easiest is, if the character is specifiable as a literal, like <code>&quot;A&quot;</code> or <code>&quot;%&quot;</code>, to use that; if not so specificable, you can use <code>\N{}</code> , if the side effects aren&#39;t troublesome. Simply specify all your characters in hex, using <code>\N{U+ZZ}</code> instead of <code>\xZZ</code>. <code>\N{}</code> is the Unicode name, and so it always gives you the Unicode character. <code>\N{U+41}</code> is the character whose Unicode code point is <code>0x41</code>, hence is <code>&#39;A&#39;</code> on all platforms. The side effects are:</p>
+
+<ul>
+
+<li><p>These select Unicode rules. That means that in double-quotish strings, the string is always converted to UTF-8 to force a Unicode interpretation (you can <code>utf8::downgrade()</code> afterwards to convert back to non-UTF8, if possible). In regular expression patterns, the conversion isn&#39;t done, but if the character set modifier would otherwise be <code>/d</code>, it is changed to <code>/u</code>.</p>
+
+</li>
+<li><p>If you use the form <code>\N{<i>character name</i>}</code>, the <a href="charnames.html">charnames</a> module gets automatically loaded. This may not be suitable for the test level you are doing.</p>
+
+</li>
+</ul>
+
+<p>If you are testing locales (see <a href="perllocale.html">perllocale</a>), there are helper functions in <i>t/loc_tools.pl</i> to enable you to see what locales there are on the current platform.</p>
+
+<h2 id="Special-make-test-targets"><a class="permalink" href="perlhack.html#Special-make-test-targets">#</a><a id="Special"></a>Special <code>make test</code> targets</h2>
+
+<p>There are various special make targets that can be used to test Perl slightly differently than the standard &quot;test&quot; target. Not all them are expected to give a 100% success rate. Many of them have several aliases, and many of them are not available on certain operating systems.</p>
+
+<ul>
+
+<li><p>test_porting</p>
+
+<p>This runs some basic sanity tests on the source tree and helps catch basic errors before you submit a patch.</p>
+
+</li>
+<li><p>minitest</p>
+
+<p>Run <i>miniperl</i> on <i>t/base</i>, <i>t/comp</i>, <i>t/cmd</i>, <i>t/run</i>, <i>t/io</i>, <i>t/op</i>, <i>t/uni</i> and <i>t/mro</i> tests.</p>
+
+<p><i>miniperl</i> is a minimalistic perl built to bootstrap building extensions, utilties, documentation etc. It doesn&#39;t support dynamic loading and depending on the point in the build process will only have access to a limited set of core modules. <i>miniperl</i> is not intended for day to day use.</p>
+
+</li>
+<li><p>test.valgrind check.valgrind</p>
+
+<p>(Only in Linux) Run all the tests using the memory leak + naughty memory access tool &quot;valgrind&quot;. The log files will be named <i>testname.valgrind</i>.</p>
+
+</li>
+<li><p>test_harness</p>
+
+<p>Run the test suite with the <i>t/harness</i> controlling program, instead of <i>t/TEST</i>. <i>t/harness</i> is more sophisticated, and uses the <a href="./Test::Harness.html">Test::Harness</a> module, thus using this test target supposes that perl mostly works. The main advantage for our purposes is that it prints a detailed summary of failed tests at the end. Also, unlike <i>t/TEST</i>, it doesn&#39;t redirect stderr to stdout.</p>
+
+<p>Note that under Win32 <i>t/harness</i> is always used instead of <i>t/TEST</i>, so there is no special &quot;test_harness&quot; target.</p>
+
+<p>Under Win32&#39;s &quot;test&quot; target you may use the TEST_SWITCHES and TEST_FILES environment variables to control the behaviour of <i>t/harness</i>. This means you can say</p>
+
+<pre><code class="plaintext">nmake test TEST_FILES=&quot;op/*.t&quot;
+nmake test TEST_SWITCHES=&quot;-torture&quot; TEST_FILES=&quot;op/*.t&quot;</code></pre>
+
+</li>
+<li><p>test-notty test_notty</p>
+
+<p>Sets PERL_SKIP_TTY_TEST to true before running normal test.</p>
+
+</li>
+</ul>
+
+<h2 id="Parallel-tests"><a class="permalink" href="perlhack.html#Parallel-tests">#</a><a id="Parallel"></a>Parallel tests</h2>
+
+<p>The core distribution can now run its regression tests in parallel on Unix-like and Windows platforms. On Unix, instead of running <code>make test</code>, set <code>TEST_JOBS</code> in your environment to the number of tests to run in parallel, and run <code>make test_harness</code>. On a Bourne-like shell, this can be done as</p>
+
+<pre><code class="plaintext">TEST_JOBS=3 make test_harness  # Run 3 tests in parallel</code></pre>
+
+<p>An environment variable is used, rather than parallel make itself, because <a href="./TAP::Harness.html">TAP::Harness</a> needs to be able to schedule individual non-conflicting test scripts itself, and there is no standard interface to <code>make</code> utilities to interact with their job schedulers.</p>
+
+<p>Tests are normally run in a logical order, with the sanity tests first, then the main tests of the Perl core functionality, then the tests for the non-core modules. On many-core systems, this may not use the hardware as effectively as possible. By also specifying</p>
+
+<pre><code class="plaintext">TEST_JOBS=19 PERL_TEST_HARNESS_ASAP=1 make -j19 test_harness</code></pre>
+
+<p>you signal that you want the tests to finish in wall-clock time as short as possible. After the sanity tests are completed, this causes the remaining ones to be packed into the available cores as tightly as we know how. This has its greatest effect on slower, many-core systems. Throughput was sped up by 20% on an outmoded 24-core system; less on more recent faster ones with fewer cores.</p>
+
+<p>Note that the command line above added a <code>-j</code> parameter to make, so as to cause parallel compilation. This may or may not work on your platform.</p>
+
+<h2 id="Running-tests-by-hand"><a class="permalink" href="perlhack.html#Running-tests-by-hand">#</a><a id="Running"></a>Running tests by hand</h2>
+
+<p>You can run part of the test suite by hand by using one of the following commands from the <i>t/</i> directory:</p>
+
+<pre><code class="plaintext">./perl -I../lib TEST list-of-.t-files</code></pre>
+
+<p>or</p>
+
+<pre><code class="plaintext">./perl -I../lib harness list-of-.t-files</code></pre>
+
+<p>(If you don&#39;t specify test scripts, the whole test suite will be run.)</p>
+
+<h2 id="Using-t/harness-for-testing"><a class="permalink" href="perlhack.html#Using-t/harness-for-testing">#</a><a id="Using"></a><a id="Using-t-harness-for-testing"></a>Using <i>t/harness</i> for testing</h2>
+
+<p>If you use <code>harness</code> for testing, you have several command line options available to you. The arguments are as follows, and are in the order that they must appear if used together.</p>
+
+<pre><code class="plaintext">harness -v -torture -re=pattern LIST OF FILES TO TEST
+harness -v -torture -re LIST OF PATTERNS TO MATCH</code></pre>
+
+<p>If <code>LIST OF FILES TO TEST</code> is omitted, the file list is obtained from the manifest. The file list may include shell wildcards which will be expanded out.</p>
+
+<ul>
+
+<li><p>-v</p>
+
+<p>Run the tests under verbose mode so you can see what tests were run, and debug output.</p>
+
+</li>
+<li><p>-torture</p>
+
+<p>Run the torture tests as well as the normal set.</p>
+
+</li>
+<li><p>-re=PATTERN</p>
+
+<p>Filter the file list so that all the test files run match PATTERN. Note that this form is distinct from the <b>-re LIST OF PATTERNS</b> form below in that it allows the file list to be provided as well.</p>
+
+</li>
+<li><p>-re LIST OF PATTERNS</p>
+
+<p>Filter the file list so that all the test files run match /(LIST|OF|PATTERNS)/. Note that with this form the patterns are joined by &#39;|&#39; and you cannot supply a list of files, instead the test files are obtained from the MANIFEST.</p>
+
+</li>
+</ul>
+
+<p>You can run an individual test by a command similar to</p>
+
+<pre><code class="plaintext">./perl -I../lib path/to/foo.t</code></pre>
+
+<p>except that the harnesses set up some environment variables that may affect the execution of the test:</p>
+
+<ul>
+
+<li><p>PERL_CORE=1</p>
+
+<p>indicates that we&#39;re running this test as part of the perl core test suite. This is useful for modules that have a dual life on CPAN.</p>
+
+</li>
+<li><p>PERL_DESTRUCT_LEVEL=2</p>
+
+<p>is set to 2 if it isn&#39;t set already (see <a href="perlhacktips.html#PERL_DESTRUCT_LEVEL">&quot;PERL_DESTRUCT_LEVEL&quot; in perlhacktips</a>).</p>
+
+</li>
+<li><p>PERL</p>
+
+<p>(used only by <i>t/TEST</i>) if set, overrides the path to the perl executable that should be used to run the tests (the default being <i>./perl</i>).</p>
+
+</li>
+<li><p>PERL_SKIP_TTY_TEST</p>
+
+<p>if set, tells to skip the tests that need a terminal. It&#39;s actually set automatically by the Makefile, but can also be forced artificially by running &#39;make test_notty&#39;.</p>
+
+</li>
+</ul>
+
+<h3 id="Other-environment-variables-that-may-influence-tests"><a class="permalink" href="perlhack.html#Other-environment-variables-that-may-influence-tests">#</a><a id="Other"></a>Other environment variables that may influence tests</h3>
+
+<ul>
+
+<li><p>PERL_TEST_Net_Ping</p>
+
+<p>Setting this variable runs all the Net::Ping modules tests, otherwise some tests that interact with the outside world are skipped. See <a href="perl58delta.html">perl58delta</a>.</p>
+
+</li>
+<li><p>PERL_TEST_NOVREXX</p>
+
+<p>Setting this variable skips the vrexx.t tests for OS2::REXX.</p>
+
+</li>
+<li><p>PERL_TEST_NUMCONVERTS</p>
+
+<p>This sets a variable in op/numconvert.t.</p>
+
+</li>
+<li><p>PERL_TEST_MEMORY</p>
+
+<p>Setting this variable includes the tests in <i>t/bigmem/</i>. This should be set to the number of gigabytes of memory available for testing, eg. <code>PERL_TEST_MEMORY=4</code> indicates that tests that require 4GiB of available memory can be run safely.</p>
+
+</li>
+</ul>
+
+<p>See also the documentation for the Test and Test::Harness modules, for more environment variables that affect testing.</p>
+
+<h2 id="Performance-testing"><a class="permalink" href="perlhack.html#Performance-testing">#</a><a id="Performance"></a>Performance testing</h2>
+
+<p>The file <i>t/perf/benchmarks</i> contains snippets of perl code which are intended to be benchmarked across a range of perls by the <i>Porting/bench.pl</i> tool. If you fix or enhance a performance issue, you may want to add a representative code sample to the file, then run <i>bench.pl</i> against the previous and current perls to see what difference it has made, and whether anything else has slowed down as a consequence.</p>
+
+<p>The file <i>t/perf/opcount.t</i> is designed to test whether a particular code snippet has been compiled into an optree containing specified numbers of particular op types. This is good for testing whether optimisations which alter ops, such as converting an <code>aelem</code> op into an <code>aelemfast</code> op, are really doing that.</p>
+
+<p>The files <i>t/perf/speed.t</i> and <i>t/re/speed.t</i> are designed to test things that run thousands of times slower if a particular optimisation is broken (for example, the utf8 length cache on long utf8 strings). Add a test that will take a fraction of a second normally, and minutes otherwise, causing the test file to time out on failure.</p>
+
+<h2 id="Building-perl-at-older-commits"><a class="permalink" href="perlhack.html#Building-perl-at-older-commits">#</a><a id="Building"></a>Building perl at older commits</h2>
+
+<p>In the course of hacking on the Perl core distribution, you may have occasion to configure, build and test perl at an old commit. Sometimes <code>make</code> will fail during this process. If that happens, you may be able to salvage the situation by using the Devel::PatchPerl library from CPAN (not included in the core) to bring the source code at that commit to a buildable state.</p>
+
+<p>Here&#39;s a real world example, taken from work done to resolve <a href="https://github.com/Perl/perl5/issues/10118">perl #10118</a>. Use of <i>Porting/bisect.pl</i> had identified commit <code>ba77e4cc9d1ceebf472c9c5c18b2377ee47062e6</code> as the commit in which a bug was corrected. To confirm, a P5P developer wanted to configure and build perl at commit <code>ba77e4c^</code> (presumably &quot;bad&quot;) and then at <code>ba77e4c</code> (presumably &quot;good&quot;). Normal configuration and build was attempted:</p>
+
+<pre><code class="plaintext">$ sh ./Configure -des -Dusedevel
+$ make test_prep</code></pre>
+
+<p><code>make</code>, however, failed with output (excerpted) like this:</p>
+
+<pre><code class="plaintext">cc -fstack-protector -L/usr/local/lib -o miniperl \
+  gv.o toke.o perly.o pad.o regcomp.o dump.o util.o \
+  mg.o reentr.o mro.o hv.o av.o run.o pp_hot.o sv.o \
+  pp.o scope.o pp_ctl.o pp_sys.o doop.o doio.o regexec.o \
+  utf8.o taint.o deb.o universal.o globals.o perlio.o \
+  numeric.o mathoms.o locale.o pp_pack.o pp_sort.o  \
+  miniperlmain.o opmini.o perlmini.o
+pp.o: In function `Perl_pp_pow&#39;:
+pp.c:(.text+0x2db9): undefined reference to `pow&#39;
+...
+collect2: error: ld returned 1 exit status
+makefile:348: recipe for target &#39;miniperl&#39; failed
+make: *** [miniperl] Error 1</code></pre>
+
+<p>Another P5P contributor recommended installation and use of Devel::PatchPerl for this situation, first to determine the version of perl at the commit in question, then to patch the source code at that point to facilitate a build.</p>
+
+<pre><code>$ perl -MDevel::PatchPerl -e \
+    &#39;print Devel::PatchPerl-&gt;determine_version(&quot;/path/to/sourcecode&quot;), &quot;\n&quot;;&#39;
+5.11.1
+$ perl -MDevel::PatchPerl -e \
+    &#39;Devel::PatchPerl-&gt;patch_source(&quot;5.11.1&quot;, &quot;/path/to/sourcecode&quot;);&#39;</code></pre>
+
+<p>Once the source was patched, <code>./Configure</code> and <code>make test_prep</code> were called and completed successfully, enabling confirmation of the findings in RT #72414.</p>
+
+<h1 id="MORE-READING-FOR-GUTS-HACKERS"><a class="permalink" href="perlhack.html#MORE-READING-FOR-GUTS-HACKERS">#</a><a id="MORE"></a>MORE READING FOR GUTS HACKERS</h1>
+
+<p>To hack on the Perl guts, you&#39;ll need to read the following things:</p>
+
+<ul>
+
+<li><p><a href="perlsource.html">perlsource</a></p>
+
+<p>An overview of the Perl source tree. This will help you find the files you&#39;re looking for.</p>
+
+</li>
+<li><p><a href="perlinterp.html">perlinterp</a></p>
+
+<p>An overview of the Perl interpreter source code and some details on how Perl does what it does.</p>
+
+</li>
+<li><p><a href="perlhacktut.html">perlhacktut</a></p>
+
+<p>This document walks through the creation of a small patch to Perl&#39;s C code. If you&#39;re just getting started with Perl core hacking, this will help you understand how it works.</p>
+
+</li>
+<li><p><a href="perlhacktips.html">perlhacktips</a></p>
+
+<p>More details on hacking the Perl core. This document focuses on lower level details such as how to write tests, compilation issues, portability, debugging, etc.</p>
+
+<p>If you plan on doing serious C hacking, make sure to read this.</p>
+
+</li>
+<li><p><a href="perlguts.html">perlguts</a></p>
+
+<p>This is of paramount importance, since it&#39;s the documentation of what goes where in the Perl source. Read it over a couple of times and it might start to make sense - don&#39;t worry if it doesn&#39;t yet, because the best way to study it is to read it in conjunction with poking at Perl source, and we&#39;ll do that later on.</p>
+
+<p>Gisle Aas&#39;s &quot;illustrated perlguts&quot;, also known as <i>illguts</i>, has very helpful pictures:</p>
+
+<p><a href="https://metacpan.org/release/RURBAN/illguts-0.49">https://metacpan.org/release/RURBAN/illguts-0.49</a></p>
+
+</li>
+<li><p><a href="perlxstut.html">perlxstut</a> and <a href="perlxs.html">perlxs</a></p>
+
+<p>A working knowledge of XSUB programming is incredibly useful for core hacking; XSUBs use techniques drawn from the PP code, the portion of the guts that actually executes a Perl program. It&#39;s a lot gentler to learn those techniques from simple examples and explanation than from the core itself.</p>
+
+</li>
+<li><p><a href="perlapi.html">perlapi</a></p>
+
+<p>The documentation for the Perl API explains what some of the internal functions do, as well as the many macros used in the source.</p>
+
+</li>
+<li><p><i>Porting/pumpkin.pod</i></p>
+
+<p>This is a collection of words of wisdom for a Perl porter; some of it is only useful to the pumpkin holders, but most of it applies to anyone wanting to go about Perl development.</p>
+
+</li>
+</ul>
+
+<h1 id="CPAN-TESTERS-AND-PERL-SMOKERS"><a class="permalink" href="perlhack.html#CPAN-TESTERS-AND-PERL-SMOKERS">#</a><a id="CPAN"></a>CPAN TESTERS AND PERL SMOKERS</h1>
+
+<p>The CPAN testers ( <a href="http://cpantesters.org/">http://cpantesters.org/</a> ) are a group of volunteers who test CPAN modules on a variety of platforms.</p>
+
+<p>Perl Smokers ( <a href="https://www.nntp.perl.org/group/perl.daily-build/">https://www.nntp.perl.org/group/perl.daily-build/</a> and <a href="https://www.nntp.perl.org/group/perl.daily-build.reports/">https://www.nntp.perl.org/group/perl.daily-build.reports/</a> ) automatically test Perl source releases on platforms with various configurations.</p>
+
+<p>Both efforts welcome volunteers. In order to get involved in smoke testing of the perl itself visit <a href="https://metacpan.org/release/Test-Smoke">https://metacpan.org/release/Test-Smoke</a>. In order to start smoke testing CPAN modules visit <a href="https://metacpan.org/release/CPANPLUS-YACSmoke">https://metacpan.org/release/CPANPLUS-YACSmoke</a> or <a href="https://metacpan.org/release/minismokebox">https://metacpan.org/release/minismokebox</a> or <a href="https://metacpan.org/release/CPAN-Reporter">https://metacpan.org/release/CPAN-Reporter</a>.</p>
+
+<h1 id="WHAT-NEXT?"><a class="permalink" href="perlhack.html#WHAT-NEXT?">#</a><a id="WHAT"></a><a id="WHAT-NEXT"></a>WHAT NEXT?</h1>
+
+<p>If you&#39;ve read all the documentation in the document and the ones listed above, you&#39;re more than ready to hack on Perl.</p>
+
+<p>Here&#39;s some more recommendations</p>
+
+<ul>
+
+<li><p>Subscribe to perl5-porters, follow the patches and try and understand them; don&#39;t be afraid to ask if there&#39;s a portion you&#39;re not clear on - who knows, you may unearth a bug in the patch...</p>
+
+</li>
+<li><p>Do read the README associated with your operating system, e.g. README.aix on the IBM AIX OS. Don&#39;t hesitate to supply patches to that README if you find anything missing or changed over a new OS release.</p>
+
+</li>
+<li><p>Find an area of Perl that seems interesting to you, and see if you can work out how it works. Scan through the source, and step over it in the debugger. Play, poke, investigate, fiddle! You&#39;ll probably get to understand not just your chosen area but a much wider range of <i>perl</i>&#39;s activity as well, and probably sooner than you&#39;d think.</p>
+
+</li>
+</ul>
+
+<h2 id="&quot;The-Road-goes-ever-on-and-on,-down-from-the-door-where-it-began.&quot;"><a class="permalink" href="perlhack.html#%22The-Road-goes-ever-on-and-on,-down-from-the-door-where-it-began.%22">#</a><a id="The-Road-goes-ever-on-and-on-down-from-the-door-where-it-began"></a>&quot;The Road goes ever on and on, down from the door where it began.&quot;</h2>
+
+<p>If you can do these things, you&#39;ve started on the long road to Perl porting. Thanks for wanting to help make Perl better - and happy hacking!</p>
+
+<h2 id="Metaphoric-Quotations"><a class="permalink" href="perlhack.html#Metaphoric-Quotations">#</a><a id="Metaphoric"></a>Metaphoric Quotations</h2>
+
+<p>If you recognized the quote about the Road above, you&#39;re in luck.</p>
+
+<p>Most software projects begin each file with a literal description of each file&#39;s purpose. Perl instead begins each with a literary allusion to that file&#39;s purpose.</p>
+
+<p>Like chapters in many books, all top-level Perl source files (along with a few others here and there) begin with an epigrammatic inscription that alludes, indirectly and metaphorically, to the material you&#39;re about to read.</p>
+
+<p>Quotations are taken from writings of J.R.R. Tolkien pertaining to his Legendarium, almost always from <i>The Lord of the Rings</i>. Chapters and page numbers are given using the following editions:</p>
+
+<ul>
+
+<li><p><i>The Hobbit</i>, by J.R.R. Tolkien. The hardcover, 70th-anniversary edition of 2007 was used, published in the UK by Harper Collins Publishers and in the US by the Houghton Mifflin Company.</p>
+
+</li>
+<li><p><i>The Lord of the Rings</i>, by J.R.R. Tolkien. The hardcover, 50th-anniversary edition of 2004 was used, published in the UK by Harper Collins Publishers and in the US by the Houghton Mifflin Company.</p>
+
+</li>
+<li><p><i>The Lays of Beleriand</i>, by J.R.R. Tolkien and published posthumously by his son and literary executor, C.J.R. Tolkien, being the 3rd of the 12 volumes in Christopher&#39;s mammoth <i>History of Middle Earth</i>. Page numbers derive from the hardcover edition, first published in 1983 by George Allen &amp; Unwin; no page numbers changed for the special 3-volume omnibus edition of 2002 or the various trade-paper editions, all again now by Harper Collins or Houghton Mifflin.</p>
+
+</li>
+</ul>
+
+<p>Other JRRT books fair game for quotes would thus include <i>The Adventures of Tom Bombadil</i>, <i>The Silmarillion</i>, <i>Unfinished Tales</i>, and <i>The Tale of the Children of Hurin</i>, all but the first posthumously assembled by CJRT. But <i>The Lord of the Rings</i> itself is perfectly fine and probably best to quote from, provided you can find a suitable quote there.</p>
+
+<p>So if you were to supply a new, complete, top-level source file to add to Perl, you should conform to this peculiar practice by yourself selecting an appropriate quotation from Tolkien, retaining the original spelling and punctuation and using the same format the rest of the quotes are in. Indirect and oblique is just fine; remember, it&#39;s a metaphor, so being meta is, after all, what it&#39;s for.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="perlhack.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>This document was originally written by Nathan Torkington, and is maintained by the perl5-porters mailing list.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

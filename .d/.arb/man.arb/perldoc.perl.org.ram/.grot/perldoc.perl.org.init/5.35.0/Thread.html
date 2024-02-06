@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thread - Manipulate threads in Perl (for old code only) - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Thread">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Thread.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Thread">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Thread">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Thread">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Thread">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Thread">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Thread">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Thread">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Thread">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Thread">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Thread">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Thread">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Thread">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Thread">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Thread">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Thread">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Thread">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Thread">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Thread">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Thread">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Thread">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Thread">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Thread">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Thread">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Thread">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Thread">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Thread">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Thread">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Thread">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Thread">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Thread">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Thread">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Thread">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Thread">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Thread">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Thread">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Thread">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Thread">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Thread">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Thread">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Thread">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Thread">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Thread">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Thread">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Thread">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Thread">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Thread">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Thread">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Thread">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Thread">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Thread">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Thread">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Thread">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Thread">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Thread">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Thread">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Thread">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Thread">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Thread">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Thread">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Thread">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Thread">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Thread">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Thread">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Thread">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Thread">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Thread">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Thread">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Thread">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Thread">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Thread">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Thread">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Thread">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Thread">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Thread">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Thread">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Thread">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Thread">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Thread">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Thread">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Thread">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Thread.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Thread">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Thread">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Thread">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Thread">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Thread">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Thread">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Thread">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Thread">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Thread">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Thread">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Thread">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Thread">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Thread">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Thread">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Thread">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Thread">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Thread">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Thread">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Thread">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Thread">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Thread">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Thread">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Thread">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Thread">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Thread">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Thread">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Thread">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Thread">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Thread">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Thread">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Thread">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Thread">5.35.1</a>
+          <a class="dropdown-item active" href="Thread.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Thread.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="Thread.html">Thread</a>
+          <div id="more">
+            (<a href="Thread.txt">source</a>,
+            <a href="https://metacpan.org/pod/Thread">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 3.05</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="Thread.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Thread.html#DEPRECATED">DEPRECATED</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Thread.html#HISTORY">HISTORY</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Thread.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Thread.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Thread.html#FUNCTIONS">FUNCTIONS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Thread.html#METHODS">METHODS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Thread.html#DEFUNCT">DEFUNCT</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Thread.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="Thread.html#NAME">#</a>NAME</h1>
+
+<p>Thread - Manipulate threads in Perl (for old code only)</p>
+
+<h1 id="DEPRECATED"><a class="permalink" href="Thread.html#DEPRECATED">#</a>DEPRECATED</h1>
+
+<p>The <code>Thread</code> module served as the frontend to the old-style thread model, called <i>5005threads</i>, that was introduced in release 5.005. That model was deprecated, and has been removed in version 5.10.</p>
+
+<p>For old code and interim backwards compatibility, the <code>Thread</code> module has been reworked to function as a frontend for the new interpreter threads (<i>ithreads</i>) model. However, some previous functionality is not available. Further, the data sharing models between the two thread models are completely different, and anything to do with data sharing has to be thought differently. With <i>ithreads</i>, you must explicitly <code>share()</code> variables between the threads.</p>
+
+<p>You are strongly encouraged to migrate any existing threaded code to the new model (i.e., use the <code>threads</code> and <code>threads::shared</code> modules) as soon as possible.</p>
+
+<h1 id="HISTORY"><a class="permalink" href="Thread.html#HISTORY">#</a>HISTORY</h1>
+
+<p>In Perl 5.005, the thread model was that all data is implicitly shared, and shared access to data has to be explicitly synchronized. This model is called <i>5005threads</i>.</p>
+
+<p>In Perl 5.6, a new model was introduced in which all is was thread local and shared access to data has to be explicitly declared. This model is called <i>ithreads</i>, for &quot;interpreter threads&quot;.</p>
+
+<p>In Perl 5.6, the <i>ithreads</i> model was not available as a public API; only as an internal API that was available for extension writers, and to implement fork() emulation on Win32 platforms.</p>
+
+<p>In Perl 5.8, the <i>ithreads</i> model became available through the <code>threads</code> module, and the <i>5005threads</i> model was deprecated.</p>
+
+<p>In Perl 5.10, the <i>5005threads</i> model was removed from the Perl interpreter.</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="Thread.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Thread qw(:DEFAULT async yield);
+
+my $t = Thread-&gt;new(\&amp;start_sub, @start_args);
+
+$result = $t-&gt;join;
+$t-&gt;detach;
+
+if ($t-&gt;done) {
+    $t-&gt;join;
+}
+
+if($t-&gt;equal($another_thread)) {
+    # ...
+}
+
+yield();
+
+my $tid = Thread-&gt;self-&gt;tid;
+
+lock($scalar);
+lock(@array);
+lock(%hash);
+
+my @list = Thread-&gt;list;</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="Thread.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>The <code>Thread</code> module provides multithreading support for Perl.</p>
+
+<h1 id="FUNCTIONS"><a class="permalink" href="Thread.html#FUNCTIONS">#</a>FUNCTIONS</h1>
+
+<dl>
+
+<dt id="$thread-=-Thread-&gt;new(\&amp;start_sub)"><a class="permalink" href="Thread.html#$thread-=-Thread-%3Enew(%5C&amp;start_sub)">#</a><a id="thread-Thread-new-start_sub"></a>$thread = Thread-&gt;new(\&amp;start_sub)</dt>
+<dd>
+
+</dd>
+<dt id="$thread-=-Thread-&gt;new(\&amp;start_sub,-LIST)"><a class="permalink" href="Thread.html#$thread-=-Thread-%3Enew(%5C&amp;start_sub,-LIST)">#</a><a id="thread-Thread-new-start_sub-LIST"></a>$thread = Thread-&gt;new(\&amp;start_sub, LIST)</dt>
+<dd>
+
+<p><code>new</code> starts a new thread of execution in the referenced subroutine. The optional list is passed as parameters to the subroutine. Execution continues in both the subroutine and the code after the <code>new</code> call.</p>
+
+<p><code>Thread-&gt;new</code> returns a thread object representing the newly created thread.</p>
+
+</dd>
+<dt id="lock-VARIABLE"><a class="permalink" href="Thread.html#lock-VARIABLE">#</a><a id="lock"></a>lock VARIABLE</dt>
+<dd>
+
+<p><code>lock</code> places a lock on a variable until the lock goes out of scope.</p>
+
+<p>If the variable is locked by another thread, the <code>lock</code> call will block until it&#39;s available. <code>lock</code> is recursive, so multiple calls to <code>lock</code> are safe--the variable will remain locked until the outermost lock on the variable goes out of scope.</p>
+
+<p>Locks on variables only affect <code>lock</code> calls--they do <i>not</i> affect normal access to a variable. (Locks on subs are different, and covered in a bit.) If you really, <i>really</i> want locks to block access, then go ahead and tie them to something and manage this yourself. This is done on purpose. While managing access to variables is a good thing, Perl doesn&#39;t force you out of its living room...</p>
+
+<p>If a container object, such as a hash or array, is locked, all the elements of that container are not locked. For example, if a thread does a <code>lock @a</code>, any other thread doing a <code>lock($a[12])</code> won&#39;t block.</p>
+
+<p>Finally, <code>lock</code> will traverse up references exactly <i>one</i> level. <code>lock(\$a)</code> is equivalent to <code>lock($a)</code>, while <code>lock(\\$a)</code> is not.</p>
+
+</dd>
+<dt id="async-BLOCK;"><a class="permalink" href="Thread.html#async-BLOCK;">#</a><a id="async"></a><a id="async-BLOCK"></a>async BLOCK;</dt>
+<dd>
+
+<p><code>async</code> creates a thread to execute the block immediately following it. This block is treated as an anonymous sub, and so must have a semi-colon after the closing brace. Like <code>Thread-&gt;new</code>, <code>async</code> returns a thread object.</p>
+
+</dd>
+<dt id="Thread-&gt;self"><a class="permalink" href="Thread.html#Thread-%3Eself">#</a><a id="Thread"></a><a id="Thread-self"></a>Thread-&gt;self</dt>
+<dd>
+
+<p>The <code>Thread-&gt;self</code> function returns a thread object that represents the thread making the <code>Thread-&gt;self</code> call.</p>
+
+</dd>
+<dt id="Thread-&gt;list"><a class="permalink" href="Thread.html#Thread-%3Elist">#</a><a id="Thread1"></a><a id="Thread-list"></a>Thread-&gt;list</dt>
+<dd>
+
+<p>Returns a list of all non-joined, non-detached Thread objects.</p>
+
+</dd>
+<dt id="cond_wait-VARIABLE"><a class="permalink" href="Thread.html#cond_wait-VARIABLE">#</a><a id="cond_wait"></a>cond_wait VARIABLE</dt>
+<dd>
+
+<p>The <code>cond_wait</code> function takes a <b>locked</b> variable as a parameter, unlocks the variable, and blocks until another thread does a <code>cond_signal</code> or <code>cond_broadcast</code> for that same locked variable. The variable that <code>cond_wait</code> blocked on is relocked after the <code>cond_wait</code> is satisfied. If there are multiple threads <code>cond_wait</code>ing on the same variable, all but one will reblock waiting to re-acquire the lock on the variable. (So if you&#39;re only using <code>cond_wait</code> for synchronization, give up the lock as soon as possible.)</p>
+
+</dd>
+<dt id="cond_signal-VARIABLE"><a class="permalink" href="Thread.html#cond_signal-VARIABLE">#</a><a id="cond_signal"></a>cond_signal VARIABLE</dt>
+<dd>
+
+<p>The <code>cond_signal</code> function takes a locked variable as a parameter and unblocks one thread that&#39;s <code>cond_wait</code>ing on that variable. If more than one thread is blocked in a <code>cond_wait</code> on that variable, only one (and which one is indeterminate) will be unblocked.</p>
+
+<p>If there are no threads blocked in a <code>cond_wait</code> on the variable, the signal is discarded.</p>
+
+</dd>
+<dt id="cond_broadcast-VARIABLE"><a class="permalink" href="Thread.html#cond_broadcast-VARIABLE">#</a><a id="cond_broadcast"></a>cond_broadcast VARIABLE</dt>
+<dd>
+
+<p>The <code>cond_broadcast</code> function works similarly to <code>cond_signal</code>. <code>cond_broadcast</code>, though, will unblock <b>all</b> the threads that are blocked in a <code>cond_wait</code> on the locked variable, rather than only one.</p>
+
+</dd>
+<dt id="yield"><a class="permalink" href="Thread.html#yield">#</a>yield</dt>
+<dd>
+
+<p>The <code>yield</code> function allows another thread to take control of the CPU. The exact results are implementation-dependent.</p>
+
+</dd>
+</dl>
+
+<h1 id="METHODS"><a class="permalink" href="Thread.html#METHODS">#</a>METHODS</h1>
+
+<dl>
+
+<dt id="join"><a class="permalink" href="Thread.html#join">#</a>join</dt>
+<dd>
+
+<p><code>join</code> waits for a thread to end and returns any values the thread exited with. <code>join</code> will block until the thread has ended, though it won&#39;t block if the thread has already terminated.</p>
+
+<p>If the thread being <code>join</code>ed <code>die</code>d, the error it died with will be returned at this time. If you don&#39;t want the thread performing the <code>join</code> to die as well, you should either wrap the <code>join</code> in an <code>eval</code> or use the <code>eval</code> thread method instead of <code>join</code>.</p>
+
+</dd>
+<dt id="detach"><a class="permalink" href="Thread.html#detach">#</a>detach</dt>
+<dd>
+
+<p><code>detach</code> tells a thread that it is never going to be joined i.e. that all traces of its existence can be removed once it stops running. Errors in detached threads will not be visible anywhere - if you want to catch them, you should use $SIG{__DIE__} or something like that.</p>
+
+</dd>
+<dt id="equal"><a class="permalink" href="Thread.html#equal">#</a>equal</dt>
+<dd>
+
+<p><code>equal</code> tests whether two thread objects represent the same thread and returns true if they do.</p>
+
+</dd>
+<dt id="tid"><a class="permalink" href="Thread.html#tid">#</a>tid</dt>
+<dd>
+
+<p>The <code>tid</code> method returns the tid of a thread. The tid is a monotonically increasing integer assigned when a thread is created. The main thread of a program will have a tid of zero, while subsequent threads will have tids assigned starting with one.</p>
+
+</dd>
+<dt id="done"><a class="permalink" href="Thread.html#done">#</a>done</dt>
+<dd>
+
+<p>The <code>done</code> method returns true if the thread you&#39;re checking has finished, and false otherwise.</p>
+
+</dd>
+</dl>
+
+<h1 id="DEFUNCT"><a class="permalink" href="Thread.html#DEFUNCT">#</a>DEFUNCT</h1>
+
+<p>The following were implemented with <i>5005threads</i>, but are no longer available with <i>ithreads</i>.</p>
+
+<dl>
+
+<dt id="lock(\&amp;sub)"><a class="permalink" href="Thread.html#lock(%5C&amp;sub)">#</a><a id="lock1"></a><a id="lock-sub"></a>lock(\&amp;sub)</dt>
+<dd>
+
+<p>With 5005threads, you could also <code>lock</code> a sub such that any calls to that sub from another thread would block until the lock was released.</p>
+
+<p>Also, subroutines could be declared with the <code>:locked</code> attribute which would serialize access to the subroutine, but allowed different threads non-simultaneous access.</p>
+
+</dd>
+<dt id="eval"><a class="permalink" href="Thread.html#eval">#</a>eval</dt>
+<dd>
+
+<p>The <code>eval</code> method wrapped an <code>eval</code> around a <code>join</code>, and so waited for a thread to exit, passing along any values the thread might have returned and placing any errors into <code>$@</code>.</p>
+
+</dd>
+<dt id="flags"><a class="permalink" href="Thread.html#flags">#</a>flags</dt>
+<dd>
+
+<p>The <code>flags</code> method returned the flags for the thread - an integer value corresponding to the internal flags for the thread.</p>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="Thread.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="threads.html">threads</a>, <a href="./threads::shared.html">threads::shared</a>, <a href="./Thread::Queue.html">Thread::Queue</a>, <a href="./Thread::Semaphore.html">Thread::Semaphore</a></p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

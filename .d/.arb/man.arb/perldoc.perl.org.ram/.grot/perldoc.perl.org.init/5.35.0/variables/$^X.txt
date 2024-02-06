@@ -1,0 +1,57 @@
+=over
+
+=item $EXECUTABLE_NAME
+
+=item $^X
+X<$^X> X<$EXECUTABLE_NAME>
+
+The name used to execute the current copy of Perl, from C's
+C<argv[0]> or (where supported) F</proc/self/exe>.
+
+Depending on the host operating system, the value of C<$^X> may be
+a relative or absolute pathname of the perl program file, or may
+be the string used to invoke perl but not the pathname of the
+perl program file.  Also, most operating systems permit invoking
+programs that are not in the PATH environment variable, so there
+is no guarantee that the value of C<$^X> is in PATH.  For VMS, the
+value may or may not include a version number.
+
+You usually can use the value of C<$^X> to re-invoke an independent
+copy of the same perl that is currently running, e.g.,
+
+    @first_run = `$^X -le "print int rand 100 for 1..100"`;
+
+But recall that not all operating systems support forking or
+capturing of the output of commands, so this complex statement
+may not be portable.
+
+It is not safe to use the value of C<$^X> as a path name of a file,
+as some operating systems that have a mandatory suffix on
+executable files do not require use of the suffix when invoking
+a command.  To convert the value of C<$^X> to a path name, use the
+following statements:
+
+    # Build up a set of file names (not command names).
+    use Config;
+    my $this_perl = $^X;
+    if ($^O ne 'VMS') {
+	$this_perl .= $Config{_exe}
+	  unless $this_perl =~ m/$Config{_exe}$/i;
+	}
+
+Because many operating systems permit anyone with read access to
+the Perl program file to make a copy of it, patch the copy, and
+then execute the copy, the security-conscious Perl programmer
+should take care to invoke the installed copy of perl, not the
+copy referenced by C<$^X>.  The following statements accomplish
+this goal, and produce a pathname that can be invoked as a
+command or referenced as a file.
+
+    use Config;
+    my $secure_perl_path = $Config{perlpath};
+    if ($^O ne 'VMS') {
+	$secure_perl_path .= $Config{_exe}
+	    unless $secure_perl_path =~ m/$Config{_exe}$/i;
+	}
+
+=back

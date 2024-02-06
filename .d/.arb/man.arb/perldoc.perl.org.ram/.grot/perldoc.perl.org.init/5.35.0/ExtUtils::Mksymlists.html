@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ExtUtils::Mksymlists - write linker options files for dynamic extension - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/ExtUtils::Mksymlists">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./ExtUtils::Mksymlists.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/ExtUtils::Mksymlists">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/ExtUtils::Mksymlists">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/ExtUtils::Mksymlists">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/ExtUtils::Mksymlists">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/ExtUtils::Mksymlists">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/ExtUtils::Mksymlists">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/ExtUtils::Mksymlists">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/ExtUtils::Mksymlists">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/ExtUtils::Mksymlists">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/ExtUtils::Mksymlists">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/ExtUtils::Mksymlists">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/ExtUtils::Mksymlists">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/ExtUtils::Mksymlists">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/ExtUtils::Mksymlists">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/ExtUtils::Mksymlists">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/ExtUtils::Mksymlists">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/ExtUtils::Mksymlists">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/ExtUtils::Mksymlists">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/ExtUtils::Mksymlists">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/ExtUtils::Mksymlists">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/ExtUtils::Mksymlists">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/ExtUtils::Mksymlists">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/ExtUtils::Mksymlists">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/ExtUtils::Mksymlists">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/ExtUtils::Mksymlists">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/ExtUtils::Mksymlists">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/ExtUtils::Mksymlists">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/ExtUtils::Mksymlists">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/ExtUtils::Mksymlists">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/ExtUtils::Mksymlists">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/ExtUtils::Mksymlists">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/ExtUtils::Mksymlists">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/ExtUtils::Mksymlists">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/ExtUtils::Mksymlists">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/ExtUtils::Mksymlists">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/ExtUtils::Mksymlists">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/ExtUtils::Mksymlists">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/ExtUtils::Mksymlists">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/ExtUtils::Mksymlists">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/ExtUtils::Mksymlists">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/ExtUtils::Mksymlists">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/ExtUtils::Mksymlists">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/ExtUtils::Mksymlists">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/ExtUtils::Mksymlists">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/ExtUtils::Mksymlists">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/ExtUtils::Mksymlists">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/ExtUtils::Mksymlists">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/ExtUtils::Mksymlists">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/ExtUtils::Mksymlists">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/ExtUtils::Mksymlists">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/ExtUtils::Mksymlists">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/ExtUtils::Mksymlists">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/ExtUtils::Mksymlists">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/ExtUtils::Mksymlists">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/ExtUtils::Mksymlists">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/ExtUtils::Mksymlists">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/ExtUtils::Mksymlists">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/ExtUtils::Mksymlists">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/ExtUtils::Mksymlists">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/ExtUtils::Mksymlists">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/ExtUtils::Mksymlists">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/ExtUtils::Mksymlists">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/ExtUtils::Mksymlists">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/ExtUtils::Mksymlists">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/ExtUtils::Mksymlists">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/ExtUtils::Mksymlists">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/ExtUtils::Mksymlists">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/ExtUtils::Mksymlists">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/ExtUtils::Mksymlists">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/ExtUtils::Mksymlists">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/ExtUtils::Mksymlists">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/ExtUtils::Mksymlists">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/ExtUtils::Mksymlists">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/ExtUtils::Mksymlists">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/ExtUtils::Mksymlists">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/ExtUtils::Mksymlists">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/ExtUtils::Mksymlists">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/ExtUtils::Mksymlists">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/ExtUtils::Mksymlists">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/ExtUtils::Mksymlists">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./ExtUtils::Mksymlists.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/ExtUtils::Mksymlists">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/ExtUtils::Mksymlists">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/ExtUtils::Mksymlists">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/ExtUtils::Mksymlists">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/ExtUtils::Mksymlists">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/ExtUtils::Mksymlists">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/ExtUtils::Mksymlists">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/ExtUtils::Mksymlists">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/ExtUtils::Mksymlists">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/ExtUtils::Mksymlists">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/ExtUtils::Mksymlists">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/ExtUtils::Mksymlists">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/ExtUtils::Mksymlists">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/ExtUtils::Mksymlists">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/ExtUtils::Mksymlists">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/ExtUtils::Mksymlists">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/ExtUtils::Mksymlists">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/ExtUtils::Mksymlists">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/ExtUtils::Mksymlists">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/ExtUtils::Mksymlists">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/ExtUtils::Mksymlists">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/ExtUtils::Mksymlists">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/ExtUtils::Mksymlists">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/ExtUtils::Mksymlists">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/ExtUtils::Mksymlists">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/ExtUtils::Mksymlists">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/ExtUtils::Mksymlists">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/ExtUtils::Mksymlists">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/ExtUtils::Mksymlists">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/ExtUtils::Mksymlists">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/ExtUtils::Mksymlists">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/ExtUtils::Mksymlists">5.35.1</a>
+          <a class="dropdown-item active" href="./ExtUtils::Mksymlists.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./ExtUtils::Mksymlists.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./ExtUtils::Mksymlists.html">ExtUtils::Mksymlists</a>
+          <div id="more">
+            (<a href="./ExtUtils::Mksymlists.txt">source</a>,
+            <a href="https://metacpan.org/pod/ExtUtils::Mksymlists">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 7.62</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::Mksymlists.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::Mksymlists.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::Mksymlists.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::Mksymlists.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::Mksymlists.html#REVISION">REVISION</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./ExtUtils::Mksymlists.html#NAME">#</a>NAME</h1>
+
+<p>ExtUtils::Mksymlists - write linker options files for dynamic extension</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./ExtUtils::Mksymlists.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use ExtUtils::Mksymlists;
+Mksymlists(  NAME     =&gt; $name ,
+             DL_VARS  =&gt; [ $var1, $var2, $var3 ],
+             DL_FUNCS =&gt; { $pkg1 =&gt; [ $func1, $func2 ],
+                           $pkg2 =&gt; [ $func3 ] );</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./ExtUtils::Mksymlists.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p><code>ExtUtils::Mksymlists</code> produces files used by the linker under some OSs during the creation of shared libraries for dynamic extensions. It is normally called from a MakeMaker-generated Makefile when the extension is built. The linker option file is generated by calling the function <code>Mksymlists</code>, which is exported by default from <code>ExtUtils::Mksymlists</code>. It takes one argument, a list of key-value pairs, in which the following keys are recognized:</p>
+
+<dl>
+
+<dt id="DLBASE"><a class="permalink" href="./ExtUtils::Mksymlists.html#DLBASE">#</a>DLBASE</dt>
+<dd>
+
+<p>This item specifies the name by which the linker knows the extension, which may be different from the name of the extension itself (for instance, some linkers add an &#39;_&#39; to the name of the extension). If it is not specified, it is derived from the NAME attribute. It is presently used only by OS2 and Win32.</p>
+
+</dd>
+<dt id="DL_FUNCS"><a class="permalink" href="./ExtUtils::Mksymlists.html#DL_FUNCS">#</a>DL_FUNCS</dt>
+<dd>
+
+<p>This is identical to the DL_FUNCS attribute available via MakeMaker, from which it is usually taken. Its value is a reference to an associative array, in which each key is the name of a package, and each value is an a reference to an array of function names which should be exported by the extension. For instance, one might say <code>DL_FUNCS =&gt; { Homer::Iliad =&gt; [ qw(trojans greeks) ], Homer::Odyssey =&gt; [ qw(travellers family suitors) ] }</code>. The function names should be identical to those in the XSUB code; <code>Mksymlists</code> will alter the names written to the linker option file to match the changes made by <i>xsubpp</i>. In addition, if none of the functions in a list begin with the string <b>boot_</b>, <code>Mksymlists</code> will add a bootstrap function for that package, just as xsubpp does. (If a <b>boot_&lt;pkg&gt;</b> function is present in the list, it is passed through unchanged.) If DL_FUNCS is not specified, it defaults to the bootstrap function for the extension specified in NAME.</p>
+
+</dd>
+<dt id="DL_VARS"><a class="permalink" href="./ExtUtils::Mksymlists.html#DL_VARS">#</a>DL_VARS</dt>
+<dd>
+
+<p>This is identical to the DL_VARS attribute available via MakeMaker, and, like DL_FUNCS, it is usually specified via MakeMaker. Its value is a reference to an array of variable names which should be exported by the extension.</p>
+
+</dd>
+<dt id="FILE"><a class="permalink" href="./ExtUtils::Mksymlists.html#FILE">#</a>FILE</dt>
+<dd>
+
+<p>This key can be used to specify the name of the linker option file (minus the OS-specific extension), if for some reason you do not want to use the default value, which is the last word of the NAME attribute (<i>e.g.</i> for <code>Tk::Canvas</code>, FILE defaults to <code>Canvas</code>).</p>
+
+</dd>
+<dt id="FUNCLIST"><a class="permalink" href="./ExtUtils::Mksymlists.html#FUNCLIST">#</a>FUNCLIST</dt>
+<dd>
+
+<p>This provides an alternate means to specify function names to be exported from the extension. Its value is a reference to an array of function names to be exported by the extension. These names are passed through unaltered to the linker options file. Specifying a value for the FUNCLIST attribute suppresses automatic generation of the bootstrap function for the package. To still create the bootstrap name you have to specify the package name in the DL_FUNCS hash:</p>
+
+<pre><code>    Mksymlists(  NAME     =&gt; $name ,
+		 FUNCLIST =&gt; [ $func1, $func2 ],
+                 DL_FUNCS =&gt; { $pkg =&gt; [] } );</code></pre>
+
+</dd>
+<dt id="IMPORTS"><a class="permalink" href="./ExtUtils::Mksymlists.html#IMPORTS">#</a>IMPORTS</dt>
+<dd>
+
+<p>This attribute is used to specify names to be imported into the extension. It is currently only used by OS/2 and Win32.</p>
+
+</dd>
+<dt id="NAME1"><a class="permalink" href="./ExtUtils::Mksymlists.html#NAME1">#</a>NAME</dt>
+<dd>
+
+<p>This gives the name of the extension (<i>e.g.</i> <code>Tk::Canvas</code>) for which the linker option file will be produced.</p>
+
+</dd>
+</dl>
+
+<p>When calling <code>Mksymlists</code>, one should always specify the NAME attribute. In most cases, this is all that&#39;s necessary. In the case of unusual extensions, however, the other attributes can be used to provide additional information to the linker.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./ExtUtils::Mksymlists.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Charles Bailey <i>&lt;bailey@newman.upenn.edu&gt;</i></p>
+
+<h1 id="REVISION"><a class="permalink" href="./ExtUtils::Mksymlists.html#REVISION">#</a>REVISION</h1>
+
+<p>Last revised 14-Feb-1996, for Perl 5.002.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

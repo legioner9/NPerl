@@ -1,0 +1,2946 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>HACKERS - Devel::PPPort internals for hackers - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Devel-PPPort - MetaCPAN" href="https://metacpan.org/dist/Devel-PPPort/releases.rss" />
+        <link rel="canonical" href="https://metacpan.org/dist/Devel-PPPort/view/HACKERS" />
+        <meta name="description" content="Devel::PPPort internals for hackers" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/HACKERS" />
+<meta name="twitter:title"       content="HACKERS" />
+<meta name="twitter:description" content="Devel::PPPort internals for hackers" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="HACKERS.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Devel-PPPort was released.">
+      <span class="relatize">18 Mar 2022 22:08:30 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Devel-PPPort">Devel-PPPort</a>
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Devel-PPPort/source/HACKERS">Source</a>
+    (<a href="https://metacpan.org/dist/Devel-PPPort/source/HACKERS?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Devel-PPPort/source">Browse</a>
+    (<a href="https://metacpan.org/dist/Devel-PPPort/source?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Devel-PPPort/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Devel-PPPort/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/Dual-Life/Devel-PPPort">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/Dual-Life/Devel-PPPort/issues">Issues</a>
+      (16)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Devel-PPPort+3.68" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-PPPort.html?oncpan=1&amp;distmat=1&amp;version=3.68&amp;grade=2" style="color: #090">2898</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-PPPort.html?oncpan=1&amp;distmat=1&amp;version=3.68&amp;grade=3" style="color: #900">5</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-PPPort.html?oncpan=1&amp;distmat=1&amp;version=3.68&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/ATOOMIC/Devel-PPPort-3.68">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Devel-PPPort who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 5
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Devel-PPPort-3.68/index.html">% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Devel-PPPort/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.68.tar.gz">
+      Download (<span itemprop="fileSize">469.2KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FATOOMIC%2FDevel-PPPort-3.68%2FHACKERS">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-PPPort/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-PPPort/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Devel-PPPort">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Devel-PPPort">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/HACKERS&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="ATOOMIC/Devel-PPPort-3.68"
+>3.68
+  (ATOOMIC on 2022-03-18)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.67"
+>3.67
+  (ATOOMIC on 2022-03-08)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.66"
+>3.66
+  (ATOOMIC on 2022-03-02)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.65"
+>3.65
+  (ATOOMIC on 2022-03-02)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.64"
+>3.64
+  (ATOOMIC on 2022-02-01)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.63"
+>3.63
+  (ATOOMIC on 2021-07-07)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.62"
+>3.62
+  (ATOOMIC on 2020-10-16)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.61"
+>3.61
+  (ATOOMIC on 2020-10-12)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.60_02"
+>3.60_02 DEV
+  (ATOOMIC on 2020-10-07)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.60_01"
+>3.60_01 DEV
+  (ATOOMIC on 2020-09-30)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.60"
+>3.60
+  (ATOOMIC on 2020-08-11)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.59"
+>3.59
+  (ATOOMIC on 2020-08-10)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.58_01"
+>3.58_01 DEV
+  (ATOOMIC on 2020-08-06)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.58"
+>3.58
+  (ATOOMIC on 2020-03-09)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.57_02"
+>3.57_02 DEV
+  (ATOOMIC on 2020-03-04)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.57_01"
+>3.57_01 DEV
+  (ATOOMIC on 2020-02-10)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.57"
+>3.57
+  (ATOOMIC on 2020-01-31)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.56"
+>3.56
+  (ATOOMIC on 2019-11-25)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.55"
+>3.55
+  (ATOOMIC on 2019-11-07)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.54"
+>3.54
+  (ATOOMIC on 2019-09-28)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.53"
+>3.53
+  (ATOOMIC on 2019-09-28)</option>
+<option
+  
+  value="RURBAN/Devel-PPPort-3.53_04"
+>3.53_04 DEV
+  (RURBAN on 2019-06-11)</option>
+<option
+  
+  value="RURBAN/Devel-PPPort-3.52_04"
+>3.52_04 DEV
+  (RURBAN on 2019-06-09)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.52"
+>3.52
+  (ATOOMIC on 2019-05-14)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.51"
+>3.51
+  (ETHER on 2019-04-30)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.50"
+>3.50
+  (ETHER on 2019-04-30)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.49"
+>3.49
+  (ATOOMIC on 2019-04-29)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.46"
+>3.46
+  (ATOOMIC on 2019-04-26)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.45"
+>3.45
+  (ATOOMIC on 2019-03-19)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.44"
+>3.44
+  (ATOOMIC on 2019-02-20)</option>
+<option
+  
+  value="RURBAN/Devel-PPPort-3.43_04"
+>3.43_04 DEV
+  (RURBAN on 2018-10-12)</option>
+<option
+  
+  value="XSAWYERX/Devel-PPPort-3.43"
+>3.43
+  (XSAWYERX on 2018-09-19)</option>
+<option
+  
+  value="XSAWYERX/Devel-PPPort-3.42"
+>3.42
+  (XSAWYERX on 2018-04-21)</option>
+<option
+  
+  value="XSAWYERX/Devel-PPPort-3.41"
+>3.41
+  (XSAWYERX on 2018-04-21)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.36"
+>3.36
+  (WOLFSAGE on 2017-05-14)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.35"
+>3.35
+  (WOLFSAGE on 2016-06-17)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.34"
+>3.34
+  (WOLFSAGE on 2016-06-12)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.33"
+>3.33
+  (WOLFSAGE on 2016-06-03)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.32_02"
+>3.32_02 DEV
+  (WOLFSAGE on 2016-05-24)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.32_01"
+>3.32_01 DEV
+  (WOLFSAGE on 2016-05-06)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.32"
+>3.32
+  (WOLFSAGE on 2015-09-30)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.31"
+>3.31
+  (WOLFSAGE on 2015-03-12)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.30"
+>3.30
+  (WOLFSAGE on 2015-03-05)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.29"
+>3.29
+  (WOLFSAGE on 2015-03-05)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.28"
+>3.28
+  (WOLFSAGE on 2015-01-16)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.27"
+>3.27
+  (WOLFSAGE on 2015-01-13)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.26"
+>3.26
+  (WOLFSAGE on 2015-01-08)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.25"
+>3.25
+  (WOLFSAGE on 2014-12-02)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.24"
+>3.24
+  (WOLFSAGE on 2014-05-09)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.23"
+>3.23
+  (WOLFSAGE on 2014-04-13)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.22"
+>3.22
+  (WOLFSAGE on 2014-03-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.21"
+>3.21
+  (MHX on 2013-08-17)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.20"
+>3.20
+  (MHX on 2011-09-10)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19_03"
+>3.19_03 DEV
+  (MHX on 2011-04-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19"
+>3.19
+  (MHX on 2009-06-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.18"
+>3.18
+  (MHX on 2009-06-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.17"
+>3.17
+  (MHX on 2009-03-15)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0007"
+>1.0007
+  (KJALB on 1999-03-29)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0006"
+>1.0006
+  (KJALB on 1999-03-24)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0005"
+>1.0005
+  (KJALB on 1999-03-08)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0004"
+>1.0004
+  (KJALB on 1999-03-01)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/Devel-PPPort-3.48-again"
+>3.48-again
+  (ETHER on 2019-04-28)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.48"
+>3.48
+  (ETHER on 2019-04-28)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.47"
+>3.47
+  (ETHER on 2019-04-28)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19_02"
+>3.19_02 DEV
+  (MHX on 2010-03-07)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19_01"
+>3.19_01 DEV
+  (MHX on 2010-02-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.18_01"
+>3.18_01 DEV
+  (MHX on 2009-06-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.16"
+>3.16
+  (MHX on 2009-01-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.15"
+>3.15
+  (MHX on 2009-01-18)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_05"
+>3.14_05 DEV
+  (MHX on 2008-10-31)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_04"
+>3.14_04 DEV
+  (MHX on 2008-10-30)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_03"
+>3.14_03 DEV
+  (MHX on 2008-10-21)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_02"
+>3.14_02 DEV
+  (MHX on 2008-10-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_01"
+>3.14_01 DEV
+  (MHX on 2008-07-11)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14"
+>3.14
+  (MHX on 2008-06-01)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13_03"
+>3.13_03 DEV
+  (MHX on 2008-05-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13_02"
+>3.13_02 DEV
+  (MHX on 2008-04-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13_01"
+>3.13_01 DEV
+  (MHX on 2008-01-04)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13"
+>3.13
+  (MHX on 2007-10-04)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.12"
+>3.12
+  (MHX on 2007-09-22)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_06"
+>3.11_06 DEV
+  (MHX on 2007-09-11)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_05"
+>3.11_05 DEV
+  (MHX on 2007-08-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_04"
+>3.11_04 DEV
+  (MHX on 2007-08-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_03"
+>3.11_03 DEV
+  (MHX on 2007-08-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_02"
+>3.11_02 DEV
+  (MHX on 2007-08-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_01"
+>3.11_01 DEV
+  (MHX on 2007-03-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11"
+>3.11
+  (MHX on 2007-02-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.10_02"
+>3.10_02 DEV
+  (MHX on 2006-12-02)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.10_01"
+>3.10_01 DEV
+  (MHX on 2006-12-02)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.10"
+>3.10
+  (MHX on 2006-08-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.09_02"
+>3.09_02 DEV
+  (MHX on 2006-07-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.09_01"
+>3.09_01 DEV
+  (MHX on 2006-07-21)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.09"
+>3.09
+  (MHX on 2006-07-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_07"
+>3.08_07 DEV
+  (MHX on 2006-07-03)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_06"
+>3.08_06 DEV
+  (MHX on 2006-06-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_05"
+>3.08_05 DEV
+  (MHX on 2006-06-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_04"
+>3.08_04 DEV
+  (MHX on 2006-05-29)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_03"
+>3.08_03 DEV
+  (MHX on 2006-05-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_02"
+>3.08_02 DEV
+  (MHX on 2006-05-22)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_01"
+>3.08_01 DEV
+  (MHX on 2006-05-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08"
+>3.08
+  (MHX on 2006-01-19)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.07"
+>3.07
+  (MHX on 2006-01-16)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_04"
+>3.06_04 DEV
+  (MHX on 2005-10-30)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_03"
+>3.06_03 DEV
+  (MHX on 2005-10-18)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_02"
+>3.06_02 DEV
+  (MHX on 2005-10-18)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_01"
+>3.06_01 DEV
+  (MHX on 2005-06-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06"
+>3.06
+  (MHX on 2005-02-02)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.05"
+>3.05
+  (MHX on 2005-01-31)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.04"
+>3.04
+  (MHX on 2004-12-29)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.03"
+>3.03
+  (MHX on 2004-09-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.02"
+>3.02
+  (MHX on 2004-09-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.01"
+>3.01
+  (MHX on 2004-08-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00_03"
+>3.00_03 DEV
+  (MHX on 2004-08-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00_02"
+>3.00_02 DEV
+  (MHX on 2004-08-19)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00_01"
+>3.00_01 DEV
+  (MHX on 2004-08-17)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00"
+>3.00
+  (MHX on 2004-08-16)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_07"
+>2.99_07 DEV
+  (MHX on 2004-08-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_06"
+>2.99_06 DEV
+  (MHX on 2004-08-11)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_05"
+>2.99_05 DEV
+  (MHX on 2004-08-10)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_04"
+>2.99_04 DEV
+  (MHX on 2004-08-10)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_03"
+>2.99_03 DEV
+  (MHX on 2004-08-09)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_02"
+>2.99_02 DEV
+  (MHX on 2004-08-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_01"
+>2.99_01 DEV
+  (MHX on 2004-08-07)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/ATOOMIC/Devel-PPPort-3.68/diff/' + encodeURIComponent(this.value) + '/HACKERS'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="ATOOMIC/Devel-PPPort-3.68"
+>3.68
+  (ATOOMIC on 2022-03-18)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.67"
+>3.67
+  (ATOOMIC on 2022-03-08)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.66"
+>3.66
+  (ATOOMIC on 2022-03-02)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.65"
+>3.65
+  (ATOOMIC on 2022-03-02)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.64"
+>3.64
+  (ATOOMIC on 2022-02-01)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.63"
+>3.63
+  (ATOOMIC on 2021-07-07)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.62"
+>3.62
+  (ATOOMIC on 2020-10-16)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.61"
+>3.61
+  (ATOOMIC on 2020-10-12)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.60_02"
+>3.60_02 DEV
+  (ATOOMIC on 2020-10-07)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.60_01"
+>3.60_01 DEV
+  (ATOOMIC on 2020-09-30)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.60"
+>3.60
+  (ATOOMIC on 2020-08-11)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.59"
+>3.59
+  (ATOOMIC on 2020-08-10)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.58_01"
+>3.58_01 DEV
+  (ATOOMIC on 2020-08-06)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.58"
+>3.58
+  (ATOOMIC on 2020-03-09)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.57_02"
+>3.57_02 DEV
+  (ATOOMIC on 2020-03-04)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.57_01"
+>3.57_01 DEV
+  (ATOOMIC on 2020-02-10)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.57"
+>3.57
+  (ATOOMIC on 2020-01-31)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.56"
+>3.56
+  (ATOOMIC on 2019-11-25)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.55"
+>3.55
+  (ATOOMIC on 2019-11-07)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.54"
+>3.54
+  (ATOOMIC on 2019-09-28)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.53"
+>3.53
+  (ATOOMIC on 2019-09-28)</option>
+<option
+  
+  value="RURBAN/Devel-PPPort-3.53_04"
+>3.53_04 DEV
+  (RURBAN on 2019-06-11)</option>
+<option
+  
+  value="RURBAN/Devel-PPPort-3.52_04"
+>3.52_04 DEV
+  (RURBAN on 2019-06-09)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.52"
+>3.52
+  (ATOOMIC on 2019-05-14)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.51"
+>3.51
+  (ETHER on 2019-04-30)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.50"
+>3.50
+  (ETHER on 2019-04-30)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.49"
+>3.49
+  (ATOOMIC on 2019-04-29)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.46"
+>3.46
+  (ATOOMIC on 2019-04-26)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.45"
+>3.45
+  (ATOOMIC on 2019-03-19)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.44"
+>3.44
+  (ATOOMIC on 2019-02-20)</option>
+<option
+  
+  value="RURBAN/Devel-PPPort-3.43_04"
+>3.43_04 DEV
+  (RURBAN on 2018-10-12)</option>
+<option
+  
+  value="XSAWYERX/Devel-PPPort-3.43"
+>3.43
+  (XSAWYERX on 2018-09-19)</option>
+<option
+  
+  value="XSAWYERX/Devel-PPPort-3.42"
+>3.42
+  (XSAWYERX on 2018-04-21)</option>
+<option
+  
+  value="XSAWYERX/Devel-PPPort-3.41"
+>3.41
+  (XSAWYERX on 2018-04-21)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.36"
+>3.36
+  (WOLFSAGE on 2017-05-14)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.35"
+>3.35
+  (WOLFSAGE on 2016-06-17)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.34"
+>3.34
+  (WOLFSAGE on 2016-06-12)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.33"
+>3.33
+  (WOLFSAGE on 2016-06-03)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.32_02"
+>3.32_02 DEV
+  (WOLFSAGE on 2016-05-24)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.32_01"
+>3.32_01 DEV
+  (WOLFSAGE on 2016-05-06)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.32"
+>3.32
+  (WOLFSAGE on 2015-09-30)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.31"
+>3.31
+  (WOLFSAGE on 2015-03-12)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.30"
+>3.30
+  (WOLFSAGE on 2015-03-05)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.29"
+>3.29
+  (WOLFSAGE on 2015-03-05)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.28"
+>3.28
+  (WOLFSAGE on 2015-01-16)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.27"
+>3.27
+  (WOLFSAGE on 2015-01-13)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.26"
+>3.26
+  (WOLFSAGE on 2015-01-08)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.25"
+>3.25
+  (WOLFSAGE on 2014-12-02)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.24"
+>3.24
+  (WOLFSAGE on 2014-05-09)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.23"
+>3.23
+  (WOLFSAGE on 2014-04-13)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.22"
+>3.22
+  (WOLFSAGE on 2014-03-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.21"
+>3.21
+  (MHX on 2013-08-17)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.20"
+>3.20
+  (MHX on 2011-09-10)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19_03"
+>3.19_03 DEV
+  (MHX on 2011-04-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19"
+>3.19
+  (MHX on 2009-06-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.18"
+>3.18
+  (MHX on 2009-06-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.17"
+>3.17
+  (MHX on 2009-03-15)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0007"
+>1.0007
+  (KJALB on 1999-03-29)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0006"
+>1.0006
+  (KJALB on 1999-03-24)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0005"
+>1.0005
+  (KJALB on 1999-03-08)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0004"
+>1.0004
+  (KJALB on 1999-03-01)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/Devel-PPPort-3.48-again"
+>3.48-again
+  (ETHER on 2019-04-28)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.48"
+>3.48
+  (ETHER on 2019-04-28)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.47"
+>3.47
+  (ETHER on 2019-04-28)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19_02"
+>3.19_02 DEV
+  (MHX on 2010-03-07)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19_01"
+>3.19_01 DEV
+  (MHX on 2010-02-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.18_01"
+>3.18_01 DEV
+  (MHX on 2009-06-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.16"
+>3.16
+  (MHX on 2009-01-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.15"
+>3.15
+  (MHX on 2009-01-18)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_05"
+>3.14_05 DEV
+  (MHX on 2008-10-31)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_04"
+>3.14_04 DEV
+  (MHX on 2008-10-30)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_03"
+>3.14_03 DEV
+  (MHX on 2008-10-21)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_02"
+>3.14_02 DEV
+  (MHX on 2008-10-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_01"
+>3.14_01 DEV
+  (MHX on 2008-07-11)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14"
+>3.14
+  (MHX on 2008-06-01)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13_03"
+>3.13_03 DEV
+  (MHX on 2008-05-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13_02"
+>3.13_02 DEV
+  (MHX on 2008-04-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13_01"
+>3.13_01 DEV
+  (MHX on 2008-01-04)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13"
+>3.13
+  (MHX on 2007-10-04)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.12"
+>3.12
+  (MHX on 2007-09-22)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_06"
+>3.11_06 DEV
+  (MHX on 2007-09-11)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_05"
+>3.11_05 DEV
+  (MHX on 2007-08-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_04"
+>3.11_04 DEV
+  (MHX on 2007-08-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_03"
+>3.11_03 DEV
+  (MHX on 2007-08-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_02"
+>3.11_02 DEV
+  (MHX on 2007-08-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_01"
+>3.11_01 DEV
+  (MHX on 2007-03-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11"
+>3.11
+  (MHX on 2007-02-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.10_02"
+>3.10_02 DEV
+  (MHX on 2006-12-02)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.10_01"
+>3.10_01 DEV
+  (MHX on 2006-12-02)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.10"
+>3.10
+  (MHX on 2006-08-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.09_02"
+>3.09_02 DEV
+  (MHX on 2006-07-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.09_01"
+>3.09_01 DEV
+  (MHX on 2006-07-21)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.09"
+>3.09
+  (MHX on 2006-07-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_07"
+>3.08_07 DEV
+  (MHX on 2006-07-03)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_06"
+>3.08_06 DEV
+  (MHX on 2006-06-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_05"
+>3.08_05 DEV
+  (MHX on 2006-06-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_04"
+>3.08_04 DEV
+  (MHX on 2006-05-29)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_03"
+>3.08_03 DEV
+  (MHX on 2006-05-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_02"
+>3.08_02 DEV
+  (MHX on 2006-05-22)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_01"
+>3.08_01 DEV
+  (MHX on 2006-05-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08"
+>3.08
+  (MHX on 2006-01-19)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.07"
+>3.07
+  (MHX on 2006-01-16)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_04"
+>3.06_04 DEV
+  (MHX on 2005-10-30)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_03"
+>3.06_03 DEV
+  (MHX on 2005-10-18)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_02"
+>3.06_02 DEV
+  (MHX on 2005-10-18)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_01"
+>3.06_01 DEV
+  (MHX on 2005-06-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06"
+>3.06
+  (MHX on 2005-02-02)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.05"
+>3.05
+  (MHX on 2005-01-31)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.04"
+>3.04
+  (MHX on 2004-12-29)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.03"
+>3.03
+  (MHX on 2004-09-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.02"
+>3.02
+  (MHX on 2004-09-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.01"
+>3.01
+  (MHX on 2004-08-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00_03"
+>3.00_03 DEV
+  (MHX on 2004-08-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00_02"
+>3.00_02 DEV
+  (MHX on 2004-08-19)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00_01"
+>3.00_01 DEV
+  (MHX on 2004-08-17)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00"
+>3.00
+  (MHX on 2004-08-16)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_07"
+>2.99_07 DEV
+  (MHX on 2004-08-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_06"
+>2.99_06 DEV
+  (MHX on 2004-08-11)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_05"
+>2.99_05 DEV
+  (MHX on 2004-08-10)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_04"
+>2.99_04 DEV
+  (MHX on 2004-08-10)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_03"
+>2.99_03 DEV
+  (MHX on 2004-08-09)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_02"
+>2.99_02 DEV
+  (MHX on 2004-08-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_01"
+>2.99_01 DEV
+  (MHX on 2004-08-07)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><i class="ttip" title="dynamic_config enabled">unknown</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/HACKERS/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=HACKERS">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Devel-PPPort">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/ATOOMIC/Devel-PPPort-3.68/view/HACKERS">This version</a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-PPPort/view/HACKERS">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/DOLMEN"><img src="https://www.gravatar.com/avatar/70d9b050bfe39350c234d710fadfcd39?d=identicon&amp;s=20" title="DOLMEN" alt="DOLMEN"></a>
+<a class="display-all" href="https://metacpan.org/author/RWP"><img src="https://www.gravatar.com/avatar/7110eb2389e69a066d9d7cad7a1cc2bf?d=identicon&amp;s=20" title="RWP" alt="RWP"></a>
+<a class="display-all" href="https://metacpan.org/author/PINGAN"><img src="https://www.gravatar.com/avatar/a02222e5e0e4fd24d52fc29a08ac6bcb?d=identicon&amp;s=20" title="PINGAN" alt="PINGAN"></a>
+<a class="display-all" href="https://metacpan.org/author/ETHER"><img src="https://www.gravatar.com/avatar/bdc5cd06679e732e262f6c1b450a0237?d=identicon&amp;s=20" title="ETHER" alt="ETHER"></a>
+<a class="display-all" href="https://metacpan.org/author/POTATOGIM"><img src="https://www.gravatar.com/avatar/82f1c6258702415af6e26187f1e36850?d=identicon&amp;s=20" title="POTATOGIM" alt="POTATOGIM"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Devel-PPPort/plussers">8 PAUSE users</a>
+</div>
+<div>
+    4 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="MHX"
+      data-contrib-email="mhx@cpan.org"
+    >
+      <a href="https://metacpan.org/author/MHX" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/18b25a069928be515c889e76f7fd7be8?d=identicon&amp;s=20" />
+      Marcus Holland-Moritz
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/ATOOMIC" class="author-name">ℕicolas ℝ.</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/HACKERS&#39;" class="">
+<option
+  selected
+  value="ATOOMIC/Devel-PPPort-3.68"
+>3.68
+  (ATOOMIC on 2022-03-18)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.67"
+>3.67
+  (ATOOMIC on 2022-03-08)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.66"
+>3.66
+  (ATOOMIC on 2022-03-02)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.65"
+>3.65
+  (ATOOMIC on 2022-03-02)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.64"
+>3.64
+  (ATOOMIC on 2022-02-01)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.63"
+>3.63
+  (ATOOMIC on 2021-07-07)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.62"
+>3.62
+  (ATOOMIC on 2020-10-16)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.61"
+>3.61
+  (ATOOMIC on 2020-10-12)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.60_02"
+>3.60_02 DEV
+  (ATOOMIC on 2020-10-07)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.60_01"
+>3.60_01 DEV
+  (ATOOMIC on 2020-09-30)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.60"
+>3.60
+  (ATOOMIC on 2020-08-11)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.59"
+>3.59
+  (ATOOMIC on 2020-08-10)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.58_01"
+>3.58_01 DEV
+  (ATOOMIC on 2020-08-06)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.58"
+>3.58
+  (ATOOMIC on 2020-03-09)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.57_02"
+>3.57_02 DEV
+  (ATOOMIC on 2020-03-04)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.57_01"
+>3.57_01 DEV
+  (ATOOMIC on 2020-02-10)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.57"
+>3.57
+  (ATOOMIC on 2020-01-31)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.56"
+>3.56
+  (ATOOMIC on 2019-11-25)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.55"
+>3.55
+  (ATOOMIC on 2019-11-07)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.54"
+>3.54
+  (ATOOMIC on 2019-09-28)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.53"
+>3.53
+  (ATOOMIC on 2019-09-28)</option>
+<option
+  
+  value="RURBAN/Devel-PPPort-3.53_04"
+>3.53_04 DEV
+  (RURBAN on 2019-06-11)</option>
+<option
+  
+  value="RURBAN/Devel-PPPort-3.52_04"
+>3.52_04 DEV
+  (RURBAN on 2019-06-09)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.52"
+>3.52
+  (ATOOMIC on 2019-05-14)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.51"
+>3.51
+  (ETHER on 2019-04-30)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.50"
+>3.50
+  (ETHER on 2019-04-30)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.49"
+>3.49
+  (ATOOMIC on 2019-04-29)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.46"
+>3.46
+  (ATOOMIC on 2019-04-26)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.45"
+>3.45
+  (ATOOMIC on 2019-03-19)</option>
+<option
+  
+  value="ATOOMIC/Devel-PPPort-3.44"
+>3.44
+  (ATOOMIC on 2019-02-20)</option>
+<option
+  
+  value="RURBAN/Devel-PPPort-3.43_04"
+>3.43_04 DEV
+  (RURBAN on 2018-10-12)</option>
+<option
+  
+  value="XSAWYERX/Devel-PPPort-3.43"
+>3.43
+  (XSAWYERX on 2018-09-19)</option>
+<option
+  
+  value="XSAWYERX/Devel-PPPort-3.42"
+>3.42
+  (XSAWYERX on 2018-04-21)</option>
+<option
+  
+  value="XSAWYERX/Devel-PPPort-3.41"
+>3.41
+  (XSAWYERX on 2018-04-21)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.36"
+>3.36
+  (WOLFSAGE on 2017-05-14)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.35"
+>3.35
+  (WOLFSAGE on 2016-06-17)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.34"
+>3.34
+  (WOLFSAGE on 2016-06-12)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.33"
+>3.33
+  (WOLFSAGE on 2016-06-03)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.32_02"
+>3.32_02 DEV
+  (WOLFSAGE on 2016-05-24)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.32_01"
+>3.32_01 DEV
+  (WOLFSAGE on 2016-05-06)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.32"
+>3.32
+  (WOLFSAGE on 2015-09-30)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.31"
+>3.31
+  (WOLFSAGE on 2015-03-12)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.30"
+>3.30
+  (WOLFSAGE on 2015-03-05)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.29"
+>3.29
+  (WOLFSAGE on 2015-03-05)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.28"
+>3.28
+  (WOLFSAGE on 2015-01-16)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.27"
+>3.27
+  (WOLFSAGE on 2015-01-13)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.26"
+>3.26
+  (WOLFSAGE on 2015-01-08)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.25"
+>3.25
+  (WOLFSAGE on 2014-12-02)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.24"
+>3.24
+  (WOLFSAGE on 2014-05-09)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.23"
+>3.23
+  (WOLFSAGE on 2014-04-13)</option>
+<option
+  
+  value="WOLFSAGE/Devel-PPPort-3.22"
+>3.22
+  (WOLFSAGE on 2014-03-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.21"
+>3.21
+  (MHX on 2013-08-17)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.20"
+>3.20
+  (MHX on 2011-09-10)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19_03"
+>3.19_03 DEV
+  (MHX on 2011-04-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19"
+>3.19
+  (MHX on 2009-06-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.18"
+>3.18
+  (MHX on 2009-06-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.17"
+>3.17
+  (MHX on 2009-03-15)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0007"
+>1.0007
+  (KJALB on 1999-03-29)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0006"
+>1.0006
+  (KJALB on 1999-03-24)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0005"
+>1.0005
+  (KJALB on 1999-03-08)</option>
+<option
+  
+  value="KJALB/Devel-PPPort-1.0004"
+>1.0004
+  (KJALB on 1999-03-01)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/Devel-PPPort-3.48-again"
+>3.48-again
+  (ETHER on 2019-04-28)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.48"
+>3.48
+  (ETHER on 2019-04-28)</option>
+<option
+  
+  value="ETHER/Devel-PPPort-3.47"
+>3.47
+  (ETHER on 2019-04-28)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19_02"
+>3.19_02 DEV
+  (MHX on 2010-03-07)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.19_01"
+>3.19_01 DEV
+  (MHX on 2010-02-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.18_01"
+>3.18_01 DEV
+  (MHX on 2009-06-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.16"
+>3.16
+  (MHX on 2009-01-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.15"
+>3.15
+  (MHX on 2009-01-18)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_05"
+>3.14_05 DEV
+  (MHX on 2008-10-31)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_04"
+>3.14_04 DEV
+  (MHX on 2008-10-30)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_03"
+>3.14_03 DEV
+  (MHX on 2008-10-21)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_02"
+>3.14_02 DEV
+  (MHX on 2008-10-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14_01"
+>3.14_01 DEV
+  (MHX on 2008-07-11)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.14"
+>3.14
+  (MHX on 2008-06-01)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13_03"
+>3.13_03 DEV
+  (MHX on 2008-05-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13_02"
+>3.13_02 DEV
+  (MHX on 2008-04-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13_01"
+>3.13_01 DEV
+  (MHX on 2008-01-04)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.13"
+>3.13
+  (MHX on 2007-10-04)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.12"
+>3.12
+  (MHX on 2007-09-22)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_06"
+>3.11_06 DEV
+  (MHX on 2007-09-11)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_05"
+>3.11_05 DEV
+  (MHX on 2007-08-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_04"
+>3.11_04 DEV
+  (MHX on 2007-08-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_03"
+>3.11_03 DEV
+  (MHX on 2007-08-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_02"
+>3.11_02 DEV
+  (MHX on 2007-08-12)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11_01"
+>3.11_01 DEV
+  (MHX on 2007-03-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.11"
+>3.11
+  (MHX on 2007-02-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.10_02"
+>3.10_02 DEV
+  (MHX on 2006-12-02)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.10_01"
+>3.10_01 DEV
+  (MHX on 2006-12-02)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.10"
+>3.10
+  (MHX on 2006-08-14)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.09_02"
+>3.09_02 DEV
+  (MHX on 2006-07-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.09_01"
+>3.09_01 DEV
+  (MHX on 2006-07-21)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.09"
+>3.09
+  (MHX on 2006-07-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_07"
+>3.08_07 DEV
+  (MHX on 2006-07-03)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_06"
+>3.08_06 DEV
+  (MHX on 2006-06-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_05"
+>3.08_05 DEV
+  (MHX on 2006-06-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_04"
+>3.08_04 DEV
+  (MHX on 2006-05-29)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_03"
+>3.08_03 DEV
+  (MHX on 2006-05-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_02"
+>3.08_02 DEV
+  (MHX on 2006-05-22)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08_01"
+>3.08_01 DEV
+  (MHX on 2006-05-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.08"
+>3.08
+  (MHX on 2006-01-19)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.07"
+>3.07
+  (MHX on 2006-01-16)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_04"
+>3.06_04 DEV
+  (MHX on 2005-10-30)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_03"
+>3.06_03 DEV
+  (MHX on 2005-10-18)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_02"
+>3.06_02 DEV
+  (MHX on 2005-10-18)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06_01"
+>3.06_01 DEV
+  (MHX on 2005-06-25)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.06"
+>3.06
+  (MHX on 2005-02-02)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.05"
+>3.05
+  (MHX on 2005-01-31)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.04"
+>3.04
+  (MHX on 2004-12-29)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.03"
+>3.03
+  (MHX on 2004-09-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.02"
+>3.02
+  (MHX on 2004-09-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.01"
+>3.01
+  (MHX on 2004-08-23)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00_03"
+>3.00_03 DEV
+  (MHX on 2004-08-20)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00_02"
+>3.00_02 DEV
+  (MHX on 2004-08-19)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00_01"
+>3.00_01 DEV
+  (MHX on 2004-08-17)</option>
+<option
+  
+  value="MHX/Devel-PPPort-3.00"
+>3.00
+  (MHX on 2004-08-16)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_07"
+>2.99_07 DEV
+  (MHX on 2004-08-13)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_06"
+>2.99_06 DEV
+  (MHX on 2004-08-11)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_05"
+>2.99_05 DEV
+  (MHX on 2004-08-10)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_04"
+>2.99_04 DEV
+  (MHX on 2004-08-10)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_03"
+>2.99_03 DEV
+  (MHX on 2004-08-09)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_02"
+>2.99_02 DEV
+  (MHX on 2004-08-08)</option>
+<option
+  
+  value="MHX/Devel-PPPort-2.99_01"
+>2.99_01 DEV
+  (MHX on 2004-08-07)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Devel-PPPort">Devel-PPPort-3.68</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage four &#10;
+          • 73 direct dependents &#10;          • 1315 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Devel-PPPort-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Devel-PPPort-3.68">
+    <input type="hidden" name="author" value="ATOOMIC">
+    <input type="hidden" name="distribution" value="Devel-PPPort">
+    <button type="submit" class="favorite highlight"><span>12</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="HACKERS.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>12</span> ++</a>
+</div>
+   / <span>HACKERS</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="HACKERS.html#NAME">NAME</a></li>
+  <li><a href="HACKERS.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="HACKERS.html#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a href="HACKERS.html#How-to-backport-something">How to backport something</a></li>
+      <li><a href="HACKERS.html#Implementation-Section-Details">Implementation Section Details</a></li>
+      <li><a href="HACKERS.html#Testing">Testing</a></li>
+      <li><a href="HACKERS.html#Special-Makefile-targets">Special Makefile targets</a></li>
+      <li><a href="HACKERS.html#Regenerating-ppport.h-and-PPPort.pm">Regenerating ppport.h and PPPort.pm</a></li>
+      <li><a href="HACKERS.html#How-to-build-gobs-of-versions-of-Perl">How to build gobs of versions of Perl</a></li>
+      <li><a href="HACKERS.html#Implementation1">Implementation</a></li>
+      <li><a href="HACKERS.html#Files">Files</a></li>
+      <li><a href="HACKERS.html#Submitting-Patches">Submitting Patches</a></li>
+      <li><a href="HACKERS.html#Integrating-into-the-Perl-core">Integrating into the Perl core</a></li>
+    </ul>
+  </li>
+  <li><a href="HACKERS.html#BUGS">BUGS</a></li>
+  <li><a href="HACKERS.html#COPYRIGHT">COPYRIGHT</a></li>
+  <li><a href="HACKERS.html#SEE-ALSO">SEE ALSO</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>HACKERS - Devel::PPPort internals for hackers</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p>So you probably want to hack <code>Devel::PPPort</code>?</p>
+
+<p>Well, here&#39;s some information to get you started with what&#39;s lying around in this distribution.</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<h2 id="How-to-backport-something"><a id="How"></a>How to backport something</h2>
+
+<p>First, make sure that what you want to backport is documented. If it&#39;s worth backporting, it surely is worth documenting. Submit a documentation patch to <a href="https://github.com/Perl/perl5/issues">https://github.com/Perl/perl5/issues</a> if necessary. Also, <code>Devel::PPPort</code> cannot automatically generate proper information about the item without at least knowing its API prototype. It can get this from <i>embed.fnc</i> if the item is a function, but if it is a macro, there needs to be at least a <span style="white-space: nowrap;"><code>=for apidoc</code></span> line for <code>Devel::PPPort</code> to be able to figure things out on its own.</p>
+
+<p>Next, figure out where to place your implementation. Look at all the files in <i>parts/inc/</i> for one that fits what you&#39;re planning. If there isn&#39;t one, just start a new one and remember to include it from within <i>PPPort_pm.PL</i>. If you do create a new file, it&#39;s usually the best approach to just copy an existing file and use it as a template.</p>
+
+<p>Each file holds all relevant data for implementing a certain part of the API:</p>
+
+<ul>
+
+<li><p>A list of the provided API in the <code>=provides</code> section.</p>
+
+</li>
+<li><p>The optional <code>=dontwarn</code> section is used to suppress warnings about particular API elements. Don&#39;t use this unless you get such a warning, and be sure to think about using other other alternatives before resorting to adding something in this section.</p>
+
+</li>
+<li><p>The implementation to add to <i>ppport.h</i> in the <code>=implementation</code> section. See <a href="HACKERS.html#Implementation-Section-Details">&quot;Implementation Section Details&quot;</a>.</p>
+
+</li>
+<li><p>The code required to add to PPPort.xs for testing the implementation. This code goes into the <code>=xshead</code>, <code>=xsinit</code>, <code>=xsmisc</code>, <code>=xsboot</code> and <code>=xsubs</code> section. Have a look at the template at the bottom of <i>RealPPPort_xs.PL</i> to see where the code ends up.</p>
+
+</li>
+<li><p>The tests in the <code>=tests</code> section. Remember not to use any fancy modules or syntax elements, as the test code needs to be able to run with Perl 5.003. (This is because Devel::PPPort itself will run all test files in the process of generating the information about when a feature came into existence.) This means, for example</p>
+
+<dl>
+
+<dt id="my-isn&#39;t-supported-in-for-loops"><a id="my"></a><a id="my-isn-t-supported-in-for-loops"></a><code>my</code> isn&#39;t supported in <code>for</code>-loops</dt>
+<dd>
+
+<pre><code>    for my $x (1, 2, 3) { }    # won&#39;t work with 5.003</code></pre>
+
+<p>Instead declare <code>$x</code> just before the statement</p>
+
+</dd>
+<dt id="The-postfix-for-statement-modifier-isn&#39;t-supported"><a id="The"></a><a id="The-postfix-for-statement-modifier-isn-t-supported"></a>The postfix <code>for</code> statement modifier isn&#39;t supported</dt>
+<dd>
+
+<pre><code>    foo for 1..2</code></pre>
+
+<p>won&#39;t compile. Instead enclose <code>foo</code> in a loop.</p>
+
+</dd>
+<dt id="You-can&#39;t-use-plain-qr//"><a id="You"></a><a id="You-can-t-use-plain-qr"></a>You can&#39;t use plain <code>qr//</code></dt>
+<dd>
+
+<p>Instead, wrap it in a string eval <code>eval &quot;qr//&quot;</code>, and be sure it&#39;s skipped at execution time on perls earlier than 5.005</p>
+
+</dd>
+</dl>
+
+<p>As of version 3.56 of Devel::PPPort, the old Test style tests have been replaced with the more modern Test::More style, with some limitations. This means, for example, that <code>is</code> is finally available, as well as <code>done_testing</code>. You can pass the number of tests to <code>skip</code>, instead of having to have your own <code>for</code> loop.</p>
+
+<p>There is no <code>like</code> nor <code>unlike</code> (as those require <code>qr</code> which didn&#39;t exist in the earliest perls that Devel::PPPort runs on).</p>
+
+<p><code>skip</code> doesn&#39;t do a <span style="white-space: nowrap;"><code>last SKIP</code></span>. (Perhaps it could, but that would mean converting all the skips in the existing tests.)</p>
+
+<p>The existing tests have been changed only as much as necessary so as to get things to work. But feel free to use the full functionality for any new tests you write.</p>
+
+<p>Here&#39;s a list of the supported functions:</p>
+
+<pre><code> cmp_ok
+ curr_test
+ diag
+ display
+ done_testing
+ eq_array
+ eq_hash
+ fail
+ is
+ isnt
+ next_test
+ note
+ ok
+ pass
+ plan
+ skip
+ skip_all
+ within</code></pre>
+
+<p>These are copied from <i>t/test.pl</i> in the perl distribution. Not all of them have been tested back as far as Devel::PPPort supports. Bug reports welcome.</p>
+
+<p>It&#39;s fine to backport an element only as far as convenient and necessary. But remember that your test file will end up being called on all perl versions available, likely including ones earlier than your backport. That may mean that elements in the <code>=xs</code> sections will have to be <code>#idef</code>&#39;d out so that the object will not get missing symbols when loaded.</p>
+
+<p>It also means you have to check for and skip tests that aren&#39;t relevant to this version. The recommended way to do this is like:</p>
+
+<pre><code> if (ivers($]) &lt; ivers(5.6)) {           # No quotes needed
+    skip &quot;reason&quot;, $count;
+ }
+ elsif (if (ivers($]) &gt; ivers(&quot;5.5.4&quot;) {
+     # Quotes needed for double-dotted versions prior to 5.6.0
+    skip &quot;other reason&quot;, $count;
+ }
+ else {
+    do_the_test
+ }</code></pre>
+
+<p><code>ivers()</code> is a function automatically made available to all <i>.t</i> files. It converts any reasonble expression of a version number into an integer, which can reliably be compared using numeric comparison operators, with the output of a second <code>ivers()</code> call on a different version number, like in the result above.</p>
+
+<p>It&#39;s worth emphasizing that, due to bugs in early perl parsing, if you use a version number containing two dots on a version befor 5.6.0, it has to be quoted.</p>
+
+</li>
+</ul>
+
+<p>In all sections, lines that begin with <code>##</code> are completely ignored.</p>
+
+<h2 id="Implementation-Section-Details"><a id="Implementation"></a>Implementation Section Details</h2>
+
+<p>You can implement API elements via C functions or macros, or simple variables. It is preferable to use a macro if feasible. Otherwise, the user must explicitly request that it get loaded, by defining a <code>NEED_<i>function</i></code> (or <i>variable</i>) as described in <i>ppport.h</i>. If a function, <i>foo</i> is required, place its body in this <code>=implementation</code> section, like so:</p>
+
+<pre><code> #if { NEED foo }
+
+ char *
+ foo(pTHX_ const U8 *arg1, const U32 arg2, ...)
+ {
+    ...
+ }
+
+ #endif</code></pre>
+
+<p>Similarly for a variable.</p>
+
+<p>It&#39;s obviously best to use a macro if at all feasible. Sometimes what once was implemented with a macro now requires a function; perhaps an edge case was overlooked. Doing so will cause the new <i>ppport.h</i> to not be drop-in compatible with the older version, and can hence cause breakage. This incompatiblity (while easily solved) really needs to be stressed in documentation.</p>
+
+<dl>
+
+<dt id="__UNDEFINED__"><a id="UNDEFINED__"></a>__UNDEFINED__</dt>
+<dd>
+
+<p>If you add the line <code>__UNDEFINED__</code> to the <code>=provides</code> section, you can use lines like this in the <code>=implementation</code> section:</p>
+
+<pre><code>  __UNDEFINED__ macro    some definition</code></pre>
+
+<p>to both define <code>macro</code> and indicate that it is provided by <i>ppport.h</i>. This replaces these <code>=implementation</code> section lines:</p>
+
+<pre><code>  #ifndef macro
+  #  define macro    some definition
+  #endif</code></pre>
+
+<p>besides automagically making it be considered to be provided. <code>macro</code> can have optional arguments and the definition can even span multiple lines, like in</p>
+
+<pre><code>  __UNDEFINED__ SvMAGIC_set(sv, val) \
+                STMT_START { assert(SvTYPE(sv) &gt;= SVt_PVMG); \
+                (((XPVMG*) SvANY(sv))-&gt;xmg_magic = (val)); } \
+                STMT_END</code></pre>
+
+<p>This usually makes the code more compact and readable.</p>
+
+<p>But you should only use this on things that you plan to publicly provide. If something, such as a mnemonic for a constant needs to be defined but isn&#39;t really needed for the public at large to know about, you should use</p>
+
+<pre><code> __UNDEF_NOT_PROVIDED__ macro   some definition</code></pre>
+
+<p>instead. To avoid name space conflicts, follow what&#39;s in <a href="HACKERS.html#Helper-macros">&quot;Helper macros&quot;</a>, below.</p>
+
+</dd>
+<dt id="Helper-macros"><a id="Helper"></a>Helper macros</dt>
+<dd>
+
+<p>If you need to define a helper macro which is not part of <code>Devel::PPPort</code> API and its usage is only for the definition of other <code>Devel::PPPort</code> macros, then use the <code>D_PPP_</code> prefix for this macro name (e.g. <code>D_PPP_SVPV_NOLEN_LP_ARG</code>). This suppresses any warnings when a macro is defined which is not part of the Perl public API.</p>
+
+</dd>
+<dt id="Version-numbers"><a id="Version"></a>Version numbers</dt>
+<dd>
+
+<p>Version checking used to be tricky to get correct (besides being buggy in some perl versions). <code>ivers()</code> is used in the <code>=tests</code> section to overcome this. and constructs like the following in the C language sections.</p>
+
+<pre><code>  #if { VERSION &lt; 5.9.3 }</code></pre>
+
+<p>You SHOULD be using this construct or the alternatives listed below for ALL version checks, and not come up with something on your own.</p>
+
+<p>In this form, the version number can be either of the new form <code>5.x.y</code> or the older form <code>5.00x_yy</code>. Both are translated into the correct preprocessor statements. It is also possible to combine this with other statements:</p>
+
+<pre><code>  #if { VERSION &gt;= 5.004 } &amp;&amp; !defined(sv_vcatpvf)
+    /* a */
+  #elif { VERSION &lt; 5.004_63 } &amp;&amp; { VERSION != 5.004_05 }
+    /* b */
+  #endif</code></pre>
+
+<p>This not only works in the <code>=implementation</code> section, but also in the <code>=xsubs</code>, <code>=xsinit</code>, <code>=xsmisc</code>, <code>=xshead</code> and <code>=xsboot</code> sections.</p>
+
+<p>Alternatively, you can use the forms now available in regular Perl:</p>
+
+<pre><code>  #if PERL_VERSION_EQ(5,9,3)
+  #if PERL_VERSION_NE(5,9,3)
+  #if PERL_VERSION_LT(5,9,3)
+  #if PERL_VERSION_GT(5,9,3)
+  #if PERL_VERSION_LE(5,9,3)
+  #if PERL_VERSION_GE(5,9,3)</code></pre>
+
+<p>These forms have the advantage over the &#39;{ VERSION ... }&#39; form in that you may use the special value &#39;*&#39; for the final number to mean ALL possible values for it. Thus,</p>
+
+<pre><code> #if PERL_VERSION_EQ(5,31,&#39;*&#39;)</code></pre>
+
+<p>means all perls in the 5.31 series. And</p>
+
+<pre><code> #if PERL_VERSION_NE(5,24,&#39;*&#39;)</code></pre>
+
+<p>means all perls EXCEPT 5.24 ones. And</p>
+
+<pre><code> #if PERL_VERSION_LE(5,9,&#39;*&#39;)</code></pre>
+
+<p>is effectively</p>
+
+<pre><code> #if PERL_VERSION_LT(5,10,0)</code></pre>
+
+</dd>
+<dt id="Hints">Hints</dt>
+<dd>
+
+<p>If you add a comment like so:</p>
+
+<pre><code> /* Hint: PL_expect, PL_copline, PL_rsfp
+    paragraphs of stuff you want to have shown when ppport.h outputs
+    something about any one of PL_expect, PL_copline, or PL_rsfp
+ */</code></pre>
+
+<p>Earlier versions of <i>ppport.h</i> required an asterisk at the beginning of every continuation line, or else the content would be silently dropped.</p>
+
+</dd>
+<dt id="Warnings">Warnings</dt>
+<dd>
+
+<p>A more serious caution can be displayed by instead saying</p>
+
+<pre><code> /* Warning: PL_expect, PL_copline, PL_rsfp
+    paragraphs of stuff you want to have shown when ppport.h outputs
+    something about any one of PL_expect, PL_copline, or PL_rsfp
+ */</code></pre>
+
+<p>Earlier versions of <i>ppport.h</i> required an asterisk at the beginning of every continuation line, or else the content would be silently dropped.</p>
+
+</dd>
+<dt id="Replace">Replace</dt>
+<dd>
+
+<p>When <i>ppport.h</i> is run on a file(s), you can cause it to automatically flag occurrences of the constructs you specify, encouraging the author to replace them with different (presumably better) ones. These also are used in any suggested edits and generated patches.</p>
+
+<p>There are three ways to do this</p>
+
+<dl>
+
+<dt id="in-line-comment"><a id="in"></a>in-line comment</dt>
+<dd>
+
+<p>You can add a trailing comment like so:</p>
+
+<pre><code> #define bar foo    /* Replace */
+ __UNDEFINED__ bar foo  /* Replace */</code></pre>
+
+<p>These say that <code>foo</code> should be replaced by <code>bar</code>. NOT the other way around.</p>
+
+</dd>
+<dt id="separate-comment"><a id="separate"></a>separate comment</dt>
+<dd>
+
+<p>For situations not amenable to the above, you can say</p>
+
+<pre><code> /* Replace foo with bar */</code></pre>
+
+</dd>
+<dt id="define-a-replacement-region"><a id="define"></a>define a replacement region</dt>
+<dd>
+
+<p>It you have several replacements, you can group them together like so:</p>
+
+<pre><code> /* Replace: 1 */
+ #define foo bar
+ #define bat baz
+ /* Replace: 0 */</code></pre>
+
+<p>These replace <code>bar</code> with <code>foo</code>; <code>baz</code> with <code>bat</code>. NOT the other way around.</p>
+
+</dd>
+</dl>
+
+</dd>
+<dt id="Dependencies">Dependencies</dt>
+<dd>
+
+<p><i>ppport.h</i> automatically gathers information as to what functions are dependent on what other things from inspecting the source, but if this is insufficient for you, you can add lines like the following:</p>
+
+<pre><code> /* foo, bar depends on baz, bat */</code></pre>
+
+<p>Each of <code>foo</code>, <code>bar</code> depends on each of <code>baz</code>, <code>bat</code>.</p>
+
+</dd>
+</dl>
+
+<h2 id="Testing">Testing</h2>
+
+<p>After you have furnished your implementation, you need to test it.</p>
+
+<h2 id="Special-Makefile-targets"><a id="Special"></a>Special Makefile targets</h2>
+
+<p>You can use</p>
+
+<pre><code>    make regen</code></pre>
+
+<p>to regenerate all of the autogenerated files. To get rid of all generated files (except for <i>parts/todo/*</i> and <i>parts/base/*</i>), use</p>
+
+<pre><code>    make purge_all</code></pre>
+
+<p>That&#39;s it.</p>
+
+<p>To automatically test <code>Devel::PPPort</code> with lots of different Perl versions, you can use the <i>soak</i> script. Just pass it a list of all Perl binaries you want to test.</p>
+
+<h2 id="Regenerating-ppport.h-and-PPPort.pm"><a id="Regenerating"></a>Regenerating <i>ppport.h</i> and <i>PPPort.pm</i></h2>
+
+<p><code>Devel::PPPort</code> keeps two directories of generated files, in <i>parts/base</i> and <i>parts/todo</i>. The files in each are named after Perl version numbers. When a function or macro came into existence is indicated by placing its name in the corresponding file in <i>parts/base</i>. The files in <i>parts/todo</i> are the same, except they indicate the earliest release that <i>ppport.h</i> supports the element. The delta is effectively what <i>ppport.h</i> buys you.</p>
+
+<p>The generation process described in this section creates these files. It does so by examining as many perl versions as are available to it. It tries to make sure each element actually compiles, and it runs the test scripts you have furnished on every version.</p>
+
+<p>Ideally, this should be done before every release that includes new backporting and/or when blead has added new public API. At a minimum, it should be done as the next major Perl release comes out.</p>
+
+<p>The process isn&#39;t platform independent. It has currently been tested only under Linux, and it definitely requires at least <code>gcc</code> and the <code>nm</code> utility. The process used to be problematic, with random failures. But it has now been fixed to be reliable.</p>
+
+<p>Before starting the regeneration, you need to have gathered certain data. (Options listed below apply to the tools that eventually will use the data, and which are described further below).</p>
+
+<ul>
+
+<li><p>You will first need a whole bunch of different Perls, the more, the better, but only one per version tag (which one is random) will actually get used. dromedary has a sufficient set. They should all have the same Configure options with respect to what functions and macros are enabled. For example, they should all be threaded, or all non-threaded. A mixture will screw up the results. Similarly, they should all or none have quad math (at least as far back as that became available). You can use <i>devel/buildperl.pl</i> to build them.</p>
+
+<p>Previous maintainers of this module kept those perls in <i>/tmp/perl/install/default</i>, so most of the tools use this as a default, but you&#39;ll likely simply use the <code>--install=</code> option to specify where. This should be a path where a <span style="white-space: nowrap;"><code>make install</code></span> has been done, so has immediate subdirectories of <code>/bin</code> and <code>/lib</code>. <code>/bin</code> should contain the binaries. It will use all files in this directory whose names begin with <code>perl5</code>.</p>
+
+<p>Actually, not all the binaries need be in this directory. You can specify additional places to look since <code>--install=</code> takes a comma separated list of directories.</p>
+
+</li>
+<li><p>You also need a freshly built bleadperl. The <code>--blead=<i>path</i></code> option should be used to specify it. (Some of the tools have a default of <code>bleadperl-debug</code> if this option is omitted.) Again, it needs the same Configure options as the earlier versions had. Using <code>-DNO_MATHOMS</code> will change the results, and probably should be avoided. True, these functions are allegedly on their way out, so it could be argued that they shouldn&#39;t be encouraged in any way; but some of these have been in limbo for many years, so should be documented.</p>
+
+</li>
+<li><p>And you will need updated API information. Copy the latest <i>embed.fnc</i> file from bleadperl to the <i>parts</i> directory and run <i>devel/mkapidoc.pl</i> to collect the remaining information in <i>parts/apidoc.fnc</i>. This needs to be done after the perl has been compiled, as there are generated files that feed it.</p>
+
+</li>
+<li><p>The final step before regenerating everything is to run <i>devel/mkppport_fnc.pl</i> to update the <i>/parts/ppport.fnc</i> file.</p>
+
+</li>
+</ul>
+
+<p>Having done this, run <i>devel/regenerate</i> which wraps the following steps (which you could instead do by hand, but it&#39;s easy to forget things):</p>
+
+<ul>
+
+<li><p>It first does some sanity checking</p>
+
+</li>
+<li><p>Then it asks you if it&#39;s ok to remove all existing todo files in the <i>parts/base</i> and <i>parts/todo</i> directories. If you answer no, the process aborts.</p>
+
+<p>This is crtical to getting accurate results.</p>
+
+</li>
+<li><p>It builds the new baseline by running</p>
+
+<pre><code>    perl devel/mktodo --base</code></pre>
+
+<p>in the root directory of the distribution.</p>
+
+<p>If there are warnings in blead, it will ask you to examine them, and to ok if it&#39;s all right to go ahead. If there are issues with blead, everything following could be wrong.</p>
+
+</li>
+<li><p>It builds the new todo files by running</p>
+
+<pre><code>    perl devel/mktodo</code></pre>
+
+<p>in the root directory of the distribution.</p>
+
+</li>
+<li><p>Finally, it adds the remaining information by running</p>
+
+<pre><code>    perl Makefile.PL &amp;&amp; make
+    perl devel/scanprov --mode=write</code></pre>
+
+</li>
+</ul>
+
+<h2 id="How-to-build-gobs-of-versions-of-Perl"><a id="How1"></a>How to build gobs of versions of Perl</h2>
+
+<p><code>Devel::PPPort</code> supports Perl versions between 5.003 and bleadperl. To guarantee this support, its good to have as many versions as possible to test on. dromedary currently has many such versions.</p>
+
+<p>There is a tool to build all the different versions and configurations. You can find it in <i>devel/buildperl.pl</i>. It can currently build the following Perl releases:</p>
+
+<pre><code>    5.003
+    5.004 - 5.004_05
+    5.005 - 5.005_04
+    5.6.x
+    5.7.x
+    5.8.x
+    5.9.x
+    5.1x.x
+    5.2x.x
+    5.3x.x</code></pre>
+
+<h2 id="Implementation1">Implementation</h2>
+
+<p>Knowing which parts of the API are not backwards compatible and probably need <code>Devel::PPPort</code> support is another problem that&#39;s not easy to deal with manually. If you run</p>
+
+<pre><code>    perl Makefile.PL --with-apicheck</code></pre>
+
+<p>a C file is generated by <i>parts/apicheck.pl</i> that is compiled and linked with <code>Devel::PPPort</code>. This C file has the purpose of using each of the public API functions/macros once.</p>
+
+<p>The required information is derived from <i>parts/embed.fnc</i> (just a copy of bleadperl&#39;s <i>embed.fnc</i>), <i>parts/apidoc.fnc</i> (which is generated by <i>devel/mkapidoc.pl</i> and simply collects the rest of the apidoc entries spread over the Perl source code) and <i>parts/ppport.fnc</i> (which lists the API provided purely by Devel::PPPort, along with other elements that are tested only using <i>ppport.h</i>).</p>
+
+<p>The generated C file (usually, <i>apicheck.c</i>) won&#39;t compile as-is with older perls. And even if it compiles, there&#39;s still a good chance of the dynamic linker failing at <code>make test</code> time. But that&#39;s on purpose!</p>
+
+<p>We can use these failures to find changes in the API automatically. The Perl script <i>devel/mktodo</i> calls another script <i>devel/mktodo.pl</i> repeatedly to run <code>Devel::PPPort</code> on version after version of perl, in decreasing version order, so we start with blead and work backwards. The latter script generates an <i>apicheck.c</i>. It starts with the code that successfully worked in the previously tested Perl version, which should be the version one higher than the current one. Call the current one <i>n</i>, and the previous one <i>n+1</i>. The items that fail to compile in <i>n</i>, but did compile in <i>n+1</i> must have become available in <i>n+1</i>. We run the Linux command <code>nm</code> to find those undefined symbols in <i>n</i>. We change <i>apicheck.c</i> to ignore (through <code>#ifdef</code>&#39;s) those and recompile, repeating until <i>apicheck.c</i> successfully compiles, the dynamic linker is happy, and <code>make test</code> runs on this version. Then we repeat the process for <i>n-1</i>, and so on. (Actually, this process may generate false positives, so by default each failing API call is checked again. If possible, this is done by generating an <i>apicheck.c</i> for just the one failing API.) Note that the make test is run using <i>ppport.h</i> during both passes.</p>
+
+<p>Running <i>devel/mktodo</i> currently takes a couple hours on dromedary.</p>
+
+<p>If you run it with the <code>--nocheck</code> option, it won&#39;t recheck the API calls that failed in the compilation stage and it&#39;ll take significantly less time. No one currently associated with maintaining this module understands under what circumstances it is safe to run with <code>--nocheck</code>.</p>
+
+<p>By repeating the process over and over, we build up information on when every element first became supported. This information is stored in files in the <i>parts/base</i> directory, one file per version. The file for version <i>n+1</i> is generated by running version <i>n</i> of perl.</p>
+
+<p>We actually want a second piece of information, which is how much <i>ppport.h</i> buys you. What happens when regenerating is actually two entire runs through all the perls. The first is accomplished by calling <i>devel/mktodo</i> with the <code>--base</code> option. It automically will call <i>devel/mktodo.pl</i> with each version of perl, NOT using anything in <i>ppport.h</i>. When done the results indicate when each API element became available in stock perl, without using <i>ppport.h</i>.</p>
+
+<p>And then the whole process is repeated, but this time <i>ppport.h</i> is included. The files are placed in <i>parts/todo</i>. Thus, at the end, we know when each element became available in modified perl, using <i>ppport.h</i>.</p>
+
+<p>However, only the public API that is implemented as functions (and must appear in <i>embed.fnc</i>) plus macros whose calling sequence is documented can be checked this way. The final step in the process is calling <i>devel/scanprov</i>. It looks through the header files for when all the symbols provided by <code>Devel::PPPort</code> first became defined. It doesn&#39;t test the symbols or try to compile them, as it doesn&#39;t generally know the API, but it can tell that something exists in release <i>n+1</i> but not <i>n</i> (by scanning the include files in the <i>CORE</i> directory of various Perl versions). (It does know if a macro has zero arguments or non-zero arguments, so it does get extra information from the zero argument ones.)</p>
+
+<h2 id="Files">Files</h2>
+
+<p>Residing in <i>parts/inc/</i> is the &quot;heart&quot; of <code>Devel::PPPort</code>. Each of the files implements a part of the supported API, along with hints, dependency information, XS code and tests. The files are in a POD-like format that is parsed using the functions in <i>parts/ppptools.pl</i>.</p>
+
+<p>The scripts <i>PPPort_pm.PL</i>, <i>RealPPPort_xs.PL</i> and <i>mktests.PL</i> all use the information in <i>parts/inc/</i> to generate the main module <i>PPPort.pm</i>, the XS code in <i>RealPPPort.xs</i> and various test files in <i>t/</i>.</p>
+
+<p>You can get extra information from <i>PPPort_pm.PL</i> by setting the environment variable <code>DPPP_CHECK_LEVEL</code> to 1 or 2.</p>
+
+<p>All of these files could be generated on the fly while building <code>Devel::PPPort</code>, but not having the tests in <i>t/</i> will confuse TEST/harness in the core. Not having <i>PPPort.pm</i> will be bad for viewing the docs on <code>search.cpan.org</code>. So unfortunately, it&#39;s unavoidable to put some redundancy into the package.</p>
+
+<h2 id="Submitting-Patches"><a id="Submitting"></a>Submitting Patches</h2>
+
+<p>If you&#39;ve added some functionality to <code>Devel::PPPort</code>, please consider submitting a patch with your work to P5P by sending a pull request to</p>
+
+<p><a href="https://github.com/Dual-Life/Devel-PPPort/pulls">https://github.com/Dual-Life/Devel-PPPort/pulls</a>.</p>
+
+<p>When submitting patches, please only add the relevant changes and don&#39;t include the differences of the generated files. You can use the <code>purge_all</code> target to delete all autogenerated files.</p>
+
+<h2 id="Integrating-into-the-Perl-core"><a id="Integrating"></a>Integrating into the Perl core</h2>
+
+<p>When integrating this module into the Perl core, be sure to remove the following files from the distribution. They are either not needed or generated on the fly when building this module in the core:</p>
+
+<pre><code>  MANIFEST
+  META.yml
+  PPPort.pm</code></pre>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>No known bugs.</p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Version 3.x, Copyright (C) 2004-2020, Marcus Holland-Moritz and Perl 5 porters</p>
+
+<p>Version 2.x, Copyright (C) 2001, Paul Marquess.</p>
+
+<p>Version 1.x, Copyright (C) 1999, Kenneth Albanowski.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p>See <i>ppport.h</i> and <i>devel/regenerate</i>.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Devel::PPPort, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Devel::PPPort</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Devel::PPPort</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="HACKERS.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

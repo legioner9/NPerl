@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlopentut - simple recipes for opening files and pipes in Perl - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlopentut">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlopentut.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlopentut">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlopentut">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlopentut">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlopentut">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlopentut">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlopentut">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlopentut">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlopentut">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlopentut">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlopentut">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlopentut">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlopentut">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlopentut">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlopentut">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlopentut">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlopentut">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlopentut">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlopentut">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlopentut">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlopentut">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlopentut">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlopentut">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlopentut">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlopentut">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlopentut">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlopentut">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlopentut">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlopentut">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlopentut">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlopentut">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlopentut">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlopentut">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlopentut">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlopentut">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlopentut">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlopentut">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlopentut">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlopentut">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlopentut">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlopentut">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlopentut">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlopentut">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlopentut">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlopentut">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlopentut">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlopentut">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlopentut">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlopentut">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlopentut">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlopentut">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlopentut">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlopentut">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlopentut">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlopentut">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlopentut">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlopentut">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlopentut">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlopentut">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlopentut">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlopentut">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlopentut">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlopentut">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlopentut">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlopentut">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlopentut">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlopentut">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlopentut">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlopentut">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlopentut">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlopentut">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlopentut">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlopentut">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlopentut">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlopentut">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlopentut">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlopentut">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlopentut">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlopentut">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlopentut">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlopentut">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlopentut.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlopentut">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlopentut">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlopentut">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlopentut">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlopentut">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlopentut">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlopentut">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlopentut">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlopentut">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlopentut">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlopentut">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlopentut">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlopentut">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlopentut">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlopentut">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlopentut">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlopentut">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlopentut">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlopentut">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlopentut">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlopentut">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlopentut">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlopentut">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlopentut">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlopentut">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlopentut">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlopentut">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlopentut">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlopentut">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlopentut">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlopentut">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlopentut">5.35.1</a>
+          <a class="dropdown-item active" href="perlopentut.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlopentut.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlopentut.html">perlopentut</a>
+          <div id="more">
+            (<a href="perlopentut.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlopentut">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#Opening-Text-Files">Opening Text Files</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#Opening-Text-Files-for-Reading">Opening Text Files for Reading</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#Opening-Text-Files-for-Writing">Opening Text Files for Writing</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#Opening-Binary-Files">Opening Binary Files</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#Opening-Pipes">Opening Pipes</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#Opening-a-pipe-for-reading">Opening a pipe for reading</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#Opening-a-pipe-for-writing">Opening a pipe for writing</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#Expressing-the-command-as-a-list">Expressing the command as a list</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlopentut.html#AUTHOR-and-COPYRIGHT">AUTHOR and COPYRIGHT</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlopentut.html#NAME">#</a>NAME</h1>
+
+<p>perlopentut - simple recipes for opening files and pipes in Perl</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlopentut.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>Whenever you do I/O on a file in Perl, you do so through what in Perl is called a <b>filehandle</b>. A filehandle is an internal name for an external file. It is the job of the <code>open</code> function to make the association between the internal name and the external name, and it is the job of the <code>close</code> function to break that association.</p>
+
+<p>For your convenience, Perl sets up a few special filehandles that are already open when you run. These include <code>STDIN</code>, <code>STDOUT</code>, <code>STDERR</code>, and <code>ARGV</code>. Since those are pre-opened, you can use them right away without having to go to the trouble of opening them yourself:</p>
+
+<pre><code>print STDERR &quot;This is a debugging message.\n&quot;;
+
+print STDOUT &quot;Please enter something: &quot;;
+$response = &lt;STDIN&gt; // die &quot;how come no input?&quot;;
+print STDOUT &quot;Thank you!\n&quot;;
+
+while (&lt;ARGV&gt;) { ... }</code></pre>
+
+<p>As you see from those examples, <code>STDOUT</code> and <code>STDERR</code> are output handles, and <code>STDIN</code> and <code>ARGV</code> are input handles. They are in all capital letters because they are reserved to Perl, much like the <code>@ARGV</code> array and the <code>%ENV</code> hash are. Their external associations were set up by your shell.</p>
+
+<p>You will need to open every other filehandle on your own. Although there are many variants, the most common way to call Perl&#39;s open() function is with three arguments and one return value:</p>
+
+<p><code> <i>OK</i> = open(<i>HANDLE</i>, <i>MODE</i>, <i>PATHNAME</i>)</code></p>
+
+<p>Where:</p>
+
+<dl>
+
+<dt id="OK"><a class="permalink" href="perlopentut.html#OK">#</a><i>OK</i></dt>
+<dd>
+
+<p>will be some defined value if the open succeeds, but <code>undef</code> if it fails;</p>
+
+</dd>
+<dt id="HANDLE"><a class="permalink" href="perlopentut.html#HANDLE">#</a><i>HANDLE</i></dt>
+<dd>
+
+<p>should be an undefined scalar variable to be filled in by the <code>open</code> function if it succeeds;</p>
+
+</dd>
+<dt id="MODE"><a class="permalink" href="perlopentut.html#MODE">#</a><i>MODE</i></dt>
+<dd>
+
+<p>is the access mode and the encoding format to open the file with;</p>
+
+</dd>
+<dt id="PATHNAME"><a class="permalink" href="perlopentut.html#PATHNAME">#</a><i>PATHNAME</i></dt>
+<dd>
+
+<p>is the external name of the file you want opened.</p>
+
+</dd>
+</dl>
+
+<p>Most of the complexity of the <code>open</code> function lies in the many possible values that the <i>MODE</i> parameter can take on.</p>
+
+<p>One last thing before we show you how to open files: opening files does not (usually) automatically lock them in Perl. See <a href="perlfaq5.html">perlfaq5</a> for how to lock.</p>
+
+<h1 id="Opening-Text-Files"><a class="permalink" href="perlopentut.html#Opening-Text-Files">#</a><a id="Opening"></a>Opening Text Files</h1>
+
+<h2 id="Opening-Text-Files-for-Reading"><a class="permalink" href="perlopentut.html#Opening-Text-Files-for-Reading">#</a><a id="Opening1"></a>Opening Text Files for Reading</h2>
+
+<p>If you want to read from a text file, first open it in read-only mode like this:</p>
+
+<pre><code>my $filename = &quot;/some/path/to/a/textfile/goes/here&quot;;
+my $encoding = &quot;:encoding(UTF-8)&quot;;
+my $handle   = undef;     # this will be filled in on success
+
+open($handle, &quot;&lt; $encoding&quot;, $filename)
+    || die &quot;$0: can&#39;t open $filename for reading: $!&quot;;</code></pre>
+
+<p>As with the shell, in Perl the <code>&quot;&lt;&quot;</code> is used to open the file in read-only mode. If it succeeds, Perl allocates a brand new filehandle for you and fills in your previously undefined <code>$handle</code> argument with a reference to that handle.</p>
+
+<p>Now you may use functions like <code>readline</code>, <code>read</code>, <code>getc</code>, and <code>sysread</code> on that handle. Probably the most common input function is the one that looks like an operator:</p>
+
+<pre><code>$line = readline($handle);
+$line = &lt;$handle&gt;;          # same thing</code></pre>
+
+<p>Because the <code>readline</code> function returns <code>undef</code> at end of file or upon error, you will sometimes see it used this way:</p>
+
+<pre><code>$line = &lt;$handle&gt;;
+if (defined $line) {
+    # do something with $line
+}
+else {
+    # $line is not valid, so skip it
+}</code></pre>
+
+<p>You can also just quickly <code>die</code> on an undefined value this way:</p>
+
+<pre><code>$line = &lt;$handle&gt; // die &quot;no input found&quot;;</code></pre>
+
+<p>However, if hitting EOF is an expected and normal event, you do not want to exit simply because you have run out of input. Instead, you probably just want to exit an input loop. You can then test to see if an actual error has caused the loop to terminate, and act accordingly:</p>
+
+<pre><code>while (&lt;$handle&gt;) {
+    # do something with data in $_
+}
+if ($!) {
+    die &quot;unexpected error while reading from $filename: $!&quot;;
+}</code></pre>
+
+<p><b>A Note on Encodings</b>: Having to specify the text encoding every time might seem a bit of a bother. To set up a default encoding for <code>open</code> so that you don&#39;t have to supply it each time, you can use the <code>open</code> pragma:</p>
+
+<pre><code>use open qw&lt; :encoding(UTF-8) &gt;;</code></pre>
+
+<p>Once you&#39;ve done that, you can safely omit the encoding part of the open mode:</p>
+
+<pre><code>open($handle, &quot;&lt;&quot;, $filename)
+    || die &quot;$0: can&#39;t open $filename for reading: $!&quot;;</code></pre>
+
+<p>But never use the bare <code>&quot;&lt;&quot;</code> without having set up a default encoding first. Otherwise, Perl cannot know which of the many, many, many possible flavors of text file you have, and Perl will have no idea how to correctly map the data in your file into actual characters it can work with. Other common encoding formats including <code>&quot;ASCII&quot;</code>, <code>&quot;ISO-8859-1&quot;</code>, <code>&quot;ISO-8859-15&quot;</code>, <code>&quot;Windows-1252&quot;</code>, <code>&quot;MacRoman&quot;</code>, and even <code>&quot;UTF-16LE&quot;</code>. See <a href="perlunitut.html">perlunitut</a> for more about encodings.</p>
+
+<h2 id="Opening-Text-Files-for-Writing"><a class="permalink" href="perlopentut.html#Opening-Text-Files-for-Writing">#</a><a id="Opening2"></a>Opening Text Files for Writing</h2>
+
+<p>When you want to write to a file, you first have to decide what to do about any existing contents of that file. You have two basic choices here: to preserve or to clobber.</p>
+
+<p>If you want to preserve any existing contents, then you want to open the file in append mode. As in the shell, in Perl you use <code>&quot;&gt;&gt;&quot;</code> to open an existing file in append mode. <code>&quot;&gt;&gt;&quot;</code> creates the file if it does not already exist.</p>
+
+<pre><code>my $handle   = undef;
+my $filename = &quot;/some/path/to/a/textfile/goes/here&quot;;
+my $encoding = &quot;:encoding(UTF-8)&quot;;
+
+open($handle, &quot;&gt;&gt; $encoding&quot;, $filename)
+    || die &quot;$0: can&#39;t open $filename for appending: $!&quot;;</code></pre>
+
+<p>Now you can write to that filehandle using any of <code>print</code>, <code>printf</code>, <code>say</code>, <code>write</code>, or <code>syswrite</code>.</p>
+
+<p>As noted above, if the file does not already exist, then the append-mode open will create it for you. But if the file does already exist, its contents are safe from harm because you will be adding your new text past the end of the old text.</p>
+
+<p>On the other hand, sometimes you want to clobber whatever might already be there. To empty out a file before you start writing to it, you can open it in write-only mode:</p>
+
+<pre><code>my $handle   = undef;
+my $filename = &quot;/some/path/to/a/textfile/goes/here&quot;;
+my $encoding = &quot;:encoding(UTF-8)&quot;;
+
+open($handle, &quot;&gt; $encoding&quot;, $filename)
+    || die &quot;$0: can&#39;t open $filename in write-open mode: $!&quot;;</code></pre>
+
+<p>Here again Perl works just like the shell in that the <code>&quot;&gt;&quot;</code> clobbers an existing file.</p>
+
+<p>As with the append mode, when you open a file in write-only mode, you can now write to that filehandle using any of <code>print</code>, <code>printf</code>, <code>say</code>, <code>write</code>, or <code>syswrite</code>.</p>
+
+<p>What about read-write mode? You should probably pretend it doesn&#39;t exist, because opening text files in read-write mode is unlikely to do what you would like. See <a href="perlfaq5.html">perlfaq5</a> for details.</p>
+
+<h1 id="Opening-Binary-Files"><a class="permalink" href="perlopentut.html#Opening-Binary-Files">#</a><a id="Opening3"></a>Opening Binary Files</h1>
+
+<p>If the file to be opened contains binary data instead of text characters, then the <code>MODE</code> argument to <code>open</code> is a little different. Instead of specifying the encoding, you tell Perl that your data are in raw bytes.</p>
+
+<pre><code>my $filename = &quot;/some/path/to/a/binary/file/goes/here&quot;;
+my $encoding = &quot;:raw :bytes&quot;
+my $handle   = undef;     # this will be filled in on success</code></pre>
+
+<p>And then open as before, choosing <code>&quot;&lt;&quot;</code>, <code>&quot;&gt;&gt;&quot;</code>, or <code>&quot;&gt;&quot;</code> as needed:</p>
+
+<pre><code>open($handle, &quot;&lt; $encoding&quot;, $filename)
+    || die &quot;$0: can&#39;t open $filename for reading: $!&quot;;
+
+open($handle, &quot;&gt;&gt; $encoding&quot;, $filename)
+    || die &quot;$0: can&#39;t open $filename for appending: $!&quot;;
+
+open($handle, &quot;&gt; $encoding&quot;, $filename)
+    || die &quot;$0: can&#39;t open $filename in write-open mode: $!&quot;;</code></pre>
+
+<p>Alternately, you can change to binary mode on an existing handle this way:</p>
+
+<pre><code>binmode($handle)    || die &quot;cannot binmode handle&quot;;</code></pre>
+
+<p>This is especially handy for the handles that Perl has already opened for you.</p>
+
+<pre><code>binmode(STDIN)      || die &quot;cannot binmode STDIN&quot;;
+binmode(STDOUT)     || die &quot;cannot binmode STDOUT&quot;;</code></pre>
+
+<p>You can also pass <code>binmode</code> an explicit encoding to change it on the fly. This isn&#39;t exactly &quot;binary&quot; mode, but we still use <code>binmode</code> to do it:</p>
+
+<pre><code>binmode(STDIN,  &quot;:encoding(MacRoman)&quot;) || die &quot;cannot binmode STDIN&quot;;
+binmode(STDOUT, &quot;:encoding(UTF-8)&quot;)    || die &quot;cannot binmode STDOUT&quot;;</code></pre>
+
+<p>Once you have your binary file properly opened in the right mode, you can use all the same Perl I/O functions as you used on text files. However, you may wish to use the fixed-size <code>read</code> instead of the variable-sized <code>readline</code> for your input.</p>
+
+<p>Here&#39;s an example of how to copy a binary file:</p>
+
+<pre><code>my $BUFSIZ   = 64 * (2 ** 10);
+my $name_in  = &quot;/some/input/file&quot;;
+my $name_out = &quot;/some/output/flie&quot;;
+
+my($in_fh, $out_fh, $buffer);
+
+open($in_fh,  &quot;&lt;&quot;, $name_in)
+    || die &quot;$0: cannot open $name_in for reading: $!&quot;;
+open($out_fh, &quot;&gt;&quot;, $name_out)
+    || die &quot;$0: cannot open $name_out for writing: $!&quot;;
+
+for my $fh ($in_fh, $out_fh)  {
+    binmode($fh)               || die &quot;binmode failed&quot;;
+}
+
+while (read($in_fh, $buffer, $BUFSIZ)) {
+    unless (print $out_fh $buffer) {
+        die &quot;couldn&#39;t write to $name_out: $!&quot;;
+    }
+}
+
+close($in_fh)       || die &quot;couldn&#39;t close $name_in: $!&quot;;
+close($out_fh)      || die &quot;couldn&#39;t close $name_out: $!&quot;;</code></pre>
+
+<h1 id="Opening-Pipes"><a class="permalink" href="perlopentut.html#Opening-Pipes">#</a><a id="Opening4"></a>Opening Pipes</h1>
+
+<p>Perl also lets you open a filehandle into an external program or shell command rather than into a file. You can do this in order to pass data from your Perl program to an external command for further processing, or to receive data from another program for your own Perl program to process.</p>
+
+<p>Filehandles into commands are also known as <i>pipes</i>, since they work on similar inter-process communication principles as Unix pipelines. Such a filehandle has an active program instead of a static file on its external end, but in every other sense it works just like a more typical file-based filehandle, with all the techniques discussed earlier in this article just as applicable.</p>
+
+<p>As such, you open a pipe using the same <code>open</code> call that you use for opening files, setting the second (<code>MODE</code>) argument to special characters that indicate either an input or an output pipe. Use <code>&quot;-|&quot;</code> for a filehandle that will let your Perl program read data from an external program, and <code>&quot;|-&quot;</code> for a filehandle that will send data to that program instead.</p>
+
+<h2 id="Opening-a-pipe-for-reading"><a class="permalink" href="perlopentut.html#Opening-a-pipe-for-reading">#</a><a id="Opening5"></a>Opening a pipe for reading</h2>
+
+<p>Let&#39;s say you&#39;d like your Perl program to process data stored in a nearby directory called <code>unsorted</code>, which contains a number of textfiles. You&#39;d also like your program to sort all the contents from these files into a single, alphabetically sorted list of unique lines before it starts processing them.</p>
+
+<p>You could do this through opening an ordinary filehandle into each of those files, gradually building up an in-memory array of all the file contents you load this way, and finally sorting and filtering that array when you&#39;ve run out of files to load. <i>Or</i>, you could offload all that merging and sorting into your operating system&#39;s own <code>sort</code> command by opening a pipe directly into its output, and get to work that much faster.</p>
+
+<p>Here&#39;s how that might look:</p>
+
+<pre><code>open(my $sort_fh, &#39;-|&#39;, &#39;sort -u unsorted/*.txt&#39;)
+    or die &quot;Couldn&#39;t open a pipe into sort: $!&quot;;
+
+# And right away, we can start reading sorted lines:
+while (my $line = &lt;$sort_fh&gt;) {
+    #
+    # ... Do something interesting with each $line here ...
+    #
+}</code></pre>
+
+<p>The second argument to <code>open</code>, <code>&quot;-|&quot;</code>, makes it a read-pipe into a separate program, rather than an ordinary filehandle into a file.</p>
+
+<p>Note that the third argument to <code>open</code> is a string containing the program name (<code>sort</code>) plus all its arguments: in this case, <code>-u</code> to specify unqiue sort, and then a fileglob specifying the files to sort. The resulting filehandle <code>$sort_fh</code> works just like a read-only (<code>&quot;&lt;&quot;</code>) filehandle, and your program can subsequently read data from it as if it were opened onto an ordinary, single file.</p>
+
+<h2 id="Opening-a-pipe-for-writing"><a class="permalink" href="perlopentut.html#Opening-a-pipe-for-writing">#</a><a id="Opening6"></a>Opening a pipe for writing</h2>
+
+<p>Continuing the previous example, let&#39;s say that your program has completed its processing, and the results sit in an array called <code>@processed</code>. You want to print these lines to a file called <code>numbered.txt</code> with a neatly formatted column of line-numbers.</p>
+
+<p>Certainly you could write your own code to do this — or, once again, you could kick that work over to another program. In this case, <code>cat</code>, running with its own <code>-n</code> option to activate line numbering, should do the trick:</p>
+
+<pre><code>open(my $cat_fh, &#39;|-&#39;, &#39;cat -n &gt; numbered.txt&#39;)
+    or die &quot;Couldn&#39;t open a pipe into cat: $!&quot;;
+
+for my $line (@processed) {
+    print $cat_fh $line;
+}</code></pre>
+
+<p>Here, we use a second <code>open</code> argument of <code>&quot;|-&quot;</code>, signifying that the filehandle assigned to <code>$cat_fh</code> should be a write-pipe. We can then use it just as we would a write-only ordinary filehandle, including the basic function of <code>print</code>-ing data to it.</p>
+
+<p>Note that the third argument, specifying the command that we wish to pipe to, sets up <code>cat</code> to redirect its output via that <code>&quot;&gt;&quot;</code> symbol into the file <code>numbered.txt</code>. This can start to look a little tricky, because that same symbol would have meant something entirely different had it showed it in the second argument to <code>open</code>! But here in the third argument, it&#39;s simply part of the shell command that Perl will open the pipe into, and Perl itself doesn&#39;t invest any special meaning to it.</p>
+
+<h2 id="Expressing-the-command-as-a-list"><a class="permalink" href="perlopentut.html#Expressing-the-command-as-a-list">#</a><a id="Expressing"></a>Expressing the command as a list</h2>
+
+<p>For opening pipes, Perl offers the option to call <code>open</code> with a list comprising the desired command and all its own arguments as separate elements, rather than combining them into a single string as in the examples above. For instance, we could have phrased the <code>open</code> call in the first example like this:</p>
+
+<pre><code>open(my $sort_fh, &#39;-|&#39;, &#39;sort&#39;, &#39;-u&#39;, glob(&#39;unsorted/*.txt&#39;))
+    or die &quot;Couldn&#39;t open a pipe into sort: $!&quot;;</code></pre>
+
+<p>When you call <code>open</code> this way, Perl invokes the given command directly, bypassing the shell. As such, the shell won&#39;t try to interpret any special characters within the command&#39;s argument list, which might overwise have unwanted effects. This can make for safer, less error-prone <code>open</code> calls, useful in cases such as passing in variables as arguments, or even just referring to filenames with spaces in them.</p>
+
+<p>However, when you <i>do</i> want to pass a meaningful metacharacter to the shell, such with the <code>&quot;*&quot;</code> inside that final <code>unsorted/*.txt</code> argument here, you can&#39;t use this alternate syntax. In this case, we have worked around it via Perl&#39;s handy <code>glob</code> built-in function, which evaluates its argument into a list of filenames — and we can safely pass that resulting list right into <code>open</code>, as shown above.</p>
+
+<p>Note also that representing piped-command arguments in list form like this doesn&#39;t work on every platform. It will work on any Unix-based OS that provides a real <code>fork</code> function (e.g. macOS or Linux), as well as on Windows when running Perl 5.22 or later.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="perlopentut.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p>The full documentation for <a href="perlfunc.html#open-FILEHANDLE%2CMODE%2CEXPR"><code>open</code></a> provides a thorough reference to this function, beyond the best-practice basics covered here.</p>
+
+<h1 id="AUTHOR-and-COPYRIGHT"><a class="permalink" href="perlopentut.html#AUTHOR-and-COPYRIGHT">#</a><a id="AUTHOR"></a>AUTHOR and COPYRIGHT</h1>
+
+<p>Copyright 2013 Tom Christiansen; now maintained by Perl5 Porters</p>
+
+<p>This documentation is free; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

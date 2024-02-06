@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>provide - easily switch between different implementations depending on which version of Perl is detected - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of provide - MetaCPAN" href="https://metacpan.org/dist/provide/releases.rss" />
+        <link rel="canonical" href="provide.html" />
+        <meta name="description" content="easily switch between different implementations depending on which version of Perl is detected" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/provide" />
+<meta name="twitter:title"       content="provide" />
+<meta name="twitter:description" content="easily switch between different implementations depending on which version of Perl is detected" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="provide.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of provide was released.">
+      <span class="relatize">13 Feb 2013 09:06:10 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/provide">provide</a>
+  </li>
+  <li>
+    Module version: 0.03
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/provide/source/lib/provide.pm">Source</a>
+    (<a href="https://metacpan.org/dist/provide/source/lib/provide.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/provide/source/lib">Browse</a>
+    (<a href="https://metacpan.org/dist/provide/source/lib?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/provide/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/provide/contribute">How to Contribute</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/belden/perl-provide/issues">Issues</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=provide+0.03" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/p/provide.html?oncpan=1&amp;distmat=1&amp;version=0.03&amp;grade=2" style="color: #090">32</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/p/provide.html?oncpan=1&amp;distmat=1&amp;version=0.03&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/p/provide.html?oncpan=1&amp;distmat=1&amp;version=0.03&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/BELDEN/provide-0.03">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on provide who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 0
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/provide-0.03/index.html">88.19% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/provide/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/B/BE/BELDEN/provide-0.03.tar.gz">
+      Download (<span itemprop="fileSize">15.58KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FBELDEN%2Fprovide-0.03%2Flib%2Fprovide.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/provide/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/provide/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:provide">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="provide">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/provide.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="BELDEN/provide-0.03"
+>0.03
+  (BELDEN on 2013-02-13)</option>
+<option
+  
+  value="BELDEN/provide-0.02"
+>0.02
+  (BELDEN on 2013-02-13)</option>
+<option
+  
+  value="BELDEN/provide-0.01"
+>0.01
+  (BELDEN on 2013-02-11)</option>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/BELDEN/provide-0.03/diff/' + encodeURIComponent(this.value) + '/lib/provide.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="BELDEN/provide-0.03"
+>0.03
+  (BELDEN on 2013-02-13)</option>
+<option
+  
+  value="BELDEN/provide-0.02"
+>0.02
+  (BELDEN on 2013-02-13)</option>
+<option
+  
+  value="BELDEN/provide-0.01"
+>0.01
+  (BELDEN on 2013-02-11)</option>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><i class="ttip" title="dynamic_config enabled">unknown</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/provide/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=provide">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=provide">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/BELDEN/provide-0.03/view/lib/provide.pm">This version</a>
+    </li>
+    <li>
+      <a href="provide.html">Latest version</a>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/BELDEN" class="author-name">Belden Lyman</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/provide.pm&#39;" class="">
+<option
+  selected
+  value="BELDEN/provide-0.03"
+>0.03
+  (BELDEN on 2013-02-13)</option>
+<option
+  
+  value="BELDEN/provide-0.02"
+>0.02
+  (BELDEN on 2013-02-13)</option>
+<option
+  
+  value="BELDEN/provide-0.01"
+>0.01
+  (BELDEN on 2013-02-11)</option>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/provide">provide-0.03</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage zero &#10;
+          No dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="provide-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="provide-0.03">
+    <input type="hidden" name="author" value="BELDEN">
+    <input type="hidden" name="distribution" value="provide">
+    <button type="submit" class="favorite"><span></span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="provide.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite">
+<span></span> ++</a>
+</div>
+   / <span>provide</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="provide.html#NAME">NAME</a></li>
+  <li><a href="provide.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="provide.html#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a href="provide.html#hash_pop-v1.0-pass-by-value">hash_pop v1.0 - pass by value</a></li>
+      <li><a href="provide.html#hash_pop-v1.1-explicit-pass-by-reference">hash_pop v1.1 - explicit pass by reference</a></li>
+      <li><a href="provide.html#hash_pop-v1.2-implicit-pass-by-reference">hash_pop v1.2 - implicit pass by reference</a></li>
+      <li><a href="provide.html#Uh-oh,-implementing-CORE::-like-functions-means-we-have-to-respect-the-CORE">Uh-oh, implementing CORE::-like functions means we have to respect the CORE</a></li>
+      <li><a href="provide.html#hash_pop-v1.3-version-specific-prototypes-for-implicit-reference-passing">hash_pop v1.3 - version-specific prototypes for implicit reference passing</a></li>
+    </ul>
+  </li>
+  <li><a href="provide.html#SYNTAX">SYNTAX</a>
+    <ul>
+      <li><a href="provide.html#if-=%3E-TEST-=%3E-VALUE-=%3E-RESULT">if =&gt; TEST =&gt; VALUE =&gt; RESULT</a>
+        <ul>
+          <li><a href="provide.html#TEST">TEST</a></li>
+          <li><a href="provide.html#VALUE">VALUE</a></li>
+          <li><a href="provide.html#RESULT">RESULT</a></li>
+        </ul>
+      </li>
+      <li><a href="provide.html#else-=%3E-RESULT">else =&gt; RESULT</a></li>
+    </ul>
+  </li>
+  <li><a href="provide.html#BUGS">BUGS</a></li>
+  <li><a href="provide.html#APOLOGY">APOLOGY</a></li>
+  <li><a href="provide.html#ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</a></li>
+  <li><a href="provide.html#CONTRIBUTING">CONTRIBUTING</a></li>
+  <li><a href="provide.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>provide - easily switch between different implementations depending on which version of Perl is detected</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    package My::Module;
+
+    use provide (
+        if =&gt; ge =&gt; &#39;5.013000&#39; =&gt; &#39;My::Module::v5_013000&#39;,
+        else                   =&gt; &#39;My::Module::v5_080000&#39;,
+    );</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>Good code is free of side effects, avoids tight coupling, and solves a useful problem in an understandable way. This module, on the other hand, is ball of frightened octopuses clinging together.</p>
+
+<p>The simple act of adding</p>
+
+<pre><code>    use provide (...)</code></pre>
+
+<p>to an otherwise well-behaved class performs the following changes to it:</p>
+
+<ul>
+
+<li><p>The calling module automatically inherits from Exporter.</p>
+
+</li>
+<li><p>provide.pm finds suitable modules to load and loads them.</p>
+
+</li>
+<li><p>Any functions exported by the loaded modules get re-exported by the calling module.</p>
+
+</li>
+</ul>
+
+<p>This module is marginally useful if you are implementing your own module and you end up stumbling over some bug in your code caused by a change to the Perl core. Here&#39;s a worked example of when you might use this module:</p>
+
+<h2 id="hash_pop-v1.0-pass-by-value"><a id="hash_pop"></a>hash_pop v1.0 - pass by value</h2>
+
+<p>Let&#39;s pretend you want to implement your own version of pop, but for hashes: it&#39;ll return the last key+value pair of the hash (whatever &quot;last&quot; means in the context of an inherently unordered list!). You might start out like this:</p>
+
+<pre><code>    use strict;
+    use warnings;
+    package My::Module;
+    use base qw(Exporter);
+
+    our @EXPORT = qw(hash_pop);
+
+    sub hash_pop {
+        my (%hash) = @_;
+        my ($last_key) = reverse keys %hash;
+        return ($last_key, delete $hash{$last_key});
+    }
+
+    1;
+
+    __END__</code></pre>
+
+<p>Well, this is about as good an implementation as you can expect. It is easy enough to call:</p>
+
+<pre><code>    my %hash = (1..10); # Belden&#39;s default &quot;just give me some kind of hash&quot; hash
+
+    my ($last_key, $last_value) = hash_pop(%hash);</code></pre>
+
+<p>But unlike the <code>pop</code> that we&#39;re mimicking, our <code>hash_pop</code> doesn&#39;t mutate the %hash that we pass in, so it&#39;s not very <code>pop</code>-like yet.</p>
+
+<h2 id="hash_pop-v1.1-explicit-pass-by-reference"><a id="hash_pop1"></a>hash_pop v1.1 - explicit pass by reference</h2>
+
+<p>To mutate our subject %hash, we&#39;ll need to pass by reference:</p>
+
+<pre><code>    sub hash_pop {
+        my $hash = shift;
+        my ($last_key) = reverse keys %$hash;
+        return ($last_key, delete $hash-&gt;{$last_key});
+    }</code></pre>
+
+<p>And since we&#39;re passing by reference, we&#39;d darn well better change our call pattern:</p>
+
+<pre><code>    my %hash = (1..10);
+
+    my ($last_key, $last_value) = hash_pop(\%hash);</code></pre>
+
+<h2 id="hash_pop-v1.2-implicit-pass-by-reference"><a id="hash_pop2"></a>hash_pop v1.2 - implicit pass by reference</h2>
+
+<p>If only there were a way to implicitly pass %hash by reference to <code>hash_pop</code> - then we&#39;d have the best of both worlds, wouldn&#39;t we? (Would we? I really don&#39;t know.)</p>
+
+<p>Ruby and Python aren&#39;t the only languages that have built-in documentation; look at this marvelous interaction with the Perl debugger:</p>
+
+<pre><code>    $ perl -de 1
+      DB&lt;1&gt; p prototype &#39;CORE::keys&#39;
+    \%</code></pre>
+
+<p>That&#39;s pretty good stuff! Take that, highly self-documenting languages! Now we know how to change <code>hash_pop</code>:</p>
+
+<pre><code>    sub hash_pop (\%) {
+        my $hash = shift;
+        my ($last_key) = reverse keys %$hash;
+        return ($last_key, delete $hash-&gt;{$last_key});
+    }</code></pre>
+
+<p>And now here&#39;s someone using this ridiculous function:</p>
+
+<pre><code>    my %hash = (1..10);
+
+    my ($last_key, $last_value) = hash_pop(%hash);</code></pre>
+
+<p>Sweet! All done, let&#39;s stick it on CPAN!</p>
+
+<h2 id="Uh-oh,-implementing-CORE::-like-functions-means-we-have-to-respect-the-CORE"><a id="Uh"></a><a id="Uh-oh--implementing-CORE::-like-functions-means-we-have-to-respect-the-CORE"></a>Uh-oh, implementing CORE::-like functions means we have to respect the CORE</h2>
+
+<p>Except: you&#39;re not done until you run it against every version of Perl you can shake a <a href="http://perlbrew.pl">perlbrew</a> at. And when you go through and do that, you&#39;ll discover a break between Perl v5.12 and v5.13:</p>
+
+<pre><code>    $ perlbrew list | \
+      cut -b 3- | (while read ver; do \
+          perlbrew use $ver; \
+          perl -le &#39;print $] . &quot;\t&quot; . prototype q,CORE::keys,&#39;; \
+      done)
+
+    __END__
+    5.006002  \%
+    5.008009  \%
+    5.010001  \%
+    5.012005  \[@%]
+    5.014003  +
+    5.016002  +
+    5.017008  +</code></pre>
+
+<p>Aww, nerds! there&#39;s two difference prototypes in play here: \% and +. One valid option is to just give up on supporting older versions of Perl. Another is to implement your own version-specific loading code. And yet another option is to use this module to gloss away implementing your own version-specific code:</p>
+
+<h2 id="hash_pop-v1.3-version-specific-prototypes-for-implicit-reference-passing"><a id="hash_pop3"></a>hash_pop v1.3 - version-specific prototypes for implicit reference passing</h2>
+
+<pre><code>    use strict;
+    use warnings;
+    package My::Module;
+
+    use provide (
+        if =&gt; ge =&gt; &#39;5.013000&#39; =&gt; &#39;My::Module::hash_pop::v5_013000&#39;,
+        else                   =&gt; &#39;My::Module::hash_pop::v5_006000&#39;,
+    );
+
+    sub _hash_pop {
+        my $hash = shift;
+        my ($last_key) = reverse keys %$hash;
+        return ($last_key, delete $hash-&gt;{$last_key});
+    }
+
+    1;</code></pre>
+
+<p>We&#39;re collecting common behavior between the two version-specific modules in My::Module::_hash_pop.</p>
+
+<p>Now all that&#39;s left is to write your version-specific modules. Here&#39;s the one for v5.013000 and above:</p>
+
+<pre><code>    use strict;
+    use warnings;
+    package My::Module::hash_pop::v5_013000;
+
+    our @EXPORT = qw(hash_pop);
+
+    require My::Module;
+
+    sub hash_pop (+) { goto &amp;My::Module::_hash_pop }
+
+    1;</code></pre>
+
+<p>The module for v5.006000 would be nearly identical:</p>
+
+<pre><code>    use strict;
+    use warnings;
+    package My::Module::hash_pop::v5_006000;
+
+    our @EXPORT = qw(hash_pop);
+
+    require My::Module;
+
+    sub hash_pop (\%) { goto &amp;My::Module::_hash_pop }
+
+    1;</code></pre>
+
+<p>And now someone can go and use our module:</p>
+
+<pre><code>    #!/usr/bin/env perl
+
+    use strict;
+    use warnings;
+
+    use My::Module qw(hash_pop);
+
+    my %hash = (1..10);
+    my ($nine, $ten) = hash_pop %hash;</code></pre>
+
+<h1 id="SYNTAX">SYNTAX</h1>
+
+<p>Currently two statements are supported: <code>if</code> and <code>else</code>.</p>
+
+<h2 id="if-=&gt;-TEST-=&gt;-VALUE-=&gt;-RESULT"><a id="if"></a><a id="if---TEST---VALUE---RESULT"></a>if =&gt; TEST =&gt; VALUE =&gt; RESULT</h2>
+
+<h3 id="TEST">TEST</h3>
+
+<p>TEST may be any of:</p>
+
+<pre><code>    gt   &quot;greater than&quot;
+    ge   &quot;greater or equal to&quot;
+    eq   &quot;equal to&quot;
+    ne   &quot;not equal to&quot;
+    le   &quot;less than or equal to&quot;
+    lt   &quot;less than&quot;</code></pre>
+
+<h3 id="VALUE">VALUE</h3>
+
+<p>VALUE should be a string which describes something you might get back in $]. See also: <a href="https://metacpan.org/pod/perldoc">perldoc</a>.</p>
+
+<h3 id="RESULT">RESULT</h3>
+
+<p>RESULT is the resulting module that will be loaded if this condition is true.</p>
+
+<h2 id="else-=&gt;-RESULT"><a id="else"></a><a id="else---RESULT"></a>else =&gt; RESULT</h2>
+
+<p>In the event that the preceding <code>if</code> condition is false, the <code>else</code> RESULT will be loaded.</p>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>Please report bugs on this project&#39;s <a href="http://github.com/belden/perl-provide/issues">Github issues page</a>.</p>
+
+<h1 id="APOLOGY">APOLOGY</h1>
+
+<p>Too often the explanation for crufty code is, &quot;It seemed like a good idea at the time.&quot; To the contrary, this seems like a strange idea.</p>
+
+<p>I really don&#39;t know if this will be useful to anyone at all. One of the challenges to us portraying the Perl community as actively growing is that there are so many well-tested implementations on CPAN to the various Big Problems we all face: processing a CGI form, connecting to a DB_File, writing EBCDIC things (whatever those are!); and more modernishly, Dancing with Mooses and Catalytic Test frameworks.</p>
+
+<h1 id="ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</h1>
+
+<p><a href="http://twitter.com/torgomatic">Sam Merrit</a> coined the phrase &quot;a ball of frightened octopuses clinging together&quot;.</p>
+
+<p><a href="http://twitter.com/epochbell">Logan Bell</a> practically dared me to release this. Well, maybe he would if I were to ask him.</p>
+
+<p><a href="https://github.com/jjn1056">John Napiorkowski</a> originally put in my head the notion that, &quot;A CPAN module is a unit of conversation between developers. It says, &#39;Here is a problem, and here is my take on how to solve it.&#39;&quot; This module is the equivalent of me standing in a corner and mumbling to myself.</p>
+
+<p><a href="http://shutterstock.com/jobs.mhtml">My employer</a>, <a href="http://shutterstock.com">Shutterstock, Inc.</a>, is a <a href="http://code.shutterstock.com">staunch supporter</a> of open-source software. It&#39;s a shame I&#39;ve worked so hard to link them to this amusing but disingenuous implementation.</p>
+
+<h1 id="CONTRIBUTING">CONTRIBUTING</h1>
+
+<p>Feel free to use and improve this software in whatever way you see fit. This code is hosted on Github.com at <a href="http://github.com/belden/perl-provide">http://github.com/belden/perl-provide</a>.</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<pre><code>    (c) 2013 by Belden Lyman</code></pre>
+
+<p>This library is free software: you may redistribute it and/or modify it under the same terms as Perl itself; either Perl version 5.8.8 or, at your option, any later version of Perl 5 you may have available.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install provide, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm provide</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install provide</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="provide.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

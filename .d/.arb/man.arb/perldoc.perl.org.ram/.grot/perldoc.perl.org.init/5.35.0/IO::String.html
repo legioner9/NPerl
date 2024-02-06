@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>IO::String - Emulate file interface for in-core strings - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of IO-String - MetaCPAN" href="https://metacpan.org/dist/IO-String/releases.rss" />
+        <link rel="canonical" href="./IO::String.html" />
+        <meta name="description" content="Emulate file interface for in-core strings" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/IO::String" />
+<meta name="twitter:title"       content="IO::String" />
+<meta name="twitter:description" content="Emulate file interface for in-core strings" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./IO::String.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of IO-String was released.">
+      <span class="relatize">06 Dec 2005 07:52:54 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/IO-String">IO-String</a>
+  </li>
+  <li>
+    Module version: 1.08
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/IO-String/source/String.pm">Source</a>
+    (<a href="https://metacpan.org/dist/IO-String/source/String.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/IO-String/source">Browse</a>
+    (<a href="https://metacpan.org/dist/IO-String/source?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/IO-String/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/IO-String/contribute">How to Contribute</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=IO-String">Issues</a>
+      (3)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=IO-String+1.08" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IO-String.html?oncpan=1&amp;distmat=1&amp;version=1.08&amp;grade=2" style="color: #090">1386</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IO-String.html?oncpan=1&amp;distmat=1&amp;version=1.08&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IO-String.html?oncpan=1&amp;distmat=1&amp;version=1.08&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/GAAS/IO-String-1.08">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on IO-String who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 0
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/IO-String-1.08/index.html">75.32% Coverage </a>
+    </li>
+    <li>
+      License: unknown
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/IO-String/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/G/GA/GAAS/IO-String-1.08.tar.gz">
+      Download (<span itemprop="fileSize">7.3KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FGAAS%2FIO-String-1.08%2FString.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/IO-String/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/IO-String/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:IO-String">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="IO-String">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/String.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="GAAS/IO-String-1.08"
+>1.08
+  (GAAS on 2005-12-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="GAAS/IO-String-1.07"
+>1.07
+  (GAAS on 2005-10-24)</option>
+<option
+  
+  value="GAAS/IO-String-1.06"
+>1.06
+  (GAAS on 2004-11-05)</option>
+<option
+  
+  value="GAAS/IO-String-1.05"
+>1.05
+  (GAAS on 2004-04-01)</option>
+<option
+  
+  value="GAAS/IO-String-1.04"
+>1.04
+  (GAAS on 2004-01-08)</option>
+<option
+  
+  value="GAAS/IO-String-1.03"
+>1.03
+  (GAAS on 2003-10-06)</option>
+<option
+  
+  value="GAAS/IO-String-1.02"
+>1.02
+  (GAAS on 2002-12-27)</option>
+<option
+  
+  value="GAAS/IO-String-1.01"
+>1.01
+  (GAAS on 2000-01-27)</option>
+<option
+  
+  value="GAAS/IO-String-1.00"
+>1.00
+  (GAAS on 1999-04-11)</option>
+<option
+  
+  value="GAAS/IO-String-0.03"
+>0.03
+  (GAAS on 1998-10-14)</option>
+<option
+  
+  value="GAAS/IO-String-0.02"
+>0.02
+  (GAAS on 1998-10-12)</option>
+<option
+  
+  value="GAAS/IO-String-0.01"
+>0.01
+  (GAAS on 1998-10-07)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/GAAS/IO-String-1.08/diff/' + encodeURIComponent(this.value) + '/String.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="GAAS/IO-String-1.08"
+>1.08
+  (GAAS on 2005-12-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="GAAS/IO-String-1.07"
+>1.07
+  (GAAS on 2005-10-24)</option>
+<option
+  
+  value="GAAS/IO-String-1.06"
+>1.06
+  (GAAS on 2004-11-05)</option>
+<option
+  
+  value="GAAS/IO-String-1.05"
+>1.05
+  (GAAS on 2004-04-01)</option>
+<option
+  
+  value="GAAS/IO-String-1.04"
+>1.04
+  (GAAS on 2004-01-08)</option>
+<option
+  
+  value="GAAS/IO-String-1.03"
+>1.03
+  (GAAS on 2003-10-06)</option>
+<option
+  
+  value="GAAS/IO-String-1.02"
+>1.02
+  (GAAS on 2002-12-27)</option>
+<option
+  
+  value="GAAS/IO-String-1.01"
+>1.01
+  (GAAS on 2000-01-27)</option>
+<option
+  
+  value="GAAS/IO-String-1.00"
+>1.00
+  (GAAS on 1999-04-11)</option>
+<option
+  
+  value="GAAS/IO-String-0.03"
+>0.03
+  (GAAS on 1998-10-14)</option>
+<option
+  
+  value="GAAS/IO-String-0.02"
+>0.02
+  (GAAS on 1998-10-12)</option>
+<option
+  
+  value="GAAS/IO-String-0.01"
+>0.01
+  (GAAS on 1998-10-07)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><i class="ttip" title="dynamic_config enabled">unknown</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/IO::String/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=IO%3A%3AString">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=IO-String">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/GAAS/IO-String-1.08/view/String.pm">This version</a>
+    </li>
+    <li>
+      <a href="./IO::String.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/PINGAN"><img src="https://www.gravatar.com/avatar/a02222e5e0e4fd24d52fc29a08ac6bcb?d=identicon&amp;s=20" title="PINGAN" alt="PINGAN"></a>
+<a class="display-all" href="https://metacpan.org/author/AZAWAWI"><img src="https://www.gravatar.com/avatar/70ebafdecf974e15bcaba4cbe39efef1?d=identicon&amp;s=20" title="AZAWAWI" alt="AZAWAWI"></a>
+<a class="display-all" href="https://metacpan.org/author/KEEDI"><img src="https://www.gravatar.com/avatar/95f905a7a4ccc573c711e9d264c0fde8?d=identicon&amp;s=20" title="KEEDI" alt="KEEDI"></a>
+<a class="display-all" href="https://metacpan.org/author/TINITA"><img src="https://www.gravatar.com/avatar/41d992bb7c01d13ffb8b7bf1ed355e91?d=identicon&amp;s=20" title="TINITA" alt="TINITA"></a>
+<a class="display-all" href="https://metacpan.org/author/RRWO"><img src="https://www.gravatar.com/avatar/4a5274bc5d690ee3d619f044778771a7?d=identicon&amp;s=20" title="RRWO" alt="RRWO"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/IO-String/plussers">7 PAUSE users</a>
+</div>
+<div>
+    4 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/GAAS" class="author-name">Gisle Aas</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/String.pm&#39;" class="">
+<option
+  selected
+  value="GAAS/IO-String-1.08"
+>1.08
+  (GAAS on 2005-12-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="GAAS/IO-String-1.07"
+>1.07
+  (GAAS on 2005-10-24)</option>
+<option
+  
+  value="GAAS/IO-String-1.06"
+>1.06
+  (GAAS on 2004-11-05)</option>
+<option
+  
+  value="GAAS/IO-String-1.05"
+>1.05
+  (GAAS on 2004-04-01)</option>
+<option
+  
+  value="GAAS/IO-String-1.04"
+>1.04
+  (GAAS on 2004-01-08)</option>
+<option
+  
+  value="GAAS/IO-String-1.03"
+>1.03
+  (GAAS on 2003-10-06)</option>
+<option
+  
+  value="GAAS/IO-String-1.02"
+>1.02
+  (GAAS on 2002-12-27)</option>
+<option
+  
+  value="GAAS/IO-String-1.01"
+>1.01
+  (GAAS on 2000-01-27)</option>
+<option
+  
+  value="GAAS/IO-String-1.00"
+>1.00
+  (GAAS on 1999-04-11)</option>
+<option
+  
+  value="GAAS/IO-String-0.03"
+>0.03
+  (GAAS on 1998-10-14)</option>
+<option
+  
+  value="GAAS/IO-String-0.02"
+>0.02
+  (GAAS on 1998-10-12)</option>
+<option
+  
+  value="GAAS/IO-String-0.01"
+>0.01
+  (GAAS on 1998-10-07)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/IO-String">IO-String-1.08</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 155 direct dependents &#10;          • 712 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="IO-String-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="IO-String-1.08">
+    <input type="hidden" name="author" value="GAAS">
+    <input type="hidden" name="distribution" value="IO-String">
+    <button type="submit" class="favorite highlight"><span>11</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./IO::String.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>11</span> ++</a>
+</div>
+   / <span>IO::String</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./IO::String.html#NAME">NAME</a></li>
+  <li><a href="./IO::String.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./IO::String.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./IO::String.html#BUGS">BUGS</a></li>
+  <li><a href="./IO::String.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./IO::String.html#COPYRIGHT">COPYRIGHT</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>IO::String - Emulate file interface for in-core strings</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code> use IO::String;
+ $io = IO::String-&gt;new;
+ $io = IO::String-&gt;new($var);
+ tie *IO, &#39;IO::String&#39;;
+
+ # read data
+ &lt;$io&gt;;
+ $io-&gt;getline;
+ read($io, $buf, 100);
+
+ # write data
+ print $io &quot;string\n&quot;;
+ $io-&gt;print(@data);
+ syswrite($io, $buf, 100);
+
+ select $io;
+ printf &quot;Some text %s\n&quot;, $str;
+
+ # seek
+ $pos = $io-&gt;getpos;
+ $io-&gt;setpos(0);        # rewind
+ $io-&gt;seek(-30, -1);
+ seek($io, 0, 0);</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>The <code>IO::String</code> module provides the <code>IO::File</code> interface for in-core strings. An <code>IO::String</code> object can be attached to a string, and makes it possible to use the normal file operations for reading or writing data, as well as for seeking to various locations of the string. This is useful when you want to use a library module that only provides an interface to file handles on data that you have in a string variable.</p>
+
+<p>Note that perl-5.8 and better has built-in support for &quot;in memory&quot; files, which are set up by passing a reference instead of a filename to the open() call. The reason for using this module is that it makes the code backwards compatible with older versions of Perl.</p>
+
+<p>The <code>IO::String</code> module provides an interface compatible with <code>IO::File</code> as distributed with <i>IO-1.20</i>, but the following methods are not available: new_from_fd, fdopen, format_write, format_page_number, format_lines_per_page, format_lines_left, format_name, format_top_name.</p>
+
+<p>The following methods are specific to the <code>IO::String</code> class:</p>
+
+<dl>
+
+<dt id="$io-=-IO::String-&gt;new"><a id="io---IO::String--new"></a>$io = IO::String-&gt;new</dt>
+<dd>
+
+</dd>
+<dt id="$io-=-IO::String-&gt;new(-$string-)"><a id="io---IO::String--new---string"></a>$io = IO::String-&gt;new( $string )</dt>
+<dd>
+
+<p>The constructor returns a newly-created <code>IO::String</code> object. It takes an optional argument, which is the string to read from or write into. If no $string argument is given, then an internal buffer (initially empty) is allocated.</p>
+
+<p>The <code>IO::String</code> object returned is tied to itself. This means that you can use most Perl I/O built-ins on it too: readline, &lt;&gt;, getc, print, printf, syswrite, sysread, close.</p>
+
+</dd>
+<dt id="$io-&gt;open"><a id="io--open"></a>$io-&gt;open</dt>
+<dd>
+
+</dd>
+<dt id="$io-&gt;open(-$string-)"><a id="io--open---string"></a>$io-&gt;open( $string )</dt>
+<dd>
+
+<p>Attaches an existing IO::String object to some other $string, or allocates a new internal buffer (if no argument is given). The position is reset to 0.</p>
+
+</dd>
+<dt id="$io-&gt;string_ref"><a id="io--string_ref"></a>$io-&gt;string_ref</dt>
+<dd>
+
+<p>Returns a reference to the string that is attached to the <code>IO::String</code> object. Most useful when you let the <code>IO::String</code> create an internal buffer to write into.</p>
+
+</dd>
+<dt id="$io-&gt;pad"><a id="io--pad"></a>$io-&gt;pad</dt>
+<dd>
+
+</dd>
+<dt id="$io-&gt;pad(-$char-)"><a id="io--pad---char"></a>$io-&gt;pad( $char )</dt>
+<dd>
+
+<p>Specifies the padding to use if the string is extended by either the seek() or truncate() methods. It is a single character and defaults to &quot;\0&quot;.</p>
+
+</dd>
+<dt id="$io-&gt;pos"><a id="io--pos"></a>$io-&gt;pos</dt>
+<dd>
+
+</dd>
+<dt id="$io-&gt;pos(-$newpos-)"><a id="io--pos---newpos"></a>$io-&gt;pos( $newpos )</dt>
+<dd>
+
+<p>Yet another interface for reading and setting the current read/write position within the string (the normal getpos/setpos/tell/seek methods are also available). The pos() method always returns the old position, and if you pass it an argument it sets the new position.</p>
+
+<p>There is (deliberately) a difference between the setpos() and seek() methods in that seek() extends the string (with the specified padding) if you go to a location past the end, whereas setpos() just snaps back to the end. If truncate() is used to extend the string, then it works as seek().</p>
+
+</dd>
+</dl>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>In Perl versions &lt; 5.6, the TIEHANDLE interface was incomplete. If you use such a Perl, then seek(), tell(), eof(), fileno(), binmode() will not do anything on an <code>IO::String</code> handle. See <a href="https://metacpan.org/pod/perltie">perltie</a> for details.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/IO::File">IO::File</a>, <a href="./IO::Stringy.html">IO::Stringy</a>, <a href="functions/CORE.html#open">&quot;open&quot; in perlfunc</a></p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright 1998-2005 Gisle Aas.</p>
+
+<p>This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install IO::String, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm IO::String</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install IO::String</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./IO::String.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

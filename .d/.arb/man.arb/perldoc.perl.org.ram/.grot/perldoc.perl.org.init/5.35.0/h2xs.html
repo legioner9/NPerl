@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>h2xs - convert .h C header files to Perl extensions - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/h2xs">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="h2xs.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/h2xs">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/h2xs">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/h2xs">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/h2xs">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/h2xs">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/h2xs">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/h2xs">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/h2xs">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/h2xs">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/h2xs">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/h2xs">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/h2xs">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/h2xs">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/h2xs">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/h2xs">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/h2xs">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/h2xs">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/h2xs">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/h2xs">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/h2xs">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/h2xs">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/h2xs">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/h2xs">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/h2xs">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/h2xs">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/h2xs">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/h2xs">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/h2xs">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/h2xs">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/h2xs">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/h2xs">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/h2xs">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/h2xs">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/h2xs">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/h2xs">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/h2xs">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/h2xs">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/h2xs">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/h2xs">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/h2xs">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/h2xs">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/h2xs">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/h2xs">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/h2xs">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/h2xs">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/h2xs">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/h2xs">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/h2xs">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/h2xs">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/h2xs">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/h2xs">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/h2xs">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/h2xs">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/h2xs">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/h2xs">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/h2xs">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/h2xs">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/h2xs">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/h2xs">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/h2xs">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/h2xs">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/h2xs">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/h2xs">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/h2xs">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/h2xs">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/h2xs">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/h2xs">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/h2xs">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/h2xs">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/h2xs">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/h2xs">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/h2xs">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/h2xs">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/h2xs">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/h2xs">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/h2xs">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/h2xs">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/h2xs">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/h2xs">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/h2xs">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="h2xs.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/h2xs">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/h2xs">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/h2xs">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/h2xs">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/h2xs">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/h2xs">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/h2xs">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/h2xs">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/h2xs">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/h2xs">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/h2xs">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/h2xs">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/h2xs">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/h2xs">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/h2xs">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/h2xs">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/h2xs">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/h2xs">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/h2xs">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/h2xs">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/h2xs">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/h2xs">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/h2xs">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/h2xs">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/h2xs">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/h2xs">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/h2xs">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/h2xs">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/h2xs">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/h2xs">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/h2xs">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/h2xs">5.35.1</a>
+          <a class="dropdown-item active" href="h2xs.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="h2xs.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="h2xs.html">h2xs</a>
+          <div id="more">
+            (<a href="h2xs.txt">source</a>,
+            <a href="https://metacpan.org/pod/h2xs">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="h2xs.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="h2xs.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="h2xs.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="h2xs.html#OPTIONS">OPTIONS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="h2xs.html#EXAMPLES">EXAMPLES</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="h2xs.html#Extension-based-on-.h-and-.c-files">Extension based on .h and .c files</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="h2xs.html#ENVIRONMENT">ENVIRONMENT</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="h2xs.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="h2xs.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="h2xs.html#DIAGNOSTICS">DIAGNOSTICS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="h2xs.html#LIMITATIONS-of-x">LIMITATIONS of -x</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="h2xs.html#NAME">#</a>NAME</h1>
+
+<p>h2xs - convert .h C header files to Perl extensions</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="h2xs.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<p><b>h2xs</b> [<b>OPTIONS</b> ...] [headerfile ... [extra_libraries]]</p>
+
+<p><b>h2xs</b> <b>-h</b>|<b>-?</b>|<b>--help</b></p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="h2xs.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p><i>h2xs</i> builds a Perl extension from C header files. The extension will include functions which can be used to retrieve the value of any #define statement which was in the C header files.</p>
+
+<p>The <i>module_name</i> will be used for the name of the extension. If module_name is not supplied then the name of the first header file will be used, with the first character capitalized.</p>
+
+<p>If the extension might need extra libraries, they should be included here. The extension Makefile.PL will take care of checking whether the libraries actually exist and how they should be loaded. The extra libraries should be specified in the form -lm -lposix, etc, just as on the cc command line. By default, the Makefile.PL will search through the library path determined by Configure. That path can be augmented by including arguments of the form <b>-L/another/library/path</b> in the extra-libraries argument.</p>
+
+<p>In spite of its name, <i>h2xs</i> may also be used to create a skeleton pure Perl module. See the <b>-X</b> option.</p>
+
+<h1 id="OPTIONS"><a class="permalink" href="h2xs.html#OPTIONS">#</a>OPTIONS</h1>
+
+<dl>
+
+<dt id="-A,-omit-autoload"><a class="permalink" href="h2xs.html#-A,-omit-autoload">#</a><a id="A---omit-autoload"></a><b>-A</b>, <b>--omit-autoload</b></dt>
+<dd>
+
+<p>Omit all autoload facilities. This is the same as <b>-c</b> but also removes the <span style="white-space: nowrap;"><code>use AutoLoader</code></span> statement from the .pm file.</p>
+
+</dd>
+<dt id="-B,-beta-version"><a class="permalink" href="h2xs.html#-B,-beta-version">#</a><a id="B---beta-version"></a><b>-B</b>, <b>--beta-version</b></dt>
+<dd>
+
+<p>Use an alpha/beta style version number. Causes version number to be &quot;0.00_01&quot; unless <b>-v</b> is specified.</p>
+
+</dd>
+<dt id="-C,-omit-changes"><a class="permalink" href="h2xs.html#-C,-omit-changes">#</a><a id="C---omit-changes"></a><b>-C</b>, <b>--omit-changes</b></dt>
+<dd>
+
+<p>Omits creation of the <i>Changes</i> file, and adds a HISTORY section to the POD template.</p>
+
+</dd>
+<dt id="-F,-cpp-flags=addflags"><a class="permalink" href="h2xs.html#-F,-cpp-flags=addflags">#</a><a id="F---cpp-flags-addflags"></a><b>-F</b>, <b>--cpp-flags</b>=<i>addflags</i></dt>
+<dd>
+
+<p>Additional flags to specify to C preprocessor when scanning header for function declarations. Writes these options in the generated <i>Makefile.PL</i> too.</p>
+
+</dd>
+<dt id="-M,-func-mask=regular-expression"><a class="permalink" href="h2xs.html#-M,-func-mask=regular-expression">#</a><a id="M---func-mask-regular-expression"></a><b>-M</b>, <b>--func-mask</b>=<i>regular expression</i></dt>
+<dd>
+
+<p>selects functions/macros to process.</p>
+
+</dd>
+<dt id="-O,-overwrite-ok"><a class="permalink" href="h2xs.html#-O,-overwrite-ok">#</a><a id="O---overwrite-ok"></a><b>-O</b>, <b>--overwrite-ok</b></dt>
+<dd>
+
+<p>Allows a pre-existing extension directory to be overwritten.</p>
+
+</dd>
+<dt id="-P,-omit-pod"><a class="permalink" href="h2xs.html#-P,-omit-pod">#</a><a id="P---omit-pod"></a><b>-P</b>, <b>--omit-pod</b></dt>
+<dd>
+
+<p>Omit the autogenerated stub POD section.</p>
+
+</dd>
+<dt id="-X,-omit-XS"><a class="permalink" href="h2xs.html#-X,-omit-XS">#</a><a id="X---omit-XS"></a><b>-X</b>, <b>--omit-XS</b></dt>
+<dd>
+
+<p>Omit the XS portion. Used to generate a skeleton pure Perl module. <code>-c</code> and <code>-f</code> are implicitly enabled.</p>
+
+</dd>
+<dt id="-a,-gen-accessors"><a class="permalink" href="h2xs.html#-a,-gen-accessors">#</a><a id="a---gen-accessors"></a><b>-a</b>, <b>--gen-accessors</b></dt>
+<dd>
+
+<p>Generate an accessor method for each element of structs and unions. The generated methods are named after the element name; will return the current value of the element if called without additional arguments; and will set the element to the supplied value (and return the new value) if called with an additional argument. Embedded structures and unions are returned as a pointer rather than the complete structure, to facilitate chained calls.</p>
+
+<p>These methods all apply to the Ptr type for the structure; additionally two methods are constructed for the structure type itself, <code>_to_ptr</code> which returns a Ptr type pointing to the same structure, and a <code>new</code> method to construct and return a new structure, initialised to zeroes.</p>
+
+</dd>
+<dt id="-b,-compat-version=version"><a class="permalink" href="h2xs.html#-b,-compat-version=version">#</a><a id="b---compat-version-version"></a><b>-b</b>, <b>--compat-version</b>=<i>version</i></dt>
+<dd>
+
+<p>Generates a .pm file which is backwards compatible with the specified perl version.</p>
+
+<p>For versions &lt; 5.6.0, the changes are. - no use of &#39;our&#39; (uses &#39;use vars&#39; instead) - no &#39;use warnings&#39;</p>
+
+<p>Specifying a compatibility version higher than the version of perl you are using to run h2xs will have no effect. If unspecified h2xs will default to compatibility with the version of perl you are using to run h2xs.</p>
+
+</dd>
+<dt id="-c,-omit-constant"><a class="permalink" href="h2xs.html#-c,-omit-constant">#</a><a id="c---omit-constant"></a><b>-c</b>, <b>--omit-constant</b></dt>
+<dd>
+
+<p>Omit <code>constant()</code> from the .xs file and corresponding specialised <code>AUTOLOAD</code> from the .pm file.</p>
+
+</dd>
+<dt id="-d,-debugging"><a class="permalink" href="h2xs.html#-d,-debugging">#</a><a id="d---debugging"></a><b>-d</b>, <b>--debugging</b></dt>
+<dd>
+
+<p>Turn on debugging messages.</p>
+
+</dd>
+<dt id="-e,-omit-enums=[regular-expression]"><a class="permalink" href="h2xs.html#-e,-omit-enums=%5Bregular-expression%5D">#</a><a id="e---omit-enums-regular-expression"></a><b>-e</b>, <b>--omit-enums</b>=[<i>regular expression</i>]</dt>
+<dd>
+
+<p>If <i>regular expression</i> is not given, skip all constants that are defined in a C enumeration. Otherwise skip only those constants that are defined in an enum whose name matches <i>regular expression</i>.</p>
+
+<p>Since <i>regular expression</i> is optional, make sure that this switch is followed by at least one other switch if you omit <i>regular expression</i> and have some pending arguments such as header-file names. This is ok:</p>
+
+<pre><code class="plaintext">h2xs -e -n Module::Foo foo.h</code></pre>
+
+<p>This is not ok:</p>
+
+<pre><code class="plaintext">h2xs -n Module::Foo -e foo.h</code></pre>
+
+<p>In the latter, foo.h is taken as <i>regular expression</i>.</p>
+
+</dd>
+<dt id="-f,-force"><a class="permalink" href="h2xs.html#-f,-force">#</a><a id="f---force"></a><b>-f</b>, <b>--force</b></dt>
+<dd>
+
+<p>Allows an extension to be created for a header even if that header is not found in standard include directories.</p>
+
+</dd>
+<dt id="-g,-global"><a class="permalink" href="h2xs.html#-g,-global">#</a><a id="g---global"></a><b>-g</b>, <b>--global</b></dt>
+<dd>
+
+<p>Include code for safely storing static data in the .xs file. Extensions that do no make use of static data can ignore this option.</p>
+
+</dd>
+<dt id="-h,-?,-help"><a class="permalink" href="h2xs.html#-h,-?,-help">#</a><a id="h-----help"></a><b>-h</b>, <b>-?</b>, <b>--help</b></dt>
+<dd>
+
+<p>Print the usage, help and version for this h2xs and exit.</p>
+
+</dd>
+<dt id="-k,-omit-const-func"><a class="permalink" href="h2xs.html#-k,-omit-const-func">#</a><a id="k---omit-const-func"></a><b>-k</b>, <b>--omit-const-func</b></dt>
+<dd>
+
+<p>For function arguments declared as <code>const</code>, omit the const attribute in the generated XS code.</p>
+
+</dd>
+<dt id="-m,-gen-tied-var"><a class="permalink" href="h2xs.html#-m,-gen-tied-var">#</a><a id="m---gen-tied-var"></a><b>-m</b>, <b>--gen-tied-var</b></dt>
+<dd>
+
+<p><b>Experimental</b>: for each variable declared in the header file(s), declare a perl variable of the same name magically tied to the C variable.</p>
+
+</dd>
+<dt id="-n,-name=module_name"><a class="permalink" href="h2xs.html#-n,-name=module_name">#</a><a id="n---name-module_name"></a><b>-n</b>, <b>--name</b>=<i>module_name</i></dt>
+<dd>
+
+<p>Specifies a name to be used for the extension, e.g., <span style="white-space: nowrap;">-n RPC::DCE</span></p>
+
+</dd>
+<dt id="-o,-opaque-re=regular-expression"><a class="permalink" href="h2xs.html#-o,-opaque-re=regular-expression">#</a><a id="o---opaque-re-regular-expression"></a><b>-o</b>, <b>--opaque-re</b>=<i>regular expression</i></dt>
+<dd>
+
+<p>Use &quot;opaque&quot; data type for the C types matched by the regular expression, even if these types are <code>typedef</code>-equivalent to types from typemaps. Should not be used without <b>-x</b>.</p>
+
+<p>This may be useful since, say, types which are <code>typedef</code>-equivalent to integers may represent OS-related handles, and one may want to work with these handles in OO-way, as in <code>$handle-&gt;do_something()</code>. Use <code>-o .</code> if you want to handle all the <code>typedef</code>ed types as opaque types.</p>
+
+<p>The type-to-match is whitewashed (except for commas, which have no whitespace before them, and multiple <code>*</code> which have no whitespace between them).</p>
+
+</dd>
+<dt id="-p,-remove-prefix=prefix"><a class="permalink" href="h2xs.html#-p,-remove-prefix=prefix">#</a><a id="p---remove-prefix-prefix"></a><b>-p</b>, <b>--remove-prefix</b>=<i>prefix</i></dt>
+<dd>
+
+<p>Specify a prefix which should be removed from the Perl function names, e.g., <span style="white-space: nowrap;">-p sec_rgy_</span> This sets up the XS <b>PREFIX</b> keyword and removes the prefix from functions that are autoloaded via the <code>constant()</code> mechanism.</p>
+
+</dd>
+<dt id="-s,-const-subs=sub1,sub2"><a class="permalink" href="h2xs.html#-s,-const-subs=sub1,sub2">#</a><a id="s---const-subs-sub1-sub2"></a><b>-s</b>, <b>--const-subs</b>=<i>sub1,sub2</i></dt>
+<dd>
+
+<p>Create a perl subroutine for the specified macros rather than autoload with the constant() subroutine. These macros are assumed to have a return type of <b>char *</b>, e.g., <span style="white-space: nowrap;">-s sec_rgy_wildcard_name,sec_rgy_wildcard_sid</span>.</p>
+
+</dd>
+<dt id="-t,-default-type=type"><a class="permalink" href="h2xs.html#-t,-default-type=type">#</a><a id="t---default-type-type"></a><b>-t</b>, <b>--default-type</b>=<i>type</i></dt>
+<dd>
+
+<p>Specify the internal type that the constant() mechanism uses for macros. The default is IV (signed integer). Currently all macros found during the header scanning process will be assumed to have this type. Future versions of <code>h2xs</code> may gain the ability to make educated guesses.</p>
+
+</dd>
+<dt id="-use-new-tests"><a class="permalink" href="h2xs.html#-use-new-tests">#</a><a id="use-new-tests"></a><b>--use-new-tests</b></dt>
+<dd>
+
+<p>When <b>--compat-version</b> (<b>-b</b>) is present the generated tests will use <code>Test::More</code> rather than <code>Test</code> which is the default for versions before 5.6.2. <code>Test::More</code> will be added to PREREQ_PM in the generated <code>Makefile.PL</code>.</p>
+
+</dd>
+<dt id="-use-old-tests"><a class="permalink" href="h2xs.html#-use-old-tests">#</a><a id="use-old-tests"></a><b>--use-old-tests</b></dt>
+<dd>
+
+<p>Will force the generation of test code that uses the older <code>Test</code> module.</p>
+
+</dd>
+<dt id="-skip-exporter"><a class="permalink" href="h2xs.html#-skip-exporter">#</a><a id="skip-exporter"></a><b>--skip-exporter</b></dt>
+<dd>
+
+<p>Do not use <code>Exporter</code> and/or export any symbol.</p>
+
+</dd>
+<dt id="-skip-ppport"><a class="permalink" href="h2xs.html#-skip-ppport">#</a><a id="skip-ppport"></a><b>--skip-ppport</b></dt>
+<dd>
+
+<p>Do not use <code>Devel::PPPort</code>: no portability to older version.</p>
+
+</dd>
+<dt id="-skip-autoloader"><a class="permalink" href="h2xs.html#-skip-autoloader">#</a><a id="skip-autoloader"></a><b>--skip-autoloader</b></dt>
+<dd>
+
+<p>Do not use the module <code>AutoLoader</code>; but keep the constant() function and <code>sub AUTOLOAD</code> for constants.</p>
+
+</dd>
+<dt id="-skip-strict"><a class="permalink" href="h2xs.html#-skip-strict">#</a><a id="skip-strict"></a><b>--skip-strict</b></dt>
+<dd>
+
+<p>Do not use the pragma <code>strict</code>.</p>
+
+</dd>
+<dt id="-skip-warnings"><a class="permalink" href="h2xs.html#-skip-warnings">#</a><a id="skip-warnings"></a><b>--skip-warnings</b></dt>
+<dd>
+
+<p>Do not use the pragma <code>warnings</code>.</p>
+
+</dd>
+<dt id="-v,-version=version"><a class="permalink" href="h2xs.html#-v,-version=version">#</a><a id="v---version-version"></a><b>-v</b>, <b>--version</b>=<i>version</i></dt>
+<dd>
+
+<p>Specify a version number for this extension. This version number is added to the templates. The default is 0.01, or 0.00_01 if <code>-B</code> is specified. The version specified should be numeric.</p>
+
+</dd>
+<dt id="-x,-autogen-xsubs"><a class="permalink" href="h2xs.html#-x,-autogen-xsubs">#</a><a id="x---autogen-xsubs"></a><b>-x</b>, <b>--autogen-xsubs</b></dt>
+<dd>
+
+<p>Automatically generate XSUBs basing on function declarations in the header file. The package <code>C::Scan</code> should be installed. If this option is specified, the name of the header file may look like <code>NAME1,NAME2</code>. In this case NAME1 is used instead of the specified string, but XSUBs are emitted only for the declarations included from file NAME2.</p>
+
+<p>Note that some types of arguments/return-values for functions may result in XSUB-declarations/typemap-entries which need hand-editing. Such may be objects which cannot be converted from/to a pointer (like <code>long long</code>), pointers to functions, or arrays. See also the section on <a href="h2xs.html#LIMITATIONS-of-x">&quot;LIMITATIONS of <b>-x</b>&quot;</a>.</p>
+
+</dd>
+</dl>
+
+<h1 id="EXAMPLES"><a class="permalink" href="h2xs.html#EXAMPLES">#</a>EXAMPLES</h1>
+
+<pre><code class="plaintext"># Default behavior, extension is Rusers
+h2xs rpcsvc/rusers
+
+# Same, but extension is RUSERS
+h2xs -n RUSERS rpcsvc/rusers
+
+# Extension is rpcsvc::rusers. Still finds &lt;rpcsvc/rusers.h&gt;
+h2xs rpcsvc::rusers
+
+# Extension is ONC::RPC.  Still finds &lt;rpcsvc/rusers.h&gt;
+h2xs -n ONC::RPC rpcsvc/rusers
+
+# Without constant() or AUTOLOAD
+h2xs -c rpcsvc/rusers
+
+# Creates templates for an extension named RPC
+h2xs -cfn RPC
+
+# Extension is ONC::RPC.
+h2xs -cfn ONC::RPC
+
+# Extension is a pure Perl module with no XS code.
+h2xs -X My::Module
+
+# Extension is Lib::Foo which works at least with Perl5.005_03.
+# Constants are created for all #defines and enums h2xs can find
+# in foo.h.
+h2xs -b 5.5.3 -n Lib::Foo foo.h
+
+# Extension is Lib::Foo which works at least with Perl5.005_03.
+# Constants are created for all #defines but only for enums
+# whose names do not start with &#39;bar_&#39;.
+h2xs -b 5.5.3 -e &#39;^bar_&#39; -n Lib::Foo foo.h
+
+# Makefile.PL will look for library -lrpc in
+# additional directory /opt/net/lib
+h2xs rpcsvc/rusers -L/opt/net/lib -lrpc
+
+# Extension is DCE::rgynbase
+# prefix &quot;sec_rgy_&quot; is dropped from perl function names
+h2xs -n DCE::rgynbase -p sec_rgy_ dce/rgynbase
+
+# Extension is DCE::rgynbase
+# prefix &quot;sec_rgy_&quot; is dropped from perl function names
+# subroutines are created for sec_rgy_wildcard_name and
+# sec_rgy_wildcard_sid
+h2xs -n DCE::rgynbase -p sec_rgy_ \
+-s sec_rgy_wildcard_name,sec_rgy_wildcard_sid dce/rgynbase
+
+# Make XS without defines in perl.h, but with function declarations
+# visible from perl.h. Name of the extension is perl1.
+# When scanning perl.h, define -DEXT=extern -DdEXT= -DINIT(x)=
+# Extra backslashes below because the string is passed to shell.
+# Note that a directory with perl header files would
+#  be added automatically to include path.
+h2xs -xAn perl1 -F &quot;-DEXT=extern -DdEXT= -DINIT\(x\)=&quot; perl.h
+
+# Same with function declaration in proto.h as visible from perl.h.
+h2xs -xAn perl2 perl.h,proto.h
+
+# Same but select only functions which match /^av_/
+h2xs -M &#39;^av_&#39; -xAn perl2 perl.h,proto.h
+
+# Same but treat SV* etc as &quot;opaque&quot; types
+h2xs -o &#39;^[S]V \*$&#39; -M &#39;^av_&#39; -xAn perl2 perl.h,proto.h</code></pre>
+
+<h2 id="Extension-based-on-.h-and-.c-files"><a class="permalink" href="h2xs.html#Extension-based-on-.h-and-.c-files">#</a><a id="Extension"></a>Extension based on <i>.h</i> and <i>.c</i> files</h2>
+
+<p>Suppose that you have some C files implementing some functionality, and the corresponding header files. How to create an extension which makes this functionality accessible in Perl? The example below assumes that the header files are <i>interface_simple.h</i> and <i>interface_hairy.h</i>, and you want the perl module be named as <code>Ext::Ension</code>. If you need some preprocessor directives and/or linking with external libraries, see the flags <code>-F</code>, <code>-L</code> and <code>-l</code> in <a href="h2xs.html#OPTIONS">&quot;OPTIONS&quot;</a>.</p>
+
+<dl>
+
+<dt id="Find-the-directory-name"><a class="permalink" href="h2xs.html#Find-the-directory-name">#</a><a id="Find"></a>Find the directory name</dt>
+<dd>
+
+<p>Start with a dummy run of h2xs:</p>
+
+<pre><code class="plaintext">h2xs -Afn Ext::Ension</code></pre>
+
+<p>The only purpose of this step is to create the needed directories, and let you know the names of these directories. From the output you can see that the directory for the extension is <i>Ext/Ension</i>.</p>
+
+</dd>
+<dt id="Copy-C-files"><a class="permalink" href="h2xs.html#Copy-C-files">#</a><a id="Copy"></a>Copy C files</dt>
+<dd>
+
+<p>Copy your header files and C files to this directory <i>Ext/Ension</i>.</p>
+
+</dd>
+<dt id="Create-the-extension"><a class="permalink" href="h2xs.html#Create-the-extension">#</a><a id="Create"></a>Create the extension</dt>
+<dd>
+
+<p>Run h2xs, overwriting older autogenerated files:</p>
+
+<pre><code class="plaintext">h2xs -Oxan Ext::Ension interface_simple.h interface_hairy.h</code></pre>
+
+<p>h2xs looks for header files <i>after</i> changing to the extension directory, so it will find your header files OK.</p>
+
+</dd>
+<dt id="Archive-and-test"><a class="permalink" href="h2xs.html#Archive-and-test">#</a><a id="Archive"></a>Archive and test</dt>
+<dd>
+
+<p>As usual, run</p>
+
+<pre><code class="plaintext">cd Ext/Ension
+perl Makefile.PL
+make dist
+make
+make test</code></pre>
+
+</dd>
+<dt id="Hints"><a class="permalink" href="h2xs.html#Hints">#</a>Hints</dt>
+<dd>
+
+<p>It is important to do <code>make dist</code> as early as possible. This way you can easily merge(1) your changes to autogenerated files if you decide to edit your <code>.h</code> files and rerun h2xs.</p>
+
+<p>Do not forget to edit the documentation in the generated <i>.pm</i> file.</p>
+
+<p>Consider the autogenerated files as skeletons only, you may invent better interfaces than what h2xs could guess.</p>
+
+<p>Consider this section as a guideline only, some other options of h2xs may better suit your needs.</p>
+
+</dd>
+</dl>
+
+<h1 id="ENVIRONMENT"><a class="permalink" href="h2xs.html#ENVIRONMENT">#</a>ENVIRONMENT</h1>
+
+<p>No environment variables are used.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="h2xs.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Larry Wall and others</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="h2xs.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="perl.html">perl</a>, <a href="perlxstut.html">perlxstut</a>, <a href="./ExtUtils::MakeMaker.html">ExtUtils::MakeMaker</a>, and <a href="AutoLoader.html">AutoLoader</a>.</p>
+
+<h1 id="DIAGNOSTICS"><a class="permalink" href="h2xs.html#DIAGNOSTICS">#</a>DIAGNOSTICS</h1>
+
+<p>The usual warnings if it cannot read or write the files involved.</p>
+
+<h1 id="LIMITATIONS-of-x"><a class="permalink" href="h2xs.html#LIMITATIONS-of-x">#</a><a id="LIMITATIONS"></a><a id="LIMITATIONS-of--x"></a>LIMITATIONS of <b>-x</b></h1>
+
+<p><i>h2xs</i> would not distinguish whether an argument to a C function which is of the form, say, <code>int *</code>, is an input, output, or input/output parameter. In particular, argument declarations of the form</p>
+
+<pre><code class="plaintext">    int
+    foo(n)
+	int *n</code></pre>
+
+<p>should be better rewritten as</p>
+
+<pre><code class="plaintext">    int
+    foo(n)
+	int &amp;n</code></pre>
+
+<p>if <code>n</code> is an input parameter.</p>
+
+<p>Additionally, <i>h2xs</i> has no facilities to intuit that a function</p>
+
+<pre><code class="plaintext">   int
+   foo(addr,l)
+	char *addr
+	int   l</code></pre>
+
+<p>takes a pair of address and length of data at this address, so it is better to rewrite this function as</p>
+
+<pre><code>    int
+    foo(sv)
+	    SV *addr
+	PREINIT:
+	    STRLEN len;
+	    char *s;
+	CODE:
+	    s = SvPV(sv,len);
+	    RETVAL = foo(s, len);
+	OUTPUT:
+	    RETVAL</code></pre>
+
+<p>or alternately</p>
+
+<pre><code>    static int
+    my_foo(SV *sv)
+    {
+	STRLEN len;
+	char *s = SvPV(sv,len);
+
+	return foo(s, len);
+    }
+
+    MODULE = foo	PACKAGE = foo	PREFIX = my_
+
+    int
+    foo(sv)
+	SV *sv</code></pre>
+
+<p>See <a href="perlxs.html">perlxs</a> and <a href="perlxstut.html">perlxstut</a> for additional details.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

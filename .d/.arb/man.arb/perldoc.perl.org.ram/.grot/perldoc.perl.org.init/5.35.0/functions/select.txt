@@ -1,0 +1,116 @@
+=over
+
+=item select FILEHANDLE
+X<select> X<filehandle, default>
+
+=item select
+
+Returns the currently selected filehandle.  If FILEHANDLE is supplied,
+sets the new current default filehandle for output.  This has two
+effects: first, a L<C<write>|/write FILEHANDLE> or a L<C<print>|/print
+FILEHANDLE LIST> without a filehandle
+default to this FILEHANDLE.  Second, references to variables related to
+output will refer to this output channel.
+
+For example, to set the top-of-form format for more than one
+output channel, you might do the following:
+
+    select(REPORT1);
+    $^ = 'report1_top';
+    select(REPORT2);
+    $^ = 'report2_top';
+
+FILEHANDLE may be an expression whose value gives the name of the
+actual filehandle.  Thus:
+
+    my $oldfh = select(STDERR); $| = 1; select($oldfh);
+
+Some programmers may prefer to think of filehandles as objects with
+methods, preferring to write the last example as:
+
+    STDERR->autoflush(1);
+
+(Prior to Perl version 5.14, you have to C<use IO::Handle;> explicitly
+first.)
+
+Portability issues: L<perlport/select>.
+
+=item select RBITS,WBITS,EBITS,TIMEOUT
+X<select>
+
+This calls the L<select(2)> syscall with the bit masks specified, which
+can be constructed using L<C<fileno>|/fileno FILEHANDLE> and
+L<C<vec>|/vec EXPR,OFFSET,BITS>, along these lines:
+
+    my $rin = my $win = my $ein = '';
+    vec($rin, fileno(STDIN),  1) = 1;
+    vec($win, fileno(STDOUT), 1) = 1;
+    $ein = $rin | $win;
+
+If you want to select on many filehandles, you may wish to write a
+subroutine like this:
+
+    sub fhbits {
+        my @fhlist = @_;
+        my $bits = "";
+        for my $fh (@fhlist) {
+            vec($bits, fileno($fh), 1) = 1;
+        }
+        return $bits;
+    }
+    my $rin = fhbits(\*STDIN, $tty, $mysock);
+
+The usual idiom is:
+
+ my ($nfound, $timeleft) =
+   select(my $rout = $rin, my $wout = $win, my $eout = $ein,
+                                                          $timeout);
+
+or to block until something becomes ready just do this
+
+ my $nfound =
+   select(my $rout = $rin, my $wout = $win, my $eout = $ein, undef);
+
+Most systems do not bother to return anything useful in C<$timeleft>, so
+calling L<C<select>|/select RBITS,WBITS,EBITS,TIMEOUT> in scalar context
+just returns C<$nfound>.
+
+Any of the bit masks can also be L<C<undef>|/undef EXPR>.  The timeout,
+if specified, is
+in seconds, which may be fractional.  Note: not all implementations are
+capable of returning the C<$timeleft>.  If not, they always return
+C<$timeleft> equal to the supplied C<$timeout>.
+
+You can effect a sleep of 250 milliseconds this way:
+
+    select(undef, undef, undef, 0.25);
+
+Note that whether L<C<select>|/select RBITS,WBITS,EBITS,TIMEOUT> gets
+restarted after signals (say, SIGALRM) is implementation-dependent.  See
+also L<perlport> for notes on the portability of
+L<C<select>|/select RBITS,WBITS,EBITS,TIMEOUT>.
+
+On error, L<C<select>|/select RBITS,WBITS,EBITS,TIMEOUT> behaves just
+like L<select(2)>: it returns C<-1> and sets L<C<$!>|perlvar/$!>.
+
+On some Unixes, L<select(2)> may report a socket file descriptor as
+"ready for reading" even when no data is available, and thus any
+subsequent L<C<read>|/read FILEHANDLE,SCALAR,LENGTH,OFFSET> would block.
+This can be avoided if you always use C<O_NONBLOCK> on the socket.  See
+L<select(2)> and L<fcntl(2)> for further details.
+
+The standard L<C<IO::Select>|IO::Select> module provides a
+user-friendlier interface to
+L<C<select>|/select RBITS,WBITS,EBITS,TIMEOUT>, mostly because it does
+all the bit-mask work for you.
+
+B<WARNING>: One should not attempt to mix buffered I/O (like
+L<C<read>|/read FILEHANDLE,SCALAR,LENGTH,OFFSET> or
+L<C<readline>|/readline EXPR>) with
+L<C<select>|/select RBITS,WBITS,EBITS,TIMEOUT>, except as permitted by
+POSIX, and even then only on POSIX systems.  You have to use
+L<C<sysread>|/sysread FILEHANDLE,SCALAR,LENGTH,OFFSET> instead.
+
+Portability issues: L<perlport/select>.
+
+=back

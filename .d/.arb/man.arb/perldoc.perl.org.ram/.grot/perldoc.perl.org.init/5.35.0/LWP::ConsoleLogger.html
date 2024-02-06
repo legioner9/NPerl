@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>LWP::ConsoleLogger - LWP tracing and debugging - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of LWP-ConsoleLogger - MetaCPAN" href="https://metacpan.org/dist/LWP-ConsoleLogger/releases.rss" />
+        <link rel="canonical" href="./LWP::ConsoleLogger.html" />
+        <meta name="description" content="LWP tracing and debugging" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/LWP::ConsoleLogger" />
+<meta name="twitter:title"       content="LWP::ConsoleLogger" />
+<meta name="twitter:description" content="LWP tracing and debugging" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./LWP::ConsoleLogger.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of LWP-ConsoleLogger was released.">
+      <span class="relatize">21 Jun 2023 16:17:22 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/LWP-ConsoleLogger">LWP-ConsoleLogger</a>
+  </li>
+  <li>
+    Module version: 1.000001
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/LWP-ConsoleLogger/source/lib/LWP/ConsoleLogger.pm">Source</a>
+    (<a href="https://metacpan.org/dist/LWP-ConsoleLogger/source/lib/LWP/ConsoleLogger.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/LWP-ConsoleLogger/source/lib/LWP">Browse</a>
+    (<a href="https://metacpan.org/dist/LWP-ConsoleLogger/source/lib/LWP?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/LWP-ConsoleLogger/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://github.com/oalders/lwp-consolelogger">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/LWP-ConsoleLogger/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/oalders/lwp-consolelogger">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/oalders/lwp-consolelogger/issues">Issues</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=LWP-ConsoleLogger+1.000001" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/L/LWP-ConsoleLogger.html?oncpan=1&amp;distmat=1&amp;version=1.000001&amp;grade=2" style="color: #090">195</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/L/LWP-ConsoleLogger.html?oncpan=1&amp;distmat=1&amp;version=1.000001&amp;grade=3" style="color: #900">1</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/L/LWP-ConsoleLogger.html?oncpan=1&amp;distmat=1&amp;version=1.000001&amp;grade=4">7</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/OALDERS/LWP-ConsoleLogger-1.000001">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on LWP-ConsoleLogger who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 5
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/LWP-ConsoleLogger-1.000001/index.html">86.58% Coverage </a>
+    </li>
+    <li>
+      License: artistic_2
+    </li>
+    <li>
+      Perl: v5.16.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/LWP-ConsoleLogger/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/O/OA/OALDERS/LWP-ConsoleLogger-1.000001.tar.gz">
+      Download (<span itemprop="fileSize">41.65KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FOALDERS%2FLWP-ConsoleLogger-1.000001%2Flib%2FLWP%2FConsoleLogger.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/LWP-ConsoleLogger/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/LWP-ConsoleLogger/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:LWP-ConsoleLogger">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="LWP-ConsoleLogger">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/LWP/ConsoleLogger.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="OALDERS/LWP-ConsoleLogger-1.000001"
+>1.000001
+  (OALDERS on 2023-06-21)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-1.000000"
+>1.000000
+  (OALDERS on 2022-08-17)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000044"
+>0.000044
+  (OALDERS on 2022-04-21)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000043"
+>0.000043
+  (OALDERS on 2021-03-04)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000042"
+>0.000042
+  (OALDERS on 2019-06-12)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000041"
+>0.000041
+  (OALDERS on 2019-06-12)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000040"
+>0.000040
+  (OALDERS on 2019-06-11)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000039"
+>0.000039
+  (OALDERS on 2018-08-01)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000038"
+>0.000038
+  (OALDERS on 2018-07-28)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000037"
+>0.000037
+  (OALDERS on 2018-02-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000036"
+>0.000036
+  (OALDERS on 2017-07-21)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000035"
+>0.000035
+  (OALDERS on 2017-03-01)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000034"
+>0.000034
+  (OALDERS on 2017-01-23)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000033"
+>0.000033
+  (OALDERS on 2016-12-04)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000032"
+>0.000032
+  (OALDERS on 2016-11-29)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000031"
+>0.000031
+  (OALDERS on 2016-11-25)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000030"
+>0.000030
+  (OALDERS on 2016-09-13)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000029"
+>0.000029
+  (OALDERS on 2016-09-13)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000028"
+>0.000028
+  (OALDERS on 2016-06-20)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000027-TRIAL"
+>0.000027-TRIAL DEV
+  (OALDERS on 2016-06-18)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000026"
+>0.000026
+  (OALDERS on 2016-06-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000025"
+>0.000025
+  (OALDERS on 2016-06-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000024"
+>0.000024
+  (OALDERS on 2016-05-16)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000023"
+>0.000023
+  (OALDERS on 2016-04-15)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000022"
+>0.000022
+  (OALDERS on 2016-01-29)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000021"
+>0.000021
+  (OALDERS on 2016-01-18)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000020"
+>0.000020
+  (OALDERS on 2015-06-03)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000019"
+>0.000019
+  (OALDERS on 2015-05-29)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000018"
+>0.000018
+  (OALDERS on 2015-05-27)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000017"
+>0.000017
+  (OALDERS on 2015-05-26)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000016"
+>0.000016
+  (OALDERS on 2015-05-26)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000015"
+>0.000015
+  (OALDERS on 2015-04-16)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000014"
+>0.000014
+  (OALDERS on 2015-03-18)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000013"
+>0.000013
+  (OALDERS on 2015-02-04)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000012"
+>0.000012
+  (OALDERS on 2014-09-24)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000011"
+>0.000011
+  (OALDERS on 2014-08-16)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000010"
+>0.000010
+  (OALDERS on 2014-07-26)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000009"
+>0.000009
+  (OALDERS on 2014-07-17)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000008"
+>0.000008
+  (OALDERS on 2014-07-14)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000007"
+>0.000007
+  (OALDERS on 2014-07-14)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000006"
+>0.000006
+  (OALDERS on 2014-07-14)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000005"
+>0.000005
+  (OALDERS on 2014-07-12)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000004"
+>0.000004
+  (OALDERS on 2014-06-17)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000003"
+>0.000003
+  (OALDERS on 2014-06-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000002"
+>0.000002
+  (OALDERS on 2014-06-07)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000001"
+>0.000001
+  (OALDERS on 2014-06-05)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/OALDERS/LWP-ConsoleLogger-1.000001/diff/' + encodeURIComponent(this.value) + '/lib/LWP/ConsoleLogger.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="OALDERS/LWP-ConsoleLogger-1.000001"
+>1.000001
+  (OALDERS on 2023-06-21)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-1.000000"
+>1.000000
+  (OALDERS on 2022-08-17)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000044"
+>0.000044
+  (OALDERS on 2022-04-21)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000043"
+>0.000043
+  (OALDERS on 2021-03-04)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000042"
+>0.000042
+  (OALDERS on 2019-06-12)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000041"
+>0.000041
+  (OALDERS on 2019-06-12)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000040"
+>0.000040
+  (OALDERS on 2019-06-11)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000039"
+>0.000039
+  (OALDERS on 2018-08-01)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000038"
+>0.000038
+  (OALDERS on 2018-07-28)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000037"
+>0.000037
+  (OALDERS on 2018-02-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000036"
+>0.000036
+  (OALDERS on 2017-07-21)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000035"
+>0.000035
+  (OALDERS on 2017-03-01)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000034"
+>0.000034
+  (OALDERS on 2017-01-23)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000033"
+>0.000033
+  (OALDERS on 2016-12-04)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000032"
+>0.000032
+  (OALDERS on 2016-11-29)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000031"
+>0.000031
+  (OALDERS on 2016-11-25)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000030"
+>0.000030
+  (OALDERS on 2016-09-13)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000029"
+>0.000029
+  (OALDERS on 2016-09-13)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000028"
+>0.000028
+  (OALDERS on 2016-06-20)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000027-TRIAL"
+>0.000027-TRIAL DEV
+  (OALDERS on 2016-06-18)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000026"
+>0.000026
+  (OALDERS on 2016-06-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000025"
+>0.000025
+  (OALDERS on 2016-06-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000024"
+>0.000024
+  (OALDERS on 2016-05-16)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000023"
+>0.000023
+  (OALDERS on 2016-04-15)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000022"
+>0.000022
+  (OALDERS on 2016-01-29)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000021"
+>0.000021
+  (OALDERS on 2016-01-18)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000020"
+>0.000020
+  (OALDERS on 2015-06-03)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000019"
+>0.000019
+  (OALDERS on 2015-05-29)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000018"
+>0.000018
+  (OALDERS on 2015-05-27)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000017"
+>0.000017
+  (OALDERS on 2015-05-26)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000016"
+>0.000016
+  (OALDERS on 2015-05-26)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000015"
+>0.000015
+  (OALDERS on 2015-04-16)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000014"
+>0.000014
+  (OALDERS on 2015-03-18)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000013"
+>0.000013
+  (OALDERS on 2015-02-04)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000012"
+>0.000012
+  (OALDERS on 2014-09-24)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000011"
+>0.000011
+  (OALDERS on 2014-08-16)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000010"
+>0.000010
+  (OALDERS on 2014-07-26)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000009"
+>0.000009
+  (OALDERS on 2014-07-17)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000008"
+>0.000008
+  (OALDERS on 2014-07-14)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000007"
+>0.000007
+  (OALDERS on 2014-07-14)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000006"
+>0.000006
+  (OALDERS on 2014-07-14)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000005"
+>0.000005
+  (OALDERS on 2014-07-12)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000004"
+>0.000004
+  (OALDERS on 2014-06-17)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000003"
+>0.000003
+  (OALDERS on 2014-06-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000002"
+>0.000002
+  (OALDERS on 2014-06-07)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000001"
+>0.000001
+  (OALDERS on 2014-06-05)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Class::Method::Modifiers" title="Class::Method::Modifiers" class="ellipsis">Class::Method::Modifiers</a></li>
+  <li><a href="https://metacpan.org/pod/Data::Printer" title="Data::Printer" class="ellipsis">Data::Printer</a></li>
+  <li><a href="DateTime.html" title="DateTime" class="ellipsis">DateTime</a></li>
+  <li><a href="https://metacpan.org/pod/HTML::Restrict" title="HTML::Restrict" class="ellipsis">HTML::Restrict</a></li>
+  <li><a href="https://metacpan.org/pod/HTTP::Body" title="HTTP::Body" class="ellipsis">HTTP::Body</a></li>
+  <li><a href="https://metacpan.org/pod/HTTP::CookieMonster" title="HTTP::CookieMonster" class="ellipsis">HTTP::CookieMonster</a></li>
+  <li><a href="./HTTP::Request.html" title="HTTP::Request" class="ellipsis">HTTP::Request</a></li>
+  <li><a href="./HTTP::Response.html" title="HTTP::Response" class="ellipsis">HTTP::Response</a></li>
+  <li><a href="./JSON::MaybeXS.html" title="JSON::MaybeXS" class="ellipsis">JSON::MaybeXS</a></li>
+  <li><a href="https://metacpan.org/pod/List::AllUtils" title="List::AllUtils" class="ellipsis">List::AllUtils</a></li>
+  <li><a href="./Log::Dispatch.html" title="Log::Dispatch" class="ellipsis">Log::Dispatch</a></li>
+  <li><a href="https://metacpan.org/pod/Module::Load::Conditional" title="Module::Load::Conditional" class="ellipsis">Module::Load::Conditional</a></li>
+  <li><a href="./Module::Runtime.html" title="Module::Runtime" class="ellipsis">Module::Runtime</a></li>
+  <li><a href="Moo.html" title="Moo" class="ellipsis">Moo</a></li>
+  <li><a href="https://metacpan.org/pod/MooX::StrictConstructor" title="MooX::StrictConstructor" class="ellipsis">MooX::StrictConstructor</a></li>
+  <li><a href="https://metacpan.org/pod/Parse::MIME" title="Parse::MIME" class="ellipsis">Parse::MIME</a></li>
+  <li><a href="https://metacpan.org/pod/Ref::Util" title="Ref::Util" class="ellipsis">Ref::Util</a></li>
+  <li><a href="https://metacpan.org/pod/String::Trim" title="String::Trim" class="ellipsis">String::Trim</a></li>
+  <li><a href="https://metacpan.org/pod/Sub::Exporter" title="Sub::Exporter" class="ellipsis">Sub::Exporter</a></li>
+  <li><a href="https://metacpan.org/pod/Term::Size::Any" title="Term::Size::Any" class="ellipsis">Term::Size::Any</a></li>
+  <li><a href="https://metacpan.org/pod/Text::SimpleTable::AutoWidth" title="Text::SimpleTable::AutoWidth" class="ellipsis">Text::SimpleTable::AutoWidth</a></li>
+  <li><a href="./Try::Tiny.html" title="Try::Tiny" class="ellipsis">Try::Tiny</a></li>
+  <li><a href="https://metacpan.org/pod/Types::Common::Numeric" title="Types::Common::Numeric" class="ellipsis">Types::Common::Numeric</a></li>
+  <li><a href="https://metacpan.org/pod/Types::Standard" title="Types::Standard" class="ellipsis">Types::Standard</a></li>
+  <li><a href="https://metacpan.org/pod/URI::QueryParam" title="URI::QueryParam" class="ellipsis">URI::QueryParam</a></li>
+  <li><a href="https://metacpan.org/pod/XML::Simple" title="XML::Simple" class="ellipsis">XML::Simple</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/warnings" title="warnings" class="ellipsis">warnings</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/LWP::ConsoleLogger/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=LWP%3A%3AConsoleLogger">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=LWP-ConsoleLogger">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/OALDERS/LWP-ConsoleLogger-1.000001/view/lib/LWP/ConsoleLogger.pm">This version</a>
+    </li>
+    <li>
+      <a href="./LWP::ConsoleLogger.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/PAVELSR"><img src="https://www.gravatar.com/avatar/bdd3233525e2a6ca61bbc05752111c15?d=identicon&amp;s=20" title="PAVELSR" alt="PAVELSR"></a>
+<a class="display-all" href="https://metacpan.org/author/TSIBLEY"><img src="https://www.gravatar.com/avatar/a09cbdbd4c85618a83795f01f7d217af?d=identicon&amp;s=20" title="TSIBLEY" alt="TSIBLEY"></a>
+<a class="display-all" href="https://metacpan.org/author/OALDERS"><img src="https://www.gravatar.com/avatar/7a66ba9f5f4af93dd55fcdc0e69c0b55?d=identicon&amp;s=20" title="OALDERS" alt="OALDERS"></a>
+<a class="display-all" href="https://metacpan.org/author/DBOEHMER"><img src="https://www.gravatar.com/avatar/220fbe10dba79664fe84771d5ea32763?d=identicon&amp;s=20" title="DBOEHMER" alt="DBOEHMER"></a>
+<a class="display-all" href="https://metacpan.org/author/AERO"><img src="https://www.gravatar.com/avatar/c178cdf81a17c1c59c6ee898d9e09ccf?d=identicon&amp;s=20" title="AERO" alt="AERO"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/LWP-ConsoleLogger/plussers">7 PAUSE users</a>
+</div>
+<div>
+    5 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 8 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-contrib-email="github@veracity.ca"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Andy Jack
+    </li>
+    <li class="contributor"
+      data-cpan-author="BIGPRESH"
+      data-contrib-email="davidp@preshweb.co.uk"
+    >
+      <a href="https://metacpan.org/author/BIGPRESH" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/66f9cc184db11ee7810f4bc2d029ec17?d=identicon&amp;s=20" />
+      David Precious
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="OSCHWALD"
+      data-contrib-email="goschwald@maxmind.com"
+    >
+      <a href="https://metacpan.org/author/OSCHWALD" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/2c092000b26ce71a7beb2161da998468?d=identicon&amp;s=20" />
+      Gregory Oschwald
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="HAKONH"
+      data-contrib-email="hakon.hagland@gmail.com"
+    >
+      <a href="https://metacpan.org/author/HAKONH" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/52ef20852e93826552ce3a6f4810edf1?d=identicon&amp;s=20" />
+      Håkon Hægland
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="Mohammad.Anwar@yahoo.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Mohammad S Anwar
+    </li>
+    <li class="contributor"
+      data-cpan-author="SIMBABQUE"
+      data-contrib-email="simbabque@cpan.org"
+    >
+      <a href="https://metacpan.org/author/SIMBABQUE" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/bcf66f65dcd36296129acbd96bfb0cb9?d=identicon&amp;s=20" />
+      simbabque
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="varadinsky@yahoo.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Varadinsky
+    </li>
+    <li class="contributor"
+      data-contrib-email="sromanov-dev@yandex.ru"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Сергей Романов
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/OALDERS" class="author-name">Olaf Alders 🐫</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/LWP/ConsoleLogger.pm&#39;" class="">
+<option
+  selected
+  value="OALDERS/LWP-ConsoleLogger-1.000001"
+>1.000001
+  (OALDERS on 2023-06-21)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-1.000000"
+>1.000000
+  (OALDERS on 2022-08-17)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000044"
+>0.000044
+  (OALDERS on 2022-04-21)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000043"
+>0.000043
+  (OALDERS on 2021-03-04)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000042"
+>0.000042
+  (OALDERS on 2019-06-12)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000041"
+>0.000041
+  (OALDERS on 2019-06-12)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000040"
+>0.000040
+  (OALDERS on 2019-06-11)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000039"
+>0.000039
+  (OALDERS on 2018-08-01)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000038"
+>0.000038
+  (OALDERS on 2018-07-28)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000037"
+>0.000037
+  (OALDERS on 2018-02-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000036"
+>0.000036
+  (OALDERS on 2017-07-21)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000035"
+>0.000035
+  (OALDERS on 2017-03-01)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000034"
+>0.000034
+  (OALDERS on 2017-01-23)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000033"
+>0.000033
+  (OALDERS on 2016-12-04)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000032"
+>0.000032
+  (OALDERS on 2016-11-29)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000031"
+>0.000031
+  (OALDERS on 2016-11-25)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000030"
+>0.000030
+  (OALDERS on 2016-09-13)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000029"
+>0.000029
+  (OALDERS on 2016-09-13)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000028"
+>0.000028
+  (OALDERS on 2016-06-20)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000027-TRIAL"
+>0.000027-TRIAL DEV
+  (OALDERS on 2016-06-18)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000026"
+>0.000026
+  (OALDERS on 2016-06-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000025"
+>0.000025
+  (OALDERS on 2016-06-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000024"
+>0.000024
+  (OALDERS on 2016-05-16)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000023"
+>0.000023
+  (OALDERS on 2016-04-15)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000022"
+>0.000022
+  (OALDERS on 2016-01-29)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000021"
+>0.000021
+  (OALDERS on 2016-01-18)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000020"
+>0.000020
+  (OALDERS on 2015-06-03)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000019"
+>0.000019
+  (OALDERS on 2015-05-29)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000018"
+>0.000018
+  (OALDERS on 2015-05-27)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000017"
+>0.000017
+  (OALDERS on 2015-05-26)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000016"
+>0.000016
+  (OALDERS on 2015-05-26)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000015"
+>0.000015
+  (OALDERS on 2015-04-16)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000014"
+>0.000014
+  (OALDERS on 2015-03-18)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000013"
+>0.000013
+  (OALDERS on 2015-02-04)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000012"
+>0.000012
+  (OALDERS on 2014-09-24)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000011"
+>0.000011
+  (OALDERS on 2014-08-16)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000010"
+>0.000010
+  (OALDERS on 2014-07-26)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000009"
+>0.000009
+  (OALDERS on 2014-07-17)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000008"
+>0.000008
+  (OALDERS on 2014-07-14)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000007"
+>0.000007
+  (OALDERS on 2014-07-14)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000006"
+>0.000006
+  (OALDERS on 2014-07-14)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000005"
+>0.000005
+  (OALDERS on 2014-07-12)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000004"
+>0.000004
+  (OALDERS on 2014-06-17)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000003"
+>0.000003
+  (OALDERS on 2014-06-09)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000002"
+>0.000002
+  (OALDERS on 2014-06-07)</option>
+<option
+  
+  value="OALDERS/LWP-ConsoleLogger-0.000001"
+>0.000001
+  (OALDERS on 2014-06-05)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/LWP-ConsoleLogger">LWP-ConsoleLogger-1.000001</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage one &#10;
+          • 6 direct dependents &#10;          • 6 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="LWP-ConsoleLogger-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="LWP-ConsoleLogger-1.000001">
+    <input type="hidden" name="author" value="OALDERS">
+    <input type="hidden" name="distribution" value="LWP-ConsoleLogger">
+    <button type="submit" class="favorite highlight"><span>12</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./LWP::ConsoleLogger.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>12</span> ++</a>
+</div>
+   / <span>LWP::ConsoleLogger</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./LWP::ConsoleLogger.html#NAME">NAME</a></li>
+  <li><a href="./LWP::ConsoleLogger.html#VERSION">VERSION</a></li>
+  <li><a href="./LWP::ConsoleLogger.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./LWP::ConsoleLogger.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./LWP::ConsoleLogger.html#CONSTRUCTOR">CONSTRUCTOR</a>
+    <ul>
+      <li><a href="./LWP::ConsoleLogger.html#new()">new()</a></li>
+    </ul>
+  </li>
+  <li><a href="./LWP::ConsoleLogger.html#SUBROUTINES/METHODS">SUBROUTINES/METHODS</a>
+    <ul>
+      <li><a href="./LWP::ConsoleLogger.html#dump_content(-0%7C1-)">dump_content( 0|1 )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#dump_cookies(-0%7C1-)">dump_cookies( 0|1 )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#dump_headers(-0%7C1-)">dump_headers( 0|1 )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#dump_params(-0%7C1-)">dump_params( 0|1 )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#dump_status(-0%7C1-)">dump_status( 0|1 )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#dump_text(-0%7C1-)">dump_text( 0|1 )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#dump_title(-0%7C1-)">dump_title( 0|1 )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#dump_uri(-0%7C1-)">dump_uri( 0|1 )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#pretty-(-0%7C1-)">pretty ( 0|1 )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#content_pre_filter(-sub-%7B-...-%7D-)">content_pre_filter( sub { ... } )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#request_callback">request_callback</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#response_callback">response_callback</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#text_pre_filter(-sub-%7B-...-%7D-)">text_pre_filter( sub { ... } )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#html_restrict(-HTML::Restrict-%3Enew(-...-)-)">html_restrict( HTML::Restrict-&gt;new( ... ) )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#logger(-Log::Dispatch-%3Enew(-...-)-)">logger( Log::Dispatch-&gt;new( ... ) )</a></li>
+      <li><a href="./LWP::ConsoleLogger.html#term_width(-$integer-)">term_width( $integer )</a></li>
+    </ul>
+  </li>
+  <li><a href="./LWP::ConsoleLogger.html#CAVEATS">CAVEATS</a></li>
+  <li><a href="./LWP::ConsoleLogger.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./LWP::ConsoleLogger.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>LWP::ConsoleLogger - LWP tracing and debugging</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>version 1.000001</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p>The simplest way to get started is by adding <a href="https://metacpan.org/pod/LWP::ConsoleLogger::Everywhere">LWP::ConsoleLogger::Everywhere</a> to your code and then just watching your output.</p>
+
+<pre><code>    use LWP::ConsoleLogger::Everywhere ();</code></pre>
+
+<p>If you need more control, look at <a href="https://metacpan.org/pod/LWP::ConsoleLogger::Easy">LWP::ConsoleLogger::Easy</a>.</p>
+
+<pre><code>    use LWP::ConsoleLogger::Easy qw( debug_ua );
+    use WWW::Mechanize;
+
+    my $mech           = WWW::Mechanize-&gt;new;   # or LWP::UserAgent-&gt;new() etc
+    my $console_logger = debug_ua( $mech );
+    $mech-&gt;get( &#39;https://metacpan.org&#39; );
+
+    # now watch the console for debugging output
+    # turn off header dumps
+    $console_logger-&gt;dump_headers( 0 );
+
+    $mech-&gt;get( $some_other_url );</code></pre>
+
+<p>To get down to the lowest level, use LWP::ConsoleLogger directly.</p>
+
+<pre><code>    my $ua = LWP::UserAgent-&gt;new( cookie_jar =&gt; {} );
+    my $console_logger = LWP::ConsoleLogger-&gt;new(
+        dump_content       =&gt; 1,
+        dump_text          =&gt; 1,
+        content_pre_filter =&gt; sub {
+            my $content      = shift;
+            my $content_type = shift;
+
+            # mangle content here
+            # ...
+
+            return $content;
+        },
+    );
+
+    $ua-&gt;default_header(
+        &#39;Accept-Encoding&#39; =&gt; scalar HTTP::Message::decodable() );
+
+    $ua-&gt;add_handler( &#39;response_done&#39;,
+        sub { $console_logger-&gt;response_callback( @_ ) } );
+    $ua-&gt;add_handler( &#39;request_send&#39;,
+        sub { $console_logger-&gt;request_callback( @_ ) } );
+
+    # now watch debugging output to your screen
+    $ua-&gt;get( &#39;http://nytimes.com/&#39; );</code></pre>
+
+<p>Sample output might look like this.</p>
+
+<pre><code>    GET http://www.nytimes.com/2014/04/24/technology/fcc-new-net-neutrality-rules.html
+
+    GET params:
+    .-----+-------.
+    | Key | Value |
+    +-----+-------+
+    | _r  | 1     |
+    | hp  |       |
+    &#39;-----+-------&#39;
+
+    .-----------------+--------------------------------.
+    | Request Header  | Value                          |
+    +-----------------+--------------------------------+
+    | Accept-Encoding | gzip                           |
+    | Cookie2         | $Version=&quot;1&quot;                   |
+    | Referer         | http://www.nytimes.com?foo=bar |
+    | User-Agent      | WWW-Mechanize/1.73             |
+    &#39;-----------------+--------------------------------&#39;
+
+    ==&gt; 200 OK
+
+    Title: The New York Times - Breaking News, World News &amp; Multimedia
+
+    .--------------------------+-------------------------------.
+    | Response Header          | Value                         |
+    +--------------------------+-------------------------------+
+    | Accept-Ranges            | bytes                         |
+    | Age                      | 176                           |
+    | Cache-Control            | no-cache                      |
+    | Channels                 | NytNow                        |
+    | Client-Date              | Fri, 30 May 2014 22:37:42 GMT |
+    | Client-Peer              | 170.149.172.130:80            |
+    | Client-Response-Num      | 1                             |
+    | Client-Transfer-Encoding | chunked                       |
+    | Connection               | keep-alive                    |
+    | Content-Encoding         | gzip                          |
+    | Content-Type             | text/html; charset=utf-8      |
+    | Date                     | Fri, 30 May 2014 22:37:41 GMT |
+    | NtCoent-Length           | 65951                         |
+    | Server                   | Apache                        |
+    | Via                      | 1.1 varnish                   |
+    | X-Cache                  | HIT                           |
+    | X-Varnish                | 1142859770 1142854917         |
+    &#39;--------------------------+-------------------------------&#39;
+
+    .--------------------------+-------------------------------.
+    | Text                                                     |
+    +--------------------------+-------------------------------+
+    | F.C.C., in a Shift, Backs Fast Lanes for Web Traffic...  |
+    &#39;--------------------------+-------------------------------&#39;</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>It can be hard (or at least tedious) to debug mechanize scripts. LWP::Debug is deprecated. It suggests you write your own debugging handlers, set up a proxy or install Wireshark. Those are all workable solutions, but this module exists to save you some of that work. The guts of this module are stolen from <a href="https://metacpan.org/pod/Plack::Middleware::DebugLogging">Plack::Middleware::DebugLogging</a>, which in turn stole most of its internals from <a href="Catalyst.html">Catalyst</a>. If you&#39;re new to LWP::ConsoleLogger, I suggest getting started with the <a href="https://metacpan.org/pod/LWP::ConsoleLogger::Easy">LWP::ConsoleLogger::Easy</a> wrapper. This will get you up and running in minutes. If you need to tweak the settings that <a href="https://metacpan.org/pod/LWP::ConsoleLogger::Easy">LWP::ConsoleLogger::Easy</a> chooses for you (or if you just want to be fancy), please read on.</p>
+
+<p>Since this is a debugging library, I&#39;ve left as much mutable state as possible, so that you can easily toggle output on and off and otherwise adjust how you deal with the output.</p>
+
+<h1 id="CONSTRUCTOR">CONSTRUCTOR</h1>
+
+<h2 id="new()"><a id="new"></a>new()</h2>
+
+<p>The following arguments can be passed to new(), although none are required. They can also be called as methods on an instantiated object. I&#39;ll list them here and discuss them in detail below.</p>
+
+<ul>
+
+<li><p><code>dump_content =&gt; 0|1</code></p>
+
+</li>
+<li><p><code>dump_cookies =&gt; 0|1</code></p>
+
+</li>
+<li><p><code>dump_headers =&gt; 0|1</code></p>
+
+</li>
+<li><p><code>dump_params =&gt; 0|1</code></p>
+
+</li>
+<li><p><code>dump_status =&gt; 0|1</code></p>
+
+</li>
+<li><p><code>dump_text =&gt; 0|1</code></p>
+
+</li>
+<li><p><code>dump_title =&gt; 0|1</code></p>
+
+</li>
+<li><p><code>dump_text =&gt; 0|1</code></p>
+
+</li>
+<li><p><code>dump_uri =&gt; 0|1</code></p>
+
+</li>
+<li><p><code>content_pre_filter =&gt; sub { ... }</code></p>
+
+</li>
+<li><p><code>headers_to_redact =&gt; [&#39;Authentication&#39;, &#39;Foo&#39;]</code></p>
+
+</li>
+<li><p><code>params_to_redact =&gt; [&#39;token&#39;, &#39;password&#39;]</code></p>
+
+</li>
+<li><p><code>text_pre_filter =&gt; sub { ... }</code></p>
+
+</li>
+<li><p><code>html_restrict =&gt; HTML::Restrict-&gt;new( ... )</code></p>
+
+</li>
+<li><p><code>logger =&gt; Log::Dispatch-&gt;new( ... )</code></p>
+
+</li>
+<li><p><code>pretty =&gt; 0|1</code></p>
+
+</li>
+<li><p><code>term_width =&gt; $integer</code></p>
+
+</li>
+</ul>
+
+<h1 id="SUBROUTINES/METHODS"><a id="SUBROUTINES"></a><a id="SUBROUTINES-METHODS"></a>SUBROUTINES/METHODS</h1>
+
+<h2 id="dump_content(-0|1-)"><a id="dump_content"></a><a id="dump_content--0-1"></a>dump_content( 0|1 )</h2>
+
+<p>Boolean value. If true, the actual content of your response (HTML, JSON, etc) will be dumped to your screen. Defaults to false.</p>
+
+<h2 id="dump_cookies(-0|1-)"><a id="dump_cookies"></a><a id="dump_cookies--0-1"></a>dump_cookies( 0|1 )</h2>
+
+<p>Boolean value. If true, the content of your cookies will be dumped to your screen. Defaults to false.</p>
+
+<h2 id="dump_headers(-0|1-)"><a id="dump_headers"></a><a id="dump_headers--0-1"></a>dump_headers( 0|1 )</h2>
+
+<p>Boolean value. If true, both request and response headers will be dumped to your screen. Defaults to true.</p>
+
+<p>Headers are dumped in alphabetical order.</p>
+
+<h2 id="dump_params(-0|1-)"><a id="dump_params"></a><a id="dump_params--0-1"></a>dump_params( 0|1 )</h2>
+
+<p>Boolean value. If true, both GET and POST params will be dumped to your screen. Defaults to true.</p>
+
+<p>Params are dumped in alphabetical order.</p>
+
+<h2 id="dump_status(-0|1-)"><a id="dump_status"></a><a id="dump_status--0-1"></a>dump_status( 0|1 )</h2>
+
+<p>Boolean value. If true, dumps the HTTP response code for each page being visited. Defaults to true.</p>
+
+<h2 id="dump_text(-0|1-)"><a id="dump_text"></a><a id="dump_text--0-1"></a>dump_text( 0|1 )</h2>
+
+<p>Boolean value. If true, dumps the text of your page after both the content_pre_filter and text_pre_filters have been applied. Defaults to true.</p>
+
+<h2 id="dump_title(-0|1-)"><a id="dump_title"></a><a id="dump_title--0-1"></a>dump_title( 0|1 )</h2>
+
+<p>Boolean value. If true, dumps the titles of HTML pages if your UserAgent has a <code>title</code> method and if it returns something useful. Defaults to true.</p>
+
+<h2 id="dump_uri(-0|1-)"><a id="dump_uri"></a><a id="dump_uri--0-1"></a>dump_uri( 0|1 )</h2>
+
+<p>Boolean value. If true, dumps the URI of each page being visited. Defaults to true.</p>
+
+<h2 id="pretty-(-0|1-)"><a id="pretty"></a><a id="pretty---0-1"></a>pretty ( 0|1 )</h2>
+
+<p>Boolean value. If disabled, request headers, response headers, content and text sections will be dumped without using tables. Handy for copy/pasting JSON etc for faking responses later. Defaults to true.</p>
+
+<h2 id="content_pre_filter(-sub-{-...-}-)"><a id="content_pre_filter"></a><a id="content_pre_filter--sub"></a>content_pre_filter( sub { ... } )</h2>
+
+<p>Subroutine reference. This allows you to manipulate content before it is dumped. A common use case might be stripping headers and footers away from HTML content to make it easier to detect changes in the body of the page.</p>
+
+<pre><code>    $easy_logger-&gt;content_pre_filter(
+    sub {
+        my $content      = shift;
+        my $content_type = shift; # the value of the Content-Type header
+        if (   $content_type =~ m{html}i
+            &amp;&amp; $content =~ m{&lt;!--\scontent\s--&gt;(.*)&lt;!--\sfooter}msx ) {
+            return $1;
+        }
+        return $content;
+    }
+    );</code></pre>
+
+<p>Try to make sure that your content mangling doesn&#39;t return broken HTML as that may not play well with <a href="https://metacpan.org/pod/HTML::Restrict">HTML::Restrict</a>.</p>
+
+<h2 id="request_callback">request_callback</h2>
+
+<p>Use this handler to set up console logging on your requests.</p>
+
+<pre><code>    my $ua = LWP::UserAgent-&gt;new;
+    $ua-&gt;add_handler(
+        &#39;request_send&#39;,
+        sub { $console_logger-&gt;request_callback(@_) }
+    );</code></pre>
+
+<p>This is done for you by default if you set up your logging via <a href="https://metacpan.org/pod/LWP::ConsoleLogger::Easy">LWP::ConsoleLogger::Easy</a>.</p>
+
+<h2 id="response_callback">response_callback</h2>
+
+<p>Use this handler to set up console logging on your responses.</p>
+
+<pre><code>    my $ua = LWP::UserAgent-&gt;new;
+    $ua-&gt;add_handler(
+        &#39;response_done&#39;,
+        sub { $console_logger-&gt;response_callback(@_) }
+    );</code></pre>
+
+<p>This is done for you by default if you set up your logging via <a href="https://metacpan.org/pod/LWP::ConsoleLogger::Easy">LWP::ConsoleLogger::Easy</a>.</p>
+
+<h2 id="text_pre_filter(-sub-{-...-}-)"><a id="text_pre_filter"></a><a id="text_pre_filter--sub"></a>text_pre_filter( sub { ... } )</h2>
+
+<p>Subroutine reference. This allows you to manipulate text before it is dumped. A common use case might be stripping away duplicate whitespace and/or newlines in order to improve formatting. Keep in mind that the <code>content_pre_filter</code> will have been applied to the content which is passed to the text_pre_filter. The idea is that you can strip away an HTML you don&#39;t care about in the content_pre_filter phase and then process the remainder of the content in the text_pre_filter.</p>
+
+<pre><code>    $easy_logger-&gt;text_pre_filter(
+    sub {
+        my $content      = shift;
+        my $content_type = shift; # the value of the Content-Type header
+        my $base_url     = shift;
+
+        # do something with the content
+        # ...
+
+        return ( $content, $new_content_type );
+    }
+    );</code></pre>
+
+<p>If your <code>text_pre_filter()</code> converts from HTML to plain text, be sure to return the new content type (text/plain) when you exit the sub. If you do not do this, HTML formatting will then be applied to your plain text as is explained below.</p>
+
+<p>If this is HTML content, <a href="https://metacpan.org/pod/HTML::Restrict">HTML::Restrict</a> will be applied after the text_pre_filter has been run. LWP::ConsoleLogger will then strip away some whitespace and newlines from processed HTML in its own opinionated way, in order to present you with more readable text.</p>
+
+<h2 id="html_restrict(-HTML::Restrict-&gt;new(-...-)-)"><a id="html_restrict"></a><a id="html_restrict--HTML::Restrict--new"></a>html_restrict( HTML::Restrict-&gt;new( ... ) )</h2>
+
+<p>If the content_type indicates HTML then HTML::Restrict will be used to strip tags from your content in the text rendering process. You may pass your own HTML::Restrict object, if you like. This would be helpful in situations where you still do want to have some tags in your text.</p>
+
+<h2 id="logger(-Log::Dispatch-&gt;new(-...-)-)"><a id="logger"></a><a id="logger--Log::Dispatch--new"></a>logger( Log::Dispatch-&gt;new( ... ) )</h2>
+
+<p>By default all data will be dumped to your console (as the name of this module implies) using Log::Dispatch. However, you may use your own Log::Dispatch module in order to facilitate logging to files or any other output which Log::Dispatch supports.</p>
+
+<h2 id="term_width(-$integer-)"><a id="term_width"></a><a id="term_width---integer"></a>term_width( $integer )</h2>
+
+<p>By default this module will try to find the maximum width of your terminal and use all available space when displaying tabular data. You may use this parameter to constrain the tables to an arbitrary width.</p>
+
+<h1 id="CAVEATS">CAVEATS</h1>
+
+<p>I&#39;ve written this to suit my needs and there are a lot of things I haven&#39;t considered. For example, I&#39;m mostly assuming that the content will be text, HTML, JSON or XML.</p>
+
+<p>The test suite is not very robust either. If you&#39;d like to contribute to this module and you can&#39;t find an appropriate test, do add something to the example folder (either a new script or alter an existing one), so that I can see what your patch does.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Olaf Alders &lt;olaf@wundercounter.com&gt;</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>This software is Copyright (c) 2014 by MaxMind, Inc.</p>
+
+<p>This is free software, licensed under:</p>
+
+<pre><code>  The Artistic License 2.0 (GPL Compatible)</code></pre></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install LWP::ConsoleLogger, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm LWP::ConsoleLogger</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install LWP::ConsoleLogger</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./LWP::ConsoleLogger.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

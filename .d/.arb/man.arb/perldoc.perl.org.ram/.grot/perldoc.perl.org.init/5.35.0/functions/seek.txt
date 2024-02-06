@@ -1,0 +1,57 @@
+=over
+
+=item seek FILEHANDLE,POSITION,WHENCE
+X<seek> X<fseek> X<filehandle, position>
+
+Sets FILEHANDLE's position, just like the L<fseek(3)> call of C C<stdio>.
+FILEHANDLE may be an expression whose value gives the name of the
+filehandle.  The values for WHENCE are C<0> to set the new position
+I<in bytes> to POSITION; C<1> to set it to the current position plus
+POSITION; and C<2> to set it to EOF plus POSITION, typically
+negative.  For WHENCE you may use the constants C<SEEK_SET>,
+C<SEEK_CUR>, and C<SEEK_END> (start of the file, current position, end
+of the file) from the L<Fcntl> module.  Returns C<1> on success, false
+otherwise.
+
+Note the emphasis on bytes: even if the filehandle has been set to operate
+on characters (for example using the C<:encoding(UTF-8)> I/O layer), the
+L<C<seek>|/seek FILEHANDLE,POSITION,WHENCE>,
+L<C<tell>|/tell FILEHANDLE>, and
+L<C<sysseek>|/sysseek FILEHANDLE,POSITION,WHENCE>
+family of functions use byte offsets, not character offsets,
+because seeking to a character offset would be very slow in a UTF-8 file.
+
+If you want to position the file for
+L<C<sysread>|/sysread FILEHANDLE,SCALAR,LENGTH,OFFSET> or
+L<C<syswrite>|/syswrite FILEHANDLE,SCALAR,LENGTH,OFFSET>, don't use
+L<C<seek>|/seek FILEHANDLE,POSITION,WHENCE>, because buffering makes its
+effect on the file's read-write position unpredictable and non-portable.
+Use L<C<sysseek>|/sysseek FILEHANDLE,POSITION,WHENCE> instead.
+
+Due to the rules and rigors of ANSI C, on some systems you have to do a
+seek whenever you switch between reading and writing.  Amongst other
+things, this may have the effect of calling stdio's L<clearerr(3)>.
+A WHENCE of C<1> (C<SEEK_CUR>) is useful for not moving the file position:
+
+    seek($fh, 0, 1);
+
+This is also useful for applications emulating C<tail -f>.  Once you hit
+EOF on your read and then sleep for a while, you (probably) have to stick in a
+dummy L<C<seek>|/seek FILEHANDLE,POSITION,WHENCE> to reset things.  The
+L<C<seek>|/seek FILEHANDLE,POSITION,WHENCE> doesn't change the position,
+but it I<does> clear the end-of-file condition on the handle, so that the
+next C<readline FILE> makes Perl try again to read something.  (We hope.)
+
+If that doesn't work (some I/O implementations are particularly
+cantankerous), you might need something like this:
+
+    for (;;) {
+        for ($curpos = tell($fh); $_ = readline($fh);
+             $curpos = tell($fh)) {
+            # search for some stuff and put it into files
+        }
+        sleep($for_a_while);
+        seek($fh, $curpos, 0);
+    }
+
+=back

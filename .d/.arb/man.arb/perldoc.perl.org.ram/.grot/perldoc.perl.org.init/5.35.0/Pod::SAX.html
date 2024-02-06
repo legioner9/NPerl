@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Pod::SAX - a SAX parser for Pod - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Pod-SAX - MetaCPAN" href="https://metacpan.org/dist/Pod-SAX/releases.rss" />
+        <link rel="canonical" href="./Pod::SAX.html" />
+        <meta name="description" content="a SAX parser for Pod" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Pod::SAX" />
+<meta name="twitter:title"       content="Pod::SAX" />
+<meta name="twitter:description" content="a SAX parser for Pod" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Pod::SAX.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Pod-SAX was released.">
+      <span class="relatize">29 Jan 2003 18:25:32 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Pod-SAX">Pod-SAX</a>
+  </li>
+  <li>
+    Module version: 0.14
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Pod-SAX/source/lib/Pod/SAX.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Pod-SAX/source/lib/Pod/SAX.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Pod-SAX/source/lib/Pod">Browse</a>
+    (<a href="https://metacpan.org/dist/Pod-SAX/source/lib/Pod?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Pod-SAX/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Pod-SAX/contribute">How to Contribute</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Pod-SAX">Issues</a>
+      (4)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Pod-SAX+0.14" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Pod-SAX.html?oncpan=1&amp;distmat=1&amp;version=0.14&amp;grade=2" style="color: #090">26</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Pod-SAX.html?oncpan=1&amp;distmat=1&amp;version=0.14&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Pod-SAX.html?oncpan=1&amp;distmat=1&amp;version=0.14&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/MSERGEANT/Pod-SAX-0.14">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Pod-SAX who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 0
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Pod-SAX-0.14/index.html">70.28% Coverage </a>
+    </li>
+    <li>
+      License: unknown
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Pod-SAX/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/M/MS/MSERGEANT/Pod-SAX-0.14.tar.gz">
+      Download (<span itemprop="fileSize">13.75KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FMSERGEANT%2FPod-SAX-0.14%2Flib%2FPod%2FSAX.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Pod-SAX/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Pod-SAX/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Pod-SAX">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Pod-SAX">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Pod/SAX.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="MSERGEANT/Pod-SAX-0.14"
+>0.14
+  (MSERGEANT on 2003-01-29)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.13"
+>0.13
+  (MSERGEANT on 2003-01-04)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.11"
+>0.11
+  (MSERGEANT on 2002-08-30)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.10"
+>0.10
+  (MSERGEANT on 2002-06-24)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.08"
+>0.08
+  (MSERGEANT on 2002-06-16)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.07"
+>0.07
+  (MSERGEANT on 2002-06-14)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.06"
+>0.06
+  (MSERGEANT on 2002-06-14)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.05"
+>0.05
+  (MSERGEANT on 2002-06-14)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.04"
+>0.04
+  (MSERGEANT on 2002-06-13)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.03"
+>0.03
+  (MSERGEANT on 2002-06-13)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.02"
+>0.02
+  (MSERGEANT on 2002-06-12)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.01"
+>0.01
+  (MSERGEANT on 2002-05-19)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/MSERGEANT/Pod-SAX-0.14/diff/' + encodeURIComponent(this.value) + '/lib/Pod/SAX.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="MSERGEANT/Pod-SAX-0.14"
+>0.14
+  (MSERGEANT on 2003-01-29)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.13"
+>0.13
+  (MSERGEANT on 2003-01-04)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.11"
+>0.11
+  (MSERGEANT on 2002-08-30)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.10"
+>0.10
+  (MSERGEANT on 2002-06-24)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.08"
+>0.08
+  (MSERGEANT on 2002-06-16)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.07"
+>0.07
+  (MSERGEANT on 2002-06-14)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.06"
+>0.06
+  (MSERGEANT on 2002-06-14)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.05"
+>0.05
+  (MSERGEANT on 2002-06-14)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.04"
+>0.04
+  (MSERGEANT on 2002-06-13)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.03"
+>0.03
+  (MSERGEANT on 2002-06-13)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.02"
+>0.02
+  (MSERGEANT on 2002-06-12)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.01"
+>0.01
+  (MSERGEANT on 2002-05-19)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><i class="ttip" title="dynamic_config enabled">unknown</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Pod::SAX/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Pod%3A%3ASAX">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Pod-SAX">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/MSERGEANT/Pod-SAX-0.14/view/lib/Pod/SAX.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Pod::SAX.html">Latest version</a>
+    </li>
+    <li>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/MSERGEANT" class="author-name">Matt Sergeant</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Pod/SAX.pm&#39;" class="">
+<option
+  selected
+  value="MSERGEANT/Pod-SAX-0.14"
+>0.14
+  (MSERGEANT on 2003-01-29)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.13"
+>0.13
+  (MSERGEANT on 2003-01-04)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.11"
+>0.11
+  (MSERGEANT on 2002-08-30)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.10"
+>0.10
+  (MSERGEANT on 2002-06-24)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.08"
+>0.08
+  (MSERGEANT on 2002-06-16)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.07"
+>0.07
+  (MSERGEANT on 2002-06-14)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.06"
+>0.06
+  (MSERGEANT on 2002-06-14)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.05"
+>0.05
+  (MSERGEANT on 2002-06-14)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.04"
+>0.04
+  (MSERGEANT on 2002-06-13)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.03"
+>0.03
+  (MSERGEANT on 2002-06-13)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.02"
+>0.02
+  (MSERGEANT on 2002-06-12)</option>
+<option
+  
+  value="MSERGEANT/Pod-SAX-0.01"
+>0.01
+  (MSERGEANT on 2002-05-19)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Pod-SAX">Pod-SAX-0.14</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage one &#10;
+          • 2 direct dependents &#10;          • 2 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Pod-SAX-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Pod-SAX-0.14">
+    <input type="hidden" name="author" value="MSERGEANT">
+    <input type="hidden" name="distribution" value="Pod-SAX">
+    <button type="submit" class="favorite"><span></span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Pod::SAX.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite">
+<span></span> ++</a>
+</div>
+   / <span>Pod::SAX</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Pod::SAX.html#NAME">NAME</a></li>
+  <li><a href="./Pod::SAX.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Pod::SAX.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Pod::SAX.html#API">API</a>
+    <ul>
+      <li><a href="./Pod::SAX.html#new()">new()</a></li>
+      <li><a href="./Pod::SAX.html#parse()">parse()</a></li>
+      <li><a href="./Pod::SAX.html#parse_file(),-parse_string(),-parse_uri(),-parse_fh()">parse_file(), parse_string(), parse_uri(), parse_fh()</a></li>
+    </ul>
+  </li>
+  <li><a href="./Pod::SAX.html#XML-Format">XML Format</a>
+    <ul>
+      <li><a href="./Pod::SAX.html#=pod-(or-any-other-way-to-begin-the-document)">=pod (or any other way to begin the document)</a></li>
+      <li><a href="./Pod::SAX.html#=head1-and-=headN">=head1 and =headN</a></li>
+      <li><a href="./Pod::SAX.html#Paragraphs">Paragraphs</a></li>
+      <li><a href="./Pod::SAX.html#Verbatim">Verbatim</a></li>
+      <li><a href="./Pod::SAX.html#=over/=back">=over/=back</a></li>
+      <li><a href="./Pod::SAX.html#=item">=item</a></li>
+      <li><a href="./Pod::SAX.html#=begin-foo">=begin foo</a></li>
+      <li><a href="./Pod::SAX.html#Sequences-or-Formatting-Codes">Sequences or Formatting Codes</a>
+        <ul>
+          <li><a href="./Pod::SAX.html#Links">Links</a></li>
+          <li><a href="./Pod::SAX.html#Entities">Entities</a></li>
+          <li><a href="./Pod::SAX.html#Non-Breaking-Space">Non-Breaking Space</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="./Pod::SAX.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Pod::SAX.html#BUGS">BUGS</a></li>
+  <li><a href="./Pod::SAX.html#LICENSE">LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Pod::SAX - a SAX parser for Pod</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  my $h = XML::SAX::Writer-&gt;new();
+  my $p = Pod::SAX-&gt;new( Handler =&gt; $h );
+  $p-&gt;parse_uri(&#39;perlpodspec.pod&#39;);</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>Very simply, this module parses POD (or perl) files and turns the Plain Old Documentation into SAX events (which often you&#39;ll use to turn into XML, but there are other uses as well).</p>
+
+<p>The aim of this module is not round-tripping, so some things may be lost in the conversion. The aim is to be as standards compliant as possible, while giving you very simple access to the data.</p>
+
+<p>The main motivation for this module though was simple standards compliance - all the Pod parsers out there seem to have their own unique way of doing things, and so my aim was to unify that and allow the flexibility that SAX gives me at the same time.</p>
+
+<p>For an introduction to SAX, please read <a href="https://metacpan.org/pod/XML::SAX::Intro">XML::SAX::Intro</a>.</p>
+
+<p>One very important point to note is that just because this is a SAX module it doesn&#39;t mandate that the results are XML. You could just as easily use this module to extract all filenames from a POD file, or extract custom =for/=begin sections. And because it uses standardised interfaces this is a lot simpler than working with any other POD parser out there, and the knowledge is transferrable.</p>
+
+<h1 id="API">API</h1>
+
+<h2 id="new()"><a id="new"></a>new()</h2>
+
+<p>To construct a parser simply call new(). It is customary to pass in the handler object that will receive the SAX events at this time, though you do not have to:</p>
+
+<pre><code>  my $parser = Pod::SAX-&gt;new(Handler =&gt; $h);</code></pre>
+
+<p>You can re-use this parser object multiple times. It&#39;s possible to change the handler at a later date using <code>$parser-</code>set_handler()&gt;. This and many other API calls are documented in <a href="https://metacpan.org/pod/XML::SAX::Base">XML::SAX::Base</a>, which this module inherits from.</p>
+
+<h2 id="parse()"><a id="parse"></a>parse()</h2>
+
+<p>This method is an auto-detecting parser - it will try and figure out what you passed to it (a string, a file handle or a filename) and parse the data using the appropriate technique.</p>
+
+<h2 id="parse_file(),-parse_string(),-parse_uri(),-parse_fh()"><a id="parse_file"></a><a id="parse_file--parse_string--parse_uri--parse_fh"></a>parse_file(), parse_string(), parse_uri(), parse_fh()</h2>
+
+<p>These are simply the non-detecting methods that parse() uses internally. Use these if you are paranoid about what you&#39;re parsing, and don&#39;t want the overhead of SAX trying to guess.</p>
+
+<h1 id="XML-Format"><a id="XML"></a>XML Format</h1>
+
+<p>The XML format is intended to be simple and map fairly closely to the source POD. The documentation here shows the POD marker and the tag that it maps to.</p>
+
+<h2 id="=pod-(or-any-other-way-to-begin-the-document)"><a id="pod--or-any-other-way-to-begin-the-document"></a>=pod (or any other way to begin the document)</h2>
+
+<pre><code>  &lt;pod&gt;
+  &lt;!-- Pod::SAX v0.14, using POD::Parser v1.13 --&gt;</code></pre>
+
+<p>The comment is automatically generated so that you can see what version of Pod::SAX was used in parsing this document. The closing <code>&lt;/pod&gt;</code> tag is generated when the end of the POD is reached.</p>
+
+<h2 id="=head1-and-=headN"><a id="head1-and--headN"></a>=head1 and =headN</h2>
+
+<pre><code>  &lt;head1&gt;Text here&lt;/head1&gt;</code></pre>
+
+<p>All head levels are supported.</p>
+
+<h2 id="Paragraphs">Paragraphs</h2>
+
+<p>Plain paragraphs are represented with:</p>
+
+<pre><code>  &lt;para&gt;text&lt;/para&gt;</code></pre>
+
+<h2 id="Verbatim">Verbatim</h2>
+
+<p>Verbatim sections (i.e. when you indent the text) are represented with:</p>
+
+<pre><code>  &lt;verbatim&gt;text&lt;/verbatim&gt;</code></pre>
+
+<h2 id="=over/=back"><a id="over-back"></a>=over/=back</h2>
+
+<p>Pod::SAX automatically detects whether a list is itemized or ordered (i.e. whether it should have bullet points or numbers), and so =over/=back are represented by:</p>
+
+<pre><code>  &lt;itemizedlist&gt;  &lt;/itemizedlist&gt;</code></pre>
+
+<p>and</p>
+
+<pre><code>  &lt;orderedlist&gt;   &lt;/orderedlist&gt;</code></pre>
+
+<p>respectively. The indent value (as in &quot;=over 4&quot;) is saved in the <code>indent_width</code> attribute, although for most purposes this can be ignored.</p>
+
+<h2 id="=item"><a id="item"></a>=item</h2>
+
+<p>For both bulleted and numbered lists, the =item tag always maps to:</p>
+
+<pre><code>  &lt;listitem&gt;text&lt;/listitem&gt;</code></pre>
+
+<p>If a paragraph follows an =item tag (and occurs before any =back) then the paragraph is included immediately after the tag, so for example:</p>
+
+<pre><code>  =item foo
+  
+  Some text about foo</code></pre>
+
+<p>Maps to:</p>
+
+<pre><code>  &lt;listitem&gt;foo
+    &lt;para&gt;Some text about foo&lt;/para&gt;
+  &lt;/listitem&gt;</code></pre>
+
+<h2 id="=begin-foo"><a id="begin-foo"></a>=begin foo</h2>
+
+<p>And &quot;=for foo&quot; (the two are semantically equivalent in Pod)</p>
+
+<pre><code>  &lt;markup type=&quot;foo&quot; ordinary_paragraph=&quot;0&quot;&gt;text here&lt;/markup&gt;</code></pre>
+
+<p>If the markup section is meant for ordinary processing (see the perlpodspec section on &quot;About Data Paragraphs and &quot;=begin/=end&quot; Regions&quot;), which means the type name begins with a colon as in:</p>
+
+<pre><code>  =begin :biblio</code></pre>
+
+<p>Then the markup produced indicates that using:</p>
+
+<pre><code>  &lt;markup type=&quot;biblio&quot; ordinary_paragraph=&quot;1&quot;/&gt;</code></pre>
+
+<p>And the parser will expand all interior Pod commands as it should.</p>
+
+<p><b>Note</b>: There is <i>no</i> special treatment of =begin html or =begin XML or any variant thereof. The contents of those markers will simply be treated as text, and it is up to the user of this module to parse that data as XML if they wish to do so.</p>
+
+<h2 id="Sequences-or-Formatting-Codes"><a id="Sequences"></a>Sequences or Formatting Codes</h2>
+
+<p>Sequences in POD consist of the following:</p>
+
+<pre><code>  L&lt;&gt; - Links
+  E&lt;&gt; - Entities
+  I&lt;&gt; - Italics
+  B&lt;&gt; - Bold
+  C&lt;&gt; - Code
+  F&lt;&gt; - Filename
+  S&lt;&gt; - Non breaking space
+  X&lt;&gt; - Index marker
+  Z&lt;&gt; - Null</code></pre>
+
+<p>Most sequences are simply converted to tags of the same name, case preserved:</p>
+
+<pre><code>  &lt;B&gt;This is bold text&lt;/B&gt; and also &lt;I&gt;some in italics&lt;/I&gt;.</code></pre>
+
+<p>Special treatment is given to the L&lt;&gt; E&lt;&gt; and S&lt;&gt; tags only.</p>
+
+<h3 id="Links">Links</h3>
+
+<p>Links in Pod are... funky.</p>
+
+<p>Parsing links is really hard, so don&#39;t expect that I&#39;ve got this right. Basically though you&#39;ve got this mapping:</p>
+
+<pre><code>  L&lt;foo/bar&gt;
+   =&gt; &lt;link type=&quot;pod&quot; page=&quot;foo&quot; section=&quot;bar&quot;&gt;foo&lt;/link&gt;
+  
+  L&lt;Some Foo|foo&gt;
+   =&gt; &lt;link type=&quot;pod&quot; page=&quot;foo&quot; section=&quot;&quot;&gt;Some Foo&lt;/link&gt;
+  
+  L&lt;select(3)&gt;
+   =&gt; &lt;link type=&quot;man&quot; page=&quot;select(3)&quot; section=&quot;&quot;&gt;select(3)&lt;/link&gt;
+  
+  L&lt;http://foo.com&gt;
+   =&gt; &lt;xlink href=&quot;http://foo.com&quot;&gt;http://foo.com&lt;/xlink&gt;</code></pre>
+
+<p>And many variations thereof! Basically it should do the right thing</p>
+
+<h3 id="Entities">Entities</h3>
+
+<p>In POD an E&lt;&gt; marker defines an entity. In pod these are single characters only, and take either a text form, in which case they map to the standard HTML entities (e.g. ouml, Agrave etc), or a decimal number in which case they map to the unicode character at that code point.</p>
+
+<p>In Pod::SAX entities are always converted to unicode and never generate any tags or markers in the data stream so it will be as though the entity was never there.</p>
+
+<h3 id="Non-Breaking-Space"><a id="Non"></a>Non-Breaking Space</h3>
+
+<p>Non breaking space is simply achieved by changing all space within the S&lt;&gt; section into the unicode codepoint 160 - the non-breaking space character. Normally this is enough to do the right thing, but if you need to you can detect this with a regexp.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Matt Sergeant, matt@sergeant.org. Copyright AxKit.com Ltd 2002</p>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>There may be bugs in the unicode handling on perl 5.8, because it&#39;s just really hard to get things right on 5.8 when dealing with unicode. :-)</p>
+
+<h1 id="LICENSE">LICENSE</h1>
+
+<p>This is free software. You may use it and redistribute it under the same terms as Perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Pod::SAX, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Pod::SAX</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Pod::SAX</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Pod::SAX.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

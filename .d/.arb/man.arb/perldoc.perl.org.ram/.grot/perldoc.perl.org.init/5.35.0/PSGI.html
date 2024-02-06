@@ -1,0 +1,1258 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>PSGI - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of PSGI - MetaCPAN" href="https://metacpan.org/dist/PSGI/releases.rss" />
+        <link rel="canonical" href="PSGI.html" />
+        <meta name="description" content="Perl Web Server Gateway Interface Specification" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/PSGI" />
+<meta name="twitter:title"       content="PSGI" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="PSGI.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of PSGI was released.">
+      <span class="relatize">24 Jul 2013 20:13:37 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/PSGI">PSGI</a>
+  </li>
+  <li>
+    Module version: 1.102
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/PSGI/source/PSGI.pm">Source</a>
+    (<a href="https://metacpan.org/dist/PSGI/source/PSGI.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g p" href="https://metacpan.org/dist/PSGI/source/PSGI.pod">Pod Source</a>
+    (<a href="https://metacpan.org/dist/PSGI/source/PSGI.pod?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/PSGI/source">Browse</a>
+    (<a href="https://metacpan.org/dist/PSGI/source?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/PSGI/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/PSGI/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/plack/psgi-specs">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=PSGI">Issues</a>
+      (0)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=PSGI+1.102" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/PSGI.html?oncpan=1&amp;distmat=1&amp;version=1.102&amp;grade=2" style="color: #090">2</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/PSGI.html?oncpan=1&amp;distmat=1&amp;version=1.102&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/PSGI.html?oncpan=1&amp;distmat=1&amp;version=1.102&amp;grade=4">1</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/MIYAGAWA/PSGI-1.102">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on PSGI who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/PSGI-1.102/index.html">% Coverage </a>
+    </li>
+    <li>
+      License: unknown
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/PSGI/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/M/MI/MIYAGAWA/PSGI-1.102.tar.gz">
+      Download (<span itemprop="fileSize">35.85KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FMIYAGAWA%2FPSGI-1.102%2FPSGI.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/PSGI/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/PSGI/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:PSGI">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="PSGI">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/PSGI.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="MIYAGAWA/PSGI-1.102"
+>1.102
+  (MIYAGAWA on 2013-07-24)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.101"
+>1.101
+  (MIYAGAWA on 2012-07-21)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.10"
+>1.10
+  (MIYAGAWA on 2012-03-09)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.03"
+>1.03
+  (MIYAGAWA on 2009-10-27)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.02"
+>1.02
+  (MIYAGAWA on 2009-10-13)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.00"
+>1.00
+  (MIYAGAWA on 2009-10-13)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.01"
+>1.01
+  (MIYAGAWA on 2009-10-13)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.0"
+>1.0
+  (MIYAGAWA on 2009-10-13)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MIYAGAWA/PSGI-1.09_3"
+>1.09_3 DEV
+  (MIYAGAWA on 2011-06-22)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.09_2"
+>1.09_2 DEV
+  (MIYAGAWA on 2011-06-07)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.09_1"
+>1.09_1 DEV
+  (MIYAGAWA on 2011-03-28)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/MIYAGAWA/PSGI-1.102/diff/' + encodeURIComponent(this.value) + '/PSGI.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="MIYAGAWA/PSGI-1.102"
+>1.102
+  (MIYAGAWA on 2013-07-24)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.101"
+>1.101
+  (MIYAGAWA on 2012-07-21)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.10"
+>1.10
+  (MIYAGAWA on 2012-03-09)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.03"
+>1.03
+  (MIYAGAWA on 2009-10-27)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.02"
+>1.02
+  (MIYAGAWA on 2009-10-13)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.00"
+>1.00
+  (MIYAGAWA on 2009-10-13)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.01"
+>1.01
+  (MIYAGAWA on 2009-10-13)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.0"
+>1.0
+  (MIYAGAWA on 2009-10-13)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MIYAGAWA/PSGI-1.09_3"
+>1.09_3 DEV
+  (MIYAGAWA on 2011-06-22)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.09_2"
+>1.09_2 DEV
+  (MIYAGAWA on 2011-06-07)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.09_1"
+>1.09_1 DEV
+  (MIYAGAWA on 2011-03-28)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><i class="ttip" title="dynamic_config enabled">unknown</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/PSGI/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=PSGI">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=PSGI">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/MIYAGAWA/PSGI-1.102/view/PSGI.pm">This version</a>
+    </li>
+    <li>
+      <a href="PSGI.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/RUZ"><img src="https://www.gravatar.com/avatar/4abd932fc6526c3d830c73f3c436d5aa?d=identicon&amp;s=20" title="RUZ" alt="RUZ"></a>
+<a class="display-all" href="https://metacpan.org/author/KOORCHIK"><img src="https://www.gravatar.com/avatar/388f0564e6cb0de0996b4f0d3c50e9f8?d=identicon&amp;s=20" title="KOORCHIK" alt="KOORCHIK"></a>
+<a class="display-all" href="https://metacpan.org/author/DAVECROSS"><img src="https://www.gravatar.com/avatar/d9f8bf9efe6afedec1b5b4ea24301933?d=identicon&amp;s=20" title="DAVECROSS" alt="DAVECROSS"></a>
+<a class="display-all" href="https://metacpan.org/author/ARJONES"><img src="https://www.gravatar.com/avatar/779fdd029141571e2650d9060978c1a1?d=identicon&amp;s=20" title="ARJONES" alt="ARJONES"></a>
+<a class="display-all" href="https://metacpan.org/author/PHAYLON"><img src="https://www.gravatar.com/avatar/32ab988963e09ce6fbda10b86b030470?d=identicon&amp;s=20" title="PHAYLON" alt="PHAYLON"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/PSGI/plussers">32 PAUSE users</a>
+</div>
+<div>
+    19 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/MIYAGAWA" class="author-name">Tatsuhiko Miyagawa</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/PSGI.pm&#39;" class="">
+<option
+  selected
+  value="MIYAGAWA/PSGI-1.102"
+>1.102
+  (MIYAGAWA on 2013-07-24)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.101"
+>1.101
+  (MIYAGAWA on 2012-07-21)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.10"
+>1.10
+  (MIYAGAWA on 2012-03-09)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.03"
+>1.03
+  (MIYAGAWA on 2009-10-27)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.02"
+>1.02
+  (MIYAGAWA on 2009-10-13)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.00"
+>1.00
+  (MIYAGAWA on 2009-10-13)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.01"
+>1.01
+  (MIYAGAWA on 2009-10-13)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.0"
+>1.0
+  (MIYAGAWA on 2009-10-13)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MIYAGAWA/PSGI-1.09_3"
+>1.09_3 DEV
+  (MIYAGAWA on 2011-06-22)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.09_2"
+>1.09_2 DEV
+  (MIYAGAWA on 2011-06-07)</option>
+<option
+  
+  value="MIYAGAWA/PSGI-1.09_1"
+>1.09_1 DEV
+  (MIYAGAWA on 2011-03-28)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/PSGI">PSGI-1.102</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage one &#10;
+          • 5 direct dependents &#10;          • 9 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="PSGI-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="PSGI-1.102">
+    <input type="hidden" name="author" value="MIYAGAWA">
+    <input type="hidden" name="distribution" value="PSGI">
+    <button type="submit" class="favorite highlight"><span>51</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="PSGI.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>51</span> ++</a>
+</div>
+   / <span>PSGI</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="PSGI.html#NAME">NAME</a></li>
+  <li><a href="PSGI.html#ABSTRACT">ABSTRACT</a></li>
+  <li><a href="PSGI.html#TERMINOLOGY">TERMINOLOGY</a></li>
+  <li><a href="PSGI.html#SPECIFICATION">SPECIFICATION</a>
+    <ul>
+      <li><a href="PSGI.html#Application">Application</a>
+        <ul>
+          <li><a href="PSGI.html#The-Environment">The Environment</a></li>
+          <li><a href="PSGI.html#The-Input-Stream">The Input Stream</a></li>
+          <li><a href="PSGI.html#The-Error-Stream">The Error Stream</a></li>
+          <li><a href="PSGI.html#The-Response">The Response</a>
+            <ul>
+              <li><a href="PSGI.html#Status">Status</a></li>
+              <li><a href="PSGI.html#Headers">Headers</a></li>
+              <li><a href="PSGI.html#Content-Type">Content-Type</a></li>
+              <li><a href="PSGI.html#Content-Length">Content-Length</a></li>
+              <li><a href="PSGI.html#Body">Body</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="PSGI.html#Delayed-Response-and-Streaming-Body">Delayed Response and Streaming Body</a></li>
+      <li><a href="PSGI.html#Middleware1">Middleware</a></li>
+    </ul>
+  </li>
+  <li><a href="PSGI.html#CHANGELOGS">CHANGELOGS</a></li>
+  <li><a href="PSGI.html#ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</a></li>
+  <li><a href="PSGI.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="PSGI.html#CONTRIBUTORS">CONTRIBUTORS</a></li>
+  <li><a href="PSGI.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>PSGI - Perl Web Server Gateway Interface Specification</p>
+
+<h1 id="ABSTRACT">ABSTRACT</h1>
+
+<p>This document specifies a standard interface between web servers and Perl web applications or frameworks. This interface is designed to promote web application portability and reduce the duplication of effort by web application framework developers.</p>
+
+<p>Please keep in mind that PSGI is not Yet Another web application framework. PSGI is a specification to decouple web server environments from web application framework code. Nor is PSGI a web application API. Web application developers (end users) will not run their web applications directly using the PSGI interface, but instead are encouraged to use frameworks that support PSGI.</p>
+
+<h1 id="TERMINOLOGY">TERMINOLOGY</h1>
+
+<dl>
+
+<dt id="Web-Servers"><a id="Web"></a>Web Servers</dt>
+<dd>
+
+<p><i>Web servers</i> accept HTTP requests issued by web clients, dispatching those requests to web applications if configured to do so, and return HTTP responses to the request-initiating clients.</p>
+
+</dd>
+<dt id="PSGI-Server"><a id="PSGI"></a>PSGI Server</dt>
+<dd>
+
+<p>A <i>PSGI Server</i> is a Perl program providing an environment for a <i>PSGI application</i> to run in.</p>
+
+<p>PSGI specifying an interface for web applications and the main purpose of web applications being to be served to the Internet, a <i>PSGI Server</i> will most likely be either: part of a web server (like Apache mod_perl), connected to a web server (with FastCGI, SCGI), invoked by a web server (as in plain old CGI), or be a standalone web server itself, written entirely or partly in Perl.</p>
+
+<p>There is, however, no requirement for a <i>PSGI Server</i> to actually be a web server or part of one, as <i>PSGI</i> only defines an interface between the server and the application, not between the server and the world.</p>
+
+<p>A <i>PSGI Server</i> is often also called <i>PSGI Application Container</i> because it is similar to a <i>Java Servlet container</i>, which is Java process providing an environment for <i>Java Servlets</i>.</p>
+
+</dd>
+<dt id="Applications">Applications</dt>
+<dd>
+
+<p><i>Web applications</i> accept HTTP requests and return HTTP responses.</p>
+
+<p><i>PSGI applications</i> are web applications conforming to the PSGI interface, prescribing they take the form of a code reference with defined input and output.</p>
+
+<p>For simplicity, <i>PSGI Applications</i> will also be referred to as <i>Applications</i> for the remainder of this document.</p>
+
+</dd>
+<dt id="Middleware">Middleware</dt>
+<dd>
+
+<p><i>Middleware</i> is a PSGI application (a code reference) <i>and</i> a <i>Server</i>. <i>Middleware</i> looks like an <i>application</i> when called from a <i>server</i>, and it in turn can call other <i>applications</i>. It can be thought of a <i>plugin</i> to extend a PSGI application.</p>
+
+</dd>
+<dt id="Framework-developers"><a id="Framework"></a>Framework developers</dt>
+<dd>
+
+<p><i>Framework developers</i> are the authors of web application frameworks. They write adapters (or engines) which accept PSGI input, run a web application, and return a PSGI response to the <i>server</i>.</p>
+
+</dd>
+<dt id="Web-application-developers"><a id="Web1"></a>Web application developers</dt>
+<dd>
+
+<p><i>Web application developers</i> are developers who write code on top of a web application framework. These developers should never have to deal with PSGI directly.</p>
+
+</dd>
+</dl>
+
+<h1 id="SPECIFICATION">SPECIFICATION</h1>
+
+<h2 id="Application">Application</h2>
+
+<p>A PSGI application is a Perl code reference. It takes exactly one argument, the environment, and returns an array reference containing exactly three values.</p>
+
+<pre><code>  my $app = sub {
+      my $env = shift;
+      return [
+          &#39;200&#39;,
+          [ &#39;Content-Type&#39; =&gt; &#39;text/plain&#39; ],
+          [ &quot;Hello World&quot; ], # or IO::Handle-like object
+      ];
+  };</code></pre>
+
+<h3 id="The-Environment"><a id="The"></a>The Environment</h3>
+
+<p>The environment MUST be a hash reference that includes CGI-like headers, as detailed below. The application is free to modify the environment. The environment MUST include these keys (adopted from <a href="http://www.python.org/dev/peps/pep-0333/">PEP 333</a>, <a href="http://rack.rubyforge.org/doc/files/SPEC.html">Rack</a> and <a href="http://jackjs.org/jsgi-spec.html">JSGI</a>) except when they would normally be empty.</p>
+
+<p>When an environment key is described as a boolean, its value MUST conform to Perl&#39;s notion of boolean-ness. This means that an empty string or an explicit <code>0</code> are both valid false values. If a boolean key is not present, an application MAY treat this as a false value.</p>
+
+<p>The values for all CGI keys (named without a period) MUST be a scalar string.</p>
+
+<p>See below for details.</p>
+
+<ul>
+
+<li><p><code>REQUEST_METHOD</code>: The HTTP request method, such as &quot;GET&quot; or &quot;POST&quot;. This <b>MUST NOT</b> be an empty string, and so is always required.</p>
+
+</li>
+<li><p><code>SCRIPT_NAME</code>: The initial portion of the request URL&#39;s <i>path</i>, corresponding to the application. This tells the application its virtual &quot;location&quot;. This may be an empty string if the application corresponds to the server&#39;s root URI.</p>
+
+<p>If this key is not empty, it MUST start with a forward slash (<code>/</code>).</p>
+
+</li>
+<li><p><code>PATH_INFO</code>: The remainder of the request URL&#39;s <i>path</i>, designating the virtual &quot;location&quot; of the request&#39;s target within the application. This may be an empty string if the request URL targets the application root and does not have a trailing slash. This value should be URI decoded by servers in order to be compatible with <a href="http://www.ietf.org/rfc/rfc3875">RFC 3875</a>.</p>
+
+<p>If this key is not empty, it MUST start with a forward slash (<code>/</code>).</p>
+
+</li>
+<li><p><code>REQUEST_URI</code>: The undecoded, raw request URL line. It is the raw URI path and query part that appears in the HTTP <code>GET /... HTTP/1.x</code> line and doesn&#39;t contain URI scheme and host names.</p>
+
+<p>Unlike <code>PATH_INFO</code>, this value <b>SHOULD NOT</b> be decoded by servers. It is an application&#39;s responsibility to properly decode paths in order to map URLs to application handlers if they choose to use this key instead of <code>PATH_INFO</code>.</p>
+
+</li>
+<li><p><code>QUERY_STRING</code>: The portion of the request URL that follows the <code>?</code>, if any. This key MAY be empty, but <b>MUST</b> always be present, even if empty.</p>
+
+</li>
+<li><p><code>SERVER_NAME</code>, <code>SERVER_PORT</code>: When combined with <code>SCRIPT_NAME</code> and <code>PATH_INFO</code>, these keys can be used to complete the URL. Note, however, that <code>HTTP_HOST</code>, if present, should be used in preference to <code>SERVER_NAME</code> for reconstructing the request URL. <code>SERVER_NAME</code> and <code>SERVER_PORT</code> <b>MUST NOT</b> be empty strings, and are always required.</p>
+
+</li>
+<li><p><code>SERVER_PROTOCOL</code>: The version of the protocol the client used to send the request. Typically this will be something like &quot;HTTP/1.0&quot; or &quot;HTTP/1.1&quot; and may be used by the application to determine how to treat any HTTP request headers.</p>
+
+</li>
+<li><p><code>CONTENT_LENGTH</code>: The length of the content in bytes, as an integer. The presence or absence of this key should correspond to the presence or absence of HTTP Content-Length header in the request.</p>
+
+</li>
+<li><p><code>CONTENT_TYPE</code>: The request&#39;s MIME type, as specified by the client. The presence or absence of this key should correspond to the presence or absence of HTTP Content-Type header in the request.</p>
+
+</li>
+<li><p><code>HTTP_*</code> Keys: These keys correspond to the client-supplied HTTP request headers. The presence or absence of these keys should correspond to the presence or absence of the appropriate HTTP header in the request.</p>
+
+<p>The key is obtained converting the HTTP header field name to upper case, replacing all occurrences of hyphens <code>-</code> with underscores <code>_</code> and prepending <code>HTTP_</code>, as in <a href="http://www.ietf.org/rfc/rfc3875">RFC 3875</a>.</p>
+
+<p>If there are multiple header lines sent with the same key, the server should treat them as if they were sent in one line and combine them with <code>, </code>, as in <a href="http://www.ietf.org/rfc/rfc2616">RFC 2616</a>.</p>
+
+</li>
+</ul>
+
+<p>A server should attempt to provide as many other CGI variables as are applicable. Note, however, that an application that uses any CGI variables other than the ones listed above are necessarily non-portable to web servers that do not support the relevant extensions.</p>
+
+<p>In addition to the keys above, the PSGI environment MUST also include these PSGI-specific keys:</p>
+
+<ul>
+
+<li><p><code>psgi.version</code>: An array reference [1,1] representing this version of PSGI. The first number is the major version and the second it the minor version.</p>
+
+</li>
+<li><p><code>psgi.url_scheme</code>: A string <code>http</code> or <code>https</code>, depending on the request URL.</p>
+
+</li>
+<li><p><code>psgi.input</code>: the input stream. See below for details.</p>
+
+</li>
+<li><p><code>psgi.errors</code>: the error stream. See below for details.</p>
+
+</li>
+<li><p><code>psgi.multithread</code>: This is a boolean value, which MUST be true if the application may be simultaneously invoked by another thread in the same process, false otherwise.</p>
+
+</li>
+<li><p><code>psgi.multiprocess</code>: This is a boolean value, which MUST be true if an equivalent application object may be simultaneously invoked by another process, false otherwise.</p>
+
+</li>
+<li><p><code>psgi.run_once</code>: A boolean which is true if the server expects (but does not guarantee!) that the application will only be invoked this one time during the life of its containing process. Normally, this will only be true for a server based on CGI (or something similar).</p>
+
+</li>
+<li><p><code>psgi.nonblocking</code>: A boolean which is true if the server is calling the application in an non-blocking event loop.</p>
+
+</li>
+<li><p><code>psgi.streaming</code>: A boolean which is true if the server supports callback style delayed response and streaming writer object.</p>
+
+</li>
+</ul>
+
+<p>The server or the application can store its own data in the environment as well. These keys MUST contain at least one dot, and SHOULD be prefixed uniquely.</p>
+
+<p>The <code>psgi.</code> prefix is reserved for use with the PSGI core specification, and <code>psgix.</code> prefix is reserved for officially blessed extensions. These prefixes <b>MUST NOT</b> be used by other servers or application. See <a href="https://metacpan.org/pod/distribution/PSGI/PSGI/Extensions.pod">psgi-extensions</a> for the list of officially approved extensions.</p>
+
+<p>The environment <b>MUST NOT</b> contain keys named <code>HTTP_CONTENT_TYPE</code> or <code>HTTP_CONTENT_LENGTH</code>.</p>
+
+<p>One of <code>SCRIPT_NAME</code> or <code>PATH_INFO</code> MUST be set. When <code>REQUEST_URI</code> is <code>/</code>, <code>PATH_INFO</code> should be <code>/</code> and <code>SCRIPT_NAME</code> should be empty. <code>SCRIPT_NAME</code> <b>MUST NOT</b> be <code>/</code>, but MAY be empty.</p>
+
+<h3 id="The-Input-Stream"><a id="The1"></a>The Input Stream</h3>
+
+<p>The input stream in <code>psgi.input</code> is an <a href="https://metacpan.org/pod/IO::Handle">IO::Handle</a>-like object which streams the raw HTTP POST or PUT data. If it is a file handle then it MUST be opened in binary mode. The input stream <b>MUST</b> respond to <code>read</code> and MAY implement <code>seek</code>.</p>
+
+<p>Perl&#39;s built-in filehandles or <a href="https://metacpan.org/pod/IO::Handle">IO::Handle</a> based objects should work as-is in a PSGI server. Application developers <b>SHOULD NOT</b> inspect the type or class of the stream. Instead, they SHOULD simply call <code>read</code> on the object.</p>
+
+<p>Application developers <b>SHOULD NOT</b> use Perl&#39;s built-in <code>read</code> or iterator (<code>&lt;$fh&gt;</code>) to read from the input stream. Instead, application developers should call <code>read</code> as a method (<code>$fh-&gt;read</code>) to allow for duck typing.</p>
+
+<p>Framework developers, if they know the input stream will be used with the built-in read() in any upstream code they can&#39;t touch, SHOULD use PerlIO or a tied handle to work around with this problem.</p>
+
+<p>The input stream object is expected to provide a <code>read</code> method:</p>
+
+<dl>
+
+<dt id="read">read</dt>
+<dd>
+
+<pre><code>  $input-&gt;read($buf, $len [, $offset ]);</code></pre>
+
+<p>Returns the number of characters actually read, 0 at end of file, or undef if there was an error.</p>
+
+</dd>
+</dl>
+
+<p>It may also implement an optional <code>seek</code> method. If <code>psgix.input.buffered</code> environment is true, it MUST implement the <code>seek</code> method.</p>
+
+<dl>
+
+<dt id="seek">seek</dt>
+<dd>
+
+<pre><code>  $input-&gt;seek($pos, $whence);</code></pre>
+
+<p>Returns 1 on success, 0 otherwise.</p>
+
+</dd>
+</dl>
+
+<p>See the <a href="https://metacpan.org/pod/IO::Handle">IO::Handle</a> documentation for more details on exactly how these methods should work.</p>
+
+<h3 id="The-Error-Stream"><a id="The2"></a>The Error Stream</h3>
+
+<p>The error stream in <code>psgi.errors</code> is an <a href="https://metacpan.org/pod/IO::Handle">IO::Handle</a>-like object to print errors. The error stream must implement a <code>print</code> method.</p>
+
+<p>As with the input stream, Perl&#39;s built-in filehandles or <a href="https://metacpan.org/pod/IO::Handle">IO::Handle</a> based objects should work as-is in a PSGI server. Application developers <b>SHOULD NOT</b> inspect the type or class of the stream. Instead, they SHOULD simply call <code>print</code> on the object.</p>
+
+<dl>
+
+<dt id="print">print</dt>
+<dd>
+
+<pre><code>  $errors-&gt;print($error);</code></pre>
+
+<p>Returns true if successful.</p>
+
+</dd>
+</dl>
+
+<h3 id="The-Response"><a id="The3"></a>The Response</h3>
+
+<p>Applications MUST return a response as either a three element array reference, or a code reference for a delayed/streaming response.</p>
+
+<p>The response array reference consists of the following elements:</p>
+
+<h4 id="Status">Status</h4>
+
+<p>An HTTP status code. This MUST be an integer greater than or equal to 100, and SHOULD be an HTTP status code as documented in <a href="http://www.w3.org/Protocols/rfc2616">RFC 2616</a>.</p>
+
+<h4 id="Headers">Headers</h4>
+
+<p>The headers MUST be an array reference (<b>not</b> a hash reference) of key/value pairs. This means it MUST contain an even number of elements.</p>
+
+<p>The header <b>MUST NOT</b> contain a key named <code>Status</code>, nor any keys with <code>:</code> or newlines in their name. It <b>MUST NOT</b> contain any keys that end in <code>-</code> or <code>_</code>.</p>
+
+<p>All keys MUST consist only of letters, digits, <code>_</code> or <code>-</code>. All keys MUST start with a letter. The value of the header <b>MUST</b> be a scalar string and defined. The value string <b>MUST NOT</b> contain characters below octal 037 i.e. chr(31).</p>
+
+<p>If the same key name appears multiple times in an array ref, those header lines MUST be sent to the client separately (e.g. multiple <code>Set-Cookie</code> lines).</p>
+
+<h4 id="Content-Type"><a id="Content"></a>Content-Type</h4>
+
+<p>There MUST be a <code>Content-Type</code> except when the <code>Status</code> is 1xx, 204 or 304, in which case there <b>MUST NOT</b> be a content type.</p>
+
+<h4 id="Content-Length"><a id="Content1"></a>Content-Length</h4>
+
+<p>There <b>MUST NOT</b> be a <code>Content-Length</code> header when the <code>Status</code> is 1xx, 204 or 304.</p>
+
+<p>If the Status is not 1xx, 204 or 304 and there is no <code>Content-Length</code> header, a PSGI server MAY calculate the content length by looking at the Body. This value can then be appended to the list of headers returned by the application.</p>
+
+<h4 id="Body">Body</h4>
+
+<p>The response body MUST be returned from the application as either an array reference or a handle containing the response body as byte strings. The body MUST be encoded into appropriate encodings and <b>MUST NOT</b> contain wide characters (&gt; 255).</p>
+
+<ul>
+
+<li><p>If the body is an array reference, it is expected to contain an array of lines which make up the body.</p>
+
+<pre><code>  my $body = [ &quot;Hello\n&quot;, &quot;World\n&quot; ];</code></pre>
+
+<p>Note that the elements in an array reference are <b>NOT REQUIRED</b> to end in a newline. A server SHOULD write each elements as-is to the client, and <b>SHOULD NOT</b> care if the line ends with newline or not.</p>
+
+<p>An array reference with a single value is valid. So <code>[ $html ]</code> is a valid response body.</p>
+
+</li>
+<li><p>The body can instead be a handle, either a Perl built-in filehandle or an <a href="https://metacpan.org/pod/IO::Handle">IO::Handle</a>-like object.</p>
+
+<pre><code>  open my $body, &quot;&lt;/path/to/file&quot;;
+  open my $body, &quot;&lt;:via(SomePerlIO)&quot;, ...;
+  my $body = IO::File-&gt;new(&quot;/path/to/file&quot;);
+
+  # mock class that implements getline() and close()
+  my $body = SomeClass-&gt;new();</code></pre>
+
+<p>Servers <b>SHOULD NOT</b> check the type or class of the body. Instead, they should simply call <code>getline</code> to iterate over the body, and call <code>close</code> when done.</p>
+
+<p>Servers MAY check if the body is a real filehandle using <code>fileno</code> and <code>Scalar::Util::reftype</code>. If the body is real filehandle, the server MAY optimize using techniques like <i>sendfile(2)</i>.</p>
+
+<p>The body object MAY also respond to a <code>path</code> method. This method is expected to return the path to a file accessible by the server. This allows the server to use this information instead of a file descriptor number to serve the file.</p>
+
+<p>Servers SHOULD set the <code>$/</code> special variable to the buffer size when reading content from <code>$body</code> using the <code>getline</code> method. This is done by setting <code>$/</code> with a reference to an integer (<code>$/ = \8192</code>).</p>
+
+<p>If the body filehandle is a Perl built-in filehandle <a href="https://metacpan.org/pod/IO::Handle">IO::Handle</a> object, they will respect this value. Similarly, an object which provides the same API MAY also respect this special variable, but are not required to do so.</p>
+
+</li>
+</ul>
+
+<h2 id="Delayed-Response-and-Streaming-Body"><a id="Delayed"></a>Delayed Response and Streaming Body</h2>
+
+<p>The PSGI interface allows applications and servers to provide a callback-style response instead of the three-element array reference. This allows for a delayed response and a streaming body (server push).</p>
+
+<p>This interface SHOULD be implemented by PSGI servers, and <code>psgi.streaming</code> environment MUST be set to true in such servers.</p>
+
+<p>To enable a delayed response, the application SHOULD return a callback as its response. An application MAY check if the <code>psgi.streaming</code> environment is true and falls back to the direct response if it isn&#39;t.</p>
+
+<p>This callback will be called with <i>another</i> subroutine reference (referred to as the <i>responder</i> from now on) as its only argument. The <i>responder</i> should in turn be called with the standard three element array reference response. This is best illustrated with an example:</p>
+
+<pre><code>  my $app = sub {
+      my $env = shift;
+
+      # Delays response until it fetches content from the network
+      return sub {
+          my $responder = shift;
+
+          fetch_content_from_server(sub {
+              my $content = shift;
+              $responder-&gt;([ 200, $headers, [ $content ] ]);
+          });
+      };
+  };</code></pre>
+
+<p>An application MAY omit the third element (the body) when calling the <i>responder</i>. If the body is omitted, the <i>responder</i> MUST return <i>yet another</i> object which implements <code>write</code> and <code>close</code> methods. Again, an example illustrates this best.</p>
+
+<pre><code>  my $app = sub {
+      my $env = shift;
+
+      # immediately starts the response and stream the content
+      return sub {
+          my $responder = shift;
+          my $writer = $responder-&gt;(
+              [ 200, [ &#39;Content-Type&#39;, &#39;application/json&#39; ]]);
+
+          wait_for_events(sub {
+              my $new_event = shift;
+              if ($new_event) {
+                  $writer-&gt;write($new_event-&gt;as_json . &quot;\n&quot;);
+              } else {
+                  $writer-&gt;close;
+              }
+          });
+      };
+  };</code></pre>
+
+<p>This delayed response and streaming API is useful if you want to implement a non-blocking I/O based server streaming or long-poll Comet push technology, but could also be used to implement unbuffered writes in a blocking server.</p>
+
+<h2 id="Middleware1">Middleware</h2>
+
+<p>A <i>middleware</i> component takes another PSGI application and runs it. From the perspective of a server, a middleware component is a PSGI application. From the perspective of the application being run by the middleware component, the middleware is the server. Generally, this will be done in order to implement some sort of pre-processing on the PSGI environment hash or post-processing on the response.</p>
+
+<p>Here&#39;s a simple example that appends a special HTTP header <i>X-PSGI-Used</i> to any PSGI application.</p>
+
+<pre><code>  # $app is a simple PSGI application
+  my $app = sub {
+      my $env = shift;
+      return [ &#39;200&#39;,
+               [ &#39;Content-Type&#39; =&gt; &#39;text/plain&#39; ],
+               [ &quot;Hello World&quot; ] ];
+  };
+
+  # $xheader is a piece of middleware that wraps $app
+  my $xheader = sub {
+      my $env = shift;
+      my $res = $app-&gt;($env);
+      push @{$res-&gt;[1]}, &#39;X-PSGI-Used&#39; =&gt; 1;
+      return $res;
+  };</code></pre>
+
+<p>Middleware MUST behave exactly like a PSGI application from the perspective of a server. Middleware MAY decide not to support the streaming interface discussed earlier, but SHOULD pass through the response types that it doesn&#39;t understand.</p>
+
+<h1 id="CHANGELOGS">CHANGELOGS</h1>
+
+<p>1.1: 2010.02.xx</p>
+
+<ul>
+
+<li><p>Added optional PSGI keys as extensions: <code>psgix.logger</code> and <code>psgix.session</code>.</p>
+
+</li>
+<li><p><code>psgi.streaming</code> SHOULD be implemented by PSGI servers, rather than <b>MAY</b>.</p>
+
+</li>
+<li><p>PSGI keys <code>psgi.run_once</code>, <code>psgi.nonblocking</code> and <code>psgi.streaming</code> MUST be set by PSGI servers.</p>
+
+</li>
+<li><p>Removed <code>poll_cb</code> from writer methods.</p>
+
+</li>
+</ul>
+
+<h1 id="ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</h1>
+
+<p>Some parts of this specification are adopted from the following specifications.</p>
+
+<ul>
+
+<li><p>PEP333 Python Web Server Gateway Interface <a href="http://www.python.org/dev/peps/pep-0333">http://www.python.org/dev/peps/pep-0333</a></p>
+
+</li>
+<li><p>Rack <a href="http://rack.rubyforge.org/doc/SPEC.html">http://rack.rubyforge.org/doc/SPEC.html</a></p>
+
+</li>
+<li><p>JSGI Specification <a href="http://jackjs.org/jsgi-spec.html">http://jackjs.org/jsgi-spec.html</a></p>
+
+</li>
+</ul>
+
+<p>I&#39;d like to thank authors of these great documents.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Tatsuhiko Miyagawa &lt;miyagawa@bulknews.net&gt;</p>
+
+<h1 id="CONTRIBUTORS">CONTRIBUTORS</h1>
+
+<p>The following people have contributed to the PSGI specification and Plack implementation by commiting their code, sending patches, reporting bugs, asking questions, suggesting useful advices, nitpicking, chatting on IRC or commenting on my blog (in no particular order):</p>
+
+<pre><code>  Tokuhiro Matsuno
+  Kazuhiro Osawa
+  Yuval Kogman
+  Kazuho Oku
+  Alexis Sukrieh
+  Takatoshi Kitano
+  Stevan Little
+  Daisuke Murase
+  mala
+  Pedro Melo
+  Jesse Luehrs
+  John Beppu
+  Shawn M Moore
+  Mark Stosberg
+  Matt S Trout
+  Jesse Vincent
+  Chia-liang Kao
+  Dave Rolsky
+  Hans Dieter Pearcey
+  Randy J Ray
+  Benjamin Trott
+  Max Maischein
+  Slaven Rezi&#x107;
+  Marcel Gr&uuml;nauer
+  Masayoshi Sekimura
+  Brock Wilcox
+  Piers Cawley
+  Daisuke Maki
+  Kang-min Liu
+  Yasuhiro Matsumoto
+  Ash Berlin
+  Artur Bergman
+  Simon Cozens
+  Scott McWhirter
+  Jiro Nishiguchi
+  Masahiro Chiba
+  Patrick Donelan
+  Paul Driver
+  Florian Ragwitz</code></pre>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>Copyright Tatsuhiko Miyagawa, 2009-2011.</p>
+
+<p>This document is licensed under the Creative Commons license by-sa.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install PSGI, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm PSGI</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install PSGI</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="PSGI.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

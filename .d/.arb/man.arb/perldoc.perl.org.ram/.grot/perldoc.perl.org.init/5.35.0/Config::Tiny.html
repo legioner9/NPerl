@@ -1,0 +1,1660 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Config::Tiny - Read/Write .ini style files with as little code as possible - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Config-Tiny - MetaCPAN" href="https://metacpan.org/dist/Config-Tiny/releases.rss" />
+        <link rel="canonical" href="./Config::Tiny.html" />
+        <meta name="description" content="Read/Write .ini style files with as little code as possible" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Config::Tiny" />
+<meta name="twitter:title"       content="Config::Tiny" />
+<meta name="twitter:description" content="Read/Write .ini style files with as little code as possible" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Config::Tiny.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Config-Tiny was released.">
+      <span class="relatize">12 Oct 2023 23:47:12 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Config-Tiny">Config-Tiny</a>
+  </li>
+  <li>
+    Module version: 2.30
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Config-Tiny/source/lib/Config/Tiny.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Config-Tiny/source/lib/Config/Tiny.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Config-Tiny/source/lib/Config">Browse</a>
+    (<a href="https://metacpan.org/dist/Config-Tiny/source/lib/Config?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Config-Tiny/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Config-Tiny/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/ronsavage/Config-Tiny">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/ronsavage/Config-Tiny/issues">Issues</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Config-Tiny+2.30" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/Config-Tiny.html?oncpan=1&amp;distmat=1&amp;version=2.30&amp;grade=2" style="color: #090">1447</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/Config-Tiny.html?oncpan=1&amp;distmat=1&amp;version=2.30&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/Config-Tiny.html?oncpan=1&amp;distmat=1&amp;version=2.30&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/RSAVAGE/Config-Tiny-2.30">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Config-Tiny who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 2
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Config-Tiny-2.30/index.html">83.67% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.8.1
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Config-Tiny/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/R/RS/RSAVAGE/Config-Tiny-2.30.tgz">
+      Download (<span itemprop="fileSize">26.34KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FRSAVAGE%2FConfig-Tiny-2.30%2Flib%2FConfig%2FTiny.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Config-Tiny/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Config-Tiny/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Config-Tiny">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Config-Tiny">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Config/Tiny.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="RSAVAGE/Config-Tiny-2.30"
+>2.30
+  (RSAVAGE on 2023-10-12)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.29"
+>2.29
+  (RSAVAGE on 2023-04-05)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.28"
+>2.28
+  (RSAVAGE on 2022-01-04)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.27"
+>2.27
+  (RSAVAGE on 2021-09-22)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.26"
+>2.26
+  (RSAVAGE on 2021-02-01)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.14"
+>2.14
+  (ADAMK on 2011-03-24)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.13"
+>2.13
+  (ADAMK on 2010-09-03)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.12"
+>2.12
+  (ADAMK on 2007-11-02)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.10"
+>2.10
+  (ADAMK on 2006-10-01)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.25"
+>2.25
+  (RSAVAGE on 2021-02-01)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.24"
+>2.24
+  (RSAVAGE on 2019-06-17)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.23"
+>2.23
+  (RSAVAGE on 2015-10-13)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.22"
+>2.22
+  (RSAVAGE on 2015-02-16)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.21"
+>2.21
+  (RSAVAGE on 2015-02-15)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.20"
+>2.20
+  (RSAVAGE on 2013-11-23)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.19"
+>2.19
+  (RSAVAGE on 2013-09-14)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.18"
+>2.18
+  (RSAVAGE on 2013-09-14)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.17"
+>2.17
+  (RSAVAGE on 2013-09-13)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.16"
+>2.16
+  (RSAVAGE on 2013-09-06)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.15"
+>2.15
+  (RSAVAGE on 2013-09-02)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.08"
+>2.08
+  (ADAMK on 2006-07-15)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.07"
+>2.07
+  (ADAMK on 2006-05-10)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.06"
+>2.06
+  (ADAMK on 2006-04-22)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.05"
+>2.05
+  (ADAMK on 2006-02-23)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.04"
+>2.04
+  (ADAMK on 2005-12-30)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.03"
+>2.03
+  (ADAMK on 2005-12-29)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.02"
+>2.02
+  (ADAMK on 2005-06-19)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.01"
+>2.01
+  (ADAMK on 2005-03-24)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.00"
+>2.00
+  (ADAMK on 2004-07-22)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.9"
+>1.9
+  (ADAMK on 2004-07-07)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.8"
+>1.8
+  (ADAMK on 2004-06-30)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.7"
+>1.7
+  (ADAMK on 2004-06-22)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.6"
+>1.6
+  (ADAMK on 2004-02-29)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.5"
+>1.5
+  (ADAMK on 2004-01-07)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.4"
+>1.4
+  (ADAMK on 2003-12-24)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.3"
+>1.3
+  (ADAMK on 2003-11-06)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.2"
+>1.2
+  (ADAMK on 2003-08-13)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1"
+>1
+  (ADAMK on 2002-12-21)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-0.3"
+>0.3
+  (ADAMK on 2002-12-09)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-0.2"
+>0.2
+  (ADAMK on 2002-11-26)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-0.1"
+>0.1
+  (ADAMK on 2002-11-13)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/RSAVAGE/Config-Tiny-2.30/diff/' + encodeURIComponent(this.value) + '/lib/Config/Tiny.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="RSAVAGE/Config-Tiny-2.30"
+>2.30
+  (RSAVAGE on 2023-10-12)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.29"
+>2.29
+  (RSAVAGE on 2023-04-05)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.28"
+>2.28
+  (RSAVAGE on 2022-01-04)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.27"
+>2.27
+  (RSAVAGE on 2021-09-22)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.26"
+>2.26
+  (RSAVAGE on 2021-02-01)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.14"
+>2.14
+  (ADAMK on 2011-03-24)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.13"
+>2.13
+  (ADAMK on 2010-09-03)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.12"
+>2.12
+  (ADAMK on 2007-11-02)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.10"
+>2.10
+  (ADAMK on 2006-10-01)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.25"
+>2.25
+  (RSAVAGE on 2021-02-01)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.24"
+>2.24
+  (RSAVAGE on 2019-06-17)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.23"
+>2.23
+  (RSAVAGE on 2015-10-13)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.22"
+>2.22
+  (RSAVAGE on 2015-02-16)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.21"
+>2.21
+  (RSAVAGE on 2015-02-15)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.20"
+>2.20
+  (RSAVAGE on 2013-11-23)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.19"
+>2.19
+  (RSAVAGE on 2013-09-14)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.18"
+>2.18
+  (RSAVAGE on 2013-09-14)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.17"
+>2.17
+  (RSAVAGE on 2013-09-13)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.16"
+>2.16
+  (RSAVAGE on 2013-09-06)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.15"
+>2.15
+  (RSAVAGE on 2013-09-02)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.08"
+>2.08
+  (ADAMK on 2006-07-15)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.07"
+>2.07
+  (ADAMK on 2006-05-10)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.06"
+>2.06
+  (ADAMK on 2006-04-22)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.05"
+>2.05
+  (ADAMK on 2006-02-23)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.04"
+>2.04
+  (ADAMK on 2005-12-30)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.03"
+>2.03
+  (ADAMK on 2005-12-29)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.02"
+>2.02
+  (ADAMK on 2005-06-19)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.01"
+>2.01
+  (ADAMK on 2005-03-24)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.00"
+>2.00
+  (ADAMK on 2004-07-22)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.9"
+>1.9
+  (ADAMK on 2004-07-07)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.8"
+>1.8
+  (ADAMK on 2004-06-30)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.7"
+>1.7
+  (ADAMK on 2004-06-22)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.6"
+>1.6
+  (ADAMK on 2004-02-29)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.5"
+>1.5
+  (ADAMK on 2004-01-07)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.4"
+>1.4
+  (ADAMK on 2003-12-24)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.3"
+>1.3
+  (ADAMK on 2003-11-06)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.2"
+>1.2
+  (ADAMK on 2003-08-13)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1"
+>1
+  (ADAMK on 2002-12-21)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-0.3"
+>0.3
+  (ADAMK on 2002-12-09)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-0.2"
+>0.2
+  (ADAMK on 2002-11-26)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-0.1"
+>0.1
+  (ADAMK on 2002-11-13)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/File::Spec" title="File::Spec" class="ellipsis">File::Spec</a></li>
+  <li><a href="https://metacpan.org/pod/File::Temp" title="File::Temp" class="ellipsis">File::Temp</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/utf8" title="utf8" class="ellipsis">utf8</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Config::Tiny/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Config%3A%3ATiny">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Config-Tiny">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/RSAVAGE/Config-Tiny-2.30/view/lib/Config/Tiny.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Config::Tiny.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/MISHIN"><img src="https://www.gravatar.com/avatar/7aefe037fc617ef89780ad89de3deb87?d=identicon&amp;s=20" title="MISHIN" alt="MISHIN"></a>
+<a class="display-all" href="https://metacpan.org/author/SMONFF"><img src="https://www.gravatar.com/avatar/4ede99c3eac52827f5cb4b68b408ca41?d=identicon&amp;s=20" title="SMONFF" alt="SMONFF"></a>
+<a class="display-all" href="https://metacpan.org/author/MITHUN"><img src="https://www.gravatar.com/avatar/41a11eddab777db7ae1a8961dce61cc8?d=identicon&amp;s=20" title="MITHUN" alt="MITHUN"></a>
+<a class="display-all" href="https://metacpan.org/author/MARIOROY"><img src="https://www.gravatar.com/avatar/112c64e088284a78b9afbcb83c125613?d=identicon&amp;s=20" title="MARIOROY" alt="MARIOROY"></a>
+<a class="display-all" href="https://metacpan.org/author/XAV"><img src="https://www.gravatar.com/avatar/37f9cbd6749507cadc1df1efeec95771?d=identicon&amp;s=20" title="XAV" alt="XAV"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Config-Tiny/plussers">17 PAUSE users</a>
+</div>
+<div>
+    17 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="ADAMK"
+      data-contrib-email="adamk@cpan.org"
+    >
+      <a href="https://metacpan.org/author/ADAMK" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/884124d0169f41668fb3f948b2ba8b0a?d=identicon&amp;s=20" />
+      Adam Kennedy
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/RSAVAGE" class="author-name">Ron Savage</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Config/Tiny.pm&#39;" class="">
+<option
+  selected
+  value="RSAVAGE/Config-Tiny-2.30"
+>2.30
+  (RSAVAGE on 2023-10-12)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.29"
+>2.29
+  (RSAVAGE on 2023-04-05)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.28"
+>2.28
+  (RSAVAGE on 2022-01-04)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.27"
+>2.27
+  (RSAVAGE on 2021-09-22)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.26"
+>2.26
+  (RSAVAGE on 2021-02-01)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.14"
+>2.14
+  (ADAMK on 2011-03-24)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.13"
+>2.13
+  (ADAMK on 2010-09-03)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.12"
+>2.12
+  (ADAMK on 2007-11-02)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.10"
+>2.10
+  (ADAMK on 2006-10-01)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.25"
+>2.25
+  (RSAVAGE on 2021-02-01)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.24"
+>2.24
+  (RSAVAGE on 2019-06-17)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.23"
+>2.23
+  (RSAVAGE on 2015-10-13)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.22"
+>2.22
+  (RSAVAGE on 2015-02-16)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.21"
+>2.21
+  (RSAVAGE on 2015-02-15)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.20"
+>2.20
+  (RSAVAGE on 2013-11-23)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.19"
+>2.19
+  (RSAVAGE on 2013-09-14)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.18"
+>2.18
+  (RSAVAGE on 2013-09-14)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.17"
+>2.17
+  (RSAVAGE on 2013-09-13)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.16"
+>2.16
+  (RSAVAGE on 2013-09-06)</option>
+<option
+  
+  value="RSAVAGE/Config-Tiny-2.15"
+>2.15
+  (RSAVAGE on 2013-09-02)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.08"
+>2.08
+  (ADAMK on 2006-07-15)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.07"
+>2.07
+  (ADAMK on 2006-05-10)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.06"
+>2.06
+  (ADAMK on 2006-04-22)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.05"
+>2.05
+  (ADAMK on 2006-02-23)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.04"
+>2.04
+  (ADAMK on 2005-12-30)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.03"
+>2.03
+  (ADAMK on 2005-12-29)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.02"
+>2.02
+  (ADAMK on 2005-06-19)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.01"
+>2.01
+  (ADAMK on 2005-03-24)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-2.00"
+>2.00
+  (ADAMK on 2004-07-22)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.9"
+>1.9
+  (ADAMK on 2004-07-07)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.8"
+>1.8
+  (ADAMK on 2004-06-30)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.7"
+>1.7
+  (ADAMK on 2004-06-22)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.6"
+>1.6
+  (ADAMK on 2004-02-29)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.5"
+>1.5
+  (ADAMK on 2004-01-07)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.4"
+>1.4
+  (ADAMK on 2003-12-24)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.3"
+>1.3
+  (ADAMK on 2003-11-06)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1.2"
+>1.2
+  (ADAMK on 2003-08-13)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-1"
+>1
+  (ADAMK on 2002-12-21)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-0.3"
+>0.3
+  (ADAMK on 2002-12-09)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-0.2"
+>0.2
+  (ADAMK on 2002-11-26)</option>
+<option
+  
+  value="ADAMK/Config-Tiny-0.1"
+>0.1
+  (ADAMK on 2002-11-13)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Config-Tiny">Config-Tiny-2.30</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 137 direct dependents &#10;          • 277 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Config-Tiny-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Config-Tiny-2.30">
+    <input type="hidden" name="author" value="RSAVAGE">
+    <input type="hidden" name="distribution" value="Config-Tiny">
+    <button type="submit" class="favorite highlight"><span>34</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Config::Tiny.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>34</span> ++</a>
+</div>
+   / <span>Config::Tiny</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Config::Tiny.html#NAME">NAME</a></li>
+  <li><a href="./Config::Tiny.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Config::Tiny.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Config::Tiny.html#CONFIGURATION-FILE-SYNTAX">CONFIGURATION FILE SYNTAX</a></li>
+  <li><a href="./Config::Tiny.html#ARRAY-SYNTAX">ARRAY SYNTAX</a>
+    <ul>
+      <li><a href="./Config::Tiny.html#Basic-Syntax">Basic Syntax</a></li>
+      <li><a href="./Config::Tiny.html#Warning">Warning</a></li>
+    </ul>
+  </li>
+  <li><a href="./Config::Tiny.html#METHODS">METHODS</a>
+    <ul>
+      <li><a href="./Config::Tiny.html#errstr()">errstr()</a></li>
+      <li><a href="./Config::Tiny.html#new(%5B$config%5D)">new([$config])</a></li>
+      <li><a href="./Config::Tiny.html#read($filename,-%5B$encoding%5D)">read($filename, [$encoding])</a></li>
+      <li><a href="./Config::Tiny.html#read_string($string)">read_string($string)</a></li>
+      <li><a href="./Config::Tiny.html#write($filename,-%5B$encoding%5D)">write($filename, [$encoding])</a></li>
+      <li><a href="./Config::Tiny.html#write_string()">write_string()</a></li>
+    </ul>
+  </li>
+  <li><a href="./Config::Tiny.html#FAQ">FAQ</a>
+    <ul>
+      <li><a href="./Config::Tiny.html#What-happens-if-a-key-is-repeated?">What happens if a key is repeated?</a></li>
+      <li><a href="./Config::Tiny.html#Why-can&#39;t-I-put-comments-at-the-ends-of-lines?">Why can&#39;t I put comments at the ends of lines?</a></li>
+      <li><a href="./Config::Tiny.html#Why-can&#39;t-I-omit-the-&#39;=&#39;-signs?">Why can&#39;t I omit the &#39;=&#39; signs?</a></li>
+      <li><a href="./Config::Tiny.html#Why-do-I-have-to-assign-the-result-of-a-method-call-to-a-variable?">Why do I have to assign the result of a method call to a variable?</a></li>
+      <li><a href="./Config::Tiny.html#Can-I-use-a-file-called-&#39;0&#39;-(zero)?">Can I use a file called &#39;0&#39; (zero)?</a></li>
+    </ul>
+  </li>
+  <li><a href="./Config::Tiny.html#CAVEATS">CAVEATS</a></li>
+  <li><a href="./Config::Tiny.html#Repository">Repository</a></li>
+  <li><a href="./Config::Tiny.html#SUPPORT">SUPPORT</a></li>
+  <li><a href="./Config::Tiny.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Config::Tiny.html#ACKNOWLEGEMENTS">ACKNOWLEGEMENTS</a></li>
+  <li><a href="./Config::Tiny.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Config::Tiny.html#COPYRIGHT">COPYRIGHT</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Config::Tiny - Read/Write .ini style files with as little code as possible</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>        # In your configuration file
+        rootproperty=blah
+
+        [section]
+        one=twp
+        greetings[]=Hello
+        three= four
+        Foo =Bar
+        greetings[]=World!
+        empty=
+
+        # In your program
+        use Config::Tiny;
+
+        # Create an empty config
+        my $Config = Config::Tiny-&gt;new;
+
+        # Create a config with data
+        my $config = Config::Tiny-&gt;new({
+                _ =&gt; { rootproperty =&gt; &quot;Bar&quot; },
+                section =&gt; { one =&gt; &quot;value&quot;, Foo =&gt; 42 } });
+
+        # Open the config
+        $Config = Config::Tiny-&gt;read( &#39;file.conf&#39; );
+        $Config = Config::Tiny-&gt;read( &#39;file.conf&#39;, &#39;utf8&#39; ); # Neither &#39;:&#39; nor &#39;&lt;:&#39; prefix!
+        $Config = Config::Tiny-&gt;read( &#39;file.conf&#39;, &#39;encoding(iso-8859-1)&#39;);
+
+        # Reading properties
+        my $rootproperty = $Config-&gt;{_}-&gt;{rootproperty};
+        my $one = $Config-&gt;{section}-&gt;{one};
+        my $Foo = $Config-&gt;{section}-&gt;{Foo};
+
+        # Changing data
+        $Config-&gt;{newsection} = { this =&gt; &#39;that&#39; }; # Add a section
+        $Config-&gt;{section}-&gt;{Foo} = &#39;Not Bar!&#39;;     # Change a value
+        delete $Config-&gt;{_};                        # Delete a value or section
+
+        # Save a config
+        $Config-&gt;write( &#39;file.conf&#39; );
+        $Config-&gt;write( &#39;file.conf&#39;, &#39;utf8&#39; ); # Neither &#39;:&#39; nor &#39;&gt;:&#39; prefix!
+
+        # Shortcuts
+        my($rootproperty) = $$Config{_}{rootproperty};
+
+        my($config) = Config::Tiny -&gt; read_string(&#39;alpha=bet&#39;);
+        my($value)  = $$config{_}{alpha}; # $value is &#39;bet&#39;.
+
+        my($config) = Config::Tiny -&gt; read_string(&quot;[init]\nalpha=bet&quot;);
+        my($value)  = $$config{init}{alpha}; # $value is &#39;bet&#39;.</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p><code>Config::Tiny</code> is a Perl class to read and write .ini style configuration files with as little code as possible, reducing load time and memory overhead.</p>
+
+<p>Most of the time it is accepted that Perl applications use a lot of memory and modules.</p>
+
+<p>The <code>*::Tiny</code> family of modules is specifically intended to provide an ultralight alternative to the standard modules.</p>
+
+<p>This module is primarily for reading human written files, and anything we write shouldn&#39;t need to have documentation/comments. If you need something with more power move up to <a href="https://metacpan.org/pod/Config::Simple">Config::Simple</a>, <a href="https://metacpan.org/pod/Config::General">Config::General</a> or one of the many other <code>Config::*</code> modules.</p>
+
+<p>Lastly, <a href="./Config::Tiny.html">Config::Tiny</a> does <b>not</b> preserve your comments, whitespace, or the order of your config file.</p>
+
+<p>See <a href="https://metacpan.org/pod/Config::Tiny::Ordered">Config::Tiny::Ordered</a> (and possibly others) for the preservation of the order of the entries in the file.</p>
+
+<h1 id="CONFIGURATION-FILE-SYNTAX"><a id="CONFIGURATION"></a>CONFIGURATION FILE SYNTAX</h1>
+
+<p>Files are the same format as for MS Windows <code>*.ini</code> files. For example:</p>
+
+<pre><code>        [section]
+        var1=value1
+        var2=value2</code></pre>
+
+<p>But see also ARRAY SYNTAX just below.</p>
+
+<p>If a property is outside of a section at the beginning of a file, it will be assigned to the <code>&quot;root section&quot;</code>, available at <code>$Config-&gt;{_}</code>.</p>
+
+<p>Lines starting with <code>&#39;#&#39;</code> or <code>&#39;;&#39;</code> are considered comments and ignored, as are blank lines.</p>
+
+<p>When writing back to the config file, all comments, custom whitespace, and the ordering of your config file elements are discarded. If you need to keep the human elements of a config when writing back, upgrade to something better, this module is not for you.</p>
+
+<h1 id="ARRAY-SYNTAX"><a id="ARRAY"></a>ARRAY SYNTAX</h1>
+
+<h2 id="Basic-Syntax"><a id="Basic"></a>Basic Syntax</h2>
+
+<p>As of V 2.30, this module supports the case of a key having an array of values.</p>
+
+<p>Sample data (copied from t/test.conf):</p>
+
+<pre><code>        root=something
+
+        [section]
+        greetings[]=Hello
+        one=two
+        Foo=Bar
+        greetings[]=World!
+        this=Your Mother!
+        blank=
+
+        [Section Two]
+        something else=blah
+         remove = whitespace</code></pre>
+
+<p>Note specifically that the key name greetings has the empty bracket pair [] as a suffix. This tells the code that it is not to overwrite the 1st value with the 2nd value, but rather to push these values onto a stack called &#39;greetings&#39;.</p>
+
+<p>Note also that you could have used:</p>
+
+<pre><code>        [section]
+        greetings[]=Hello
+        greetings[]=World!
+        one=two
+        Foo=Bar
+        this=Your Mother!
+        blank=</code></pre>
+
+<p>Clearly, the 2 lines using greetings[] do not have to be side-by-side.</p>
+
+<p>If you use e.g. Data::Dumper::Concise to give you a Dumper() function (not method), then &#39;say Dumper($Config)&#39; the output will look like:</p>
+
+<pre><code>        bless( {
+          &quot;Section Two&quot; =&gt; {
+             remove =&gt; &quot;whitespace&quot;,
+             &quot;something else&quot; =&gt; &quot;blah&quot;,
+           },
+           _ =&gt; {
+             root =&gt; &quot;something&quot;,
+           },
+           section =&gt; {
+             Foo =&gt; &quot;Bar&quot;,
+             blank =&gt; &quot;&quot;,
+             greetings =&gt; [
+               &quot;Hello&quot;,
+               &quot;World!&quot;,
+             ],
+             one =&gt; &quot;two&quot;,
+             this =&gt; &quot;Your Mother!&quot;,
+           },
+         }, &#39;Config::Tiny&#39; )</code></pre>
+
+<p>You can see this structure in t/02.main.t starting at line 45. Observe too that the key names are reported in alphabetical order (by the module Data::Dumper::Concise) despite the differing order in the setting of these keys, and that the array syntax result is that greetings has an array for a value.</p>
+
+<p>To access these values, use code like this:</p>
+
+<pre><code>        Dumper($Config);
+        Dumper($Config-&gt;{section});
+        Dumper($Config-&gt;{section}-&gt;{greetings});
+        Dumper($Config-&gt;{section}-&gt;{greetings}-&gt;[0]);
+        Dumper($Config-&gt;{section}-&gt;{greetings}-&gt;[1]);
+        Dumper(ref $Config);</code></pre>
+
+<h2 id="Warning">Warning</h2>
+
+<p>$Config is a blessed value, which means it is accessed differently than if it was a hash ref. The latter could be accessed as:</p>
+
+<pre><code>        Dumper($$Config{section}{greetings}); # Don&#39;t do this for blessed values!</code></pre>
+
+<p>Finally, if a hash ref rather than a blessed value, you could also use, as above:</p>
+
+<pre><code>        Dumper($Config-&gt;{section}-&gt;{greetings}); # Don&#39;t do this for blessed values!</code></pre>
+
+<p>My (Ron Savage) personal preference for hashrefs is the one without the gross &#39;-&gt;&#39; chars, but that requires you to double up the initial $ character (which I hope you noticed!).</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="errstr()"><a id="errstr"></a>errstr()</h2>
+
+<p>Returns a string representing the most recent error, or the empty string.</p>
+
+<p>You can also retrieve the error message from the <code>$Config::Tiny::errstr</code> variable.</p>
+
+<h2 id="new([$config])"><a id="new"></a><a id="new-config"></a>new([$config])</h2>
+
+<p>Here, the [] indicate an optional parameter.</p>
+
+<p>The constructor <code>new</code> creates and returns a <code>Config::Tiny</code> object.</p>
+
+<p>This will normally be a new, empty configuration, but you may also pass a hashref here which will be turned into an object of this class. This hashref should have a structure suitable for a configuration file, that is, a hash of hashes where the key <code>_</code> is treated specially as the root section.</p>
+
+<h2 id="read($filename,-[$encoding])"><a id="read"></a><a id="read-filename---encoding"></a>read($filename, [$encoding])</h2>
+
+<p>Here, the [] indicate an optional parameter.</p>
+
+<p>The <code>read</code> constructor reads a config file, $filename, and returns a new <code>Config::Tiny</code> object containing the properties in the file.</p>
+
+<p>$encoding may be used to indicate the encoding of the file, e.g. &#39;utf8&#39; or &#39;encoding(iso-8859-1)&#39;.</p>
+
+<p>Do not add a prefix to $encoding, such as &#39;&lt;&#39; or &#39;&lt;:&#39;.</p>
+
+<p>Returns the object on success, or <code>undef</code> on error.</p>
+
+<p>When <code>read</code> fails, <code>Config::Tiny</code> sets an error message internally you can recover via <code>Config::Tiny-&gt;errstr</code>. Although in <b>some</b> cases a failed <code>read</code> will also set the operating system error variable <code>$!</code>, not all errors do and you should not rely on using the <code>$!</code> variable.</p>
+
+<p>See t/04.utf8.t and t/04.utf8.txt.</p>
+
+<h2 id="read_string($string)"><a id="read_string"></a><a id="read_string-string"></a>read_string($string)</h2>
+
+<p>The <code>read_string</code> method takes as argument the contents of a config file as a string and returns the <code>Config::Tiny</code> object for it.</p>
+
+<h2 id="write($filename,-[$encoding])"><a id="write"></a><a id="write-filename---encoding"></a>write($filename, [$encoding])</h2>
+
+<p>Here, the [] indicate an optional parameter.</p>
+
+<p>The <code>write</code> method generates the file content for the properties, and writes it to disk to the filename specified.</p>
+
+<p>$encoding may be used to indicate the encoding of the file, e.g. &#39;utf8&#39; or &#39;encoding(iso-8859-1)&#39;.</p>
+
+<p>Do not add a prefix to $encoding, such as &#39;&gt;&#39; or &#39;&gt;:&#39;.</p>
+
+<p>Returns true on success or <code>undef</code> on error.</p>
+
+<p>See t/04.utf8.t and t/04.utf8.txt.</p>
+
+<h2 id="write_string()"><a id="write_string"></a>write_string()</h2>
+
+<p>Generates the file content for the object and returns it as a string.</p>
+
+<h1 id="FAQ">FAQ</h1>
+
+<h2 id="What-happens-if-a-key-is-repeated?"><a id="What"></a><a id="What-happens-if-a-key-is-repeated"></a>What happens if a key is repeated?</h2>
+
+<p>Case 1: The last value is retained, overwriting any previous values.</p>
+
+<p>See t/06.repeat.key.t for sample code.</p>
+
+<p>Case 2: However, by using the new array syntax, as of V 2.30, you can assign a set of values to a key.</p>
+
+<p>For details, see the <a href="./Config::Tiny.html#ARRAY-SYNTAX">&quot;ARRAY SYNTAX&quot;</a> section above for sample code.</p>
+
+<p>See t/test.conf for sample data.</p>
+
+<h2 id="Why-can&#39;t-I-put-comments-at-the-ends-of-lines?"><a id="Why"></a><a id="Why-can-t-I-put-comments-at-the-ends-of-lines"></a>Why can&#39;t I put comments at the ends of lines?</h2>
+
+<dl>
+
+<dt id="o-The-#-char-is-only-introduces-a-comment-when-it&#39;s-at-the-start-of-a-line."><a id="o"></a><a id="o-The---char-is-only-introduces-a-comment-when-it-s-at-the-start-of-a-line"></a>o The # char is only introduces a comment when it&#39;s at the start of a line.</dt>
+<dd>
+
+<p>So a line like:</p>
+
+<pre><code>        key=value # A comment</code></pre>
+
+<p>Sets key to &#39;value # A comment&#39;, which, presumably, you did not intend.</p>
+
+<p>This conforms to the syntax discussed in <a href="./Config::Tiny.html#CONFIGURATION-FILE-SYNTAX">&quot;CONFIGURATION FILE SYNTAX&quot;</a>.</p>
+
+</dd>
+<dt id="o-Comments-matching-/\s\;\s.+$//g;-are-ignored."><a id="o1"></a><a id="o-Comments-matching--s-s.-g--are-ignored"></a>o Comments matching /\s\;\s.+$//g; are ignored.</dt>
+<dd>
+
+<p>This means you can&#39;t preserve the suffix using:</p>
+
+<pre><code>        key = Prefix ; Suffix</code></pre>
+
+<p>Result: key is now &#39;Prefix&#39;.</p>
+
+<p>But you can do this:</p>
+
+<pre><code>        key = Prefix;Suffix</code></pre>
+
+<p>Result: key is now &#39;Prefix;Suffix&#39;.</p>
+
+<p>Or this:</p>
+
+<pre><code>        key = Prefix; Suffix</code></pre>
+
+<p>Result: key is now &#39;Prefix; Suffix&#39;.</p>
+
+</dd>
+</dl>
+
+<p>See t/07.trailing.comment.t.</p>
+
+<h2 id="Why-can&#39;t-I-omit-the-&#39;=&#39;-signs?"><a id="Why1"></a><a id="Why-can-t-I-omit-the---signs"></a>Why can&#39;t I omit the &#39;=&#39; signs?</h2>
+
+<p>E.g.:</p>
+
+<pre><code>        [Things]
+        my =
+        list =
+        of =
+        things =</code></pre>
+
+<p>Instead of:</p>
+
+<pre><code>        [Things]
+        my
+        list
+        of
+        things</code></pre>
+
+<p>Because the use of &#39;=&#39; signs is a type of mandatory documentation. It indicates that that section contains 4 items, and not 1 odd item split over 4 lines.</p>
+
+<h2 id="Why-do-I-have-to-assign-the-result-of-a-method-call-to-a-variable?"><a id="Why2"></a><a id="Why-do-I-have-to-assign-the-result-of-a-method-call-to-a-variable"></a>Why do I have to assign the result of a method call to a variable?</h2>
+
+<p>This question comes from RT#85386.</p>
+
+<p>Yes, the syntax may seem odd, but you don&#39;t have to call both new() and read_string().</p>
+
+<p>Try:</p>
+
+<pre><code>        perl -MData::Dumper -MConfig::Tiny -E &#39;my $c=Config::Tiny-&gt;read_string(&quot;one=s&quot;); say Dumper $c&#39;</code></pre>
+
+<p>Or:</p>
+
+<pre><code>        my($config) = Config::Tiny -&gt; read_string(&#39;alpha=bet&#39;);
+        my($value)  = $$config{_}{alpha}; # $value is &#39;bet&#39;.</code></pre>
+
+<p>Or even, a bit ridiculously:</p>
+
+<pre><code>        my($value) = ${Config::Tiny -&gt; read_string(&#39;alpha=bet&#39;)}{_}{alpha}; # $value is &#39;bet&#39;.</code></pre>
+
+<h2 id="Can-I-use-a-file-called-&#39;0&#39;-(zero)?"><a id="Can"></a><a id="Can-I-use-a-file-called--0---zero"></a>Can I use a file called &#39;0&#39; (zero)?</h2>
+
+<p>Yes. See t/05.zero.t (test code) and t/0 (test data).</p>
+
+<h1 id="CAVEATS">CAVEATS</h1>
+
+<p>Some edge cases in section headers are not supported, and additionally may not be detected when writing the config file.</p>
+
+<p>Specifically, section headers with leading whitespace, trailing whitespace, or newlines anywhere in the section header, will not be written correctly to the file and may cause file corruption.</p>
+
+<h1 id="Repository">Repository</h1>
+
+<p><a href="https://github.com/ronsavage/Config-Tiny.git">https://github.com/ronsavage/Config-Tiny.git</a></p>
+
+<h1 id="SUPPORT">SUPPORT</h1>
+
+<p>Bugs should be reported via the CPAN bug tracker at</p>
+
+<p><a href="https://github.com/ronsavage/Config-Tiny/issues">https://github.com/ronsavage/Config-Tiny/issues</a></p>
+
+<p>For other issues, or commercial enhancement or support, contact the author.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Adam Kennedy &lt;adamk@cpan.org&gt;</p>
+
+<p>Maintanence from V 2.15: Ron Savage <a href="http://savage.net.au/">http://savage.net.au/</a>.</p>
+
+<h1 id="ACKNOWLEGEMENTS">ACKNOWLEGEMENTS</h1>
+
+<p>Thanks to Sherzod Ruzmetov &lt;sherzodr@cpan.org&gt; for <a href="https://metacpan.org/pod/Config::Simple">Config::Simple</a>, which inspired this module by being not quite &quot;simple&quot; enough for me :).</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p>See, amongst many: <a href="https://metacpan.org/pod/Config::Simple">Config::Simple</a> and <a href="https://metacpan.org/pod/Config::General">Config::General</a>.</p>
+
+<p>See <a href="https://metacpan.org/pod/Config::Tiny::Ordered">Config::Tiny::Ordered</a> (and possibly others) for the preservation of the order of the entries in the file.</p>
+
+<p><a href="https://metacpan.org/pod/IOD">IOD</a>. Ini On Drugs.</p>
+
+<p><a href="https://metacpan.org/pod/IOD::Examples">IOD::Examples</a></p>
+
+<p><a href="https://metacpan.org/pod/App::IODUtils">App::IODUtils</a></p>
+
+<p><a href="https://metacpan.org/pod/Config::IOD::Reader">Config::IOD::Reader</a></p>
+
+<p><a href="https://metacpan.org/pod/Config::Perl::V">Config::Perl::V</a>. Config data from Perl itself.</p>
+
+<p><a href="https://metacpan.org/pod/Config::Onion">Config::Onion</a></p>
+
+<p><a href="https://metacpan.org/pod/Config::IniFiles">Config::IniFiles</a></p>
+
+<p><a href="https://metacpan.org/pod/Config::INIPlus">Config::INIPlus</a></p>
+
+<p><a href="https://metacpan.org/pod/Config::Hash">Config::Hash</a>. Allows nested data.</p>
+
+<p><a href="https://metacpan.org/pod/Config::MVP">Config::MVP</a>. Author: RJBS. Uses Moose. Extremely complex.</p>
+
+<p><a href="https://metacpan.org/pod/Config::TOML">Config::TOML</a>. See next few lines:</p>
+
+<p><a href="https://github.com/dlc/toml">https://github.com/dlc/toml</a></p>
+
+<p><a href="https://github.com/alexkalderimis/config-toml.pl">https://github.com/alexkalderimis/config-toml.pl</a>. 1 Star rating.</p>
+
+<p><a href="https://github.com/toml-lang/toml">https://github.com/toml-lang/toml</a></p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright 2002 - 2011 Adam Kennedy.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+<p>The full text of the license can be found in the LICENSE file included with this module.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Config::Tiny, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Config::Tiny</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Config::Tiny</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Config::Tiny.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

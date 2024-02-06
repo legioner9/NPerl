@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlmacosx - Perl under Mac OS X - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlmacosx">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmacosx.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlmacosx">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlmacosx">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlmacosx">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlmacosx">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlmacosx">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlmacosx">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlmacosx">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlmacosx">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlmacosx">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlmacosx">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlmacosx">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlmacosx">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlmacosx">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlmacosx">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlmacosx">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlmacosx">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlmacosx">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlmacosx">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlmacosx">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlmacosx">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlmacosx">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlmacosx">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlmacosx">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlmacosx">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlmacosx">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlmacosx">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlmacosx">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlmacosx">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlmacosx">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlmacosx">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlmacosx">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlmacosx">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlmacosx">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlmacosx">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlmacosx">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlmacosx">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlmacosx">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlmacosx">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlmacosx">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlmacosx">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlmacosx">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlmacosx">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlmacosx">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlmacosx">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlmacosx">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlmacosx">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlmacosx">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlmacosx">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlmacosx">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlmacosx">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlmacosx">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlmacosx">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlmacosx">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlmacosx">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlmacosx">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlmacosx">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlmacosx">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlmacosx">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlmacosx">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlmacosx">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlmacosx">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlmacosx">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlmacosx">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlmacosx">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlmacosx">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlmacosx">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlmacosx">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlmacosx">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlmacosx">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlmacosx">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlmacosx">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlmacosx">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlmacosx">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlmacosx">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlmacosx">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlmacosx">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlmacosx">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlmacosx">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlmacosx">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlmacosx">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmacosx.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlmacosx">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlmacosx">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlmacosx">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlmacosx">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlmacosx">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlmacosx">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlmacosx">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlmacosx">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlmacosx">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlmacosx">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlmacosx">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlmacosx">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlmacosx">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlmacosx">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlmacosx">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlmacosx">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlmacosx">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlmacosx">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlmacosx">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlmacosx">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlmacosx">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlmacosx">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlmacosx">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlmacosx">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlmacosx">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlmacosx">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlmacosx">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlmacosx">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlmacosx">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlmacosx">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlmacosx">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlmacosx">5.35.1</a>
+          <a class="dropdown-item active" href="perlmacosx.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlmacosx.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlmacosx.html">perlmacosx</a>
+          <div id="more">
+            (<a href="perlmacosx.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlmacosx">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#Installation-Prefix">Installation Prefix</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#SDK-support">SDK support</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#Universal-Binary-support">Universal Binary support</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#64-bit-PPC-support">64-bit PPC support</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#libperl-and-Prebinding">libperl and Prebinding</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#Updating-Apple&#39;s-Perl">Updating Apple&#39;s Perl</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#Known-problems">Known problems</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#Cocoa">Cocoa</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#Starting-From-Scratch">Starting From Scratch</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlmacosx.html#DATE">DATE</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlmacosx.html#NAME">#</a>NAME</h1>
+
+<p>perlmacosx - Perl under Mac OS X</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="perlmacosx.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<p>This document briefly describes Perl under Mac OS X.</p>
+
+<pre><code class="plaintext">curl -O https://www.cpan.org/src/perl-5.35.0.tar.gz
+tar -xzf perl-5.35.0.tar.gz
+cd perl-5.35.0
+./Configure -des -Dprefix=/usr/local/
+make
+make test
+sudo make install</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlmacosx.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>The latest Perl release (5.35.0 as of this writing) builds without changes under all versions of Mac OS X from 10.3 &quot;Panther&quot; onwards.</p>
+
+<p>In order to build your own version of Perl you will need &#39;make&#39;, which is part of Apple&#39;s developer tools - also known as Xcode. From Mac OS X 10.7 &quot;Lion&quot; onwards, it can be downloaded separately as the &#39;Command Line Tools&#39; bundle directly from <a href="https://developer.apple.com/downloads/">https://developer.apple.com/downloads/</a> (you will need a free account to log in), or as a part of the Xcode suite, freely available at the App Store. Xcode is a pretty big app, so unless you already have it or really want it, you are advised to get the &#39;Command Line Tools&#39; bundle separately from the link above. If you want to do it from within Xcode, go to Xcode -&gt; Preferences -&gt; Downloads and select the &#39;Command Line Tools&#39; option.</p>
+
+<p>Between Mac OS X 10.3 &quot;Panther&quot; and 10.6 &quot;Snow Leopard&quot;, the &#39;Command Line Tools&#39; bundle was called &#39;unix tools&#39;, and was usually supplied with Mac OS install DVDs.</p>
+
+<p>Earlier Mac OS X releases (10.2 &quot;Jaguar&quot; and older) did not include a completely thread-safe libc, so threading is not fully supported. Also, earlier releases included a buggy libdb, so some of the DB_File tests are known to fail on those releases.</p>
+
+<h2 id="Installation-Prefix"><a class="permalink" href="perlmacosx.html#Installation-Prefix">#</a><a id="Installation"></a>Installation Prefix</h2>
+
+<p>The default installation location for this release uses the traditional UNIX directory layout under /usr/local. This is the recommended location for most users, and will leave the Apple-supplied Perl and its modules undisturbed.</p>
+
+<p>Using an installation prefix of &#39;/usr&#39; will result in a directory layout that mirrors that of Apple&#39;s default Perl, with core modules stored in &#39;/System/Library/Perl/${version}&#39;, CPAN modules stored in &#39;/Library/Perl/${version}&#39;, and the addition of &#39;/Network/Library/Perl/${version}&#39; to @INC for modules that are stored on a file server and used by many Macs.</p>
+
+<h2 id="SDK-support"><a class="permalink" href="perlmacosx.html#SDK-support">#</a><a id="SDK"></a>SDK support</h2>
+
+<p>First, export the path to the SDK into the build environment:</p>
+
+<pre><code class="plaintext">export SDK=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk</code></pre>
+
+<p>Please make sure the SDK version (i.e. the numbers right before &#39;.sdk&#39;) matches your system&#39;s (in this case, Mac OS X 10.8 &quot;Mountain Lion&quot;), as it is possible to have more than one SDK installed. Also make sure the path exists in your system, and if it doesn&#39;t please make sure the SDK is properly installed, as it should come with the &#39;Command Line Tools&#39; bundle mentioned above. Finally, if you have an older Mac OS X (10.6 &quot;Snow Leopard&quot; and below) running Xcode 4.2 or lower, the SDK path might be something like <code>&#39;/Developer/SDKs/MacOSX10.3.9.sdk&#39;</code>.</p>
+
+<p>You can use the SDK by exporting some additions to Perl&#39;s &#39;ccflags&#39; and &#39;..flags&#39; config variables:</p>
+
+<pre><code>./Configure -Accflags=&quot;-nostdinc -B$SDK/usr/include/gcc \
+                       -B$SDK/usr/lib/gcc -isystem$SDK/usr/include \
+                       -F$SDK/System/Library/Frameworks&quot; \
+            -Aldflags=&quot;-Wl,-syslibroot,$SDK&quot; \
+            -de</code></pre>
+
+<h2 id="Universal-Binary-support"><a class="permalink" href="perlmacosx.html#Universal-Binary-support">#</a><a id="Universal"></a>Universal Binary support</h2>
+
+<p>Note: From Mac OS X 10.6 &quot;Snow Leopard&quot; onwards, Apple only supports Intel-based hardware. This means you can safely skip this section unless you have an older Apple computer running on ppc or wish to create a perl binary with backwards compatibility.</p>
+
+<p>You can compile perl as a universal binary (built for both ppc and intel). In Mac OS X 10.4 &quot;Tiger&quot;, you must export the &#39;u&#39; variant of the SDK:</p>
+
+<pre><code class="plaintext">export SDK=/Developer/SDKs/MacOSX10.4u.sdk</code></pre>
+
+<p>Mac OS X 10.5 &quot;Leopard&quot; and above do not require the &#39;u&#39; variant.</p>
+
+<p>In addition to the compiler flags used to select the SDK, also add the flags for creating a universal binary:</p>
+
+<pre><code>./Configure -Accflags=&quot;-arch i686 -arch ppc -nostdinc               \
+                        -B$SDK/usr/include/gcc                      \
+                       -B$SDK/usr/lib/gcc -isystem$SDK/usr/include  \
+                       -F$SDK/System/Library/Frameworks&quot;            \
+            -Aldflags=&quot;-arch i686 -arch ppc -Wl,-syslibroot,$SDK&quot;   \
+            -de</code></pre>
+
+<p>Keep in mind that these compiler and linker settings will also be used when building CPAN modules. For XS modules to be compiled as a universal binary, any libraries it links to must also be universal binaries. The system libraries that Apple includes with the 10.4u SDK are all universal, but user-installed libraries may need to be re-installed as universal binaries.</p>
+
+<h2 id="64-bit-PPC-support"><a class="permalink" href="perlmacosx.html#64-bit-PPC-support">#</a><a id="64"></a><a id="bit-PPC-support"></a>64-bit PPC support</h2>
+
+<p>Follow the instructions in <i>INSTALL</i> to build perl with support for 64-bit integers (<code>use64bitint</code>) or both 64-bit integers and 64-bit addressing (<code>use64bitall</code>). In the latter case, the resulting binary will run only on G5-based hosts.</p>
+
+<p>Support for 64-bit addressing is experimental: some aspects of Perl may be omitted or buggy. Note the messages output by <i>Configure</i> for further information. Please use <a href="https://github.com/Perl/perl5/issues">https://github.com/Perl/perl5/issues</a> to submit a problem report in the event that you encounter difficulties.</p>
+
+<p>When building 64-bit modules, it is your responsibility to ensure that linked external libraries and frameworks provide 64-bit support: if they do not, module building may appear to succeed, but attempts to use the module will result in run-time dynamic linking errors, and subsequent test failures. You can use <code>file</code> to discover the architectures supported by a library:</p>
+
+<pre><code class="plaintext">$ file libgdbm.3.0.0.dylib 
+libgdbm.3.0.0.dylib: Mach-O fat file with 2 architectures
+libgdbm.3.0.0.dylib (for architecture ppc):      Mach-O dynamically linked shared library ppc
+libgdbm.3.0.0.dylib (for architecture ppc64):    Mach-O 64-bit dynamically linked shared library ppc64</code></pre>
+
+<p>Note that this issue precludes the building of many Macintosh-specific CPAN modules (<code>Mac::*</code>), as the required Apple frameworks do not provide PPC64 support. Similarly, downloads from Fink or Darwinports are unlikely to provide 64-bit support; the libraries must be rebuilt from source with the appropriate compiler and linker flags. For further information, see Apple&#39;s <i>64-Bit Transition Guide</i> at <a href="https://developer.apple.com/library/archive/documentation/Darwin/Conceptual/64bitPorting/transition/transition.html">https://developer.apple.com/library/archive/documentation/Darwin/Conceptual/64bitPorting/transition/transition.html</a>.</p>
+
+<h2 id="libperl-and-Prebinding"><a class="permalink" href="perlmacosx.html#libperl-and-Prebinding">#</a><a id="libperl"></a>libperl and Prebinding</h2>
+
+<p>Mac OS X ships with a dynamically-loaded libperl, but the default for this release is to compile a static libperl. The reason for this is pre-binding. Dynamic libraries can be pre-bound to a specific address in memory in order to decrease load time. To do this, one needs to be aware of the location and size of all previously-loaded libraries. Apple collects this information as part of their overall OS build process, and thus has easy access to it when building Perl, but ordinary users would need to go to a great deal of effort to obtain the information needed for pre-binding.</p>
+
+<p>You can override the default and build a shared libperl if you wish (<span style="white-space: nowrap;">Configure ... -Duseshrplib</span>).</p>
+
+<p>With Mac OS X 10.4 &quot;Tiger&quot; and newer, there is almost no performance penalty for non-prebound libraries. Earlier releases will suffer a greater load time than either the static library, or Apple&#39;s pre-bound dynamic library.</p>
+
+<h2 id="Updating-Apple&#39;s-Perl"><a class="permalink" href="perlmacosx.html#Updating-Apple&#39;s-Perl">#</a><a id="Updating"></a><a id="Updating-Apples-Perl"></a>Updating Apple&#39;s Perl</h2>
+
+<p>In a word - don&#39;t, at least not without a *very* good reason. Your scripts can just as easily begin with &quot;#!/usr/local/bin/perl&quot; as with &quot;#!/usr/bin/perl&quot;. Scripts supplied by Apple and other third parties as part of installation packages and such have generally only been tested with the /usr/bin/perl that&#39;s installed by Apple.</p>
+
+<p>If you find that you do need to update the system Perl, one issue worth keeping in mind is the question of static vs. dynamic libraries. If you upgrade using the default static libperl, you will find that the dynamic libperl supplied by Apple will not be deleted. If both libraries are present when an application that links against libperl is built, ld will link against the dynamic library by default. So, if you need to replace Apple&#39;s dynamic libperl with a static libperl, you need to be sure to delete the older dynamic library after you&#39;ve installed the update.</p>
+
+<h2 id="Known-problems"><a class="permalink" href="perlmacosx.html#Known-problems">#</a><a id="Known"></a>Known problems</h2>
+
+<p>If you have installed extra libraries such as GDBM through Fink (in other words, you have libraries under <i>/sw/lib</i>), or libdlcompat to <i>/usr/local/lib</i>, you may need to be extra careful when running Configure to not to confuse Configure and Perl about which libraries to use. Being confused will show up for example as &quot;dyld&quot; errors about symbol problems, for example during &quot;make test&quot;. The safest bet is to run Configure as</p>
+
+<pre><code class="plaintext">Configure ... -Uloclibpth -Dlibpth=/usr/lib</code></pre>
+
+<p>to make Configure look only into the system libraries. If you have some extra library directories that you really want to use (such as newer Berkeley DB libraries in pre-Panther systems), add those to the libpth:</p>
+
+<pre><code class="plaintext">Configure ... -Uloclibpth -Dlibpth=&#39;/usr/lib /opt/lib&#39;</code></pre>
+
+<p>The default of building Perl statically may cause problems with complex applications like Tk: in that case consider building shared Perl</p>
+
+<pre><code class="plaintext">Configure ... -Duseshrplib</code></pre>
+
+<p>but remember that there&#39;s a startup cost to pay in that case (see above &quot;libperl and Prebinding&quot;).</p>
+
+<p>Starting with Tiger (Mac OS X 10.4), Apple shipped broken locale files for the eu_ES locale (Basque-Spain). In previous releases of Perl, this resulted in failures in the <i>lib/locale</i> test. These failures have been suppressed in the current release of Perl by making the test ignore the broken locale. If you need to use the eu_ES locale, you should contact Apple support.</p>
+
+<h2 id="Cocoa"><a class="permalink" href="perlmacosx.html#Cocoa">#</a>Cocoa</h2>
+
+<p>There are two ways to use Cocoa from Perl. Apple&#39;s PerlObjCBridge module, included with Mac OS X, can be used by standalone scripts to access Foundation (i.e. non-GUI) classes and objects.</p>
+
+<p>An alternative is CamelBones, a framework that allows access to both Foundation and AppKit classes and objects, so that full GUI applications can be built in Perl. CamelBones can be found on SourceForge, at <a href="https://www.sourceforge.net/projects/camelbones/">https://www.sourceforge.net/projects/camelbones/</a>.</p>
+
+<h1 id="Starting-From-Scratch"><a class="permalink" href="perlmacosx.html#Starting-From-Scratch">#</a><a id="Starting"></a>Starting From Scratch</h1>
+
+<p>Unfortunately it is not that difficult somehow manage to break one&#39;s Mac OS X Perl rather severely. If all else fails and you want to really, <b>REALLY</b>, start from scratch and remove even your Apple Perl installation (which has become corrupted somehow), the following instructions should do it. <b>Please think twice before following these instructions: they are much like conducting brain surgery to yourself. Without anesthesia.</b> We will <b>not</b> come to fix your system if you do this.</p>
+
+<p>First, get rid of the libperl.dylib:</p>
+
+<pre><code class="plaintext"># cd /System/Library/Perl/darwin/CORE
+# rm libperl.dylib</code></pre>
+
+<p>Then delete every .bundle file found anywhere in the folders:</p>
+
+<pre><code class="plaintext">/System/Library/Perl
+/Library/Perl</code></pre>
+
+<p>You can find them for example by</p>
+
+<pre><code class="plaintext"># find /System/Library/Perl /Library/Perl -name &#39;*.bundle&#39; -print</code></pre>
+
+<p>After this you can either copy Perl from your operating system media (you will need at least the /System/Library/Perl and /usr/bin/perl), or rebuild Perl from the source code with <code>Configure -Dprefix=/usr -Duseshrplib</code> NOTE: the <code>-Dprefix=/usr</code> to replace the system Perl works much better with Perl 5.8.1 and later, in Perl 5.8.0 the settings were not quite right.</p>
+
+<p>&quot;Pacifist&quot; from CharlesSoft (<a href="https://www.charlessoft.com/">https://www.charlessoft.com/</a>) is a nice way to extract the Perl binaries from the OS media, without having to reinstall the entire OS.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="perlmacosx.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>This README was written by Sherm Pendley &lt;sherm@dot-app.org&gt;, and subsequently updated by Dominic Dunlop &lt;domo@computer.org&gt; and Breno G. de Oliveira &lt;garu@cpan.org&gt;. The &quot;Starting From Scratch&quot; recipe was contributed by John Montbriand &lt;montbriand@apple.com&gt;.</p>
+
+<h1 id="DATE"><a class="permalink" href="perlmacosx.html#DATE">#</a>DATE</h1>
+
+<p>Last modified 2013-04-29.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

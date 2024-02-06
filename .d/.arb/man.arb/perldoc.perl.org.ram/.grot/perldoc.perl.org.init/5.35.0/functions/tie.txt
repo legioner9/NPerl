@@ -1,0 +1,102 @@
+=over
+
+=item tie VARIABLE,CLASSNAME,LIST
+X<tie>
+
+This function binds a variable to a package class that will provide the
+implementation for the variable.  VARIABLE is the name of the variable
+to be enchanted.  CLASSNAME is the name of a class implementing objects
+of correct type.  Any additional arguments are passed to the
+appropriate constructor
+method of the class (meaning C<TIESCALAR>, C<TIEHANDLE>, C<TIEARRAY>,
+or C<TIEHASH>).  Typically these are arguments such as might be passed
+to the L<dbm_open(3)> function of C.  The object returned by the
+constructor is also returned by the
+L<C<tie>|/tie VARIABLE,CLASSNAME,LIST> function, which would be useful
+if you want to access other methods in CLASSNAME.
+
+Note that functions such as L<C<keys>|/keys HASH> and
+L<C<values>|/values HASH> may return huge lists when used on large
+objects, like DBM files.  You may prefer to use the L<C<each>|/each
+HASH> function to iterate over such.  Example:
+
+    # print out history file offsets
+    use NDBM_File;
+    tie(my %HIST, 'NDBM_File', '/usr/lib/news/history', 1, 0);
+    while (my ($key,$val) = each %HIST) {
+        print $key, ' = ', unpack('L', $val), "\n";
+    }
+
+A class implementing a hash should have the following methods:
+
+    TIEHASH classname, LIST
+    FETCH this, key
+    STORE this, key, value
+    DELETE this, key
+    CLEAR this
+    EXISTS this, key
+    FIRSTKEY this
+    NEXTKEY this, lastkey
+    SCALAR this
+    DESTROY this
+    UNTIE this
+
+A class implementing an ordinary array should have the following methods:
+
+    TIEARRAY classname, LIST
+    FETCH this, key
+    STORE this, key, value
+    FETCHSIZE this
+    STORESIZE this, count
+    CLEAR this
+    PUSH this, LIST
+    POP this
+    SHIFT this
+    UNSHIFT this, LIST
+    SPLICE this, offset, length, LIST
+    EXTEND this, count
+    DELETE this, key
+    EXISTS this, key
+    DESTROY this
+    UNTIE this
+
+A class implementing a filehandle should have the following methods:
+
+    TIEHANDLE classname, LIST
+    READ this, scalar, length, offset
+    READLINE this
+    GETC this
+    WRITE this, scalar, length, offset
+    PRINT this, LIST
+    PRINTF this, format, LIST
+    BINMODE this
+    EOF this
+    FILENO this
+    SEEK this, position, whence
+    TELL this
+    OPEN this, mode, LIST
+    CLOSE this
+    DESTROY this
+    UNTIE this
+
+A class implementing a scalar should have the following methods:
+
+    TIESCALAR classname, LIST
+    FETCH this,
+    STORE this, value
+    DESTROY this
+    UNTIE this
+
+Not all methods indicated above need be implemented.  See L<perltie>,
+L<Tie::Hash>, L<Tie::Array>, L<Tie::Scalar>, and L<Tie::Handle>.
+
+Unlike L<C<dbmopen>|/dbmopen HASH,DBNAME,MASK>, the
+L<C<tie>|/tie VARIABLE,CLASSNAME,LIST> function will not
+L<C<use>|/use Module VERSION LIST> or L<C<require>|/require VERSION> a
+module for you; you need to do that explicitly yourself.  See L<DB_File>
+or the L<Config> module for interesting
+L<C<tie>|/tie VARIABLE,CLASSNAME,LIST> implementations.
+
+For further details see L<perltie>, L<C<tied>|/tied VARIABLE>.
+
+=back

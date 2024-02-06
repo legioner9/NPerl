@@ -1,0 +1,37 @@
+=over
+
+=item exit EXPR
+X<exit> X<terminate> X<abort>
+
+=item exit
+
+Evaluates EXPR and exits immediately with that value.    Example:
+
+    my $ans = <STDIN>;
+    exit 0 if $ans =~ /^[Xx]/;
+
+See also L<C<die>|/die LIST>.  If EXPR is omitted, exits with C<0>
+status.  The only
+universally recognized values for EXPR are C<0> for success and C<1>
+for error; other values are subject to interpretation depending on the
+environment in which the Perl program is running.  For example, exiting
+69 (EX_UNAVAILABLE) from a I<sendmail> incoming-mail filter will cause
+the mailer to return the item undelivered, but that's not true everywhere.
+
+Don't use L<C<exit>|/exit EXPR> to abort a subroutine if there's any
+chance that someone might want to trap whatever error happened.  Use
+L<C<die>|/die LIST> instead, which can be trapped by an
+L<C<eval>|/eval EXPR>.
+
+The L<C<exit>|/exit EXPR> function does not always exit immediately.  It
+calls any defined C<END> routines first, but these C<END> routines may
+not themselves abort the exit.  Likewise any object destructors that
+need to be called are called before the real exit.  C<END> routines and
+destructors can change the exit status by modifying L<C<$?>|perlvar/$?>.
+If this is a problem, you can call
+L<C<POSIX::_exit($status)>|POSIX/C<_exit>> to avoid C<END> and destructor
+processing.  See L<perlmod> for details.
+
+Portability issues: L<perlport/exit>.
+
+=back

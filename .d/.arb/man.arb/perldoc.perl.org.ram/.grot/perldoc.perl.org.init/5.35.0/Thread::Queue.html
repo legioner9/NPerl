@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Thread::Queue - Thread-safe queues - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Thread::Queue">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Thread::Queue.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Thread::Queue">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Thread::Queue">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Thread::Queue">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Thread::Queue">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Thread::Queue">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Thread::Queue">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Thread::Queue">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Thread::Queue">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Thread::Queue">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Thread::Queue">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Thread::Queue">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Thread::Queue">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Thread::Queue">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Thread::Queue">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Thread::Queue">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Thread::Queue">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Thread::Queue">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Thread::Queue">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Thread::Queue">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Thread::Queue">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Thread::Queue">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Thread::Queue">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Thread::Queue">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Thread::Queue">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Thread::Queue">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Thread::Queue">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Thread::Queue">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Thread::Queue">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Thread::Queue">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Thread::Queue">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Thread::Queue">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Thread::Queue">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Thread::Queue">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Thread::Queue">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Thread::Queue">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Thread::Queue">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Thread::Queue">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Thread::Queue">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Thread::Queue">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Thread::Queue">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Thread::Queue">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Thread::Queue">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Thread::Queue">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Thread::Queue">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Thread::Queue">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Thread::Queue">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Thread::Queue">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Thread::Queue">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Thread::Queue">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Thread::Queue">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Thread::Queue">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Thread::Queue">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Thread::Queue">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Thread::Queue">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Thread::Queue">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Thread::Queue">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Thread::Queue">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Thread::Queue">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Thread::Queue">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Thread::Queue">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Thread::Queue">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Thread::Queue">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Thread::Queue">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Thread::Queue">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Thread::Queue">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Thread::Queue">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Thread::Queue">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Thread::Queue">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Thread::Queue">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Thread::Queue">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Thread::Queue">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Thread::Queue">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Thread::Queue">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Thread::Queue">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Thread::Queue">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Thread::Queue">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Thread::Queue">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Thread::Queue">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Thread::Queue">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Thread::Queue">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Thread::Queue.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Thread::Queue">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Thread::Queue">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Thread::Queue">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Thread::Queue">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Thread::Queue">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Thread::Queue">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Thread::Queue">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Thread::Queue">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Thread::Queue">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Thread::Queue">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Thread::Queue">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Thread::Queue">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Thread::Queue">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Thread::Queue">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Thread::Queue">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Thread::Queue">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Thread::Queue">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Thread::Queue">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Thread::Queue">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Thread::Queue">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Thread::Queue">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Thread::Queue">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Thread::Queue">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Thread::Queue">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Thread::Queue">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Thread::Queue">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Thread::Queue">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Thread::Queue">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Thread::Queue">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Thread::Queue">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Thread::Queue">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Thread::Queue">5.35.1</a>
+          <a class="dropdown-item active" href="./Thread::Queue.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Thread::Queue.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Thread::Queue.html">Thread::Queue</a>
+          <div id="more">
+            (<a href="./Thread::Queue.txt">source</a>,
+            <a href="https://metacpan.org/pod/Thread::Queue">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 3.14</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#VERSION">VERSION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#QUEUE-CREATION">QUEUE CREATION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#BASIC-METHODS">BASIC METHODS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#ADVANCED-METHODS">ADVANCED METHODS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#NOTES">NOTES</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#LIMITATIONS">LIMITATIONS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#MAINTAINER">MAINTAINER</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Thread::Queue.html#LICENSE">LICENSE</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Thread::Queue.html#NAME">#</a>NAME</h1>
+
+<p>Thread::Queue - Thread-safe queues</p>
+
+<h1 id="VERSION"><a class="permalink" href="./Thread::Queue.html#VERSION">#</a>VERSION</h1>
+
+<p>This document describes Thread::Queue version 3.14</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Thread::Queue.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use strict;
+use warnings;
+
+use threads;
+use Thread::Queue;
+
+my $q = Thread::Queue-&gt;new();    # A new empty queue
+
+# Worker thread
+my $thr = threads-&gt;create(
+    sub {
+        # Thread will loop until no more work
+        while (defined(my $item = $q-&gt;dequeue())) {
+            # Do work on $item
+            ...
+        }
+    }
+);
+
+# Send work to the thread
+$q-&gt;enqueue($item1, ...);
+# Signal that there is no more work to be sent
+$q-&gt;end();
+# Join up with the thread when it finishes
+$thr-&gt;join();
+
+...
+
+# Count of items in the queue
+my $left = $q-&gt;pending();
+
+# Non-blocking dequeue
+if (defined(my $item = $q-&gt;dequeue_nb())) {
+    # Work on $item
+}
+
+# Blocking dequeue with 5-second timeout
+if (defined(my $item = $q-&gt;dequeue_timed(5))) {
+    # Work on $item
+}
+
+# Set a size for a queue
+$q-&gt;limit = 5;
+
+# Get the second item in the queue without dequeuing anything
+my $item = $q-&gt;peek(1);
+
+# Insert two items into the queue just behind the head
+$q-&gt;insert(1, $item1, $item2);
+
+# Extract the last two items on the queue
+my ($item1, $item2) = $q-&gt;extract(-2, 2);</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Thread::Queue.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This module provides thread-safe FIFO queues that can be accessed safely by any number of threads.</p>
+
+<p>Any data types supported by <a href="./threads::shared.html">threads::shared</a> can be passed via queues:</p>
+
+<dl>
+
+<dt id="Ordinary-scalars"><a class="permalink" href="./Thread::Queue.html#Ordinary-scalars">#</a><a id="Ordinary"></a>Ordinary scalars</dt>
+<dd>
+
+</dd>
+<dt id="Array-refs"><a class="permalink" href="./Thread::Queue.html#Array-refs">#</a><a id="Array"></a>Array refs</dt>
+<dd>
+
+</dd>
+<dt id="Hash-refs"><a class="permalink" href="./Thread::Queue.html#Hash-refs">#</a><a id="Hash"></a>Hash refs</dt>
+<dd>
+
+</dd>
+<dt id="Scalar-refs"><a class="permalink" href="./Thread::Queue.html#Scalar-refs">#</a><a id="Scalar"></a>Scalar refs</dt>
+<dd>
+
+</dd>
+<dt id="Objects-based-on-the-above"><a class="permalink" href="./Thread::Queue.html#Objects-based-on-the-above">#</a><a id="Objects"></a>Objects based on the above</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>Ordinary scalars are added to queues as they are.</p>
+
+<p>If not already thread-shared, the other complex data types will be cloned (recursively, if needed, and including any <code>bless</code>ings and read-only settings) into thread-shared structures before being placed onto a queue.</p>
+
+<p>For example, the following would cause <a href="./Thread::Queue.html">Thread::Queue</a> to create a empty, shared array reference via <code>&amp;shared([])</code>, copy the elements &#39;foo&#39;, &#39;bar&#39; and &#39;baz&#39; from <code>@ary</code> into it, and then place that shared reference onto the queue:</p>
+
+<pre><code>my @ary = qw/foo bar baz/;
+$q-&gt;enqueue(\@ary);</code></pre>
+
+<p>However, for the following, the items are already shared, so their references are added directly to the queue, and no cloning takes place:</p>
+
+<pre><code>my @ary :shared = qw/foo bar baz/;
+$q-&gt;enqueue(\@ary);
+
+my $obj = &amp;shared({});
+$$obj{&#39;foo&#39;} = &#39;bar&#39;;
+$$obj{&#39;qux&#39;} = 99;
+bless($obj, &#39;My::Class&#39;);
+$q-&gt;enqueue($obj);</code></pre>
+
+<p>See <a href="./Thread::Queue.html#LIMITATIONS">&quot;LIMITATIONS&quot;</a> for caveats related to passing objects via queues.</p>
+
+<h1 id="QUEUE-CREATION"><a class="permalink" href="./Thread::Queue.html#QUEUE-CREATION">#</a><a id="QUEUE"></a>QUEUE CREATION</h1>
+
+<dl>
+
+<dt id="-&gt;new()"><a class="permalink" href="./Thread::Queue.html#-%3Enew()">#</a><a id="new"></a>-&gt;new()</dt>
+<dd>
+
+<p>Creates a new empty queue.</p>
+
+</dd>
+<dt id="-&gt;new(LIST)"><a class="permalink" href="./Thread::Queue.html#-%3Enew(LIST)">#</a><a id="new-LIST"></a>-&gt;new(LIST)</dt>
+<dd>
+
+<p>Creates a new queue pre-populated with the provided list of items.</p>
+
+</dd>
+</dl>
+
+<h1 id="BASIC-METHODS"><a class="permalink" href="./Thread::Queue.html#BASIC-METHODS">#</a><a id="BASIC"></a>BASIC METHODS</h1>
+
+<p>The following methods deal with queues on a FIFO basis.</p>
+
+<dl>
+
+<dt id="-&gt;enqueue(LIST)"><a class="permalink" href="./Thread::Queue.html#-%3Eenqueue(LIST)">#</a><a id="enqueue-LIST"></a>-&gt;enqueue(LIST)</dt>
+<dd>
+
+<p>Adds a list of items onto the end of the queue.</p>
+
+</dd>
+<dt id="-&gt;dequeue()"><a class="permalink" href="./Thread::Queue.html#-%3Edequeue()">#</a><a id="dequeue"></a>-&gt;dequeue()</dt>
+<dd>
+
+</dd>
+<dt id="-&gt;dequeue(COUNT)"><a class="permalink" href="./Thread::Queue.html#-%3Edequeue(COUNT)">#</a><a id="dequeue-COUNT"></a>-&gt;dequeue(COUNT)</dt>
+<dd>
+
+<p>Removes the requested number of items (default is 1) from the head of the queue, and returns them. If the queue contains fewer than the requested number of items, then the thread will be blocked until the requisite number of items are available (i.e., until other threads <code>enqueue</code> more items).</p>
+
+</dd>
+<dt id="-&gt;dequeue_nb()"><a class="permalink" href="./Thread::Queue.html#-%3Edequeue_nb()">#</a><a id="dequeue_nb"></a>-&gt;dequeue_nb()</dt>
+<dd>
+
+</dd>
+<dt id="-&gt;dequeue_nb(COUNT)"><a class="permalink" href="./Thread::Queue.html#-%3Edequeue_nb(COUNT)">#</a><a id="dequeue_nb-COUNT"></a>-&gt;dequeue_nb(COUNT)</dt>
+<dd>
+
+<p>Removes the requested number of items (default is 1) from the head of the queue, and returns them. If the queue contains fewer than the requested number of items, then it immediately (i.e., non-blocking) returns whatever items there are on the queue. If the queue is empty, then <code>undef</code> is returned.</p>
+
+</dd>
+<dt id="-&gt;dequeue_timed(TIMEOUT)"><a class="permalink" href="./Thread::Queue.html#-%3Edequeue_timed(TIMEOUT)">#</a><a id="dequeue_timed-TIMEOUT"></a>-&gt;dequeue_timed(TIMEOUT)</dt>
+<dd>
+
+</dd>
+<dt id="-&gt;dequeue_timed(TIMEOUT,-COUNT)"><a class="permalink" href="./Thread::Queue.html#-%3Edequeue_timed(TIMEOUT,-COUNT)">#</a><a id="dequeue_timed-TIMEOUT-COUNT"></a>-&gt;dequeue_timed(TIMEOUT, COUNT)</dt>
+<dd>
+
+<p>Removes the requested number of items (default is 1) from the head of the queue, and returns them. If the queue contains fewer than the requested number of items, then the thread will be blocked until the requisite number of items are available, or until the timeout is reached. If the timeout is reached, it returns whatever items there are on the queue, or <code>undef</code> if the queue is empty.</p>
+
+<p>The timeout may be a number of seconds relative to the current time (e.g., 5 seconds from when the call is made), or may be an absolute timeout in <i>epoch</i> seconds the same as would be used with <a href="./threads::shared.html#cond_timedwait-VARIABLE%2C-ABS_TIMEOUT">cond_timedwait()</a>. Fractional seconds (e.g., 2.5 seconds) are also supported (to the extent of the underlying implementation).</p>
+
+<p>If <code>TIMEOUT</code> is missing, <code>undef</code>, or less than or equal to 0, then this call behaves the same as <code>dequeue_nb</code>.</p>
+
+</dd>
+<dt id="-&gt;pending()"><a class="permalink" href="./Thread::Queue.html#-%3Epending()">#</a><a id="pending"></a>-&gt;pending()</dt>
+<dd>
+
+<p>Returns the number of items still in the queue. Returns <code>undef</code> if the queue has been ended (see below), and there are no more items in the queue.</p>
+
+</dd>
+<dt id="-&gt;limit"><a class="permalink" href="./Thread::Queue.html#-%3Elimit">#</a><a id="limit"></a>-&gt;limit</dt>
+<dd>
+
+<p>Sets the size of the queue. If set, calls to <code>enqueue()</code> will block until the number of pending items in the queue drops below the <code>limit</code>. The <code>limit</code> does not prevent enqueuing items beyond that count:</p>
+
+<pre><code>my $q = Thread::Queue-&gt;new(1, 2);
+$q-&gt;limit = 4;
+$q-&gt;enqueue(3, 4, 5);   # Does not block
+$q-&gt;enqueue(6);         # Blocks until at least 2 items are
+                        # dequeued
+my $size = $q-&gt;limit;   # Returns the current limit (may return
+                        # &#39;undef&#39;)
+$q-&gt;limit = 0;          # Queue size is now unlimited</code></pre>
+
+<p>Calling any of the dequeue methods with <code>COUNT</code> greater than a queue&#39;s <code>limit</code> will generate an error.</p>
+
+</dd>
+<dt id="-&gt;end()"><a class="permalink" href="./Thread::Queue.html#-%3Eend()">#</a><a id="end"></a>-&gt;end()</dt>
+<dd>
+
+<p>Declares that no more items will be added to the queue.</p>
+
+<p>All threads blocking on <code>dequeue()</code> calls will be unblocked with any remaining items in the queue and/or <code>undef</code> being returned. Any subsequent calls to <code>dequeue()</code> will behave like <code>dequeue_nb()</code>.</p>
+
+<p>Once ended, no more items may be placed in the queue.</p>
+
+</dd>
+</dl>
+
+<h1 id="ADVANCED-METHODS"><a class="permalink" href="./Thread::Queue.html#ADVANCED-METHODS">#</a><a id="ADVANCED"></a>ADVANCED METHODS</h1>
+
+<p>The following methods can be used to manipulate items anywhere in a queue.</p>
+
+<p>To prevent the contents of a queue from being modified by another thread while it is being examined and/or changed, <a href="./threads::shared.html#lock-VARIABLE">lock</a> the queue inside a local block:</p>
+
+<pre><code>{
+    lock($q);   # Keep other threads from changing the queue&#39;s contents
+    my $item = $q-&gt;peek();
+    if ($item ...) {
+        ...
+    }
+}
+# Queue is now unlocked</code></pre>
+
+<dl>
+
+<dt id="-&gt;peek()"><a class="permalink" href="./Thread::Queue.html#-%3Epeek()">#</a><a id="peek"></a>-&gt;peek()</dt>
+<dd>
+
+</dd>
+<dt id="-&gt;peek(INDEX)"><a class="permalink" href="./Thread::Queue.html#-%3Epeek(INDEX)">#</a><a id="peek-INDEX"></a>-&gt;peek(INDEX)</dt>
+<dd>
+
+<p>Returns an item from the queue without dequeuing anything. Defaults to the head of queue (at index position 0) if no index is specified. Negative index values are supported as with <a href="perldata.html#Subscripts">arrays</a> (i.e., -1 is the end of the queue, -2 is next to last, and so on).</p>
+
+<p>If no items exists at the specified index (i.e., the queue is empty, or the index is beyond the number of items on the queue), then <code>undef</code> is returned.</p>
+
+<p>Remember, the returned item is not removed from the queue, so manipulating a <code>peek</code>ed at reference affects the item on the queue.</p>
+
+</dd>
+<dt id="-&gt;insert(INDEX,-LIST)"><a class="permalink" href="./Thread::Queue.html#-%3Einsert(INDEX,-LIST)">#</a><a id="insert-INDEX-LIST"></a>-&gt;insert(INDEX, LIST)</dt>
+<dd>
+
+<p>Adds the list of items to the queue at the specified index position (0 is the head of the list). Any existing items at and beyond that position are pushed back past the newly added items:</p>
+
+<pre><code>$q-&gt;enqueue(1, 2, 3, 4);
+$q-&gt;insert(1, qw/foo bar/);
+# Queue now contains:  1, foo, bar, 2, 3, 4</code></pre>
+
+<p>Specifying an index position greater than the number of items in the queue just adds the list to the end.</p>
+
+<p>Negative index positions are supported:</p>
+
+<pre><code>$q-&gt;enqueue(1, 2, 3, 4);
+$q-&gt;insert(-2, qw/foo bar/);
+# Queue now contains:  1, 2, foo, bar, 3, 4</code></pre>
+
+<p>Specifying a negative index position greater than the number of items in the queue adds the list to the head of the queue.</p>
+
+</dd>
+<dt id="-&gt;extract()"><a class="permalink" href="./Thread::Queue.html#-%3Eextract()">#</a><a id="extract"></a>-&gt;extract()</dt>
+<dd>
+
+</dd>
+<dt id="-&gt;extract(INDEX)"><a class="permalink" href="./Thread::Queue.html#-%3Eextract(INDEX)">#</a><a id="extract-INDEX"></a>-&gt;extract(INDEX)</dt>
+<dd>
+
+</dd>
+<dt id="-&gt;extract(INDEX,-COUNT)"><a class="permalink" href="./Thread::Queue.html#-%3Eextract(INDEX,-COUNT)">#</a><a id="extract-INDEX-COUNT"></a>-&gt;extract(INDEX, COUNT)</dt>
+<dd>
+
+<p>Removes and returns the specified number of items (defaults to 1) from the specified index position in the queue (0 is the head of the queue). When called with no arguments, <code>extract</code> operates the same as <code>dequeue_nb</code>.</p>
+
+<p>This method is non-blocking, and will return only as many items as are available to fulfill the request:</p>
+
+<pre><code>$q-&gt;enqueue(1, 2, 3, 4);
+my $item  = $q-&gt;extract(2)     # Returns 3
+                               # Queue now contains:  1, 2, 4
+my @items = $q-&gt;extract(1, 3)  # Returns (2, 4)
+                               # Queue now contains:  1</code></pre>
+
+<p>Specifying an index position greater than the number of items in the queue results in <code>undef</code> or an empty list being returned.</p>
+
+<pre><code>$q-&gt;enqueue(&#39;foo&#39;);
+my $nada = $q-&gt;extract(3)      # Returns undef
+my @nada = $q-&gt;extract(1, 3)   # Returns ()</code></pre>
+
+<p>Negative index positions are supported. Specifying a negative index position greater than the number of items in the queue may return items from the head of the queue (similar to <code>dequeue_nb</code>) if the count overlaps the head of the queue from the specified position (i.e. if queue size + index + count is greater than zero):</p>
+
+<pre><code>$q-&gt;enqueue(qw/foo bar baz/);
+my @nada = $q-&gt;extract(-6, 2);  # Returns ()      - (3+(-6)+2) &lt;= 0
+my @some = $q-&gt;extract(-6, 4);  # Returns (foo)   - (3+(-6)+4) &gt; 0
+                                # Queue now contains:  bar, baz
+my @rest = $q-&gt;extract(-3, 4);  # Returns (bar, baz) -
+                                #                   (2+(-3)+4) &gt; 0</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="NOTES"><a class="permalink" href="./Thread::Queue.html#NOTES">#</a>NOTES</h1>
+
+<p>Queues created by <a href="./Thread::Queue.html">Thread::Queue</a> can be used in both threaded and non-threaded applications.</p>
+
+<h1 id="LIMITATIONS"><a class="permalink" href="./Thread::Queue.html#LIMITATIONS">#</a>LIMITATIONS</h1>
+
+<p>Passing objects on queues may not work if the objects&#39; classes do not support sharing. See <a href="./threads::shared.html#BUGS-AND-LIMITATIONS">&quot;BUGS AND LIMITATIONS&quot; in threads::shared</a> for more.</p>
+
+<p>Passing array/hash refs that contain objects may not work for Perl prior to 5.10.0.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./Thread::Queue.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p>Thread::Queue on MetaCPAN: <a href="https://metacpan.org/release/Thread-Queue">https://metacpan.org/release/Thread-Queue</a></p>
+
+<p>Code repository for CPAN distribution: <a href="https://github.com/Dual-Life/Thread-Queue">https://github.com/Dual-Life/Thread-Queue</a></p>
+
+<p><a href="threads.html">threads</a>, <a href="./threads::shared.html">threads::shared</a></p>
+
+<p>Sample code in the <i>examples</i> directory of this distribution on CPAN.</p>
+
+<h1 id="MAINTAINER"><a class="permalink" href="./Thread::Queue.html#MAINTAINER">#</a>MAINTAINER</h1>
+
+<p>Jerry D. Hedden, <span style="white-space: nowrap;">&lt;jdhedden AT cpan DOT org&gt;</span></p>
+
+<h1 id="LICENSE"><a class="permalink" href="./Thread::Queue.html#LICENSE">#</a>LICENSE</h1>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

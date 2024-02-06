@@ -1,0 +1,63 @@
+=over
+
+=item readline EXPR
+
+=item readline
+X<readline> X<gets> X<fgets>
+
+Reads from the filehandle whose typeglob is contained in EXPR (or from
+C<*ARGV> if EXPR is not provided).  In scalar context, each call reads and
+returns the next line until end-of-file is reached, whereupon the
+subsequent call returns L<C<undef>|/undef EXPR>.  In list context, reads
+until end-of-file is reached and returns a list of lines.  Note that the
+notion of "line" used here is whatever you may have defined with
+L<C<$E<sol>>|perlvar/$E<sol>> (or C<$INPUT_RECORD_SEPARATOR> in
+L<English>).  See L<perlvar/"$/">.
+
+When L<C<$E<sol>>|perlvar/$E<sol>> is set to L<C<undef>|/undef EXPR>,
+when L<C<readline>|/readline EXPR> is in scalar context (i.e., file
+slurp mode), and when an empty file is read, it returns C<''> the first
+time, followed by L<C<undef>|/undef EXPR> subsequently.
+
+This is the internal function implementing the C<< <EXPR> >>
+operator, but you can use it directly.  The C<< <EXPR> >>
+operator is discussed in more detail in L<perlop/"I/O Operators">.
+
+    my $line = <STDIN>;
+    my $line = readline(STDIN);    # same thing
+
+If L<C<readline>|/readline EXPR> encounters an operating system error,
+L<C<$!>|perlvar/$!> will be set with the corresponding error message.
+It can be helpful to check L<C<$!>|perlvar/$!> when you are reading from
+filehandles you don't trust, such as a tty or a socket.  The following
+example uses the operator form of L<C<readline>|/readline EXPR> and dies
+if the result is not defined.
+
+    while ( ! eof($fh) ) {
+        defined( $_ = readline $fh ) or die "readline failed: $!";
+        ...
+    }
+
+Note that you have can't handle L<C<readline>|/readline EXPR> errors
+that way with the C<ARGV> filehandle.  In that case, you have to open
+each element of L<C<@ARGV>|perlvar/@ARGV> yourself since
+L<C<eof>|/eof FILEHANDLE> handles C<ARGV> differently.
+
+    foreach my $arg (@ARGV) {
+        open(my $fh, $arg) or warn "Can't open $arg: $!";
+
+        while ( ! eof($fh) ) {
+            defined( $_ = readline $fh )
+                or die "readline failed for $arg: $!";
+            ...
+        }
+    }
+
+Like the C<< <EXPR> >> operator, if a C<readline> expression is
+used as the condition of a C<while> or C<for> loop, then it will be
+implicitly assigned to C<$_>.  If either a C<readline> expression or
+an explicit assignment of a C<readline> expression to a scalar is used
+as a C<while>/C<for> condition, then the condition actually tests for
+definedness of the expression's value, not for its regular truth value.
+
+=back

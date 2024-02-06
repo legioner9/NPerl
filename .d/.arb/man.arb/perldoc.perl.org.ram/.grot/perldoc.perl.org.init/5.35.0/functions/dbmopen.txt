@@ -1,0 +1,54 @@
+=over
+
+=item dbmopen HASH,DBNAME,MASK
+X<dbmopen> X<dbm> X<ndbm> X<sdbm> X<gdbm>
+
+[This function has been largely superseded by the
+L<C<tie>|/tie VARIABLE,CLASSNAME,LIST> function.]
+
+This binds a L<dbm(3)>, L<ndbm(3)>, L<sdbm(3)>, L<gdbm(3)>, or Berkeley
+DB file to a hash.  HASH is the name of the hash.  (Unlike normal
+L<C<open>|/open FILEHANDLE,MODE,EXPR>, the first argument is I<not> a
+filehandle, even though it looks like one).  DBNAME is the name of the
+database (without the F<.dir> or F<.pag> extension if any).  If the
+database does not exist, it is created with protection specified by MASK
+(as modified by the L<C<umask>|/umask EXPR>).  To prevent creation of
+the database if it doesn't exist, you may specify a MODE of 0, and the
+function will return a false value if it can't find an existing
+database.  If your system supports only the older DBM functions, you may
+make only one L<C<dbmopen>|/dbmopen HASH,DBNAME,MASK> call in your
+program.  In older versions of Perl, if your system had neither DBM nor
+ndbm, calling L<C<dbmopen>|/dbmopen HASH,DBNAME,MASK> produced a fatal
+error; it now falls back to L<sdbm(3)>.
+
+If you don't have write access to the DBM file, you can only read hash
+variables, not set them.  If you want to test whether you can write,
+either use file tests or try setting a dummy hash entry inside an
+L<C<eval>|/eval EXPR> to trap the error.
+
+Note that functions such as L<C<keys>|/keys HASH> and
+L<C<values>|/values HASH> may return huge lists when used on large DBM
+files.  You may prefer to use the L<C<each>|/each HASH> function to
+iterate over large DBM files.  Example:
+
+    # print out history file offsets
+    dbmopen(%HIST,'/usr/lib/news/history',0666);
+    while (($key,$val) = each %HIST) {
+        print $key, ' = ', unpack('L',$val), "\n";
+    }
+    dbmclose(%HIST);
+
+See also L<AnyDBM_File> for a more general description of the pros and
+cons of the various dbm approaches, as well as L<DB_File> for a particularly
+rich implementation.
+
+You can control which DBM library you use by loading that library
+before you call L<C<dbmopen>|/dbmopen HASH,DBNAME,MASK>:
+
+    use DB_File;
+    dbmopen(%NS_Hist, "$ENV{HOME}/.netscape/history.db")
+        or die "Can't open netscape history file: $!";
+
+Portability issues: L<perlport/dbmopen>.
+
+=back

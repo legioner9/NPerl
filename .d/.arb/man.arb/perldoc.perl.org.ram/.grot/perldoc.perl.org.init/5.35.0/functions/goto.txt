@@ -1,0 +1,67 @@
+=over
+
+=item goto LABEL
+X<goto> X<jump> X<jmp>
+
+=item goto EXPR
+
+=item goto &NAME
+
+The C<goto LABEL> form finds the statement labeled with LABEL and
+resumes execution there.  It can't be used to get out of a block or
+subroutine given to L<C<sort>|/sort SUBNAME LIST>.  It can be used to go
+almost anywhere else within the dynamic scope, including out of
+subroutines, but it's usually better to use some other construct such as
+L<C<last>|/last LABEL> or L<C<die>|/die LIST>.  The author of Perl has
+never felt the need to use this form of L<C<goto>|/goto LABEL> (in Perl,
+that is; C is another matter).  (The difference is that C does not offer
+named loops combined with loop control.  Perl does, and this replaces
+most structured uses of L<C<goto>|/goto LABEL> in other languages.)
+
+The C<goto EXPR> form expects to evaluate C<EXPR> to a code reference or
+a label name.  If it evaluates to a code reference, it will be handled
+like C<goto &NAME>, below.  This is especially useful for implementing
+tail recursion via C<goto __SUB__>.
+
+If the expression evaluates to a label name, its scope will be resolved
+dynamically.  This allows for computed L<C<goto>|/goto LABEL>s per
+FORTRAN, but isn't necessarily recommended if you're optimizing for
+maintainability:
+
+    goto ("FOO", "BAR", "GLARCH")[$i];
+
+As shown in this example, C<goto EXPR> is exempt from the "looks like a
+function" rule.  A pair of parentheses following it does not (necessarily)
+delimit its argument.  C<goto("NE")."XT"> is equivalent to C<goto NEXT>.
+Also, unlike most named operators, this has the same precedence as
+assignment.
+
+Use of C<goto LABEL> or C<goto EXPR> to jump into a construct is
+deprecated and will issue a warning.  Even then, it may not be used to
+go into any construct that requires initialization, such as a
+subroutine, a C<foreach> loop, or a C<given>
+block.  In general, it may not be used to jump into the parameter
+of a binary or list operator, but it may be used to jump into the
+I<first> parameter of a binary operator.  (The C<=>
+assignment operator's "first" operand is its right-hand
+operand.)  It also can't be used to go into a
+construct that is optimized away.
+
+The C<goto &NAME> form is quite different from the other forms of
+L<C<goto>|/goto LABEL>.  In fact, it isn't a goto in the normal sense at
+all, and doesn't have the stigma associated with other gotos.  Instead,
+it exits the current subroutine (losing any changes set by
+L<C<local>|/local EXPR>) and immediately calls in its place the named
+subroutine using the current value of L<C<@_>|perlvar/@_>.  This is used
+by C<AUTOLOAD> subroutines that wish to load another subroutine and then
+pretend that the other subroutine had been called in the first place
+(except that any modifications to L<C<@_>|perlvar/@_> in the current
+subroutine are propagated to the other subroutine.) After the
+L<C<goto>|/goto LABEL>, not even L<C<caller>|/caller EXPR> will be able
+to tell that this routine was called first.
+
+NAME needn't be the name of a subroutine; it can be a scalar variable
+containing a code reference or a block that evaluates to a code
+reference.
+
+=back

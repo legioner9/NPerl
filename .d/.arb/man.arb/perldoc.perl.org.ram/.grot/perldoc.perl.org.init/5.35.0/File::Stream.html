@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>File::Stream - Regular expression delimited records from streams - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of File-Stream - MetaCPAN" href="https://metacpan.org/dist/File-Stream/releases.rss" />
+        <link rel="canonical" href="./File::Stream.html" />
+        <meta name="description" content="Regular expression delimited records from streams" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/File::Stream" />
+<meta name="twitter:title"       content="File::Stream" />
+<meta name="twitter:description" content="Regular expression delimited records from streams" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./File::Stream.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of File-Stream was released.">
+      <span class="relatize">06 Feb 2011 18:19:20 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/File-Stream">File-Stream</a>
+  </li>
+  <li>
+    Module version: 2.30
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/File-Stream/source/lib/File/Stream.pm">Source</a>
+    (<a href="https://metacpan.org/dist/File-Stream/source/lib/File/Stream.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/File-Stream/source/lib/File">Browse</a>
+    (<a href="https://metacpan.org/dist/File-Stream/source/lib/File?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/File-Stream/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/File-Stream/contribute">How to Contribute</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=File-Stream">Issues</a>
+      (2)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=File-Stream+2.30" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/F/File-Stream.html?oncpan=1&amp;distmat=1&amp;version=2.30&amp;grade=2" style="color: #090">20</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/F/File-Stream.html?oncpan=1&amp;distmat=1&amp;version=2.30&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/F/File-Stream.html?oncpan=1&amp;distmat=1&amp;version=2.30&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/SMUELLER/File-Stream-2.30">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on File-Stream who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 0
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/File-Stream-2.30/index.html">57.47% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/File-Stream/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/S/SM/SMUELLER/File-Stream-2.30.tar.gz">
+      Download (<span itemprop="fileSize">8.59KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FSMUELLER%2FFile-Stream-2.30%2Flib%2FFile%2FStream.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/File-Stream/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/File-Stream/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:File-Stream">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="File-Stream">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/File/Stream.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="SMUELLER/File-Stream-2.30"
+>2.30
+  (SMUELLER on 2011-02-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="SMUELLER/File-Stream-2.20"
+>2.20
+  (SMUELLER on 2008-07-16)</option>
+<option
+  
+  value="SMUELLER/File-Stream-2.10"
+>2.10
+  (SMUELLER on 2005-12-19)</option>
+<option
+  
+  value="SMUELLER/File-Stream-2.00"
+>2.00
+  (SMUELLER on 2005-11-15)</option>
+<option
+  
+  value="SMUELLER/File-Stream-1.11"
+>1.11
+  (SMUELLER on 2004-03-02)</option>
+<option
+  
+  value="SMUELLER/File-Stream-1.10"
+>1.10
+  (SMUELLER on 2003-10-12)</option>
+<option
+  
+  value="SMUELLER/File-Stream-1.00"
+>1.00
+  (SMUELLER on 2003-10-04)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/SMUELLER/File-Stream-2.30/diff/' + encodeURIComponent(this.value) + '/lib/File/Stream.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="SMUELLER/File-Stream-2.30"
+>2.30
+  (SMUELLER on 2011-02-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="SMUELLER/File-Stream-2.20"
+>2.20
+  (SMUELLER on 2008-07-16)</option>
+<option
+  
+  value="SMUELLER/File-Stream-2.10"
+>2.10
+  (SMUELLER on 2005-12-19)</option>
+<option
+  
+  value="SMUELLER/File-Stream-2.00"
+>2.00
+  (SMUELLER on 2005-11-15)</option>
+<option
+  
+  value="SMUELLER/File-Stream-1.11"
+>1.11
+  (SMUELLER on 2004-03-02)</option>
+<option
+  
+  value="SMUELLER/File-Stream-1.10"
+>1.10
+  (SMUELLER on 2003-10-12)</option>
+<option
+  
+  value="SMUELLER/File-Stream-1.00"
+>1.00
+  (SMUELLER on 2003-10-04)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Carp" title="Carp" class="ellipsis">Carp</a></li>
+  <li><a href="https://metacpan.org/pod/YAPE::Regex" title="YAPE::Regex" class="ellipsis">YAPE::Regex</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/File::Stream/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=File%3A%3AStream">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=File-Stream">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/SMUELLER/File-Stream-2.30/view/lib/File/Stream.pm">This version</a>
+    </li>
+    <li>
+      <a href="./File::Stream.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+    2 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+    >
+      Steffen Mueller &lt;stream-module at steffen-mueller dot net&gt;
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/SMUELLER" class="author-name">Steffen Müller</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/File/Stream.pm&#39;" class="">
+<option
+  selected
+  value="SMUELLER/File-Stream-2.30"
+>2.30
+  (SMUELLER on 2011-02-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="SMUELLER/File-Stream-2.20"
+>2.20
+  (SMUELLER on 2008-07-16)</option>
+<option
+  
+  value="SMUELLER/File-Stream-2.10"
+>2.10
+  (SMUELLER on 2005-12-19)</option>
+<option
+  
+  value="SMUELLER/File-Stream-2.00"
+>2.00
+  (SMUELLER on 2005-11-15)</option>
+<option
+  
+  value="SMUELLER/File-Stream-1.11"
+>1.11
+  (SMUELLER on 2004-03-02)</option>
+<option
+  
+  value="SMUELLER/File-Stream-1.10"
+>1.10
+  (SMUELLER on 2003-10-12)</option>
+<option
+  
+  value="SMUELLER/File-Stream-1.00"
+>1.00
+  (SMUELLER on 2003-10-04)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/File-Stream">File-Stream-2.30</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage zero &#10;
+          No dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="File-Stream-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="File-Stream-2.30">
+    <input type="hidden" name="author" value="SMUELLER">
+    <input type="hidden" name="distribution" value="File-Stream">
+    <button type="submit" class="favorite highlight"><span>2</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./File::Stream.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>2</span> ++</a>
+</div>
+   / <span>File::Stream</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./File::Stream.html#NAME">NAME</a></li>
+  <li><a href="./File::Stream.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./File::Stream.html#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a href="./File::Stream.html#EXPORT">EXPORT</a></li>
+      <li><a href="./File::Stream.html#new">new</a></li>
+      <li><a href="./File::Stream.html#readline">readline</a></li>
+      <li><a href="./File::Stream.html#find">find</a></li>
+      <li><a href="./File::Stream.html#fill_buffer">fill_buffer</a></li>
+    </ul>
+  </li>
+  <li><a href="./File::Stream.html#CAVEATS">CAVEATS</a></li>
+  <li><a href="./File::Stream.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./File::Stream.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+  <li><a href="./File::Stream.html#SEE-ALSO">SEE ALSO</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>File::Stream - Regular expression delimited records from streams</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  use File::Stream;
+  my $stream = File::Stream-&gt;new($filehandle);
+  
+  $/ = qr/\s*,\s*/;
+  print &quot;$_\n&quot; while &lt;$stream&gt;;
+
+  # or:
+  ($handler, $stream) = File::Stream-&gt;new(
+    $filehandle,
+    read_length =&gt; 1024,
+    separator =&gt; qr{to_be_used_instead_of_$/},
+  );
+  
+  while(&lt;$stream&gt;) {...}
+  my $line = $stream-&gt;readline(); # similar
+  
+  # extended usage:
+  use URI;
+  my $uri = URI-&gt;new(&#39;http://steffen-mueller.net&#39;);
+  my ($pre_match, $match) =
+    $handler-&gt;find(&#39;literal_string&#39;, qr/regex/, $uri);
+  
+  # $match contains whichever argument to find() was found first.
+  # $pre_match contains all that was before the first token that was found.
+  # both the contents of $match and $pre_match have been removed from the
+  # data stream (buffer).
+  
+  # Since version 2.10 of the module, you can use seek() and tell() on
+  # File::Stream objects:
+  my $position = tell($stream);
+  # ...
+  seek($stream, 0, $position); # rewind</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>Perl filehandles are streams, but sometimes they just aren&#39;t powerful enough. This module offers to have streams from filehandles searched with regexes and allows the global input record separator variable to contain regexes.</p>
+
+<p>Thus, readline() and the &lt;&gt; operator can now return records delimited by regular expression matches.</p>
+
+<p>There are some very important gripes with applying regular expressions to (possibly infinite) streams. Please read the CAVEATS section of this documentation carfully.</p>
+
+<h2 id="EXPORT">EXPORT</h2>
+
+<p>None.</p>
+
+<h2 id="new">new</h2>
+
+<p>The new() constructor takes a filehandle (or a glob reference) as first argument. The following arguments are interpreted as key/value pairs with the following parameters being defined:</p>
+
+<dl>
+
+<dt id="separator">separator</dt>
+<dd>
+
+<p>This may be set to either a string, a compiled regular expression (qr//), or an object which is overloaded in stringification context to return a string.</p>
+
+<p>If separator is set, its value will be used in calls to readline() (including the &lt;&gt; diamond operator which calls readline internally) instead of $/, the global input record separator.</p>
+
+<p>String will be interpreted as literal strings, not regular expressions.</p>
+
+</dd>
+<dt id="read_length">read_length</dt>
+<dd>
+
+<p>Defaults to 1024 bytes. Sets the number of bytes to read into the internal buffer at once. Large values may speed up searching considerably, but increase memory usage.</p>
+
+</dd>
+<dt id="die_on_anchors">die_on_anchors</dt>
+<dd>
+
+<p>Defaults to true. If set, any call to <code>find()</code> will die on regular expressions which contain anchors (<code>^ and $</code>). Usually, those do not make much sense in regular expressions applied to streams. If, however, you&#39;re using the <code>//m</code> option, these anchors match the start and end of each line respectively. In that case, you can suppress the fatal error by setting <code>die_on_anchors =&gt; 0</code>.</p>
+
+</dd>
+</dl>
+
+<p>The new() method returns a fresh File::Stream object that has been tied to be a filehandle and a filehandle. All the usual file operations should work on the filehandle and the File::Stream methods should work on the object.</p>
+
+<h2 id="readline">readline</h2>
+
+<p>The readline method on a File::Stream object works just like the builtin except that it uses the objects record separator instead of $/ if it has been set via new() and honours regular expressions.</p>
+
+<p>This is also internally used when readline() is called on the tied filehandle.</p>
+
+<h2 id="find">find</h2>
+
+<p>Finds the first occurrance one of its arguments in the stream. For example,</p>
+
+<pre><code>  $stream_handler-&gt;find(&#39;a&#39;, &#39;b&#39;);</code></pre>
+
+<p>finds the first character &#39;a&#39; or &#39;b&#39; in the stream whichever comes first. Returns two strings: The data read from the stream <i>before</i> the match and the match itself. The arguments to find() may be regular expressions, but please see the CAVEATS section of this documentation about that. If any of the arguments is an object, it will be evaluated in stringification context and the result of that will be matched <i>literally</i>, ie. not as a regular expression.</p>
+
+<p>As with readline(), this is a method on the stream handler object.</p>
+
+<h2 id="fill_buffer">fill_buffer</h2>
+
+<p>It is unlikely that you will need to call this method directly. Reads more data from the internal filehandle into the buffer. First argument may be the number of bytes to read, otherwise the &#39;read_length&#39; attribute is used.</p>
+
+<p>Again, call this on the handler object, not the file handle.</p>
+
+<h1 id="CAVEATS">CAVEATS</h1>
+
+<p>There are several important issues to keep in mind when using this module. First, setting $/ to a regular expression will most certainly break badly when $/ is used on filehandles that are not File::Stream object. Please consider setting the &quot;separator&quot; attribute of the File::Stream object instead for a more robust solution.</p>
+
+<p>In a later version of this module, either $/ may be tied to do magic that only applies the regex to File::Stream objects, or CORE::readline() might be overridden to use the builtin readline() whenever the handle at hand is not a File::Stream. It is currently unclear which would be less bad.</p>
+
+<p>Most importantly, however, there are some inherent problems with regular expressions applied to (possibly infinite) streams. The implementation of Perl&#39;s regular expression engine requires that the string you apply a regular expression to be in memory completely. That means applying a regular expression that matches infinitely long strings (like .*) to a stream will lead to the module reading in the whole file, or worse yet, an infinite string. Anchors like <i>^</i> or <i>$</i> don&#39;t make sense with streams either, but since version 1.11 of File::Stream, the module throws a fatal error when finding an anchor in a regular expression. Using infinitely long matches on infinite streams may still result in your machine running out of memory. <b>So don&#39;t do that!</b></p>
+
+<p>Since version 1.10, the buffer is extended whenever the regex reaches its end. That means it has to tokenize the regex and insert weird constructs in many places. This is a rather slow and fragile process.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Steffen Mueller, &lt;stream-module at steffen-mueller dot net&gt;</p>
+
+<p>Many thanks to Simon Cozens for his advice and the original idea, Autrijus Tang for much help with the fiendish regexes I couldn&#39;t handle, and Ben Tilly for suggesting the use of the ${} regex construct.</p>
+
+<p>Furthermore, since version 2.10, File::Stream includes a patch implementing <code>seek()</code> and <code>tell()</code> for File::Stream objects. The idea and code were kindly supplied by Phil Whineray.</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>Copyright (C) 2003-2011 by Steffen Mueller</p>
+
+<p>This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself, either Perl version 5.6 or, at your option, any later version of Perl 5 you may have available.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/perltie">perltie</a>, <a href="https://metacpan.org/pod/Tie::Handle">Tie::Handle</a>, <a href="https://metacpan.org/pod/perlre">perlre</a>, <a href="https://metacpan.org/pod/YAPE::Regex">YAPE::Regex</a></p>
+
+<p><a href="https://metacpan.org/pod/Perl6::Slurp">Perl6::Slurp</a></p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install File::Stream, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm File::Stream</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install File::Stream</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./File::Stream.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

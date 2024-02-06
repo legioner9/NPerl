@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>File::Path - Create or remove directory trees - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/File::Path">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./File::Path.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/File::Path">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/File::Path">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/File::Path">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/File::Path">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/File::Path">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/File::Path">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/File::Path">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/File::Path">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/File::Path">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/File::Path">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/File::Path">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/File::Path">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/File::Path">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/File::Path">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/File::Path">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/File::Path">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/File::Path">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/File::Path">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/File::Path">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/File::Path">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/File::Path">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/File::Path">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/File::Path">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/File::Path">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/File::Path">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/File::Path">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/File::Path">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/File::Path">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/File::Path">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/File::Path">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/File::Path">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/File::Path">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/File::Path">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/File::Path">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/File::Path">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/File::Path">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/File::Path">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/File::Path">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/File::Path">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/File::Path">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/File::Path">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/File::Path">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/File::Path">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/File::Path">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/File::Path">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/File::Path">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/File::Path">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/File::Path">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/File::Path">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/File::Path">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/File::Path">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/File::Path">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/File::Path">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/File::Path">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/File::Path">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/File::Path">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/File::Path">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/File::Path">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/File::Path">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/File::Path">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/File::Path">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/File::Path">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/File::Path">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/File::Path">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/File::Path">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/File::Path">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/File::Path">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/File::Path">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/File::Path">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/File::Path">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/File::Path">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/File::Path">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/File::Path">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/File::Path">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/File::Path">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/File::Path">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/File::Path">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/File::Path">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/File::Path">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/File::Path">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./File::Path.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/File::Path">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/File::Path">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/File::Path">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/File::Path">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/File::Path">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/File::Path">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/File::Path">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/File::Path">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/File::Path">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/File::Path">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/File::Path">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/File::Path">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/File::Path">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/File::Path">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/File::Path">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/File::Path">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/File::Path">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/File::Path">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/File::Path">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/File::Path">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/File::Path">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/File::Path">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/File::Path">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/File::Path">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/File::Path">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/File::Path">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/File::Path">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/File::Path">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/File::Path">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/File::Path">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/File::Path">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/File::Path">5.35.1</a>
+          <a class="dropdown-item active" href="./File::Path.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./File::Path.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./File::Path.html">File::Path</a>
+          <div id="more">
+            (<a href="./File::Path.txt">source</a>,
+            <a href="https://metacpan.org/pod/File::Path">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 2.18</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#VERSION">VERSION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#ERROR-HANDLING">ERROR HANDLING</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#NOTES">NOTES</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#API-CHANGES">API CHANGES</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#SECURITY-CONSIDERATIONS">SECURITY CONSIDERATIONS</a>
+              </li>
+          </ul>
+
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#DIAGNOSTICS">DIAGNOSTICS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#BUGS-AND-LIMITATIONS">BUGS AND LIMITATIONS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#MULTITHREADED-APPLICATIONS">MULTITHREADED APPLICATIONS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#NFS-Mount-Points">NFS Mount Points</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#REPORTING-BUGS">REPORTING BUGS</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#AUTHORS">AUTHORS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#CONTRIBUTORS">CONTRIBUTORS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Path.html#LICENSE">LICENSE</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./File::Path.html#NAME">#</a>NAME</h1>
+
+<p>File::Path - Create or remove directory trees</p>
+
+<h1 id="VERSION"><a class="permalink" href="./File::Path.html#VERSION">#</a>VERSION</h1>
+
+<p>2.18 - released November 4 2020.</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./File::Path.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use File::Path qw(make_path remove_tree);
+
+@created = make_path(&#39;foo/bar/baz&#39;, &#39;/zug/zwang&#39;);
+@created = make_path(&#39;foo/bar/baz&#39;, &#39;/zug/zwang&#39;, {
+    verbose =&gt; 1,
+    mode =&gt; 0711,
+});
+make_path(&#39;foo/bar/baz&#39;, &#39;/zug/zwang&#39;, {
+    chmod =&gt; 0777,
+});
+
+$removed_count = remove_tree(&#39;foo/bar/baz&#39;, &#39;/zug/zwang&#39;, {
+    verbose =&gt; 1,
+    error  =&gt; \my $err_list,
+    safe =&gt; 1,
+});
+
+# legacy (interface promoted before v2.00)
+@created = mkpath(&#39;/foo/bar/baz&#39;);
+@created = mkpath(&#39;/foo/bar/baz&#39;, 1, 0711);
+@created = mkpath([&#39;/foo/bar/baz&#39;, &#39;blurfl/quux&#39;], 1, 0711);
+$removed_count = rmtree(&#39;foo/bar/baz&#39;, 1, 1);
+$removed_count = rmtree([&#39;foo/bar/baz&#39;, &#39;blurfl/quux&#39;], 1, 1);
+
+# legacy (interface promoted before v2.06)
+@created = mkpath(&#39;foo/bar/baz&#39;, &#39;/zug/zwang&#39;, { verbose =&gt; 1, mode =&gt; 0711 });
+$removed_count = rmtree(&#39;foo/bar/baz&#39;, &#39;/zug/zwang&#39;, { verbose =&gt; 1, mode =&gt; 0711 });</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./File::Path.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This module provides a convenient way to create directories of arbitrary depth and to delete an entire directory subtree from the filesystem.</p>
+
+<p>The following functions are provided:</p>
+
+<dl>
+
+<dt id="make_path(-$dir1,-$dir2,-....-)"><a class="permalink" href="./File::Path.html#make_path(-$dir1,-$dir2,-....-)">#</a><a id="make_path"></a><a id="make_path-dir1-dir2"></a>make_path( $dir1, $dir2, .... )</dt>
+<dd>
+
+</dd>
+<dt id="make_path(-$dir1,-$dir2,-....,-\%opts-)"><a class="permalink" href="./File::Path.html#make_path(-$dir1,-$dir2,-....,-%5C%25opts-)">#</a><a id="make_path1"></a><a id="make_path-dir1-dir2-....-opts"></a>make_path( $dir1, $dir2, ...., \%opts )</dt>
+<dd>
+
+<p>The <code>make_path</code> function creates the given directories if they don&#39;t exist before, much like the Unix command <code>mkdir -p</code>.</p>
+
+<p>The function accepts a list of directories to be created. Its behaviour may be tuned by an optional hashref appearing as the last parameter on the call.</p>
+
+<p>The function returns the list of directories actually created during the call; in scalar context the number of directories created.</p>
+
+<p>The following keys are recognised in the option hash:</p>
+
+<dl>
+
+<dt id="mode-=&gt;-$num"><a class="permalink" href="./File::Path.html#mode-=%3E-$num">#</a><a id="mode"></a><a id="mode-num"></a>mode =&gt; $num</dt>
+<dd>
+
+<p>The numeric permissions mode to apply to each created directory (defaults to <code>0777</code>), to be modified by the current <code>umask</code>. If the directory already exists (and thus does not need to be created), the permissions will not be modified.</p>
+
+<p><code>mask</code> is recognised as an alias for this parameter.</p>
+
+</dd>
+<dt id="chmod-=&gt;-$num"><a class="permalink" href="./File::Path.html#chmod-=%3E-$num">#</a><a id="chmod"></a><a id="chmod-num"></a>chmod =&gt; $num</dt>
+<dd>
+
+<p>Takes a numeric mode to apply to each created directory (not modified by the current <code>umask</code>). If the directory already exists (and thus does not need to be created), the permissions will not be modified.</p>
+
+</dd>
+<dt id="verbose-=&gt;-$bool"><a class="permalink" href="./File::Path.html#verbose-=%3E-$bool">#</a><a id="verbose"></a><a id="verbose-bool"></a>verbose =&gt; $bool</dt>
+<dd>
+
+<p>If present, will cause <code>make_path</code> to print the name of each directory as it is created. By default nothing is printed.</p>
+
+</dd>
+<dt id="error-=&gt;-\$err"><a class="permalink" href="./File::Path.html#error-=%3E-%5C$err">#</a><a id="error"></a><a id="error-err"></a>error =&gt; \$err</dt>
+<dd>
+
+<p>If present, it should be a reference to a scalar. This scalar will be made to reference an array, which will be used to store any errors that are encountered. See the <a href="./File::Path.html#ERROR-HANDLING">&quot;ERROR HANDLING&quot;</a> section for more information.</p>
+
+<p>If this parameter is not used, certain error conditions may raise a fatal error that will cause the program to halt, unless trapped in an <code>eval</code> block.</p>
+
+</dd>
+<dt id="owner-=&gt;-$owner"><a class="permalink" href="./File::Path.html#owner-=%3E-$owner">#</a><a id="owner"></a><a id="owner-owner"></a>owner =&gt; $owner</dt>
+<dd>
+
+</dd>
+<dt id="user-=&gt;-$owner"><a class="permalink" href="./File::Path.html#user-=%3E-$owner">#</a><a id="user"></a><a id="user-owner"></a>user =&gt; $owner</dt>
+<dd>
+
+</dd>
+<dt id="uid-=&gt;-$owner"><a class="permalink" href="./File::Path.html#uid-=%3E-$owner">#</a><a id="uid"></a><a id="uid-owner"></a>uid =&gt; $owner</dt>
+<dd>
+
+<p>If present, will cause any created directory to be owned by <code>$owner</code>. If the value is numeric, it will be interpreted as a uid; otherwise a username is assumed. An error will be issued if the username cannot be mapped to a uid, the uid does not exist or the process lacks the privileges to change ownership.</p>
+
+<p>Ownership of directories that already exist will not be changed.</p>
+
+<p><code>user</code> and <code>uid</code> are aliases of <code>owner</code>.</p>
+
+</dd>
+<dt id="group-=&gt;-$group"><a class="permalink" href="./File::Path.html#group-=%3E-$group">#</a><a id="group"></a><a id="group-group"></a>group =&gt; $group</dt>
+<dd>
+
+<p>If present, will cause any created directory to be owned by the group <code>$group</code>. If the value is numeric, it will be interpreted as a gid; otherwise a group name is assumed. An error will be issued if the group name cannot be mapped to a gid, the gid does not exist or the process lacks the privileges to change group ownership.</p>
+
+<p>Group ownership of directories that already exist will not be changed.</p>
+
+<pre><code>make_path &#39;/var/tmp/webcache&#39;, {owner=&gt;&#39;nobody&#39;, group=&gt;&#39;nogroup&#39;};</code></pre>
+
+</dd>
+</dl>
+
+</dd>
+<dt id="mkpath(-$dir-)"><a class="permalink" href="./File::Path.html#mkpath(-$dir-)">#</a><a id="mkpath"></a><a id="mkpath-dir"></a>mkpath( $dir )</dt>
+<dd>
+
+</dd>
+<dt id="mkpath(-$dir,-$verbose,-$mode-)"><a class="permalink" href="./File::Path.html#mkpath(-$dir,-$verbose,-$mode-)">#</a><a id="mkpath1"></a><a id="mkpath-dir-verbose-mode"></a>mkpath( $dir, $verbose, $mode )</dt>
+<dd>
+
+</dd>
+<dt id="mkpath(-[$dir1,-$dir2,...],-$verbose,-$mode-)"><a class="permalink" href="./File::Path.html#mkpath(-%5B$dir1,-$dir2,...%5D,-$verbose,-$mode-)">#</a><a id="mkpath2"></a><a id="mkpath-dir1-dir2-...-verbose-mode"></a>mkpath( [$dir1, $dir2,...], $verbose, $mode )</dt>
+<dd>
+
+</dd>
+<dt id="mkpath(-$dir1,-$dir2,...,-\%opt-)"><a class="permalink" href="./File::Path.html#mkpath(-$dir1,-$dir2,...,-%5C%25opt-)">#</a><a id="mkpath3"></a><a id="mkpath-dir1-dir2-...-opt"></a>mkpath( $dir1, $dir2,..., \%opt )</dt>
+<dd>
+
+<p>The <code>mkpath()</code> function provide the legacy interface of <code>make_path()</code> with a different interpretation of the arguments passed. The behaviour and return value of the function is otherwise identical to <code>make_path()</code>.</p>
+
+</dd>
+<dt id="remove_tree(-$dir1,-$dir2,-....-)"><a class="permalink" href="./File::Path.html#remove_tree(-$dir1,-$dir2,-....-)">#</a><a id="remove_tree"></a><a id="remove_tree-dir1-dir2"></a>remove_tree( $dir1, $dir2, .... )</dt>
+<dd>
+
+</dd>
+<dt id="remove_tree(-$dir1,-$dir2,-....,-\%opts-)"><a class="permalink" href="./File::Path.html#remove_tree(-$dir1,-$dir2,-....,-%5C%25opts-)">#</a><a id="remove_tree1"></a><a id="remove_tree-dir1-dir2-....-opts"></a>remove_tree( $dir1, $dir2, ...., \%opts )</dt>
+<dd>
+
+<p>The <code>remove_tree</code> function deletes the given directories and any files and subdirectories they might contain, much like the Unix command <code>rm -rf</code> or the Windows commands <code>rmdir /s</code> and <code>rd /s</code>.</p>
+
+<p>The function accepts a list of directories to be removed. (In point of fact, it will also accept filesystem entries which are not directories, such as regular files and symlinks. But, as its name suggests, its intent is to remove trees rather than individual files.)</p>
+
+<p><code>remove_tree()</code>&#39;s behaviour may be tuned by an optional hashref appearing as the last parameter on the call. If an empty string is passed to <code>remove_tree</code>, an error will occur.</p>
+
+<p><b>NOTE:</b> For security reasons, we strongly advise use of the hashref-as-final-argument syntax -- specifically, with a setting of the <code>safe</code> element to a true value.</p>
+
+<pre><code>remove_tree( $dir1, $dir2, ....,
+    {
+        safe =&gt; 1,
+        ...         # other key-value pairs
+    },
+);</code></pre>
+
+<p>The function returns the number of files successfully deleted.</p>
+
+<p>The following keys are recognised in the option hash:</p>
+
+<dl>
+
+<dt id="verbose-=&gt;-$bool1"><a class="permalink" href="./File::Path.html#verbose-=%3E-$bool1">#</a><a id="verbose1"></a><a id="verbose-bool1"></a>verbose =&gt; $bool</dt>
+<dd>
+
+<p>If present, will cause <code>remove_tree</code> to print the name of each file as it is unlinked. By default nothing is printed.</p>
+
+</dd>
+<dt id="safe-=&gt;-$bool"><a class="permalink" href="./File::Path.html#safe-=%3E-$bool">#</a><a id="safe"></a><a id="safe-bool"></a>safe =&gt; $bool</dt>
+<dd>
+
+<p>When set to a true value, will cause <code>remove_tree</code> to skip the files for which the process lacks the required privileges needed to delete files, such as delete privileges on VMS. In other words, the code will make no attempt to alter file permissions. Thus, if the process is interrupted, no filesystem object will be left in a more permissive mode.</p>
+
+</dd>
+<dt id="keep_root-=&gt;-$bool"><a class="permalink" href="./File::Path.html#keep_root-=%3E-$bool">#</a><a id="keep_root"></a><a id="keep_root-bool"></a>keep_root =&gt; $bool</dt>
+<dd>
+
+<p>When set to a true value, will cause all files and subdirectories to be removed, except the initially specified directories. This comes in handy when cleaning out an application&#39;s scratch directory.</p>
+
+<pre><code>remove_tree( &#39;/tmp&#39;, {keep_root =&gt; 1} );</code></pre>
+
+</dd>
+<dt id="result-=&gt;-\$res"><a class="permalink" href="./File::Path.html#result-=%3E-%5C$res">#</a><a id="result"></a><a id="result-res"></a>result =&gt; \$res</dt>
+<dd>
+
+<p>If present, it should be a reference to a scalar. This scalar will be made to reference an array, which will be used to store all files and directories unlinked during the call. If nothing is unlinked, the array will be empty.</p>
+
+<pre><code>remove_tree( &#39;/tmp&#39;, {result =&gt; \my $list} );
+print &quot;unlinked $_\n&quot; for @$list;</code></pre>
+
+<p>This is a useful alternative to the <code>verbose</code> key.</p>
+
+</dd>
+<dt id="error-=&gt;-\$err1"><a class="permalink" href="./File::Path.html#error-=%3E-%5C$err1">#</a><a id="error1"></a><a id="error-err1"></a>error =&gt; \$err</dt>
+<dd>
+
+<p>If present, it should be a reference to a scalar. This scalar will be made to reference an array, which will be used to store any errors that are encountered. See the <a href="./File::Path.html#ERROR-HANDLING">&quot;ERROR HANDLING&quot;</a> section for more information.</p>
+
+<p>Removing things is a much more dangerous proposition than creating things. As such, there are certain conditions that <code>remove_tree</code> may encounter that are so dangerous that the only sane action left is to kill the program.</p>
+
+<p>Use <code>error</code> to trap all that is reasonable (problems with permissions and the like), and let it die if things get out of hand. This is the safest course of action.</p>
+
+</dd>
+</dl>
+
+</dd>
+<dt id="rmtree(-$dir-)"><a class="permalink" href="./File::Path.html#rmtree(-$dir-)">#</a><a id="rmtree"></a><a id="rmtree-dir"></a>rmtree( $dir )</dt>
+<dd>
+
+</dd>
+<dt id="rmtree(-$dir,-$verbose,-$safe-)"><a class="permalink" href="./File::Path.html#rmtree(-$dir,-$verbose,-$safe-)">#</a><a id="rmtree1"></a><a id="rmtree-dir-verbose-safe"></a>rmtree( $dir, $verbose, $safe )</dt>
+<dd>
+
+</dd>
+<dt id="rmtree(-[$dir1,-$dir2,...],-$verbose,-$safe-)"><a class="permalink" href="./File::Path.html#rmtree(-%5B$dir1,-$dir2,...%5D,-$verbose,-$safe-)">#</a><a id="rmtree2"></a><a id="rmtree-dir1-dir2-...-verbose-safe"></a>rmtree( [$dir1, $dir2,...], $verbose, $safe )</dt>
+<dd>
+
+</dd>
+<dt id="rmtree(-$dir1,-$dir2,...,-\%opt-)"><a class="permalink" href="./File::Path.html#rmtree(-$dir1,-$dir2,...,-%5C%25opt-)">#</a><a id="rmtree3"></a><a id="rmtree-dir1-dir2-...-opt"></a>rmtree( $dir1, $dir2,..., \%opt )</dt>
+<dd>
+
+<p>The <code>rmtree()</code> function provide the legacy interface of <code>remove_tree()</code> with a different interpretation of the arguments passed. The behaviour and return value of the function is otherwise identical to <code>remove_tree()</code>.</p>
+
+<p><b>NOTE:</b> For security reasons, we strongly advise use of the hashref-as-final-argument syntax, specifically with a setting of the <code>safe</code> element to a true value.</p>
+
+<pre><code>rmtree( $dir1, $dir2, ....,
+    {
+        safe =&gt; 1,
+        ...         # other key-value pairs
+    },
+);</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="ERROR-HANDLING"><a class="permalink" href="./File::Path.html#ERROR-HANDLING">#</a><a id="ERROR"></a>ERROR HANDLING</h2>
+
+<dl>
+
+<dt id="NOTE:"><a class="permalink" href="./File::Path.html#NOTE:">#</a><a id="NOTE"></a><b>NOTE:</b></dt>
+<dd>
+
+<p>The following error handling mechanism is consistent throughout all code paths EXCEPT in cases where the ROOT node is nonexistent. In version 2.11 the maintainers attempted to rectify this inconsistency but too many downstream modules encountered problems. In such case, if you require root node evaluation or error checking prior to calling <code>make_path</code> or <code>remove_tree</code>, you should take additional precautions.</p>
+
+</dd>
+</dl>
+
+<p>If <code>make_path</code> or <code>remove_tree</code> encounters an error, a diagnostic message will be printed to <code>STDERR</code> via <code>carp</code> (for non-fatal errors) or via <code>croak</code> (for fatal errors).</p>
+
+<p>If this behaviour is not desirable, the <code>error</code> attribute may be used to hold a reference to a variable, which will be used to store the diagnostics. The variable is made a reference to an array of hash references. Each hash contain a single key/value pair where the key is the name of the file, and the value is the error message (including the contents of <code>$!</code> when appropriate). If a general error is encountered the diagnostic key will be empty.</p>
+
+<p>An example usage looks like:</p>
+
+<pre><code>remove_tree( &#39;foo/bar&#39;, &#39;bar/rat&#39;, {error =&gt; \my $err} );
+if ($err &amp;&amp; @$err) {
+    for my $diag (@$err) {
+        my ($file, $message) = %$diag;
+        if ($file eq &#39;&#39;) {
+            print &quot;general error: $message\n&quot;;
+        }
+        else {
+            print &quot;problem unlinking $file: $message\n&quot;;
+        }
+    }
+}
+else {
+    print &quot;No error encountered\n&quot;;
+}</code></pre>
+
+<p>Note that if no errors are encountered, <code>$err</code> will reference an empty array. This means that <code>$err</code> will always end up TRUE; so you need to test <code>@$err</code> to determine if errors occurred.</p>
+
+<h2 id="NOTES"><a class="permalink" href="./File::Path.html#NOTES">#</a>NOTES</h2>
+
+<p><code>File::Path</code> blindly exports <code>mkpath</code> and <code>rmtree</code> into the current namespace. These days, this is considered bad style, but to change it now would break too much code. Nonetheless, you are invited to specify what it is you are expecting to use:</p>
+
+<pre><code>use File::Path &#39;rmtree&#39;;</code></pre>
+
+<p>The routines <code>make_path</code> and <code>remove_tree</code> are <b>not</b> exported by default. You must specify which ones you want to use.</p>
+
+<pre><code>use File::Path &#39;remove_tree&#39;;</code></pre>
+
+<p>Note that a side-effect of the above is that <code>mkpath</code> and <code>rmtree</code> are no longer exported at all. This is due to the way the <code>Exporter</code> module works. If you are migrating a codebase to use the new interface, you will have to list everything explicitly. But that&#39;s just good practice anyway.</p>
+
+<pre><code>use File::Path qw(remove_tree rmtree);</code></pre>
+
+<h3 id="API-CHANGES"><a class="permalink" href="./File::Path.html#API-CHANGES">#</a><a id="API"></a>API CHANGES</h3>
+
+<p>The API was changed in the 2.0 branch. For a time, <code>mkpath</code> and <code>rmtree</code> tried, unsuccessfully, to deal with the two different calling mechanisms. This approach was considered a failure.</p>
+
+<p>The new semantics are now only available with <code>make_path</code> and <code>remove_tree</code>. The old semantics are only available through <code>mkpath</code> and <code>rmtree</code>. Users are strongly encouraged to upgrade to at least 2.08 in order to avoid surprises.</p>
+
+<h3 id="SECURITY-CONSIDERATIONS"><a class="permalink" href="./File::Path.html#SECURITY-CONSIDERATIONS">#</a><a id="SECURITY"></a>SECURITY CONSIDERATIONS</h3>
+
+<p>There were race conditions in the 1.x implementations of File::Path&#39;s <code>rmtree</code> function (although sometimes patched depending on the OS distribution or platform). The 2.0 version contains code to avoid the problem mentioned in CVE-2002-0435.</p>
+
+<p>See the following pages for more information:</p>
+
+<pre><code class="plaintext">http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=286905
+http://www.nntp.perl.org/group/perl.perl5.porters/2005/01/msg97623.html
+http://www.debian.org/security/2005/dsa-696</code></pre>
+
+<p>Additionally, unless the <code>safe</code> parameter is set (or the third parameter in the traditional interface is TRUE), should a <code>remove_tree</code> be interrupted, files that were originally in read-only mode may now have their permissions set to a read-write (or &quot;delete OK&quot;) mode.</p>
+
+<p>The following CVE reports were previously filed against File-Path and are believed to have been addressed:</p>
+
+<ul>
+
+<li><p><a href="http://cve.circl.lu/cve/CVE-2004-0452">http://cve.circl.lu/cve/CVE-2004-0452</a></p>
+
+</li>
+<li><p><a href="http://cve.circl.lu/cve/CVE-2005-0448">http://cve.circl.lu/cve/CVE-2005-0448</a></p>
+
+</li>
+</ul>
+
+<p>In February 2017 the cPanel Security Team reported an additional vulnerability in File-Path. The <code>chmod()</code> logic to make directories traversable can be abused to set the mode on an attacker-chosen file to an attacker-chosen value. This is due to the time-of-check-to-time-of-use (TOCTTOU) race condition (<a href="https://en.wikipedia.org/wiki/Time_of_check_to_time_of_use">https://en.wikipedia.org/wiki/Time_of_check_to_time_of_use</a>) between the <code>stat()</code> that decides the inode is a directory and the <code>chmod()</code> that tries to make it user-rwx. CPAN versions 2.13 and later incorporate a patch provided by John Lightsey to address this problem. This vulnerability has been reported as CVE-2017-6512.</p>
+
+<h1 id="DIAGNOSTICS"><a class="permalink" href="./File::Path.html#DIAGNOSTICS">#</a>DIAGNOSTICS</h1>
+
+<p>FATAL errors will cause the program to halt (<code>croak</code>), since the problem is so severe that it would be dangerous to continue. (This can always be trapped with <code>eval</code>, but it&#39;s not a good idea. Under the circumstances, dying is the best thing to do).</p>
+
+<p>SEVERE errors may be trapped using the modern interface. If the they are not trapped, or if the old interface is used, such an error will cause the program will halt.</p>
+
+<p>All other errors may be trapped using the modern interface, otherwise they will be <code>carp</code>ed about. Program execution will not be halted.</p>
+
+<dl>
+
+<dt id="mkdir-[path]:-[errmsg]-(SEVERE)"><a class="permalink" href="./File::Path.html#mkdir-%5Bpath%5D:-%5Berrmsg%5D-(SEVERE)">#</a><a id="mkdir"></a><a id="mkdir-path-:-errmsg-SEVERE"></a>mkdir [path]: [errmsg] (SEVERE)</dt>
+<dd>
+
+<p><code>make_path</code> was unable to create the path. Probably some sort of permissions error at the point of departure or insufficient resources (such as free inodes on Unix).</p>
+
+</dd>
+<dt id="No-root-path(s)-specified"><a class="permalink" href="./File::Path.html#No-root-path(s)-specified">#</a><a id="No"></a><a id="No-root-path-s-specified"></a>No root path(s) specified</dt>
+<dd>
+
+<p><code>make_path</code> was not given any paths to create. This message is only emitted if the routine is called with the traditional interface. The modern interface will remain silent if given nothing to do.</p>
+
+</dd>
+<dt id="No-such-file-or-directory"><a class="permalink" href="./File::Path.html#No-such-file-or-directory">#</a><a id="No1"></a>No such file or directory</dt>
+<dd>
+
+<p>On Windows, if <code>make_path</code> gives you this warning, it may mean that you have exceeded your filesystem&#39;s maximum path length.</p>
+
+</dd>
+<dt id="cannot-fetch-initial-working-directory:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-fetch-initial-working-directory:-%5Berrmsg%5D">#</a><a id="cannot"></a><a id="cannot-fetch-initial-working-directory:-errmsg"></a>cannot fetch initial working directory: [errmsg]</dt>
+<dd>
+
+<p><code>remove_tree</code> attempted to determine the initial directory by calling <code>Cwd::getcwd</code>, but the call failed for some reason. No attempt will be made to delete anything.</p>
+
+</dd>
+<dt id="cannot-stat-initial-working-directory:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-stat-initial-working-directory:-%5Berrmsg%5D">#</a><a id="cannot1"></a><a id="cannot-stat-initial-working-directory:-errmsg"></a>cannot stat initial working directory: [errmsg]</dt>
+<dd>
+
+<p><code>remove_tree</code> attempted to stat the initial directory (after having successfully obtained its name via <code>getcwd</code>), however, the call failed for some reason. No attempt will be made to delete anything.</p>
+
+</dd>
+<dt id="cannot-chdir-to-[dir]:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-chdir-to-%5Bdir%5D:-%5Berrmsg%5D">#</a><a id="cannot2"></a><a id="cannot-chdir-to-dir-:-errmsg"></a>cannot chdir to [dir]: [errmsg]</dt>
+<dd>
+
+<p><code>remove_tree</code> attempted to set the working directory in order to begin deleting the objects therein, but was unsuccessful. This is usually a permissions issue. The routine will continue to delete other things, but this directory will be left intact.</p>
+
+</dd>
+<dt id="directory-[dir]-changed-before-chdir,-expected-dev=[n]-ino=[n],-actual-dev=[n]-ino=[n],-aborting.-(FATAL)"><a class="permalink" href="./File::Path.html#directory-%5Bdir%5D-changed-before-chdir,-expected-dev=%5Bn%5D-ino=%5Bn%5D,-actual-dev=%5Bn%5D-ino=%5Bn%5D,-aborting.-(FATAL)">#</a><a id="directory"></a><a id="directory-dir-changed-before-chdir-expected-dev-n-ino-n-actual-dev-n-ino-n-aborting.-FATAL"></a>directory [dir] changed before chdir, expected dev=[n] ino=[n], actual dev=[n] ino=[n], aborting. (FATAL)</dt>
+<dd>
+
+<p><code>remove_tree</code> recorded the device and inode of a directory, and then moved into it. It then performed a <code>stat</code> on the current directory and detected that the device and inode were no longer the same. As this is at the heart of the race condition problem, the program will die at this point.</p>
+
+</dd>
+<dt id="cannot-make-directory-[dir]-read+writeable:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-make-directory-%5Bdir%5D-read+writeable:-%5Berrmsg%5D">#</a><a id="cannot3"></a><a id="cannot-make-directory-dir-read-writeable:-errmsg"></a>cannot make directory [dir] read+writeable: [errmsg]</dt>
+<dd>
+
+<p><code>remove_tree</code> attempted to change the permissions on the current directory to ensure that subsequent unlinkings would not run into problems, but was unable to do so. The permissions remain as they were, and the program will carry on, doing the best it can.</p>
+
+</dd>
+<dt id="cannot-read-[dir]:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-read-%5Bdir%5D:-%5Berrmsg%5D">#</a><a id="cannot4"></a><a id="cannot-read-dir-:-errmsg"></a>cannot read [dir]: [errmsg]</dt>
+<dd>
+
+<p><code>remove_tree</code> tried to read the contents of the directory in order to acquire the names of the directory entries to be unlinked, but was unsuccessful. This is usually a permissions issue. The program will continue, but the files in this directory will remain after the call.</p>
+
+</dd>
+<dt id="cannot-reset-chmod-[dir]:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-reset-chmod-%5Bdir%5D:-%5Berrmsg%5D">#</a><a id="cannot5"></a><a id="cannot-reset-chmod-dir-:-errmsg"></a>cannot reset chmod [dir]: [errmsg]</dt>
+<dd>
+
+<p><code>remove_tree</code>, after having deleted everything in a directory, attempted to restore its permissions to the original state but failed. The directory may wind up being left behind.</p>
+
+</dd>
+<dt id="cannot-remove-[dir]-when-cwd-is-[dir]"><a class="permalink" href="./File::Path.html#cannot-remove-%5Bdir%5D-when-cwd-is-%5Bdir%5D">#</a><a id="cannot6"></a><a id="cannot-remove-dir-when-cwd-is-dir"></a>cannot remove [dir] when cwd is [dir]</dt>
+<dd>
+
+<p>The current working directory of the program is <i>/some/path/to/here</i> and you are attempting to remove an ancestor, such as <i>/some/path</i>. The directory tree is left untouched.</p>
+
+<p>The solution is to <code>chdir</code> out of the child directory to a place outside the directory tree to be removed.</p>
+
+</dd>
+<dt id="cannot-chdir-to-[parent-dir]-from-[child-dir]:-[errmsg],-aborting.-(FATAL)"><a class="permalink" href="./File::Path.html#cannot-chdir-to-%5Bparent-dir%5D-from-%5Bchild-dir%5D:-%5Berrmsg%5D,-aborting.-(FATAL)">#</a><a id="cannot7"></a><a id="cannot-chdir-to-parent-dir-from-child-dir-:-errmsg-aborting.-FATAL"></a>cannot chdir to [parent-dir] from [child-dir]: [errmsg], aborting. (FATAL)</dt>
+<dd>
+
+<p><code>remove_tree</code>, after having deleted everything and restored the permissions of a directory, was unable to chdir back to the parent. The program halts to avoid a race condition from occurring.</p>
+
+</dd>
+<dt id="cannot-stat-prior-working-directory-[dir]:-[errmsg],-aborting.-(FATAL)"><a class="permalink" href="./File::Path.html#cannot-stat-prior-working-directory-%5Bdir%5D:-%5Berrmsg%5D,-aborting.-(FATAL)">#</a><a id="cannot8"></a><a id="cannot-stat-prior-working-directory-dir-:-errmsg-aborting.-FATAL"></a>cannot stat prior working directory [dir]: [errmsg], aborting. (FATAL)</dt>
+<dd>
+
+<p><code>remove_tree</code> was unable to stat the parent directory after having returned from the child. Since there is no way of knowing if we returned to where we think we should be (by comparing device and inode) the only way out is to <code>croak</code>.</p>
+
+</dd>
+<dt id="previous-directory-[parent-dir]-changed-before-entering-[child-dir],-expected-dev=[n]-ino=[n],-actual-dev=[n]-ino=[n],-aborting.-(FATAL)"><a class="permalink" href="./File::Path.html#previous-directory-%5Bparent-dir%5D-changed-before-entering-%5Bchild-dir%5D,-expected-dev=%5Bn%5D-ino=%5Bn%5D,-actual-dev=%5Bn%5D-ino=%5Bn%5D,-aborting.-(FATAL)">#</a><a id="previous"></a><a id="previous-directory-parent-dir-changed-before-entering-child-dir-expected-dev-n-ino-n-actual-dev-n-ino-n-aborting.-FATAL"></a>previous directory [parent-dir] changed before entering [child-dir], expected dev=[n] ino=[n], actual dev=[n] ino=[n], aborting. (FATAL)</dt>
+<dd>
+
+<p>When <code>remove_tree</code> returned from deleting files in a child directory, a check revealed that the parent directory it returned to wasn&#39;t the one it started out from. This is considered a sign of malicious activity.</p>
+
+</dd>
+<dt id="cannot-make-directory-[dir]-writeable:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-make-directory-%5Bdir%5D-writeable:-%5Berrmsg%5D">#</a><a id="cannot9"></a><a id="cannot-make-directory-dir-writeable:-errmsg"></a>cannot make directory [dir] writeable: [errmsg]</dt>
+<dd>
+
+<p>Just before removing a directory (after having successfully removed everything it contained), <code>remove_tree</code> attempted to set the permissions on the directory to ensure it could be removed and failed. Program execution continues, but the directory may possibly not be deleted.</p>
+
+</dd>
+<dt id="cannot-remove-directory-[dir]:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-remove-directory-%5Bdir%5D:-%5Berrmsg%5D">#</a><a id="cannot10"></a><a id="cannot-remove-directory-dir-:-errmsg"></a>cannot remove directory [dir]: [errmsg]</dt>
+<dd>
+
+<p><code>remove_tree</code> attempted to remove a directory, but failed. This may be because some objects that were unable to be removed remain in the directory, or it could be a permissions issue. The directory will be left behind.</p>
+
+</dd>
+<dt id="cannot-restore-permissions-of-[dir]-to-[0nnn]:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-restore-permissions-of-%5Bdir%5D-to-%5B0nnn%5D:-%5Berrmsg%5D">#</a><a id="cannot11"></a><a id="cannot-restore-permissions-of-dir-to-0nnn-:-errmsg"></a>cannot restore permissions of [dir] to [0nnn]: [errmsg]</dt>
+<dd>
+
+<p>After having failed to remove a directory, <code>remove_tree</code> was unable to restore its permissions from a permissive state back to a possibly more restrictive setting. (Permissions given in octal).</p>
+
+</dd>
+<dt id="cannot-make-file-[file]-writeable:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-make-file-%5Bfile%5D-writeable:-%5Berrmsg%5D">#</a><a id="cannot12"></a><a id="cannot-make-file-file-writeable:-errmsg"></a>cannot make file [file] writeable: [errmsg]</dt>
+<dd>
+
+<p><code>remove_tree</code> attempted to force the permissions of a file to ensure it could be deleted, but failed to do so. It will, however, still attempt to unlink the file.</p>
+
+</dd>
+<dt id="cannot-unlink-file-[file]:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-unlink-file-%5Bfile%5D:-%5Berrmsg%5D">#</a><a id="cannot13"></a><a id="cannot-unlink-file-file-:-errmsg"></a>cannot unlink file [file]: [errmsg]</dt>
+<dd>
+
+<p><code>remove_tree</code> failed to remove a file. Probably a permissions issue.</p>
+
+</dd>
+<dt id="cannot-restore-permissions-of-[file]-to-[0nnn]:-[errmsg]"><a class="permalink" href="./File::Path.html#cannot-restore-permissions-of-%5Bfile%5D-to-%5B0nnn%5D:-%5Berrmsg%5D">#</a><a id="cannot14"></a><a id="cannot-restore-permissions-of-file-to-0nnn-:-errmsg"></a>cannot restore permissions of [file] to [0nnn]: [errmsg]</dt>
+<dd>
+
+<p>After having failed to remove a file, <code>remove_tree</code> was also unable to restore the permissions on the file to a possibly less permissive setting. (Permissions given in octal).</p>
+
+</dd>
+<dt id="unable-to-map-[owner]-to-a-uid,-ownership-not-changed&quot;);"><a class="permalink" href="./File::Path.html#unable-to-map-%5Bowner%5D-to-a-uid,-ownership-not-changed%22);">#</a><a id="unable"></a><a id="unable-to-map-owner-to-a-uid-ownership-not-changed"></a>unable to map [owner] to a uid, ownership not changed&quot;);</dt>
+<dd>
+
+<p><code>make_path</code> was instructed to give the ownership of created directories to the symbolic name [owner], but <code>getpwnam</code> did not return the corresponding numeric uid. The directory will be created, but ownership will not be changed.</p>
+
+</dd>
+<dt id="unable-to-map-[group]-to-a-gid,-group-ownership-not-changed"><a class="permalink" href="./File::Path.html#unable-to-map-%5Bgroup%5D-to-a-gid,-group-ownership-not-changed">#</a><a id="unable1"></a><a id="unable-to-map-group-to-a-gid-group-ownership-not-changed"></a>unable to map [group] to a gid, group ownership not changed</dt>
+<dd>
+
+<p><code>make_path</code> was instructed to give the group ownership of created directories to the symbolic name [group], but <code>getgrnam</code> did not return the corresponding numeric gid. The directory will be created, but group ownership will not be changed.</p>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./File::Path.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<ul>
+
+<li><p><a href="./File::Remove.html">File::Remove</a></p>
+
+<p>Allows files and directories to be moved to the Trashcan/Recycle Bin (where they may later be restored if necessary) if the operating system supports such functionality. This feature may one day be made available directly in <code>File::Path</code>.</p>
+
+</li>
+<li><p><a href="./File::Find::Rule.html">File::Find::Rule</a></p>
+
+<p>When removing directory trees, if you want to examine each file to decide whether to delete it (and possibly leaving large swathes alone), <i>File::Find::Rule</i> offers a convenient and flexible approach to examining directory trees.</p>
+
+</li>
+</ul>
+
+<h1 id="BUGS-AND-LIMITATIONS"><a class="permalink" href="./File::Path.html#BUGS-AND-LIMITATIONS">#</a><a id="BUGS"></a>BUGS AND LIMITATIONS</h1>
+
+<p>The following describes <i>File::Path</i> limitations and how to report bugs.</p>
+
+<h2 id="MULTITHREADED-APPLICATIONS"><a class="permalink" href="./File::Path.html#MULTITHREADED-APPLICATIONS">#</a><a id="MULTITHREADED"></a>MULTITHREADED APPLICATIONS</h2>
+
+<p><i>File::Path</i> <code>rmtree</code> and <code>remove_tree</code> will not work with multithreaded applications due to its use of <code>chdir</code>. At this time, no warning or error is generated in this situation. You will certainly encounter unexpected results.</p>
+
+<p>The implementation that surfaces this limitation will not be changed. See the <i>File::Path::Tiny</i> module for functionality similar to <i>File::Path</i> but which does not <code>chdir</code>.</p>
+
+<h2 id="NFS-Mount-Points"><a class="permalink" href="./File::Path.html#NFS-Mount-Points">#</a><a id="NFS"></a>NFS Mount Points</h2>
+
+<p><i>File::Path</i> is not responsible for triggering the automounts, mirror mounts, and the contents of network mounted filesystems. If your NFS implementation requires an action to be performed on the filesystem in order for <i>File::Path</i> to perform operations, it is strongly suggested you assure filesystem availability by reading the root of the mounted filesystem.</p>
+
+<h2 id="REPORTING-BUGS"><a class="permalink" href="./File::Path.html#REPORTING-BUGS">#</a><a id="REPORTING"></a>REPORTING BUGS</h2>
+
+<p>Please report all bugs on the RT queue, either via the web interface:</p>
+
+<p><a href="http://rt.cpan.org/NoAuth/Bugs.html?Dist=File-Path">http://rt.cpan.org/NoAuth/Bugs.html?Dist=File-Path</a></p>
+
+<p>or by email:</p>
+
+<pre><code>bug-File-Path@rt.cpan.org</code></pre>
+
+<p>In either case, please <b>attach</b> patches to the bug report rather than including them inline in the web post or the body of the email.</p>
+
+<p>You can also send pull requests to the Github repository:</p>
+
+<p><a href="https://github.com/rpcme/File-Path">https://github.com/rpcme/File-Path</a></p>
+
+<h1 id="ACKNOWLEDGEMENTS"><a class="permalink" href="./File::Path.html#ACKNOWLEDGEMENTS">#</a>ACKNOWLEDGEMENTS</h1>
+
+<p>Paul Szabo identified the race condition originally, and Brendan O&#39;Dea wrote an implementation for Debian that addressed the problem. That code was used as a basis for the current code. Their efforts are greatly appreciated.</p>
+
+<p>Gisle Aas made a number of improvements to the documentation for 2.07 and his advice and assistance is also greatly appreciated.</p>
+
+<h1 id="AUTHORS"><a class="permalink" href="./File::Path.html#AUTHORS">#</a>AUTHORS</h1>
+
+<p>Prior authors and maintainers: Tim Bunce, Charles Bailey, and David Landgren &lt;<i>david@landgren.net</i>&gt;.</p>
+
+<p>Current maintainers are Richard Elberger &lt;<i>riche@cpan.org</i>&gt; and James (Jim) Keenan &lt;<i>jkeenan@cpan.org</i>&gt;.</p>
+
+<h1 id="CONTRIBUTORS"><a class="permalink" href="./File::Path.html#CONTRIBUTORS">#</a>CONTRIBUTORS</h1>
+
+<p>Contributors to File::Path, in alphabetical order by first name.</p>
+
+<dl>
+
+<dt id="bulkdd@cpan.org&gt;"><a class="permalink" href="./File::Path.html#bulkdd@cpan.org%3E">#</a><a id="&lt;bulkdd@cpan.org&gt;"></a><a id="bulkdd-cpan.org"></a>&lt;<i>bulkdd@cpan.org</i>&gt;</dt>
+<dd>
+
+</dd>
+<dt id="Charlie-Gonzalez-itcharlie@cpan.org&gt;"><a class="permalink" href="./File::Path.html#Charlie-Gonzalez-itcharlie@cpan.org%3E">#</a><a id="Charlie-Gonzalez-&lt;itcharlie@cpan.org&gt;"></a><a id="Charlie"></a><a id="Charlie-Gonzalez-itcharlie-cpan.org"></a>Charlie Gonzalez &lt;<i>itcharlie@cpan.org</i>&gt;</dt>
+<dd>
+
+</dd>
+<dt id="Craig-A.-Berry-craigberry@mac.com&gt;"><a class="permalink" href="./File::Path.html#Craig-A.-Berry-craigberry@mac.com%3E">#</a><a id="Craig-A.-Berry-&lt;craigberry@mac.com&gt;"></a><a id="Craig"></a><a id="Craig-A.-Berry-craigberry-mac.com"></a>Craig A. Berry &lt;<i>craigberry@mac.com</i>&gt;</dt>
+<dd>
+
+</dd>
+<dt id="James-E-Keenan-jkeenan@cpan.org&gt;"><a class="permalink" href="./File::Path.html#James-E-Keenan-jkeenan@cpan.org%3E">#</a><a id="James-E-Keenan-&lt;jkeenan@cpan.org&gt;"></a><a id="James"></a><a id="James-E-Keenan-jkeenan-cpan.org"></a>James E Keenan &lt;<i>jkeenan@cpan.org</i>&gt;</dt>
+<dd>
+
+</dd>
+<dt id="John-Lightsey-john@perlsec.org&gt;"><a class="permalink" href="./File::Path.html#John-Lightsey-john@perlsec.org%3E">#</a><a id="John-Lightsey-&lt;john@perlsec.org&gt;"></a><a id="John"></a><a id="John-Lightsey-john-perlsec.org"></a>John Lightsey &lt;<i>john@perlsec.org</i>&gt;</dt>
+<dd>
+
+</dd>
+<dt id="Nigel-Horne-njh@bandsman.co.uk&gt;"><a class="permalink" href="./File::Path.html#Nigel-Horne-njh@bandsman.co.uk%3E">#</a><a id="Nigel-Horne-&lt;njh@bandsman.co.uk&gt;"></a><a id="Nigel"></a><a id="Nigel-Horne-njh-bandsman.co.uk"></a>Nigel Horne &lt;<i>njh@bandsman.co.uk</i>&gt;</dt>
+<dd>
+
+</dd>
+<dt id="Richard-Elberger-riche@cpan.org&gt;"><a class="permalink" href="./File::Path.html#Richard-Elberger-riche@cpan.org%3E">#</a><a id="Richard-Elberger-&lt;riche@cpan.org&gt;"></a><a id="Richard"></a><a id="Richard-Elberger-riche-cpan.org"></a>Richard Elberger &lt;<i>riche@cpan.org</i>&gt;</dt>
+<dd>
+
+</dd>
+<dt id="Ryan-Yee-ryee@cpan.org&gt;"><a class="permalink" href="./File::Path.html#Ryan-Yee-ryee@cpan.org%3E">#</a><a id="Ryan-Yee-&lt;ryee@cpan.org&gt;"></a><a id="Ryan"></a><a id="Ryan-Yee-ryee-cpan.org"></a>Ryan Yee &lt;<i>ryee@cpan.org</i>&gt;</dt>
+<dd>
+
+</dd>
+<dt id="Skye-Shaw-shaw@cpan.org&gt;"><a class="permalink" href="./File::Path.html#Skye-Shaw-shaw@cpan.org%3E">#</a><a id="Skye-Shaw-&lt;shaw@cpan.org&gt;"></a><a id="Skye"></a><a id="Skye-Shaw-shaw-cpan.org"></a>Skye Shaw &lt;<i>shaw@cpan.org</i>&gt;</dt>
+<dd>
+
+</dd>
+<dt id="Tom-Lutz-tommylutz@gmail.com&gt;"><a class="permalink" href="./File::Path.html#Tom-Lutz-tommylutz@gmail.com%3E">#</a><a id="Tom-Lutz-&lt;tommylutz@gmail.com&gt;"></a><a id="Tom"></a><a id="Tom-Lutz-tommylutz-gmail.com"></a>Tom Lutz &lt;<i>tommylutz@gmail.com</i>&gt;</dt>
+<dd>
+
+</dd>
+<dt id="Will-Sheppard-willsheppard@github&gt;"><a class="permalink" href="./File::Path.html#Will-Sheppard-willsheppard@github%3E">#</a><a id="Will-Sheppard-&lt;willsheppard@github&gt;"></a><a id="Will"></a><a id="Will-Sheppard-willsheppard-github"></a>Will Sheppard &lt;<i>willsheppard@github</i>&gt;</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="./File::Path.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>This module is copyright (C) Charles Bailey, Tim Bunce, David Landgren, James Keenan and Richard Elberger 1995-2020. All rights reserved.</p>
+
+<h1 id="LICENSE"><a class="permalink" href="./File::Path.html#LICENSE">#</a>LICENSE</h1>
+
+<p>This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

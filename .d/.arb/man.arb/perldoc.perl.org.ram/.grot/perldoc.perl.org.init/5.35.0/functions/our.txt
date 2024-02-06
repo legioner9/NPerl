@@ -1,0 +1,122 @@
+=over
+
+=item our VARLIST
+X<our> X<global>
+
+=item our TYPE VARLIST
+
+=item our VARLIST : ATTRS
+
+=item our TYPE VARLIST : ATTRS
+
+L<C<our>|/our VARLIST> makes a lexical alias to a package (i.e. global)
+variable of the same name in the current package for use within the
+current lexical scope.
+
+L<C<our>|/our VARLIST> has the same scoping rules as
+L<C<my>|/my VARLIST> or L<C<state>|/state VARLIST>, meaning that it is
+only valid within a lexical scope.  Unlike L<C<my>|/my VARLIST> and
+L<C<state>|/state VARLIST>, which both declare new (lexical) variables,
+L<C<our>|/our VARLIST> only creates an alias to an existing variable: a
+package variable of the same name.
+
+This means that when C<use strict 'vars'> is in effect, L<C<our>|/our
+VARLIST> lets you use a package variable without qualifying it with the
+package name, but only within the lexical scope of the
+L<C<our>|/our VARLIST> declaration.  This applies immediately--even
+within the same statement.
+
+    package Foo;
+    use strict;
+
+    $Foo::foo = 23;
+
+    {
+        our $foo;   # alias to $Foo::foo
+        print $foo; # prints 23
+    }
+
+    print $Foo::foo; # prints 23
+
+    print $foo; # ERROR: requires explicit package name
+
+This works even if the package variable has not been used before, as
+package variables spring into existence when first used.
+
+    package Foo;
+    use strict;
+
+    our $foo = 23;   # just like $Foo::foo = 23
+
+    print $Foo::foo; # prints 23
+
+Because the variable becomes legal immediately under C<use strict 'vars'>, so
+long as there is no variable with that name is already in scope, you can then
+reference the package variable again even within the same statement.
+
+    package Foo;
+    use strict;
+
+    my  $foo = $foo; # error, undeclared $foo on right-hand side
+    our $foo = $foo; # no errors
+
+If more than one variable is listed, the list must be placed
+in parentheses.
+
+    our($bar, $baz);
+
+An L<C<our>|/our VARLIST> declaration declares an alias for a package
+variable that will be visible
+across its entire lexical scope, even across package boundaries.  The
+package in which the variable is entered is determined at the point
+of the declaration, not at the point of use.  This means the following
+behavior holds:
+
+    package Foo;
+    our $bar;      # declares $Foo::bar for rest of lexical scope
+    $bar = 20;
+
+    package Bar;
+    print $bar;    # prints 20, as it refers to $Foo::bar
+
+Multiple L<C<our>|/our VARLIST> declarations with the same name in the
+same lexical
+scope are allowed if they are in different packages.  If they happen
+to be in the same package, Perl will emit warnings if you have asked
+for them, just like multiple L<C<my>|/my VARLIST> declarations.  Unlike
+a second L<C<my>|/my VARLIST> declaration, which will bind the name to a
+fresh variable, a second L<C<our>|/our VARLIST> declaration in the same
+package, in the same scope, is merely redundant.
+
+    use warnings;
+    package Foo;
+    our $bar;      # declares $Foo::bar for rest of lexical scope
+    $bar = 20;
+
+    package Bar;
+    our $bar = 30; # declares $Bar::bar for rest of lexical scope
+    print $bar;    # prints 30
+
+    our $bar;      # emits warning but has no other effect
+    print $bar;    # still prints 30
+
+An L<C<our>|/our VARLIST> declaration may also have a list of attributes
+associated with it.
+
+The exact semantics and interface of TYPE and ATTRS are still
+evolving.  TYPE is currently bound to the use of the L<fields> pragma,
+and attributes are handled using the L<attributes> pragma, or, starting
+from Perl 5.8.0, also via the L<Attribute::Handlers> module.  See
+L<perlsub/"Private Variables via my()"> for details.
+
+Note that with a parenthesised list, L<C<undef>|/undef EXPR> can be used
+as a dummy placeholder, for example to skip assignment of initial
+values:
+
+    our ( undef, $min, $hour ) = localtime;
+
+L<C<our>|/our VARLIST> differs from L<C<use vars>|vars>, which allows
+use of an unqualified name I<only> within the affected package, but
+across scopes.
+
+=back

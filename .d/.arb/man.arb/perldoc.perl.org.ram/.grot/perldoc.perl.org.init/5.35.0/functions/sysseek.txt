@@ -1,0 +1,44 @@
+=over
+
+=item sysseek FILEHANDLE,POSITION,WHENCE
+X<sysseek> X<lseek>
+
+Sets FILEHANDLE's system position I<in bytes> using L<lseek(2)>.  FILEHANDLE may
+be an expression whose value gives the name of the filehandle.  The values
+for WHENCE are C<0> to set the new position to POSITION; C<1> to set it
+to the current position plus POSITION; and C<2> to set it to EOF plus
+POSITION, typically negative.
+
+Note the emphasis on bytes: even if the filehandle has been set to operate
+on characters (for example using the C<:encoding(UTF-8)> I/O layer), the
+L<C<seek>|/seek FILEHANDLE,POSITION,WHENCE>,
+L<C<tell>|/tell FILEHANDLE>, and
+L<C<sysseek>|/sysseek FILEHANDLE,POSITION,WHENCE>
+family of functions use byte offsets, not character offsets,
+because seeking to a character offset would be very slow in a UTF-8 file.
+
+L<C<sysseek>|/sysseek FILEHANDLE,POSITION,WHENCE> bypasses normal
+buffered IO, so mixing it with reads other than
+L<C<sysread>|/sysread FILEHANDLE,SCALAR,LENGTH,OFFSET> (for example
+L<C<readline>|/readline EXPR> or
+L<C<read>|/read FILEHANDLE,SCALAR,LENGTH,OFFSET>),
+L<C<print>|/print FILEHANDLE LIST>, L<C<write>|/write FILEHANDLE>,
+L<C<seek>|/seek FILEHANDLE,POSITION,WHENCE>,
+L<C<tell>|/tell FILEHANDLE>, or L<C<eof>|/eof FILEHANDLE> may cause
+confusion.
+
+For WHENCE, you may also use the constants C<SEEK_SET>, C<SEEK_CUR>,
+and C<SEEK_END> (start of the file, current position, end of the file)
+from the L<Fcntl> module.  Use of the constants is also more portable
+than relying on 0, 1, and 2.  For example to define a "systell" function:
+
+    use Fcntl 'SEEK_CUR';
+    sub systell { sysseek($_[0], 0, SEEK_CUR) }
+
+Returns the new position, or the undefined value on failure.  A position
+of zero is returned as the string C<"0 but true">; thus
+L<C<sysseek>|/sysseek FILEHANDLE,POSITION,WHENCE> returns
+true on success and false on failure, yet you can still easily determine
+the new position.
+
+=back

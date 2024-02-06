@@ -1,0 +1,33 @@
+=over
+
+=item ${^ENCODING}
+X<${^ENCODING}>
+
+This variable is no longer supported.
+
+It used to hold the I<object reference> to the C<Encode> object that was
+used to convert the source code to Unicode.
+
+Its purpose was to allow your non-ASCII Perl
+scripts not to have to be written in UTF-8; this was
+useful before editors that worked on UTF-8 encoded text were common, but
+that was long ago.  It caused problems, such as affecting the operation
+of other modules that weren't expecting it, causing general mayhem.
+
+If you need something like this functionality, it is recommended that use
+you a simple source filter, such as L<Filter::Encoding>.
+
+If you are coming here because code of yours is being adversely affected
+by someone's use of this variable, you can usually work around it by
+doing this:
+
+ local ${^ENCODING};
+
+near the beginning of the functions that are getting broken.  This
+undefines the variable during the scope of execution of the including
+function.
+
+This variable was added in Perl 5.8.2 and removed in 5.26.0.
+Setting it to anything other than C<undef> was made fatal in Perl 5.28.0.
+
+=back

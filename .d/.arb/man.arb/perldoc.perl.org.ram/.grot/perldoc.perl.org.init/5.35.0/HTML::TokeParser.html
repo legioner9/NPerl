@@ -1,0 +1,2502 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>HTML::TokeParser - Alternative HTML::Parser interface - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of HTML-Parser - MetaCPAN" href="https://metacpan.org/dist/HTML-Parser/releases.rss" />
+        <link rel="canonical" href="./HTML::TokeParser.html" />
+        <meta name="description" content="Alternative HTML::Parser interface" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/HTML::TokeParser" />
+<meta name="twitter:title"       content="HTML::TokeParser" />
+<meta name="twitter:description" content="Alternative HTML::Parser interface" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./HTML::TokeParser.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of HTML-Parser was released.">
+      <span class="relatize">31 Jan 2023 03:13:18 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/HTML-Parser">HTML-Parser</a>
+  </li>
+  <li>
+    Module version: 3.81
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/HTML-Parser/source/lib/HTML/TokeParser.pm">Source</a>
+    (<a href="https://metacpan.org/dist/HTML-Parser/source/lib/HTML/TokeParser.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/HTML-Parser/source/lib/HTML">Browse</a>
+    (<a href="https://metacpan.org/dist/HTML-Parser/source/lib/HTML?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/HTML-Parser/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://github.com/libwww-perl/HTML-Parser">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/HTML-Parser/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/libwww-perl/HTML-Parser">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/libwww-perl/HTML-Parser/issues">Issues</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=HTML-Parser+3.81" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/H/HTML-Parser.html?oncpan=1&amp;distmat=1&amp;version=3.81&amp;grade=2" style="color: #090">3254</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/H/HTML-Parser.html?oncpan=1&amp;distmat=1&amp;version=3.81&amp;grade=3" style="color: #900">3</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/H/HTML-Parser.html?oncpan=1&amp;distmat=1&amp;version=3.81&amp;grade=4">3</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/OALDERS/HTML-Parser-3.81">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on HTML-Parser who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 5
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/HTML-Parser-3.81/index.html">83.57% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.8.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/HTML-Parser/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/O/OA/OALDERS/HTML-Parser-3.81.tar.gz">
+      Download (<span itemprop="fileSize">144.87KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FOALDERS%2FHTML-Parser-3.81%2Flib%2FHTML%2FTokeParser.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/HTML-Parser/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/HTML-Parser/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:HTML-Parser">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="HTML-Parser">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/HTML/TokeParser.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="OALDERS/HTML-Parser-3.81"
+>3.81
+  (OALDERS on 2023-01-31)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.80"
+>3.80
+  (OALDERS on 2022-11-01)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.79"
+>3.79
+  (OALDERS on 2022-10-12)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.78"
+>3.78
+  (OALDERS on 2022-03-28)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.77"
+>3.77
+  (OALDERS on 2022-03-14)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.76"
+>3.76
+  (OALDERS on 2021-03-04)</option>
+<option
+  
+  value="CAPOEIRAB/HTML-Parser-3.75"
+>3.75
+  (CAPOEIRAB on 2020-08-30)</option>
+<option
+  
+  value="CAPOEIRAB/HTML-Parser-3.74"
+>3.74
+  (CAPOEIRAB on 2020-08-30)</option>
+<option
+  
+  value="CAPOEIRAB/HTML-Parser-3.73"
+>3.73
+  (CAPOEIRAB on 2020-08-25)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.72"
+>3.72
+  (GAAS on 2016-01-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.71"
+>3.71
+  (GAAS on 2013-05-08)</option>
+<option
+  
+  value="KIMURA/HTML-Parser-3.25-bin-1-Mac"
+>3.25-bin-1-Mac
+  (KIMURA on 2001-06-12)</option>
+<option
+  
+  value="KIMURA/HTML-Parser-3.23-bin-1-Mac"
+>3.23-bin-1-Mac
+  (KIMURA on 2001-05-05)</option>
+<option
+  
+  value="KIMURA/HTML-Parser-3.19-bin-1-Mac"
+>3.19-bin-1-Mac
+  (KIMURA on 2001-03-16)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.25"
+>2.25
+  (GAAS on 1999-11-05)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="GAAS/HTML-Parser-3.70"
+>3.70
+  (GAAS on 2013-03-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.69"
+>3.69
+  (GAAS on 2011-10-15)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.68"
+>3.68
+  (GAAS on 2010-09-01)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.67"
+>3.67
+  (GAAS on 2010-08-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.66"
+>3.66
+  (GAAS on 2010-07-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.65"
+>3.65
+  (GAAS on 2010-04-04)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.64"
+>3.64
+  (GAAS on 2009-10-25)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.63"
+>3.63
+  (GAAS on 2009-10-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.62"
+>3.62
+  (GAAS on 2009-08-13)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.61"
+>3.61
+  (GAAS on 2009-06-20)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.60"
+>3.60
+  (GAAS on 2009-02-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.59"
+>3.59
+  (GAAS on 2008-11-24)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.58"
+>3.58
+  (GAAS on 2008-11-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.57"
+>3.57
+  (GAAS on 2008-11-16)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.56"
+>3.56
+  (GAAS on 2007-01-12)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.55"
+>3.55
+  (GAAS on 2006-07-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.54"
+>3.54
+  (GAAS on 2006-04-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.53"
+>3.53
+  (GAAS on 2006-04-27)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.52"
+>3.52
+  (GAAS on 2006-04-26)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.51"
+>3.51
+  (GAAS on 2006-03-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.50"
+>3.50
+  (GAAS on 2006-02-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.49"
+>3.49
+  (GAAS on 2006-02-08)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.48"
+>3.48
+  (GAAS on 2005-12-02)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.47"
+>3.47
+  (GAAS on 2005-11-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.46"
+>3.46
+  (GAAS on 2005-10-24)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.45"
+>3.45
+  (GAAS on 2005-01-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.44"
+>3.44
+  (GAAS on 2004-12-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.43"
+>3.43
+  (GAAS on 2004-12-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.42"
+>3.42
+  (GAAS on 2004-12-04)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.41"
+>3.41
+  (GAAS on 2004-11-30)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.40"
+>3.40
+  (GAAS on 2004-11-29)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.39_92"
+>3.39_92 DEV
+  (GAAS on 2004-11-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.39_91"
+>3.39_91 DEV
+  (GAAS on 2004-11-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.39_90"
+>3.39_90 DEV
+  (GAAS on 2004-11-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.38"
+>3.38
+  (GAAS on 2004-11-11)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.37"
+>3.37
+  (GAAS on 2004-11-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.36"
+>3.36
+  (GAAS on 2004-04-01)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.35"
+>3.35
+  (GAAS on 2003-12-12)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.34"
+>3.34
+  (GAAS on 2003-10-27)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.33"
+>3.33
+  (GAAS on 2003-10-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.32"
+>3.32
+  (GAAS on 2003-10-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.31"
+>3.31
+  (GAAS on 2003-08-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.30"
+>3.30
+  (GAAS on 2003-08-18)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.29"
+>3.29
+  (GAAS on 2003-08-15)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.28"
+>3.28
+  (GAAS on 2003-04-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.27"
+>3.27
+  (GAAS on 2003-01-18)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.26"
+>3.26
+  (GAAS on 2002-03-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.25"
+>3.25
+  (GAAS on 2001-05-11)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.24"
+>3.24
+  (GAAS on 2001-05-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.23"
+>3.23
+  (GAAS on 2001-05-02)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.22"
+>3.22
+  (GAAS on 2001-04-18)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.21"
+>3.21
+  (GAAS on 2001-04-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.20"
+>3.20
+  (GAAS on 2001-04-03)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_94"
+>3.19_94 DEV
+  (GAAS on 2001-03-30)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_93"
+>3.19_93 DEV
+  (GAAS on 2001-03-27)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_92"
+>3.19_92 DEV
+  (GAAS on 2001-03-26)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_91"
+>3.19_91 DEV
+  (GAAS on 2001-03-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_90"
+>3.19_90 DEV
+  (GAAS on 2001-03-13)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19"
+>3.19
+  (GAAS on 2001-03-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.18"
+>3.18
+  (GAAS on 2001-02-25)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.17"
+>3.17
+  (GAAS on 2001-02-24)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.16"
+>3.16
+  (GAAS on 2001-02-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.15"
+>3.15
+  (GAAS on 2000-12-26)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.14"
+>3.14
+  (GAAS on 2000-12-04)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.13"
+>3.13
+  (GAAS on 2000-09-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.12"
+>3.12
+  (GAAS on 2000-09-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.11"
+>3.11
+  (GAAS on 2000-08-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.10"
+>3.10
+  (GAAS on 2000-06-29)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.09"
+>3.09
+  (GAAS on 2000-06-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.08"
+>3.08
+  (GAAS on 2000-05-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.07"
+>3.07
+  (GAAS on 2000-03-20)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.06"
+>3.06
+  (GAAS on 2000-03-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.05"
+>3.05
+  (GAAS on 2000-01-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.04"
+>3.04
+  (GAAS on 2000-01-15)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.02"
+>3.02
+  (GAAS on 1999-12-21)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.01"
+>3.01
+  (GAAS on 1999-12-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.00"
+>3.00
+  (GAAS on 1999-12-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.24"
+>2.24
+  (GAAS on 1999-11-03)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.23"
+>2.23
+  (GAAS on 1999-06-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.21"
+>2.21
+  (GAAS on 1998-11-13)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.20"
+>2.20
+  (GAAS on 1998-07-08)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.19"
+>2.19
+  (GAAS on 1998-07-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.18"
+>2.18
+  (GAAS on 1998-06-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.17"
+>2.17
+  (GAAS on 1998-04-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.16"
+>2.16
+  (GAAS on 1998-04-02)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.14"
+>2.14
+  (GAAS on 1998-03-31)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/OALDERS/HTML-Parser-3.81/diff/' + encodeURIComponent(this.value) + '/lib/HTML/TokeParser.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="OALDERS/HTML-Parser-3.81"
+>3.81
+  (OALDERS on 2023-01-31)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.80"
+>3.80
+  (OALDERS on 2022-11-01)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.79"
+>3.79
+  (OALDERS on 2022-10-12)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.78"
+>3.78
+  (OALDERS on 2022-03-28)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.77"
+>3.77
+  (OALDERS on 2022-03-14)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.76"
+>3.76
+  (OALDERS on 2021-03-04)</option>
+<option
+  
+  value="CAPOEIRAB/HTML-Parser-3.75"
+>3.75
+  (CAPOEIRAB on 2020-08-30)</option>
+<option
+  
+  value="CAPOEIRAB/HTML-Parser-3.74"
+>3.74
+  (CAPOEIRAB on 2020-08-30)</option>
+<option
+  
+  value="CAPOEIRAB/HTML-Parser-3.73"
+>3.73
+  (CAPOEIRAB on 2020-08-25)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.72"
+>3.72
+  (GAAS on 2016-01-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.71"
+>3.71
+  (GAAS on 2013-05-08)</option>
+<option
+  
+  value="KIMURA/HTML-Parser-3.25-bin-1-Mac"
+>3.25-bin-1-Mac
+  (KIMURA on 2001-06-12)</option>
+<option
+  
+  value="KIMURA/HTML-Parser-3.23-bin-1-Mac"
+>3.23-bin-1-Mac
+  (KIMURA on 2001-05-05)</option>
+<option
+  
+  value="KIMURA/HTML-Parser-3.19-bin-1-Mac"
+>3.19-bin-1-Mac
+  (KIMURA on 2001-03-16)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.25"
+>2.25
+  (GAAS on 1999-11-05)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="GAAS/HTML-Parser-3.70"
+>3.70
+  (GAAS on 2013-03-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.69"
+>3.69
+  (GAAS on 2011-10-15)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.68"
+>3.68
+  (GAAS on 2010-09-01)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.67"
+>3.67
+  (GAAS on 2010-08-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.66"
+>3.66
+  (GAAS on 2010-07-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.65"
+>3.65
+  (GAAS on 2010-04-04)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.64"
+>3.64
+  (GAAS on 2009-10-25)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.63"
+>3.63
+  (GAAS on 2009-10-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.62"
+>3.62
+  (GAAS on 2009-08-13)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.61"
+>3.61
+  (GAAS on 2009-06-20)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.60"
+>3.60
+  (GAAS on 2009-02-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.59"
+>3.59
+  (GAAS on 2008-11-24)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.58"
+>3.58
+  (GAAS on 2008-11-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.57"
+>3.57
+  (GAAS on 2008-11-16)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.56"
+>3.56
+  (GAAS on 2007-01-12)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.55"
+>3.55
+  (GAAS on 2006-07-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.54"
+>3.54
+  (GAAS on 2006-04-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.53"
+>3.53
+  (GAAS on 2006-04-27)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.52"
+>3.52
+  (GAAS on 2006-04-26)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.51"
+>3.51
+  (GAAS on 2006-03-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.50"
+>3.50
+  (GAAS on 2006-02-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.49"
+>3.49
+  (GAAS on 2006-02-08)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.48"
+>3.48
+  (GAAS on 2005-12-02)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.47"
+>3.47
+  (GAAS on 2005-11-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.46"
+>3.46
+  (GAAS on 2005-10-24)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.45"
+>3.45
+  (GAAS on 2005-01-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.44"
+>3.44
+  (GAAS on 2004-12-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.43"
+>3.43
+  (GAAS on 2004-12-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.42"
+>3.42
+  (GAAS on 2004-12-04)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.41"
+>3.41
+  (GAAS on 2004-11-30)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.40"
+>3.40
+  (GAAS on 2004-11-29)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.39_92"
+>3.39_92 DEV
+  (GAAS on 2004-11-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.39_91"
+>3.39_91 DEV
+  (GAAS on 2004-11-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.39_90"
+>3.39_90 DEV
+  (GAAS on 2004-11-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.38"
+>3.38
+  (GAAS on 2004-11-11)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.37"
+>3.37
+  (GAAS on 2004-11-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.36"
+>3.36
+  (GAAS on 2004-04-01)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.35"
+>3.35
+  (GAAS on 2003-12-12)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.34"
+>3.34
+  (GAAS on 2003-10-27)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.33"
+>3.33
+  (GAAS on 2003-10-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.32"
+>3.32
+  (GAAS on 2003-10-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.31"
+>3.31
+  (GAAS on 2003-08-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.30"
+>3.30
+  (GAAS on 2003-08-18)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.29"
+>3.29
+  (GAAS on 2003-08-15)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.28"
+>3.28
+  (GAAS on 2003-04-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.27"
+>3.27
+  (GAAS on 2003-01-18)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.26"
+>3.26
+  (GAAS on 2002-03-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.25"
+>3.25
+  (GAAS on 2001-05-11)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.24"
+>3.24
+  (GAAS on 2001-05-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.23"
+>3.23
+  (GAAS on 2001-05-02)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.22"
+>3.22
+  (GAAS on 2001-04-18)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.21"
+>3.21
+  (GAAS on 2001-04-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.20"
+>3.20
+  (GAAS on 2001-04-03)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_94"
+>3.19_94 DEV
+  (GAAS on 2001-03-30)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_93"
+>3.19_93 DEV
+  (GAAS on 2001-03-27)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_92"
+>3.19_92 DEV
+  (GAAS on 2001-03-26)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_91"
+>3.19_91 DEV
+  (GAAS on 2001-03-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_90"
+>3.19_90 DEV
+  (GAAS on 2001-03-13)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19"
+>3.19
+  (GAAS on 2001-03-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.18"
+>3.18
+  (GAAS on 2001-02-25)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.17"
+>3.17
+  (GAAS on 2001-02-24)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.16"
+>3.16
+  (GAAS on 2001-02-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.15"
+>3.15
+  (GAAS on 2000-12-26)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.14"
+>3.14
+  (GAAS on 2000-12-04)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.13"
+>3.13
+  (GAAS on 2000-09-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.12"
+>3.12
+  (GAAS on 2000-09-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.11"
+>3.11
+  (GAAS on 2000-08-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.10"
+>3.10
+  (GAAS on 2000-06-29)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.09"
+>3.09
+  (GAAS on 2000-06-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.08"
+>3.08
+  (GAAS on 2000-05-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.07"
+>3.07
+  (GAAS on 2000-03-20)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.06"
+>3.06
+  (GAAS on 2000-03-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.05"
+>3.05
+  (GAAS on 2000-01-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.04"
+>3.04
+  (GAAS on 2000-01-15)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.02"
+>3.02
+  (GAAS on 1999-12-21)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.01"
+>3.01
+  (GAAS on 1999-12-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.00"
+>3.00
+  (GAAS on 1999-12-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.24"
+>2.24
+  (GAAS on 1999-11-03)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.23"
+>2.23
+  (GAAS on 1999-06-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.21"
+>2.21
+  (GAAS on 1998-11-13)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.20"
+>2.20
+  (GAAS on 1998-07-08)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.19"
+>2.19
+  (GAAS on 1998-07-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.18"
+>2.18
+  (GAAS on 1998-06-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.17"
+>2.17
+  (GAAS on 1998-04-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.16"
+>2.16
+  (GAAS on 1998-04-02)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.14"
+>2.14
+  (GAAS on 1998-03-31)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Carp" title="Carp" class="ellipsis">Carp</a></li>
+  <li><a href="https://metacpan.org/pod/Exporter" title="Exporter" class="ellipsis">Exporter</a></li>
+  <li><a href="https://metacpan.org/pod/HTML::Tagset" title="HTML::Tagset" class="ellipsis">HTML::Tagset</a></li>
+  <li><a href="https://metacpan.org/pod/HTTP::Headers" title="HTTP::Headers" class="ellipsis">HTTP::Headers</a></li>
+  <li><a href="https://metacpan.org/pod/IO::File" title="IO::File" class="ellipsis">IO::File</a></li>
+  <li><a href="URI.html" title="URI" class="ellipsis">URI</a></li>
+  <li><a href="https://metacpan.org/pod/URI::URL" title="URI::URL" class="ellipsis">URI::URL</a></li>
+  <li><a href="https://metacpan.org/pod/XSLoader" title="XSLoader" class="ellipsis">XSLoader</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/HTML::TokeParser/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=HTML%3A%3ATokeParser">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=HTML-Parser">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/OALDERS/HTML-Parser-3.81/view/lib/HTML/TokeParser.pm">This version</a>
+    </li>
+    <li>
+      <a href="./HTML::TokeParser.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/KEEDI"><img src="https://www.gravatar.com/avatar/95f905a7a4ccc573c711e9d264c0fde8?d=identicon&amp;s=20" title="KEEDI" alt="KEEDI"></a>
+<a class="display-all" href="https://metacpan.org/author/DOHERTY"><img src="https://www.gravatar.com/avatar/9533c36b6385c8321bad636c98e9c0a8?d=identicon&amp;s=20" title="DOHERTY" alt="DOHERTY"></a>
+<a class="display-all" href="https://metacpan.org/author/HUBAN"><img src="https://www.gravatar.com/avatar/15226a88a183f57fb228aae44dc5c16c?d=identicon&amp;s=20" title="HUBAN" alt="HUBAN"></a>
+<a class="display-all" href="https://metacpan.org/author/WREIS"><img src="https://www.gravatar.com/avatar/0b14bc3a0a18e795beebcffef045bbea?d=identicon&amp;s=20" title="WREIS" alt="WREIS"></a>
+<a class="display-all" href="https://metacpan.org/author/ILUX"><img src="https://www.gravatar.com/avatar/1cd0eea5e6ca13346060bb9d2c1e286b?d=identicon&amp;s=20" title="ILUX" alt="ILUX"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/HTML-Parser/plussers">22 PAUSE users</a>
+</div>
+<div>
+    25 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 24 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="GAAS"
+      data-contrib-email="gaas@cpan.org gisle@aas.no"
+    >
+      <a href="https://metacpan.org/author/GAAS" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/80ccd89a65d9faf08c2fb6be2991ba57?d=identicon&amp;s=20" />
+      Gisle Aas
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="antonio@dyne.org"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Antonio Radici
+    </li>
+    <li class="contributor"
+      data-cpan-author="BARBIE"
+      data-contrib-email="barbie@missbarbell.co.uk"
+    >
+      <a href="https://metacpan.org/author/BARBIE" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/92c6c2f8be6f62c74aae398b99aefe57?d=identicon&amp;s=20" />
+      Barbie
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="bulk88@hotmail.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      bulk88
+    </li>
+    <li class="contributor"
+      data-cpan-author="CAPOEIRAB"
+      data-contrib-email="capoeirab@cpan.org"
+    >
+      <a href="https://metacpan.org/author/CAPOEIRAB" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/912bfa255ef8161a494932af0cad48c5?d=identicon&amp;s=20" />
+      Chase Whitener
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="CHIPS"
+      data-contrib-email="chip@pobox.com"
+    >
+      <a href="https://metacpan.org/author/CHIPS" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/60cdb5a6d95805ffc42a674bb504bbb1?d=identicon&amp;s=20" />
+      Chip Salzenberg
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="dmn@debian.org"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Damyan Ivanov
+    </li>
+    <li class="contributor"
+      data-contrib-email="dsteinbrunner@pobox.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      David Steinbrunner
+    </li>
+    <li class="contributor"
+      data-cpan-author="PERRAD"
+      data-contrib-email="francois.perrad@gadz.org"
+    >
+      <a href="https://metacpan.org/author/PERRAD" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/4219d7ad0c9c2be2b9f3abfd68a94dd4?d=identicon&amp;s=20" />
+      François Perrad
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="HAARG"
+      data-contrib-email="haarg@haarg.org"
+    >
+      <a href="https://metacpan.org/author/HAARG" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/5037faf9ba40cf736778820fe83fc2ae?d=identicon&amp;s=20" />
+      Graham Knop
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="JACQUESG"
+      data-contrib-email="jacquesg@striata.com"
+    >
+      <a href="https://metacpan.org/author/JACQUESG" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/979fdf21a0f82c302536905d762adf75?d=identicon&amp;s=20" />
+      Jacques Germishuys
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="RAZ"
+      data-contrib-email="jraspass@gmail.com"
+    >
+      <a href="https://metacpan.org/author/RAZ" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/b9af2a54454e8f38c169be0c236670d6?d=identicon&amp;s=20" />
+      James Raspass
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="JROBINSON"
+      data-contrib-email="castaway@desert-island.me.uk"
+    >
+      <a href="https://metacpan.org/author/JROBINSON" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/c7254b939e5a5f293d8fabb51167fbaa?d=identicon&amp;s=20" />
+      Jess Robinson
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="JONJ"
+      data-contrib-email="jon@endpoint.com"
+    >
+      <a href="https://metacpan.org/author/JONJ" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/6becea182c4c0326e48ac2d3fc056b11?d=identicon&amp;s=20" />
+      Jon Jensen
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="mspacek@redhat.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Michal Josef Špaček
+    </li>
+    <li class="contributor"
+      data-cpan-author="MSOUTH"
+      data-contrib-email="msouth@gmail.com"
+    >
+      <a href="https://metacpan.org/author/MSOUTH" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/db7b941f3e749b0365533e72d02db30f?d=identicon&amp;s=20" />
+      Mike South
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="nick@ccl4.org"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Nicholas Clark
+    </li>
+    <li class="contributor"
+      data-contrib-email="nicolas@atoomic.org"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Nicolas R
+    </li>
+    <li class="contributor"
+      data-contrib-email="olaf@wundersolutions.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Olaf Alders
+    </li>
+    <li class="contributor"
+      data-contrib-email="salvatore.bonaccorso@gmail.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Salvatore Bonaccorso
+    </li>
+    <li class="contributor"
+      data-cpan-author="TODDR"
+      data-contrib-email="toddr@cpan.org"
+    >
+      <a href="https://metacpan.org/author/TODDR" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/593351ab4ba45a73fb5de512d89432d2?d=identicon&amp;s=20" />
+      Todd Rinaldo
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="SCOP"
+      data-contrib-email="ville.skytta@iki.fi"
+    >
+      <a href="https://metacpan.org/author/SCOP" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/4623589f12ed201b060c2075fd9c0920?d=identicon&amp;s=20" />
+      Ville Skyttä
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="demerphq@gmail.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Yves Orton
+    </li>
+    <li class="contributor"
+      data-cpan-author="ZEFRAM"
+      data-contrib-email="zefram@fysh.org"
+    >
+      <a href="https://metacpan.org/author/ZEFRAM" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/aab343bc3a4424dcb7f913920242f051?d=identicon&amp;s=20" />
+      Zefram
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/OALDERS" class="author-name">Olaf Alders 🐫</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/HTML/TokeParser.pm&#39;" class="">
+<option
+  selected
+  value="OALDERS/HTML-Parser-3.81"
+>3.81
+  (OALDERS on 2023-01-31)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.80"
+>3.80
+  (OALDERS on 2022-11-01)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.79"
+>3.79
+  (OALDERS on 2022-10-12)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.78"
+>3.78
+  (OALDERS on 2022-03-28)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.77"
+>3.77
+  (OALDERS on 2022-03-14)</option>
+<option
+  
+  value="OALDERS/HTML-Parser-3.76"
+>3.76
+  (OALDERS on 2021-03-04)</option>
+<option
+  
+  value="CAPOEIRAB/HTML-Parser-3.75"
+>3.75
+  (CAPOEIRAB on 2020-08-30)</option>
+<option
+  
+  value="CAPOEIRAB/HTML-Parser-3.74"
+>3.74
+  (CAPOEIRAB on 2020-08-30)</option>
+<option
+  
+  value="CAPOEIRAB/HTML-Parser-3.73"
+>3.73
+  (CAPOEIRAB on 2020-08-25)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.72"
+>3.72
+  (GAAS on 2016-01-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.71"
+>3.71
+  (GAAS on 2013-05-08)</option>
+<option
+  
+  value="KIMURA/HTML-Parser-3.25-bin-1-Mac"
+>3.25-bin-1-Mac
+  (KIMURA on 2001-06-12)</option>
+<option
+  
+  value="KIMURA/HTML-Parser-3.23-bin-1-Mac"
+>3.23-bin-1-Mac
+  (KIMURA on 2001-05-05)</option>
+<option
+  
+  value="KIMURA/HTML-Parser-3.19-bin-1-Mac"
+>3.19-bin-1-Mac
+  (KIMURA on 2001-03-16)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.25"
+>2.25
+  (GAAS on 1999-11-05)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="GAAS/HTML-Parser-3.70"
+>3.70
+  (GAAS on 2013-03-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.69"
+>3.69
+  (GAAS on 2011-10-15)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.68"
+>3.68
+  (GAAS on 2010-09-01)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.67"
+>3.67
+  (GAAS on 2010-08-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.66"
+>3.66
+  (GAAS on 2010-07-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.65"
+>3.65
+  (GAAS on 2010-04-04)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.64"
+>3.64
+  (GAAS on 2009-10-25)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.63"
+>3.63
+  (GAAS on 2009-10-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.62"
+>3.62
+  (GAAS on 2009-08-13)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.61"
+>3.61
+  (GAAS on 2009-06-20)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.60"
+>3.60
+  (GAAS on 2009-02-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.59"
+>3.59
+  (GAAS on 2008-11-24)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.58"
+>3.58
+  (GAAS on 2008-11-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.57"
+>3.57
+  (GAAS on 2008-11-16)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.56"
+>3.56
+  (GAAS on 2007-01-12)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.55"
+>3.55
+  (GAAS on 2006-07-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.54"
+>3.54
+  (GAAS on 2006-04-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.53"
+>3.53
+  (GAAS on 2006-04-27)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.52"
+>3.52
+  (GAAS on 2006-04-26)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.51"
+>3.51
+  (GAAS on 2006-03-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.50"
+>3.50
+  (GAAS on 2006-02-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.49"
+>3.49
+  (GAAS on 2006-02-08)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.48"
+>3.48
+  (GAAS on 2005-12-02)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.47"
+>3.47
+  (GAAS on 2005-11-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.46"
+>3.46
+  (GAAS on 2005-10-24)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.45"
+>3.45
+  (GAAS on 2005-01-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.44"
+>3.44
+  (GAAS on 2004-12-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.43"
+>3.43
+  (GAAS on 2004-12-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.42"
+>3.42
+  (GAAS on 2004-12-04)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.41"
+>3.41
+  (GAAS on 2004-11-30)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.40"
+>3.40
+  (GAAS on 2004-11-29)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.39_92"
+>3.39_92 DEV
+  (GAAS on 2004-11-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.39_91"
+>3.39_91 DEV
+  (GAAS on 2004-11-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.39_90"
+>3.39_90 DEV
+  (GAAS on 2004-11-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.38"
+>3.38
+  (GAAS on 2004-11-11)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.37"
+>3.37
+  (GAAS on 2004-11-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.36"
+>3.36
+  (GAAS on 2004-04-01)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.35"
+>3.35
+  (GAAS on 2003-12-12)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.34"
+>3.34
+  (GAAS on 2003-10-27)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.33"
+>3.33
+  (GAAS on 2003-10-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.32"
+>3.32
+  (GAAS on 2003-10-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.31"
+>3.31
+  (GAAS on 2003-08-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.30"
+>3.30
+  (GAAS on 2003-08-18)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.29"
+>3.29
+  (GAAS on 2003-08-15)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.28"
+>3.28
+  (GAAS on 2003-04-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.27"
+>3.27
+  (GAAS on 2003-01-18)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.26"
+>3.26
+  (GAAS on 2002-03-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.25"
+>3.25
+  (GAAS on 2001-05-11)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.24"
+>3.24
+  (GAAS on 2001-05-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.23"
+>3.23
+  (GAAS on 2001-05-02)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.22"
+>3.22
+  (GAAS on 2001-04-18)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.21"
+>3.21
+  (GAAS on 2001-04-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.20"
+>3.20
+  (GAAS on 2001-04-03)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_94"
+>3.19_94 DEV
+  (GAAS on 2001-03-30)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_93"
+>3.19_93 DEV
+  (GAAS on 2001-03-27)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_92"
+>3.19_92 DEV
+  (GAAS on 2001-03-26)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_91"
+>3.19_91 DEV
+  (GAAS on 2001-03-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19_90"
+>3.19_90 DEV
+  (GAAS on 2001-03-13)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.19"
+>3.19
+  (GAAS on 2001-03-10)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.18"
+>3.18
+  (GAAS on 2001-02-25)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.17"
+>3.17
+  (GAAS on 2001-02-24)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.16"
+>3.16
+  (GAAS on 2001-02-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.15"
+>3.15
+  (GAAS on 2000-12-26)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.14"
+>3.14
+  (GAAS on 2000-12-04)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.13"
+>3.13
+  (GAAS on 2000-09-17)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.12"
+>3.12
+  (GAAS on 2000-09-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.11"
+>3.11
+  (GAAS on 2000-08-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.10"
+>3.10
+  (GAAS on 2000-06-29)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.09"
+>3.09
+  (GAAS on 2000-06-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.08"
+>3.08
+  (GAAS on 2000-05-23)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.07"
+>3.07
+  (GAAS on 2000-03-20)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.06"
+>3.06
+  (GAAS on 2000-03-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.05"
+>3.05
+  (GAAS on 2000-01-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.04"
+>3.04
+  (GAAS on 2000-01-15)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.02"
+>3.02
+  (GAAS on 1999-12-21)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.01"
+>3.01
+  (GAAS on 1999-12-19)</option>
+<option
+  
+  value="GAAS/HTML-Parser-3.00"
+>3.00
+  (GAAS on 1999-12-14)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.24"
+>2.24
+  (GAAS on 1999-11-03)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.23"
+>2.23
+  (GAAS on 1999-06-09)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.21"
+>2.21
+  (GAAS on 1998-11-13)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.20"
+>2.20
+  (GAAS on 1998-07-08)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.19"
+>2.19
+  (GAAS on 1998-07-06)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.18"
+>2.18
+  (GAAS on 1998-06-22)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.17"
+>2.17
+  (GAAS on 1998-04-28)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.16"
+>2.16
+  (GAAS on 1998-04-02)</option>
+<option
+  
+  value="GAAS/HTML-Parser-2.14"
+>2.14
+  (GAAS on 1998-03-31)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/HTML-Parser">HTML-Parser-3.81</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage four &#10;
+          • 548 direct dependents &#10;          • 3510 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="HTML-Parser-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="HTML-Parser-3.81">
+    <input type="hidden" name="author" value="OALDERS">
+    <input type="hidden" name="distribution" value="HTML-Parser">
+    <button type="submit" class="favorite highlight"><span>47</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./HTML::TokeParser.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>47</span> ++</a>
+</div>
+   / <span>HTML::TokeParser</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./HTML::TokeParser.html#NAME">NAME</a></li>
+  <li><a href="./HTML::TokeParser.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./HTML::TokeParser.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./HTML::TokeParser.html#EXAMPLES">EXAMPLES</a></li>
+  <li><a href="./HTML::TokeParser.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./HTML::TokeParser.html#COPYRIGHT">COPYRIGHT</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>HTML::TokeParser - Alternative HTML::Parser interface</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code> require HTML::TokeParser;
+ $p = HTML::TokeParser-&gt;new(&quot;index.html&quot;) ||
+      die &quot;Can&#39;t open: $!&quot;;
+ $p-&gt;empty_element_tags(1);  # configure its behaviour
+
+ while (my $token = $p-&gt;get_token) {
+     #...
+ }</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>The <code>HTML::TokeParser</code> is an alternative interface to the <code>HTML::Parser</code> class. It is an <code>HTML::PullParser</code> subclass with a predeclared set of token types. If you wish the tokens to be reported differently you probably want to use the <code>HTML::PullParser</code> directly.</p>
+
+<p>The following methods are available:</p>
+
+<dl>
+
+<dt id="$p-=-HTML::TokeParser-&gt;new(-$filename,-%opt-);"><a id="p---HTML::TokeParser--new---filename---opt"></a>$p = HTML::TokeParser-&gt;new( $filename, %opt );</dt>
+<dd>
+
+</dd>
+<dt id="$p-=-HTML::TokeParser-&gt;new(-$filehandle,-%opt-);"><a id="p---HTML::TokeParser--new---filehandle---opt"></a>$p = HTML::TokeParser-&gt;new( $filehandle, %opt );</dt>
+<dd>
+
+</dd>
+<dt id="$p-=-HTML::TokeParser-&gt;new(-\$document,-%opt-);"><a id="p---HTML::TokeParser--new---document---opt"></a>$p = HTML::TokeParser-&gt;new( \$document, %opt );</dt>
+<dd>
+
+<p>The object constructor argument is either a file name, a file handle object, or the complete document to be parsed. Extra options can be provided as key/value pairs and are processed as documented by the base classes.</p>
+
+<p>If the argument is a plain scalar, then it is taken as the name of a file to be opened and parsed. If the file can&#39;t be opened for reading, then the constructor will return <code>undef</code> and $! will tell you why it failed.</p>
+
+<p>If the argument is a reference to a plain scalar, then this scalar is taken to be the literal document to parse. The value of this scalar should not be changed before all tokens have been extracted.</p>
+
+<p>Otherwise the argument is taken to be some object that the <code>HTML::TokeParser</code> can read() from when it needs more data. Typically it will be a filehandle of some kind. The stream will be read() until EOF, but not closed.</p>
+
+<p>A newly constructed <code>HTML::TokeParser</code> differ from its base classes by having the <code>unbroken_text</code> attribute enabled by default. See <a href="./HTML::Parser.html">HTML::Parser</a> for a description of this and other attributes that influence how the document is parsed. It is often a good idea to enable <code>empty_element_tags</code> behaviour.</p>
+
+<p>Note that the parsing result will likely not be valid if raw undecoded UTF-8 is used as a source. When parsing UTF-8 encoded files turn on UTF-8 decoding:</p>
+
+<pre><code>   open(my $fh, &quot;&lt;:utf8&quot;, &quot;index.html&quot;) || die &quot;Can&#39;t open &#39;index.html&#39;: $!&quot;;
+   my $p = HTML::TokeParser-&gt;new( $fh );
+   # ...</code></pre>
+
+<p>If a $filename is passed to the constructor the file will be opened in raw mode and the parsing result will only be valid if its content is Latin-1 or pure ASCII.</p>
+
+<p>If parsing from an UTF-8 encoded string buffer decode it first:</p>
+
+<pre><code>   utf8::decode($document);
+   my $p = HTML::TokeParser-&gt;new( \$document );
+   # ...</code></pre>
+
+</dd>
+<dt id="$p-&gt;get_token"><a id="p--get_token"></a>$p-&gt;get_token</dt>
+<dd>
+
+<p>This method will return the next <i>token</i> found in the HTML document, or <code>undef</code> at the end of the document. The token is returned as an array reference. The first element of the array will be a string denoting the type of this token: &quot;S&quot; for start tag, &quot;E&quot; for end tag, &quot;T&quot; for text, &quot;C&quot; for comment, &quot;D&quot; for declaration, and &quot;PI&quot; for process instructions. The rest of the token array depend on the type like this:</p>
+
+<pre><code>  [&quot;S&quot;,  $tag, $attr, $attrseq, $text]
+  [&quot;E&quot;,  $tag, $text]
+  [&quot;T&quot;,  $text, $is_data]
+  [&quot;C&quot;,  $text]
+  [&quot;D&quot;,  $text]
+  [&quot;PI&quot;, $token0, $text]</code></pre>
+
+<p>where $attr is a hash reference, $attrseq is an array reference and the rest are plain scalars. The <a href="./HTML::Parser.html#Argspec">&quot;Argspec&quot; in HTML::Parser</a> explains the details.</p>
+
+</dd>
+<dt id="$p-&gt;unget_token(-@tokens-)"><a id="p--unget_token---tokens"></a>$p-&gt;unget_token( @tokens )</dt>
+<dd>
+
+<p>If you find you have read too many tokens you can push them back, so that they are returned the next time $p-&gt;get_token is called.</p>
+
+</dd>
+<dt id="$p-&gt;get_tag"><a id="p--get_tag"></a>$p-&gt;get_tag</dt>
+<dd>
+
+</dd>
+<dt id="$p-&gt;get_tag(-@tags-)"><a id="p--get_tag---tags"></a>$p-&gt;get_tag( @tags )</dt>
+<dd>
+
+<p>This method returns the next start or end tag (skipping any other tokens), or <code>undef</code> if there are no more tags in the document. If one or more arguments are given, then we skip tokens until one of the specified tag types is found. For example:</p>
+
+<pre><code>   $p-&gt;get_tag(&quot;font&quot;, &quot;/font&quot;);</code></pre>
+
+<p>will find the next start or end tag for a font-element.</p>
+
+<p>The tag information is returned as an array reference in the same form as for $p-&gt;get_token above, but the type code (first element) is missing. A start tag will be returned like this:</p>
+
+<pre><code>  [$tag, $attr, $attrseq, $text]</code></pre>
+
+<p>The tagname of end tags are prefixed with &quot;/&quot;, i.e. end tag is returned like this:</p>
+
+<pre><code>  [&quot;/$tag&quot;, $text]</code></pre>
+
+</dd>
+<dt id="$p-&gt;get_text"><a id="p--get_text"></a>$p-&gt;get_text</dt>
+<dd>
+
+</dd>
+<dt id="$p-&gt;get_text(-@endtags-)"><a id="p--get_text---endtags"></a>$p-&gt;get_text( @endtags )</dt>
+<dd>
+
+<p>This method returns all text found at the current position. It will return a zero length string if the next token is not text. Any entities will be converted to their corresponding character.</p>
+
+<p>If one or more arguments are given, then we return all text occurring before the first of the specified tags found. For example:</p>
+
+<pre><code>   $p-&gt;get_text(&quot;p&quot;, &quot;br&quot;);</code></pre>
+
+<p>will return the text up to either a paragraph of line break element.</p>
+
+<p>The text might span tags that should be <i>textified</i>. This is controlled by the $p-&gt;{textify} attribute, which is a hash that defines how certain tags can be treated as text. If the name of a start tag matches a key in this hash then this tag is converted to text. The hash value is used to specify which tag attribute to obtain the text from. If this tag attribute is missing, then the upper case name of the tag enclosed in brackets is returned, e.g. &quot;[IMG]&quot;. The hash value can also be a subroutine reference. In this case the routine is called with the start tag token content as its argument and the return value is treated as the text.</p>
+
+<p>The default $p-&gt;{textify} value is:</p>
+
+<pre><code>  {img =&gt; &quot;alt&quot;, applet =&gt; &quot;alt&quot;}</code></pre>
+
+<p>This means that &lt;IMG&gt; and &lt;APPLET&gt; tags are treated as text, and that the text to substitute can be found in the ALT attribute.</p>
+
+</dd>
+<dt id="$p-&gt;get_trimmed_text"><a id="p--get_trimmed_text"></a>$p-&gt;get_trimmed_text</dt>
+<dd>
+
+</dd>
+<dt id="$p-&gt;get_trimmed_text(-@endtags-)"><a id="p--get_trimmed_text---endtags"></a>$p-&gt;get_trimmed_text( @endtags )</dt>
+<dd>
+
+<p>Same as $p-&gt;get_text above, but will collapse any sequences of white space to a single space character. Leading and trailing white space is removed.</p>
+
+</dd>
+<dt id="$p-&gt;get_phrase"><a id="p--get_phrase"></a>$p-&gt;get_phrase</dt>
+<dd>
+
+<p>This will return all text found at the current position ignoring any phrasal-level tags. Text is extracted until the first non phrasal-level tag. Textification of tags is the same as for get_text(). This method will collapse white space in the same way as get_trimmed_text() does.</p>
+
+<p>The definition of &lt;i&gt;phrasal-level tags&lt;/i&gt; is obtained from the HTML::Tagset module.</p>
+
+</dd>
+</dl>
+
+<h1 id="EXAMPLES">EXAMPLES</h1>
+
+<p>This example extracts all links from a document. It will print one line for each link, containing the URL and the textual description between the &lt;A&gt;...&lt;/A&gt; tags:</p>
+
+<pre><code>  use HTML::TokeParser;
+  $p = HTML::TokeParser-&gt;new(shift||&quot;index.html&quot;);
+
+  while (my $token = $p-&gt;get_tag(&quot;a&quot;)) {
+      my $url = $token-&gt;[1]{href} || &quot;-&quot;;
+      my $text = $p-&gt;get_trimmed_text(&quot;/a&quot;);
+      print &quot;$url\t$text\n&quot;;
+  }</code></pre>
+
+<p>This example extract the &lt;TITLE&gt; from the document:</p>
+
+<pre><code>  use HTML::TokeParser;
+  $p = HTML::TokeParser-&gt;new(shift||&quot;index.html&quot;);
+  if ($p-&gt;get_tag(&quot;title&quot;)) {
+      my $title = $p-&gt;get_trimmed_text;
+      print &quot;Title: $title\n&quot;;
+  }</code></pre>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/HTML::PullParser">HTML::PullParser</a>, <a href="./HTML::Parser.html">HTML::Parser</a></p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright 1998-2005 Gisle Aas.</p>
+
+<p>This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install HTML::Parser, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm HTML::Parser</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install HTML::Parser</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./HTML::TokeParser.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

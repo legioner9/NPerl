@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Locale::Maketext::Cookbook - recipes for using Locale::Maketext - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Locale::Maketext::Cookbook">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Locale::Maketext::Cookbook.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Locale::Maketext::Cookbook">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Locale::Maketext::Cookbook">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Locale::Maketext::Cookbook">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Locale::Maketext::Cookbook">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Locale::Maketext::Cookbook">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Locale::Maketext::Cookbook">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Locale::Maketext::Cookbook">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Locale::Maketext::Cookbook">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Locale::Maketext::Cookbook">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Locale::Maketext::Cookbook">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Locale::Maketext::Cookbook">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Locale::Maketext::Cookbook">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Locale::Maketext::Cookbook">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Locale::Maketext::Cookbook">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Locale::Maketext::Cookbook">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Locale::Maketext::Cookbook">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Locale::Maketext::Cookbook">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Locale::Maketext::Cookbook">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Locale::Maketext::Cookbook">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Locale::Maketext::Cookbook">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Locale::Maketext::Cookbook">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Locale::Maketext::Cookbook">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Locale::Maketext::Cookbook">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Locale::Maketext::Cookbook">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Locale::Maketext::Cookbook">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Locale::Maketext::Cookbook">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Locale::Maketext::Cookbook">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Locale::Maketext::Cookbook">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Locale::Maketext::Cookbook">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Locale::Maketext::Cookbook">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Locale::Maketext::Cookbook">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Locale::Maketext::Cookbook">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Locale::Maketext::Cookbook">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Locale::Maketext::Cookbook">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Locale::Maketext::Cookbook">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Locale::Maketext::Cookbook">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Locale::Maketext::Cookbook">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Locale::Maketext::Cookbook">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Locale::Maketext::Cookbook">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Locale::Maketext::Cookbook">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Locale::Maketext::Cookbook">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Locale::Maketext::Cookbook">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Locale::Maketext::Cookbook">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Locale::Maketext::Cookbook">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Locale::Maketext::Cookbook">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Locale::Maketext::Cookbook">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Locale::Maketext::Cookbook">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Locale::Maketext::Cookbook">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Locale::Maketext::Cookbook">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Locale::Maketext::Cookbook">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Locale::Maketext::Cookbook">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Locale::Maketext::Cookbook">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Locale::Maketext::Cookbook">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Locale::Maketext::Cookbook">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Locale::Maketext::Cookbook">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Locale::Maketext::Cookbook">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Locale::Maketext::Cookbook">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Locale::Maketext::Cookbook">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Locale::Maketext::Cookbook">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Locale::Maketext::Cookbook">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Locale::Maketext::Cookbook">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Locale::Maketext::Cookbook">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Locale::Maketext::Cookbook">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Locale::Maketext::Cookbook">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Locale::Maketext::Cookbook">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Locale::Maketext::Cookbook">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Locale::Maketext::Cookbook">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Locale::Maketext::Cookbook">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Locale::Maketext::Cookbook">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Locale::Maketext::Cookbook">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Locale::Maketext::Cookbook">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Locale::Maketext::Cookbook">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Locale::Maketext::Cookbook">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Locale::Maketext::Cookbook">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Locale::Maketext::Cookbook">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Locale::Maketext::Cookbook">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Locale::Maketext::Cookbook">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Locale::Maketext::Cookbook">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Locale::Maketext::Cookbook">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Locale::Maketext::Cookbook">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Locale::Maketext::Cookbook.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Locale::Maketext::Cookbook">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Locale::Maketext::Cookbook">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Locale::Maketext::Cookbook">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Locale::Maketext::Cookbook">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Locale::Maketext::Cookbook">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Locale::Maketext::Cookbook">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Locale::Maketext::Cookbook">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Locale::Maketext::Cookbook">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Locale::Maketext::Cookbook">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Locale::Maketext::Cookbook">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Locale::Maketext::Cookbook">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Locale::Maketext::Cookbook">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Locale::Maketext::Cookbook">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Locale::Maketext::Cookbook">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Locale::Maketext::Cookbook">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Locale::Maketext::Cookbook">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Locale::Maketext::Cookbook">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Locale::Maketext::Cookbook">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Locale::Maketext::Cookbook">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Locale::Maketext::Cookbook">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Locale::Maketext::Cookbook">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Locale::Maketext::Cookbook">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Locale::Maketext::Cookbook">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Locale::Maketext::Cookbook">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Locale::Maketext::Cookbook">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Locale::Maketext::Cookbook">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Locale::Maketext::Cookbook">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Locale::Maketext::Cookbook">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Locale::Maketext::Cookbook">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Locale::Maketext::Cookbook">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Locale::Maketext::Cookbook">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Locale::Maketext::Cookbook">5.35.1</a>
+          <a class="dropdown-item active" href="./Locale::Maketext::Cookbook.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Locale::Maketext::Cookbook.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Locale::Maketext::Cookbook.html">Locale::Maketext::Cookbook</a>
+          <div id="more">
+            (<a href="./Locale::Maketext::Cookbook.txt">source</a>,
+            <a href="https://metacpan.org/pod/Locale::Maketext::Cookbook">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Locale::Maketext::Cookbook.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Locale::Maketext::Cookbook.html#INTRODUCTION">INTRODUCTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Locale::Maketext::Cookbook.html#ONESIDED-LEXICONS">ONESIDED LEXICONS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Locale::Maketext::Cookbook.html#DECIMAL-PLACES-IN-NUMBER-FORMATTING">DECIMAL PLACES IN NUMBER FORMATTING</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Locale::Maketext::Cookbook.html#NAME">#</a>NAME</h1>
+
+<p>Locale::Maketext::Cookbook - recipes for using Locale::Maketext</p>
+
+<h1 id="INTRODUCTION"><a class="permalink" href="./Locale::Maketext::Cookbook.html#INTRODUCTION">#</a>INTRODUCTION</h1>
+
+<p>This is a work in progress. Not much progress by now :-)</p>
+
+<h1 id="ONESIDED-LEXICONS"><a class="permalink" href="./Locale::Maketext::Cookbook.html#ONESIDED-LEXICONS">#</a><a id="ONESIDED"></a>ONESIDED LEXICONS</h1>
+
+<p><i>Adapted from a suggestion by Dan Muey</i></p>
+
+<p>It may be common (for example at your main lexicon) that the hash keys and values coincide. Like that</p>
+
+<pre><code class="plaintext">q{Hello, tell me your name} 
+  =&gt; q{Hello, tell me your name}</code></pre>
+
+<p>It would be nice to just write:</p>
+
+<pre><code class="plaintext">q{Hello, tell me your name} =&gt; &#39;&#39;</code></pre>
+
+<p>and have this magically inflated to the first form. Among the advantages of such representation, that would lead to smaller files, less prone to mistyping or mispasting, and handy to someone translating it which can simply copy the main lexicon and enter the translation instead of having to remove the value first.</p>
+
+<p>That can be achieved by overriding <code>init</code> in your class and working on the main lexicon with code like that:</p>
+
+<pre><code>package My::I18N;
+...
+
+sub init {
+    my $lh = shift; # a newborn handle
+    $lh-&gt;SUPER::init();
+    inflate_lexicon(\%My::I18N::en::Lexicon);
+    return;
+}
+
+sub inflate_lexicon {
+    my $lex = shift;
+    while (my ($k, $v) = each %$lex) {
+        $v = $k if !defined $v || $v eq &#39;&#39;;
+    }
+}</code></pre>
+
+<p>Here we are assuming <code>My::I18N::en</code> to own the main lexicon.</p>
+
+<p>There are some downsides here: the size economy will not stand at runtime after this <code>init()</code> runs. But it should not be that critical, since if you don&#39;t have space for that, you won&#39;t have space for any other language besides the main one as well. You could do that too with ties, expanding the value at lookup time which should be more time expensive as an option.</p>
+
+<h1 id="DECIMAL-PLACES-IN-NUMBER-FORMATTING"><a class="permalink" href="./Locale::Maketext::Cookbook.html#DECIMAL-PLACES-IN-NUMBER-FORMATTING">#</a><a id="DECIMAL"></a>DECIMAL PLACES IN NUMBER FORMATTING</h1>
+
+<p><i>After CPAN RT #36136 (<a href="https://rt.cpan.org/Ticket/Display.html?id=36136">https://rt.cpan.org/Ticket/Display.html?id=36136</a>)</i></p>
+
+<p>The documentation of <a href="./Locale::Maketext.html">Locale::Maketext</a> advises that the standard bracket method <code>numf</code> is limited and that you must override that for better results. It even suggests the use of <a href="./Number::Format.html">Number::Format</a>.</p>
+
+<p>One such defect of standard <code>numf</code> is to not be able to use a certain decimal precision. For example,</p>
+
+<pre><code>$lh-&gt;maketext(&#39;pi is [numf,_1]&#39;, 355/113);</code></pre>
+
+<p>outputs</p>
+
+<pre><code class="plaintext">pi is 3.14159292035398 </code></pre>
+
+<p>Since pi ≈ 355/116 is only accurate to 6 decimal places, you would want to say:</p>
+
+<pre><code>$lh-&gt;maketext(&#39;pi is [numf,_1,6]&#39;, 355/113); </code></pre>
+
+<p>and get &quot;pi is 3.141592&quot;.</p>
+
+<p>One solution for that could use <code>Number::Format</code> like that:</p>
+
+<pre><code>package Wuu;
+
+use base qw(Locale::Maketext);
+
+use Number::Format;
+
+# can be overridden according to language conventions
+sub _numf_params {
+    return (
+        -thousands_sep  =&gt; &#39;.&#39;,
+        -decimal_point  =&gt; &#39;,&#39;,
+        -decimal_digits =&gt; 2,
+    );
+}
+
+# builds a Number::Format
+sub _numf_formatter {
+    my ($lh, $scale) = @_;
+    my @params = $lh-&gt;_numf_params;
+    if ($scale) { # use explicit scale rather than default
+        push @params, (-decimal_digits =&gt; $scale);
+    }
+    return Number::Format-&gt;new(@params);
+}
+
+sub numf {
+    my ($lh, $n, $scale) = @_;
+    # get the (cached) formatter
+    my $nf = $lh-&gt;{__nf}{$scale} ||= $lh-&gt;_numf_formatter($scale);
+    # format the number itself
+    return $nf-&gt;format_number($n);
+}
+
+package Wuu::pt;
+
+use base qw(Wuu);</code></pre>
+
+<p>and then</p>
+
+<pre><code>my $lh = Wuu-&gt;get_handle(&#39;pt&#39;);
+$lh-&gt;maketext(&#39;A [numf,_1,3] km de distância&#39;, 1550.2222);</code></pre>
+
+<p>would return &quot;A 1.550,222 km de distância&quot;.</p>
+
+<p>Notice that the standard utility methods of <code>Locale::Maketext</code> are irremediably limited because they could not aim to do everything that could be expected from them in different languages, cultures and applications. So extending <code>numf</code>, <code>quant</code>, and <code>sprintf</code> is natural as soon as your needs exceed what the standard ones do.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

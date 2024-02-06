@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlnewmod - preparing a new module for distribution - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlnewmod">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlnewmod.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlnewmod">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlnewmod">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlnewmod">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlnewmod">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlnewmod">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlnewmod">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlnewmod">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlnewmod">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlnewmod">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlnewmod">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlnewmod">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlnewmod">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlnewmod">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlnewmod">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlnewmod">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlnewmod">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlnewmod">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlnewmod">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlnewmod">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlnewmod">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlnewmod">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlnewmod">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlnewmod">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlnewmod">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlnewmod">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlnewmod">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlnewmod">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlnewmod">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlnewmod">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlnewmod">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlnewmod">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlnewmod">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlnewmod">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlnewmod">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlnewmod">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlnewmod">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlnewmod">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlnewmod">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlnewmod">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlnewmod">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlnewmod">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlnewmod">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlnewmod">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlnewmod">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlnewmod">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlnewmod">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlnewmod">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlnewmod">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlnewmod">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlnewmod">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlnewmod">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlnewmod">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlnewmod">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlnewmod">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlnewmod">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlnewmod">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlnewmod">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlnewmod">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlnewmod">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlnewmod">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlnewmod">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlnewmod">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlnewmod">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlnewmod">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlnewmod">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlnewmod">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlnewmod">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlnewmod">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlnewmod">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlnewmod">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlnewmod">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlnewmod">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlnewmod">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlnewmod">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlnewmod">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlnewmod">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlnewmod">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlnewmod">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlnewmod">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlnewmod">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlnewmod.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlnewmod">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlnewmod">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlnewmod">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlnewmod">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlnewmod">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlnewmod">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlnewmod">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlnewmod">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlnewmod">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlnewmod">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlnewmod">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlnewmod">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlnewmod">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlnewmod">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlnewmod">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlnewmod">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlnewmod">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlnewmod">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlnewmod">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlnewmod">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlnewmod">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlnewmod">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlnewmod">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlnewmod">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlnewmod">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlnewmod">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlnewmod">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlnewmod">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlnewmod">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlnewmod">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlnewmod">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlnewmod">5.35.1</a>
+          <a class="dropdown-item active" href="perlnewmod.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlnewmod.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlnewmod.html">perlnewmod</a>
+          <div id="more">
+            (<a href="perlnewmod.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlnewmod">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlnewmod.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlnewmod.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlnewmod.html#Warning">Warning</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlnewmod.html#What-should-I-make-into-a-module?">What should I make into a module?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlnewmod.html#Step-by-step:-Preparing-the-ground">Step-by-step: Preparing the ground</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlnewmod.html#Step-by-step:-Making-the-module">Step-by-step: Making the module</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlnewmod.html#Step-by-step:-Distributing-your-module">Step-by-step: Distributing your module</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlnewmod.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlnewmod.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlnewmod.html#NAME">#</a>NAME</h1>
+
+<p>perlnewmod - preparing a new module for distribution</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlnewmod.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This document gives you some suggestions about how to go about writing Perl modules, preparing them for distribution, and making them available via CPAN.</p>
+
+<p>One of the things that makes Perl really powerful is the fact that Perl hackers tend to want to share the solutions to problems they&#39;ve faced, so you and I don&#39;t have to battle with the same problem again.</p>
+
+<p>The main way they do this is by abstracting the solution into a Perl module. If you don&#39;t know what one of these is, the rest of this document isn&#39;t going to be much use to you. You&#39;re also missing out on an awful lot of useful code; consider having a look at <a href="perlmod.html">perlmod</a>, <a href="perlmodlib.html">perlmodlib</a> and <a href="perlmodinstall.html">perlmodinstall</a> before coming back here.</p>
+
+<p>When you&#39;ve found that there isn&#39;t a module available for what you&#39;re trying to do, and you&#39;ve had to write the code yourself, consider packaging up the solution into a module and uploading it to CPAN so that others can benefit.</p>
+
+<p>You should also take a look at <a href="perlmodstyle.html">perlmodstyle</a> for best practices in making a module.</p>
+
+<h2 id="Warning"><a class="permalink" href="perlnewmod.html#Warning">#</a>Warning</h2>
+
+<p>We&#39;re going to primarily concentrate on Perl-only modules here, rather than XS modules. XS modules serve a rather different purpose, and you should consider different things before distributing them - the popularity of the library you are gluing, the portability to other operating systems, and so on. However, the notes on preparing the Perl side of the module and packaging and distributing it will apply equally well to an XS module as a pure-Perl one.</p>
+
+<h2 id="What-should-I-make-into-a-module?"><a class="permalink" href="perlnewmod.html#What-should-I-make-into-a-module?">#</a><a id="What"></a><a id="What-should-I-make-into-a-module"></a>What should I make into a module?</h2>
+
+<p>You should make a module out of any code that you think is going to be useful to others. Anything that&#39;s likely to fill a hole in the communal library and which someone else can slot directly into their program. Any part of your code which you can isolate and extract and plug into something else is a likely candidate.</p>
+
+<p>Let&#39;s take an example. Suppose you&#39;re reading in data from a local format into a hash-of-hashes in Perl, turning that into a tree, walking the tree and then piping each node to an Acme Transmogrifier Server.</p>
+
+<p>Now, quite a few people have the Acme Transmogrifier, and you&#39;ve had to write something to talk the protocol from scratch - you&#39;d almost certainly want to make that into a module. The level at which you pitch it is up to you: you might want protocol-level modules analogous to <a href="./Net::SMTP.html">Net::SMTP</a> which then talk to higher level modules analogous to <a href="./Mail::Send.html">Mail::Send</a>. The choice is yours, but you do want to get a module out for that server protocol.</p>
+
+<p>Nobody else on the planet is going to talk your local data format, so we can ignore that. But what about the thing in the middle? Building tree structures from Perl variables and then traversing them is a nice, general problem, and if nobody&#39;s already written a module that does that, you might want to modularise that code too.</p>
+
+<p>So hopefully you&#39;ve now got a few ideas about what&#39;s good to modularise. Let&#39;s now see how it&#39;s done.</p>
+
+<h2 id="Step-by-step:-Preparing-the-ground"><a class="permalink" href="perlnewmod.html#Step-by-step:-Preparing-the-ground">#</a><a id="Step"></a>Step-by-step: Preparing the ground</h2>
+
+<p>Before we even start scraping out the code, there are a few things we&#39;ll want to do in advance.</p>
+
+<dl>
+
+<dt id="Look-around"><a class="permalink" href="perlnewmod.html#Look-around">#</a><a id="Look"></a>Look around</dt>
+<dd>
+
+<p>Dig into a bunch of modules to see how they&#39;re written. I&#39;d suggest starting with <a href="./Text::Tabs.html">Text::Tabs</a>, since it&#39;s in the standard library and is nice and simple, and then looking at something a little more complex like <a href="./File::Copy.html">File::Copy</a>. For object oriented code, <a href="./WWW::Mechanize.html">WWW::Mechanize</a> or the <code>Email::*</code> modules provide some good examples.</p>
+
+<p>These should give you an overall feel for how modules are laid out and written.</p>
+
+</dd>
+<dt id="Check-it&#39;s-new"><a class="permalink" href="perlnewmod.html#Check-it&#39;s-new">#</a><a id="Check"></a><a id="Check-its-new"></a>Check it&#39;s new</dt>
+<dd>
+
+<p>There are a lot of modules on CPAN, and it&#39;s easy to miss one that&#39;s similar to what you&#39;re planning on contributing. Have a good plough through <a href="http://metacpan.org">http://metacpan.org</a> and make sure you&#39;re not the one reinventing the wheel!</p>
+
+</dd>
+<dt id="Discuss-the-need"><a class="permalink" href="perlnewmod.html#Discuss-the-need">#</a><a id="Discuss"></a>Discuss the need</dt>
+<dd>
+
+<p>You might love it. You might feel that everyone else needs it. But there might not actually be any real demand for it out there. If you&#39;re unsure about the demand your module will have, consider asking the <code>module-authors@perl.org</code> mailing list (send an email to <code>module-authors-subscribe@perl.org</code> to subscribe; see <a href="https://lists.perl.org/list/module-authors.html">https://lists.perl.org/list/module-authors.html</a> for more information and a link to the archives).</p>
+
+</dd>
+<dt id="Choose-a-name"><a class="permalink" href="perlnewmod.html#Choose-a-name">#</a><a id="Choose"></a>Choose a name</dt>
+<dd>
+
+<p>Perl modules included on CPAN have a naming hierarchy you should try to fit in with. See <a href="perlmodlib.html">perlmodlib</a> for more details on how this works, and browse around CPAN and the modules list to get a feel of it. At the very least, remember this: modules should be title capitalised, (This::Thing) fit in with a category, and explain their purpose succinctly.</p>
+
+</dd>
+<dt id="Check-again"><a class="permalink" href="perlnewmod.html#Check-again">#</a><a id="Check1"></a>Check again</dt>
+<dd>
+
+<p>While you&#39;re doing that, make really sure you haven&#39;t missed a module similar to the one you&#39;re about to write.</p>
+
+<p>When you&#39;ve got your name sorted out and you&#39;re sure that your module is wanted and not currently available, it&#39;s time to start coding.</p>
+
+</dd>
+</dl>
+
+<h2 id="Step-by-step:-Making-the-module"><a class="permalink" href="perlnewmod.html#Step-by-step:-Making-the-module">#</a><a id="Step1"></a>Step-by-step: Making the module</h2>
+
+<dl>
+
+<dt id="Start-with-module-starter-or-h2xs"><a class="permalink" href="perlnewmod.html#Start-with-module-starter-or-h2xs">#</a><a id="Start"></a>Start with <i>module-starter</i> or <i>h2xs</i></dt>
+<dd>
+
+<p>The <i>module-starter</i> utility is distributed as part of the <a href="./Module::Starter.html">Module::Starter</a> CPAN package. It creates a directory with stubs of all the necessary files to start a new module, according to recent &quot;best practice&quot; for module development, and is invoked from the command line, thus:</p>
+
+<pre><code>module-starter --module=Foo::Bar \
+   --author=&quot;Your Name&quot; --email=yourname@cpan.org</code></pre>
+
+<p>If you do not wish to install the <a href="./Module::Starter.html">Module::Starter</a> package from CPAN, <i>h2xs</i> is an older tool, originally intended for the development of XS modules, which comes packaged with the Perl distribution.</p>
+
+<p>A typical invocation of <a href="h2xs.html">h2xs</a> for a pure Perl module is:</p>
+
+<pre><code class="plaintext">h2xs -AX --skip-exporter --use-new-tests -n Foo::Bar </code></pre>
+
+<p>The <code>-A</code> omits the Autoloader code, <code>-X</code> omits XS elements, <code>--skip-exporter</code> omits the Exporter code, <code>--use-new-tests</code> sets up a modern testing environment, and <code>-n</code> specifies the name of the module.</p>
+
+</dd>
+<dt id="Use-strict-and-warnings"><a class="permalink" href="perlnewmod.html#Use-strict-and-warnings">#</a><a id="Use"></a>Use <a href="strict.html">strict</a> and <a href="warnings.html">warnings</a></dt>
+<dd>
+
+<p>A module&#39;s code has to be warning and strict-clean, since you can&#39;t guarantee the conditions that it&#39;ll be used under. Besides, you wouldn&#39;t want to distribute code that wasn&#39;t warning or strict-clean anyway, right?</p>
+
+</dd>
+<dt id="Use-Carp"><a class="permalink" href="perlnewmod.html#Use-Carp">#</a><a id="Use1"></a>Use <a href="Carp.html">Carp</a></dt>
+<dd>
+
+<p>The <a href="Carp.html">Carp</a> module allows you to present your error messages from the caller&#39;s perspective; this gives you a way to signal a problem with the caller and not your module. For instance, if you say this:</p>
+
+<pre><code>warn &quot;No hostname given&quot;;</code></pre>
+
+<p>the user will see something like this:</p>
+
+<pre><code class="plaintext">No hostname given at
+/usr/local/lib/perl5/site_perl/5.6.0/Net/Acme.pm line 123.</code></pre>
+
+<p>which looks like your module is doing something wrong. Instead, you want to put the blame on the user, and say this:</p>
+
+<pre><code class="plaintext">No hostname given at bad_code, line 10.</code></pre>
+
+<p>You do this by using <a href="Carp.html">Carp</a> and replacing your <code>warn</code>s with <code>carp</code>s. If you need to <code>die</code>, say <code>croak</code> instead. However, keep <code>warn</code> and <code>die</code> in place for your sanity checks - where it really is your module at fault.</p>
+
+</dd>
+<dt id="Use-Exporter-wisely!"><a class="permalink" href="perlnewmod.html#Use-Exporter-wisely!">#</a><a id="Use2"></a><a id="Use-Exporter---wisely"></a>Use <a href="Exporter.html">Exporter</a> - wisely!</dt>
+<dd>
+
+<p><a href="Exporter.html">Exporter</a> gives you a standard way of exporting symbols and subroutines from your module into the caller&#39;s namespace. For instance, saying <code>use Net::Acme qw(&amp;frob)</code> would import the <code>frob</code> subroutine.</p>
+
+<p>The package variable <code>@EXPORT</code> will determine which symbols will get exported when the caller simply says <code>use Net::Acme</code> - you will hardly ever want to put anything in there. <code>@EXPORT_OK</code>, on the other hand, specifies which symbols you&#39;re willing to export. If you do want to export a bunch of symbols, use the <code>%EXPORT_TAGS</code> and define a standard export set - look at <a href="Exporter.html">Exporter</a> for more details.</p>
+
+</dd>
+<dt id="Use-plain-old-documentation"><a class="permalink" href="perlnewmod.html#Use-plain-old-documentation">#</a><a id="Use3"></a>Use <a href="perlpod.html">plain old documentation</a></dt>
+<dd>
+
+<p>The work isn&#39;t over until the paperwork is done, and you&#39;re going to need to put in some time writing some documentation for your module. <code>module-starter</code> or <code>h2xs</code> will provide a stub for you to fill in; if you&#39;re not sure about the format, look at <a href="perlpod.html">perlpod</a> for an introduction. Provide a good synopsis of how your module is used in code, a description, and then notes on the syntax and function of the individual subroutines or methods. Use Perl comments for developer notes and POD for end-user notes.</p>
+
+</dd>
+<dt id="Write-tests"><a class="permalink" href="perlnewmod.html#Write-tests">#</a><a id="Write"></a>Write tests</dt>
+<dd>
+
+<p>You&#39;re encouraged to create self-tests for your module to ensure it&#39;s working as intended on the myriad platforms Perl supports; if you upload your module to CPAN, a host of testers will build your module and send you the results of the tests. Again, <code>module-starter</code> and <code>h2xs</code> provide a test framework which you can extend - you should do something more than just checking your module will compile. <a href="./Test::Simple.html">Test::Simple</a> and <a href="./Test::More.html">Test::More</a> are good places to start when writing a test suite.</p>
+
+</dd>
+<dt id="Write-the-README"><a class="permalink" href="perlnewmod.html#Write-the-README">#</a><a id="Write1"></a>Write the <i>README</i></dt>
+<dd>
+
+<p>If you&#39;re uploading to CPAN, the automated gremlins will extract the README file and place that in your CPAN directory. It&#39;ll also appear in the main <i>by-module</i> and <i>by-category</i> directories if you make it onto the modules list. It&#39;s a good idea to put here what the module actually does in detail.</p>
+
+</dd>
+<dt id="Write-Changes"><a class="permalink" href="perlnewmod.html#Write-Changes">#</a><a id="Write2"></a>Write <i>Changes</i></dt>
+<dd>
+
+<p>Add any user-visible changes since the last release to your <i>Changes</i> file.</p>
+
+</dd>
+</dl>
+
+<h2 id="Step-by-step:-Distributing-your-module"><a class="permalink" href="perlnewmod.html#Step-by-step:-Distributing-your-module">#</a><a id="Step2"></a>Step-by-step: Distributing your module</h2>
+
+<dl>
+
+<dt id="Get-a-CPAN-user-ID"><a class="permalink" href="perlnewmod.html#Get-a-CPAN-user-ID">#</a><a id="Get"></a>Get a CPAN user ID</dt>
+<dd>
+
+<p>Every developer publishing modules on CPAN needs a CPAN ID. Visit <code><a href="http://pause.perl.org/">http://pause.perl.org/</a></code>, select &quot;Request PAUSE Account&quot;, and wait for your request to be approved by the PAUSE administrators.</p>
+
+</dd>
+<dt id="perl-Makefile.PL;-make-test;-make-distcheck;-make-dist"><a class="permalink" href="perlnewmod.html#perl-Makefile.PL;-make-test;-make-distcheck;-make-dist">#</a><a id="perl"></a><a id="perl-Makefile.PL-make-test-make-distcheck-make-dist"></a><code>perl Makefile.PL; make test; make distcheck; make dist</code></dt>
+<dd>
+
+<p>Once again, <code>module-starter</code> or <code>h2xs</code> has done all the work for you. They produce the standard <code>Makefile.PL</code> you see when you download and install modules, and this produces a Makefile with a <code>dist</code> target.</p>
+
+<p>Once you&#39;ve ensured that your module passes its own tests - always a good thing to make sure - you can <code>make distcheck</code> to make sure everything looks OK, followed by <code>make dist</code>, and the Makefile will hopefully produce you a nice tarball of your module, ready for upload.</p>
+
+</dd>
+<dt id="Upload-the-tarball"><a class="permalink" href="perlnewmod.html#Upload-the-tarball">#</a><a id="Upload"></a>Upload the tarball</dt>
+<dd>
+
+<p>The email you got when you received your CPAN ID will tell you how to log in to PAUSE, the Perl Authors Upload SErver. From the menus there, you can upload your module to CPAN.</p>
+
+<p>Alternatively you can use the <i>cpan-upload</i> script, part of the <a href="./CPAN::Uploader.html">CPAN::Uploader</a> distribution on CPAN.</p>
+
+</dd>
+<dt id="Fix-bugs!"><a class="permalink" href="perlnewmod.html#Fix-bugs!">#</a><a id="Fix"></a><a id="Fix-bugs"></a>Fix bugs!</dt>
+<dd>
+
+<p>Once you start accumulating users, they&#39;ll send you bug reports. If you&#39;re lucky, they&#39;ll even send you patches. Welcome to the joys of maintaining a software project...</p>
+
+</dd>
+</dl>
+
+<h1 id="AUTHOR"><a class="permalink" href="perlnewmod.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Simon Cozens, <code>simon@cpan.org</code></p>
+
+<p>Updated by Kirrily &quot;Skud&quot; Robert, <code>skud@cpan.org</code></p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="perlnewmod.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="perlmod.html">perlmod</a>, <a href="perlmodlib.html">perlmodlib</a>, <a href="perlmodinstall.html">perlmodinstall</a>, <a href="h2xs.html">h2xs</a>, <a href="strict.html">strict</a>, <a href="Carp.html">Carp</a>, <a href="Exporter.html">Exporter</a>, <a href="perlpod.html">perlpod</a>, <a href="./Test::Simple.html">Test::Simple</a>, <a href="./Test::More.html">Test::More</a> <a href="./ExtUtils::MakeMaker.html">ExtUtils::MakeMaker</a>, <a href="./Module::Build.html">Module::Build</a>, <a href="./Module::Starter.html">Module::Starter</a> <a href="http://www.cpan.org/">http://www.cpan.org/</a>, Ken Williams&#39; tutorial on building your own module at <a href="http://mathforum.org/~ken/perl_modules.html">http://mathforum.org/~ken/perl_modules.html</a></p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

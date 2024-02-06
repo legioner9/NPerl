@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlbug - how to submit bug reports on Perl - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlthanks">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlthanks.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlthanks">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlthanks">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlthanks">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlthanks">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlthanks">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlthanks">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlthanks">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlthanks">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlthanks">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlthanks">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlthanks">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlthanks">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlthanks">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlthanks">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlthanks">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlthanks">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlthanks">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlthanks">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlthanks">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlthanks">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlthanks">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlthanks">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlthanks">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlthanks">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlthanks">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlthanks">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlthanks">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlthanks">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlthanks">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlthanks">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlthanks">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlthanks">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlthanks">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlthanks">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlthanks">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlthanks">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlthanks">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlthanks">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlthanks">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlthanks">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlthanks">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlthanks">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlthanks">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlthanks">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlthanks">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlthanks">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlthanks">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlthanks">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlthanks">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlthanks">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlthanks">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlthanks">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlthanks">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlthanks">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlthanks">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlthanks">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlthanks">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlthanks">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlthanks">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlthanks">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlthanks">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlthanks">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlthanks">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlthanks">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlthanks">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlthanks">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlthanks">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlthanks">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlthanks">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlthanks">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlthanks">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlthanks">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlthanks">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlthanks">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlthanks">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlthanks">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlthanks">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlthanks">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlthanks">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlthanks">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlthanks.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlthanks">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlthanks">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlthanks">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlthanks">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlthanks">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlthanks">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlthanks">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlthanks">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlthanks">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlthanks">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlthanks">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlthanks">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlthanks">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlthanks">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlthanks">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlthanks">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlthanks">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlthanks">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlthanks">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlthanks">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlthanks">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlthanks">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlthanks">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlthanks">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlthanks">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlthanks">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlthanks">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlthanks">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlthanks">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlthanks">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlthanks">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlthanks">5.35.1</a>
+          <a class="dropdown-item active" href="perlthanks.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlthanks.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlthanks.html">perlthanks</a>
+          <div id="more">
+            (<a href="perlthanks.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlthanks">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlthanks.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlthanks.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlthanks.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlthanks.html#OPTIONS">OPTIONS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlthanks.html#AUTHORS">AUTHORS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlthanks.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlthanks.html#BUGS">BUGS</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlthanks.html#NAME">#</a>NAME</h1>
+
+<p>perlbug - how to submit bug reports on Perl</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="perlthanks.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<p><b>perlbug</b></p>
+
+<p><b>perlbug</b> <span style="white-space: nowrap;">[ <b>-v</b> ]</span> <span style="white-space: nowrap;">[ <b>-a</b> <i>address</i> ]</span> <span style="white-space: nowrap;">[ <b>-s</b> <i>subject</i> ]</span> <span style="white-space: nowrap;">[ <b>-b</b> <i>body</i> | <b>-f</b> <i>inputfile</i> ]</span> <span style="white-space: nowrap;">[ <b>-F</b> <i>outputfile</i> ]</span> <span style="white-space: nowrap;">[ <b>-r</b> <i>returnaddress</i> ]</span> <span style="white-space: nowrap;">[ <b>-e</b> <i>editor</i> ]</span> <span style="white-space: nowrap;">[ <b>-c</b> <i>adminaddress</i> | <b>-C</b> ]</span> <span style="white-space: nowrap;">[ <b>-S</b> ]</span> <span style="white-space: nowrap;">[ <b>-t</b> ]</span> <span style="white-space: nowrap;">[ <b>-d</b> ]</span> <span style="white-space: nowrap;">[ <b>-h</b> ]</span> <span style="white-space: nowrap;">[ <b>-T</b> ]</span></p>
+
+<p><b>perlbug</b> <span style="white-space: nowrap;">[ <b>-v</b> ]</span> <span style="white-space: nowrap;">[ <b>-r</b> <i>returnaddress</i> ]</span> <span style="white-space: nowrap;">[ <b>-ok</b> | <b>-okay</b> | <b>-nok</b> | <b>-nokay</b> ]</span></p>
+
+<p><b>perlthanks</b></p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlthanks.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This program is designed to help you generate bug reports (and thank-you notes) about perl5 and the modules which ship with it.</p>
+
+<p>In most cases, you can just run it interactively from a command line without any special arguments and follow the prompts.</p>
+
+<p>If you have found a bug with a non-standard port (one that was not part of the <i>standard distribution</i>), a binary distribution, or a non-core module (such as Tk, DBI, etc), then please see the documentation that came with that distribution to determine the correct place to report bugs.</p>
+
+<p>Bug reports should be submitted to the GitHub issue tracker at <a href="https://github.com/Perl/perl5/issues">https://github.com/Perl/perl5/issues</a>. The <b>perlbug@perl.org</b> address no longer automatically opens tickets. You can use this tool to compose your report and save it to a file which you can then submit to the issue tracker.</p>
+
+<p>In extreme cases, <b>perlbug</b> may not work well enough on your system to guide you through composing a bug report. In those cases, you may be able to use <b>perlbug -d</b> or <b>perl -V</b> to get system configuration information to include in your issue report.</p>
+
+<p>When reporting a bug, please run through this checklist:</p>
+
+<dl>
+
+<dt id="What-version-of-Perl-you-are-running?"><a class="permalink" href="perlthanks.html#What-version-of-Perl-you-are-running?">#</a><a id="What"></a><a id="What-version-of-Perl-you-are-running"></a>What version of Perl you are running?</dt>
+<dd>
+
+<p>Type <code>perl -v</code> at the command line to find out.</p>
+
+</dd>
+<dt id="Are-you-running-the-latest-released-version-of-perl?"><a class="permalink" href="perlthanks.html#Are-you-running-the-latest-released-version-of-perl?">#</a><a id="Are"></a><a id="Are-you-running-the-latest-released-version-of-perl"></a>Are you running the latest released version of perl?</dt>
+<dd>
+
+<p>Look at <a href="http://www.perl.org/">http://www.perl.org/</a> to find out. If you are not using the latest released version, please try to replicate your bug on the latest stable release.</p>
+
+<p>Note that reports about bugs in old versions of Perl, especially those which indicate you haven&#39;t also tested the current stable release of Perl, are likely to receive less attention from the volunteers who build and maintain Perl than reports about bugs in the current release.</p>
+
+</dd>
+<dt id="Are-you-sure-what-you-have-is-a-bug?"><a class="permalink" href="perlthanks.html#Are-you-sure-what-you-have-is-a-bug?">#</a><a id="Are1"></a><a id="Are-you-sure-what-you-have-is-a-bug"></a>Are you sure what you have is a bug?</dt>
+<dd>
+
+<p>A significant number of the bug reports we get turn out to be documented features in Perl. Make sure the issue you&#39;ve run into isn&#39;t intentional by glancing through the documentation that comes with the Perl distribution.</p>
+
+<p>Given the sheer volume of Perl documentation, this isn&#39;t a trivial undertaking, but if you can point to documentation that suggests the behaviour you&#39;re seeing is <i>wrong</i>, your issue is likely to receive more attention. You may want to start with <b>perldoc</b> <a href="perltrap.html">perltrap</a> for pointers to common traps that new (and experienced) Perl programmers run into.</p>
+
+<p>If you&#39;re unsure of the meaning of an error message you&#39;ve run across, <b>perldoc</b> <a href="perldiag.html">perldiag</a> for an explanation. If the message isn&#39;t in perldiag, it probably isn&#39;t generated by Perl. You may have luck consulting your operating system documentation instead.</p>
+
+<p>If you are on a non-UNIX platform <b>perldoc</b> <a href="perlport.html">perlport</a>, as some features may be unimplemented or work differently.</p>
+
+<p>You may be able to figure out what&#39;s going wrong using the Perl debugger. For information about how to use the debugger <b>perldoc</b> <a href="perldebug.html">perldebug</a>.</p>
+
+</dd>
+<dt id="Do-you-have-a-proper-test-case?"><a class="permalink" href="perlthanks.html#Do-you-have-a-proper-test-case?">#</a><a id="Do"></a><a id="Do-you-have-a-proper-test-case"></a>Do you have a proper test case?</dt>
+<dd>
+
+<p>The easier it is to reproduce your bug, the more likely it will be fixed -- if nobody can duplicate your problem, it probably won&#39;t be addressed.</p>
+
+<p>A good test case has most of these attributes: short, simple code; few dependencies on external commands, modules, or libraries; no platform-dependent code (unless it&#39;s a platform-specific bug); clear, simple documentation.</p>
+
+<p>A good test case is almost always a good candidate to be included in Perl&#39;s test suite. If you have the time, consider writing your test case so that it can be easily included into the standard test suite.</p>
+
+</dd>
+<dt id="Have-you-included-all-relevant-information?"><a class="permalink" href="perlthanks.html#Have-you-included-all-relevant-information?">#</a><a id="Have"></a><a id="Have-you-included-all-relevant-information"></a>Have you included all relevant information?</dt>
+<dd>
+
+<p>Be sure to include the <b>exact</b> error messages, if any. &quot;Perl gave an error&quot; is not an exact error message.</p>
+
+<p>If you get a core dump (or equivalent), you may use a debugger (<b>dbx</b>, <b>gdb</b>, etc) to produce a stack trace to include in the bug report.</p>
+
+<p>NOTE: unless your Perl has been compiled with debug info (often <b>-g</b>), the stack trace is likely to be somewhat hard to use because it will most probably contain only the function names and not their arguments. If possible, recompile your Perl with debug info and reproduce the crash and the stack trace.</p>
+
+</dd>
+<dt id="Can-you-describe-the-bug-in-plain-English?"><a class="permalink" href="perlthanks.html#Can-you-describe-the-bug-in-plain-English?">#</a><a id="Can"></a><a id="Can-you-describe-the-bug-in-plain-English"></a>Can you describe the bug in plain English?</dt>
+<dd>
+
+<p>The easier it is to understand a reproducible bug, the more likely it will be fixed. Any insight you can provide into the problem will help a great deal. In other words, try to analyze the problem (to the extent you can) and report your discoveries.</p>
+
+</dd>
+<dt id="Can-you-fix-the-bug-yourself?"><a class="permalink" href="perlthanks.html#Can-you-fix-the-bug-yourself?">#</a><a id="Can1"></a><a id="Can-you-fix-the-bug-yourself"></a>Can you fix the bug yourself?</dt>
+<dd>
+
+<p>If so, that&#39;s great news; bug reports with patches are likely to receive significantly more attention and interest than those without patches. Please submit your patch via the GitHub Pull Request workflow as described in <b>perldoc</b> <a href="perlhack.html">perlhack</a>. You may also send patches to <b>perl5-porters@perl.org</b>. When sending a patch, create it using <code>git format-patch</code> if possible, though a unified diff created with <code>diff -pu</code> will do nearly as well.</p>
+
+<p>Your patch may be returned with requests for changes, or requests for more detailed explanations about your fix.</p>
+
+<p>Here are a few hints for creating high-quality patches:</p>
+
+<p>Make sure the patch is not reversed (the first argument to diff is typically the original file, the second argument your changed file). Make sure you test your patch by applying it with <code>git am</code> or the <code>patch</code> program before you send it on its way. Try to follow the same style as the code you are trying to patch. Make sure your patch really does work (<code>make test</code>, if the thing you&#39;re patching is covered by Perl&#39;s test suite).</p>
+
+</dd>
+<dt id="Can-you-use-perlbug-to-submit-a-thank-you-note?"><a class="permalink" href="perlthanks.html#Can-you-use-perlbug-to-submit-a-thank-you-note?">#</a><a id="Can2"></a><a id="Can-you-use-perlbug-to-submit-a-thank-you-note"></a>Can you use <code>perlbug</code> to submit a thank-you note?</dt>
+<dd>
+
+<p>Yes, you can do this by either using the <code>-T</code> option, or by invoking the program as <code>perlthanks</code>. Thank-you notes are good. It makes people smile.</p>
+
+</dd>
+</dl>
+
+<p>Please make your issue title informative. &quot;a bug&quot; is not informative. Neither is &quot;perl crashes&quot; nor is &quot;HELP!!!&quot;. These don&#39;t help. A compact description of what&#39;s wrong is fine.</p>
+
+<p>Having done your bit, please be prepared to wait, to be told the bug is in your code, or possibly to get no reply at all. The volunteers who maintain Perl are busy folks, so if your problem is an obvious bug in your own code, is difficult to understand or is a duplicate of an existing report, you may not receive a personal reply.</p>
+
+<p>If it is important to you that your bug be fixed, do monitor the issue tracker (you will be subscribed to notifications for issues you submit or comment on) and the commit logs to development versions of Perl, and encourage the maintainers with kind words or offers of frosty beverages. (Please do be kind to the maintainers. Harassing or flaming them is likely to have the opposite effect of the one you want.)</p>
+
+<p>Feel free to update the ticket about your bug on <a href="https://github.com/Perl/perl5/issues">https://github.com/Perl/perl5/issues</a> if a new version of Perl is released and your bug is still present.</p>
+
+<h1 id="OPTIONS"><a class="permalink" href="perlthanks.html#OPTIONS">#</a>OPTIONS</h1>
+
+<dl>
+
+<dt id="-a"><a class="permalink" href="perlthanks.html#-a">#</a><a id="a"></a><b>-a</b></dt>
+<dd>
+
+<p>Address to send the report to instead of saving to a file.</p>
+
+</dd>
+<dt id="-b"><a class="permalink" href="perlthanks.html#-b">#</a><a id="b"></a><b>-b</b></dt>
+<dd>
+
+<p>Body of the report. If not included on the command line, or in a file with <b>-f</b>, you will get a chance to edit the report.</p>
+
+</dd>
+<dt id="-C"><a class="permalink" href="perlthanks.html#-C">#</a><a id="C"></a><b>-C</b></dt>
+<dd>
+
+<p>Don&#39;t send copy to administrator when sending report by mail.</p>
+
+</dd>
+<dt id="-c"><a class="permalink" href="perlthanks.html#-c">#</a><a id="c"></a><b>-c</b></dt>
+<dd>
+
+<p>Address to send copy of report to when sending report by mail. Defaults to the address of the local perl administrator (recorded when perl was built).</p>
+
+</dd>
+<dt id="-d"><a class="permalink" href="perlthanks.html#-d">#</a><a id="d"></a><b>-d</b></dt>
+<dd>
+
+<p>Data mode (the default if you redirect or pipe output). This prints out your configuration data, without saving or mailing anything. You can use this with <b>-v</b> to get more complete data.</p>
+
+</dd>
+<dt id="-e"><a class="permalink" href="perlthanks.html#-e">#</a><a id="e"></a><b>-e</b></dt>
+<dd>
+
+<p>Editor to use.</p>
+
+</dd>
+<dt id="-f"><a class="permalink" href="perlthanks.html#-f">#</a><a id="f"></a><b>-f</b></dt>
+<dd>
+
+<p>File containing the body of the report. Use this to quickly send a prepared report.</p>
+
+</dd>
+<dt id="-F"><a class="permalink" href="perlthanks.html#-F">#</a><a id="F"></a><b>-F</b></dt>
+<dd>
+
+<p>File to output the results to. Defaults to <b>perlbug.rep</b>.</p>
+
+</dd>
+<dt id="-h"><a class="permalink" href="perlthanks.html#-h">#</a><a id="h"></a><b>-h</b></dt>
+<dd>
+
+<p>Prints a brief summary of the options.</p>
+
+</dd>
+<dt id="-ok"><a class="permalink" href="perlthanks.html#-ok">#</a><a id="ok"></a><b>-ok</b></dt>
+<dd>
+
+<p>Report successful build on this system to perl porters. Forces <b>-S</b> and <b>-C</b>. Forces and supplies values for <b>-s</b> and <b>-b</b>. Only prompts for a return address if it cannot guess it (for use with <b>make</b>). Honors return address specified with <b>-r</b>. You can use this with <b>-v</b> to get more complete data. Only makes a report if this system is less than 60 days old.</p>
+
+</dd>
+<dt id="-okay"><a class="permalink" href="perlthanks.html#-okay">#</a><a id="okay"></a><b>-okay</b></dt>
+<dd>
+
+<p>As <b>-ok</b> except it will report on older systems.</p>
+
+</dd>
+<dt id="-nok"><a class="permalink" href="perlthanks.html#-nok">#</a><a id="nok"></a><b>-nok</b></dt>
+<dd>
+
+<p>Report unsuccessful build on this system. Forces <b>-C</b>. Forces and supplies a value for <b>-s</b>, then requires you to edit the report and say what went wrong. Alternatively, a prepared report may be supplied using <b>-f</b>. Only prompts for a return address if it cannot guess it (for use with <b>make</b>). Honors return address specified with <b>-r</b>. You can use this with <b>-v</b> to get more complete data. Only makes a report if this system is less than 60 days old.</p>
+
+</dd>
+<dt id="-nokay"><a class="permalink" href="perlthanks.html#-nokay">#</a><a id="nokay"></a><b>-nokay</b></dt>
+<dd>
+
+<p>As <b>-nok</b> except it will report on older systems.</p>
+
+</dd>
+<dt id="-p"><a class="permalink" href="perlthanks.html#-p">#</a><a id="p"></a><b>-p</b></dt>
+<dd>
+
+<p>The names of one or more patch files or other text attachments to be included with the report. Multiple files must be separated with commas.</p>
+
+</dd>
+<dt id="-r"><a class="permalink" href="perlthanks.html#-r">#</a><a id="r"></a><b>-r</b></dt>
+<dd>
+
+<p>Your return address. The program will ask you to confirm its default if you don&#39;t use this option.</p>
+
+</dd>
+<dt id="-S"><a class="permalink" href="perlthanks.html#-S">#</a><a id="S"></a><b>-S</b></dt>
+<dd>
+
+<p>Save or send the report without asking for confirmation.</p>
+
+</dd>
+<dt id="-s"><a class="permalink" href="perlthanks.html#-s">#</a><a id="s"></a><b>-s</b></dt>
+<dd>
+
+<p>Subject to include with the report. You will be prompted if you don&#39;t supply one on the command line.</p>
+
+</dd>
+<dt id="-t"><a class="permalink" href="perlthanks.html#-t">#</a><a id="t"></a><b>-t</b></dt>
+<dd>
+
+<p>Test mode. Makes it possible to command perlbug from a pipe or file, for testing purposes.</p>
+
+</dd>
+<dt id="-T"><a class="permalink" href="perlthanks.html#-T">#</a><a id="T"></a><b>-T</b></dt>
+<dd>
+
+<p>Send a thank-you note instead of a bug report.</p>
+
+</dd>
+<dt id="-v"><a class="permalink" href="perlthanks.html#-v">#</a><a id="v"></a><b>-v</b></dt>
+<dd>
+
+<p>Include verbose configuration data in the report.</p>
+
+</dd>
+</dl>
+
+<h1 id="AUTHORS"><a class="permalink" href="perlthanks.html#AUTHORS">#</a>AUTHORS</h1>
+
+<p>Kenneth Albanowski (&lt;kjahds@kjahds.com&gt;), subsequently <i>doc</i>tored by Gurusamy Sarathy (&lt;gsar@activestate.com&gt;), Tom Christiansen (&lt;tchrist@perl.com&gt;), Nathan Torkington (&lt;gnat@frii.com&gt;), Charles F. Randall (&lt;cfr@pobox.com&gt;), Mike Guy (&lt;mjtg@cam.ac.uk&gt;), Dominic Dunlop (&lt;domo@computer.org&gt;), Hugo van der Sanden (&lt;hv@crypt.org&gt;), Jarkko Hietaniemi (&lt;jhi@iki.fi&gt;), Chris Nandor (&lt;pudge@pobox.com&gt;), Jon Orwant (&lt;orwant@media.mit.edu&gt;, Richard Foley (&lt;richard.foley@rfi.net&gt;), Jesse Vincent (&lt;jesse@bestpractical.com&gt;), and Craig A. Berry (&lt;craigberry@mac.com&gt;).</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="perlthanks.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p>perl(1), perldebug(1), perldiag(1), perlport(1), perltrap(1), diff(1), patch(1), dbx(1), gdb(1)</p>
+
+<h1 id="BUGS"><a class="permalink" href="perlthanks.html#BUGS">#</a>BUGS</h1>
+
+<p>None known (guess what must have been used to report them?)</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

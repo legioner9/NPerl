@@ -1,0 +1,58 @@
+=over
+
+=item lc EXPR
+X<lc> X<lowercase>
+
+=item lc
+
+Returns a lowercased version of EXPR.  This is the internal function
+implementing the C<\L> escape in double-quoted strings.
+
+If EXPR is omitted, uses L<C<$_>|perlvar/$_>.
+
+What gets returned depends on several factors:
+
+=over
+
+=item If C<use bytes> is in effect:
+
+The results follow ASCII rules.  Only the characters C<A-Z> change,
+to C<a-z> respectively.
+
+=item Otherwise, if C<use locale> for C<LC_CTYPE> is in effect:
+
+Respects current C<LC_CTYPE> locale for code points < 256; and uses Unicode
+rules for the remaining code points (this last can only happen if
+the UTF8 flag is also set).  See L<perllocale>.
+
+Starting in v5.20, Perl uses full Unicode rules if the locale is
+UTF-8.  Otherwise, there is a deficiency in this scheme, which is that
+case changes that cross the 255/256
+boundary are not well-defined.  For example, the lower case of LATIN CAPITAL
+LETTER SHARP S (U+1E9E) in Unicode rules is U+00DF (on ASCII
+platforms).   But under C<use locale> (prior to v5.20 or not a UTF-8
+locale), the lower case of U+1E9E is
+itself, because 0xDF may not be LATIN SMALL LETTER SHARP S in the
+current locale, and Perl has no way of knowing if that character even
+exists in the locale, much less what code point it is.  Perl returns
+a result that is above 255 (almost always the input character unchanged),
+for all instances (and there aren't many) where the 255/256 boundary
+would otherwise be crossed; and starting in v5.22, it raises a
+L<locale|perldiag/Can't do %s("%s") on non-UTF-8 locale; resolved to "%s".> warning.
+
+=item Otherwise, If EXPR has the UTF8 flag set:
+
+Unicode rules are used for the case change.
+
+=item Otherwise, if C<use feature 'unicode_strings'> or C<use locale ':not_characters'> is in effect:
+
+Unicode rules are used for the case change.
+
+=item Otherwise:
+
+ASCII rules are used for the case change.  The lowercase of any character
+outside the ASCII range is the character itself.
+
+=back
+
+=back

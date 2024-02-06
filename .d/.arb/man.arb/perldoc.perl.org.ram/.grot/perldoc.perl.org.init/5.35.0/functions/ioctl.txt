@@ -1,0 +1,47 @@
+=over
+
+=item ioctl FILEHANDLE,FUNCTION,SCALAR
+X<ioctl>
+
+Implements the L<ioctl(2)> function.  You'll probably first have to say
+
+    require "sys/ioctl.ph";  # probably in
+                             # $Config{archlib}/sys/ioctl.ph
+
+to get the correct function definitions.  If F<sys/ioctl.ph> doesn't
+exist or doesn't have the correct definitions you'll have to roll your
+own, based on your C header files such as F<< <sys/ioctl.h> >>.
+(There is a Perl script called B<h2ph> that comes with the Perl kit that
+may help you in this, but it's nontrivial.)  SCALAR will be read and/or
+written depending on the FUNCTION; a C pointer to the string value of SCALAR
+will be passed as the third argument of the actual
+L<C<ioctl>|/ioctl FILEHANDLE,FUNCTION,SCALAR> call.  (If SCALAR
+has no string value but does have a numeric value, that value will be
+passed rather than a pointer to the string value.  To guarantee this to be
+true, add a C<0> to the scalar before using it.)  The
+L<C<pack>|/pack TEMPLATE,LIST> and L<C<unpack>|/unpack TEMPLATE,EXPR>
+functions may be needed to manipulate the values of structures used by
+L<C<ioctl>|/ioctl FILEHANDLE,FUNCTION,SCALAR>.
+
+The return value of L<C<ioctl>|/ioctl FILEHANDLE,FUNCTION,SCALAR> (and
+L<C<fcntl>|/fcntl FILEHANDLE,FUNCTION,SCALAR>) is as follows:
+
+    if OS returns:      then Perl returns:
+        -1               undefined value
+         0              string "0 but true"
+    anything else           that number
+
+Thus Perl returns true on success and false on failure, yet you can
+still easily determine the actual value returned by the operating
+system:
+
+    my $retval = ioctl(...) || -1;
+    printf "System returned %d\n", $retval;
+
+The special string C<"0 but true"> is exempt from
+L<C<Argument "..." isn't numeric>|perldiag/Argument "%s" isn't numeric%s>
+L<warnings> on improper numeric conversions.
+
+Portability issues: L<perlport/ioctl>.
+
+=back

@@ -1,0 +1,55 @@
+=over
+
+=item splice ARRAY,OFFSET,LENGTH,LIST
+X<splice>
+
+=item splice ARRAY,OFFSET,LENGTH
+
+=item splice ARRAY,OFFSET
+
+=item splice ARRAY
+
+Removes the elements designated by OFFSET and LENGTH from an array, and
+replaces them with the elements of LIST, if any.  In list context,
+returns the elements removed from the array.  In scalar context,
+returns the last element removed, or L<C<undef>|/undef EXPR> if no
+elements are
+removed.  The array grows or shrinks as necessary.
+If OFFSET is negative then it starts that far from the end of the array.
+If LENGTH is omitted, removes everything from OFFSET onward.
+If LENGTH is negative, removes the elements from OFFSET onward
+except for -LENGTH elements at the end of the array.
+If both OFFSET and LENGTH are omitted, removes everything.  If OFFSET is
+past the end of the array and a LENGTH was provided, Perl issues a warning,
+and splices at the end of the array.
+
+The following equivalences hold (assuming C<< $#a >= $i >> )
+
+    push(@a,$x,$y)      splice(@a,@a,0,$x,$y)
+    pop(@a)             splice(@a,-1)
+    shift(@a)           splice(@a,0,1)
+    unshift(@a,$x,$y)   splice(@a,0,0,$x,$y)
+    $a[$i] = $y         splice(@a,$i,1,$y)
+
+L<C<splice>|/splice ARRAY,OFFSET,LENGTH,LIST> can be used, for example,
+to implement n-ary queue processing:
+
+    sub nary_print {
+      my $n = shift;
+      while (my @next_n = splice @_, 0, $n) {
+        say join q{ -- }, @next_n;
+      }
+    }
+
+    nary_print(3, qw(a b c d e f g h));
+    # prints:
+    #   a -- b -- c
+    #   d -- e -- f
+    #   g -- h
+
+Starting with Perl 5.14, an experimental feature allowed
+L<C<splice>|/splice ARRAY,OFFSET,LENGTH,LIST> to take a
+scalar expression. This experiment has been deemed unsuccessful, and was
+removed as of Perl 5.24.
+
+=back

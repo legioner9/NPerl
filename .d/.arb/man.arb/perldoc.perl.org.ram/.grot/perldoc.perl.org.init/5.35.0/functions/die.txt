@@ -1,0 +1,139 @@
+=over
+
+=item die LIST
+X<die> X<throw> X<exception> X<raise> X<$@> X<abort>
+
+L<C<die>|/die LIST> raises an exception.  Inside an L<C<eval>|/eval EXPR>
+the exception is stuffed into L<C<$@>|perlvar/$@> and the L<C<eval>|/eval
+EXPR> is terminated with the undefined value.  If the exception is
+outside of all enclosing L<C<eval>|/eval EXPR>s, then the uncaught
+exception is printed to C<STDERR> and perl exits with an exit code
+indicating failure.  If you need to exit the process with a specific
+exit code, see L<C<exit>|/exit EXPR>.
+
+Equivalent examples:
+
+    die "Can't cd to spool: $!\n" unless chdir '/usr/spool/news';
+    chdir '/usr/spool/news' or die "Can't cd to spool: $!\n"
+
+Most of the time, C<die> is called with a string to use as the exception.
+You may either give a single non-reference operand to serve as the
+exception, or a list of two or more items, which will be stringified
+and concatenated to make the exception.
+
+If the string exception does not end in a newline, the current
+script line number and input line number (if any) and a newline
+are appended to it.  Note that the "input line number" (also
+known as "chunk") is subject to whatever notion of "line" happens to
+be currently in effect, and is also available as the special variable
+L<C<$.>|perlvar/$.>.  See L<perlvar/"$/"> and L<perlvar/"$.">.
+
+Hint: sometimes appending C<", stopped"> to your message will cause it
+to make better sense when the string C<"at foo line 123"> is appended.
+Suppose you are running script "canasta".
+
+    die "/etc/games is no good";
+    die "/etc/games is no good, stopped";
+
+produce, respectively
+
+    /etc/games is no good at canasta line 123.
+    /etc/games is no good, stopped at canasta line 123.
+
+If LIST was empty or made an empty string, and L<C<$@>|perlvar/$@>
+already contains an exception value (typically from a previous
+L<C<eval>|/eval EXPR>), then that value is reused after
+appending C<"\t...propagated">.  This is useful for propagating exceptions:
+
+    eval { ... };
+    die unless $@ =~ /Expected exception/;
+
+If LIST was empty or made an empty string,
+and L<C<$@>|perlvar/$@> contains an object
+reference that has a C<PROPAGATE> method, that method will be called
+with additional file and line number parameters.  The return value
+replaces the value in L<C<$@>|perlvar/$@>;  i.e., as if
+C<< $@ = eval { $@->PROPAGATE(__FILE__, __LINE__) }; >> were called.
+
+If LIST was empty or made an empty string, and L<C<$@>|perlvar/$@>
+is also empty, then the string C<"Died"> is used.
+
+You can also call L<C<die>|/die LIST> with a reference argument, and if
+this is trapped within an L<C<eval>|/eval EXPR>, L<C<$@>|perlvar/$@>
+contains that reference.  This permits more elaborate exception handling
+using objects that maintain arbitrary state about the exception.  Such a
+scheme is sometimes preferable to matching particular string values of
+L<C<$@>|perlvar/$@> with regular expressions.
+
+Because Perl stringifies uncaught exception messages before display,
+you'll probably want to overload stringification operations on
+exception objects.  See L<overload> for details about that.
+The stringified message should be non-empty, and should end in a newline,
+in order to fit in with the treatment of string exceptions.
+Also, because an exception object reference cannot be stringified
+without destroying it, Perl doesn't attempt to append location or other
+information to a reference exception.  If you want location information
+with a complex exception object, you'll have to arrange to put the
+location information into the object yourself.
+
+Because L<C<$@>|perlvar/$@> is a global variable, be careful that
+analyzing an exception caught by C<eval> doesn't replace the reference
+in the global variable.  It's
+easiest to make a local copy of the reference before any manipulations.
+Here's an example:
+
+    use Scalar::Util "blessed";
+
+    eval { ... ; die Some::Module::Exception->new( FOO => "bar" ) };
+    if (my $ev_err = $@) {
+        if (blessed($ev_err)
+            && $ev_err->isa("Some::Module::Exception")) {
+            # handle Some::Module::Exception
+        }
+        else {
+            # handle all other possible exceptions
+        }
+    }
+
+If an uncaught exception results in interpreter exit, the exit code is
+determined from the values of L<C<$!>|perlvar/$!> and
+L<C<$?>|perlvar/$?> with this pseudocode:
+
+    exit $! if $!;              # errno
+    exit $? >> 8 if $? >> 8;    # child exit status
+    exit 255;                   # last resort
+
+As with L<C<exit>|/exit EXPR>, L<C<$?>|perlvar/$?> is set prior to
+unwinding the call stack; any C<DESTROY> or C<END> handlers can then
+alter this value, and thus Perl's exit code.
+
+The intent is to squeeze as much possible information about the likely cause
+into the limited space of the system exit code.  However, as
+L<C<$!>|perlvar/$!> is the value of C's C<errno>, which can be set by
+any system call, this means that the value of the exit code used by
+L<C<die>|/die LIST> can be non-predictable, so should not be relied
+upon, other than to be non-zero.
+
+You can arrange for a callback to be run just before the
+L<C<die>|/die LIST> does its deed, by setting the
+L<C<$SIG{__DIE__}>|perlvar/%SIG> hook.  The associated handler is called
+with the exception as an argument, and can change the exception,
+if it sees fit, by
+calling L<C<die>|/die LIST> again.  See L<perlvar/%SIG> for details on
+setting L<C<%SIG>|perlvar/%SIG> entries, and L<C<eval>|/eval EXPR> for some
+examples.  Although this feature was to be run only right before your
+program was to exit, this is not currently so: the
+L<C<$SIG{__DIE__}>|perlvar/%SIG> hook is currently called even inside
+L<C<eval>|/eval EXPR>ed blocks/strings!  If one wants the hook to do
+nothing in such situations, put
+
+    die @_ if $^S;
+
+as the first line of the handler (see L<perlvar/$^S>).  Because
+this promotes strange action at a distance, this counterintuitive
+behavior may be fixed in a future release.
+
+See also L<C<exit>|/exit EXPR>, L<C<warn>|/warn LIST>, and the L<Carp>
+module.
+
+=back

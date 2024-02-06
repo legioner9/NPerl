@@ -1,0 +1,86 @@
+=over
+
+=item do BLOCK
+X<do> X<block>
+
+Not really a function.  Returns the value of the last command in the
+sequence of commands indicated by BLOCK.  When modified by the C<while> or
+C<until> loop modifier, executes the BLOCK once before testing the loop
+condition.  (On other statements the loop modifiers test the conditional
+first.)
+
+C<do BLOCK> does I<not> count as a loop, so the loop control statements
+L<C<next>|/next LABEL>, L<C<last>|/last LABEL>, or
+L<C<redo>|/redo LABEL> cannot be used to leave or restart the block.
+See L<perlsyn> for alternative strategies.
+
+=item do EXPR
+X<do>
+
+Uses the value of EXPR as a filename and executes the contents of the
+file as a Perl script:
+
+    # load the exact specified file (./ and ../ special-cased)
+    do '/foo/stat.pl';
+    do './stat.pl';
+    do '../foo/stat.pl';
+
+    # search for the named file within @INC
+    do 'stat.pl';
+    do 'foo/stat.pl';
+
+C<do './stat.pl'> is largely like
+
+    eval `cat stat.pl`;
+
+except that it's more concise, runs no external processes, and keeps
+track of the current filename for error messages. It also differs in that
+code evaluated with C<do FILE> cannot see lexicals in the enclosing
+scope; C<eval STRING> does.  It's the same, however, in that it does
+reparse the file every time you call it, so you probably don't want
+to do this inside a loop.
+
+Using C<do> with a relative path (except for F<./> and F<../>), like
+
+    do 'foo/stat.pl';
+
+will search the L<C<@INC>|perlvar/@INC> directories, and update
+L<C<%INC>|perlvar/%INC> if the file is found.  See L<perlvar/@INC>
+and L<perlvar/%INC> for these variables. In particular, note that
+whilst historically L<C<@INC>|perlvar/@INC> contained '.' (the
+current directory) making these two cases equivalent, that is no
+longer necessarily the case, as '.' is not included in C<@INC> by default
+in perl versions 5.26.0 onwards. Instead, perl will now warn:
+
+    do "stat.pl" failed, '.' is no longer in @INC;
+    did you mean do "./stat.pl"?
+
+If L<C<do>|/do EXPR> can read the file but cannot compile it, it
+returns L<C<undef>|/undef EXPR> and sets an error message in
+L<C<$@>|perlvar/$@>.  If L<C<do>|/do EXPR> cannot read the file, it
+returns undef and sets L<C<$!>|perlvar/$!> to the error.  Always check
+L<C<$@>|perlvar/$@> first, as compilation could fail in a way that also
+sets L<C<$!>|perlvar/$!>.  If the file is successfully compiled,
+L<C<do>|/do EXPR> returns the value of the last expression evaluated.
+
+Inclusion of library modules is better done with the
+L<C<use>|/use Module VERSION LIST> and L<C<require>|/require VERSION>
+operators, which also do automatic error checking and raise an exception
+if there's a problem.
+
+You might like to use L<C<do>|/do EXPR> to read in a program
+configuration file.  Manual error checking can be done this way:
+
+    # Read in config files: system first, then user.
+    # Beware of using relative pathnames here.
+    for $file ("/share/prog/defaults.rc",
+               "$ENV{HOME}/.someprogrc")
+    {
+        unless ($return = do $file) {
+            warn "couldn't parse $file: $@" if $@;
+            warn "couldn't do $file: $!"    unless defined $return;
+            warn "couldn't run $file"       unless $return;
+        }
+    }
+
+=back

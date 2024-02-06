@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>CPAN::Changes::Spec - Specification for CPAN Changes files - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of CPAN-Changes - MetaCPAN" href="https://metacpan.org/dist/CPAN-Changes/releases.rss" />
+        <link rel="canonical" href="https://metacpan.org/dist/CPAN-Changes/view/lib/CPAN/Changes/Spec.pod" />
+        <meta name="description" content="Specification for CPAN Changes files" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/CPAN::Changes::Spec" />
+<meta name="twitter:title"       content="CPAN::Changes::Spec" />
+<meta name="twitter:description" content="Specification for CPAN Changes files" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./CPAN::Changes::Spec.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of CPAN-Changes was released.">
+      <span class="relatize">26 Oct 2023 14:43:22 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/CPAN-Changes">CPAN-Changes</a>
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/CPAN-Changes/source/lib/CPAN/Changes/Spec.pod">Source</a>
+    (<a href="https://metacpan.org/dist/CPAN-Changes/source/lib/CPAN/Changes/Spec.pod?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/CPAN-Changes/source/lib/CPAN/Changes">Browse</a>
+    (<a href="https://metacpan.org/dist/CPAN-Changes/source/lib/CPAN/Changes?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/CPAN-Changes/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/CPAN-Changes/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/metacpan/CPAN-Changes">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=CPAN-Changes">Issues</a>
+      (11)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=CPAN-Changes+0.500002" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/CPAN-Changes.html?oncpan=1&amp;distmat=1&amp;version=0.500002&amp;grade=2" style="color: #090">841</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/CPAN-Changes.html?oncpan=1&amp;distmat=1&amp;version=0.500002&amp;grade=3" style="color: #900">6</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/CPAN-Changes.html?oncpan=1&amp;distmat=1&amp;version=0.500002&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/HAARG/CPAN-Changes-0.500002">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on CPAN-Changes who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 2
+      </div>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="chat-banner">
+      <div><a rel="noopener nofollow" target="_blank" href="https://kiwiirc.com/nextclient/#irc://irc.perl.org/#metacpan?nick=mc-guest-?">Chat with us!</a></div>
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/CPAN-Changes/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/H/HA/HAARG/CPAN-Changes-0.500002.tar.gz">
+      Download (<span itemprop="fileSize">533.48KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FHAARG%2FCPAN-Changes-0.500002%2Flib%2FCPAN%2FChanges%2FSpec.pod">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/CPAN-Changes/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/CPAN-Changes/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:CPAN-Changes">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="CPAN-Changes">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/CPAN/Changes/Spec.pod&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="HAARG/CPAN-Changes-0.500002"
+>0.500002
+  (HAARG on 2023-10-26)</option>
+<option
+  
+  value="HAARG/CPAN-Changes-0.500_001"
+>0.500_001 DEV
+  (HAARG on 2023-08-27)</option>
+<option
+  
+  value="HAARG/CPAN-Changes-0.400002"
+>0.400002
+  (HAARG on 2015-06-21)</option>
+<option
+  
+  value="HAARG/CPAN-Changes-0.400001"
+>0.400001
+  (HAARG on 2015-05-23)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.30"
+>0.30
+  (BRICAS on 2014-07-26)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.29"
+>0.29
+  (BRICAS on 2014-07-24)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.28"
+>0.28
+  (BRICAS on 2014-06-11)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BRICAS/CPAN-Changes-0.27"
+>0.27
+  (BRICAS on 2013-12-13)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.26"
+>0.26
+  (BRICAS on 2013-11-22)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.25"
+>0.25
+  (BRICAS on 2013-10-08)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.24"
+>0.24
+  (BRICAS on 2013-10-08)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.23"
+>0.23
+  (BRICAS on 2013-08-15)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.22"
+>0.22
+  (BRICAS on 2013-07-30)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.21"
+>0.21
+  (BRICAS on 2013-07-30)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.20"
+>0.20
+  (BRICAS on 2013-05-02)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.19"
+>0.19
+  (BRICAS on 2012-04-30)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.18"
+>0.18
+  (BRICAS on 2011-10-18)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.17"
+>0.17
+  (BRICAS on 2011-04-21)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.16"
+>0.16
+  (BRICAS on 2011-04-12)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.15"
+>0.15
+  (BRICAS on 2011-04-12)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.14"
+>0.14
+  (BRICAS on 2011-04-12)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.13"
+>0.13
+  (BRICAS on 2011-04-04)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.12"
+>0.12
+  (BRICAS on 2011-04-04)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.11"
+>0.11
+  (BRICAS on 2011-03-31)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.10"
+>0.10
+  (BRICAS on 2011-03-29)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.09"
+>0.09
+  (BRICAS on 2011-03-29)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.08"
+>0.08
+  (BRICAS on 2011-03-15)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.07"
+>0.07
+  (BRICAS on 2011-03-03)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.06"
+>0.06
+  (BRICAS on 2011-02-15)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.05"
+>0.05
+  (BRICAS on 2011-02-14)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.04"
+>0.04
+  (BRICAS on 2011-02-10)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.03"
+>0.03
+  (BRICAS on 2011-02-10)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.02"
+>0.02
+  (BRICAS on 2011-02-08)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.01"
+>0.01
+  (BRICAS on 2011-02-02)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/HAARG/CPAN-Changes-0.500002/diff/' + encodeURIComponent(this.value) + '/lib/CPAN/Changes/Spec.pod'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="HAARG/CPAN-Changes-0.500002"
+>0.500002
+  (HAARG on 2023-10-26)</option>
+<option
+  
+  value="HAARG/CPAN-Changes-0.500_001"
+>0.500_001 DEV
+  (HAARG on 2023-08-27)</option>
+<option
+  
+  value="HAARG/CPAN-Changes-0.400002"
+>0.400002
+  (HAARG on 2015-06-21)</option>
+<option
+  
+  value="HAARG/CPAN-Changes-0.400001"
+>0.400001
+  (HAARG on 2015-05-23)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.30"
+>0.30
+  (BRICAS on 2014-07-26)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.29"
+>0.29
+  (BRICAS on 2014-07-24)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.28"
+>0.28
+  (BRICAS on 2014-06-11)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BRICAS/CPAN-Changes-0.27"
+>0.27
+  (BRICAS on 2013-12-13)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.26"
+>0.26
+  (BRICAS on 2013-11-22)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.25"
+>0.25
+  (BRICAS on 2013-10-08)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.24"
+>0.24
+  (BRICAS on 2013-10-08)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.23"
+>0.23
+  (BRICAS on 2013-08-15)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.22"
+>0.22
+  (BRICAS on 2013-07-30)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.21"
+>0.21
+  (BRICAS on 2013-07-30)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.20"
+>0.20
+  (BRICAS on 2013-05-02)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.19"
+>0.19
+  (BRICAS on 2012-04-30)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.18"
+>0.18
+  (BRICAS on 2011-10-18)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.17"
+>0.17
+  (BRICAS on 2011-04-21)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.16"
+>0.16
+  (BRICAS on 2011-04-12)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.15"
+>0.15
+  (BRICAS on 2011-04-12)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.14"
+>0.14
+  (BRICAS on 2011-04-12)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.13"
+>0.13
+  (BRICAS on 2011-04-04)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.12"
+>0.12
+  (BRICAS on 2011-04-04)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.11"
+>0.11
+  (BRICAS on 2011-03-31)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.10"
+>0.10
+  (BRICAS on 2011-03-29)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.09"
+>0.09
+  (BRICAS on 2011-03-29)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.08"
+>0.08
+  (BRICAS on 2011-03-15)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.07"
+>0.07
+  (BRICAS on 2011-03-03)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.06"
+>0.06
+  (BRICAS on 2011-02-15)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.05"
+>0.05
+  (BRICAS on 2011-02-14)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.04"
+>0.04
+  (BRICAS on 2011-02-10)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.03"
+>0.03
+  (BRICAS on 2011-02-10)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.02"
+>0.02
+  (BRICAS on 2011-02-08)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.01"
+>0.01
+  (BRICAS on 2011-02-02)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="./Module::Runtime.html" title="Module::Runtime" class="ellipsis">Module::Runtime</a></li>
+  <li><a href="Moo.html" title="Moo" class="ellipsis">Moo</a></li>
+  <li><a href="https://metacpan.org/pod/Sub::Quote" title="Sub::Quote" class="ellipsis">Sub::Quote</a></li>
+  <li><a href="https://metacpan.org/pod/Test::Builder" title="Test::Builder" class="ellipsis">Test::Builder</a></li>
+  <li><a href="https://metacpan.org/pod/Types::Standard" title="Types::Standard" class="ellipsis">Types::Standard</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/CPAN::Changes::Spec/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=CPAN%3A%3AChanges%3A%3ASpec">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=CPAN-Changes">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/HAARG/CPAN-Changes-0.500002/view/lib/CPAN/Changes/Spec.pod">This version</a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/CPAN-Changes/view/lib/CPAN/Changes/Spec.pod">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/KENTNL"><img src="https://www.gravatar.com/avatar/4b96677ae9ecbe76b8c33ead244f7407?d=identicon&amp;s=20" title="KENTNL" alt="KENTNL"></a>
+<a class="display-all" href="https://metacpan.org/author/TIMB"><img src="https://www.gravatar.com/avatar/a497fd127f6d1e9e1e618bf46504fc59?d=identicon&amp;s=20" title="TIMB" alt="TIMB"></a>
+<a class="display-all" href="https://metacpan.org/author/MISHIN"><img src="https://www.gravatar.com/avatar/7aefe037fc617ef89780ad89de3deb87?d=identicon&amp;s=20" title="MISHIN" alt="MISHIN"></a>
+<a class="display-all" href="https://metacpan.org/author/PATCH"><img src="https://www.gravatar.com/avatar/3cab2cdaf129f5574e20c2b168b4c389?d=identicon&amp;s=20" title="PATCH" alt="PATCH"></a>
+<a class="display-all" href="https://metacpan.org/author/PERLANCAR"><img src="https://www.gravatar.com/avatar/c66c9e215cc2342796cd87ca82d044a8?d=identicon&amp;s=20" title="PERLANCAR" alt="PERLANCAR"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/CPAN-Changes/plussers">21 PAUSE users</a>
+</div>
+<div>
+    10 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/HAARG" class="author-name">Graham Knop</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/CPAN/Changes/Spec.pod&#39;" class="">
+<option
+  selected
+  value="HAARG/CPAN-Changes-0.500002"
+>0.500002
+  (HAARG on 2023-10-26)</option>
+<option
+  
+  value="HAARG/CPAN-Changes-0.500_001"
+>0.500_001 DEV
+  (HAARG on 2023-08-27)</option>
+<option
+  
+  value="HAARG/CPAN-Changes-0.400002"
+>0.400002
+  (HAARG on 2015-06-21)</option>
+<option
+  
+  value="HAARG/CPAN-Changes-0.400001"
+>0.400001
+  (HAARG on 2015-05-23)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.30"
+>0.30
+  (BRICAS on 2014-07-26)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.29"
+>0.29
+  (BRICAS on 2014-07-24)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.28"
+>0.28
+  (BRICAS on 2014-06-11)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BRICAS/CPAN-Changes-0.27"
+>0.27
+  (BRICAS on 2013-12-13)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.26"
+>0.26
+  (BRICAS on 2013-11-22)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.25"
+>0.25
+  (BRICAS on 2013-10-08)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.24"
+>0.24
+  (BRICAS on 2013-10-08)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.23"
+>0.23
+  (BRICAS on 2013-08-15)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.22"
+>0.22
+  (BRICAS on 2013-07-30)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.21"
+>0.21
+  (BRICAS on 2013-07-30)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.20"
+>0.20
+  (BRICAS on 2013-05-02)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.19"
+>0.19
+  (BRICAS on 2012-04-30)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.18"
+>0.18
+  (BRICAS on 2011-10-18)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.17"
+>0.17
+  (BRICAS on 2011-04-21)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.16"
+>0.16
+  (BRICAS on 2011-04-12)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.15"
+>0.15
+  (BRICAS on 2011-04-12)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.14"
+>0.14
+  (BRICAS on 2011-04-12)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.13"
+>0.13
+  (BRICAS on 2011-04-04)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.12"
+>0.12
+  (BRICAS on 2011-04-04)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.11"
+>0.11
+  (BRICAS on 2011-03-31)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.10"
+>0.10
+  (BRICAS on 2011-03-29)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.09"
+>0.09
+  (BRICAS on 2011-03-29)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.08"
+>0.08
+  (BRICAS on 2011-03-15)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.07"
+>0.07
+  (BRICAS on 2011-03-03)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.06"
+>0.06
+  (BRICAS on 2011-02-15)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.05"
+>0.05
+  (BRICAS on 2011-02-14)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.04"
+>0.04
+  (BRICAS on 2011-02-10)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.03"
+>0.03
+  (BRICAS on 2011-02-10)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.02"
+>0.02
+  (BRICAS on 2011-02-08)</option>
+<option
+  
+  value="BRICAS/CPAN-Changes-0.01"
+>0.01
+  (BRICAS on 2011-02-02)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/CPAN-Changes">CPAN-Changes-0.500002</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 46 direct dependents &#10;          • 149 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="CPAN-Changes-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="CPAN-Changes-0.500002">
+    <input type="hidden" name="author" value="HAARG">
+    <input type="hidden" name="distribution" value="CPAN-Changes">
+    <button type="submit" class="favorite highlight"><span>31</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./CPAN::Changes::Spec.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>31</span> ++</a>
+</div>
+   / <span>CPAN::Changes::Spec</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./CPAN::Changes::Spec.html#NAME">NAME</a></li>
+  <li><a href="./CPAN::Changes::Spec.html#VERSION">VERSION</a></li>
+  <li><a href="./CPAN::Changes::Spec.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./CPAN::Changes::Spec.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./CPAN::Changes::Spec.html#DATA-TYPES">DATA TYPES</a>
+    <ul>
+      <li><a href="./CPAN::Changes::Spec.html#Version">Version</a></li>
+      <li><a href="./CPAN::Changes::Spec.html#Date">Date</a></li>
+    </ul>
+  </li>
+  <li><a href="./CPAN::Changes::Spec.html#STRUCTURE">STRUCTURE</a>
+    <ul>
+      <li><a href="./CPAN::Changes::Spec.html#Required-Elements">Required Elements</a></li>
+      <li><a href="./CPAN::Changes::Spec.html#Optional-Elements">Optional Elements</a>
+        <ul>
+          <li><a href="./CPAN::Changes::Spec.html#Release-Note">Release Note</a></li>
+        </ul>
+      </li>
+      <li><a href="./CPAN::Changes::Spec.html#Preamble">Preamble</a></li>
+      <li><a href="./CPAN::Changes::Spec.html#Groups">Groups</a></li>
+    </ul>
+  </li>
+  <li><a href="./CPAN::Changes::Spec.html#EXAMPLES">EXAMPLES</a>
+    <ul>
+      <li><a href="./CPAN::Changes::Spec.html#Basic-Example">Basic Example</a></li>
+      <li><a href="./CPAN::Changes::Spec.html#Example-with-a-preamble">Example with a preamble</a></li>
+      <li><a href="./CPAN::Changes::Spec.html#Example-with-groups">Example with groups</a></li>
+    </ul>
+  </li>
+  <li><a href="./CPAN::Changes::Spec.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./CPAN::Changes::Spec.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./CPAN::Changes::Spec.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>CPAN::Changes::Spec - Specification for CPAN Changes files</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>version 0.500002</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    Revision history for perl module Foo::Bar
+
+    0.02 2009-07-17
+
+     - Added more foo() tests
+
+    0.01 2009-07-16
+
+     - Initial release</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>It is intended as a guide for module authors to encourage them to write meaningful changelogs as well as provide a programmatic interface to reliably read and write Changes files.</p>
+
+<h1 id="DATA-TYPES"><a id="DATA"></a>DATA TYPES</h1>
+
+<h2 id="Version">Version</h2>
+
+<p>Versions should be formatted as described in <a href="https://metacpan.org/pod/CPAN::Meta::Spec#Version-Formats">&quot;Version-Formats&quot; in CPAN::Meta::Spec</a>.</p>
+
+<h2 id="Date">Date</h2>
+
+<p>A date/time in the format specified by <a href="http://www.w3.org/TR/NOTE-datetime">http://www.w3.org/TR/NOTE-datetime</a> aka W3CDTF. <b>Note:</b> The &quot;T&quot; marker before the time portion is optional.</p>
+
+<p>In order to satisfy release events not made to the public, or dates that are historically unknown, the following strings are also available:</p>
+
+<ul>
+
+<li><p>Unknown Release Date</p>
+
+</li>
+<li><p>Unknown</p>
+
+</li>
+<li><p>Not Released</p>
+
+</li>
+<li><p>Development Release</p>
+
+</li>
+<li><p>Development</p>
+
+</li>
+<li><p>Developer Release</p>
+
+</li>
+</ul>
+
+<h1 id="STRUCTURE">STRUCTURE</h1>
+
+<h2 id="Required-Elements"><a id="Required"></a>Required Elements</h2>
+
+<p>In its simplest form, the only required elements are a <code>Version</code>, a <code>Date</code> and the noted changes. Blank lines between the <code>Version</code> line and the first <code>Change</code> line are optional. Blank lines between <code>Change</code> lines are also optional.</p>
+
+<pre><code>    &lt;Version&gt;(whitespace/non-&quot;word&quot; characters)&lt;Date&gt;
+    (whitespace)&lt;Change&gt;</code></pre>
+
+<p><b>NOTE:</b> The characters between a <code>Version</code> and a <code>Date</code> must start with whitespace, but may subsequently contain any combination of whitespace and non-&quot;word&quot; characters. Example:</p>
+
+<pre><code>    0.01 - 2013-12-11</code></pre>
+
+<p><code>Change</code> lines have no specific format. Commonly, authors will use a dash <code>-</code> followed by a space to start a new change, and indent subsequent lines for multi-line changes. Example</p>
+
+<pre><code>    - Simple Change
+    - This is a very very very long
+      change line</code></pre>
+
+<p>Although there is no limit on line length, authors generally wrap each line at 78 columns.</p>
+
+<h2 id="Optional-Elements"><a id="Optional"></a>Optional Elements</h2>
+
+<h3 id="Release-Note"><a id="Release"></a>Release Note</h3>
+
+<p>Any text following the <code>Date</code> portion of the <code>Version</code> line will be considered the <code>Release Note</code>. Example:</p>
+
+<pre><code>    0.01 2013-04-01 Codename: April Fool
+
+      - First Release</code></pre>
+
+<h2 id="Preamble">Preamble</h2>
+
+<p>Any amount of text before the first <code>Version</code> line will be considered part of the preamble. Most existing distributions include something along the lines of:</p>
+
+<pre><code>    Revision history for perl module My::Module</code></pre>
+
+<p>Or</p>
+
+<pre><code>    Revision history for perl distribution My-Distribution</code></pre>
+
+<h2 id="Groups">Groups</h2>
+
+<p>Changelog entries may be grouped under headings. Heading lines begin with an opening square bracket (<code>[</code>), and end with a matching square bracket (<code>]</code>). When parsing group headings, leading and trailing whitespace inside the brackets should be discarded.</p>
+
+<pre><code>    (whitespace)[Grouping Name]
+    (whitespace)&lt;Change&gt;</code></pre>
+
+<p>Since empty lines hold no special meaning, all <code>Change</code> lines will fall under the current group until a new group heading is found. Example:</p>
+
+<pre><code>    [ First Group ]
+    - First Change
+
+    - Second Change; in first group
+
+    [ Second Group ]
+    - First Change; in second group</code></pre>
+
+<h1 id="EXAMPLES">EXAMPLES</h1>
+
+<h2 id="Basic-Example"><a id="Basic"></a>Basic Example</h2>
+
+<pre><code>    0.01 2009-07-16
+     - Initial release</code></pre>
+
+<h2 id="Example-with-a-preamble"><a id="Example"></a>Example with a preamble</h2>
+
+<pre><code>    Revision history for perl module Foo::Bar
+
+    0.02 2009-07-17
+
+     - Added more foo() tests
+
+    0.01 2009-07-16
+
+     - Initial release</code></pre>
+
+<h2 id="Example-with-groups"><a id="Example1"></a>Example with groups</h2>
+
+<pre><code>    Revision history for perl module Foo::Bar
+
+    0.03 2009-07-18
+
+     [Important Security Information]
+     - This release fixes critical bug RT #1234
+
+     [Other Changes]
+     - Added some feature
+
+    0.02 2009-07-17
+
+     - Added more foo() tests
+
+    0.01 2009-07-16T19:20:30+01:00
+
+     - Initial release</code></pre>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<ul>
+
+<li><p><a href="https://metacpan.org/pod/CPAN::Changes">CPAN::Changes</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Test::CPAN::Changes">Test::CPAN::Changes</a></p>
+
+</li>
+</ul>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Brian Cassidy &lt;bricas@cpan.org&gt;</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>Copyright 2011-2013 by Brian Cassidy</p>
+
+<p>This is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install CPAN::Changes, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm CPAN::Changes</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install CPAN::Changes</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./CPAN::Changes::Spec.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

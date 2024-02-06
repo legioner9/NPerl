@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IO::Socket - Object interface to socket communications - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/IO::Socket">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IO::Socket.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/IO::Socket">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/IO::Socket">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/IO::Socket">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/IO::Socket">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/IO::Socket">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/IO::Socket">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/IO::Socket">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/IO::Socket">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/IO::Socket">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/IO::Socket">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/IO::Socket">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/IO::Socket">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/IO::Socket">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/IO::Socket">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/IO::Socket">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/IO::Socket">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/IO::Socket">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/IO::Socket">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/IO::Socket">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/IO::Socket">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/IO::Socket">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/IO::Socket">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/IO::Socket">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/IO::Socket">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/IO::Socket">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/IO::Socket">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/IO::Socket">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/IO::Socket">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/IO::Socket">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/IO::Socket">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/IO::Socket">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/IO::Socket">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/IO::Socket">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/IO::Socket">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/IO::Socket">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/IO::Socket">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/IO::Socket">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/IO::Socket">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/IO::Socket">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/IO::Socket">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/IO::Socket">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/IO::Socket">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/IO::Socket">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/IO::Socket">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/IO::Socket">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/IO::Socket">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/IO::Socket">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/IO::Socket">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/IO::Socket">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/IO::Socket">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/IO::Socket">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/IO::Socket">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/IO::Socket">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/IO::Socket">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/IO::Socket">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/IO::Socket">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/IO::Socket">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/IO::Socket">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/IO::Socket">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/IO::Socket">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/IO::Socket">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/IO::Socket">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/IO::Socket">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/IO::Socket">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/IO::Socket">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/IO::Socket">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/IO::Socket">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/IO::Socket">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/IO::Socket">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/IO::Socket">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/IO::Socket">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/IO::Socket">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/IO::Socket">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/IO::Socket">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/IO::Socket">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/IO::Socket">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/IO::Socket">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/IO::Socket">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/IO::Socket">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/IO::Socket">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IO::Socket.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/IO::Socket">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/IO::Socket">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/IO::Socket">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/IO::Socket">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/IO::Socket">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/IO::Socket">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/IO::Socket">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/IO::Socket">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/IO::Socket">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/IO::Socket">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/IO::Socket">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/IO::Socket">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/IO::Socket">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/IO::Socket">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/IO::Socket">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/IO::Socket">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/IO::Socket">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/IO::Socket">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/IO::Socket">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/IO::Socket">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/IO::Socket">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/IO::Socket">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/IO::Socket">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/IO::Socket">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/IO::Socket">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/IO::Socket">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/IO::Socket">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/IO::Socket">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/IO::Socket">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/IO::Socket">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/IO::Socket">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/IO::Socket">5.35.1</a>
+          <a class="dropdown-item active" href="./IO::Socket.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IO::Socket.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./IO::Socket.html">IO::Socket</a>
+          <div id="more">
+            (<a href="./IO::Socket.txt">source</a>,
+            <a href="https://metacpan.org/pod/IO::Socket">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 1.46</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#CONSTRUCTOR-ARGUMENTS">CONSTRUCTOR ARGUMENTS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#Blocking">Blocking</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#Domain">Domain</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#Listen">Listen</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#Timeout">Timeout</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#Type">Type</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#CONSTRUCTORS">CONSTRUCTORS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#new">new</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#METHODS">METHODS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#accept">accept</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#atmark">atmark</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#autoflush">autoflush</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#bind">bind</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#connected">connected</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#getsockopt">getsockopt</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#listen">listen</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#peername">peername</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#protocol">protocol</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#recv">recv</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#send">send</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#setsockopt">setsockopt</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#shutdown">shutdown</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#sockdomain">sockdomain</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#socket">socket</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#socketpair">socketpair</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#sockname">sockname</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#sockopt">sockopt</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#socktype">socktype</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#timeout">timeout</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#EXAMPLES">EXAMPLES</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#LIMITATIONS">LIMITATIONS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./IO::Socket.html#NAME">#</a>NAME</h1>
+
+<p>IO::Socket - Object interface to socket communications</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./IO::Socket.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use strict;
+use warnings;
+
+use IO::Socket qw(AF_INET AF_UNIX);
+
+# create a new AF_INET socket
+my $sock = IO::Socket-&gt;new(Domain =&gt; AF_INET);
+# which is the same as
+$sock = IO::Socket::INET-&gt;new();
+
+# create a new AF_UNIX socket
+$sock = IO::Socket-&gt;new(Domain =&gt; AF_UNIX);
+# which is the same as
+$sock = IO::Socket::UNIX-&gt;new();</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./IO::Socket.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p><code>IO::Socket</code> provides an object-oriented, <a href="./IO::Handle.html">IO::Handle</a>-based interface to creating and using sockets via <a href="Socket.html">Socket</a>, which provides a near one-to-one interface to the C socket library.</p>
+
+<p><code>IO::Socket</code> is a base class that really only defines methods for those operations which are common to all types of sockets. Operations which are specific to a particular socket domain have methods defined in subclasses of <code>IO::Socket</code>. See <a href="./IO::Socket::INET.html">IO::Socket::INET</a>, <a href="./IO::Socket::UNIX.html">IO::Socket::UNIX</a>, and <a href="./IO::Socket::IP.html">IO::Socket::IP</a> for examples of such a subclass.</p>
+
+<p><code>IO::Socket</code> will export all functions (and constants) defined by <a href="Socket.html">Socket</a>.</p>
+
+<h1 id="CONSTRUCTOR-ARGUMENTS"><a class="permalink" href="./IO::Socket.html#CONSTRUCTOR-ARGUMENTS">#</a><a id="CONSTRUCTOR"></a>CONSTRUCTOR ARGUMENTS</h1>
+
+<p>Given that <code>IO::Socket</code> doesn&#39;t have attributes in the traditional sense, the following arguments, rather than attributes, can be passed into the constructor.</p>
+
+<p>Constructor arguments should be passed in <code>Key =&gt; &#39;Value&#39;</code> pairs.</p>
+
+<p>The only required argument is <a href="./IO::Socket.html#Domain">&quot;Domain&quot; in IO::Socket</a>.</p>
+
+<h2 id="Blocking"><a class="permalink" href="./IO::Socket.html#Blocking">#</a>Blocking</h2>
+
+<pre><code>my $sock = IO::Socket-&gt;new(..., Blocking =&gt; 1);
+$sock = IO::Socket-&gt;new(..., Blocking =&gt; 0);</code></pre>
+
+<p>If defined but false, the socket will be set to non-blocking mode. If not specified it defaults to <code>1</code> (blocking mode).</p>
+
+<h2 id="Domain"><a class="permalink" href="./IO::Socket.html#Domain">#</a>Domain</h2>
+
+<pre><code>my $sock = IO::Socket-&gt;new(Domain =&gt; IO::Socket::AF_INET);
+$sock = IO::Socket-&gt;new(Domain =&gt; IO::Socket::AF_UNIX);</code></pre>
+
+<p>The socket domain will define which subclass of <code>IO::Socket</code> to use. The two options available along with this distribution are <code>AF_INET</code> and <code>AF_UNIX</code>.</p>
+
+<p><code>AF_INET</code> is for the internet address family of sockets and is handled via <a href="./IO::Socket::INET.html">IO::Socket::INET</a>. <code>AF_INET</code> sockets are bound to an internet address and port.</p>
+
+<p><code>AF_UNIX</code> is for the unix domain socket and is handled via <a href="./IO::Socket::UNIX.html">IO::Socket::UNIX</a>. <code>AF_UNIX</code> sockets are bound to the file system as their address name space.</p>
+
+<p>This argument is <b>required</b>. All other arguments are optional.</p>
+
+<h2 id="Listen"><a class="permalink" href="./IO::Socket.html#Listen">#</a>Listen</h2>
+
+<pre><code>my $sock = IO::Socket-&gt;new(..., Listen =&gt; 5);</code></pre>
+
+<p>Listen should be an integer value or left unset.</p>
+
+<p>If provided, this argument will place the socket into listening mode. New connections can then be accepted using the <a href="./IO::Socket.html#accept">&quot;accept&quot; in IO::Socket</a> method. The value given is used as the <code>listen(2)</code> queue size.</p>
+
+<p>If the <code>Listen</code> argument is given, but false, the queue size will be set to 5.</p>
+
+<h2 id="Timeout"><a class="permalink" href="./IO::Socket.html#Timeout">#</a>Timeout</h2>
+
+<pre><code>my $sock = IO::Socket-&gt;new(..., Timeout =&gt; 5);</code></pre>
+
+<p>The timeout value, in seconds, for this socket connection. How exactly this value is utilized is defined in the socket domain subclasses that make use of the value.</p>
+
+<h2 id="Type"><a class="permalink" href="./IO::Socket.html#Type">#</a>Type</h2>
+
+<pre><code>my $sock = IO::Socket-&gt;new(..., Type =&gt; IO::Socket::SOCK_STREAM);</code></pre>
+
+<p>The socket type that will be used. These are usually <code>SOCK_STREAM</code>, <code>SOCK_DGRAM</code>, or <code>SOCK_RAW</code>. If this argument is left undefined an attempt will be made to infer the type from the service name.</p>
+
+<p>For example, you&#39;ll usually use <code>SOCK_STREAM</code> with a <code>tcp</code> connection and <code>SOCK_DGRAM</code> with a <code>udp</code> connection.</p>
+
+<h1 id="CONSTRUCTORS"><a class="permalink" href="./IO::Socket.html#CONSTRUCTORS">#</a>CONSTRUCTORS</h1>
+
+<p><code>IO::Socket</code> extends the <a href="./IO::Handle.html">IO::Handle</a> constructor.</p>
+
+<h2 id="new"><a class="permalink" href="./IO::Socket.html#new">#</a>new</h2>
+
+<pre><code>my $sock = IO::Socket-&gt;new();
+
+# get a new IO::Socket::INET instance
+$sock = IO::Socket-&gt;new(Domain =&gt; IO::Socket::AF_INET);
+# get a new IO::Socket::UNIX instance
+$sock = IO::Socket-&gt;new(Domain =&gt; IO::Socket::AF_UNIX);
+
+# Domain is the only required argument
+$sock = IO::Socket-&gt;new(
+    Domain =&gt; IO::Socket::AF_INET, # AF_INET, AF_UNIX
+    Type =&gt; IO::Socket::SOCK_STREAM, # SOCK_STREAM, SOCK_DGRAM, ...
+    Proto =&gt; &#39;tcp&#39;, # &#39;tcp&#39;, &#39;udp&#39;, IPPROTO_TCP, IPPROTO_UDP
+    # and so on...
+);</code></pre>
+
+<p>Creates an <code>IO::Socket</code>, which is a reference to a newly created symbol (see the <a href="Symbol.html">Symbol</a> package). <code>new</code> optionally takes arguments, these arguments are defined in <a href="./IO::Socket.html#CONSTRUCTOR-ARGUMENTS">&quot;CONSTRUCTOR ARGUMENTS&quot; in IO::Socket</a>.</p>
+
+<p>Any of the <a href="./IO::Socket.html#CONSTRUCTOR-ARGUMENTS">&quot;CONSTRUCTOR ARGUMENTS&quot; in IO::Socket</a> may be passed to the constructor, but if any arguments are provided, then one of them must be the <a href="./IO::Socket.html#Domain">&quot;Domain&quot; in IO::Socket</a> argument. The <a href="./IO::Socket.html#Domain">&quot;Domain&quot; in IO::Socket</a> argument can, by default, be either <code>AF_INET</code> or <code>AF_UNIX</code>. Other domains can be used if a proper subclass for the domain family is registered. All other arguments will be passed to the <code>configuration</code> method of the package for that domain.</p>
+
+<p>If the constructor fails it will return <code>undef</code> and set the <code>$errstr</code> package variable to contain an error message.</p>
+
+<pre><code>$sock = IO::Socket-&gt;new(...)
+    or die &quot;Cannot create socket - $IO::Socket::errstr\n&quot;;</code></pre>
+
+<p>For legacy reasons the error message is also set into the global <code>$@</code> variable, and you may still find older code which looks here instead.</p>
+
+<pre><code>$sock = IO::Socket-&gt;new(...)
+    or die &quot;Cannot create socket - $@\n&quot;;</code></pre>
+
+<h1 id="METHODS"><a class="permalink" href="./IO::Socket.html#METHODS">#</a>METHODS</h1>
+
+<p><code>IO::Socket</code> inherits all methods from <a href="./IO::Handle.html">IO::Handle</a> and implements the following new ones.</p>
+
+<h2 id="accept"><a class="permalink" href="./IO::Socket.html#accept">#</a>accept</h2>
+
+<pre><code>my $client_sock = $sock-&gt;accept();
+my $inet_sock = $sock-&gt;accept(&#39;IO::Socket::INET&#39;);</code></pre>
+
+<p>The accept method will perform the system call <code>accept</code> on the socket and return a new object. The new object will be created in the same class as the listen socket, unless a specific package name is specified. This object can be used to communicate with the client that was trying to connect.</p>
+
+<p>This differs slightly from the <code>accept</code> function in <a href="perlfunc.html">perlfunc</a>.</p>
+
+<p>In a scalar context the new socket is returned, or <code>undef</code> upon failure. In a list context a two-element array is returned containing the new socket and the peer address; the list will be empty upon failure.</p>
+
+<h2 id="atmark"><a class="permalink" href="./IO::Socket.html#atmark">#</a>atmark</h2>
+
+<pre><code>my $integer = $sock-&gt;atmark();
+# read in some data on a given socket
+my $data;
+$sock-&gt;read($data, 1024) until $sock-&gt;atmark;
+
+# or, export the function to use:
+use IO::Socket &#39;sockatmark&#39;;
+$sock-&gt;read($data, 1024) until sockatmark($sock);</code></pre>
+
+<p>True if the socket is currently positioned at the urgent data mark, false otherwise. If your system doesn&#39;t yet implement <code>sockatmark</code> this will throw an exception.</p>
+
+<p>If your system does not support <code>sockatmark</code>, the <code>use</code> declaration will fail at compile time.</p>
+
+<h2 id="autoflush"><a class="permalink" href="./IO::Socket.html#autoflush">#</a>autoflush</h2>
+
+<pre><code># by default, autoflush will be turned on when referenced
+$sock-&gt;autoflush(); # turns on autoflush
+# turn off autoflush
+$sock-&gt;autoflush(0);
+# turn on autoflush
+$sock-&gt;autoflush(1);</code></pre>
+
+<p>This attribute isn&#39;t overridden from <a href="./IO::Handle.html">IO::Handle</a>&#39;s implementation. However, since we turn it on by default, it&#39;s worth mentioning here.</p>
+
+<h2 id="bind"><a class="permalink" href="./IO::Socket.html#bind">#</a>bind</h2>
+
+<pre><code>use Socket qw(pack_sockaddr_in);
+my $port = 3000;
+my $ip_address = &#39;0.0.0.0&#39;;
+my $packed_addr = pack_sockaddr_in($port, $ip_address);
+$sock-&gt;bind($packed_addr);</code></pre>
+
+<p>Binds a network address to a socket, just as <code>bind(2)</code> does. Returns true if it succeeded, false otherwise. You should provide a packed address of the appropriate type for the socket.</p>
+
+<h2 id="connected"><a class="permalink" href="./IO::Socket.html#connected">#</a>connected</h2>
+
+<pre><code>my $peer_addr = $sock-&gt;connected();
+if ($peer_addr) {
+    say &quot;We&#39;re connected to $peer_addr&quot;;
+}</code></pre>
+
+<p>If the socket is in a connected state, the peer address is returned. If the socket is not in a connected state, <code>undef</code> is returned.</p>
+
+<p>Note that this method considers a half-open TCP socket to be &quot;in a connected state&quot;. Specifically, it does not distinguish between the <b>ESTABLISHED</b> and <b>CLOSE-WAIT</b> TCP states; it returns the peer address, rather than <code>undef</code>, in either case. Thus, in general, it cannot be used to reliably learn whether the peer has initiated a graceful shutdown because in most cases (see below) the local TCP state machine remains in <b>CLOSE-WAIT</b> until the local application calls <a href="./IO::Socket.html#shutdown">&quot;shutdown&quot; in IO::Socket</a> or <code>close</code>. Only at that point does this function return <code>undef</code>.</p>
+
+<p>The &quot;in most cases&quot; hedge is because local TCP state machine behavior may depend on the peer&#39;s socket options. In particular, if the peer socket has <code>SO_LINGER</code> enabled with a zero timeout, then the peer&#39;s <code>close</code> will generate a <code>RST</code> segment. Upon receipt of that segment, the local TCP transitions immediately to <b>CLOSED</b>, and in that state, this method <i>will</i> return <code>undef</code>.</p>
+
+<h2 id="getsockopt"><a class="permalink" href="./IO::Socket.html#getsockopt">#</a>getsockopt</h2>
+
+<pre><code>my $value = $sock-&gt;getsockopt(SOL_SOCKET, SO_REUSEADDR);
+my $buf = $socket-&gt;getsockopt(SOL_SOCKET, SO_RCVBUF);
+say &quot;Receive buffer is $buf bytes&quot;;</code></pre>
+
+<p>Get an option associated with the socket. Levels other than <code>SOL_SOCKET</code> may be specified here. As a convenience, this method will unpack a byte buffer of the correct size back into a number.</p>
+
+<h2 id="listen"><a class="permalink" href="./IO::Socket.html#listen">#</a>listen</h2>
+
+<pre><code>$sock-&gt;listen(5);</code></pre>
+
+<p>Does the same thing that the <code>listen(2)</code> system call does. Returns true if it succeeded, false otherwise. Listens to a socket with a given queue size.</p>
+
+<h2 id="peername"><a class="permalink" href="./IO::Socket.html#peername">#</a>peername</h2>
+
+<pre><code>my $sockaddr_in = $sock-&gt;peername();</code></pre>
+
+<p>Returns the packed <code>sockaddr</code> address of the other end of the socket connection. It calls <code>getpeername</code>.</p>
+
+<h2 id="protocol"><a class="permalink" href="./IO::Socket.html#protocol">#</a>protocol</h2>
+
+<pre><code>my $proto = $sock-&gt;protocol();</code></pre>
+
+<p>Returns the number for the protocol being used on the socket, if known. If the protocol is unknown, as with an <code>AF_UNIX</code> socket, zero is returned.</p>
+
+<h2 id="recv"><a class="permalink" href="./IO::Socket.html#recv">#</a>recv</h2>
+
+<pre><code>my $buffer = &quot;&quot;;
+my $length = 1024;
+my $flags = 0; # default. optional
+$sock-&gt;recv($buffer, $length);
+$sock-&gt;recv($buffer, $length, $flags);</code></pre>
+
+<p>Similar in functionality to <a href="perlfunc.html#recv">&quot;recv&quot; in perlfunc</a>.</p>
+
+<p>Receives a message on a socket. Attempts to receive <code>$length</code> characters of data into <code>$buffer</code> from the specified socket. <code>$buffer</code> will be grown or shrunk to the length actually read. Takes the same flags as the system call of the same name. Returns the address of the sender if socket&#39;s protocol supports this; returns an empty string otherwise. If there&#39;s an error, returns <code>undef</code>. This call is actually implemented in terms of the <code>recvfrom(2)</code> system call.</p>
+
+<p>Flags are ORed together values, such as <code>MSG_BCAST</code>, <code>MSG_OOB</code>, <code>MSG_TRUNC</code>. The default value for the flags is <code>0</code>.</p>
+
+<p>The cached value of <a href="./IO::Socket.html#peername">&quot;peername&quot; in IO::Socket</a> is updated with the result of <code>recv</code>.</p>
+
+<p><b>Note:</b> In Perl v5.30 and newer, if the socket has been marked as <code>:utf8</code>, <code>recv</code> will throw an exception. The <code>:encoding(...)</code> layer implicitly introduces the <code>:utf8</code> layer. See <a href="perlfunc.html#binmode">&quot;binmode&quot; in perlfunc</a>.</p>
+
+<p><b>Note:</b> In Perl versions older than v5.30, depending on the status of the socket, either (8-bit) bytes or characters are received. By default all sockets operate on bytes, but for example if the socket has been changed using <a href="perlfunc.html#binmode">&quot;binmode&quot; in perlfunc</a> to operate with the <code>:encoding(UTF-8)</code> I/O layer (see the <a href="perlfunc.html#open">&quot;open&quot; in perlfunc</a> pragma), the I/O will operate on UTF8-encoded Unicode characters, not bytes. Similarly for the <code>:encoding</code> layer: in that case pretty much any characters can be read.</p>
+
+<h2 id="send"><a class="permalink" href="./IO::Socket.html#send">#</a>send</h2>
+
+<pre><code>my $message = &quot;Hello, world!&quot;;
+my $flags = 0; # defaults to zero
+my $to = &#39;0.0.0.0&#39;; # optional destination
+my $sent = $sock-&gt;send($message);
+$sent = $sock-&gt;send($message, $flags);
+$sent = $sock-&gt;send($message, $flags, $to);</code></pre>
+
+<p>Similar in functionality to <a href="perlfunc.html#send">&quot;send&quot; in perlfunc</a>.</p>
+
+<p>Sends a message on a socket. Attempts to send the scalar message to the socket. Takes the same flags as the system call of the same name. On unconnected sockets, you must specify a destination to send to, in which case it does a <code>sendto(2)</code> syscall. Returns the number of characters sent, or <code>undef</code> on error. The <code>sendmsg(2)</code> syscall is currently unimplemented.</p>
+
+<p>The <code>flags</code> option is optional and defaults to <code>0</code>.</p>
+
+<p>After a successful send with <code>$to</code>, further calls to <code>send</code> on an unconnected socket without <code>$to</code> will send to the same address, and <code>$to</code> will be used as the result of <a href="./IO::Socket.html#peername">&quot;peername&quot; in IO::Socket</a>.</p>
+
+<p><b>Note:</b> In Perl v5.30 and newer, if the socket has been marked as <code>:utf8</code>, <code>send</code> will throw an exception. The <code>:encoding(...)</code> layer implicitly introduces the <code>:utf8</code> layer. See <a href="perlfunc.html#binmode">&quot;binmode&quot; in perlfunc</a>.</p>
+
+<p><b>Note:</b> In Perl versions older than v5.30, depending on the status of the socket, either (8-bit) bytes or characters are sent. By default all sockets operate on bytes, but for example if the socket has been changed using <a href="perlfunc.html#binmode">&quot;binmode&quot; in perlfunc</a> to operate with the <code>:encoding(UTF-8)</code> I/O layer (see the <a href="perlfunc.html#open">&quot;open&quot; in perlfunc</a> pragma), the I/O will operate on UTF8-encoded Unicode characters, not bytes. Similarly for the <code>:encoding</code> layer: in that case pretty much any characters can be sent.</p>
+
+<h2 id="setsockopt"><a class="permalink" href="./IO::Socket.html#setsockopt">#</a>setsockopt</h2>
+
+<pre><code>$sock-&gt;setsockopt(SOL_SOCKET, SO_REUSEADDR, 1);
+$sock-&gt;setsockopt(SOL_SOCKET, SO_RCVBUF, 64*1024);</code></pre>
+
+<p>Set option associated with the socket. Levels other than <code>SOL_SOCKET</code> may be specified here. As a convenience, this method will convert a number into a packed byte buffer.</p>
+
+<h2 id="shutdown"><a class="permalink" href="./IO::Socket.html#shutdown">#</a>shutdown</h2>
+
+<pre><code>$sock-&gt;shutdown(SHUT_RD); # we stopped reading data
+$sock-&gt;shutdown(SHUT_WR); # we stopped writing data
+$sock-&gt;shutdown(SHUT_RDWR); # we stopped using this socket</code></pre>
+
+<p>Shuts down a socket connection in the manner indicated by the value passed in, which has the same interpretation as in the syscall of the same name.</p>
+
+<p>This is useful with sockets when you want to tell the other side you&#39;re done writing but not done reading, or vice versa. It&#39;s also a more insistent form of <code>close</code> because it also disables the file descriptor in any forked copies in other processes.</p>
+
+<p>Returns <code>1</code> for success; on error, returns <code>undef</code> if the socket is not a valid filehandle, or returns <code>0</code> and sets <code>$!</code> for any other failure.</p>
+
+<h2 id="sockdomain"><a class="permalink" href="./IO::Socket.html#sockdomain">#</a>sockdomain</h2>
+
+<pre><code>my $domain = $sock-&gt;sockdomain();</code></pre>
+
+<p>Returns the number for the socket domain type. For example, for an <code>AF_INET</code> socket the value of <code>&amp;AF_INET</code> will be returned.</p>
+
+<h2 id="socket"><a class="permalink" href="./IO::Socket.html#socket">#</a>socket</h2>
+
+<pre><code>my $sock = IO::Socket-&gt;new(); # no values given
+# now let&#39;s actually get a socket with the socket method
+# domain, type, and protocol are required
+$sock = $sock-&gt;socket(AF_INET, SOCK_STREAM, &#39;tcp&#39;);</code></pre>
+
+<p>Opens a socket of the specified kind and returns it. Domain, type, and protocol are specified the same as for the syscall of the same name.</p>
+
+<h2 id="socketpair"><a class="permalink" href="./IO::Socket.html#socketpair">#</a>socketpair</h2>
+
+<pre><code>my ($r, $w) = $sock-&gt;socketpair(AF_UNIX, SOCK_STREAM, PF_UNSPEC);
+($r, $w) = IO::Socket::UNIX
+    -&gt;socketpair(AF_UNIX, SOCK_STREAM, PF_UNSPEC);</code></pre>
+
+<p>Will return a list of two sockets created (read and write), or an empty list on failure.</p>
+
+<p>Differs slightly from <code>socketpair</code> in <a href="perlfunc.html">perlfunc</a> in that the argument list is a bit simpler.</p>
+
+<h2 id="sockname"><a class="permalink" href="./IO::Socket.html#sockname">#</a>sockname</h2>
+
+<pre><code>my $packed_addr = $sock-&gt;sockname();</code></pre>
+
+<p>Returns the packed <code>sockaddr</code> address of this end of the connection. It&#39;s the same as <code>getsockname(2)</code>.</p>
+
+<h2 id="sockopt"><a class="permalink" href="./IO::Socket.html#sockopt">#</a>sockopt</h2>
+
+<pre><code>my $value = $sock-&gt;sockopt(SO_REUSEADDR);
+$sock-&gt;sockopt(SO_REUSEADDR, 1);</code></pre>
+
+<p>Unified method to both set and get options in the <code>SOL_SOCKET</code> level. If called with one argument then <a href="./IO::Socket.html#getsockopt">&quot;getsockopt&quot; in IO::Socket</a> is called, otherwise <a href="./IO::Socket.html#setsockopt">&quot;setsockopt&quot; in IO::Socket</a> is called.</p>
+
+<h2 id="socktype"><a class="permalink" href="./IO::Socket.html#socktype">#</a>socktype</h2>
+
+<pre><code>my $type = $sock-&gt;socktype();</code></pre>
+
+<p>Returns the number for the socket type. For example, for a <code>SOCK_STREAM</code> socket the value of <code>&amp;SOCK_STREAM</code> will be returned.</p>
+
+<h2 id="timeout"><a class="permalink" href="./IO::Socket.html#timeout">#</a>timeout</h2>
+
+<pre><code>my $seconds = $sock-&gt;timeout();
+my $old_val = $sock-&gt;timeout(5); # set new and return old value</code></pre>
+
+<p>Set or get the timeout value (in seconds) associated with this socket. If called without any arguments then the current setting is returned. If called with an argument the current setting is changed and the previous value returned.</p>
+
+<p>This method is available to all <code>IO::Socket</code> implementations but may or may not be used by the individual domain subclasses.</p>
+
+<h1 id="EXAMPLES"><a class="permalink" href="./IO::Socket.html#EXAMPLES">#</a>EXAMPLES</h1>
+
+<p>Let&#39;s create a TCP server on <code>localhost:3333</code>.</p>
+
+<pre><code>use strict;
+use warnings;
+use feature &#39;say&#39;;
+
+use IO::Socket qw(AF_INET AF_UNIX SOCK_STREAM SHUT_WR);
+
+my $server = IO::Socket-&gt;new(
+    Domain =&gt; AF_INET,
+    Type =&gt; SOCK_STREAM,
+    Proto =&gt; &#39;tcp&#39;,
+    LocalHost =&gt; &#39;0.0.0.0&#39;,
+    LocalPort =&gt; 3333,
+    ReusePort =&gt; 1,
+    Listen =&gt; 5,
+) || die &quot;Can&#39;t open socket: $IO::Socket::errstr&quot;;
+say &quot;Waiting on 3333&quot;;
+
+while (1) {
+    # waiting for a new client connection
+    my $client = $server-&gt;accept();
+
+    # get information about a newly connected client
+    my $client_address = $client-&gt;peerhost();
+    my $client_port = $client-&gt;peerport();
+    say &quot;Connection from $client_address:$client_port&quot;;
+
+    # read up to 1024 characters from the connected client
+    my $data = &quot;&quot;;
+    $client-&gt;recv($data, 1024);
+    say &quot;received data: $data&quot;;
+
+    # write response data to the connected client
+    $data = &quot;ok&quot;;
+    $client-&gt;send($data);
+
+    # notify client that response has been sent
+    $client-&gt;shutdown(SHUT_WR);
+}
+
+$server-&gt;close();</code></pre>
+
+<p>A client for such a server could be</p>
+
+<pre><code>use strict;
+use warnings;
+use feature &#39;say&#39;;
+
+use IO::Socket qw(AF_INET AF_UNIX SOCK_STREAM SHUT_WR);
+
+my $client = IO::Socket-&gt;new(
+    Domain =&gt; AF_INET,
+    Type =&gt; SOCK_STREAM,
+    proto =&gt; &#39;tcp&#39;,
+    PeerPort =&gt; 3333,
+    PeerHost =&gt; &#39;0.0.0.0&#39;,
+) || die &quot;Can&#39;t open socket: $IO::Socket::errstr&quot;;
+
+say &quot;Sending Hello World!&quot;;
+my $size = $client-&gt;send(&quot;Hello World!&quot;);
+say &quot;Sent data of length: $size&quot;;
+
+$client-&gt;shutdown(SHUT_WR);
+
+my $buffer;
+$client-&gt;recv($buffer, 1024);
+say &quot;Got back $buffer&quot;;
+
+$client-&gt;close();</code></pre>
+
+<h1 id="LIMITATIONS"><a class="permalink" href="./IO::Socket.html#LIMITATIONS">#</a>LIMITATIONS</h1>
+
+<p>On some systems, for an IO::Socket object created with <code>new_from_fd</code>, or created with <a href="./IO::Socket.html#accept">&quot;accept&quot; in IO::Socket</a> from such an object, the <a href="./IO::Socket.html#protocol">&quot;protocol&quot; in IO::Socket</a>, <a href="./IO::Socket.html#sockdomain">&quot;sockdomain&quot; in IO::Socket</a> and <a href="./IO::Socket.html#socktype">&quot;socktype&quot; in IO::Socket</a> methods may return <code>undef</code>.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./IO::Socket.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="Socket.html">Socket</a>, <a href="./IO::Handle.html">IO::Handle</a>, <a href="./IO::Socket::INET.html">IO::Socket::INET</a>, <a href="./IO::Socket::UNIX.html">IO::Socket::UNIX</a>, <a href="./IO::Socket::IP.html">IO::Socket::IP</a></p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./IO::Socket.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Graham Barr. atmark() by Lincoln Stein. Currently maintained by the Perl Porters. Please report all bugs to &lt;perlbug@perl.org&gt;.</p>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="./IO::Socket.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>Copyright (c) 1997-8 Graham Barr &lt;gbarr@pobox.com&gt;. All rights reserved. This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+<p>The atmark() implementation: Copyright 2001, Lincoln Stein &lt;lstein@cshl.org&gt;. This module is distributed under the same terms as Perl itself. Feel free to use, modify and redistribute it as long as you retain the correct attribution.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

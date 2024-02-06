@@ -1,0 +1,2738 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>perlbrew - Perl environment manager. - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of App-perlbrew - MetaCPAN" href="https://metacpan.org/dist/App-perlbrew/releases.rss" />
+        <link rel="canonical" href="https://metacpan.org/dist/App-perlbrew/view/script/perlbrew" />
+        <meta name="description" content="Perl environment manager." />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/perlbrew" />
+<meta name="twitter:title"       content="perlbrew" />
+<meta name="twitter:description" content="Perl environment manager." />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="perlbrew.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of App-perlbrew was released.">
+      <span class="relatize">11 Aug 2023 14:21:58 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/App-perlbrew">App-perlbrew</a>
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/App-perlbrew/source/script/perlbrew">Source</a>
+    (<a href="https://metacpan.org/dist/App-perlbrew/source/script/perlbrew?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/App-perlbrew/source/script">Browse</a>
+    (<a href="https://metacpan.org/dist/App-perlbrew/source/script?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/App-perlbrew/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/App-perlbrew/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/gugod/App-perlbrew">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/gugod/App-perlbrew/issues">Issues</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=App-perlbrew+0.98" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/A/App-perlbrew.html?oncpan=1&amp;distmat=1&amp;version=0.98&amp;grade=2" style="color: #090">703</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/A/App-perlbrew.html?oncpan=1&amp;distmat=1&amp;version=0.98&amp;grade=3" style="color: #900">6</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/A/App-perlbrew.html?oncpan=1&amp;distmat=1&amp;version=0.98&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/GUGOD/App-perlbrew-0.98">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on App-perlbrew who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/App-perlbrew-0.98/index.html">61.86% Coverage </a>
+    </li>
+    <li>
+      License: mit
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/App-perlbrew/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/G/GU/GUGOD/App-perlbrew-0.98.tar.gz">
+      Download (<span itemprop="fileSize">83.39KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FGUGOD%2FApp-perlbrew-0.98%2Fscript%2Fperlbrew">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/App-perlbrew/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/App-perlbrew/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:App-perlbrew">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="App-perlbrew">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/script/perlbrew&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="GUGOD/App-perlbrew-0.98"
+>0.98
+  (GUGOD on 2023-08-11)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.97"
+>0.97
+  (GUGOD on 2023-05-12)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.96"
+>0.96
+  (GUGOD on 2022-07-31)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.95"
+>0.95
+  (GUGOD on 2022-05-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.94"
+>0.94
+  (GUGOD on 2021-12-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.93"
+>0.93
+  (GUGOD on 2021-11-22)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.92"
+>0.92
+  (GUGOD on 2021-04-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.91"
+>0.91
+  (GUGOD on 2021-01-31)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="GUGOD/App-perlbrew-0.90"
+>0.90
+  (GUGOD on 2021-01-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.89"
+>0.89
+  (GUGOD on 2020-10-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.88"
+>0.88
+  (GUGOD on 2020-01-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.87"
+>0.87
+  (GUGOD on 2019-10-25)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.86"
+>0.86
+  (GUGOD on 2019-01-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.85"
+>0.85
+  (GUGOD on 2018-12-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.84"
+>0.84
+  (GUGOD on 2018-06-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.83"
+>0.83
+  (GUGOD on 2018-05-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.82"
+>0.82
+  (GUGOD on 2017-12-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.81"
+>0.81
+  (GUGOD on 2017-12-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.80"
+>0.80
+  (GUGOD on 2017-06-30)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.79"
+>0.79
+  (GUGOD on 2017-06-25)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.78"
+>0.78
+  (GUGOD on 2016-11-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.77"
+>0.77
+  (GUGOD on 2016-11-12)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.76"
+>0.76
+  (GUGOD on 2016-06-21)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.75"
+>0.75
+  (GUGOD on 2016-03-16)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.74"
+>0.74
+  (GUGOD on 2015-11-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.73"
+>0.73
+  (GUGOD on 2015-02-01)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.72"
+>0.72
+  (GUGOD on 2014-10-27)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.71"
+>0.71
+  (GUGOD on 2014-09-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.70"
+>0.70
+  (GUGOD on 2014-09-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.69"
+>0.69
+  (GUGOD on 2014-06-10)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.68"
+>0.68
+  (GUGOD on 2014-06-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.67"
+>0.67
+  (GUGOD on 2013-11-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.66"
+>0.66
+  (GUGOD on 2013-08-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.65"
+>0.65
+  (GUGOD on 2013-08-01)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.64"
+>0.64
+  (GUGOD on 2013-06-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.63"
+>0.63
+  (GUGOD on 2013-05-06)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.62"
+>0.62
+  (GUGOD on 2013-04-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.61"
+>0.61
+  (GUGOD on 2013-03-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.60"
+>0.60
+  (GUGOD on 2013-03-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.59"
+>0.59
+  (GUGOD on 2013-02-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.58"
+>0.58
+  (GUGOD on 2012-11-16)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.57"
+>0.57
+  (GUGOD on 2012-11-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.56"
+>0.56
+  (GUGOD on 2012-11-11)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.55"
+>0.55
+  (GUGOD on 2012-11-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.54"
+>0.54
+  (GUGOD on 2012-10-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.53"
+>0.53
+  (GUGOD on 2012-10-14)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.52"
+>0.52
+  (GUGOD on 2012-10-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.51"
+>0.51
+  (GUGOD on 2012-09-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.50"
+>0.50
+  (GUGOD on 2012-09-01)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.49"
+>0.49
+  (GUGOD on 2012-08-25)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.48"
+>0.48
+  (GUGOD on 2012-08-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.47"
+>0.47
+  (GUGOD on 2012-08-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.46"
+>0.46
+  (GUGOD on 2012-07-21)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.45"
+>0.45
+  (GUGOD on 2012-07-14)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.44"
+>0.44
+  (GUGOD on 2012-07-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.43"
+>0.43
+  (GUGOD on 2012-05-27)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.42"
+>0.42
+  (GUGOD on 2012-03-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.41"
+>0.41
+  (GUGOD on 2012-02-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.40"
+>0.40
+  (GUGOD on 2012-01-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.39"
+>0.39
+  (GUGOD on 2011-12-31)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.38"
+>0.38
+  (GUGOD on 2011-12-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.37"
+>0.37
+  (GUGOD on 2011-12-28)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.36"
+>0.36
+  (GUGOD on 2011-12-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.35"
+>0.35
+  (GUGOD on 2011-12-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.34"
+>0.34
+  (GUGOD on 2011-12-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.33"
+>0.33
+  (GUGOD on 2011-11-14)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.32"
+>0.32
+  (GUGOD on 2011-11-11)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.31"
+>0.31
+  (GUGOD on 2011-11-03)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.30"
+>0.30
+  (GUGOD on 2011-10-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.29"
+>0.29
+  (GUGOD on 2011-09-18)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.28"
+>0.28
+  (GUGOD on 2011-08-10)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.27"
+>0.27
+  (GUGOD on 2011-07-10)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.26"
+>0.26
+  (GUGOD on 2011-07-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.25"
+>0.25
+  (GUGOD on 2011-06-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.24"
+>0.24
+  (GUGOD on 2011-06-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.23"
+>0.23
+  (GUGOD on 2011-05-31)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.22"
+>0.22
+  (GUGOD on 2011-05-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.21"
+>0.21
+  (GUGOD on 2011-05-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.20"
+>0.20
+  (GUGOD on 2011-05-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.19"
+>0.19
+  (GUGOD on 2011-04-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.18"
+>0.18
+  (GUGOD on 2011-03-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.17"
+>0.17
+  (GUGOD on 2011-03-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.16"
+>0.16
+  (GUGOD on 2011-02-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.15"
+>0.15
+  (GUGOD on 2010-12-06)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.14"
+>0.14
+  (GUGOD on 2010-11-27)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.13"
+>0.13
+  (GUGOD on 2010-11-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.12"
+>0.12
+  (GUGOD on 2010-10-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.11"
+>0.11
+  (GUGOD on 2010-10-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.10"
+>0.10
+  (GUGOD on 2010-08-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.09"
+>0.09
+  (GUGOD on 2010-08-03)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.08"
+>0.08
+  (GUGOD on 2010-07-21)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.07"
+>0.07
+  (GUGOD on 2010-05-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.06"
+>0.06
+  (GUGOD on 2010-04-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.05"
+>0.05
+  (GUGOD on 2010-04-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.04"
+>0.04
+  (GUGOD on 2010-04-18)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.03"
+>0.03
+  (GUGOD on 2010-03-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.02"
+>0.02
+  (GUGOD on 2010-03-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.01"
+>0.01
+  (GUGOD on 2010-02-27)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/GUGOD/App-perlbrew-0.98/diff/' + encodeURIComponent(this.value) + '/script/perlbrew'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="GUGOD/App-perlbrew-0.98"
+>0.98
+  (GUGOD on 2023-08-11)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.97"
+>0.97
+  (GUGOD on 2023-05-12)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.96"
+>0.96
+  (GUGOD on 2022-07-31)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.95"
+>0.95
+  (GUGOD on 2022-05-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.94"
+>0.94
+  (GUGOD on 2021-12-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.93"
+>0.93
+  (GUGOD on 2021-11-22)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.92"
+>0.92
+  (GUGOD on 2021-04-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.91"
+>0.91
+  (GUGOD on 2021-01-31)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="GUGOD/App-perlbrew-0.90"
+>0.90
+  (GUGOD on 2021-01-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.89"
+>0.89
+  (GUGOD on 2020-10-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.88"
+>0.88
+  (GUGOD on 2020-01-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.87"
+>0.87
+  (GUGOD on 2019-10-25)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.86"
+>0.86
+  (GUGOD on 2019-01-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.85"
+>0.85
+  (GUGOD on 2018-12-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.84"
+>0.84
+  (GUGOD on 2018-06-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.83"
+>0.83
+  (GUGOD on 2018-05-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.82"
+>0.82
+  (GUGOD on 2017-12-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.81"
+>0.81
+  (GUGOD on 2017-12-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.80"
+>0.80
+  (GUGOD on 2017-06-30)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.79"
+>0.79
+  (GUGOD on 2017-06-25)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.78"
+>0.78
+  (GUGOD on 2016-11-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.77"
+>0.77
+  (GUGOD on 2016-11-12)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.76"
+>0.76
+  (GUGOD on 2016-06-21)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.75"
+>0.75
+  (GUGOD on 2016-03-16)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.74"
+>0.74
+  (GUGOD on 2015-11-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.73"
+>0.73
+  (GUGOD on 2015-02-01)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.72"
+>0.72
+  (GUGOD on 2014-10-27)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.71"
+>0.71
+  (GUGOD on 2014-09-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.70"
+>0.70
+  (GUGOD on 2014-09-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.69"
+>0.69
+  (GUGOD on 2014-06-10)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.68"
+>0.68
+  (GUGOD on 2014-06-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.67"
+>0.67
+  (GUGOD on 2013-11-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.66"
+>0.66
+  (GUGOD on 2013-08-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.65"
+>0.65
+  (GUGOD on 2013-08-01)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.64"
+>0.64
+  (GUGOD on 2013-06-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.63"
+>0.63
+  (GUGOD on 2013-05-06)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.62"
+>0.62
+  (GUGOD on 2013-04-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.61"
+>0.61
+  (GUGOD on 2013-03-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.60"
+>0.60
+  (GUGOD on 2013-03-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.59"
+>0.59
+  (GUGOD on 2013-02-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.58"
+>0.58
+  (GUGOD on 2012-11-16)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.57"
+>0.57
+  (GUGOD on 2012-11-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.56"
+>0.56
+  (GUGOD on 2012-11-11)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.55"
+>0.55
+  (GUGOD on 2012-11-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.54"
+>0.54
+  (GUGOD on 2012-10-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.53"
+>0.53
+  (GUGOD on 2012-10-14)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.52"
+>0.52
+  (GUGOD on 2012-10-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.51"
+>0.51
+  (GUGOD on 2012-09-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.50"
+>0.50
+  (GUGOD on 2012-09-01)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.49"
+>0.49
+  (GUGOD on 2012-08-25)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.48"
+>0.48
+  (GUGOD on 2012-08-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.47"
+>0.47
+  (GUGOD on 2012-08-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.46"
+>0.46
+  (GUGOD on 2012-07-21)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.45"
+>0.45
+  (GUGOD on 2012-07-14)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.44"
+>0.44
+  (GUGOD on 2012-07-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.43"
+>0.43
+  (GUGOD on 2012-05-27)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.42"
+>0.42
+  (GUGOD on 2012-03-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.41"
+>0.41
+  (GUGOD on 2012-02-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.40"
+>0.40
+  (GUGOD on 2012-01-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.39"
+>0.39
+  (GUGOD on 2011-12-31)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.38"
+>0.38
+  (GUGOD on 2011-12-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.37"
+>0.37
+  (GUGOD on 2011-12-28)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.36"
+>0.36
+  (GUGOD on 2011-12-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.35"
+>0.35
+  (GUGOD on 2011-12-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.34"
+>0.34
+  (GUGOD on 2011-12-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.33"
+>0.33
+  (GUGOD on 2011-11-14)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.32"
+>0.32
+  (GUGOD on 2011-11-11)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.31"
+>0.31
+  (GUGOD on 2011-11-03)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.30"
+>0.30
+  (GUGOD on 2011-10-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.29"
+>0.29
+  (GUGOD on 2011-09-18)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.28"
+>0.28
+  (GUGOD on 2011-08-10)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.27"
+>0.27
+  (GUGOD on 2011-07-10)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.26"
+>0.26
+  (GUGOD on 2011-07-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.25"
+>0.25
+  (GUGOD on 2011-06-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.24"
+>0.24
+  (GUGOD on 2011-06-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.23"
+>0.23
+  (GUGOD on 2011-05-31)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.22"
+>0.22
+  (GUGOD on 2011-05-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.21"
+>0.21
+  (GUGOD on 2011-05-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.20"
+>0.20
+  (GUGOD on 2011-05-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.19"
+>0.19
+  (GUGOD on 2011-04-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.18"
+>0.18
+  (GUGOD on 2011-03-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.17"
+>0.17
+  (GUGOD on 2011-03-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.16"
+>0.16
+  (GUGOD on 2011-02-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.15"
+>0.15
+  (GUGOD on 2010-12-06)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.14"
+>0.14
+  (GUGOD on 2010-11-27)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.13"
+>0.13
+  (GUGOD on 2010-11-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.12"
+>0.12
+  (GUGOD on 2010-10-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.11"
+>0.11
+  (GUGOD on 2010-10-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.10"
+>0.10
+  (GUGOD on 2010-08-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.09"
+>0.09
+  (GUGOD on 2010-08-03)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.08"
+>0.08
+  (GUGOD on 2010-07-21)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.07"
+>0.07
+  (GUGOD on 2010-05-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.06"
+>0.06
+  (GUGOD on 2010-04-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.05"
+>0.05
+  (GUGOD on 2010-04-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.04"
+>0.04
+  (GUGOD on 2010-04-18)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.03"
+>0.03
+  (GUGOD on 2010-03-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.02"
+>0.02
+  (GUGOD on 2010-03-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.01"
+>0.01
+  (GUGOD on 2010-02-27)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/CPAN::Perl::Releases" title="CPAN::Perl::Releases" class="ellipsis">CPAN::Perl::Releases</a></li>
+  <li><a href="https://metacpan.org/pod/Capture::Tiny" title="Capture::Tiny" class="ellipsis">Capture::Tiny</a></li>
+  <li><a href="https://metacpan.org/pod/Devel::PatchPerl" title="Devel::PatchPerl" class="ellipsis">Devel::PatchPerl</a></li>
+  <li><a href="https://metacpan.org/pod/ExtUtils::MakeMaker" title="ExtUtils::MakeMaker" class="ellipsis">ExtUtils::MakeMaker</a></li>
+  <li><a href="https://metacpan.org/pod/File::Copy" title="File::Copy" class="ellipsis">File::Copy</a></li>
+  <li><a href="https://metacpan.org/pod/File::Temp" title="File::Temp" class="ellipsis">File::Temp</a></li>
+  <li><a href="https://metacpan.org/pod/JSON::PP" title="JSON::PP" class="ellipsis">JSON::PP</a></li>
+  <li><a href="https://metacpan.org/pod/Pod::Usage" title="Pod::Usage" class="ellipsis">Pod::Usage</a></li>
+  <li><a href="./local::lib.html" title="local::lib" class="ellipsis">local::lib</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/perlbrew/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=perlbrew">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=App-perlbrew">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/GUGOD/App-perlbrew-0.98/view/script/perlbrew">This version</a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/App-perlbrew/view/script/perlbrew">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/WKI"><img src="https://www.gravatar.com/avatar/96e6cbd6079af929f3531d41081b9be1?d=identicon&amp;s=20" title="WKI" alt="WKI"></a>
+<a class="display-all" href="https://metacpan.org/author/BEROV"><img src="https://www.gravatar.com/avatar/eae0eb4092a9f63426c13408e343b803?d=identicon&amp;s=20" title="BEROV" alt="BEROV"></a>
+<a class="display-all" href="https://metacpan.org/author/BESSARABV"><img src="https://www.gravatar.com/avatar/f848f8b82e51b7a88ca22562639a814b?d=identicon&amp;s=20" title="BESSARABV" alt="BESSARABV"></a>
+<a class="display-all" href="https://metacpan.org/author/CADAVIS"><img src="https://www.gravatar.com/avatar/c21db302f67c98156d914d1f2fdcdaab?d=identicon&amp;s=20" title="CADAVIS" alt="CADAVIS"></a>
+<a class="display-all" href="https://metacpan.org/author/DOY"><img src="https://www.gravatar.com/avatar/88766de7a058697d3d0335b8d384fd2a?d=identicon&amp;s=20" title="DOY" alt="DOY"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/App-perlbrew/plussers">103 PAUSE users</a>
+</div>
+<div>
+    72 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/GUGOD" class="author-name">劉康民</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/script/perlbrew&#39;" class="">
+<option
+  selected
+  value="GUGOD/App-perlbrew-0.98"
+>0.98
+  (GUGOD on 2023-08-11)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.97"
+>0.97
+  (GUGOD on 2023-05-12)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.96"
+>0.96
+  (GUGOD on 2022-07-31)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.95"
+>0.95
+  (GUGOD on 2022-05-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.94"
+>0.94
+  (GUGOD on 2021-12-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.93"
+>0.93
+  (GUGOD on 2021-11-22)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.92"
+>0.92
+  (GUGOD on 2021-04-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.91"
+>0.91
+  (GUGOD on 2021-01-31)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="GUGOD/App-perlbrew-0.90"
+>0.90
+  (GUGOD on 2021-01-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.89"
+>0.89
+  (GUGOD on 2020-10-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.88"
+>0.88
+  (GUGOD on 2020-01-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.87"
+>0.87
+  (GUGOD on 2019-10-25)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.86"
+>0.86
+  (GUGOD on 2019-01-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.85"
+>0.85
+  (GUGOD on 2018-12-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.84"
+>0.84
+  (GUGOD on 2018-06-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.83"
+>0.83
+  (GUGOD on 2018-05-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.82"
+>0.82
+  (GUGOD on 2017-12-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.81"
+>0.81
+  (GUGOD on 2017-12-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.80"
+>0.80
+  (GUGOD on 2017-06-30)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.79"
+>0.79
+  (GUGOD on 2017-06-25)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.78"
+>0.78
+  (GUGOD on 2016-11-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.77"
+>0.77
+  (GUGOD on 2016-11-12)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.76"
+>0.76
+  (GUGOD on 2016-06-21)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.75"
+>0.75
+  (GUGOD on 2016-03-16)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.74"
+>0.74
+  (GUGOD on 2015-11-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.73"
+>0.73
+  (GUGOD on 2015-02-01)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.72"
+>0.72
+  (GUGOD on 2014-10-27)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.71"
+>0.71
+  (GUGOD on 2014-09-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.70"
+>0.70
+  (GUGOD on 2014-09-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.69"
+>0.69
+  (GUGOD on 2014-06-10)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.68"
+>0.68
+  (GUGOD on 2014-06-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.67"
+>0.67
+  (GUGOD on 2013-11-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.66"
+>0.66
+  (GUGOD on 2013-08-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.65"
+>0.65
+  (GUGOD on 2013-08-01)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.64"
+>0.64
+  (GUGOD on 2013-06-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.63"
+>0.63
+  (GUGOD on 2013-05-06)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.62"
+>0.62
+  (GUGOD on 2013-04-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.61"
+>0.61
+  (GUGOD on 2013-03-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.60"
+>0.60
+  (GUGOD on 2013-03-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.59"
+>0.59
+  (GUGOD on 2013-02-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.58"
+>0.58
+  (GUGOD on 2012-11-16)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.57"
+>0.57
+  (GUGOD on 2012-11-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.56"
+>0.56
+  (GUGOD on 2012-11-11)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.55"
+>0.55
+  (GUGOD on 2012-11-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.54"
+>0.54
+  (GUGOD on 2012-10-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.53"
+>0.53
+  (GUGOD on 2012-10-14)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.52"
+>0.52
+  (GUGOD on 2012-10-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.51"
+>0.51
+  (GUGOD on 2012-09-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.50"
+>0.50
+  (GUGOD on 2012-09-01)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.49"
+>0.49
+  (GUGOD on 2012-08-25)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.48"
+>0.48
+  (GUGOD on 2012-08-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.47"
+>0.47
+  (GUGOD on 2012-08-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.46"
+>0.46
+  (GUGOD on 2012-07-21)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.45"
+>0.45
+  (GUGOD on 2012-07-14)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.44"
+>0.44
+  (GUGOD on 2012-07-04)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.43"
+>0.43
+  (GUGOD on 2012-05-27)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.42"
+>0.42
+  (GUGOD on 2012-03-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.41"
+>0.41
+  (GUGOD on 2012-02-02)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.40"
+>0.40
+  (GUGOD on 2012-01-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.39"
+>0.39
+  (GUGOD on 2011-12-31)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.38"
+>0.38
+  (GUGOD on 2011-12-29)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.37"
+>0.37
+  (GUGOD on 2011-12-28)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.36"
+>0.36
+  (GUGOD on 2011-12-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.35"
+>0.35
+  (GUGOD on 2011-12-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.34"
+>0.34
+  (GUGOD on 2011-12-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.33"
+>0.33
+  (GUGOD on 2011-11-14)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.32"
+>0.32
+  (GUGOD on 2011-11-11)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.31"
+>0.31
+  (GUGOD on 2011-11-03)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.30"
+>0.30
+  (GUGOD on 2011-10-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.29"
+>0.29
+  (GUGOD on 2011-09-18)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.28"
+>0.28
+  (GUGOD on 2011-08-10)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.27"
+>0.27
+  (GUGOD on 2011-07-10)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.26"
+>0.26
+  (GUGOD on 2011-07-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.25"
+>0.25
+  (GUGOD on 2011-06-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.24"
+>0.24
+  (GUGOD on 2011-06-07)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.23"
+>0.23
+  (GUGOD on 2011-05-31)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.22"
+>0.22
+  (GUGOD on 2011-05-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.21"
+>0.21
+  (GUGOD on 2011-05-17)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.20"
+>0.20
+  (GUGOD on 2011-05-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.19"
+>0.19
+  (GUGOD on 2011-04-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.18"
+>0.18
+  (GUGOD on 2011-03-15)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.17"
+>0.17
+  (GUGOD on 2011-03-09)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.16"
+>0.16
+  (GUGOD on 2011-02-19)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.15"
+>0.15
+  (GUGOD on 2010-12-06)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.14"
+>0.14
+  (GUGOD on 2010-11-27)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.13"
+>0.13
+  (GUGOD on 2010-11-13)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.12"
+>0.12
+  (GUGOD on 2010-10-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.11"
+>0.11
+  (GUGOD on 2010-10-20)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.10"
+>0.10
+  (GUGOD on 2010-08-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.09"
+>0.09
+  (GUGOD on 2010-08-03)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.08"
+>0.08
+  (GUGOD on 2010-07-21)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.07"
+>0.07
+  (GUGOD on 2010-05-23)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.06"
+>0.06
+  (GUGOD on 2010-04-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.05"
+>0.05
+  (GUGOD on 2010-04-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.04"
+>0.04
+  (GUGOD on 2010-04-18)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.03"
+>0.03
+  (GUGOD on 2010-03-26)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.02"
+>0.02
+  (GUGOD on 2010-03-24)</option>
+<option
+  
+  value="GUGOD/App-perlbrew-0.01"
+>0.01
+  (GUGOD on 2010-02-27)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/App-perlbrew">App-perlbrew-0.98</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage two &#10;
+          • 7 direct dependents &#10;          • 10 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="App-perlbrew-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="App-perlbrew-0.98">
+    <input type="hidden" name="author" value="GUGOD">
+    <input type="hidden" name="distribution" value="App-perlbrew">
+    <button type="submit" class="favorite highlight"><span>175</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="perlbrew.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>175</span> ++</a>
+</div>
+   / <span>perlbrew</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="perlbrew.html#NAME">NAME</a></li>
+  <li><a href="perlbrew.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="perlbrew.html#CONFIGURATION">CONFIGURATION</a></li>
+  <li><a href="perlbrew.html#COMMAND:-INIT">COMMAND: INIT</a></li>
+  <li><a href="perlbrew.html#COMMAND:-INFO">COMMAND: INFO</a></li>
+  <li><a href="perlbrew.html#COMMAND:-INSTALL">COMMAND: INSTALL</a></li>
+  <li><a href="perlbrew.html#COMMAND:-INSTALL-MULTIPLE">COMMAND: INSTALL-MULTIPLE</a></li>
+  <li><a href="perlbrew.html#COMMAND:-UNINSTALL">COMMAND: UNINSTALL</a></li>
+  <li><a href="perlbrew.html#COMMAND:-USE">COMMAND: USE</a></li>
+  <li><a href="perlbrew.html#COMMAND:-SWITCH">COMMAND: SWITCH</a></li>
+  <li><a href="perlbrew.html#COMMAND:-LIST">COMMAND: LIST</a></li>
+  <li><a href="perlbrew.html#COMMAND:-AVAILABLE">COMMAND: AVAILABLE</a></li>
+  <li><a href="perlbrew.html#COMMAND:-OFF">COMMAND: OFF</a></li>
+  <li><a href="perlbrew.html#COMMAND:-SWITCH-OFF">COMMAND: SWITCH-OFF</a></li>
+  <li><a href="perlbrew.html#COMMAND:-ALIAS">COMMAND: ALIAS</a></li>
+  <li><a href="perlbrew.html#COMMAND:-EXEC">COMMAND: EXEC</a></li>
+  <li><a href="perlbrew.html#COMMAND:-ENV">COMMAND: ENV</a></li>
+  <li><a href="perlbrew.html#COMMAND:-SYMLINK-EXECUTABLES">COMMAND: SYMLINK-EXECUTABLES</a></li>
+  <li><a href="perlbrew.html#COMMAND:-INSTALL-CPANM">COMMAND: INSTALL-CPANM</a></li>
+  <li><a href="perlbrew.html#COMMAND:-INSTALL-PATCHPERL">COMMAND: INSTALL-PATCHPERL</a></li>
+  <li><a href="perlbrew.html#COMMAND:-SELF-UPGRADE">COMMAND: SELF-UPGRADE</a></li>
+  <li><a href="perlbrew.html#COMMAND:-SELF-INSTALL">COMMAND: SELF-INSTALL</a></li>
+  <li><a href="perlbrew.html#COMMAND:-CLEAN">COMMAND: CLEAN</a></li>
+  <li><a href="perlbrew.html#COMMAND:-VERSION">COMMAND: VERSION</a></li>
+  <li><a href="perlbrew.html#COMMAND:-LIB">COMMAND: LIB</a></li>
+  <li><a href="perlbrew.html#COMMAND:-UPGRADE-PERL">COMMAND: UPGRADE-PERL</a></li>
+  <li><a href="perlbrew.html#COMMAND:-DOWNLOAD">COMMAND: DOWNLOAD</a></li>
+  <li><a href="perlbrew.html#COMMAND:-LIST-MODULES">COMMAND: LIST-MODULES</a></li>
+  <li><a href="perlbrew.html#COMMAND:-CLONE-MODULES">COMMAND: CLONE-MODULES</a></li>
+  <li><a href="perlbrew.html#COMMAND:-MAKE-SHIM">COMMAND: MAKE-SHIM</a></li>
+  <li><a href="perlbrew.html#COMMAND:-MAKE-PP">COMMAND: MAKE-PP</a></li>
+  <li><a href="perlbrew.html#SEE-ALSO">SEE ALSO</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>perlbrew - Perl environment manager.</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p>perlbrew command syntax:</p>
+
+<pre><code>    perlbrew &lt;command&gt; [options] [arguments]</code></pre>
+
+<p>Commands:</p>
+
+<pre><code>    init           Initialize perlbrew environment.
+    info           Show useful information about the perlbrew installation
+
+    install        Install perl
+    uninstall      Uninstall the given installation
+    available      List perls available to install
+    lib            Manage local::lib directories.
+    alias          Give perl installations a new name
+    upgrade-perl   Upgrade the current perl
+
+    list           List perl installations
+    use            Use the specified perl in current shell
+    off            Turn off perlbrew in current shell
+    switch         Permanently use the specified perl as default
+    switch-off     Permanently turn off perlbrew (revert to system perl)
+    exec           Execute programs with specified perl environments.
+
+    list-modules   List installed CPAN modules for the current Perl version in use
+    clone-modules  Re-installs all CPAN modules from one installation to another
+
+    self-install       Install perlbrew itself under PERLBREW_ROOT/bin
+    self-upgrade       Upgrade perlbrew itself.
+
+    install-patchperl  Install patchperl
+    install-cpanm      Install cpanm, a friendly companion.
+    install-cpm        Install cpm, a faster but still friendly companion.
+    install-multiple   Install multiple versions and flavors of perl
+
+    download       Download the specified perl distribution tarball.
+    clean          Purge tarballs and build directories
+    version        Display version
+    help           Read more detailed instructions</code></pre>
+
+<p>Generic command options:</p>
+
+<pre><code>    -q --quiet     Be quiet on informative output message.
+    -v --verbose   Tell me more about it.</code></pre>
+
+<p>See `perlbrew help` for the full documentation of perlbrew, or</p>
+
+<p>See `perlbrew help &lt;command&gt;` for detail description of the command.</p>
+
+<h1 id="CONFIGURATION">CONFIGURATION</h1>
+
+<dl>
+
+<dt id="PERLBREW_ROOT">PERLBREW_ROOT</dt>
+<dd>
+
+<p>By default, perlbrew builds and installs perls into <code>$ENV{HOME}/perl5/perlbrew</code> directory. To use a different directory, set this environment variable in your <code>bashrc</code> to the directory in your shell RC before sourcing perlbrew&#39;s RC.</p>
+
+<p>It is possible to share one perlbrew root with multiple user account on the same machine. Therefore people do not have to install the same version of perl over an over. Let&#39;s say <code>/opt/perl5</code> is the directory we want to share. All users should be able append this snippet to their bashrc to make it effective:</p>
+
+<pre><code>    export PERLBREW_ROOT=/opt/perl5
+    source ${PERLBREW_ROOT}/etc/bashrc</code></pre>
+
+<p>After doing so, everyone&#39;s PATH should include <code>/opt/perl5/bin</code> and <code>/opt/perl5/perls/${PERLBREW_PERL}/bin</code>. Each user can invoke <code>perlbrew switch</code> and <code>perlbrew use</code> to independently switch to different perl environment of their choice. However, only the user with write permission to <code>$PERLBREW_ROOT</code> may install CPAN modules. This is both good and bad depending on the working convention of your team.</p>
+
+<p>If you wish to install CPAN modules only for yourself, you should use the <code>lib</code> command to construct a personal local::lib environment. local::lib environments are personal, and are not shared between different users. For more detail, read <code>perlbrew help lib</code> and the documentation of <a href="./local::lib.html">local::lib</a>.</p>
+
+<p>If you want even a cooler module isolation and wish to install CPAN modules used for just one project, you should use <a href="https://metacpan.org/pod/carton">carton</a> for this purpose.</p>
+
+<p>It is also possible to set this variable before installing perlbrew to make perlbrew install itself under the given PERLBREW_ROOT:</p>
+
+<pre><code>    export PERLBREW_ROOT=/opt/perl5
+    curl -L https://install.perlbrew.pl | bash</code></pre>
+
+<p>After doing this, the perlbrew executable is installed as <code>/opt/perl5/bin/perlbrew</code></p>
+
+</dd>
+<dt id="PERLBREW_HOME">PERLBREW_HOME</dt>
+<dd>
+
+<p>By default, perlbrew stores per-user setting to <code>$ENV{HOME}/.perlbrew</code> directory. To use a different directory, set this environment variable in your shell RC before sourcing perlbrew&#39;s RC.</p>
+
+<p>In some cases, say, your home directory is on NFS and shared across multiple machines, you may wish to have several different perlbrew setting per-machine. To do so, you can use the <code>PERLBREW_HOME</code> environment variable to tell perlbrew where to look for the initialization file. Here&#39;s a brief bash snippet for the given scenario.</p>
+
+<pre><code>    if [ &quot;$(hostname)&quot; == &quot;machine-a&quot; ]; then
+        export PERLBREW_HOME=~/.perlbrew-a
+    elif [ &quot;$(hostname)&quot; == &quot;machine-b&quot; ]; then
+        export PERLBREW_HOME=~/.perlbrew-b
+    fi
+
+    source ~/perl5/perlbrew/etc/bashrc</code></pre>
+
+</dd>
+<dt id="PERLBREW_CONFIGURE_FLAGS">PERLBREW_CONFIGURE_FLAGS</dt>
+<dd>
+
+<p>This environment variable specify the list of command like flags to pass through to &#39;sh Configure&#39;. By default it is &#39;-de&#39;.</p>
+
+</dd>
+<dt id="PERLBREW_CPAN_MIRROR">PERLBREW_CPAN_MIRROR</dt>
+<dd>
+
+<p>The CPAN mirror url of your choice. By default, &quot;https://cpan.metacpan.org&quot; is used.</p>
+
+</dd>
+</dl>
+
+<h1 id="COMMAND:-INIT"><a id="COMMAND"></a>COMMAND: INIT</h1>
+
+<p>Usage: perlbrew init</p>
+
+<p>The <code>init</code> command should be manually invoked whenever you (the perlbrew user) upgrade or reinstall perlbrew.</p>
+
+<p>If the upgrade is done with <code>self-upgrade</code> command, or by running the one-line installer manually, this command is invoked automatically.</p>
+
+<h1 id="COMMAND:-INFO"><a id="COMMAND1"></a>COMMAND: INFO</h1>
+
+<dl>
+
+<dt id="info-[module]"><a id="info"></a><a id="info--module"></a><b>info</b> [module]</dt>
+<dd>
+
+<p>Usage: perlbrew info [ &lt;module&gt; ]</p>
+
+<p>Display useful information about the perlbrew installation.</p>
+
+<p>If a module is given the version and location of the module is displayed.</p>
+
+</dd>
+</dl>
+
+<h1 id="COMMAND:-INSTALL"><a id="COMMAND2"></a>COMMAND: INSTALL</h1>
+
+<p>Usage:</p>
+
+<pre><code>    perlbrew install [options] &lt;perl-release&gt;
+    perlbrew install [options] /path/to/perl-5.14.0.tar.gz
+    perlbrew install [options] /path/to/perl/git/checkout/dir
+    perlbrew install [options] https://example.com/mirror/perl-5.12.3.tar.gz</code></pre>
+
+<p>Build and install the wanted perl. The last argument can be a short string designating a specific version which can be known from the output of <code>perlbrew available</code>, a path to a pre-downloaded tarball, a path to a git-checkout of perl5 repo, or a URL to a tarball.</p>
+
+<p>The format of &lt;perl-release&gt; looks like:</p>
+
+<dl>
+
+<dt id="perl-&lt;version&gt;"><a id="perl"></a><a id="perl--version"></a>perl-&lt;version&gt;</dt>
+<dd>
+
+</dd>
+<dt id="perl-stable"><a id="perl1"></a>perl-stable</dt>
+<dd>
+
+</dd>
+<dt id="perl-blead"><a id="perl2"></a>perl-blead</dt>
+<dd>
+
+</dd>
+<dt id="&lt;version&gt;"><a id="version"></a>&lt;version&gt;</dt>
+<dd>
+
+</dd>
+<dt id="stable">stable</dt>
+<dd>
+
+</dd>
+<dt id="blead">blead</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>Version numbers usually look like &quot;5.x.xx&quot;, or &quot;perl-5.xx.x-RCx&quot; for release candidates.</p>
+
+<p>Version &quot;stable&quot; is a special token that means whatever the latest stable version is at the moment.</p>
+
+<p>Version &quot;blead&quot; is also a special token that means whatever the latest version in the repository, which is downloaded from this specific URL regardless of mirror settings:</p>
+
+<pre><code>    https://github.com/Perl/perl5/archive/blead.tar.gz</code></pre>
+
+<p>The specified perl is downloaded from the official CPAN website or from the mirror site configured before.</p>
+
+<p>Version number alone without the &quot;perl-&quot; prefix means the official release provided by perl5 porters.</p>
+
+<p>Options for <code>install</code> command:</p>
+
+<pre><code>    -f --force     Force installation
+    -j $n          Parallel building and testing. ex. C&lt;perlbrew install -j 5 perl-5.14.2&gt;
+    -n --notest    Skip testing
+
+       --switch    Automatically switch to this Perl once successfully
+                   installed, as if with `perlbrew switch &lt;version&gt;`
+
+       --as        Install the given version of perl by a name.
+                   ex. C&lt;perlbrew install perl-5.6.2 --as legacy-perl&gt;
+
+       --noman     Skip installation of manpages
+
+       --thread    Build perl with usethreads enabled
+       --multi     Build perl with usemultiplicity enabled
+       --64int     Build perl with use64bitint enabled
+       --64all     Build perl with use64bitall enabled
+       --ld        Build perl with uselongdouble enabled
+       --debug     Build perl with DEBUGGING enabled
+       --clang     Build perl using the clang compiler
+       --no-patchperl
+                   Skip calling patchperl
+
+    -D,-U,-A       Switches passed to perl Configure script.
+                   ex. C&lt;perlbrew install perl-5.10.1 -D usemymalloc -U versiononly&gt;
+
+    --destdir $path
+                   Install perl as per &#39;make install DESTDIR=$path&#39;
+
+    --sitecustomize $filename
+                   Specify a file to be installed as sitecustomize.pl
+
+    --mirror $URL
+        Specify a CPAN-mirror URL. The default value of this is &quot;https://www.cpan.org&quot;</code></pre>
+
+<p>By default, all installations are configured after their name like this:</p>
+
+<pre><code>    sh Configure -de -Dprefix=$PERLBREW_ROOT/perls/&lt;name&gt;</code></pre>
+
+<h1 id="COMMAND:-INSTALL-MULTIPLE"><a id="COMMAND3"></a>COMMAND: INSTALL-MULTIPLE</h1>
+
+<p>Usage: perlbrew install-multiple [options] &lt;perl-version-1&gt; &lt;perl-version-2&gt; ...</p>
+
+<p>Build and install the given versions of perl.</p>
+
+<p><code>install-multiple</code> accepts the same set of options as the command <code>install</code> plus the following ones:</p>
+
+<pre><code>    --both $flavor       Where $flavor is one of C&lt;thread&gt;, C&lt;multi&gt;, C&lt;ld&gt;,
+                         C&lt;64int&gt;, C&lt;64all&gt;, C&lt;debug&gt; and C&lt;clang&gt;.
+
+                         For every given perl version, install two
+                         flavors, one with the flag C&lt;--$flavor&gt; set
+                         and the other with out. C&lt;--both&gt; can be
+                         passed multiple times with different values
+                         and in that case, all the possible
+                         combinations are generated.
+
+    --common-variations  equivalent to C&lt;--both thread --both ld --both 64int&gt;
+
+    --all-variations     generates all the possible flavor combinations
+
+    --append $string     Appends the given string to the generated names</code></pre>
+
+<p>For instance:</p>
+
+<pre><code>    perlbrew install-multiple 5.18.0 blead --both thread --both debug</code></pre>
+
+<p>Installs the following perls:</p>
+
+<pre><code>    perl-blead
+    perl-blead-debug
+    perl-blead-thread-multi
+    perl-blead-thread-multi-debug
+    perl-5.18.0
+    perl-5.18.0-debug
+    perl-5.18.0-thread-multi
+    perl-5.18.0-thread-multi-debug</code></pre>
+
+<p>(note that the <code>multi</code> flavor is selected automatically because <code>thread</code> requires it)</p>
+
+<p>Another example using custom compilation flags:</p>
+
+<pre><code>    perlbrew install-multiple 5.18.0 --both thread -Doptimize=&#39;-O3&#39; --append=&#39;-O3&#39;</code></pre>
+
+<h1 id="COMMAND:-UNINSTALL"><a id="COMMAND4"></a>COMMAND: UNINSTALL</h1>
+
+<p>Usage: perlbrew uninstall &lt;name&gt;</p>
+
+<p>Uninstalls the given perl installation. The name is the installation name as in the output of `perlbrew list`. This effectively deletes the specified perl installation, and all libs associated with it.</p>
+
+<h1 id="COMMAND:-USE"><a id="COMMAND5"></a>COMMAND: USE</h1>
+
+<p>Usage: perlbrew <b>use</b> [perl-&lt;version&gt; | &lt;version&gt; | &lt;name&gt;]</p>
+
+<p>Use the given version perl in current shell. This will not effect newly opened shells.</p>
+
+<p>Without a parameter, shows the version of perl currently in use.</p>
+
+<h1 id="COMMAND:-SWITCH"><a id="COMMAND6"></a>COMMAND: SWITCH</h1>
+
+<p>Usage: perlbrew switch [ &lt;name&gt; ]</p>
+
+<p>Switch to the given version, and makes it the default for this and all future terminal sessions.</p>
+
+<p>Without a parameter, shows the version of perl currently selected.</p>
+
+<h1 id="COMMAND:-LIST"><a id="COMMAND7"></a>COMMAND: LIST</h1>
+
+<p>Usage: perlbrew list</p>
+
+<p>List all perl installations inside perlbrew root specified by <code>$PERLBREW_ROOT</code> environment variable. By default, the value is <code>~/perl5/perlbrew</code>.</p>
+
+<p>If there are libs associated to some perl installations, they will be included as part of the name. The output items in this list can be the argument in various other commands.</p>
+
+<h1 id="COMMAND:-AVAILABLE"><a id="COMMAND8"></a>COMMAND: AVAILABLE</h1>
+
+<p>Usage: perlbrew available [--all]</p>
+
+<p>List the recently available versions of perl on CPAN.</p>
+
+<p>By default, the latest sub-version of each stable versions are listed.</p>
+
+<p>To get a list of all perls ever released, inculding development and RC versions, run the command with <code>--all</code> option.</p>
+
+<h1 id="COMMAND:-OFF"><a id="COMMAND9"></a>COMMAND: OFF</h1>
+
+<p>Usage: perlbrew off</p>
+
+<p>Temporarily disable perlbrew in the current shell. Effectively re-enables the default system Perl, whatever that is.</p>
+
+<p>This command works only if you add the statement of `source $PERLBREW_ROOT/etc/bashrc` in your shell initialization (bashrc / zshrc).</p>
+
+<h1 id="COMMAND:-SWITCH-OFF"><a id="COMMAND10"></a>COMMAND: SWITCH-OFF</h1>
+
+<p>Usage: perlbrew switch-off</p>
+
+<p>Permananently disable perlbrew. Use <code>switch</code> command to re-enable it. Invoke <code>use</code> command to enable it only in the current shell.</p>
+
+<p>Re-enables the default system Perl, whatever that is.</p>
+
+<h1 id="COMMAND:-ALIAS"><a id="COMMAND11"></a>COMMAND: ALIAS</h1>
+
+<p>Usage: perlbrew alias [-f] create &lt;name&gt; &lt;alias&gt;</p>
+
+<pre><code>    Create an alias for the installation named &lt;name&gt;.</code></pre>
+
+<p>Usage: perlbrew alias [-f] rename &lt;old_alias&gt; &lt;new_alias&gt;</p>
+
+<pre><code>    Rename the alias to a new name.</code></pre>
+
+<p>Usage: perlbrew alias delete &lt;alias&gt;</p>
+
+<pre><code>    Delete the given alias.</code></pre>
+
+<h1 id="COMMAND:-EXEC"><a id="COMMAND12"></a>COMMAND: EXEC</h1>
+
+<p>Usage: perlbrew exec [options] &lt;command&gt; &lt;args...&gt;</p>
+
+<p>Options for <code>exec</code> command:</p>
+
+<pre><code>    --with perl-version,... - only use these versions
+    --min n.nnnnn           - minimum perl version
+                              (format is the same as in &#39;use 5.012&#39;)
+    --max n.nnnnn           - maximum perl version
+    --halt-on-error         - stop on first nonzero exit status</code></pre>
+
+<p>Execute command for each perl installations, one by one.</p>
+
+<p>For example, run a Hello program:</p>
+
+<pre><code>    perlbrew exec perl -e &#39;print &quot;Hello from $]\n&quot;&#39;</code></pre>
+
+<p>The output looks like this:</p>
+
+<pre><code>    perl-5.12.2
+    ==========
+    Hello word from perl-5.012002
+
+    perl-5.13.10
+    ==========
+    Hello word from perl-5.013010
+
+    perl-5.14.0
+    ==========
+    Hello word from perl-5.014000</code></pre>
+
+<p>Notice that the command is not executed in parallel.</p>
+
+<p>When <code>--with</code> argument is provided, the command will be only executed with the specified perl installations. The following command install Moose module into perl-5.12, regardless the current perl:</p>
+
+<pre><code>    perlbrew exec --with perl-5.12 cpanm Moose</code></pre>
+
+<p>Multiple installation names can be provided:</p>
+
+<pre><code>    perlbrew exec --with perl-5.12,perl-5.12-debug,perl-5.14.2 cpanm Moo</code></pre>
+
+<p>They are split by either spaces or commas. When spaces are used, it is required to quote the whole specification as one argument, but then commas can be used in the installation names:</p>
+
+<pre><code>    perlbrew exec --with &#39;5.12 5.12,debug 5.14.2@nobita @shizuka&#39; cpanm Moo</code></pre>
+
+<p>As demonstrated above, &quot;perl-&quot; prefix can be omitted, and lib names can be specified too. Lib names can appear without a perl installation name, in such cases it is assumed to be &quot;current perl&quot;.</p>
+
+<p>At the moment, any specified names that fails to be resolved as a real installation names are silently ignored in the output. Also, the command exit status are not populated back.</p>
+
+<h1 id="COMMAND:-ENV"><a id="COMMAND13"></a>COMMAND: ENV</h1>
+
+<p>Usage: perlbrew env [ &lt;name&gt; ]</p>
+
+<p>Low-level command. Invoke this command to see the list of environment variables that are set by <code>perlbrew</code> itself for shell integration.</p>
+
+<p>The output is something similar to this (if your shell is bash/zsh):</p>
+
+<pre><code>    export PERLBREW_ROOT=/Users/gugod/perl5/perlbrew
+    export PERLBREW_VERSION=0.31
+    export PERLBREW_PATH=/Users/gugod/perl5/perlbrew/bin:/Users/gugod/perl5/perlbrew/perls/current/bin
+    export PERLBREW_PERL=perl-5.14.1</code></pre>
+
+<p>tcsh / csh users should see &#39;setenv&#39; statements instead of `export`.</p>
+
+<h1 id="COMMAND:-SYMLINK-EXECUTABLES"><a id="COMMAND14"></a>COMMAND: SYMLINK-EXECUTABLES</h1>
+
+<p>Usage: perlbrew symlink-executables [ &lt;name&gt; ]</p>
+
+<p>Low-level command. This command is used to create the <code>perl</code> executable symbolic link to, say, <code>perl5.13.6</code>. This is only required for development version of perls.</p>
+
+<p>You don&#39;t need to do this unless you have been using old perlbrew to install perls, and you find yourself confused because the perl that you just installed appears to be missing after invoking `use` or `switch`. perlbrew changes its installation layout since version 0.11, which generates symlinks to executables in a better way.</p>
+
+<p>If you just upgraded perlbrew (from 0.11 or earlier versions) and <code>perlbrew switch</code> failed to work after you switch to a development release of perl, say, perl-5.13.6, run this command:</p>
+
+<pre><code>    perlbrew symlink-executables perl-5.13.6</code></pre>
+
+<p>This essentially creates this symlink:</p>
+
+<pre><code>   ${PERLBREW_ROOT}/perls/perl-5.13.6/bin/perl
+   -&gt; ${PERLBREW_ROOT}/perls/perl-5.13.6/bin/perl5.13.6</code></pre>
+
+<p>Newly installed perls, whether they are development versions or not, does not need manually treatment with this command.</p>
+
+<h1 id="COMMAND:-INSTALL-CPANM"><a id="COMMAND15"></a>COMMAND: INSTALL-CPANM</h1>
+
+<p>Usage: perlbrew install-cpanm</p>
+
+<p>Install the <code>cpanm</code> standalone executable in <code>$PERLBREW_ROOT/bin</code>.</p>
+
+<p>For more rationale about the existence of this command, read &lt;https://perlbrew.pl/Perlbrew-and-Friends.html&gt;</p>
+
+<p>Usage: perlbrew install-cpm</p>
+
+<p>Install the <code>cpm</code> standalone executable in <code>$PERLBREW_ROOT/bin</code>.</p>
+
+<h1 id="COMMAND:-INSTALL-PATCHPERL"><a id="COMMAND16"></a>COMMAND: INSTALL-PATCHPERL</h1>
+
+<p>Usage: perlbrew install-patchperl</p>
+
+<p>Install the <code>patchperl</code> standalone executable in <code>$PERLBREW_ROOT/bin</code>. This is automatically invoked if your perlbrew installation is done with the installer, but not with cpan.</p>
+
+<p>For more rationale about the existence of this command, read &lt;https://perlbrew.pl/Perlbrew-and-Friends.html&gt;</p>
+
+<h1 id="COMMAND:-SELF-UPGRADE"><a id="COMMAND17"></a>COMMAND: SELF-UPGRADE</h1>
+
+<p>Usage: perlbrew self-upgrade</p>
+
+<p>This command upgrades Perlbrew to its latest version.</p>
+
+<h1 id="COMMAND:-SELF-INSTALL"><a id="COMMAND18"></a>COMMAND: SELF-INSTALL</h1>
+
+<p>Usage: perlbrew self-install</p>
+
+<p>NOTICE: You should not need to run this command in your daily routine.</p>
+
+<p>This command installs perlbrew itself to <code>$PERLBREW_ROOT/bin</code>. It is intended to be used by the perlbrew installer. However, you could manually do the following to re-install only the <code>perlbrew</code> executable:</p>
+
+<pre><code>    curl https://raw.githubusercontent.com/gugod/App-perlbrew/master/perlbrew -o perlbrew
+    perl ./perlbrew self-install</code></pre>
+
+<p>It is slightly different from running the perlbrew installer because <code>patchperl</code> is not installed in this case.</p>
+
+<h1 id="COMMAND:-CLEAN"><a id="COMMAND19"></a>COMMAND: CLEAN</h1>
+
+<p>Usage: perlbrew clean</p>
+
+<p>Removes all previously downloaded Perl tarballs and build directories.</p>
+
+<h1 id="COMMAND:-VERSION"><a id="COMMAND20"></a>COMMAND: VERSION</h1>
+
+<p>Usage: perlbrew version</p>
+
+<p>Show the version of perlbrew.</p>
+
+<h1 id="COMMAND:-LIB"><a id="COMMAND21"></a>COMMAND: LIB</h1>
+
+<p>Usage: perlbrew lib &lt;action&gt; &lt;lib-name&gt;</p>
+
+<pre><code>    perlbrew lib list
+    perlbrew lib create &lt;lib-name&gt;
+    perlbrew lib delete &lt;lib-name&gt;</code></pre>
+
+<p>The `lib` command is used to manipulate local::lib roots inside perl installations. Effectively it is similar to `perl -Mlocal::lib=/path/to/lib-name`, but a little bit more than just that.</p>
+
+<p>A lib name can be a short name, containing alphanumeric, like &#39;awesome&#39;, or a full name, prefixed by a perl installation name and a &#39;@&#39; sign, for example, &#39;perl-5.14.2@awesome&#39;.</p>
+
+<p>Here are some a brief examples to invoke the `lib` command:</p>
+
+<pre><code>    # Create lib perl-5.12.3@shizuka
+    perlbrew lib create perl-5.12.3@shizuka
+
+    # Create lib perl-5.14.2@nobita and perl-5.14.2@shizuka
+    perlbrew use perl-5.14.2
+    perlbrew lib create nobita
+    perlbrew lib create shizuka
+
+    # See the list of use/switch targets
+    perlbrew list
+
+    # Activate a lib in current shell
+    perlbrew use perl-5.12.3@shizuka
+    perlbrew use perl-5.14.2@nobita
+    perlbrew use perl-5.14.2@shizuka
+
+    # Activate a lib as default
+    perlbrew switch perl-5.12.3@shizuka
+    perlbrew switch perl-5.14.2@nobita
+    perlbrew switch perl-5.14.2@shizuka
+
+    # Delete lib perl-5.14.2@nobita and perl-5.14.2@shizuka
+    perlbrew use perl-5.14.2
+    perlbrew lib delete nobita
+    perlbrew lib delete shizuka
+
+    # Delete lib perl-5.12.3@shizuka
+    perlbrew lib delete perl-5.12.3@shizuka</code></pre>
+
+<p>Short lib names are local to current perl. A lib name &#39;nobita&#39; can refer to &#39;perl-5.12.3@nobita&#39; or &#39;perl-5.14.2@nobita&#39;, whichever is activated in the current shell.</p>
+
+<p>When <code>use</code>ing or <code>switch</code>ing to a lib, always provide the long name. A simple rule: the argument to <code>use</code> or <code>switch</code> command should appear in the output of <code>perlbrew list</code>.</p>
+
+<h1 id="COMMAND:-UPGRADE-PERL"><a id="COMMAND22"></a>COMMAND: UPGRADE-PERL</h1>
+
+<p>Usage: perlbrew upgrade-perl</p>
+
+<p>Running this command upgrades the currently activated perl to its latest released brothers. If you have a shell with 5.32.0 activated, it upgrades it to 5.32.1.</p>
+
+<p>Minor Perl releases (ex. 5.x.*) are binary compatible with one another, so this command offers you the ability to upgrade older perlbrew environments in place.</p>
+
+<h1 id="COMMAND:-DOWNLOAD"><a id="COMMAND23"></a>COMMAND: DOWNLOAD</h1>
+
+<p>Usage: perlbrew download &lt;perl-release&gt;</p>
+
+<p>Examples: perlbrew download perl-5.14.2 perlbrew download perl-5.16.1 perlbrew download perl-5.17.3</p>
+
+<p>Download the specified version of perl distribution tarball under the directory <code>$PERLBREW_ROOT/dists/</code>.</p>
+
+<p>The argument <code>perl-release</code> should be one of the items from <code>perlbrew available</code> command.</p>
+
+<h1 id="COMMAND:-LIST-MODULES"><a id="COMMAND24"></a>COMMAND: LIST-MODULES</h1>
+
+<p>Usage: perlbrew list-modules</p>
+
+<p>List all installed cpan modules for the current perl.</p>
+
+<p>This command can be used in conjunction with `perlbrew exec` to migrate your module installation to different perl. The following command re-installs all modules under perl-5.16.0:</p>
+
+<pre><code>    perlbrew list-modules | perlbrew exec --with perl-5.16.0 cpanm</code></pre>
+
+<p>Note that this installs the <i>latest</i> versions of the Perl modules on the new perl, which are not necessarily the <i>same</i> module versions you had installed previously.</p>
+
+<h1 id="COMMAND:-CLONE-MODULES"><a id="COMMAND25"></a>COMMAND: CLONE-MODULES</h1>
+
+<p>Usage:</p>
+
+<pre><code>    perlbrew clone-modules [options] &lt;destination&gt;
+    perlbrew clone-modules [options] &lt;source&gt; &lt;destination&gt;</code></pre>
+
+<p>Options:</p>
+
+<pre><code>    --notest    Skip all module tests</code></pre>
+
+<p>This command re-installs all CPAN modules found from one installation to another. For example, this lists all modules under &#39;5.26.1&#39; and re-installs them under &#39;5.27.7&#39;:</p>
+
+<pre><code>    perlbrew clone-modules 5.26.1 5.27.7</code></pre>
+
+<p>The argument &quot;source&quot; is optional and defaults to the currently activated one. However if none is activated (perlbrew is switched off), it it an error.</p>
+
+<p>Note that this does not guarantee that the versions of modules stay the same in the destination.</p>
+
+<h1 id="COMMAND:-MAKE-SHIM"><a id="COMMAND26"></a>COMMAND: MAKE-SHIM</h1>
+
+<p>Usage:</p>
+
+<pre><code>    perlbrew make-shim &lt;program&gt;
+    perlbrew make-shim -o &lt;shim-name&gt; &lt;program&gt;
+    perlbrew make-shim --output &lt;shim-name&gt; &lt;program&gt;</code></pre>
+
+<p>This commands produce an executable file under current directory named <code>program</code>, or <code>shim-name</code> if given after <code>--output</code> (or <code>-o</code> for short). The output is a shell-wrapper, a shim, of the named program inside current perlbrew environment.</p>
+
+<p>When the shim is executed, the original <code>program</code> is then executed with all relevant environment variable set to the perlbrew environment it is installed in, regardless which perlbrew environment is currently activated. The shim can also be moved to different directories and, such as the conventional <code>~/.local/bin</code>, so it is always available.</p>
+
+<p>For example, you may find <code>tldr</code> from <a href="https://metacpan.org/pod/App::tldr">App::tldr</a> a handy tool and decide to install it inside your daily working environment:</p>
+
+<pre><code>    perlbrew use perl-5.36.1
+    cpm install -g App::tldr</code></pre>
+
+<p>But when you occasionally have to switch to a different environment, <code>PATH</code> would be tweaked and the command <code>tldr</code> would went missing, and that is the expected outcome:</p>
+
+<pre><code>    perlbrew use perl-5.18.4
+    tldr perl  #=&gt; error: command not found</code></pre>
+
+<p>It would be nice if <code>tldr</code> can be made universally available. One way to mitigate such needs is to prepare install the <code>tldr</code> program outside of <code>PERLBREW_ROOT</code>, while still utilize perlbrew environment to run it.</p>
+
+<p>For example, prepare a conventional directory <code>~/.local/bin</code> and put that in <code>PATH</code>, then:</p>
+
+<pre><code>    perlbrew use perl-5.36.1
+
+    cd /tmp
+    perlbrew make-shim tldr
+    mv /tmp/tldr ~/.local/bin/tldr</code></pre>
+
+<p>This <code>~/.local/bin/tldr</code> is a shell-wrapper of the actual <code>tldr</code> program, and it internally activates the perlbrew environment <code>perl-5.36.1</code>. Running the tldr shim will then always run the actual <code>tldr</code>, no matter which perlbrew environment is activated, or even if perlbrew is turned off. The only requirements is that the perlbrew environment <code>perl-5.36.1</code> and the installation of <code>App::tldr</code> has to remain.</p>
+
+<h1 id="COMMAND:-MAKE-PP"><a id="COMMAND27"></a>COMMAND: MAKE-PP</h1>
+
+<p>Usage:</p>
+
+<pre><code>    perlbrew make-pp &lt;program&gt;
+    perlbrew make-pp -o &lt;name&gt; &lt;program&gt;
+    perlbrew make-pp --output &lt;name&gt; &lt;program&gt;</code></pre>
+
+<p>This commands produce an executable file under current directory named <code>program</code>, or <code>name</code> if given after <code>--output</code> (or <code>-o</code> for short). The output is a PAR-packed version of the named program inside current perlbrew environment.</p>
+
+<p>This requires the current perlbrew environment to have <a href="PAR.html">PAR</a> and <a href="https://metacpan.org/pod/PAR::Packer">PAR::Packer</a> installed first. Otherwise <code>make-pp</code> bails out. In addition, if current perl is not a perlbrew-managed perl, &lt;make-pp&gt; also bails out.</p>
+
+<p>The produced file is a standalone binary executable containing these content:</p>
+
+<pre><code>    1. The named program
+    2. perl runtime
+    3. all core perl libs of current perl
+    4. the entire site lib
+    5. the entire local lib (managed by `perlbrew lib` command), if active.</code></pre>
+
+<p>It is expected that the executable can then be running on a different machine of the same OS and arch.</p>
+
+<p>Noted that this approach is the maximum overkill for packing one program as it&#39;ll be definitely packaing a lot more then the exact list of runtime dependencies of the named program. <code>make-pp</code> is meant for a lazy solution for a non-trivial problem of perfectly determing the runtime dependencies of an arbitarary program.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/App::perlbrew">App::perlbrew</a>, <a href="./App::cpanminus.html">App::cpanminus</a>, <a href="https://metacpan.org/pod/Devel::PatchPerl">Devel::PatchPerl</a></p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install App::perlbrew, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm App::perlbrew</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install App::perlbrew</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="perlbrew.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,51 @@
+=over
+
+=item ref EXPR
+X<ref> X<reference>
+
+=item ref
+
+Examines the value of EXPR, expecting it to be a reference, and returns
+a string giving information about the reference and the type of referent.
+If EXPR is not specified, L<C<$_>|perlvar/$_> will be used.
+
+If the operand is not a reference, then the empty string will be returned.
+An empty string will only be returned in this situation.  C<ref> is often
+useful to just test whether a value is a reference, which can be done
+by comparing the result to the empty string.  It is a common mistake
+to use the result of C<ref> directly as a truth value: this goes wrong
+because C<0> (which is false) can be returned for a reference.
+
+If the operand is a reference to a blessed object, then the name of
+the class into which the referent is blessed will be returned.  C<ref>
+doesn't care what the physical type of the referent is; blessing takes
+precedence over such concerns.  Beware that exact comparison of C<ref>
+results against a class name doesn't perform a class membership test:
+a class's members also include objects blessed into subclasses, for
+which C<ref> will return the name of the subclass.  Also beware that
+class names can clash with the built-in type names (described below).
+
+If the operand is a reference to an unblessed object, then the return
+value indicates the type of object.  If the unblessed referent is not
+a scalar, then the return value will be one of the strings C<ARRAY>,
+C<HASH>, C<CODE>, C<FORMAT>, or C<IO>, indicating only which kind of
+object it is.  If the unblessed referent is a scalar, then the return
+value will be one of the strings C<SCALAR>, C<VSTRING>, C<REF>, C<GLOB>,
+C<LVALUE>, or C<REGEXP>, depending on the kind of value the scalar
+currently has.   But note that C<qr//> scalars are created already
+blessed, so C<ref qr/.../> will likely return C<Regexp>.  Beware that
+these built-in type names can also be used as
+class names, so C<ref> returning one of these names doesn't unambiguously
+indicate that the referent is of the kind to which the name refers.
+
+The ambiguity between built-in type names and class names significantly
+limits the utility of C<ref>.  For unambiguous information, use
+L<C<Scalar::Util::blessed()>|Scalar::Util/blessed> for information about
+blessing, and L<C<Scalar::Util::reftype()>|Scalar::Util/reftype> for
+information about physical types.  Use L<the C<isa> method|UNIVERSAL/C<<
+$obj->isa( TYPE ) >>> for class membership tests, though one must be
+sure of blessedness before attempting a method call.
+
+See also L<perlref> and L<perlobj>.
+
+=back

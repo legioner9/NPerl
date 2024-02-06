@@ -1,0 +1,38 @@
+=over
+
+=item HANDLE->input_line_number( EXPR )
+
+=item $INPUT_LINE_NUMBER
+
+=item $NR
+
+=item $.
+X<$.> X<$NR> X<$INPUT_LINE_NUMBER> X<line number>
+
+Current line number for the last filehandle accessed.
+
+Each filehandle in Perl counts the number of lines that have been read
+from it.  (Depending on the value of C<$/>, Perl's idea of what
+constitutes a line may not match yours.)  When a line is read from a
+filehandle (via C<readline()> or C<< <> >>), or when C<tell()> or
+C<seek()> is called on it, C<$.> becomes an alias to the line counter
+for that filehandle.
+
+You can adjust the counter by assigning to C<$.>, but this will not
+actually move the seek pointer.  I<Localizing C<$.> will not localize
+the filehandle's line count>.  Instead, it will localize perl's notion
+of which filehandle C<$.> is currently aliased to.
+
+C<$.> is reset when the filehandle is closed, but B<not> when an open
+filehandle is reopened without an intervening C<close()>.  For more
+details, see L<perlop/"IE<sol>O Operators">.  Because C<< <> >> never does
+an explicit close, line numbers increase across C<ARGV> files (but see
+examples in L<perlfunc/eof>).
+
+You can also use C<< HANDLE->input_line_number(EXPR) >> to access the
+line counter for a given filehandle without having to worry about
+which handle you last accessed.
+
+Mnemonic: many programs use "." to mean the current line number.
+
+=back

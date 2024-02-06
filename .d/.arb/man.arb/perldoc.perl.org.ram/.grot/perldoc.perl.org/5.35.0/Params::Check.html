@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Params::Check - A generic input parsing/checking mechanism. - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Params::Check">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Params::Check.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Params::Check">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Params::Check">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Params::Check">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Params::Check">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Params::Check">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Params::Check">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Params::Check">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Params::Check">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Params::Check">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Params::Check">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Params::Check">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Params::Check">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Params::Check">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Params::Check">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Params::Check">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Params::Check">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Params::Check">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Params::Check">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Params::Check">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Params::Check">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Params::Check">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Params::Check">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Params::Check">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Params::Check">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Params::Check">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Params::Check">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Params::Check">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Params::Check">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Params::Check">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Params::Check">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Params::Check">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Params::Check">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Params::Check">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Params::Check">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Params::Check">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Params::Check">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Params::Check">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Params::Check">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Params::Check">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Params::Check">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Params::Check">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Params::Check">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Params::Check">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Params::Check">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Params::Check">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Params::Check">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Params::Check">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Params::Check">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Params::Check">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Params::Check">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Params::Check">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Params::Check">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Params::Check">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Params::Check">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Params::Check">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Params::Check">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Params::Check">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Params::Check">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Params::Check">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Params::Check">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Params::Check">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Params::Check">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Params::Check">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Params::Check">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Params::Check">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Params::Check">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Params::Check">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Params::Check">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Params::Check">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Params::Check">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Params::Check">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Params::Check">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Params::Check">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Params::Check">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Params::Check">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Params::Check">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Params::Check">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Params::Check">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Params::Check">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Params::Check">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Params::Check.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Params::Check">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Params::Check">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Params::Check">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Params::Check">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Params::Check">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Params::Check">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Params::Check">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Params::Check">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Params::Check">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Params::Check">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Params::Check">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Params::Check">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Params::Check">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Params::Check">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Params::Check">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Params::Check">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Params::Check">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Params::Check">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Params::Check">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Params::Check">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Params::Check">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Params::Check">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Params::Check">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Params::Check">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Params::Check">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Params::Check">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Params::Check">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Params::Check">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Params::Check">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Params::Check">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Params::Check">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Params::Check">5.35.1</a>
+          <a class="dropdown-item active" href="./Params::Check.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Params::Check.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Params::Check.html">Params::Check</a>
+          <div id="more">
+            (<a href="./Params::Check.txt">source</a>,
+            <a href="https://metacpan.org/pod/Params::Check">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 0.38</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#Template">Template</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#Functions">Functions</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#check(-%5C%25tmpl,-%5C%25args,-%5B$verbose%5D-);">check( \%tmpl, \%args, [$verbose] );</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#allow(-$test_me,-%5C@criteria-);">allow( $test_me, \@criteria );</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#last_error()">last_error()</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#Global-Variables">Global Variables</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#$Params::Check::VERBOSE">$Params::Check::VERBOSE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#$Params::Check::STRICT_TYPE">$Params::Check::STRICT_TYPE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#$Params::Check::ALLOW_UNKNOWN">$Params::Check::ALLOW_UNKNOWN</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#$Params::Check::STRIP_LEADING_DASHES">$Params::Check::STRIP_LEADING_DASHES</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#$Params::Check::NO_DUPLICATES">$Params::Check::NO_DUPLICATES</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#$Params::Check::PRESERVE_CASE">$Params::Check::PRESERVE_CASE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#$Params::Check::ONLY_ALLOW_DEFINED">$Params::Check::ONLY_ALLOW_DEFINED</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#$Params::Check::SANITY_CHECK_TEMPLATE">$Params::Check::SANITY_CHECK_TEMPLATE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#$Params::Check::WARNINGS_FATAL">$Params::Check::WARNINGS_FATAL</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#$Params::Check::CALLER_DEPTH">$Params::Check::CALLER_DEPTH</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#Acknowledgements">Acknowledgements</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#BUG-REPORTS">BUG REPORTS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Params::Check.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Params::Check.html#NAME">#</a>NAME</h1>
+
+<p>Params::Check - A generic input parsing/checking mechanism.</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Params::Check.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Params::Check qw[check allow last_error];
+
+sub fill_personal_info {
+    my %hash = @_;
+    my $x;
+
+    my $tmpl = {
+        firstname   =&gt; { required   =&gt; 1, defined =&gt; 1 },
+        lastname    =&gt; { required   =&gt; 1, store =&gt; \$x },
+        gender      =&gt; { required   =&gt; 1,
+                         allow      =&gt; [qr/M/i, qr/F/i],
+                       },
+        married     =&gt; { allow      =&gt; [0,1] },
+        age         =&gt; { default    =&gt; 21,
+                         allow      =&gt; qr/^\d+$/,
+                       },
+
+        phone       =&gt; { allow =&gt; [ sub { return 1 if /$valid_re/ },
+                                    &#39;1-800-PERL&#39; ]
+                       },
+        id_list     =&gt; { default        =&gt; [],
+                         strict_type    =&gt; 1
+                       },
+        employer    =&gt; { default =&gt; &#39;NSA&#39;, no_override =&gt; 1 },
+    };
+
+    ### check() returns a hashref of parsed args on success ###
+    my $parsed_args = check( $tmpl, \%hash, $VERBOSE )
+                        or die qw[Could not parse arguments!];
+
+    ... other code here ...
+}
+
+my $ok = allow( $colour, [qw|blue green yellow|] );
+
+my $error = Params::Check::last_error();</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Params::Check.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>Params::Check is a generic input parsing/checking mechanism.</p>
+
+<p>It allows you to validate input via a template. The only requirement is that the arguments must be named.</p>
+
+<p>Params::Check can do the following things for you:</p>
+
+<ul>
+
+<li><p>Convert all keys to lowercase</p>
+
+</li>
+<li><p>Check if all required arguments have been provided</p>
+
+</li>
+<li><p>Set arguments that have not been provided to the default</p>
+
+</li>
+<li><p>Weed out arguments that are not supported and warn about them to the user</p>
+
+</li>
+<li><p>Validate the arguments given by the user based on strings, regexes, lists or even subroutines</p>
+
+</li>
+<li><p>Enforce type integrity if required</p>
+
+</li>
+</ul>
+
+<p>Most of Params::Check&#39;s power comes from its template, which we&#39;ll discuss below:</p>
+
+<h1 id="Template"><a class="permalink" href="./Params::Check.html#Template">#</a>Template</h1>
+
+<p>As you can see in the synopsis, based on your template, the arguments provided will be validated.</p>
+
+<p>The template can take a different set of rules per key that is used.</p>
+
+<p>The following rules are available:</p>
+
+<dl>
+
+<dt id="default"><a class="permalink" href="./Params::Check.html#default">#</a>default</dt>
+<dd>
+
+<p>This is the default value if none was provided by the user. This is also the type <code>strict_type</code> will look at when checking type integrity (see below).</p>
+
+</dd>
+<dt id="required"><a class="permalink" href="./Params::Check.html#required">#</a>required</dt>
+<dd>
+
+<p>A boolean flag that indicates if this argument was a required argument. If marked as required and not provided, check() will fail.</p>
+
+</dd>
+<dt id="strict_type"><a class="permalink" href="./Params::Check.html#strict_type">#</a>strict_type</dt>
+<dd>
+
+<p>This does a <code>ref()</code> check on the argument provided. The <code>ref</code> of the argument must be the same as the <code>ref</code> of the default value for this check to pass.</p>
+
+<p>This is very useful if you insist on taking an array reference as argument for example.</p>
+
+</dd>
+<dt id="defined"><a class="permalink" href="./Params::Check.html#defined">#</a>defined</dt>
+<dd>
+
+<p>If this template key is true, enforces that if this key is provided by user input, its value is <code>defined</code>. This just means that the user is not allowed to pass <code>undef</code> as a value for this key and is equivalent to: allow =&gt; sub { defined $_[0] &amp;&amp; OTHER TESTS }</p>
+
+</dd>
+<dt id="no_override"><a class="permalink" href="./Params::Check.html#no_override">#</a>no_override</dt>
+<dd>
+
+<p>This allows you to specify <code>constants</code> in your template. ie, they keys that are not allowed to be altered by the user. It pretty much allows you to keep all your <code>configurable</code> data in one place; the <code>Params::Check</code> template.</p>
+
+</dd>
+<dt id="store"><a class="permalink" href="./Params::Check.html#store">#</a>store</dt>
+<dd>
+
+<p>This allows you to pass a reference to a scalar, in which the data will be stored:</p>
+
+<pre><code>my $x;
+my $args = check(foo =&gt; { default =&gt; 1, store =&gt; \$x }, $input);</code></pre>
+
+<p>This is basically shorthand for saying:</p>
+
+<pre><code>my $args = check( { foo =&gt; { default =&gt; 1 }, $input );
+my $x    = $args-&gt;{foo};</code></pre>
+
+<p>You can alter the global variable $Params::Check::NO_DUPLICATES to control whether the <code>store</code>&#39;d key will still be present in your result set. See the <a href="./Params::Check.html#Global-Variables">&quot;Global Variables&quot;</a> section below.</p>
+
+</dd>
+<dt id="allow"><a class="permalink" href="./Params::Check.html#allow">#</a>allow</dt>
+<dd>
+
+<p>A set of criteria used to validate a particular piece of data if it has to adhere to particular rules.</p>
+
+<p>See the <code>allow()</code> function for details.</p>
+
+</dd>
+</dl>
+
+<h1 id="Functions"><a class="permalink" href="./Params::Check.html#Functions">#</a>Functions</h1>
+
+<h2 id="check(-\%tmpl,-\%args,-[$verbose]-);"><a class="permalink" href="./Params::Check.html#check(-%5C%25tmpl,-%5C%25args,-%5B$verbose%5D-);">#</a><a id="check"></a><a id="check-tmpl-args-verbose"></a>check( \%tmpl, \%args, [$verbose] );</h2>
+
+<p>This function is not exported by default, so you&#39;ll have to ask for it via:</p>
+
+<pre><code>use Params::Check qw[check];</code></pre>
+
+<p>or use its fully qualified name instead.</p>
+
+<p><code>check</code> takes a list of arguments, as follows:</p>
+
+<dl>
+
+<dt id="Template1"><a class="permalink" href="./Params::Check.html#Template1">#</a>Template</dt>
+<dd>
+
+<p>This is a hash reference which contains a template as explained in the <code>SYNOPSIS</code> and <code>Template</code> section.</p>
+
+</dd>
+<dt id="Arguments"><a class="permalink" href="./Params::Check.html#Arguments">#</a>Arguments</dt>
+<dd>
+
+<p>This is a reference to a hash of named arguments which need checking.</p>
+
+</dd>
+<dt id="Verbose"><a class="permalink" href="./Params::Check.html#Verbose">#</a>Verbose</dt>
+<dd>
+
+<p>A boolean to indicate whether <code>check</code> should be verbose and warn about what went wrong in a check or not.</p>
+
+<p>You can enable this program wide by setting the package variable <code>$Params::Check::VERBOSE</code> to a true value. For details, see the section on <code>Global Variables</code> below.</p>
+
+</dd>
+</dl>
+
+<p><code>check</code> will return when it fails, or a hashref with lowercase keys of parsed arguments when it succeeds.</p>
+
+<p>So a typical call to check would look like this:</p>
+
+<pre><code>my $parsed = check( \%template, \%arguments, $VERBOSE )
+                or warn q[Arguments could not be parsed!];</code></pre>
+
+<p>A lot of the behaviour of <code>check()</code> can be altered by setting package variables. See the section on <code>Global Variables</code> for details on this.</p>
+
+<h2 id="allow(-$test_me,-\@criteria-);"><a class="permalink" href="./Params::Check.html#allow(-$test_me,-%5C@criteria-);">#</a><a id="allow1"></a><a id="allow-test_me-criteria"></a>allow( $test_me, \@criteria );</h2>
+
+<p>The function that handles the <code>allow</code> key in the template is also available for independent use.</p>
+
+<p>The function takes as first argument a key to test against, and as second argument any form of criteria that are also allowed by the <code>allow</code> key in the template.</p>
+
+<p>You can use the following types of values for allow:</p>
+
+<dl>
+
+<dt id="string"><a class="permalink" href="./Params::Check.html#string">#</a>string</dt>
+<dd>
+
+<p>The provided argument MUST be equal to the string for the validation to pass.</p>
+
+</dd>
+<dt id="regexp"><a class="permalink" href="./Params::Check.html#regexp">#</a>regexp</dt>
+<dd>
+
+<p>The provided argument MUST match the regular expression for the validation to pass.</p>
+
+</dd>
+<dt id="subroutine"><a class="permalink" href="./Params::Check.html#subroutine">#</a>subroutine</dt>
+<dd>
+
+<p>The provided subroutine MUST return true in order for the validation to pass and the argument accepted.</p>
+
+<p>(This is particularly useful for more complicated data).</p>
+
+</dd>
+<dt id="array-ref"><a class="permalink" href="./Params::Check.html#array-ref">#</a><a id="array"></a>array ref</dt>
+<dd>
+
+<p>The provided argument MUST equal one of the elements of the array ref for the validation to pass. An array ref can hold all the above values.</p>
+
+</dd>
+</dl>
+
+<p>It returns true if the key matched the criteria, or false otherwise.</p>
+
+<h2 id="last_error()"><a class="permalink" href="./Params::Check.html#last_error()">#</a><a id="last_error"></a>last_error()</h2>
+
+<p>Returns a string containing all warnings and errors reported during the last time <code>check</code> was called.</p>
+
+<p>This is useful if you want to report then some other way than <code>carp</code>&#39;ing when the verbose flag is on.</p>
+
+<p>It is exported upon request.</p>
+
+<h1 id="Global-Variables"><a class="permalink" href="./Params::Check.html#Global-Variables">#</a><a id="Global"></a>Global Variables</h1>
+
+<p>The behaviour of Params::Check can be altered by changing the following global variables:</p>
+
+<h2 id="$Params::Check::VERBOSE"><a class="permalink" href="./Params::Check.html#$Params::Check::VERBOSE">#</a><a id="Params::Check::VERBOSE"></a>$Params::Check::VERBOSE</h2>
+
+<p>This controls whether Params::Check will issue warnings and explanations as to why certain things may have failed. If you set it to 0, Params::Check will not output any warnings.</p>
+
+<p>The default is 1 when <a href="warnings.html">warnings</a> are enabled, 0 otherwise;</p>
+
+<h2 id="$Params::Check::STRICT_TYPE"><a class="permalink" href="./Params::Check.html#$Params::Check::STRICT_TYPE">#</a><a id="Params::Check::STRICT_TYPE"></a>$Params::Check::STRICT_TYPE</h2>
+
+<p>This works like the <code>strict_type</code> option you can pass to <code>check</code>, which will turn on <code>strict_type</code> globally for all calls to <code>check</code>.</p>
+
+<p>The default is 0;</p>
+
+<h2 id="$Params::Check::ALLOW_UNKNOWN"><a class="permalink" href="./Params::Check.html#$Params::Check::ALLOW_UNKNOWN">#</a><a id="Params::Check::ALLOW_UNKNOWN"></a>$Params::Check::ALLOW_UNKNOWN</h2>
+
+<p>If you set this flag, unknown options will still be present in the return value, rather than filtered out. This is useful if your subroutine is only interested in a few arguments, and wants to pass the rest on blindly to perhaps another subroutine.</p>
+
+<p>The default is 0;</p>
+
+<h2 id="$Params::Check::STRIP_LEADING_DASHES"><a class="permalink" href="./Params::Check.html#$Params::Check::STRIP_LEADING_DASHES">#</a><a id="Params::Check::STRIP_LEADING_DASHES"></a>$Params::Check::STRIP_LEADING_DASHES</h2>
+
+<p>If you set this flag, all keys passed in the following manner:</p>
+
+<pre><code>function( -key =&gt; &#39;val&#39; );</code></pre>
+
+<p>will have their leading dashes stripped.</p>
+
+<h2 id="$Params::Check::NO_DUPLICATES"><a class="permalink" href="./Params::Check.html#$Params::Check::NO_DUPLICATES">#</a><a id="Params::Check::NO_DUPLICATES"></a>$Params::Check::NO_DUPLICATES</h2>
+
+<p>If set to true, all keys in the template that are marked as to be stored in a scalar, will also be removed from the result set.</p>
+
+<p>Default is false, meaning that when you use <code>store</code> as a template key, <code>check</code> will put it both in the scalar you supplied, as well as in the hashref it returns.</p>
+
+<h2 id="$Params::Check::PRESERVE_CASE"><a class="permalink" href="./Params::Check.html#$Params::Check::PRESERVE_CASE">#</a><a id="Params::Check::PRESERVE_CASE"></a>$Params::Check::PRESERVE_CASE</h2>
+
+<p>If set to true, <a href="./Params::Check.html">Params::Check</a> will no longer convert all keys from the user input to lowercase, but instead expect them to be in the case the template provided. This is useful when you want to use similar keys with different casing in your templates.</p>
+
+<p>Understand that this removes the case-insensitivity feature of this module.</p>
+
+<p>Default is 0;</p>
+
+<h2 id="$Params::Check::ONLY_ALLOW_DEFINED"><a class="permalink" href="./Params::Check.html#$Params::Check::ONLY_ALLOW_DEFINED">#</a><a id="Params::Check::ONLY_ALLOW_DEFINED"></a>$Params::Check::ONLY_ALLOW_DEFINED</h2>
+
+<p>If set to true, <a href="./Params::Check.html">Params::Check</a> will require all values passed to be <code>defined</code>. If you wish to enable this on a &#39;per key&#39; basis, use the template option <code>defined</code> instead.</p>
+
+<p>Default is 0;</p>
+
+<h2 id="$Params::Check::SANITY_CHECK_TEMPLATE"><a class="permalink" href="./Params::Check.html#$Params::Check::SANITY_CHECK_TEMPLATE">#</a><a id="Params::Check::SANITY_CHECK_TEMPLATE"></a>$Params::Check::SANITY_CHECK_TEMPLATE</h2>
+
+<p>If set to true, <a href="./Params::Check.html">Params::Check</a> will sanity check templates, validating for errors and unknown keys. Although very useful for debugging, this can be somewhat slow in hot-code and large loops.</p>
+
+<p>To disable this check, set this variable to <code>false</code>.</p>
+
+<p>Default is 1;</p>
+
+<h2 id="$Params::Check::WARNINGS_FATAL"><a class="permalink" href="./Params::Check.html#$Params::Check::WARNINGS_FATAL">#</a><a id="Params::Check::WARNINGS_FATAL"></a>$Params::Check::WARNINGS_FATAL</h2>
+
+<p>If set to true, <a href="./Params::Check.html">Params::Check</a> will <code>croak</code> when an error during template validation occurs, rather than return <code>false</code>.</p>
+
+<p>Default is 0;</p>
+
+<h2 id="$Params::Check::CALLER_DEPTH"><a class="permalink" href="./Params::Check.html#$Params::Check::CALLER_DEPTH">#</a><a id="Params::Check::CALLER_DEPTH"></a>$Params::Check::CALLER_DEPTH</h2>
+
+<p>This global modifies the argument given to <code>caller()</code> by <code>Params::Check::check()</code> and is useful if you have a custom wrapper function around <code>Params::Check::check()</code>. The value must be an integer, indicating the number of wrapper functions inserted between the real function call and <code>Params::Check::check()</code>.</p>
+
+<p>Example wrapper function, using a custom stacktrace:</p>
+
+<pre><code>sub check {
+    my ($template, $args_in) = @_;
+
+    local $Params::Check::WARNINGS_FATAL = 1;
+    local $Params::Check::CALLER_DEPTH = $Params::Check::CALLER_DEPTH + 1;
+    my $args_out = Params::Check::check($template, $args_in);
+
+    my_stacktrace(Params::Check::last_error) unless $args_out;
+
+    return $args_out;
+}</code></pre>
+
+<p>Default is 0;</p>
+
+<h1 id="Acknowledgements"><a class="permalink" href="./Params::Check.html#Acknowledgements">#</a>Acknowledgements</h1>
+
+<p>Thanks to Richard Soderberg for his performance improvements.</p>
+
+<h1 id="BUG-REPORTS"><a class="permalink" href="./Params::Check.html#BUG-REPORTS">#</a><a id="BUG"></a>BUG REPORTS</h1>
+
+<p>Please report bugs or other issues to &lt;bug-params-check@rt.cpan.org&gt;.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./Params::Check.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>This module by Jos Boumans &lt;kane@cpan.org&gt;.</p>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="./Params::Check.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>This library is free software; you may redistribute and/or modify it under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

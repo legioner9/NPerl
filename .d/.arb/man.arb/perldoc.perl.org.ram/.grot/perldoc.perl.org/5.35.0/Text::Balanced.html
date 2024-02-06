@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Text::Balanced - Extract delimited text sequences from strings. - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Text::Balanced">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Text::Balanced.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Text::Balanced">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Text::Balanced">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Text::Balanced">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Text::Balanced">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Text::Balanced">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Text::Balanced">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Text::Balanced">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Text::Balanced">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Text::Balanced">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Text::Balanced">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Text::Balanced">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Text::Balanced">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Text::Balanced">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Text::Balanced">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Text::Balanced">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Text::Balanced">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Text::Balanced">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Text::Balanced">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Text::Balanced">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Text::Balanced">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Text::Balanced">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Text::Balanced">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Text::Balanced">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Text::Balanced">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Text::Balanced">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Text::Balanced">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Text::Balanced">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Text::Balanced">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Text::Balanced">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Text::Balanced">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Text::Balanced">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Text::Balanced">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Text::Balanced">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Text::Balanced">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Text::Balanced">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Text::Balanced">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Text::Balanced">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Text::Balanced">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Text::Balanced">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Text::Balanced">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Text::Balanced">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Text::Balanced">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Text::Balanced">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Text::Balanced">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Text::Balanced">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Text::Balanced">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Text::Balanced">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Text::Balanced">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Text::Balanced">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Text::Balanced">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Text::Balanced">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Text::Balanced">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Text::Balanced">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Text::Balanced">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Text::Balanced">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Text::Balanced">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Text::Balanced">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Text::Balanced">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Text::Balanced">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Text::Balanced">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Text::Balanced">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Text::Balanced">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Text::Balanced">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Text::Balanced">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Text::Balanced">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Text::Balanced">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Text::Balanced">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Text::Balanced">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Text::Balanced">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Text::Balanced">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Text::Balanced">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Text::Balanced">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Text::Balanced">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Text::Balanced">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Text::Balanced">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Text::Balanced">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Text::Balanced">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Text::Balanced">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Text::Balanced">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Text::Balanced">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Text::Balanced.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Text::Balanced">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Text::Balanced">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Text::Balanced">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Text::Balanced">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Text::Balanced">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Text::Balanced">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Text::Balanced">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Text::Balanced">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Text::Balanced">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Text::Balanced">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Text::Balanced">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Text::Balanced">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Text::Balanced">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Text::Balanced">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Text::Balanced">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Text::Balanced">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Text::Balanced">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Text::Balanced">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Text::Balanced">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Text::Balanced">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Text::Balanced">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Text::Balanced">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Text::Balanced">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Text::Balanced">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Text::Balanced">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Text::Balanced">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Text::Balanced">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Text::Balanced">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Text::Balanced">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Text::Balanced">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Text::Balanced">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Text::Balanced">5.35.1</a>
+          <a class="dropdown-item active" href="./Text::Balanced.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Text::Balanced.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Text::Balanced.html">Text::Balanced</a>
+          <div id="more">
+            (<a href="./Text::Balanced.txt">source</a>,
+            <a href="https://metacpan.org/pod/Text::Balanced">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 2.04</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#General-Behaviour-in-List-Contexts">General Behaviour in List Contexts</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#General-Behaviour-in-Scalar-and-Void-Contexts">General Behaviour in Scalar and Void Contexts</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#A-Note-About-Prefixes">A Note About Prefixes</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#Functions">Functions</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#DIAGNOSTICS">DIAGNOSTICS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#EXPORTS">EXPORTS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#KNOWN-BUGS">KNOWN BUGS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#FEEDBACK">FEEDBACK</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#AVAILABILITY">AVAILABILITY</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#INSTALLATION">INSTALLATION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#LICENCE">LICENCE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#VERSION">VERSION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#DATE">DATE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Text::Balanced.html#HISTORY">HISTORY</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Text::Balanced.html#NAME">#</a>NAME</h1>
+
+<p>Text::Balanced - Extract delimited text sequences from strings.</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Text::Balanced.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Text::Balanced qw (
+    extract_delimited
+    extract_bracketed
+    extract_quotelike
+    extract_codeblock
+    extract_variable
+    extract_tagged
+    extract_multiple
+    gen_delimited_pat
+    gen_extract_tagged
+);
+
+# Extract the initial substring of $text that is delimited by
+# two (unescaped) instances of the first character in $delim.
+
+($extracted, $remainder) = extract_delimited($text,$delim);
+
+# Extract the initial substring of $text that is bracketed
+# with a delimiter(s) specified by $delim (where the string
+# in $delim contains one or more of &#39;(){}[]&lt;&gt;&#39;).
+
+($extracted, $remainder) = extract_bracketed($text,$delim);
+
+# Extract the initial substring of $text that is bounded by
+# an XML tag.
+
+($extracted, $remainder) = extract_tagged($text);
+
+# Extract the initial substring of $text that is bounded by
+# a C&lt;BEGIN&gt;...C&lt;END&gt; pair. Don&#39;t allow nested C&lt;BEGIN&gt; tags
+
+($extracted, $remainder) =
+    extract_tagged($text,&quot;BEGIN&quot;,&quot;END&quot;,undef,{bad=&gt;[&quot;BEGIN&quot;]});
+
+# Extract the initial substring of $text that represents a
+# Perl &quot;quote or quote-like operation&quot;
+
+($extracted, $remainder) = extract_quotelike($text);
+
+# Extract the initial substring of $text that represents a block
+# of Perl code, bracketed by any of character(s) specified by $delim
+# (where the string $delim contains one or more of &#39;(){}[]&lt;&gt;&#39;).
+
+($extracted, $remainder) = extract_codeblock($text,$delim);
+
+# Extract the initial substrings of $text that would be extracted by
+# one or more sequential applications of the specified functions
+# or regular expressions
+
+@extracted = extract_multiple($text,
+                              [ \&amp;extract_bracketed,
+                                \&amp;extract_quotelike,
+                                \&amp;some_other_extractor_sub,
+                                qr/[xyz]*/,
+                                &#39;literal&#39;,
+                              ]);
+
+# Create a string representing an optimized pattern (a la Friedl)
+# that matches a substring delimited by any of the specified characters
+# (in this case: any type of quote or a slash)
+
+$patstring = gen_delimited_pat(q{&#39;&quot;`/});
+
+# Generate a reference to an anonymous sub that is just like extract_tagged
+# but pre-compiled and optimized for a specific pair of tags, and
+# consequently much faster (i.e. 3 times faster). It uses qr// for better
+# performance on repeated calls.
+
+$extract_head = gen_extract_tagged(&#39;&lt;HEAD&gt;&#39;,&#39;&lt;/HEAD&gt;&#39;);
+($extracted, $remainder) = $extract_head-&gt;($text);</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Text::Balanced.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>The various <code>extract_...</code> subroutines may be used to extract a delimited substring, possibly after skipping a specified prefix string. By default, that prefix is optional whitespace (<code>/\s*/</code>), but you can change it to whatever you wish (see below).</p>
+
+<p>The substring to be extracted must appear at the current <code>pos</code> location of the string&#39;s variable (or at index zero, if no <code>pos</code> position is defined). In other words, the <code>extract_...</code> subroutines <i>don&#39;t</i> extract the first occurrence of a substring anywhere in a string (like an unanchored regex would). Rather, they extract an occurrence of the substring appearing immediately at the current matching position in the string (like a <code>\G</code>-anchored regex would).</p>
+
+<h2 id="General-Behaviour-in-List-Contexts"><a class="permalink" href="./Text::Balanced.html#General-Behaviour-in-List-Contexts">#</a><a id="General"></a>General Behaviour in List Contexts</h2>
+
+<p>In a list context, all the subroutines return a list, the first three elements of which are always:</p>
+
+<dl>
+
+<dt id="[0]"><a class="permalink" href="./Text::Balanced.html#%5B0%5D">#</a><a id="pod-0"></a>[0]</dt>
+<dd>
+
+<p>The extracted string, including the specified delimiters. If the extraction fails <code>undef</code> is returned.</p>
+
+</dd>
+<dt id="[1]"><a class="permalink" href="./Text::Balanced.html#%5B1%5D">#</a><a id="pod-1"></a>[1]</dt>
+<dd>
+
+<p>The remainder of the input string (i.e. the characters after the extracted string). On failure, the entire string is returned.</p>
+
+</dd>
+<dt id="[2]"><a class="permalink" href="./Text::Balanced.html#%5B2%5D">#</a><a id="pod-2"></a>[2]</dt>
+<dd>
+
+<p>The skipped prefix (i.e. the characters before the extracted string). On failure, <code>undef</code> is returned.</p>
+
+</dd>
+</dl>
+
+<p>Note that in a list context, the contents of the original input text (the first argument) are not modified in any way.</p>
+
+<p>However, if the input text was passed in a variable, that variable&#39;s <code>pos</code> value is updated to point at the first character after the extracted text. That means that in a list context the various subroutines can be used much like regular expressions. For example:</p>
+
+<pre><code>while ( $next = (extract_quotelike($text))[0] )
+{
+    # process next quote-like (in $next)
+}</code></pre>
+
+<h2 id="General-Behaviour-in-Scalar-and-Void-Contexts"><a class="permalink" href="./Text::Balanced.html#General-Behaviour-in-Scalar-and-Void-Contexts">#</a><a id="General1"></a>General Behaviour in Scalar and Void Contexts</h2>
+
+<p>In a scalar context, the extracted string is returned, having first been removed from the input text. Thus, the following code also processes each quote-like operation, but actually removes them from $text:</p>
+
+<pre><code>while ( $next = extract_quotelike($text) )
+{
+    # process next quote-like (in $next)
+}</code></pre>
+
+<p>Note that if the input text is a read-only string (i.e. a literal), no attempt is made to remove the extracted text.</p>
+
+<p>In a void context the behaviour of the extraction subroutines is exactly the same as in a scalar context, except (of course) that the extracted substring is not returned.</p>
+
+<h2 id="A-Note-About-Prefixes"><a class="permalink" href="./Text::Balanced.html#A-Note-About-Prefixes">#</a><a id="A"></a>A Note About Prefixes</h2>
+
+<p>Prefix patterns are matched without any trailing modifiers (<code>/gimsox</code> etc.) This can bite you if you&#39;re expecting a prefix specification like &#39;.*?(?=&lt;H1&gt;)&#39; to skip everything up to the first &lt;H1&gt; tag. Such a prefix pattern will only succeed if the &lt;H1&gt; tag is on the current line, since . normally doesn&#39;t match newlines.</p>
+
+<p>To overcome this limitation, you need to turn on /s matching within the prefix pattern, using the <code>(?s)</code> directive: &#39;(?s).*?(?=&lt;H1&gt;)&#39;</p>
+
+<h2 id="Functions"><a class="permalink" href="./Text::Balanced.html#Functions">#</a>Functions</h2>
+
+<dl>
+
+<dt id="extract_delimited"><a class="permalink" href="./Text::Balanced.html#extract_delimited">#</a><code>extract_delimited</code></dt>
+<dd>
+
+<p>The <code>extract_delimited</code> function formalizes the common idiom of extracting a single-character-delimited substring from the start of a string. For example, to extract a single-quote delimited string, the following code is typically used:</p>
+
+<pre><code>($remainder = $text) =~ s/\A(&#39;(\\.|[^&#39;])*&#39;)//s;
+$extracted = $1;</code></pre>
+
+<p>but with <code>extract_delimited</code> it can be simplified to:</p>
+
+<pre><code>($extracted,$remainder) = extract_delimited($text, &quot;&#39;&quot;);</code></pre>
+
+<p><code>extract_delimited</code> takes up to four scalars (the input text, the delimiters, a prefix pattern to be skipped, and any escape characters) and extracts the initial substring of the text that is appropriately delimited. If the delimiter string has multiple characters, the first one encountered in the text is taken to delimit the substring. The third argument specifies a prefix pattern that is to be skipped (but must be present!) before the substring is extracted. The final argument specifies the escape character to be used for each delimiter.</p>
+
+<p>All arguments are optional. If the escape characters are not specified, every delimiter is escaped with a backslash (<code>\</code>). If the prefix is not specified, the pattern <code>&#39;\s*&#39;</code> - optional whitespace - is used. If the delimiter set is also not specified, the set <code>/[&quot;&#39;`]/</code> is used. If the text to be processed is not specified either, <code>$_</code> is used.</p>
+
+<p>In list context, <code>extract_delimited</code> returns a array of three elements, the extracted substring (<i>including the surrounding delimiters</i>), the remainder of the text, and the skipped prefix (if any). If a suitable delimited substring is not found, the first element of the array is the empty string, the second is the complete original text, and the prefix returned in the third element is an empty string.</p>
+
+<p>In a scalar context, just the extracted substring is returned. In a void context, the extracted substring (and any prefix) are simply removed from the beginning of the first argument.</p>
+
+<p>Examples:</p>
+
+<pre><code># Remove a single-quoted substring from the very beginning of $text:
+
+    $substring = extract_delimited($text, &quot;&#39;&quot;, &#39;&#39;);
+
+# Remove a single-quoted Pascalish substring (i.e. one in which
+# doubling the quote character escapes it) from the very
+# beginning of $text:
+
+    $substring = extract_delimited($text, &quot;&#39;&quot;, &#39;&#39;, &quot;&#39;&quot;);
+
+# Extract a single- or double- quoted substring from the
+# beginning of $text, optionally after some whitespace
+# (note the list context to protect $text from modification):
+
+    ($substring) = extract_delimited $text, q{&quot;&#39;};
+
+# Delete the substring delimited by the first &#39;/&#39; in $text:
+
+    $text = join &#39;&#39;, (extract_delimited($text,&#39;/&#39;,&#39;[^/]*&#39;)[2,1];</code></pre>
+
+<p>Note that this last example is <i>not</i> the same as deleting the first quote-like pattern. For instance, if <code>$text</code> contained the string:</p>
+
+<pre><code>&quot;if (&#39;./cmd&#39; =~ m/$UNIXCMD/s) { $cmd = $1; }&quot;</code></pre>
+
+<p>then after the deletion it would contain:</p>
+
+<pre><code>&quot;if (&#39;.$UNIXCMD/s) { $cmd = $1; }&quot;</code></pre>
+
+<p>not:</p>
+
+<pre><code>&quot;if (&#39;./cmd&#39; =~ ms) { $cmd = $1; }&quot;</code></pre>
+
+<p>See <a href="./Text::Balanced.html#extract_quotelike">&quot;extract_quotelike&quot;</a> for a (partial) solution to this problem.</p>
+
+</dd>
+<dt id="extract_bracketed"><a class="permalink" href="./Text::Balanced.html#extract_bracketed">#</a><code>extract_bracketed</code></dt>
+<dd>
+
+<p>Like <code>&quot;extract_delimited&quot;</code>, the <code>extract_bracketed</code> function takes up to three optional scalar arguments: a string to extract from, a delimiter specifier, and a prefix pattern. As before, a missing prefix defaults to optional whitespace and a missing text defaults to <code>$_</code>. However, a missing delimiter specifier defaults to <code>&#39;{}()[]&lt;&gt;&#39;</code> (see below).</p>
+
+<p><code>extract_bracketed</code> extracts a balanced-bracket-delimited substring (using any one (or more) of the user-specified delimiter brackets: &#39;(..)&#39;, &#39;{..}&#39;, &#39;[..]&#39;, or &#39;&lt;..&gt;&#39;). Optionally it will also respect quoted unbalanced brackets (see below).</p>
+
+<p>A &quot;delimiter bracket&quot; is a bracket in list of delimiters passed as <code>extract_bracketed</code>&#39;s second argument. Delimiter brackets are specified by giving either the left or right (or both!) versions of the required bracket(s). Note that the order in which two or more delimiter brackets are specified is not significant.</p>
+
+<p>A &quot;balanced-bracket-delimited substring&quot; is a substring bounded by matched brackets, such that any other (left or right) delimiter bracket <i>within</i> the substring is also matched by an opposite (right or left) delimiter bracket <i>at the same level of nesting</i>. Any type of bracket not in the delimiter list is treated as an ordinary character.</p>
+
+<p>In other words, each type of bracket specified as a delimiter must be balanced and correctly nested within the substring, and any other kind of (&quot;non-delimiter&quot;) bracket in the substring is ignored.</p>
+
+<p>For example, given the string:</p>
+
+<pre><code>$text = &quot;{ an &#39;[irregularly :-(] {} parenthesized &gt;:-)&#39; string }&quot;;</code></pre>
+
+<p>then a call to <code>extract_bracketed</code> in a list context:</p>
+
+<pre><code>@result = extract_bracketed( $text, &#39;{}&#39; );</code></pre>
+
+<p>would return:</p>
+
+<pre><code class="plaintext">( &quot;{ an &#39;[irregularly :-(] {} parenthesized &gt;:-)&#39; string }&quot; , &quot;&quot; , &quot;&quot; )</code></pre>
+
+<p>since both sets of <code>&#39;{..}&#39;</code> brackets are properly nested and evenly balanced. (In a scalar context just the first element of the array would be returned. In a void context, <code>$text</code> would be replaced by an empty string.)</p>
+
+<p>Likewise the call in:</p>
+
+<pre><code>@result = extract_bracketed( $text, &#39;{[&#39; );</code></pre>
+
+<p>would return the same result, since all sets of both types of specified delimiter brackets are correctly nested and balanced.</p>
+
+<p>However, the call in:</p>
+
+<pre><code>@result = extract_bracketed( $text, &#39;{([&lt;&#39; );</code></pre>
+
+<p>would fail, returning:</p>
+
+<pre><code>( undef , &quot;{ an &#39;[irregularly :-(] {} parenthesized &gt;:-)&#39; string }&quot;  );</code></pre>
+
+<p>because the embedded pairs of <code>&#39;(..)&#39;</code>s and <code>&#39;[..]&#39;</code>s are &quot;cross-nested&quot; and the embedded <code>&#39;&gt;&#39;</code> is unbalanced. (In a scalar context, this call would return an empty string. In a void context, <code>$text</code> would be unchanged.)</p>
+
+<p>Note that the embedded single-quotes in the string don&#39;t help in this case, since they have not been specified as acceptable delimiters and are therefore treated as non-delimiter characters (and ignored).</p>
+
+<p>However, if a particular species of quote character is included in the delimiter specification, then that type of quote will be correctly handled. for example, if <code>$text</code> is:</p>
+
+<pre><code>$text = &#39;&lt;A HREF=&quot;&gt;&gt;&gt;&gt;&quot;&gt;link&lt;/A&gt;&#39;;</code></pre>
+
+<p>then</p>
+
+<pre><code>@result = extract_bracketed( $text, &#39;&lt;&quot;&gt;&#39; );</code></pre>
+
+<p>returns:</p>
+
+<pre><code class="plaintext">( &#39;&lt;A HREF=&quot;&gt;&gt;&gt;&gt;&quot;&gt;&#39;, &#39;link&lt;/A&gt;&#39;, &quot;&quot; )</code></pre>
+
+<p>as expected. Without the specification of <code>&quot;</code> as an embedded quoter:</p>
+
+<pre><code>@result = extract_bracketed( $text, &#39;&lt;&gt;&#39; );</code></pre>
+
+<p>the result would be:</p>
+
+<pre><code class="plaintext">( &#39;&lt;A HREF=&quot;&gt;&#39;, &#39;&gt;&gt;&gt;&quot;&gt;link&lt;/A&gt;&#39;, &quot;&quot; )</code></pre>
+
+<p>In addition to the quote delimiters <code>&#39;</code>, <code>&quot;</code>, and <code>`</code>, full Perl quote-like quoting (i.e. q{string}, qq{string}, etc) can be specified by including the letter &#39;q&#39; as a delimiter. Hence:</p>
+
+<pre><code>@result = extract_bracketed( $text, &#39;&lt;q&gt;&#39; );</code></pre>
+
+<p>would correctly match something like this:</p>
+
+<pre><code>$text = &#39;&lt;leftop: conj /and/ conj&gt;&#39;;</code></pre>
+
+<p>See also: <code>&quot;extract_quotelike&quot;</code> and <code>&quot;extract_codeblock&quot;</code>.</p>
+
+</dd>
+<dt id="extract_variable"><a class="permalink" href="./Text::Balanced.html#extract_variable">#</a><code>extract_variable</code></dt>
+<dd>
+
+<p><code>extract_variable</code> extracts any valid Perl variable or variable-involved expression, including scalars, arrays, hashes, array accesses, hash look-ups, method calls through objects, subroutine calls through subroutine references, etc.</p>
+
+<p>The subroutine takes up to two optional arguments:</p>
+
+<ol>
+
+<li><p>A string to be processed (<code>$_</code> if the string is omitted or <code>undef</code>)</p>
+
+</li>
+<li><p>A string specifying a pattern to be matched as a prefix (which is to be skipped). If omitted, optional whitespace is skipped.</p>
+
+</li>
+</ol>
+
+<p>On success in a list context, an array of 3 elements is returned. The elements are:</p>
+
+<dl>
+
+<dt id="[0]1"><a class="permalink" href="./Text::Balanced.html#%5B0%5D1">#</a><a id="pod-01"></a>[0]</dt>
+<dd>
+
+<p>the extracted variable, or variablish expression</p>
+
+</dd>
+<dt id="[1]1"><a class="permalink" href="./Text::Balanced.html#%5B1%5D1">#</a><a id="pod-11"></a>[1]</dt>
+<dd>
+
+<p>the remainder of the input text,</p>
+
+</dd>
+<dt id="[2]1"><a class="permalink" href="./Text::Balanced.html#%5B2%5D1">#</a><a id="pod-21"></a>[2]</dt>
+<dd>
+
+<p>the prefix substring (if any),</p>
+
+</dd>
+</dl>
+
+<p>On failure, all of these values (except the remaining text) are <code>undef</code>.</p>
+
+<p>In a scalar context, <code>extract_variable</code> returns just the complete substring that matched a variablish expression. <code>undef</code> is returned on failure. In addition, the original input text has the returned substring (and any prefix) removed from it.</p>
+
+<p>In a void context, the input text just has the matched substring (and any specified prefix) removed.</p>
+
+</dd>
+<dt id="extract_tagged"><a class="permalink" href="./Text::Balanced.html#extract_tagged">#</a><code>extract_tagged</code></dt>
+<dd>
+
+<p><code>extract_tagged</code> extracts and segments text between (balanced) specified tags.</p>
+
+<p>The subroutine takes up to five optional arguments:</p>
+
+<ol>
+
+<li><p>A string to be processed (<code>$_</code> if the string is omitted or <code>undef</code>)</p>
+
+</li>
+<li><p>A string specifying a pattern to be matched as the opening tag. If the pattern string is omitted (or <code>undef</code>) then a pattern that matches any standard XML tag is used.</p>
+
+</li>
+<li><p>A string specifying a pattern to be matched at the closing tag. If the pattern string is omitted (or <code>undef</code>) then the closing tag is constructed by inserting a <code>/</code> after any leading bracket characters in the actual opening tag that was matched (<i>not</i> the pattern that matched the tag). For example, if the opening tag pattern is specified as <code>&#39;{{\w+}}&#39;</code> and actually matched the opening tag <code>&quot;{{DATA}}&quot;</code>, then the constructed closing tag would be <code>&quot;{{/DATA}}&quot;</code>.</p>
+
+</li>
+<li><p>A string specifying a pattern to be matched as a prefix (which is to be skipped). If omitted, optional whitespace is skipped.</p>
+
+</li>
+<li><p>A hash reference containing various parsing options (see below)</p>
+
+</li>
+</ol>
+
+<p>The various options that can be specified are:</p>
+
+<dl>
+
+<dt id="reject-=&gt;-$listref"><a class="permalink" href="./Text::Balanced.html#reject-=%3E-$listref">#</a><a id="reject"></a><a id="reject-listref"></a><code>reject =&gt; $listref</code></dt>
+<dd>
+
+<p>The list reference contains one or more strings specifying patterns that must <i>not</i> appear within the tagged text.</p>
+
+<p>For example, to extract an HTML link (which should not contain nested links) use:</p>
+
+<pre><code>extract_tagged($text, &#39;&lt;A&gt;&#39;, &#39;&lt;/A&gt;&#39;, undef, {reject =&gt; [&#39;&lt;A&gt;&#39;]} );</code></pre>
+
+</dd>
+<dt id="ignore-=&gt;-$listref"><a class="permalink" href="./Text::Balanced.html#ignore-=%3E-$listref">#</a><a id="ignore"></a><a id="ignore-listref"></a><code>ignore =&gt; $listref</code></dt>
+<dd>
+
+<p>The list reference contains one or more strings specifying patterns that are <i>not</i> to be treated as nested tags within the tagged text (even if they would match the start tag pattern).</p>
+
+<p>For example, to extract an arbitrary XML tag, but ignore &quot;empty&quot; elements:</p>
+
+<pre><code>extract_tagged($text, undef, undef, undef, {ignore =&gt; [&#39;&lt;[^&gt;]*/&gt;&#39;]} );</code></pre>
+
+<p>(also see <a href="./Text::Balanced.html#gen_delimited_pat">&quot;gen_delimited_pat&quot;</a> below).</p>
+
+</dd>
+<dt id="fail-=&gt;-$str"><a class="permalink" href="./Text::Balanced.html#fail-=%3E-$str">#</a><a id="fail"></a><a id="fail-str"></a><code>fail =&gt; $str</code></dt>
+<dd>
+
+<p>The <code>fail</code> option indicates the action to be taken if a matching end tag is not encountered (i.e. before the end of the string or some <code>reject</code> pattern matches). By default, a failure to match a closing tag causes <code>extract_tagged</code> to immediately fail.</p>
+
+<p>However, if the string value associated with &lt;reject&gt; is &quot;MAX&quot;, then <code>extract_tagged</code> returns the complete text up to the point of failure. If the string is &quot;PARA&quot;, <code>extract_tagged</code> returns only the first paragraph after the tag (up to the first line that is either empty or contains only whitespace characters). If the string is &quot;&quot;, the default behaviour (i.e. failure) is reinstated.</p>
+
+<p>For example, suppose the start tag &quot;/para&quot; introduces a paragraph, which then continues until the next &quot;/endpara&quot; tag or until another &quot;/para&quot; tag is encountered:</p>
+
+<pre><code>$text = &quot;/para line 1\n\nline 3\n/para line 4&quot;;
+
+extract_tagged($text, &#39;/para&#39;, &#39;/endpara&#39;, undef,
+                        {reject =&gt; &#39;/para&#39;, fail =&gt; MAX );
+
+# EXTRACTED: &quot;/para line 1\n\nline 3\n&quot;</code></pre>
+
+<p>Suppose instead, that if no matching &quot;/endpara&quot; tag is found, the &quot;/para&quot; tag refers only to the immediately following paragraph:</p>
+
+<pre><code>$text = &quot;/para line 1\n\nline 3\n/para line 4&quot;;
+
+extract_tagged($text, &#39;/para&#39;, &#39;/endpara&#39;, undef,
+                {reject =&gt; &#39;/para&#39;, fail =&gt; MAX );
+
+# EXTRACTED: &quot;/para line 1\n&quot;</code></pre>
+
+<p>Note that the specified <code>fail</code> behaviour applies to nested tags as well.</p>
+
+</dd>
+</dl>
+
+<p>On success in a list context, an array of 6 elements is returned. The elements are:</p>
+
+<dl>
+
+<dt id="[0]2"><a class="permalink" href="./Text::Balanced.html#%5B0%5D2">#</a><a id="pod-02"></a>[0]</dt>
+<dd>
+
+<p>the extracted tagged substring (including the outermost tags),</p>
+
+</dd>
+<dt id="[1]2"><a class="permalink" href="./Text::Balanced.html#%5B1%5D2">#</a><a id="pod-12"></a>[1]</dt>
+<dd>
+
+<p>the remainder of the input text,</p>
+
+</dd>
+<dt id="[2]2"><a class="permalink" href="./Text::Balanced.html#%5B2%5D2">#</a><a id="pod-22"></a>[2]</dt>
+<dd>
+
+<p>the prefix substring (if any),</p>
+
+</dd>
+<dt id="[3]"><a class="permalink" href="./Text::Balanced.html#%5B3%5D">#</a><a id="pod-3"></a>[3]</dt>
+<dd>
+
+<p>the opening tag</p>
+
+</dd>
+<dt id="[4]"><a class="permalink" href="./Text::Balanced.html#%5B4%5D">#</a><a id="pod-4"></a>[4]</dt>
+<dd>
+
+<p>the text between the opening and closing tags</p>
+
+</dd>
+<dt id="[5]"><a class="permalink" href="./Text::Balanced.html#%5B5%5D">#</a><a id="pod-5"></a>[5]</dt>
+<dd>
+
+<p>the closing tag (or &quot;&quot; if no closing tag was found)</p>
+
+</dd>
+</dl>
+
+<p>On failure, all of these values (except the remaining text) are <code>undef</code>.</p>
+
+<p>In a scalar context, <code>extract_tagged</code> returns just the complete substring that matched a tagged text (including the start and end tags). <code>undef</code> is returned on failure. In addition, the original input text has the returned substring (and any prefix) removed from it.</p>
+
+<p>In a void context, the input text just has the matched substring (and any specified prefix) removed.</p>
+
+</dd>
+<dt id="gen_extract_tagged"><a class="permalink" href="./Text::Balanced.html#gen_extract_tagged">#</a><code>gen_extract_tagged</code></dt>
+<dd>
+
+<p><code>gen_extract_tagged</code> generates a new anonymous subroutine which extracts text between (balanced) specified tags. In other words, it generates a function identical in function to <code>extract_tagged</code>.</p>
+
+<p>The difference between <code>extract_tagged</code> and the anonymous subroutines generated by <code>gen_extract_tagged</code>, is that those generated subroutines:</p>
+
+<ul>
+
+<li><p>do not have to reparse tag specification or parsing options every time they are called (whereas <code>extract_tagged</code> has to effectively rebuild its tag parser on every call);</p>
+
+</li>
+<li><p>make use of the new qr// construct to pre-compile the regexes they use (whereas <code>extract_tagged</code> uses standard string variable interpolation to create tag-matching patterns).</p>
+
+</li>
+</ul>
+
+<p>The subroutine takes up to four optional arguments (the same set as <code>extract_tagged</code> except for the string to be processed). It returns a reference to a subroutine which in turn takes a single argument (the text to be extracted from).</p>
+
+<p>In other words, the implementation of <code>extract_tagged</code> is exactly equivalent to:</p>
+
+<pre><code>sub extract_tagged
+{
+        my $text = shift;
+        $extractor = gen_extract_tagged(@_);
+        return $extractor-&gt;($text);
+}</code></pre>
+
+<p>(although <code>extract_tagged</code> is not currently implemented that way).</p>
+
+<p>Using <code>gen_extract_tagged</code> to create extraction functions for specific tags is a good idea if those functions are going to be called more than once, since their performance is typically twice as good as the more general-purpose <code>extract_tagged</code>.</p>
+
+</dd>
+<dt id="extract_quotelike"><a class="permalink" href="./Text::Balanced.html#extract_quotelike">#</a><code>extract_quotelike</code></dt>
+<dd>
+
+<p><code>extract_quotelike</code> attempts to recognize, extract, and segment any one of the various Perl quotes and quotelike operators (see <a href="http://man.he.net/man3/perlop">perlop(3)</a>) Nested backslashed delimiters, embedded balanced bracket delimiters (for the quotelike operators), and trailing modifiers are all caught. For example, in:</p>
+
+<pre><code>extract_quotelike &#39;q # an octothorpe: \# (not the end of the q!) #&#39;
+
+extract_quotelike &#39;  &quot;You said, \&quot;Use sed\&quot;.&quot;  &#39;
+
+extract_quotelike &#39; s{([A-Z]{1,8}\.[A-Z]{3})} /\L$1\E/; &#39;
+
+extract_quotelike &#39; tr/\\\/\\\\/\\\//ds; &#39;</code></pre>
+
+<p>the full Perl quotelike operations are all extracted correctly.</p>
+
+<p>Note too that, when using the /x modifier on a regex, any comment containing the current pattern delimiter will cause the regex to be immediately terminated. In other words:</p>
+
+<pre><code class="plaintext">&#39;m /
+        (?i)            # CASE INSENSITIVE
+        [a-z_]          # LEADING ALPHABETIC/UNDERSCORE
+        [a-z0-9]*       # FOLLOWED BY ANY NUMBER OF ALPHANUMERICS
+   /x&#39;</code></pre>
+
+<p>will be extracted as if it were:</p>
+
+<pre><code class="plaintext">&#39;m /
+        (?i)            # CASE INSENSITIVE
+        [a-z_]          # LEADING ALPHABETIC/&#39;</code></pre>
+
+<p>This behaviour is identical to that of the actual compiler.</p>
+
+<p><code>extract_quotelike</code> takes two arguments: the text to be processed and a prefix to be matched at the very beginning of the text. If no prefix is specified, optional whitespace is the default. If no text is given, <code>$_</code> is used.</p>
+
+<p>In a list context, an array of 11 elements is returned. The elements are:</p>
+
+<dl>
+
+<dt id="[0]3"><a class="permalink" href="./Text::Balanced.html#%5B0%5D3">#</a><a id="pod-03"></a>[0]</dt>
+<dd>
+
+<p>the extracted quotelike substring (including trailing modifiers),</p>
+
+</dd>
+<dt id="[1]3"><a class="permalink" href="./Text::Balanced.html#%5B1%5D3">#</a><a id="pod-13"></a>[1]</dt>
+<dd>
+
+<p>the remainder of the input text,</p>
+
+</dd>
+<dt id="[2]3"><a class="permalink" href="./Text::Balanced.html#%5B2%5D3">#</a><a id="pod-23"></a>[2]</dt>
+<dd>
+
+<p>the prefix substring (if any),</p>
+
+</dd>
+<dt id="[3]1"><a class="permalink" href="./Text::Balanced.html#%5B3%5D1">#</a><a id="pod-31"></a>[3]</dt>
+<dd>
+
+<p>the name of the quotelike operator (if any),</p>
+
+</dd>
+<dt id="[4]1"><a class="permalink" href="./Text::Balanced.html#%5B4%5D1">#</a><a id="pod-41"></a>[4]</dt>
+<dd>
+
+<p>the left delimiter of the first block of the operation,</p>
+
+</dd>
+<dt id="[5]1"><a class="permalink" href="./Text::Balanced.html#%5B5%5D1">#</a><a id="pod-51"></a>[5]</dt>
+<dd>
+
+<p>the text of the first block of the operation (that is, the contents of a quote, the regex of a match or substitution or the target list of a translation),</p>
+
+</dd>
+<dt id="[6]"><a class="permalink" href="./Text::Balanced.html#%5B6%5D">#</a><a id="pod-6"></a>[6]</dt>
+<dd>
+
+<p>the right delimiter of the first block of the operation,</p>
+
+</dd>
+<dt id="[7]"><a class="permalink" href="./Text::Balanced.html#%5B7%5D">#</a><a id="pod-7"></a>[7]</dt>
+<dd>
+
+<p>the left delimiter of the second block of the operation (that is, if it is a <code>s</code>, <code>tr</code>, or <code>y</code>),</p>
+
+</dd>
+<dt id="[8]"><a class="permalink" href="./Text::Balanced.html#%5B8%5D">#</a><a id="pod-8"></a>[8]</dt>
+<dd>
+
+<p>the text of the second block of the operation (that is, the replacement of a substitution or the translation list of a translation),</p>
+
+</dd>
+<dt id="[9]"><a class="permalink" href="./Text::Balanced.html#%5B9%5D">#</a><a id="pod-9"></a>[9]</dt>
+<dd>
+
+<p>the right delimiter of the second block of the operation (if any),</p>
+
+</dd>
+<dt id="[10]"><a class="permalink" href="./Text::Balanced.html#%5B10%5D">#</a><a id="pod-10"></a>[10]</dt>
+<dd>
+
+<p>the trailing modifiers on the operation (if any).</p>
+
+</dd>
+</dl>
+
+<p>For each of the fields marked &quot;(if any)&quot; the default value on success is an empty string. On failure, all of these values (except the remaining text) are <code>undef</code>.</p>
+
+<p>In a scalar context, <code>extract_quotelike</code> returns just the complete substring that matched a quotelike operation (or <code>undef</code> on failure). In a scalar or void context, the input text has the same substring (and any specified prefix) removed.</p>
+
+<p>Examples:</p>
+
+<pre><code># Remove the first quotelike literal that appears in text
+
+        $quotelike = extract_quotelike($text,&#39;.*?&#39;);
+
+# Replace one or more leading whitespace-separated quotelike
+# literals in $_ with &quot;&lt;QLL&gt;&quot;
+
+        do { $_ = join &#39;&lt;QLL&gt;&#39;, (extract_quotelike)[2,1] } until $@;
+
+
+# Isolate the search pattern in a quotelike operation from $text
+
+        ($op,$pat) = (extract_quotelike $text)[3,5];
+        if ($op =~ /[ms]/)
+        {
+                print &quot;search pattern: $pat\n&quot;;
+        }
+        else
+        {
+                print &quot;$op is not a pattern matching operation\n&quot;;
+        }</code></pre>
+
+</dd>
+<dt id="extract_quotelike1"><a class="permalink" href="./Text::Balanced.html#extract_quotelike1">#</a><code>extract_quotelike</code></dt>
+<dd>
+
+<p><code>extract_quotelike</code> can successfully extract &quot;here documents&quot; from an input string, but with an important caveat in list contexts.</p>
+
+<p>Unlike other types of quote-like literals, a here document is rarely a contiguous substring. For example, a typical piece of code using here document might look like this:</p>
+
+<pre><code>&lt;&lt;&#39;EOMSG&#39; || die;
+This is the message.
+EOMSG
+exit;</code></pre>
+
+<p>Given this as an input string in a scalar context, <code>extract_quotelike</code> would correctly return the string &quot;&lt;&lt;&#39;EOMSG&#39;\nThis is the message.\nEOMSG&quot;, leaving the string &quot; || die;\nexit;&quot; in the original variable. In other words, the two separate pieces of the here document are successfully extracted and concatenated.</p>
+
+<p>In a list context, <code>extract_quotelike</code> would return the list</p>
+
+<dl>
+
+<dt id="[0]4"><a class="permalink" href="./Text::Balanced.html#%5B0%5D4">#</a><a id="pod-04"></a>[0]</dt>
+<dd>
+
+<p>&quot;&lt;&lt;&#39;EOMSG&#39;\nThis is the message.\nEOMSG\n&quot; (i.e. the full extracted here document, including fore and aft delimiters),</p>
+
+</dd>
+<dt id="[1]4"><a class="permalink" href="./Text::Balanced.html#%5B1%5D4">#</a><a id="pod-14"></a>[1]</dt>
+<dd>
+
+<p>&quot; || die;\nexit;&quot; (i.e. the remainder of the input text, concatenated),</p>
+
+</dd>
+<dt id="[2]4"><a class="permalink" href="./Text::Balanced.html#%5B2%5D4">#</a><a id="pod-24"></a>[2]</dt>
+<dd>
+
+<p>&quot;&quot; (i.e. the prefix substring -- trivial in this case),</p>
+
+</dd>
+<dt id="[3]2"><a class="permalink" href="./Text::Balanced.html#%5B3%5D2">#</a><a id="pod-32"></a>[3]</dt>
+<dd>
+
+<p>&quot;&lt;&lt;&quot; (i.e. the &quot;name&quot; of the quotelike operator)</p>
+
+</dd>
+<dt id="[4]2"><a class="permalink" href="./Text::Balanced.html#%5B4%5D2">#</a><a id="pod-42"></a>[4]</dt>
+<dd>
+
+<p>&quot;&#39;EOMSG&#39;&quot; (i.e. the left delimiter of the here document, including any quotes),</p>
+
+</dd>
+<dt id="[5]2"><a class="permalink" href="./Text::Balanced.html#%5B5%5D2">#</a><a id="pod-52"></a>[5]</dt>
+<dd>
+
+<p>&quot;This is the message.\n&quot; (i.e. the text of the here document),</p>
+
+</dd>
+<dt id="[6]1"><a class="permalink" href="./Text::Balanced.html#%5B6%5D1">#</a><a id="pod-61"></a>[6]</dt>
+<dd>
+
+<p>&quot;EOMSG&quot; (i.e. the right delimiter of the here document),</p>
+
+</dd>
+<dt id="[7..10]"><a class="permalink" href="./Text::Balanced.html#%5B7..10%5D">#</a><a id="pod-7..10"></a>[7..10]</dt>
+<dd>
+
+<p>&quot;&quot; (a here document has no second left delimiter, second text, second right delimiter, or trailing modifiers).</p>
+
+</dd>
+</dl>
+
+<p>However, the matching position of the input variable would be set to &quot;exit;&quot; (i.e. <i>after</i> the closing delimiter of the here document), which would cause the earlier &quot; || die;\nexit;&quot; to be skipped in any sequence of code fragment extractions.</p>
+
+<p>To avoid this problem, when it encounters a here document whilst extracting from a modifiable string, <code>extract_quotelike</code> silently rearranges the string to an equivalent piece of Perl:</p>
+
+<pre><code>&lt;&lt;&#39;EOMSG&#39;
+This is the message.
+EOMSG
+|| die;
+exit;</code></pre>
+
+<p>in which the here document <i>is</i> contiguous. It still leaves the matching position after the here document, but now the rest of the line on which the here document starts is not skipped.</p>
+
+<p>To prevent &lt;extract_quotelike&gt; from mucking about with the input in this way (this is the only case where a list-context <code>extract_quotelike</code> does so), you can pass the input variable as an interpolated literal:</p>
+
+<pre><code>$quotelike = extract_quotelike(&quot;$var&quot;);</code></pre>
+
+</dd>
+<dt id="extract_codeblock"><a class="permalink" href="./Text::Balanced.html#extract_codeblock">#</a><code>extract_codeblock</code></dt>
+<dd>
+
+<p><code>extract_codeblock</code> attempts to recognize and extract a balanced bracket delimited substring that may contain unbalanced brackets inside Perl quotes or quotelike operations. That is, <code>extract_codeblock</code> is like a combination of <code>&quot;extract_bracketed&quot;</code> and <code>&quot;extract_quotelike&quot;</code>.</p>
+
+<p><code>extract_codeblock</code> takes the same initial three parameters as <code>extract_bracketed</code>: a text to process, a set of delimiter brackets to look for, and a prefix to match first. It also takes an optional fourth parameter, which allows the outermost delimiter brackets to be specified separately (see below).</p>
+
+<p>Omitting the first argument (input text) means process <code>$_</code> instead. Omitting the second argument (delimiter brackets) indicates that only <code>&#39;{&#39;</code> is to be used. Omitting the third argument (prefix argument) implies optional whitespace at the start. Omitting the fourth argument (outermost delimiter brackets) indicates that the value of the second argument is to be used for the outermost delimiters.</p>
+
+<p>Once the prefix and the outermost opening delimiter bracket have been recognized, code blocks are extracted by stepping through the input text and trying the following alternatives in sequence:</p>
+
+<ol>
+
+<li><p>Try and match a closing delimiter bracket. If the bracket was the same species as the last opening bracket, return the substring to that point. If the bracket was mismatched, return an error.</p>
+
+</li>
+<li><p>Try to match a quote or quotelike operator. If found, call <code>extract_quotelike</code> to eat it. If <code>extract_quotelike</code> fails, return the error it returned. Otherwise go back to step 1.</p>
+
+</li>
+<li><p>Try to match an opening delimiter bracket. If found, call <code>extract_codeblock</code> recursively to eat the embedded block. If the recursive call fails, return an error. Otherwise, go back to step 1.</p>
+
+</li>
+<li><p>Unconditionally match a bareword or any other single character, and then go back to step 1.</p>
+
+</li>
+</ol>
+
+<p>Examples:</p>
+
+<pre><code># Find a while loop in the text
+
+        if ($text =~ s/.*?while\s*\{/{/)
+        {
+                $loop = &quot;while &quot; . extract_codeblock($text);
+        }
+
+# Remove the first round-bracketed list (which may include
+# round- or curly-bracketed code blocks or quotelike operators)
+
+        extract_codeblock $text, &quot;(){}&quot;, &#39;[^(]*&#39;;</code></pre>
+
+<p>The ability to specify a different outermost delimiter bracket is useful in some circumstances. For example, in the Parse::RecDescent module, parser actions which are to be performed only on a successful parse are specified using a <code>&lt;defer:...&gt;</code> directive. For example:</p>
+
+<pre><code>sentence: subject verb object
+                &lt;defer: {$::theVerb = $item{verb}} &gt;</code></pre>
+
+<p>Parse::RecDescent uses <code>extract_codeblock($text, &#39;{}&lt;&gt;&#39;)</code> to extract the code within the <code>&lt;defer:...&gt;</code> directive, but there&#39;s a problem.</p>
+
+<p>A deferred action like this:</p>
+
+<pre><code>&lt;defer: {if ($count&gt;10) {$count--}} &gt;</code></pre>
+
+<p>will be incorrectly parsed as:</p>
+
+<pre><code>&lt;defer: {if ($count&gt;</code></pre>
+
+<p>because the &quot;less than&quot; operator is interpreted as a closing delimiter.</p>
+
+<p>But, by extracting the directive using <span style="white-space: nowrap;"><code>extract_codeblock($text, &#39;{}&#39;, undef, &#39;&lt;&gt;&#39;)</code></span> the &#39;&gt;&#39; character is only treated as a delimited at the outermost level of the code block, so the directive is parsed correctly.</p>
+
+</dd>
+<dt id="extract_multiple"><a class="permalink" href="./Text::Balanced.html#extract_multiple">#</a><code>extract_multiple</code></dt>
+<dd>
+
+<p>The <code>extract_multiple</code> subroutine takes a string to be processed and a list of extractors (subroutines or regular expressions) to apply to that string.</p>
+
+<p>In an array context <code>extract_multiple</code> returns an array of substrings of the original string, as extracted by the specified extractors. In a scalar context, <code>extract_multiple</code> returns the first substring successfully extracted from the original string. In both scalar and void contexts the original string has the first successfully extracted substring removed from it. In all contexts <code>extract_multiple</code> starts at the current <code>pos</code> of the string, and sets that <code>pos</code> appropriately after it matches.</p>
+
+<p>Hence, the aim of a call to <code>extract_multiple</code> in a list context is to split the processed string into as many non-overlapping fields as possible, by repeatedly applying each of the specified extractors to the remainder of the string. Thus <code>extract_multiple</code> is a generalized form of Perl&#39;s <code>split</code> subroutine.</p>
+
+<p>The subroutine takes up to four optional arguments:</p>
+
+<ol>
+
+<li><p>A string to be processed (<code>$_</code> if the string is omitted or <code>undef</code>)</p>
+
+</li>
+<li><p>A reference to a list of subroutine references and/or qr// objects and/or literal strings and/or hash references, specifying the extractors to be used to split the string. If this argument is omitted (or <code>undef</code>) the list:</p>
+
+<pre><code>[
+        sub { extract_variable($_[0], &#39;&#39;) },
+        sub { extract_quotelike($_[0],&#39;&#39;) },
+        sub { extract_codeblock($_[0],&#39;{}&#39;,&#39;&#39;) },
+]</code></pre>
+
+<p>is used.</p>
+
+</li>
+<li><p>An number specifying the maximum number of fields to return. If this argument is omitted (or <code>undef</code>), split continues as long as possible.</p>
+
+<p>If the third argument is <i>N</i>, then extraction continues until <i>N</i> fields have been successfully extracted, or until the string has been completely processed.</p>
+
+<p>Note that in scalar and void contexts the value of this argument is automatically reset to 1 (under <code>-w</code>, a warning is issued if the argument has to be reset).</p>
+
+</li>
+<li><p>A value indicating whether unmatched substrings (see below) within the text should be skipped or returned as fields. If the value is true, such substrings are skipped. Otherwise, they are returned.</p>
+
+</li>
+</ol>
+
+<p>The extraction process works by applying each extractor in sequence to the text string.</p>
+
+<p>If the extractor is a subroutine it is called in a list context and is expected to return a list of a single element, namely the extracted text. It may optionally also return two further arguments: a string representing the text left after extraction (like $&#39; for a pattern match), and a string representing any prefix skipped before the extraction (like $` in a pattern match). Note that this is designed to facilitate the use of other Text::Balanced subroutines with <code>extract_multiple</code>. Note too that the value returned by an extractor subroutine need not bear any relationship to the corresponding substring of the original text (see examples below).</p>
+
+<p>If the extractor is a precompiled regular expression or a string, it is matched against the text in a scalar context with a leading &#39;\G&#39; and the gc modifiers enabled. The extracted value is either $1 if that variable is defined after the match, or else the complete match (i.e. $&amp;).</p>
+
+<p>If the extractor is a hash reference, it must contain exactly one element. The value of that element is one of the above extractor types (subroutine reference, regular expression, or string). The key of that element is the name of a class into which the successful return value of the extractor will be blessed.</p>
+
+<p>If an extractor returns a defined value, that value is immediately treated as the next extracted field and pushed onto the list of fields. If the extractor was specified in a hash reference, the field is also blessed into the appropriate class,</p>
+
+<p>If the extractor fails to match (in the case of a regex extractor), or returns an empty list or an undefined value (in the case of a subroutine extractor), it is assumed to have failed to extract. If none of the extractor subroutines succeeds, then one character is extracted from the start of the text and the extraction subroutines reapplied. Characters which are thus removed are accumulated and eventually become the next field (unless the fourth argument is true, in which case they are discarded).</p>
+
+<p>For example, the following extracts substrings that are valid Perl variables:</p>
+
+<pre><code>@fields = extract_multiple($text,
+                           [ sub { extract_variable($_[0]) } ],
+                           undef, 1);</code></pre>
+
+<p>This example separates a text into fields which are quote delimited, curly bracketed, and anything else. The delimited and bracketed parts are also blessed to identify them (the &quot;anything else&quot; is unblessed):</p>
+
+<pre><code>@fields = extract_multiple($text,
+           [
+                { Delim =&gt; sub { extract_delimited($_[0],q{&#39;&quot;}) } },
+                { Brack =&gt; sub { extract_bracketed($_[0],&#39;{}&#39;) } },
+           ]);</code></pre>
+
+<p>This call extracts the next single substring that is a valid Perl quotelike operator (and removes it from $text):</p>
+
+<pre><code>$quotelike = extract_multiple($text,
+                              [
+                                sub { extract_quotelike($_[0]) },
+                              ], undef, 1);</code></pre>
+
+<p>Finally, here is yet another way to do comma-separated value parsing:</p>
+
+<pre><code>@fields = extract_multiple($csv_text,
+                          [
+                                sub { extract_delimited($_[0],q{&#39;&quot;}) },
+                                qr/([^,]+)(.*)/,
+                          ],
+                          undef,1);</code></pre>
+
+<p>The list in the second argument means: <i>&quot;Try and extract a &#39; or &quot; delimited string, otherwise extract anything up to a comma...&quot;</i>. The undef third argument means: <i>&quot;...as many times as possible...&quot;</i>, and the true value in the fourth argument means <i>&quot;...discarding anything else that appears (i.e. the commas)&quot;</i>.</p>
+
+<p>If you wanted the commas preserved as separate fields (i.e. like split does if your split pattern has capturing parentheses), you would just make the last parameter undefined (or remove it).</p>
+
+</dd>
+<dt id="gen_delimited_pat"><a class="permalink" href="./Text::Balanced.html#gen_delimited_pat">#</a><code>gen_delimited_pat</code></dt>
+<dd>
+
+<p>The <code>gen_delimited_pat</code> subroutine takes a single (string) argument and &gt; builds a Friedl-style optimized regex that matches a string delimited by any one of the characters in the single argument. For example:</p>
+
+<pre><code class="plaintext">gen_delimited_pat(q{&#39;&quot;})</code></pre>
+
+<p>returns the regex:</p>
+
+<pre><code class="plaintext">(?:\&quot;(?:\\\&quot;|(?!\&quot;).)*\&quot;|\&#39;(?:\\\&#39;|(?!\&#39;).)*\&#39;)</code></pre>
+
+<p>Note that the specified delimiters are automatically quotemeta&#39;d.</p>
+
+<p>A typical use of <code>gen_delimited_pat</code> would be to build special purpose tags for <code>extract_tagged</code>. For example, to properly ignore &quot;empty&quot; XML elements (which might contain quoted strings):</p>
+
+<pre><code>my $empty_tag = &#39;&lt;(&#39; . gen_delimited_pat(q{&#39;&quot;}) . &#39;|.)+/&gt;&#39;;
+
+extract_tagged($text, undef, undef, undef, {ignore =&gt; [$empty_tag]} );</code></pre>
+
+<p><code>gen_delimited_pat</code> may also be called with an optional second argument, which specifies the &quot;escape&quot; character(s) to be used for each delimiter. For example to match a Pascal-style string (where &#39; is the delimiter and &#39;&#39; is a literal &#39; within the string):</p>
+
+<pre><code>gen_delimited_pat(q{&#39;},q{&#39;});</code></pre>
+
+<p>Different escape characters can be specified for different delimiters. For example, to specify that &#39;/&#39; is the escape for single quotes and &#39;%&#39; is the escape for double quotes:</p>
+
+<pre><code>gen_delimited_pat(q{&#39;&quot;},q{/%});</code></pre>
+
+<p>If more delimiters than escape chars are specified, the last escape char is used for the remaining delimiters. If no escape char is specified for a given specified delimiter, &#39;\&#39; is used.</p>
+
+</dd>
+<dt id="delimited_pat"><a class="permalink" href="./Text::Balanced.html#delimited_pat">#</a><code>delimited_pat</code></dt>
+<dd>
+
+<p>Note that <code>gen_delimited_pat</code> was previously called <code>delimited_pat</code>. That name may still be used, but is now deprecated.</p>
+
+</dd>
+</dl>
+
+<h1 id="DIAGNOSTICS"><a class="permalink" href="./Text::Balanced.html#DIAGNOSTICS">#</a>DIAGNOSTICS</h1>
+
+<p>In a list context, all the functions return <code>(undef,$original_text)</code> on failure. In a scalar context, failure is indicated by returning <code>undef</code> (in this case the input text is not modified in any way).</p>
+
+<p>In addition, on failure in <i>any</i> context, the <code>$@</code> variable is set. Accessing <code>$@-&gt;{error}</code> returns one of the error diagnostics listed below. Accessing <code>$@-&gt;{pos}</code> returns the offset into the original string at which the error was detected (although not necessarily where it occurred!) Printing <code>$@</code> directly produces the error message, with the offset appended. On success, the <code>$@</code> variable is guaranteed to be <code>undef</code>.</p>
+
+<p>The available diagnostics are:</p>
+
+<dl>
+
+<dt id="Did-not-find-a-suitable-bracket:-&quot;%s&quot;"><a class="permalink" href="./Text::Balanced.html#Did-not-find-a-suitable-bracket:-%22%25s%22">#</a><a id="Did"></a><a id="Did-not-find-a-suitable-bracket:-s"></a><code>Did not find a suitable bracket: &quot;%s&quot;</code></dt>
+<dd>
+
+<p>The delimiter provided to <code>extract_bracketed</code> was not one of <code>&#39;()[]&lt;&gt;{}&#39;</code>.</p>
+
+</dd>
+<dt id="Did-not-find-prefix:-/%s/"><a class="permalink" href="./Text::Balanced.html#Did-not-find-prefix:-/%25s/">#</a><a id="Did1"></a><a id="Did-not-find-prefix:-s"></a><code>Did not find prefix: /%s/</code></dt>
+<dd>
+
+<p>A non-optional prefix was specified but wasn&#39;t found at the start of the text.</p>
+
+</dd>
+<dt id="Did-not-find-opening-bracket-after-prefix:-&quot;%s&quot;"><a class="permalink" href="./Text::Balanced.html#Did-not-find-opening-bracket-after-prefix:-%22%25s%22">#</a><a id="Did2"></a><a id="Did-not-find-opening-bracket-after-prefix:-s"></a><code>Did not find opening bracket after prefix: &quot;%s&quot;</code></dt>
+<dd>
+
+<p><code>extract_bracketed</code> or <code>extract_codeblock</code> was expecting a particular kind of bracket at the start of the text, and didn&#39;t find it.</p>
+
+</dd>
+<dt id="No-quotelike-operator-found-after-prefix:-&quot;%s&quot;"><a class="permalink" href="./Text::Balanced.html#No-quotelike-operator-found-after-prefix:-%22%25s%22">#</a><a id="No"></a><a id="No-quotelike-operator-found-after-prefix:-s"></a><code>No quotelike operator found after prefix: &quot;%s&quot;</code></dt>
+<dd>
+
+<p><code>extract_quotelike</code> didn&#39;t find one of the quotelike operators <code>q</code>, <code>qq</code>, <code>qw</code>, <code>qx</code>, <code>s</code>, <code>tr</code> or <code>y</code> at the start of the substring it was extracting.</p>
+
+</dd>
+<dt id="Unmatched-closing-bracket:-&quot;%c&quot;"><a class="permalink" href="./Text::Balanced.html#Unmatched-closing-bracket:-%22%25c%22">#</a><a id="Unmatched"></a><a id="Unmatched-closing-bracket:-c"></a><code>Unmatched closing bracket: &quot;%c&quot;</code></dt>
+<dd>
+
+<p><code>extract_bracketed</code>, <code>extract_quotelike</code> or <code>extract_codeblock</code> encountered a closing bracket where none was expected.</p>
+
+</dd>
+<dt id="Unmatched-opening-bracket(s):-&quot;%s&quot;"><a class="permalink" href="./Text::Balanced.html#Unmatched-opening-bracket(s):-%22%25s%22">#</a><a id="Unmatched1"></a><a id="Unmatched-opening-bracket-s-:-s"></a><code>Unmatched opening bracket(s): &quot;%s&quot;</code></dt>
+<dd>
+
+<p><code>extract_bracketed</code>, <code>extract_quotelike</code> or <code>extract_codeblock</code> ran out of characters in the text before closing one or more levels of nested brackets.</p>
+
+</dd>
+<dt id="Unmatched-embedded-quote-(%s)"><a class="permalink" href="./Text::Balanced.html#Unmatched-embedded-quote-(%25s)">#</a><a id="Unmatched2"></a><a id="Unmatched-embedded-quote-s"></a><code>Unmatched embedded quote (%s)</code></dt>
+<dd>
+
+<p><code>extract_bracketed</code> attempted to match an embedded quoted substring, but failed to find a closing quote to match it.</p>
+
+</dd>
+<dt id="Did-not-find-closing-delimiter-to-match-&#39;%s&#39;"><a class="permalink" href="./Text::Balanced.html#Did-not-find-closing-delimiter-to-match-&#39;%25s&#39;">#</a><a id="Did3"></a><a id="Did-not-find-closing-delimiter-to-match-s"></a><code>Did not find closing delimiter to match &#39;%s&#39;</code></dt>
+<dd>
+
+<p><code>extract_quotelike</code> was unable to find a closing delimiter to match the one that opened the quote-like operation.</p>
+
+</dd>
+<dt id="Mismatched-closing-bracket:-expected-&quot;%c&quot;-but-found-&quot;%s&quot;"><a class="permalink" href="./Text::Balanced.html#Mismatched-closing-bracket:-expected-%22%25c%22-but-found-%22%25s%22">#</a><a id="Mismatched"></a><a id="Mismatched-closing-bracket:-expected-c-but-found-s"></a><code>Mismatched closing bracket: expected &quot;%c&quot; but found &quot;%s&quot;</code></dt>
+<dd>
+
+<p><code>extract_bracketed</code>, <code>extract_quotelike</code> or <code>extract_codeblock</code> found a valid bracket delimiter, but it was the wrong species. This usually indicates a nesting error, but may indicate incorrect quoting or escaping.</p>
+
+</dd>
+<dt id="No-block-delimiter-found-after-quotelike-&quot;%s&quot;"><a class="permalink" href="./Text::Balanced.html#No-block-delimiter-found-after-quotelike-%22%25s%22">#</a><a id="No1"></a><a id="No-block-delimiter-found-after-quotelike-s"></a><code>No block delimiter found after quotelike &quot;%s&quot;</code></dt>
+<dd>
+
+<p><code>extract_quotelike</code> or <code>extract_codeblock</code> found one of the quotelike operators <code>q</code>, <code>qq</code>, <code>qw</code>, <code>qx</code>, <code>s</code>, <code>tr</code> or <code>y</code> without a suitable block after it.</p>
+
+</dd>
+<dt id="Did-not-find-leading-dereferencer"><a class="permalink" href="./Text::Balanced.html#Did-not-find-leading-dereferencer">#</a><a id="Did4"></a><code>Did not find leading dereferencer</code></dt>
+<dd>
+
+<p><code>extract_variable</code> was expecting one of &#39;$&#39;, &#39;@&#39;, or &#39;%&#39; at the start of a variable, but didn&#39;t find any of them.</p>
+
+</dd>
+<dt id="Bad-identifier-after-dereferencer"><a class="permalink" href="./Text::Balanced.html#Bad-identifier-after-dereferencer">#</a><a id="Bad"></a><code>Bad identifier after dereferencer</code></dt>
+<dd>
+
+<p><code>extract_variable</code> found a &#39;$&#39;, &#39;@&#39;, or &#39;%&#39; indicating a variable, but that character was not followed by a legal Perl identifier.</p>
+
+</dd>
+<dt id="Did-not-find-expected-opening-bracket-at-%s"><a class="permalink" href="./Text::Balanced.html#Did-not-find-expected-opening-bracket-at-%25s">#</a><a id="Did5"></a><a id="Did-not-find-expected-opening-bracket-at-s"></a><code>Did not find expected opening bracket at %s</code></dt>
+<dd>
+
+<p><code>extract_codeblock</code> failed to find any of the outermost opening brackets that were specified.</p>
+
+</dd>
+<dt id="Improperly-nested-codeblock-at-%s"><a class="permalink" href="./Text::Balanced.html#Improperly-nested-codeblock-at-%25s">#</a><a id="Improperly"></a><a id="Improperly-nested-codeblock-at-s"></a><code>Improperly nested codeblock at %s</code></dt>
+<dd>
+
+<p>A nested code block was found that started with a delimiter that was specified as being only to be used as an outermost bracket.</p>
+
+</dd>
+<dt id="Missing-second-block-for-quotelike-&quot;%s&quot;"><a class="permalink" href="./Text::Balanced.html#Missing-second-block-for-quotelike-%22%25s%22">#</a><a id="Missing"></a><a id="Missing-second-block-for-quotelike-s"></a><code>Missing second block for quotelike &quot;%s&quot;</code></dt>
+<dd>
+
+<p><code>extract_codeblock</code> or <code>extract_quotelike</code> found one of the quotelike operators <code>s</code>, <code>tr</code> or <code>y</code> followed by only one block.</p>
+
+</dd>
+<dt id="No-match-found-for-opening-bracket"><a class="permalink" href="./Text::Balanced.html#No-match-found-for-opening-bracket">#</a><a id="No2"></a><code>No match found for opening bracket</code></dt>
+<dd>
+
+<p><code>extract_codeblock</code> failed to find a closing bracket to match the outermost opening bracket.</p>
+
+</dd>
+<dt id="Did-not-find-opening-tag:-/%s/"><a class="permalink" href="./Text::Balanced.html#Did-not-find-opening-tag:-/%25s/">#</a><a id="Did6"></a><a id="Did-not-find-opening-tag:-s"></a><code>Did not find opening tag: /%s/</code></dt>
+<dd>
+
+<p><code>extract_tagged</code> did not find a suitable opening tag (after any specified prefix was removed).</p>
+
+</dd>
+<dt id="Unable-to-construct-closing-tag-to-match:-/%s/"><a class="permalink" href="./Text::Balanced.html#Unable-to-construct-closing-tag-to-match:-/%25s/">#</a><a id="Unable"></a><a id="Unable-to-construct-closing-tag-to-match:-s"></a><code>Unable to construct closing tag to match: /%s/</code></dt>
+<dd>
+
+<p><code>extract_tagged</code> matched the specified opening tag and tried to modify the matched text to produce a matching closing tag (because none was specified). It failed to generate the closing tag, almost certainly because the opening tag did not start with a bracket of some kind.</p>
+
+</dd>
+<dt id="Found-invalid-nested-tag:-%s"><a class="permalink" href="./Text::Balanced.html#Found-invalid-nested-tag:-%25s">#</a><a id="Found"></a><a id="Found-invalid-nested-tag:-s"></a><code>Found invalid nested tag: %s</code></dt>
+<dd>
+
+<p><code>extract_tagged</code> found a nested tag that appeared in the &quot;reject&quot; list (and the failure mode was not &quot;MAX&quot; or &quot;PARA&quot;).</p>
+
+</dd>
+<dt id="Found-unbalanced-nested-tag:-%s"><a class="permalink" href="./Text::Balanced.html#Found-unbalanced-nested-tag:-%25s">#</a><a id="Found1"></a><a id="Found-unbalanced-nested-tag:-s"></a><code>Found unbalanced nested tag: %s</code></dt>
+<dd>
+
+<p><code>extract_tagged</code> found a nested opening tag that was not matched by a corresponding nested closing tag (and the failure mode was not &quot;MAX&quot; or &quot;PARA&quot;).</p>
+
+</dd>
+<dt id="Did-not-find-closing-tag"><a class="permalink" href="./Text::Balanced.html#Did-not-find-closing-tag">#</a><a id="Did7"></a><code>Did not find closing tag</code></dt>
+<dd>
+
+<p><code>extract_tagged</code> reached the end of the text without finding a closing tag to match the original opening tag (and the failure mode was not &quot;MAX&quot; or &quot;PARA&quot;).</p>
+
+</dd>
+</dl>
+
+<h1 id="EXPORTS"><a class="permalink" href="./Text::Balanced.html#EXPORTS">#</a>EXPORTS</h1>
+
+<p>The following symbols are, or can be, exported by this module:</p>
+
+<dl>
+
+<dt id="Default-Exports"><a class="permalink" href="./Text::Balanced.html#Default-Exports">#</a><a id="Default"></a>Default Exports</dt>
+<dd>
+
+<p><i>None</i>.</p>
+
+</dd>
+<dt id="Optional-Exports"><a class="permalink" href="./Text::Balanced.html#Optional-Exports">#</a><a id="Optional"></a>Optional Exports</dt>
+<dd>
+
+<p><code>extract_delimited</code>, <code>extract_bracketed</code>, <code>extract_quotelike</code>, <code>extract_codeblock</code>, <code>extract_variable</code>, <code>extract_tagged</code>, <code>extract_multiple</code>, <code>gen_delimited_pat</code>, <code>gen_extract_tagged</code>, <code>delimited_pat</code>.</p>
+
+</dd>
+<dt id="Export-Tags"><a class="permalink" href="./Text::Balanced.html#Export-Tags">#</a><a id="Export"></a>Export Tags</dt>
+<dd>
+
+<dl>
+
+<dt id=":ALL"><a class="permalink" href="./Text::Balanced.html#:ALL">#</a><a id="ALL"></a><code>:ALL</code></dt>
+<dd>
+
+<p><code>extract_delimited</code>, <code>extract_bracketed</code>, <code>extract_quotelike</code>, <code>extract_codeblock</code>, <code>extract_variable</code>, <code>extract_tagged</code>, <code>extract_multiple</code>, <code>gen_delimited_pat</code>, <code>gen_extract_tagged</code>, <code>delimited_pat</code>.</p>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<h1 id="KNOWN-BUGS"><a class="permalink" href="./Text::Balanced.html#KNOWN-BUGS">#</a><a id="KNOWN"></a>KNOWN BUGS</h1>
+
+<p>See <a href="https://rt.cpan.org/Dist/Display.html?Status=Active&amp;Queue=Text-Balanced">https://rt.cpan.org/Dist/Display.html?Status=Active&amp;Queue=Text-Balanced</a>.</p>
+
+<h1 id="FEEDBACK"><a class="permalink" href="./Text::Balanced.html#FEEDBACK">#</a>FEEDBACK</h1>
+
+<p>Patches, bug reports, suggestions or any other feedback is welcome.</p>
+
+<p>Patches can be sent as GitHub pull requests at <a href="https://github.com/steve-m-hay/Text-Balanced/pulls">https://github.com/steve-m-hay/Text-Balanced/pulls</a>.</p>
+
+<p>Bug reports and suggestions can be made on the CPAN Request Tracker at <a href="https://rt.cpan.org/Public/Bug/Report.html?Queue=Text-Balanced">https://rt.cpan.org/Public/Bug/Report.html?Queue=Text-Balanced</a>.</p>
+
+<p>Currently active requests on the CPAN Request Tracker can be viewed at <a href="https://rt.cpan.org/Public/Dist/Display.html?Status=Active;Queue=Text-Balanced">https://rt.cpan.org/Public/Dist/Display.html?Status=Active;Queue=Text-Balanced</a>.</p>
+
+<p>Please test this distribution. See CPAN Testers Reports at <a href="https://www.cpantesters.org/">https://www.cpantesters.org/</a> for details of how to get involved.</p>
+
+<p>Previous test results on CPAN Testers Reports can be viewed at <a href="https://www.cpantesters.org/distro/T/Text-Balanced.html">https://www.cpantesters.org/distro/T/Text-Balanced.html</a>.</p>
+
+<p>Please rate this distribution on CPAN Ratings at <a href="https://cpanratings.perl.org/rate/?distribution=Text-Balanced">https://cpanratings.perl.org/rate/?distribution=Text-Balanced</a>.</p>
+
+<h1 id="AVAILABILITY"><a class="permalink" href="./Text::Balanced.html#AVAILABILITY">#</a>AVAILABILITY</h1>
+
+<p>The latest version of this module is available from CPAN (see <a href="perlmodlib.html#CPAN">&quot;CPAN&quot; in perlmodlib</a> for details) at</p>
+
+<p><a href="https://metacpan.org/release/Text-Balanced">https://metacpan.org/release/Text-Balanced</a> or</p>
+
+<p><a href="https://www.cpan.org/authors/id/S/SH/SHAY/">https://www.cpan.org/authors/id/S/SH/SHAY/</a> or</p>
+
+<p><a href="https://www.cpan.org/modules/by-module/Text/">https://www.cpan.org/modules/by-module/Text/</a>.</p>
+
+<p>The latest source code is available from GitHub at <a href="https://github.com/steve-m-hay/Text-Balanced">https://github.com/steve-m-hay/Text-Balanced</a>.</p>
+
+<h1 id="INSTALLATION"><a class="permalink" href="./Text::Balanced.html#INSTALLATION">#</a>INSTALLATION</h1>
+
+<p>See the <i>INSTALL</i> file.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./Text::Balanced.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Damian Conway &lt;<a href="mailto:damian@conway.org">damian@conway.org</a>&gt;.</p>
+
+<p>Steve Hay &lt;<a href="mailto:shay@cpan.org">shay@cpan.org</a>&gt; is now maintaining Text::Balanced as of version 2.03.</p>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="./Text::Balanced.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>Copyright (C) 1997-2001 Damian Conway. All rights reserved.</p>
+
+<p>Copyright (C) 2009 Adam Kennedy.</p>
+
+<p>Copyright (C) 2015, 2020 Steve Hay. All rights reserved.</p>
+
+<h1 id="LICENCE"><a class="permalink" href="./Text::Balanced.html#LICENCE">#</a>LICENCE</h1>
+
+<p>This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself, i.e. under the terms of either the GNU General Public License or the Artistic License, as specified in the <i>LICENCE</i> file.</p>
+
+<h1 id="VERSION"><a class="permalink" href="./Text::Balanced.html#VERSION">#</a>VERSION</h1>
+
+<p>Version 2.04</p>
+
+<h1 id="DATE"><a class="permalink" href="./Text::Balanced.html#DATE">#</a>DATE</h1>
+
+<p>11 Dec 2020</p>
+
+<h1 id="HISTORY"><a class="permalink" href="./Text::Balanced.html#HISTORY">#</a>HISTORY</h1>
+
+<p>See the <i>Changes</i> file.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+=over
+
+=item formline PICTURE,LIST
+X<formline>
+
+This is an internal function used by L<C<format>|/format>s, though you
+may call it, too.  It formats (see L<perlform>) a list of values
+according to the contents of PICTURE, placing the output into the format
+output accumulator, L<C<$^A>|perlvar/$^A> (or C<$ACCUMULATOR> in
+L<English>).  Eventually, when a L<C<write>|/write FILEHANDLE> is done,
+the contents of L<C<$^A>|perlvar/$^A> are written to some filehandle.
+You could also read L<C<$^A>|perlvar/$^A> and then set
+L<C<$^A>|perlvar/$^A> back to C<"">.  Note that a format typically does
+one L<C<formline>|/formline PICTURE,LIST> per line of form, but the
+L<C<formline>|/formline PICTURE,LIST> function itself doesn't care how
+many newlines are embedded in the PICTURE.  This means that the C<~> and
+C<~~> tokens treat the entire PICTURE as a single line.  You may
+therefore need to use multiple formlines to implement a single record
+format, just like the L<C<format>|/format> compiler.
+
+Be careful if you put double quotes around the picture, because an C<@>
+character may be taken to mean the beginning of an array name.
+L<C<formline>|/formline PICTURE,LIST> always returns true.  See
+L<perlform> for other examples.
+
+If you are trying to use this instead of L<C<write>|/write FILEHANDLE>
+to capture the output, you may find it easier to open a filehandle to a
+scalar (C<< open my $fh, ">", \$output >>) and write to that instead.
+
+=back

@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>find2perl - translate find command lines to Perl code - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of App-find2perl - MetaCPAN" href="https://metacpan.org/dist/App-find2perl/releases.rss" />
+        <link rel="canonical" href="https://metacpan.org/dist/App-find2perl/view/script/find2perl" />
+        <meta name="description" content="translate find command lines to Perl code" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/find2perl" />
+<meta name="twitter:title"       content="find2perl" />
+<meta name="twitter:description" content="translate find command lines to Perl code" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="find2perl.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of App-find2perl was released.">
+      <span class="relatize">15 Oct 2018 13:04:11 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/App-find2perl">App-find2perl</a>
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/App-find2perl/source/script/find2perl">Source</a>
+    (<a href="https://metacpan.org/dist/App-find2perl/source/script/find2perl?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/App-find2perl/source/script">Browse</a>
+    (<a href="https://metacpan.org/dist/App-find2perl/source/script?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/App-find2perl/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/App-find2perl/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/Leont/app-find2perl">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="http://rt.cpan.org/Public/Dist/Display.html?Name=App-find2perl">Issues</a>
+      (0)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=App-find2perl+1.005" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/A/App-find2perl.html?oncpan=1&amp;distmat=1&amp;version=1.005&amp;grade=2" style="color: #090">4910</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/A/App-find2perl.html?oncpan=1&amp;distmat=1&amp;version=1.005&amp;grade=3" style="color: #900">263</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/A/App-find2perl.html?oncpan=1&amp;distmat=1&amp;version=1.005&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/LEONT/App-find2perl-1.005">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on App-find2perl who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/App-find2perl-1.005/index.html">% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/App-find2perl/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/L/LE/LEONT/App-find2perl-1.005.tar.gz">
+      Download (<span itemprop="fileSize">20.86KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FLEONT%2FApp-find2perl-1.005%2Fscript%2Ffind2perl">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/App-find2perl/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/App-find2perl/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:App-find2perl">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="App-find2perl">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/script/find2perl&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="LEONT/App-find2perl-1.005"
+>1.005
+  (LEONT on 2018-10-15)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.004"
+>1.004
+  (LEONT on 2018-03-19)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="LEONT/App-find2perl-1.003"
+>1.003
+  (LEONT on 2014-01-30)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.002"
+>1.002
+  (LEONT on 2014-01-06)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.001"
+>1.001
+  (LEONT on 2013-12-05)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.000"
+>1.000
+  (LEONT on 2013-12-03)</option>
+<option
+  
+  value="LEONT/App-find2perl-0.001"
+>0.001
+  (LEONT on 2013-12-03)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/LEONT/App-find2perl-1.005/diff/' + encodeURIComponent(this.value) + '/script/find2perl'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="LEONT/App-find2perl-1.005"
+>1.005
+  (LEONT on 2018-10-15)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.004"
+>1.004
+  (LEONT on 2018-03-19)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="LEONT/App-find2perl-1.003"
+>1.003
+  (LEONT on 2014-01-30)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.002"
+>1.002
+  (LEONT on 2014-01-06)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.001"
+>1.001
+  (LEONT on 2013-12-05)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.000"
+>1.000
+  (LEONT on 2013-12-03)</option>
+<option
+  
+  value="LEONT/App-find2perl-0.001"
+>0.001
+  (LEONT on 2013-12-03)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/File::Spec::Functions" title="File::Spec::Functions" class="ellipsis">File::Spec::Functions</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/vars" title="vars" class="ellipsis">vars</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/find2perl/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=find2perl">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=App-find2perl">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/LEONT/App-find2perl-1.005/view/script/find2perl">This version</a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/App-find2perl/view/script/find2perl">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/JNBEK"><img src="https://www.gravatar.com/avatar/499c962737f2931cbce15097c5cf4002?d=identicon&amp;s=20" title="JNBEK" alt="JNBEK"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/App-find2perl/plussers">1 PAUSE user</a>
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/LEONT" class="author-name">Leon Timmermans</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/script/find2perl&#39;" class="">
+<option
+  selected
+  value="LEONT/App-find2perl-1.005"
+>1.005
+  (LEONT on 2018-10-15)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.004"
+>1.004
+  (LEONT on 2018-03-19)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="LEONT/App-find2perl-1.003"
+>1.003
+  (LEONT on 2014-01-30)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.002"
+>1.002
+  (LEONT on 2014-01-06)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.001"
+>1.001
+  (LEONT on 2013-12-05)</option>
+<option
+  
+  value="LEONT/App-find2perl-1.000"
+>1.000
+  (LEONT on 2013-12-03)</option>
+<option
+  
+  value="LEONT/App-find2perl-0.001"
+>0.001
+  (LEONT on 2013-12-03)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/App-find2perl">App-find2perl-1.005</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage one &#10;
+          • 1 direct dependent &#10;          • 2 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="App-find2perl-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="App-find2perl-1.005">
+    <input type="hidden" name="author" value="LEONT">
+    <input type="hidden" name="distribution" value="App-find2perl">
+    <button type="submit" class="favorite highlight"><span>1</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="find2perl.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>1</span> ++</a>
+</div>
+   / <span>find2perl</span>
+</div>
+          </div>
+          <main class="content">
+
+<input id="HANDOFF" type="checkbox" class="notification-toggle-checkbox" />
+<div id="metacpan_notification" class="well collapsed notify-HANDOFF">
+    <label class="remove-notification" for="HANDOFF" >
+      <i class="fa fa-fw fa-times black"></i>
+    </label>
+    <div id="metacpan_notification-container">
+      <h2>Take me over?</h2>
+      <div>
+The maintainer of this distribution is looking for someone to take over!
+        If you're interested then please contact them via
+        <a href="mailto:fawaka@gmail.com?subject=Take%20over%20App%3A%3Afind2perl%3F&amp;body=Hello%2C%0A%0AI%27m%20interested%20in%20taking%20over%20the%20App%3A%3Afind2perl%20module.%20If%20you%20can%20grant%20me%20the%20privilege%20I%20will%20release%20the%20next%20version.%0A%0A">email</a>.
+        <a href="https://metacpan.org/about/faq#howtoadoptadistribution"><i class="fa fa-info-circle"></i></a>
+      </div>
+  </div>
+</div>
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="find2perl.html#NAME">NAME</a></li>
+  <li><a href="find2perl.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="find2perl.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="find2perl.html#SEE-ALSO">SEE ALSO</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>find2perl - translate find command lines to Perl code</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>        find2perl [paths] [predicates] | perl</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>find2perl is a little translator to convert find command lines to equivalent Perl code. The resulting code is typically faster than running find itself.</p>
+
+<p>&quot;paths&quot; are a set of paths where find2perl will start its searches and &quot;predicates&quot; are taken from the following list.</p>
+
+<dl>
+
+<dt id="!-PREDICATE"><a id="PREDICATE"></a><code>! PREDICATE</code></dt>
+<dd>
+
+<p>Negate the sense of the following predicate. The <code>!</code> must be passed as a distinct argument, so it may need to be surrounded by whitespace and/or quoted from interpretation by the shell using a backslash (just as with using <code>find(1)</code>).</p>
+
+</dd>
+<dt id="(-PREDICATES-)"><a id="PREDICATES"></a><code>( PREDICATES )</code></dt>
+<dd>
+
+<p>Group the given PREDICATES. The parentheses must be passed as distinct arguments, so they may need to be surrounded by whitespace and/or quoted from interpretation by the shell using a backslash (just as with using <code>find(1)</code>).</p>
+
+</dd>
+<dt id="PREDICATE1-PREDICATE2"><a id="PREDICATE1"></a><code>PREDICATE1 PREDICATE2</code></dt>
+<dd>
+
+<p>True if _both_ PREDICATE1 and PREDICATE2 are true; PREDICATE2 is not evaluated if PREDICATE1 is false.</p>
+
+</dd>
+<dt id="PREDICATE1-o-PREDICATE2"><a id="PREDICATE11"></a><code>PREDICATE1 -o PREDICATE2</code></dt>
+<dd>
+
+<p>True if either one of PREDICATE1 or PREDICATE2 is true; PREDICATE2 is not evaluated if PREDICATE1 is true.</p>
+
+</dd>
+<dt id="-follow"><a id="follow"></a><code>-follow</code></dt>
+<dd>
+
+<p>Follow (dereference) symlinks. The checking of file attributes depends on the position of the <code>-follow</code> option. If it precedes the file check option, an <code>stat</code> is done which means the file check applies to the file the symbolic link is pointing to. If <code>-follow</code> option follows the file check option, this now applies to the symbolic link itself, i.e. an <code>lstat</code> is done.</p>
+
+</dd>
+<dt id="-depth"><a id="depth"></a><code>-depth</code></dt>
+<dd>
+
+<p>Change directory traversal algorithm from breadth-first to depth-first.</p>
+
+</dd>
+<dt id="-prune"><a id="prune"></a><code>-prune</code></dt>
+<dd>
+
+<p>Do not descend into the directory currently matched.</p>
+
+</dd>
+<dt id="-xdev"><a id="xdev"></a><code>-xdev</code></dt>
+<dd>
+
+<p>Do not traverse mount points (prunes search at mount-point directories).</p>
+
+</dd>
+<dt id="-name-GLOB"><a id="name-GLOB"></a><code>-name GLOB</code></dt>
+<dd>
+
+<p>File name matches specified GLOB wildcard pattern. GLOB may need to be quoted to avoid interpretation by the shell (just as with using <code>find(1)</code>).</p>
+
+</dd>
+<dt id="-iname-GLOB"><a id="iname-GLOB"></a><code>-iname GLOB</code></dt>
+<dd>
+
+<p>Like <code>-name</code>, but the match is case insensitive.</p>
+
+</dd>
+<dt id="-path-GLOB"><a id="path-GLOB"></a><code>-path GLOB</code></dt>
+<dd>
+
+<p>Path name matches specified GLOB wildcard pattern.</p>
+
+</dd>
+<dt id="-ipath-GLOB"><a id="ipath-GLOB"></a><code>-ipath GLOB</code></dt>
+<dd>
+
+<p>Like <code>-path</code>, but the match is case insensitive.</p>
+
+</dd>
+<dt id="-perm-PERM"><a id="perm-PERM"></a><code>-perm PERM</code></dt>
+<dd>
+
+<p>Low-order 9 bits of permission match octal value PERM.</p>
+
+</dd>
+<dt id="-perm-PERM1"><a id="perm-PERM1"></a><code>-perm -PERM</code></dt>
+<dd>
+
+<p>The bits specified in PERM are all set in file&#39;s permissions.</p>
+
+</dd>
+<dt id="-type-X"><a id="type-X"></a><code>-type X</code></dt>
+<dd>
+
+<p>The file&#39;s type matches perl&#39;s <code>-X</code> operator.</p>
+
+</dd>
+<dt id="-fstype-TYPE"><a id="fstype-TYPE"></a><code>-fstype TYPE</code></dt>
+<dd>
+
+<p>Filesystem of current path is of type TYPE (only NFS/non-NFS distinction is implemented).</p>
+
+</dd>
+<dt id="-user-USER"><a id="user-USER"></a><code>-user USER</code></dt>
+<dd>
+
+<p>True if USER is owner of file.</p>
+
+</dd>
+<dt id="-group-GROUP"><a id="group-GROUP"></a><code>-group GROUP</code></dt>
+<dd>
+
+<p>True if file&#39;s group is GROUP.</p>
+
+</dd>
+<dt id="-nouser"><a id="nouser"></a><code>-nouser</code></dt>
+<dd>
+
+<p>True if file&#39;s owner is not in password database.</p>
+
+</dd>
+<dt id="-nogroup"><a id="nogroup"></a><code>-nogroup</code></dt>
+<dd>
+
+<p>True if file&#39;s group is not in group database.</p>
+
+</dd>
+<dt id="-inum-INUM"><a id="inum-INUM"></a><code>-inum INUM</code></dt>
+<dd>
+
+<p>True file&#39;s inode number is INUM.</p>
+
+</dd>
+<dt id="-links-N"><a id="links-N"></a><code>-links N</code></dt>
+<dd>
+
+<p>True if (hard) link count of file matches N (see below).</p>
+
+</dd>
+<dt id="-size-N"><a id="size-N"></a><code>-size N</code></dt>
+<dd>
+
+<p>True if file&#39;s size matches N (see below) N is normally counted in 512-byte blocks, but a suffix of &quot;c&quot; specifies that size should be counted in characters (bytes) and a suffix of &quot;k&quot; specifies that size should be counted in 1024-byte blocks.</p>
+
+</dd>
+<dt id="-atime-N"><a id="atime-N"></a><code>-atime N</code></dt>
+<dd>
+
+<p>True if last-access time of file matches N (measured in days) (see below).</p>
+
+</dd>
+<dt id="-ctime-N"><a id="ctime-N"></a><code>-ctime N</code></dt>
+<dd>
+
+<p>True if last-changed time of file&#39;s inode matches N (measured in days, see below).</p>
+
+</dd>
+<dt id="-mtime-N"><a id="mtime-N"></a><code>-mtime N</code></dt>
+<dd>
+
+<p>True if last-modified time of file matches N (measured in days, see below).</p>
+
+</dd>
+<dt id="-newer-FILE"><a id="newer-FILE"></a><code>-newer FILE</code></dt>
+<dd>
+
+<p>True if last-modified time of file matches N.</p>
+
+</dd>
+<dt id="-print"><a id="print"></a><code>-print</code></dt>
+<dd>
+
+<p>Print out path of file (always true). If none of <code>-exec</code>, <code>-ls</code>, <code>-print0</code>, or <code>-ok</code> is specified, then <code>-print</code> will be added implicitly.</p>
+
+</dd>
+<dt id="-print0"><a id="print0"></a><code>-print0</code></dt>
+<dd>
+
+<p>Like -print, but terminates with \0 instead of \n.</p>
+
+</dd>
+<dt id="-exec-OPTIONS-;"><a id="exec-OPTIONS"></a><code>-exec OPTIONS ;</code></dt>
+<dd>
+
+<p>exec() the arguments in OPTIONS in a subprocess; any occurrence of {} in OPTIONS will first be substituted with the path of the current file. Note that the command &quot;rm&quot; has been special-cased to use perl&#39;s unlink() function instead (as an optimization). The <code>;</code> must be passed as a distinct argument, so it may need to be surrounded by whitespace and/or quoted from interpretation by the shell using a backslash (just as with using <code>find(1)</code>).</p>
+
+</dd>
+<dt id="-ok-OPTIONS-;"><a id="ok-OPTIONS"></a><code>-ok OPTIONS ;</code></dt>
+<dd>
+
+<p>Like -exec, but first prompts user; if user&#39;s response does not begin with a y, skip the exec. The <code>;</code> must be passed as a distinct argument, so it may need to be surrounded by whitespace and/or quoted from interpretation by the shell using a backslash (just as with using <code>find(1)</code>).</p>
+
+</dd>
+<dt id="-eval-EXPR"><a id="eval-EXPR"></a><code>-eval EXPR</code></dt>
+<dd>
+
+<p>Has the perl script eval() the EXPR.</p>
+
+</dd>
+<dt id="-ls"><a id="ls"></a><code>-ls</code></dt>
+<dd>
+
+<p>Simulates <code>-exec ls -dils {} ;</code></p>
+
+</dd>
+<dt id="-tar-FILE"><a id="tar-FILE"></a><code>-tar FILE</code></dt>
+<dd>
+
+<p>Adds current output to tar-format FILE.</p>
+
+</dd>
+<dt id="-cpio-FILE"><a id="cpio-FILE"></a><code>-cpio FILE</code></dt>
+<dd>
+
+<p>Adds current output to old-style cpio-format FILE.</p>
+
+</dd>
+<dt id="-ncpio-FILE"><a id="ncpio-FILE"></a><code>-ncpio FILE</code></dt>
+<dd>
+
+<p>Adds current output to &quot;new&quot;-style cpio-format FILE.</p>
+
+</dd>
+</dl>
+
+<p>Predicates which take a numeric argument N can come in three forms:</p>
+
+<pre><code>   * N is prefixed with a +: match values greater than N
+   * N is prefixed with a -: match values less than N
+   * N is not prefixed with either + or -: match only values equal to N</code></pre>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p>find, File::Find.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install App::find2perl, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm App::find2perl</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install App::find2perl</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="find2perl.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

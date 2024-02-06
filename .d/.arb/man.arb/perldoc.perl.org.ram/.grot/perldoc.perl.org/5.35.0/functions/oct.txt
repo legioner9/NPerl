@@ -1,0 +1,37 @@
+=over
+
+=item oct EXPR
+X<oct> X<octal> X<hex> X<hexadecimal> X<binary> X<bin>
+
+=item oct
+
+Interprets EXPR as an octal string and returns the corresponding
+value.  An octal string consists of octal digits and, as of Perl 5.33.5,
+an optional C<0o> or C<o> prefix.  Each octal digit may be preceded by
+a single underscore, which will be ignored.
+(If EXPR happens to start off with C<0x> or C<x>, interprets it as a
+hex string.  If EXPR starts off with C<0b> or C<b>, it is interpreted as a
+binary string.  Leading whitespace is ignored in all three cases.)
+The following will handle decimal, binary, octal, and hex in standard
+Perl notation:
+
+    $val = oct($val) if $val =~ /^0/;
+
+If EXPR is omitted, uses L<C<$_>|perlvar/$_>.   To go the other way
+(produce a number in octal), use L<C<sprintf>|/sprintf FORMAT, LIST> or
+L<C<printf>|/printf FILEHANDLE FORMAT, LIST>:
+
+    my $dec_perms = (stat("filename"))[2] & 07777;
+    my $oct_perm_str = sprintf "%o", $perms;
+
+The L<C<oct>|/oct EXPR> function is commonly used when a string such as
+C<644> needs
+to be converted into a file mode, for example.  Although Perl
+automatically converts strings into numbers as needed, this automatic
+conversion assumes base 10.
+
+Leading white space is ignored without warning, as too are any trailing
+non-digits, such as a decimal point (L<C<oct>|/oct EXPR> only handles
+non-negative integers, not negative integers or floating point).
+
+=back

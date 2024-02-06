@@ -1,0 +1,49 @@
+=over
+
+=item utime LIST
+X<utime>
+
+Changes the access and modification times on each file of a list of
+files.  The first two elements of the list must be the NUMERIC access
+and modification times, in that order.  Returns the number of files
+successfully changed.  The inode change time of each file is set
+to the current time.  For example, this code has the same effect as the
+Unix L<touch(1)> command when the files I<already exist> and belong to
+the user running the program:
+
+    #!/usr/bin/perl
+    my $atime = my $mtime = time;
+    utime $atime, $mtime, @ARGV;
+
+Since Perl 5.8.0, if the first two elements of the list are
+L<C<undef>|/undef EXPR>,
+the L<utime(2)> syscall from your C library is called with a null second
+argument.  On most systems, this will set the file's access and
+modification times to the current time (i.e., equivalent to the example
+above) and will work even on files you don't own provided you have write
+permission:
+
+    for my $file (@ARGV) {
+	utime(undef, undef, $file)
+	    || warn "Couldn't touch $file: $!";
+    }
+
+Under NFS this will use the time of the NFS server, not the time of
+the local machine.  If there is a time synchronization problem, the
+NFS server and local machine will have different times.  The Unix
+L<touch(1)> command will in fact normally use this form instead of the
+one shown in the first example.
+
+Passing only one of the first two elements as L<C<undef>|/undef EXPR> is
+equivalent to passing a 0 and will not have the effect described when
+both are L<C<undef>|/undef EXPR>.  This also triggers an
+uninitialized warning.
+
+On systems that support L<futimes(2)>, you may pass filehandles among the
+files.  On systems that don't support L<futimes(2)>, passing filehandles raises
+an exception.  Filehandles must be passed as globs or glob references to be
+recognized; barewords are considered filenames.
+
+Portability issues: L<perlport/utime>.
+
+=back

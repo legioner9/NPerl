@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlfork - Perl&#39;s fork() emulation - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlfork">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlfork.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlfork">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlfork">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlfork">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlfork">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlfork">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlfork">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlfork">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlfork">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlfork">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlfork">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlfork">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlfork">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlfork">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlfork">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlfork">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlfork">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlfork">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlfork">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlfork">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlfork">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlfork">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlfork">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlfork">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlfork">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlfork">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlfork">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlfork">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlfork">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlfork">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlfork">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlfork">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlfork">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlfork">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlfork">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlfork">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlfork">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlfork">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlfork">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlfork">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlfork">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlfork">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlfork">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlfork">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlfork">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlfork">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlfork">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlfork">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlfork">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlfork">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlfork">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlfork">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlfork">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlfork">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlfork">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlfork">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlfork">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlfork">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlfork">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlfork">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlfork">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlfork">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlfork">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlfork">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlfork">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlfork">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlfork">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlfork">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlfork">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlfork">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlfork">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlfork">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlfork">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlfork">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlfork">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlfork">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlfork">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlfork">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlfork">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlfork">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlfork">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlfork.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlfork">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlfork">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlfork">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlfork">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlfork">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlfork">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlfork">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlfork">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlfork">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlfork">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlfork">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlfork">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlfork">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlfork">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlfork">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlfork">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlfork">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlfork">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlfork">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlfork">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlfork">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlfork">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlfork">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlfork">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlfork">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlfork">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlfork">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlfork">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlfork">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlfork">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlfork">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlfork">5.35.1</a>
+          <a class="dropdown-item active" href="perlfork.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlfork.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlfork.html">perlfork</a>
+          <div id="more">
+            (<a href="perlfork.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlfork">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#Behavior-of-other-Perl-features-in-forked-pseudo-processes">Behavior of other Perl features in forked pseudo-processes</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#Resource-limits">Resource limits</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#Killing-the-parent-process">Killing the parent process</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#Lifetime-of-the-parent-process-and-pseudo-processes">Lifetime of the parent process and pseudo-processes</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#CAVEATS-AND-LIMITATIONS">CAVEATS AND LIMITATIONS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#PORTABILITY-CAVEATS">PORTABILITY CAVEATS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#BUGS">BUGS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlfork.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlfork.html#NAME">#</a>NAME</h1>
+
+<p>perlfork - Perl&#39;s fork() emulation</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="perlfork.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code class="plaintext">NOTE:  As of the 5.8.0 release, fork() emulation has considerably
+matured.  However, there are still a few known bugs and differences
+from real fork() that might affect you.  See the &quot;BUGS&quot; and
+&quot;CAVEATS AND LIMITATIONS&quot; sections below.</code></pre>
+
+<p>Perl provides a fork() keyword that corresponds to the Unix system call of the same name. On most Unix-like platforms where the fork() system call is available, Perl&#39;s fork() simply calls it.</p>
+
+<p>On some platforms such as Windows where the fork() system call is not available, Perl can be built to emulate fork() at the interpreter level. While the emulation is designed to be as compatible as possible with the real fork() at the level of the Perl program, there are certain important differences that stem from the fact that all the pseudo child &quot;processes&quot; created this way live in the same real process as far as the operating system is concerned.</p>
+
+<p>This document provides a general overview of the capabilities and limitations of the fork() emulation. Note that the issues discussed here are not applicable to platforms where a real fork() is available and Perl has been configured to use it.</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlfork.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>The fork() emulation is implemented at the level of the Perl interpreter. What this means in general is that running fork() will actually clone the running interpreter and all its state, and run the cloned interpreter in a separate thread, beginning execution in the new thread just after the point where the fork() was called in the parent. We will refer to the thread that implements this child &quot;process&quot; as the pseudo-process.</p>
+
+<p>To the Perl program that called fork(), all this is designed to be transparent. The parent returns from the fork() with a pseudo-process ID that can be subsequently used in any process-manipulation functions; the child returns from the fork() with a value of <code>0</code> to signify that it is the child pseudo-process.</p>
+
+<h2 id="Behavior-of-other-Perl-features-in-forked-pseudo-processes"><a class="permalink" href="perlfork.html#Behavior-of-other-Perl-features-in-forked-pseudo-processes">#</a><a id="Behavior"></a>Behavior of other Perl features in forked pseudo-processes</h2>
+
+<p>Most Perl features behave in a natural way within pseudo-processes.</p>
+
+<dl>
+
+<dt id="$$-or-$PROCESS_ID"><a class="permalink" href="perlfork.html#$$-or-$PROCESS_ID">#</a><a id="or-PROCESS_ID"></a>$$ or $PROCESS_ID</dt>
+<dd>
+
+<p>This special variable is correctly set to the pseudo-process ID. It can be used to identify pseudo-processes within a particular session. Note that this value is subject to recycling if any pseudo-processes are launched after others have been wait()-ed on.</p>
+
+</dd>
+<dt id="%ENV"><a class="permalink" href="perlfork.html#%25ENV">#</a><a id="ENV"></a>%ENV</dt>
+<dd>
+
+<p>Each pseudo-process maintains its own virtual environment. Modifications to %ENV affect the virtual environment, and are only visible within that pseudo-process, and in any processes (or pseudo-processes) launched from it.</p>
+
+</dd>
+<dt id="chdir()-and-all-other-builtins-that-accept-filenames"><a class="permalink" href="perlfork.html#chdir()-and-all-other-builtins-that-accept-filenames">#</a><a id="chdir"></a><a id="chdir-and-all-other-builtins-that-accept-filenames"></a>chdir() and all other builtins that accept filenames</dt>
+<dd>
+
+<p>Each pseudo-process maintains its own virtual idea of the current directory. Modifications to the current directory using chdir() are only visible within that pseudo-process, and in any processes (or pseudo-processes) launched from it. All file and directory accesses from the pseudo-process will correctly map the virtual working directory to the real working directory appropriately.</p>
+
+</dd>
+<dt id="wait()-and-waitpid()"><a class="permalink" href="perlfork.html#wait()-and-waitpid()">#</a><a id="wait"></a><a id="wait-and-waitpid"></a>wait() and waitpid()</dt>
+<dd>
+
+<p>wait() and waitpid() can be passed a pseudo-process ID returned by fork(). These calls will properly wait for the termination of the pseudo-process and return its status.</p>
+
+</dd>
+<dt id="kill()"><a class="permalink" href="perlfork.html#kill()">#</a><a id="kill"></a>kill()</dt>
+<dd>
+
+<p><code>kill(&#39;KILL&#39;, ...)</code> can be used to terminate a pseudo-process by passing it the ID returned by fork(). The outcome of kill on a pseudo-process is unpredictable and it should not be used except under dire circumstances, because the operating system may not guarantee integrity of the process resources when a running thread is terminated. The process which implements the pseudo-processes can be blocked and the Perl interpreter hangs. Note that using <code>kill(&#39;KILL&#39;, ...)</code> on a pseudo-process() may typically cause memory leaks, because the thread that implements the pseudo-process does not get a chance to clean up its resources.</p>
+
+<p><code>kill(&#39;TERM&#39;, ...)</code> can also be used on pseudo-processes, but the signal will not be delivered while the pseudo-process is blocked by a system call, e.g. waiting for a socket to connect, or trying to read from a socket with no data available. Starting in Perl 5.14 the parent process will not wait for children to exit once they have been signalled with <code>kill(&#39;TERM&#39;, ...)</code> to avoid deadlock during process exit. You will have to explicitly call waitpid() to make sure the child has time to clean-up itself, but you are then also responsible that the child is not blocking on I/O either.</p>
+
+</dd>
+<dt id="exec()"><a class="permalink" href="perlfork.html#exec()">#</a><a id="exec"></a>exec()</dt>
+<dd>
+
+<p>Calling exec() within a pseudo-process actually spawns the requested executable in a separate process and waits for it to complete before exiting with the same exit status as that process. This means that the process ID reported within the running executable will be different from what the earlier Perl fork() might have returned. Similarly, any process manipulation functions applied to the ID returned by fork() will affect the waiting pseudo-process that called exec(), not the real process it is waiting for after the exec().</p>
+
+<p>When exec() is called inside a pseudo-process then DESTROY methods and END blocks will still be called after the external process returns.</p>
+
+</dd>
+<dt id="exit()"><a class="permalink" href="perlfork.html#exit()">#</a><a id="exit"></a>exit()</dt>
+<dd>
+
+<p>exit() always exits just the executing pseudo-process, after automatically wait()-ing for any outstanding child pseudo-processes. Note that this means that the process as a whole will not exit unless all running pseudo-processes have exited. See below for some limitations with open filehandles.</p>
+
+</dd>
+<dt id="Open-handles-to-files,-directories-and-network-sockets"><a class="permalink" href="perlfork.html#Open-handles-to-files,-directories-and-network-sockets">#</a><a id="Open"></a><a id="Open-handles-to-files-directories-and-network-sockets"></a>Open handles to files, directories and network sockets</dt>
+<dd>
+
+<p>All open handles are dup()-ed in pseudo-processes, so that closing any handles in one process does not affect the others. See below for some limitations.</p>
+
+</dd>
+</dl>
+
+<h2 id="Resource-limits"><a class="permalink" href="perlfork.html#Resource-limits">#</a><a id="Resource"></a>Resource limits</h2>
+
+<p>In the eyes of the operating system, pseudo-processes created via the fork() emulation are simply threads in the same process. This means that any process-level limits imposed by the operating system apply to all pseudo-processes taken together. This includes any limits imposed by the operating system on the number of open file, directory and socket handles, limits on disk space usage, limits on memory size, limits on CPU utilization etc.</p>
+
+<h2 id="Killing-the-parent-process"><a class="permalink" href="perlfork.html#Killing-the-parent-process">#</a><a id="Killing"></a>Killing the parent process</h2>
+
+<p>If the parent process is killed (either using Perl&#39;s kill() builtin, or using some external means) all the pseudo-processes are killed as well, and the whole process exits.</p>
+
+<h2 id="Lifetime-of-the-parent-process-and-pseudo-processes"><a class="permalink" href="perlfork.html#Lifetime-of-the-parent-process-and-pseudo-processes">#</a><a id="Lifetime"></a>Lifetime of the parent process and pseudo-processes</h2>
+
+<p>During the normal course of events, the parent process and every pseudo-process started by it will wait for their respective pseudo-children to complete before they exit. This means that the parent and every pseudo-child created by it that is also a pseudo-parent will only exit after their pseudo-children have exited.</p>
+
+<p>Starting with Perl 5.14 a parent will not wait() automatically for any child that has been signalled with <code>kill(&#39;TERM&#39;, ...)</code> to avoid a deadlock in case the child is blocking on I/O and never receives the signal.</p>
+
+<h1 id="CAVEATS-AND-LIMITATIONS"><a class="permalink" href="perlfork.html#CAVEATS-AND-LIMITATIONS">#</a><a id="CAVEATS"></a>CAVEATS AND LIMITATIONS</h1>
+
+<dl>
+
+<dt id="BEGIN-blocks"><a class="permalink" href="perlfork.html#BEGIN-blocks">#</a><a id="BEGIN"></a>BEGIN blocks</dt>
+<dd>
+
+<p>The fork() emulation will not work entirely correctly when called from within a BEGIN block. The forked copy will run the contents of the BEGIN block, but will not continue parsing the source stream after the BEGIN block. For example, consider the following code:</p>
+
+<pre><code>BEGIN {
+    fork and exit;          # fork child and exit the parent
+    print &quot;inner\n&quot;;
+}
+print &quot;outer\n&quot;;</code></pre>
+
+<p>This will print:</p>
+
+<pre><code class="plaintext">inner</code></pre>
+
+<p>rather than the expected:</p>
+
+<pre><code class="plaintext">inner
+outer</code></pre>
+
+<p>This limitation arises from fundamental technical difficulties in cloning and restarting the stacks used by the Perl parser in the middle of a parse.</p>
+
+</dd>
+<dt id="Open-filehandles"><a class="permalink" href="perlfork.html#Open-filehandles">#</a><a id="Open1"></a>Open filehandles</dt>
+<dd>
+
+<p>Any filehandles open at the time of the fork() will be dup()-ed. Thus, the files can be closed independently in the parent and child, but beware that the dup()-ed handles will still share the same seek pointer. Changing the seek position in the parent will change it in the child and vice-versa. One can avoid this by opening files that need distinct seek pointers separately in the child.</p>
+
+<p>On some operating systems, notably Solaris and Unixware, calling <code>exit()</code> from a child process will flush and close open filehandles in the parent, thereby corrupting the filehandles. On these systems, calling <code>_exit()</code> is suggested instead. <code>_exit()</code> is available in Perl through the <code>POSIX</code> module. Please consult your system&#39;s manpages for more information on this.</p>
+
+</dd>
+<dt id="Open-directory-handles"><a class="permalink" href="perlfork.html#Open-directory-handles">#</a><a id="Open2"></a>Open directory handles</dt>
+<dd>
+
+<p>Perl will completely read from all open directory handles until they reach the end of the stream. It will then seekdir() back to the original location and all future readdir() requests will be fulfilled from the cache buffer. That means that neither the directory handle held by the parent process nor the one held by the child process will see any changes made to the directory after the fork() call.</p>
+
+<p>Note that rewinddir() has a similar limitation on Windows and will not force readdir() to read the directory again either. Only a newly opened directory handle will reflect changes to the directory.</p>
+
+</dd>
+<dt id="Forking-pipe-open()-not-yet-implemented"><a class="permalink" href="perlfork.html#Forking-pipe-open()-not-yet-implemented">#</a><a id="Forking"></a><a id="Forking-pipe-open-not-yet-implemented"></a>Forking pipe open() not yet implemented</dt>
+<dd>
+
+<p>The <code>open(FOO, &quot;|-&quot;)</code> and <code>open(BAR, &quot;-|&quot;)</code> constructs are not yet implemented. This limitation can be easily worked around in new code by creating a pipe explicitly. The following example shows how to write to a forked child:</p>
+
+<pre><code># simulate open(FOO, &quot;|-&quot;)
+sub pipe_to_fork ($) {
+    my $parent = shift;
+    pipe my $child, $parent or die;
+    my $pid = fork();
+    die &quot;fork() failed: $!&quot; unless defined $pid;
+    if ($pid) {
+        close $child;
+    }
+    else {
+        close $parent;
+        open(STDIN, &quot;&lt;&amp;=&quot; . fileno($child)) or die;
+    }
+    $pid;
+}
+
+if (pipe_to_fork(&#39;FOO&#39;)) {
+    # parent
+    print FOO &quot;pipe_to_fork\n&quot;;
+    close FOO;
+}
+else {
+    # child
+    while (&lt;STDIN&gt;) { print; }
+    exit(0);
+}</code></pre>
+
+<p>And this one reads from the child:</p>
+
+<pre><code># simulate open(FOO, &quot;-|&quot;)
+sub pipe_from_fork ($) {
+    my $parent = shift;
+    pipe $parent, my $child or die;
+    my $pid = fork();
+    die &quot;fork() failed: $!&quot; unless defined $pid;
+    if ($pid) {
+        close $child;
+    }
+    else {
+        close $parent;
+        open(STDOUT, &quot;&gt;&amp;=&quot; . fileno($child)) or die;
+    }
+    $pid;
+}
+
+if (pipe_from_fork(&#39;BAR&#39;)) {
+    # parent
+    while (&lt;BAR&gt;) { print; }
+    close BAR;
+}
+else {
+    # child
+    print &quot;pipe_from_fork\n&quot;;
+    exit(0);
+}</code></pre>
+
+<p>Forking pipe open() constructs will be supported in future.</p>
+
+</dd>
+<dt id="Global-state-maintained-by-XSUBs"><a class="permalink" href="perlfork.html#Global-state-maintained-by-XSUBs">#</a><a id="Global"></a>Global state maintained by XSUBs</dt>
+<dd>
+
+<p>External subroutines (XSUBs) that maintain their own global state may not work correctly. Such XSUBs will either need to maintain locks to protect simultaneous access to global data from different pseudo-processes, or maintain all their state on the Perl symbol table, which is copied naturally when fork() is called. A callback mechanism that provides extensions an opportunity to clone their state will be provided in the near future.</p>
+
+</dd>
+<dt id="Interpreter-embedded-in-larger-application"><a class="permalink" href="perlfork.html#Interpreter-embedded-in-larger-application">#</a><a id="Interpreter"></a>Interpreter embedded in larger application</dt>
+<dd>
+
+<p>The fork() emulation may not behave as expected when it is executed in an application which embeds a Perl interpreter and calls Perl APIs that can evaluate bits of Perl code. This stems from the fact that the emulation only has knowledge about the Perl interpreter&#39;s own data structures and knows nothing about the containing application&#39;s state. For example, any state carried on the application&#39;s own call stack is out of reach.</p>
+
+</dd>
+<dt id="Thread-safety-of-extensions"><a class="permalink" href="perlfork.html#Thread-safety-of-extensions">#</a><a id="Thread"></a>Thread-safety of extensions</dt>
+<dd>
+
+<p>Since the fork() emulation runs code in multiple threads, extensions calling into non-thread-safe libraries may not work reliably when calling fork(). As Perl&#39;s threading support gradually becomes more widely adopted even on platforms with a native fork(), such extensions are expected to be fixed for thread-safety.</p>
+
+</dd>
+</dl>
+
+<h1 id="PORTABILITY-CAVEATS"><a class="permalink" href="perlfork.html#PORTABILITY-CAVEATS">#</a><a id="PORTABILITY"></a>PORTABILITY CAVEATS</h1>
+
+<p>In portable Perl code, <code>kill(9, $child)</code> must not be used on forked processes. Killing a forked process is unsafe and has unpredictable results. See <a href="perlfork.html#kill%28%29">&quot;kill()&quot;</a>, above.</p>
+
+<h1 id="BUGS"><a class="permalink" href="perlfork.html#BUGS">#</a>BUGS</h1>
+
+<ul>
+
+<li><p>Having pseudo-process IDs be negative integers breaks down for the integer <code>-1</code> because the wait() and waitpid() functions treat this number as being special. The tacit assumption in the current implementation is that the system never allocates a thread ID of <code>1</code> for user threads. A better representation for pseudo-process IDs will be implemented in future.</p>
+
+</li>
+<li><p>In certain cases, the OS-level handles created by the pipe(), socket(), and accept() operators are apparently not duplicated accurately in pseudo-processes. This only happens in some situations, but where it does happen, it may result in deadlocks between the read and write ends of pipe handles, or inability to send or receive data across socket handles.</p>
+
+</li>
+<li><p>This document may be incomplete in some respects.</p>
+
+</li>
+</ul>
+
+<h1 id="AUTHOR"><a class="permalink" href="perlfork.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Support for concurrent interpreters and the fork() emulation was implemented by ActiveState, with funding from Microsoft Corporation.</p>
+
+<p>This document is authored and maintained by Gurusamy Sarathy &lt;gsar@activestate.com&gt;.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="perlfork.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="perlfunc.html#fork">&quot;fork&quot; in perlfunc</a>, <a href="perlipc.html">perlipc</a></p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+=over
+
+=item %SIG
+X<%SIG>
+
+The hash C<%SIG> contains signal handlers for signals.  For example:
+
+    sub handler {   # 1st argument is signal name
+	my($sig) = @_;
+	print "Caught a SIG$sig--shutting down\n";
+	close(LOG);
+	exit(0);
+	}
+
+    $SIG{'INT'}  = \&handler;
+    $SIG{'QUIT'} = \&handler;
+    ...
+    $SIG{'INT'}  = 'DEFAULT';   # restore default action
+    $SIG{'QUIT'} = 'IGNORE';    # ignore SIGQUIT
+
+Using a value of C<'IGNORE'> usually has the effect of ignoring the
+signal, except for the C<CHLD> signal.  See L<perlipc> for more about
+this special case.  Using an empty string or C<undef> as the value has
+the same effect as C<'DEFAULT'>.
+
+Here are some other examples:
+
+    $SIG{"PIPE"} = "Plumber";   # assumes main::Plumber (not
+				# recommended)
+    $SIG{"PIPE"} = \&Plumber;   # just fine; assume current
+				# Plumber
+    $SIG{"PIPE"} = *Plumber;    # somewhat esoteric
+    $SIG{"PIPE"} = Plumber();   # oops, what did Plumber()
+				# return??
+
+Be sure not to use a bareword as the name of a signal handler,
+lest you inadvertently call it.
+
+Using a string that doesn't correspond to any existing function or a
+glob that doesn't contain a code slot is equivalent to C<'IGNORE'>,
+but a warning is emitted when the handler is being called (the warning
+is not emitted for the internal hooks described below).
+
+If your system has the C<sigaction()> function then signal handlers
+are installed using it.  This means you get reliable signal handling.
+
+The default delivery policy of signals changed in Perl v5.8.0 from
+immediate (also known as "unsafe") to deferred, also known as "safe
+signals".  See L<perlipc> for more information.
+
+Certain internal hooks can be also set using the C<%SIG> hash.  The
+routine indicated by C<$SIG{__WARN__}> is called when a warning
+message is about to be printed.  The warning message is passed as the
+first argument.  The presence of a C<__WARN__> hook causes the
+ordinary printing of warnings to C<STDERR> to be suppressed.  You can
+use this to save warnings in a variable, or turn warnings into fatal
+errors, like this:
+
+    local $SIG{__WARN__} = sub { die $_[0] };
+    eval $proggie;
+
+As the C<'IGNORE'> hook is not supported by C<__WARN__>, its effect is
+the same as using C<'DEFAULT'>.  You can disable warnings using the
+empty subroutine:
+
+    local $SIG{__WARN__} = sub {};
+
+The routine indicated by C<$SIG{__DIE__}> is called when a fatal
+exception is about to be thrown.  The error message is passed as the
+first argument.  When a C<__DIE__> hook routine returns, the exception
+processing continues as it would have in the absence of the hook,
+unless the hook routine itself exits via a C<goto &sub>, a loop exit,
+or a C<die()>.  The C<__DIE__> handler is explicitly disabled during
+the call, so that you can die from a C<__DIE__> handler.  Similarly
+for C<__WARN__>.
+
+The C<$SIG{__DIE__}> hook is called even inside an C<eval()>. It was
+never intended to happen this way, but an implementation glitch made
+this possible. This used to be deprecated, as it allowed strange action
+at a distance like rewriting a pending exception in C<$@>. Plans to
+rectify this have been scrapped, as users found that rewriting a 
+pending exception is actually a useful feature, and not a bug.
+
+The C<$SIG{__DIE__}> doesn't support C<'IGNORE'>; it has the same
+effect as C<'DEFAULT'>.
+
+C<__DIE__>/C<__WARN__> handlers are very special in one respect: they
+may be called to report (probable) errors found by the parser.  In such
+a case the parser may be in inconsistent state, so any attempt to
+evaluate Perl code from such a handler will probably result in a
+segfault.  This means that warnings or errors that result from parsing
+Perl should be used with extreme caution, like this:
+
+    require Carp if defined $^S;
+    Carp::confess("Something wrong") if defined &Carp::confess;
+    die "Something wrong, but could not load Carp to give "
+      . "backtrace...\n\t"
+      . "To see backtrace try starting Perl with -MCarp switch";
+
+Here the first line will load C<Carp> I<unless> it is the parser who
+called the handler.  The second line will print backtrace and die if
+C<Carp> was available.  The third line will be executed only if C<Carp> was
+not available.
+
+Having to even think about the C<$^S> variable in your exception
+handlers is simply wrong.  C<$SIG{__DIE__}> as currently implemented
+invites grievous and difficult to track down errors.  Avoid it
+and use an C<END{}> or CORE::GLOBAL::die override instead.
+
+See L<perlfunc/die>, L<perlfunc/warn>, L<perlfunc/eval>, and
+L<warnings> for additional information.
+
+=back

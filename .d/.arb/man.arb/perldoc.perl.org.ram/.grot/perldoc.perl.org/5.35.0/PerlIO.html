@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PerlIO - On demand loader for PerlIO layers and root of PerlIO::* name space - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/PerlIO">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="PerlIO.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/PerlIO">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/PerlIO">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/PerlIO">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/PerlIO">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/PerlIO">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/PerlIO">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/PerlIO">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/PerlIO">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/PerlIO">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/PerlIO">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/PerlIO">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/PerlIO">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/PerlIO">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/PerlIO">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/PerlIO">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/PerlIO">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/PerlIO">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/PerlIO">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/PerlIO">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/PerlIO">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/PerlIO">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/PerlIO">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/PerlIO">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/PerlIO">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/PerlIO">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/PerlIO">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/PerlIO">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/PerlIO">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/PerlIO">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/PerlIO">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/PerlIO">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/PerlIO">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/PerlIO">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/PerlIO">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/PerlIO">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/PerlIO">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/PerlIO">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/PerlIO">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/PerlIO">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/PerlIO">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/PerlIO">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/PerlIO">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/PerlIO">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/PerlIO">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/PerlIO">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/PerlIO">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/PerlIO">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/PerlIO">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/PerlIO">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/PerlIO">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/PerlIO">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/PerlIO">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/PerlIO">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/PerlIO">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/PerlIO">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/PerlIO">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/PerlIO">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/PerlIO">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/PerlIO">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/PerlIO">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/PerlIO">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/PerlIO">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/PerlIO">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/PerlIO">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/PerlIO">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/PerlIO">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/PerlIO">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/PerlIO">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/PerlIO">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/PerlIO">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/PerlIO">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/PerlIO">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/PerlIO">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/PerlIO">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/PerlIO">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/PerlIO">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/PerlIO">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/PerlIO">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/PerlIO">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/PerlIO">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="PerlIO.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/PerlIO">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/PerlIO">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/PerlIO">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/PerlIO">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/PerlIO">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/PerlIO">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/PerlIO">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/PerlIO">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/PerlIO">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/PerlIO">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/PerlIO">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/PerlIO">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/PerlIO">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/PerlIO">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/PerlIO">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/PerlIO">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/PerlIO">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/PerlIO">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/PerlIO">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/PerlIO">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/PerlIO">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/PerlIO">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/PerlIO">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/PerlIO">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/PerlIO">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/PerlIO">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/PerlIO">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/PerlIO">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/PerlIO">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/PerlIO">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/PerlIO">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/PerlIO">5.35.1</a>
+          <a class="dropdown-item active" href="PerlIO.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="PerlIO.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="PerlIO.html">PerlIO</a>
+          <div id="more">
+            (<a href="PerlIO.txt">source</a>,
+            <a href="https://metacpan.org/pod/PerlIO">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 1.11</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="PerlIO.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="PerlIO.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="PerlIO.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="PerlIO.html#Layers">Layers</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="PerlIO.html#Custom-Layers">Custom Layers</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="PerlIO.html#Alternatives-to-raw">Alternatives to raw</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="PerlIO.html#Defaults-and-how-to-override-them">Defaults and how to override them</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="PerlIO.html#Querying-the-layers-of-filehandles">Querying the layers of filehandles</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="PerlIO.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="PerlIO.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="PerlIO.html#NAME">#</a>NAME</h1>
+
+<p>PerlIO - On demand loader for PerlIO layers and root of PerlIO::* name space</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="PerlIO.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code># support platform-native and CRLF text files
+open(my $fh, &quot;&lt;:crlf&quot;, &quot;my.txt&quot;) or die &quot;open failed: $!&quot;;
+
+# append UTF-8 encoded text
+open(my $fh, &quot;&gt;&gt;:encoding(UTF-8)&quot;, &quot;some.log&quot;)
+  or die &quot;open failed: $!&quot;;
+
+# portably open a binary file for reading
+open(my $fh, &quot;&lt;&quot;, &quot;his.jpg&quot;) or die &quot;open failed: $!&quot;;
+binmode($fh) or die &quot;binmode failed: $!&quot;;
+
+Shell:
+  PERLIO=:perlio perl ....</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="PerlIO.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>When an undefined layer &#39;foo&#39; is encountered in an <code>open</code> or <code>binmode</code> layer specification then C code performs the equivalent of:</p>
+
+<pre><code>use PerlIO &#39;foo&#39;;</code></pre>
+
+<p>The Perl code in PerlIO.pm then attempts to locate a layer by doing</p>
+
+<pre><code>require PerlIO::foo;</code></pre>
+
+<p>Otherwise the <code>PerlIO</code> package is a place holder for additional PerlIO related functions.</p>
+
+<h2 id="Layers"><a class="permalink" href="PerlIO.html#Layers">#</a>Layers</h2>
+
+<p>Generally speaking, PerlIO layers (previously sometimes referred to as &quot;disciplines&quot;) are an ordered stack applied to a filehandle (specified as a space- or colon-separated list, conventionally written with a leading colon). Each layer performs some operation on any input or output, except when bypassed such as with <code>sysread</code> or <code>syswrite</code>. Read operations go through the stack in the order they are set (left to right), and write operations in the reverse order.</p>
+
+<p>There are also layers which actually just set flags on lower layers, or layers that modify the current stack but don&#39;t persist on the stack themselves; these are referred to as pseudo-layers.</p>
+
+<p>When opening a handle, it will be opened with any layers specified explicitly in the open() call (or the platform defaults, if specified as a colon with no following layers).</p>
+
+<p>If layers are not explicitly specified, the handle will be opened with the layers specified by the <a href="perlvar.html#%24%7B%5EOPEN%7D">${^OPEN}</a> variable (usually set by using the <a href="open.html">open</a> pragma for a lexical scope, or the <code>-C</code> command-line switch or <code>PERL_UNICODE</code> environment variable for the main program scope).</p>
+
+<p>If layers are not specified in the open() call or <code>${^OPEN}</code> variable, the handle will be opened with the default layer stack configured for that architecture; see <a href="PerlIO.html#Defaults-and-how-to-override-them">&quot;Defaults and how to override them&quot;</a>.</p>
+
+<p>Some layers will automatically insert required lower level layers if not present; for example <code>:perlio</code> will insert <code>:unix</code> below itself for low level IO, and <code>:encoding</code> will insert the platform defaults for buffered IO.</p>
+
+<p>The <code>binmode</code> function can be called on an opened handle to push additional layers onto the stack, which may also modify the existing layers. <code>binmode</code> called with no layers will remove or unset any existing layers which transform the byte stream, making the handle suitable for binary data.</p>
+
+<p>The following layers are currently defined:</p>
+
+<dl>
+
+<dt id=":unix"><a class="permalink" href="PerlIO.html#:unix">#</a><a id="unix"></a>:unix</dt>
+<dd>
+
+<p>Lowest level layer which provides basic PerlIO operations in terms of UNIX/POSIX numeric file descriptor calls (open(), read(), write(), lseek(), close()). It is used even on non-Unix architectures, and most other layers operate on top of it.</p>
+
+</dd>
+<dt id=":stdio"><a class="permalink" href="PerlIO.html#:stdio">#</a><a id="stdio"></a>:stdio</dt>
+<dd>
+
+<p>Layer which calls <code>fread</code>, <code>fwrite</code> and <code>fseek</code>/<code>ftell</code> etc. Note that as this is &quot;real&quot; stdio it will ignore any layers beneath it and go straight to the operating system via the C library as usual. This layer implements both low level IO and buffering, but is rarely used on modern architectures.</p>
+
+</dd>
+<dt id=":perlio"><a class="permalink" href="PerlIO.html#:perlio">#</a><a id="perlio"></a>:perlio</dt>
+<dd>
+
+<p>A from scratch implementation of buffering for PerlIO. Provides fast access to the buffer for <code>sv_gets</code> which implements Perl&#39;s readline/&lt;&gt; and in general attempts to minimize data copying.</p>
+
+<p><code>:perlio</code> will insert a <code>:unix</code> layer below itself to do low level IO.</p>
+
+</dd>
+<dt id=":crlf"><a class="permalink" href="PerlIO.html#:crlf">#</a><a id="crlf"></a>:crlf</dt>
+<dd>
+
+<p>A layer that implements DOS/Windows like CRLF line endings. On read converts pairs of CR,LF to a single &quot;\n&quot; newline character. On write converts each &quot;\n&quot; to a CR,LF pair. Note that this layer will silently refuse to be pushed on top of itself.</p>
+
+<p>It currently does <i>not</i> mimic MS-DOS as far as treating of Control-Z as being an end-of-file marker.</p>
+
+<p>On DOS/Windows like architectures where this layer is part of the defaults, it also acts like the <code>:perlio</code> layer, and removing the CRLF translation (such as with <code>:raw</code>) will only unset the CRLF translation flag. Since Perl 5.14, you can also apply another <code>:crlf</code> layer later, such as when the CRLF translation must occur after an encoding layer. On other architectures, it is a mundane CRLF translation layer and can be added and removed normally.</p>
+
+<pre><code># translate CRLF after encoding on Perl 5.14 or newer
+binmode $fh, &quot;:raw:encoding(UTF-16LE):crlf&quot;
+  or die &quot;binmode failed: $!&quot;;</code></pre>
+
+</dd>
+<dt id=":utf8"><a class="permalink" href="PerlIO.html#:utf8">#</a><a id="utf8"></a>:utf8</dt>
+<dd>
+
+<p>Pseudo-layer that declares that the stream accepts Perl&#39;s <i>internal</i> upgraded encoding of characters, which is approximately UTF-8 on ASCII machines, but UTF-EBCDIC on EBCDIC machines. This allows any character Perl can represent to be read from or written to the stream.</p>
+
+<p>This layer (which actually sets a flag on the preceding layer, and is implicitly set by any <code>:encoding</code> layer) does not translate or validate byte sequences. It instead indicates that the byte stream will have been arranged by other layers to be provided in Perl&#39;s internal upgraded encoding, which Perl code (and correctly written XS code) will interpret as decoded Unicode characters.</p>
+
+<p><b>CAUTION</b>: Do not use this layer to translate from UTF-8 bytes, as invalid UTF-8 or binary data will result in malformed Perl strings. It is unlikely to produce invalid UTF-8 when used for output, though it will instead produce UTF-EBCDIC on EBCDIC systems. The <code>:encoding(UTF-8)</code> layer (hyphen is significant) is preferred as it will ensure translation between valid UTF-8 bytes and valid Unicode characters.</p>
+
+</dd>
+<dt id=":bytes"><a class="permalink" href="PerlIO.html#:bytes">#</a><a id="bytes"></a>:bytes</dt>
+<dd>
+
+<p>This is the inverse of the <code>:utf8</code> pseudo-layer. It turns off the flag on the layer below so that data read from it is considered to be Perl&#39;s internal downgraded encoding, thus interpreted as the native single-byte encoding of Latin-1 or EBCDIC. Likewise on output Perl will warn if a &quot;wide&quot; character (a codepoint not in the range 0..255) is written to a such a stream.</p>
+
+<p>This is very dangerous to push on a handle using an <code>:encoding</code> layer, as such a layer assumes to be working with Perl&#39;s internal upgraded encoding, so you will likely get a mangled result. Instead use <code>:raw</code> or <code>:pop</code> to remove encoding layers.</p>
+
+</dd>
+<dt id=":raw"><a class="permalink" href="PerlIO.html#:raw">#</a><a id="raw"></a>:raw</dt>
+<dd>
+
+<p>The <code>:raw</code> pseudo-layer is <i>defined</i> as being identical to calling <code>binmode($fh)</code> - the stream is made suitable for passing binary data, i.e. each byte is passed as-is. The stream will still be buffered (but this was not always true before Perl 5.14).</p>
+
+<p>In Perl 5.6 and some books the <code>:raw</code> layer is documented as the inverse of the <code>:crlf</code> layer. That is no longer the case - other layers which would alter the binary nature of the stream are also disabled. If you want UNIX line endings on a platform that normally does CRLF translation, but still want UTF-8 or encoding defaults, the appropriate thing to do is to add <code>:perlio</code> to the PERLIO environment variable, or open the handle explicitly with that layer, to replace the platform default of <code>:crlf</code>.</p>
+
+<p>The implementation of <code>:raw</code> is as a pseudo-layer which when &quot;pushed&quot; pops itself and then any layers which would modify the binary data stream. (Undoing <code>:utf8</code> and <code>:crlf</code> may be implemented by clearing flags rather than popping layers but that is an implementation detail.)</p>
+
+<p>As a consequence of the fact that <code>:raw</code> normally pops layers, it usually only makes sense to have it as the only or first element in a layer specification. When used as the first element it provides a known base on which to build e.g.</p>
+
+<pre><code>open(my $fh,&quot;&gt;:raw:encoding(UTF-8)&quot;,...)
+  or die &quot;open failed: $!&quot;;</code></pre>
+
+<p>will construct a &quot;binary&quot; stream regardless of the platform defaults, but then enable UTF-8 translation.</p>
+
+</dd>
+<dt id=":pop"><a class="permalink" href="PerlIO.html#:pop">#</a><a id="pop"></a>:pop</dt>
+<dd>
+
+<p>A pseudo-layer that removes the top-most layer. Gives Perl code a way to manipulate the layer stack. Note that <code>:pop</code> only works on real layers and will not undo the effects of pseudo-layers or flags like <code>:utf8</code>. An example of a possible use might be:</p>
+
+<pre><code>open(my $fh,...) or die &quot;open failed: $!&quot;;
+...
+binmode($fh,&quot;:encoding(...)&quot;) or die &quot;binmode failed: $!&quot;;
+# next chunk is encoded
+...
+binmode($fh,&quot;:pop&quot;) or die &quot;binmode failed: $!&quot;;
+# back to un-encoded</code></pre>
+
+<p>A more elegant (and safer) interface is needed.</p>
+
+</dd>
+<dt id=":win32"><a class="permalink" href="PerlIO.html#:win32">#</a><a id="win32"></a>:win32</dt>
+<dd>
+
+<p>On Win32 platforms this <i>experimental</i> layer uses the native &quot;handle&quot; IO rather than the unix-like numeric file descriptor layer. Known to be buggy as of Perl 5.8.2.</p>
+
+</dd>
+</dl>
+
+<h2 id="Custom-Layers"><a class="permalink" href="PerlIO.html#Custom-Layers">#</a><a id="Custom"></a>Custom Layers</h2>
+
+<p>It is possible to write custom layers in addition to the above builtin ones, both in C/XS and Perl, as a module named <code>PerlIO::&lt;layer name&gt;</code>. Some custom layers come with the Perl distribution.</p>
+
+<dl>
+
+<dt id=":encoding"><a class="permalink" href="PerlIO.html#:encoding">#</a><a id="encoding"></a>:encoding</dt>
+<dd>
+
+<p>Use <code>:encoding(ENCODING)</code> to transparently do character set and encoding transformations, for example from Shift-JIS to Unicode. Note that an <code>:encoding</code> also enables <code>:utf8</code>. See <a href="./PerlIO::encoding.html">PerlIO::encoding</a> for more information.</p>
+
+</dd>
+<dt id=":mmap"><a class="permalink" href="PerlIO.html#:mmap">#</a><a id="mmap"></a>:mmap</dt>
+<dd>
+
+<p>A layer which implements &quot;reading&quot; of files by using <code>mmap()</code> to make a (whole) file appear in the process&#39;s address space, and then using that as PerlIO&#39;s &quot;buffer&quot;. This <i>may</i> be faster in certain circumstances for large files, and may result in less physical memory use when multiple processes are reading the same file.</p>
+
+<p>Files which are not <code>mmap()</code>-able revert to behaving like the <code>:perlio</code> layer. Writes also behave like the <code>:perlio</code> layer, as <code>mmap()</code> for write needs extra house-keeping (to extend the file) which negates any advantage.</p>
+
+<p>The <code>:mmap</code> layer will not exist if the platform does not support <code>mmap()</code>. See <a href="./PerlIO::mmap.html">PerlIO::mmap</a> for more information.</p>
+
+</dd>
+<dt id=":via"><a class="permalink" href="PerlIO.html#:via">#</a><a id="via"></a>:via</dt>
+<dd>
+
+<p><code>:via(MODULE)</code> allows a transformation to be applied by an arbitrary Perl module, for example compression / decompression, encryption / decryption. See <a href="./PerlIO::via.html">PerlIO::via</a> for more information.</p>
+
+</dd>
+<dt id=":scalar"><a class="permalink" href="PerlIO.html#:scalar">#</a><a id="scalar"></a>:scalar</dt>
+<dd>
+
+<p>A layer implementing &quot;in memory&quot; files using scalar variables, automatically used in place of the platform defaults for IO when opening such a handle. As such, the scalar is expected to act like a file, only containing or storing bytes. See <a href="./PerlIO::scalar.html">PerlIO::scalar</a> for more information.</p>
+
+</dd>
+</dl>
+
+<h2 id="Alternatives-to-raw"><a class="permalink" href="PerlIO.html#Alternatives-to-raw">#</a><a id="Alternatives"></a>Alternatives to raw</h2>
+
+<p>To get a binary stream an alternate method is to use:</p>
+
+<pre><code>open(my $fh,&quot;&lt;&quot;,&quot;whatever&quot;) or die &quot;open failed: $!&quot;;
+binmode($fh) or die &quot;binmode failed: $!&quot;;</code></pre>
+
+<p>This has the advantage of being backward compatible with older versions of Perl that did not use PerlIO or where <code>:raw</code> was buggy (as it was before Perl 5.14).</p>
+
+<p>To get an unbuffered stream specify an unbuffered layer (e.g. <code>:unix</code>) in the open call:</p>
+
+<pre><code>open(my $fh,&quot;&lt;:unix&quot;,$path) or die &quot;open failed: $!&quot;;</code></pre>
+
+<h2 id="Defaults-and-how-to-override-them"><a class="permalink" href="PerlIO.html#Defaults-and-how-to-override-them">#</a><a id="Defaults"></a>Defaults and how to override them</h2>
+
+<p>If the platform is MS-DOS like and normally does CRLF to &quot;\n&quot; translation for text files then the default layers are:</p>
+
+<pre><code class="plaintext">:unix:crlf</code></pre>
+
+<p>Otherwise if <code>Configure</code> found out how to do &quot;fast&quot; IO using the system&#39;s stdio (not common on modern architectures), then the default layers are:</p>
+
+<pre><code class="plaintext">:stdio</code></pre>
+
+<p>Otherwise the default layers are</p>
+
+<pre><code class="plaintext">:unix:perlio</code></pre>
+
+<p>Note that the &quot;default stack&quot; depends on the operating system and on the Perl version, and both the compile-time and runtime configurations of Perl. The default can be overridden by setting the environment variable PERLIO to a space or colon separated list of layers, however this cannot be used to set layers that require loading modules like <code>:encoding</code>.</p>
+
+<p>This can be used to see the effect of/bugs in the various layers e.g.</p>
+
+<pre><code class="plaintext">cd .../perl/t
+PERLIO=:stdio  ./perl harness
+PERLIO=:perlio ./perl harness</code></pre>
+
+<p>For the various values of PERLIO see <a href="perlrun.html#PERLIO">&quot;PERLIO&quot; in perlrun</a>.</p>
+
+<p>The following table summarizes the default layers on UNIX-like and DOS-like platforms and depending on the setting of <code>$ENV{PERLIO}</code>:</p>
+
+<pre><code class="plaintext">PERLIO     UNIX-like                   DOS-like
+------     ---------                   --------
+unset / &quot;&quot; :unix:perlio / :stdio [1]   :unix:crlf
+:stdio     :stdio                      :stdio
+:perlio    :unix:perlio                :unix:perlio
+
+# [1] &quot;:stdio&quot; if Configure found out how to do &quot;fast stdio&quot; (depends
+# on the stdio implementation) and in Perl 5.8, else &quot;:unix:perlio&quot;</code></pre>
+
+<h2 id="Querying-the-layers-of-filehandles"><a class="permalink" href="PerlIO.html#Querying-the-layers-of-filehandles">#</a><a id="Querying"></a>Querying the layers of filehandles</h2>
+
+<p>The following returns the <b>names</b> of the PerlIO layers on a filehandle.</p>
+
+<pre><code>my @layers = PerlIO::get_layers($fh); # Or FH, *FH, &quot;FH&quot;.</code></pre>
+
+<p>The layers are returned in the order an open() or binmode() call would use them, and without colons.</p>
+
+<p>By default the layers from the input side of the filehandle are returned; to get the output side, use the optional <code>output</code> argument:</p>
+
+<pre><code>my @layers = PerlIO::get_layers($fh, output =&gt; 1);</code></pre>
+
+<p>(Usually the layers are identical on either side of a filehandle but for example with sockets there may be differences.)</p>
+
+<p>There is no set_layers(), nor does get_layers() return a tied array mirroring the stack, or anything fancy like that. This is not accidental or unintentional. The PerlIO layer stack is a bit more complicated than just a stack (see for example the behaviour of <code>:raw</code>). You are supposed to use open() and binmode() to manipulate the stack.</p>
+
+<p><b>Implementation details follow, please close your eyes.</b></p>
+
+<p>The arguments to layers are by default returned in parentheses after the name of the layer, and certain layers (like <code>:utf8</code>) are not real layers but instead flags on real layers; to get all of these returned separately, use the optional <code>details</code> argument:</p>
+
+<pre><code>my @layer_and_args_and_flags = PerlIO::get_layers($fh, details =&gt; 1);</code></pre>
+
+<p>The result will be up to be three times the number of layers: the first element will be a name, the second element the arguments (unspecified arguments will be <code>undef</code>), the third element the flags, the fourth element a name again, and so forth.</p>
+
+<p><b>You may open your eyes now.</b></p>
+
+<h1 id="AUTHOR"><a class="permalink" href="PerlIO.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Nick Ing-Simmons &lt;nick@ing-simmons.net&gt;</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="PerlIO.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="perlfunc.html#binmode">&quot;binmode&quot; in perlfunc</a>, <a href="perlfunc.html#open">&quot;open&quot; in perlfunc</a>, <a href="perlunicode.html">perlunicode</a>, <a href="perliol.html">perliol</a>, <a href="Encode.html">Encode</a></p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

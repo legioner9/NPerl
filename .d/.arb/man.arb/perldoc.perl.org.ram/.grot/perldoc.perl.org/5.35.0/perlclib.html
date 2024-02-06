@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlclib - Internal replacements for standard C library functions - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlclib">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlclib.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlclib">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlclib">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlclib">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlclib">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlclib">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlclib">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlclib">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlclib">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlclib">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlclib">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlclib">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlclib">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlclib">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlclib">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlclib">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlclib">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlclib">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlclib">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlclib">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlclib">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlclib">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlclib">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlclib">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlclib">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlclib">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlclib">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlclib">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlclib">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlclib">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlclib">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlclib">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlclib">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlclib">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlclib">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlclib">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlclib">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlclib">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlclib">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlclib">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlclib">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlclib">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlclib">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlclib">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlclib">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlclib">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlclib">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlclib">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlclib">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlclib">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlclib">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlclib">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlclib">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlclib">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlclib">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlclib">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlclib">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlclib">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlclib">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlclib">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlclib">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlclib">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlclib">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlclib">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlclib">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlclib">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlclib">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlclib">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlclib">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlclib">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlclib">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlclib">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlclib">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlclib">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlclib">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlclib">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlclib">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlclib">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlclib">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlclib">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlclib">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlclib.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlclib">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlclib">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlclib">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlclib">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlclib">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlclib">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlclib">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlclib">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlclib">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlclib">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlclib">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlclib">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlclib">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlclib">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlclib">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlclib">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlclib">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlclib">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlclib">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlclib">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlclib">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlclib">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlclib">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlclib">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlclib">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlclib">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlclib">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlclib">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlclib">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlclib">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlclib">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlclib">5.35.1</a>
+          <a class="dropdown-item active" href="perlclib.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlclib.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlclib.html">perlclib</a>
+          <div id="more">
+            (<a href="perlclib.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlclib">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlclib.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlclib.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlclib.html#Conventions">Conventions</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlclib.html#File-Operations">File Operations</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlclib.html#File-Input-and-Output">File Input and Output</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlclib.html#File-Positioning">File Positioning</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlclib.html#Memory-Management-and-String-Handling">Memory Management and String Handling</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlclib.html#Character-Class-Tests">Character Class Tests</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlclib.html#stdlib.h-functions">stdlib.h functions</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlclib.html#Miscellaneous-functions">Miscellaneous functions</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlclib.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlclib.html#NAME">#</a>NAME</h1>
+
+<p>perlclib - Internal replacements for standard C library functions</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlclib.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>One thing Perl porters should note is that <i>perl</i> doesn&#39;t tend to use that much of the C standard library internally; you&#39;ll see very little use of, for example, the <i>ctype.h</i> functions in there. This is because Perl tends to reimplement or abstract standard library functions, so that we know exactly how they&#39;re going to operate.</p>
+
+<p>This is a reference card for people who are familiar with the C library and who want to do things the Perl way; to tell them which functions they ought to use instead of the more normal C functions.</p>
+
+<h2 id="Conventions"><a class="permalink" href="perlclib.html#Conventions">#</a>Conventions</h2>
+
+<p>In the following tables:</p>
+
+<dl>
+
+<dt id="t"><a class="permalink" href="perlclib.html#t">#</a><code>t</code></dt>
+<dd>
+
+<p>is a type.</p>
+
+</dd>
+<dt id="p"><a class="permalink" href="perlclib.html#p">#</a><code>p</code></dt>
+<dd>
+
+<p>is a pointer.</p>
+
+</dd>
+<dt id="n"><a class="permalink" href="perlclib.html#n">#</a><code>n</code></dt>
+<dd>
+
+<p>is a number.</p>
+
+</dd>
+<dt id="s"><a class="permalink" href="perlclib.html#s">#</a><code>s</code></dt>
+<dd>
+
+<p>is a string.</p>
+
+</dd>
+</dl>
+
+<p><code>sv</code>, <code>av</code>, <code>hv</code>, etc. represent variables of their respective types.</p>
+
+<h2 id="File-Operations"><a class="permalink" href="perlclib.html#File-Operations">#</a><a id="File"></a>File Operations</h2>
+
+<p>Instead of the <i>stdio.h</i> functions, you should use the Perl abstraction layer. Instead of <code>FILE*</code> types, you need to be handling <code>PerlIO*</code> types. Don&#39;t forget that with the new PerlIO layered I/O abstraction <code>FILE*</code> types may not even be available. See also the <code>perlapio</code> documentation for more information about the following functions:</p>
+
+<pre><code class="plaintext">Instead Of:                 Use:
+
+stdin                       PerlIO_stdin()
+stdout                      PerlIO_stdout()
+stderr                      PerlIO_stderr()
+
+fopen(fn, mode)             PerlIO_open(fn, mode)
+freopen(fn, mode, stream)   PerlIO_reopen(fn, mode, perlio) (Dep-
+                              recated)
+fflush(stream)              PerlIO_flush(perlio)
+fclose(stream)              PerlIO_close(perlio)</code></pre>
+
+<h2 id="File-Input-and-Output"><a class="permalink" href="perlclib.html#File-Input-and-Output">#</a><a id="File1"></a>File Input and Output</h2>
+
+<pre><code class="plaintext">Instead Of:                 Use:
+
+fprintf(stream, fmt, ...)   PerlIO_printf(perlio, fmt, ...)
+
+[f]getc(stream)             PerlIO_getc(perlio)
+[f]putc(stream, n)          PerlIO_putc(perlio, n)
+ungetc(n, stream)           PerlIO_ungetc(perlio, n)</code></pre>
+
+<p>Note that the PerlIO equivalents of <code>fread</code> and <code>fwrite</code> are slightly different from their C library counterparts:</p>
+
+<pre><code class="plaintext">fread(p, size, n, stream)   PerlIO_read(perlio, buf, numbytes)
+fwrite(p, size, n, stream)  PerlIO_write(perlio, buf, numbytes)
+
+fputs(s, stream)            PerlIO_puts(perlio, s)</code></pre>
+
+<p>There is no equivalent to <code>fgets</code>; one should use <code>sv_gets</code> instead:</p>
+
+<pre><code class="plaintext">fgets(s, n, stream)         sv_gets(sv, perlio, append)</code></pre>
+
+<h2 id="File-Positioning"><a class="permalink" href="perlclib.html#File-Positioning">#</a><a id="File2"></a>File Positioning</h2>
+
+<pre><code class="plaintext">Instead Of:                 Use:
+
+feof(stream)                PerlIO_eof(perlio)
+fseek(stream, n, whence)    PerlIO_seek(perlio, n, whence)
+rewind(stream)              PerlIO_rewind(perlio)
+
+fgetpos(stream, p)          PerlIO_getpos(perlio, sv)
+fsetpos(stream, p)          PerlIO_setpos(perlio, sv)
+
+ferror(stream)              PerlIO_error(perlio)
+clearerr(stream)            PerlIO_clearerr(perlio)</code></pre>
+
+<h2 id="Memory-Management-and-String-Handling"><a class="permalink" href="perlclib.html#Memory-Management-and-String-Handling">#</a><a id="Memory"></a>Memory Management and String Handling</h2>
+
+<pre><code class="plaintext">Instead Of:                    Use:
+
+t* p = malloc(n)               Newx(p, n, t)
+t* p = calloc(n, s)            Newxz(p, n, t)
+p = realloc(p, n)              Renew(p, n, t)
+memcpy(dst, src, n)            Copy(src, dst, n, t)
+memmove(dst, src, n)           Move(src, dst, n, t)
+memcpy(dst, src, sizeof(t))    StructCopy(src, dst, t)
+memset(dst, 0, n * sizeof(t))  Zero(dst, n, t)
+memzero(dst, 0)                Zero(dst, n, char)
+free(p)                        Safefree(p)
+
+strdup(p)                      savepv(p)
+strndup(p, n)                  savepvn(p, n) (Hey, strndup doesn&#39;t
+                                              exist!)
+
+strstr(big, little)            instr(big, little)
+strcmp(s1, s2)                 strLE(s1, s2) / strEQ(s1, s2)
+                                             / strGT(s1,s2)
+strncmp(s1, s2, n)             strnNE(s1, s2, n) / strnEQ(s1, s2, n)
+
+memcmp(p1, p2, n)              memNE(p1, p2, n)
+!memcmp(p1, p2, n)             memEQ(p1, p2, n)</code></pre>
+
+<p>Notice the different order of arguments to <code>Copy</code> and <code>Move</code> than used in <code>memcpy</code> and <code>memmove</code>.</p>
+
+<p>Most of the time, though, you&#39;ll want to be dealing with SVs internally instead of raw <code>char *</code> strings:</p>
+
+<pre><code class="plaintext">strlen(s)                   sv_len(sv)
+strcpy(dt, src)             sv_setpv(sv, s)
+strncpy(dt, src, n)         sv_setpvn(sv, s, n)
+strcat(dt, src)             sv_catpv(sv, s)
+strncat(dt, src)            sv_catpvn(sv, s)
+sprintf(s, fmt, ...)        sv_setpvf(sv, fmt, ...)</code></pre>
+
+<p>Note also the existence of <code>sv_catpvf</code> and <code>sv_vcatpvfn</code>, combining concatenation with formatting.</p>
+
+<p>Sometimes instead of zeroing the allocated heap by using Newxz() you should consider &quot;poisoning&quot; the data. This means writing a bit pattern into it that should be illegal as pointers (and floating point numbers), and also hopefully surprising enough as integers, so that any code attempting to use the data without forethought will break sooner rather than later. Poisoning can be done using the Poison() macros, which have similar arguments to Zero():</p>
+
+<pre><code class="plaintext">PoisonWith(dst, n, t, b)    scribble memory with byte b
+PoisonNew(dst, n, t)        equal to PoisonWith(dst, n, t, 0xAB)
+PoisonFree(dst, n, t)       equal to PoisonWith(dst, n, t, 0xEF)
+Poison(dst, n, t)           equal to PoisonFree(dst, n, t)</code></pre>
+
+<h2 id="Character-Class-Tests"><a class="permalink" href="perlclib.html#Character-Class-Tests">#</a><a id="Character"></a>Character Class Tests</h2>
+
+<p>There are several types of character class tests that Perl implements. The only ones described here are those that directly correspond to C library functions that operate on 8-bit characters, but there are equivalents that operate on wide characters, and UTF-8 encoded strings. All are more fully described in <a href="perlapi.html#Character-classification">&quot;Character classification&quot; in perlapi</a> and <a href="perlapi.html#Character-case-changing">&quot;Character case changing&quot; in perlapi</a>.</p>
+
+<p>The C library routines listed in the table below return values based on the current locale. Use the entries in the final column for that functionality. The other two columns always assume a POSIX (or C) locale. The entries in the ASCII column are only meaningful for ASCII inputs, returning FALSE for anything else. Use these only when you <b>know</b> that is what you want. The entries in the Latin1 column assume that the non-ASCII 8-bit characters are as Unicode defines, them, the same as ISO-8859-1, often called Latin 1.</p>
+
+<pre><code class="plaintext">Instead Of:  Use for ASCII:   Use for Latin1:      Use for locale:
+
+isalnum(c)  isALPHANUMERIC(c) isALPHANUMERIC_L1(c) isALPHANUMERIC_LC(c)
+isalpha(c)  isALPHA(c)        isALPHA_L1(c)        isALPHA_LC(u )
+isascii(c)  isASCII(c)                             isASCII_LC(c)
+isblank(c)  isBLANK(c)        isBLANK_L1(c)        isBLANK_LC(c)
+iscntrl(c)  isCNTRL(c)        isCNTRL_L1(c)        isCNTRL_LC(c)
+isdigit(c)  isDIGIT(c)        isDIGIT_L1(c)        isDIGIT_LC(c)
+isgraph(c)  isGRAPH(c)        isGRAPH_L1(c)        isGRAPH_LC(c)
+islower(c)  isLOWER(c)        isLOWER_L1(c)        isLOWER_LC(c)
+isprint(c)  isPRINT(c)        isPRINT_L1(c)        isPRINT_LC(c)
+ispunct(c)  isPUNCT(c)        isPUNCT_L1(c)        isPUNCT_LC(c)
+isspace(c)  isSPACE(c)        isSPACE_L1(c)        isSPACE_LC(c)
+isupper(c)  isUPPER(c)        isUPPER_L1(c)        isUPPER_LC(c)
+isxdigit(c) isXDIGIT(c)       isXDIGIT_L1(c)       isXDIGIT_LC(c)
+
+tolower(c)  toLOWER(c)        toLOWER_L1(c)
+toupper(c)  toUPPER(c)</code></pre>
+
+<p>To emphasize that you are operating only on ASCII characters, you can append <code>_A</code> to each of the macros in the ASCII column: <code>isALPHA_A</code>, <code>isDIGIT_A</code>, and so on.</p>
+
+<p>(There is no entry in the Latin1 column for <code>isascii</code> even though there is an <code>isASCII_L1</code>, which is identical to <code>isASCII</code>; the latter name is clearer. There is no entry in the Latin1 column for <code>toupper</code> because the result can be non-Latin1. You have to use <code>toUPPER_uvchr</code>, as described in <a href="perlapi.html#Character-case-changing">&quot;Character case changing&quot; in perlapi</a>.)</p>
+
+<h2 id="stdlib.h-functions"><a class="permalink" href="perlclib.html#stdlib.h-functions">#</a><a id="stdlib"></a><i>stdlib.h</i> functions</h2>
+
+<pre><code class="plaintext">Instead Of:                 Use:
+
+atof(s)                     Atof(s)
+atoi(s)                     grok_atoUV(s, &amp;uv, &amp;e)
+atol(s)                     grok_atoUV(s, &amp;uv, &amp;e)
+strtod(s, &amp;p)               Strtod(s, &amp;p)
+strtol(s, &amp;p, n)            Strtol(s, &amp;p, b)
+strtoul(s, &amp;p, n)           Strtoul(s, &amp;p, b)</code></pre>
+
+<p>Typical use is to do range checks on <code>uv</code> before casting:</p>
+
+<pre><code>int i; UV uv;
+char* end_ptr = input_end;
+if (grok_atoUV(input, &amp;uv, &amp;end_ptr)
+    &amp;&amp; uv &lt;= INT_MAX)
+  i = (int)uv;
+  ... /* continue parsing from end_ptr */
+} else {
+  ... /* parse error: not a decimal integer in range 0 .. MAX_IV */
+}</code></pre>
+
+<p>Notice also the <code>grok_bin</code>, <code>grok_hex</code>, and <code>grok_oct</code> functions in <i>numeric.c</i> for converting strings representing numbers in the respective bases into <code>NV</code>s. Note that grok_atoUV() doesn&#39;t handle negative inputs, or leading whitespace (being purposefully strict).</p>
+
+<p>Note that strtol() and strtoul() may be disguised as Strtol(), Strtoul(), Atol(), Atoul(). Avoid those, too.</p>
+
+<p>In theory <code>Strtol</code> and <code>Strtoul</code> may not be defined if the machine perl is built on doesn&#39;t actually have strtol and strtoul. But as those 2 functions are part of the 1989 ANSI C spec we suspect you&#39;ll find them everywhere by now.</p>
+
+<pre><code>int rand()                  double Drand01()
+srand(n)                    { seedDrand01((Rand_seed_t)n);
+                              PL_srand_called = TRUE; }
+
+exit(n)                     my_exit(n)
+system(s)                   Don&#39;t. Look at pp_system or use my_popen.
+
+getenv(s)                   PerlEnv_getenv(s)
+setenv(s, val)              my_setenv(s, val)</code></pre>
+
+<h2 id="Miscellaneous-functions"><a class="permalink" href="perlclib.html#Miscellaneous-functions">#</a><a id="Miscellaneous"></a>Miscellaneous functions</h2>
+
+<p>You should not even <b>want</b> to use <i>setjmp.h</i> functions, but if you think you do, use the <code>JMPENV</code> stack in <i>scope.h</i> instead.</p>
+
+<p>For <code>signal</code>/<code>sigaction</code>, use <code>rsignal(signo, handler)</code>.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="perlclib.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="perlapi.html">perlapi</a>, <a href="perlapio.html">perlapio</a>, <a href="perlguts.html">perlguts</a></p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

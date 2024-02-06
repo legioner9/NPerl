@@ -1,0 +1,4408 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>CPAN::Distribution - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of CPAN - MetaCPAN" href="https://metacpan.org/dist/CPAN/releases.rss" />
+        <link rel="canonical" href="https://metacpan.org/dist/CPAN/view/lib/CPAN/Distribution.pm" />
+        <meta name="description" content="query, download and build perl modules from CPAN sites" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/CPAN::Distribution" />
+<meta name="twitter:title"       content="" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./CPAN::Distribution.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of CPAN was released.">
+      <span class="relatize">14 May 2023 19:36:11 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/CPAN">CPAN</a>
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/CPAN/source/lib/CPAN/Distribution.pm">Source</a>
+    (<a href="https://metacpan.org/dist/CPAN/source/lib/CPAN/Distribution.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/CPAN/source/lib/CPAN">Browse</a>
+    (<a href="https://metacpan.org/dist/CPAN/source/lib/CPAN?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/CPAN/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/CPAN/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/andk/cpanpm">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=CPAN">Issues</a>
+      (214)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=CPAN+2.36" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/CPAN.html?oncpan=1&amp;distmat=1&amp;version=2.36&amp;grade=2" style="color: #090">677</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/CPAN.html?oncpan=1&amp;distmat=1&amp;version=2.36&amp;grade=3" style="color: #900">82</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/CPAN.html?oncpan=1&amp;distmat=1&amp;version=2.36&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/ANDK/CPAN-2.36">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on CPAN who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 5
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/CPAN-2.36/index.html">% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.6.2
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/CPAN/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/A/AN/ANDK/CPAN-2.36.tar.gz">
+      Download (<span itemprop="fileSize">872.68KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FANDK%2FCPAN-2.36%2Flib%2FCPAN%2FDistribution.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/CPAN/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/CPAN/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:CPAN">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="CPAN">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/CPAN/Distribution.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="ANDK/CPAN-2.36"
+>2.36
+  (ANDK on 2023-05-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.36-TRIAL"
+>2.36-TRIAL DEV
+  (ANDK on 2023-05-10)</option>
+<option
+  
+  value="ANDK/CPAN-2.35"
+>2.35
+  (ANDK on 2023-04-27)</option>
+<option
+  
+  value="ANDK/CPAN-2.33-TRIAL"
+>2.33-TRIAL DEV
+  (ANDK on 2022-01-21)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ANDK/CPAN-2.35-TRIAL"
+>2.35-TRIAL DEV
+  (ANDK on 2023-04-15)</option>
+<option
+  
+  value="ANDK/CPAN-2.34"
+>2.34
+  (ANDK on 2022-04-17)</option>
+<option
+  
+  value="ANDK/CPAN-2.34-TRIAL"
+>2.34-TRIAL DEV
+  (ANDK on 2022-04-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.33"
+>2.33
+  (ANDK on 2022-03-27)</option>
+<option
+  
+  value="ANDK/CPAN-2.32-TRIAL"
+>2.32-TRIAL DEV
+  (ANDK on 2021-12-26)</option>
+<option
+  
+  value="ANDK/CPAN-2.31-TRIAL"
+>2.31-TRIAL DEV
+  (ANDK on 2021-12-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.30-TRIAL"
+>2.30-TRIAL DEV
+  (ANDK on 2021-12-12)</option>
+<option
+  
+  value="ANDK/CPAN-2.29"
+>2.29
+  (ANDK on 2021-11-23)</option>
+<option
+  
+  value="ANDK/CPAN-2.28"
+>2.28
+  (ANDK on 2020-06-13)</option>
+<option
+  
+  value="ANDK/CPAN-2.28-TRIAL"
+>2.28-TRIAL DEV
+  (ANDK on 2020-04-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.27"
+>2.27
+  (ANDK on 2019-07-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.27-TRIAL2"
+>2.27-TRIAL2 DEV
+  (ANDK on 2019-06-09)</option>
+<option
+  
+  value="ANDK/CPAN-2.27-TRIAL"
+>2.27-TRIAL DEV
+  (ANDK on 2019-05-31)</option>
+<option
+  
+  value="ANDK/CPAN-2.26"
+>2.26
+  (ANDK on 2019-03-19)</option>
+<option
+  
+  value="ANDK/CPAN-2.25"
+>2.25
+  (ANDK on 2019-03-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.25-TRIAL"
+>2.25-TRIAL DEV
+  (ANDK on 2019-02-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.24-TRIAL"
+>2.24-TRIAL DEV
+  (ANDK on 2019-02-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.23-TRIAL"
+>2.23-TRIAL DEV
+  (ANDK on 2019-02-10)</option>
+<option
+  
+  value="ANDK/CPAN-2.22"
+>2.22
+  (ANDK on 2018-12-23)</option>
+<option
+  
+  value="ANDK/CPAN-2.22-TRIAL"
+>2.22-TRIAL DEV
+  (ANDK on 2018-12-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.21-TRIAL"
+>2.21-TRIAL DEV
+  (ANDK on 2018-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-2.20-TRIAL"
+>2.20-TRIAL DEV
+  (ANDK on 2017-11-26)</option>
+<option
+  
+  value="ANDK/CPAN-2.19-TRIAL"
+>2.19-TRIAL DEV
+  (ANDK on 2017-11-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.18-TRIAL"
+>2.18-TRIAL DEV
+  (ANDK on 2017-03-30)</option>
+<option
+  
+  value="ANDK/CPAN-2.17-TRIAL2"
+>2.17-TRIAL2 DEV
+  (ANDK on 2017-02-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.17-TRIAL"
+>2.17-TRIAL DEV
+  (ANDK on 2017-02-15)</option>
+<option
+  
+  value="ANDK/CPAN-2.16"
+>2.16
+  (ANDK on 2017-02-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.16-TRIAL2"
+>2.16-TRIAL2 DEV
+  (ANDK on 2017-01-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.16-TRIAL"
+>2.16-TRIAL DEV
+  (ANDK on 2017-01-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.15-TRIAL"
+>2.15-TRIAL DEV
+  (ANDK on 2016-07-17)</option>
+<option
+  
+  value="ANDK/CPAN-2.14"
+>2.14
+  (ANDK on 2016-06-25)</option>
+<option
+  
+  value="ANDK/CPAN-2.14-TRIAL"
+>2.14-TRIAL DEV
+  (ANDK on 2016-06-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.13-TRIAL"
+>2.13-TRIAL DEV
+  (ANDK on 2016-05-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.12-TRIAL"
+>2.12-TRIAL DEV
+  (ANDK on 2015-12-31)</option>
+<option
+  
+  value="ANDK/CPAN-2.10"
+>2.10
+  (ANDK on 2015-03-13)</option>
+<option
+  
+  value="ANDK/CPAN-2.10-TRIAL"
+>2.10-TRIAL DEV
+  (ANDK on 2015-02-22)</option>
+<option
+  
+  value="ANDK/CPAN-2.09-TRIAL"
+>2.09-TRIAL DEV
+  (ANDK on 2015-02-02)</option>
+<option
+  
+  value="ANDK/CPAN-2.08-TRIAL"
+>2.08-TRIAL DEV
+  (ANDK on 2015-01-05)</option>
+<option
+  
+  value="ANDK/CPAN-2.07-TRIAL"
+>2.07-TRIAL DEV
+  (ANDK on 2015-01-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.06-TRIAL"
+>2.06-TRIAL DEV
+  (ANDK on 2014-08-06)</option>
+<option
+  
+  value="ANDK/CPAN-2.05"
+>2.05
+  (ANDK on 2014-04-18)</option>
+<option
+  
+  value="ANDK/CPAN-2.05-TRIAL2"
+>2.05-TRIAL2 DEV
+  (ANDK on 2014-04-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.05-TRIAL"
+>2.05-TRIAL DEV
+  (ANDK on 2014-03-31)</option>
+<option
+  
+  value="ANDK/CPAN-2.04-TRIAL"
+>2.04-TRIAL DEV
+  (ANDK on 2014-03-18)</option>
+<option
+  
+  value="ANDK/CPAN-2.03-TRIAL"
+>2.03-TRIAL DEV
+  (ANDK on 2013-09-15)</option>
+<option
+  
+  value="ANDK/CPAN-2.02-TRIAL"
+>2.02-TRIAL DEV
+  (ANDK on 2013-06-23)</option>
+<option
+  
+  value="ANDK/CPAN-2.01-TRIAL"
+>2.01-TRIAL DEV
+  (ANDK on 2013-06-22)</option>
+<option
+  
+  value="ANDK/CPAN-2.00"
+>2.00
+  (ANDK on 2013-04-12)</option>
+<option
+  
+  value="ANDK/CPAN-2.00-TRIAL"
+>2.00-TRIAL DEV
+  (ANDK on 2013-02-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.99_51"
+>1.99_51 DEV
+  (ANDK on 2012-10-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.9800"
+>1.9800
+  (ANDK on 2011-08-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.97_51"
+>1.97_51 DEV
+  (ANDK on 2011-06-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.9600"
+>1.9600
+  (ANDK on 2011-03-12)</option>
+<option
+  
+  value="DAGOLDEN/CPAN-1.94_65"
+>1.94_65 DEV
+  (DAGOLDEN on 2011-02-14)</option>
+<option
+  
+  value="DAGOLDEN/CPAN-1.94_64"
+>1.94_64 DEV
+  (DAGOLDEN on 2011-01-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_63"
+>1.94_63 DEV
+  (ANDK on 2011-01-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_62"
+>1.94_62 DEV
+  (ANDK on 2010-10-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_61"
+>1.94_61 DEV
+  (ANDK on 2010-10-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_60"
+>1.94_60 DEV
+  (ANDK on 2010-09-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_59"
+>1.94_59 DEV
+  (ANDK on 2010-09-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_58"
+>1.94_58 DEV
+  (ANDK on 2010-06-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_57"
+>1.94_57 DEV
+  (ANDK on 2010-05-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_56"
+>1.94_56 DEV
+  (ANDK on 2010-02-17)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_55"
+>1.94_55 DEV
+  (ANDK on 2010-02-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_54"
+>1.94_54 DEV
+  (ANDK on 2010-01-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_53"
+>1.94_53 DEV
+  (ANDK on 2009-12-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_52"
+>1.94_52 DEV
+  (ANDK on 2009-10-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_51"
+>1.94_51 DEV
+  (ANDK on 2009-09-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.9402"
+>1.9402
+  (ANDK on 2009-06-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_01"
+>1.94_01 DEV
+  (ANDK on 2009-06-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.94"
+>1.94
+  (ANDK on 2009-05-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_54"
+>1.93_54 DEV
+  (ANDK on 2009-05-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_53"
+>1.93_53 DEV
+  (ANDK on 2009-05-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_52"
+>1.93_52 DEV
+  (ANDK on 2009-04-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.9304"
+>1.9304
+  (ANDK on 2009-02-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_51"
+>1.93_51 DEV
+  (ANDK on 2009-02-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_03"
+>1.93_03 DEV
+  (ANDK on 2009-02-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_02"
+>1.93_02 DEV
+  (ANDK on 2009-01-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.9301"
+>1.9301
+  (ANDK on 2008-10-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.93"
+>1.93
+  (ANDK on 2008-10-12)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_66"
+>1.92_66 DEV
+  (ANDK on 2008-09-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_65"
+>1.92_65 DEV
+  (ANDK on 2008-09-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_64"
+>1.92_64 DEV
+  (ANDK on 2008-09-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_63"
+>1.92_63 DEV
+  (ANDK on 2008-06-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_62"
+>1.92_62 DEV
+  (ANDK on 2008-05-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_61"
+>1.92_61 DEV
+  (ANDK on 2008-04-25)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_60"
+>1.92_60 DEV
+  (ANDK on 2008-03-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_59"
+>1.92_59 DEV
+  (ANDK on 2008-03-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_58"
+>1.92_58 DEV
+  (ANDK on 2008-03-12)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_57"
+>1.92_57 DEV
+  (ANDK on 2008-02-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_56"
+>1.92_56 DEV
+  (ANDK on 2008-02-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_55"
+>1.92_55 DEV
+  (ANDK on 2007-12-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_54"
+>1.92_54 DEV
+  (ANDK on 2007-12-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_53"
+>1.92_53 DEV
+  (ANDK on 2007-12-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.9205"
+>1.9205
+  (ANDK on 2007-11-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_52"
+>1.92_52 DEV
+  (ANDK on 2007-11-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.9204"
+>1.9204
+  (ANDK on 2007-11-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_51"
+>1.92_51 DEV
+  (ANDK on 2007-11-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.9203"
+>1.9203
+  (ANDK on 2007-09-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.9202"
+>1.9202
+  (ANDK on 2007-09-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.9201"
+>1.9201
+  (ANDK on 2007-09-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.92"
+>1.92
+  (ANDK on 2007-09-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_55"
+>1.91_55 DEV
+  (ANDK on 2007-09-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_54"
+>1.91_54 DEV
+  (ANDK on 2007-09-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_53"
+>1.91_53 DEV
+  (ANDK on 2007-08-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_52"
+>1.91_52 DEV
+  (ANDK on 2007-07-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_51"
+>1.91_51 DEV
+  (ANDK on 2007-07-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.9102"
+>1.9102
+  (ANDK on 2007-05-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.9101"
+>1.9101
+  (ANDK on 2007-04-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.91"
+>1.91
+  (ANDK on 2007-04-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.90"
+>1.90
+  (ANDK on 2007-04-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_79"
+>1.88_79 DEV
+  (ANDK on 2007-03-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_78"
+>1.88_78 DEV
+  (ANDK on 2007-03-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_77"
+>1.88_77 DEV
+  (ANDK on 2007-02-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_76"
+>1.88_76 DEV
+  (ANDK on 2007-02-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_75"
+>1.88_75 DEV
+  (ANDK on 2007-02-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_74"
+>1.88_74 DEV
+  (ANDK on 2007-02-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_73"
+>1.88_73 DEV
+  (ANDK on 2007-02-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_72"
+>1.88_72 DEV
+  (ANDK on 2007-01-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_71"
+>1.88_71 DEV
+  (ANDK on 2007-01-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_69"
+>1.88_69 DEV
+  (ANDK on 2007-01-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_68"
+>1.88_68 DEV
+  (ANDK on 2007-01-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_67"
+>1.88_67 DEV
+  (ANDK on 2006-12-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_66"
+>1.88_66 DEV
+  (ANDK on 2006-12-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_65"
+>1.88_65 DEV
+  (ANDK on 2006-12-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_64"
+>1.88_64 DEV
+  (ANDK on 2006-12-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_63"
+>1.88_63 DEV
+  (ANDK on 2006-11-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_62"
+>1.88_62 DEV
+  (ANDK on 2006-11-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_61"
+>1.88_61 DEV
+  (ANDK on 2006-11-10)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_59"
+>1.88_59 DEV
+  (ANDK on 2006-11-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_58"
+>1.88_58 DEV
+  (ANDK on 2006-10-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_57"
+>1.88_57 DEV
+  (ANDK on 2006-10-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.8802"
+>1.8802
+  (ANDK on 2006-10-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_56"
+>1.88_56 DEV
+  (ANDK on 2006-10-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_55"
+>1.88_55 DEV
+  (ANDK on 2006-10-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_54"
+>1.88_54 DEV
+  (ANDK on 2006-10-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_53"
+>1.88_53 DEV
+  (ANDK on 2006-10-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_52"
+>1.88_52 DEV
+  (ANDK on 2006-10-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_51"
+>1.88_51 DEV
+  (ANDK on 2006-09-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.8801"
+>1.8801
+  (ANDK on 2006-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.88"
+>1.88
+  (ANDK on 2006-09-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_65"
+>1.87_65 DEV
+  (ANDK on 2006-09-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_64"
+>1.87_64 DEV
+  (ANDK on 2006-09-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_63"
+>1.87_63 DEV
+  (ANDK on 2006-09-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_62"
+>1.87_62 DEV
+  (ANDK on 2006-09-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_61"
+>1.87_61 DEV
+  (ANDK on 2006-09-10)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_59"
+>1.87_59 DEV
+  (ANDK on 2006-09-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_58"
+>1.87_58 DEV
+  (ANDK on 2006-08-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_57"
+>1.87_57 DEV
+  (ANDK on 2006-08-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_56"
+>1.87_56 DEV
+  (ANDK on 2006-08-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_55"
+>1.87_55 DEV
+  (ANDK on 2006-07-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_54"
+>1.87_54 DEV
+  (ANDK on 2006-07-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_53"
+>1.87_53 DEV
+  (ANDK on 2006-07-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_52"
+>1.87_52 DEV
+  (ANDK on 2006-07-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_51"
+>1.87_51 DEV
+  (ANDK on 2006-03-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.87"
+>1.87
+  (ANDK on 2006-02-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.86_53"
+>1.86_53 DEV
+  (ANDK on 2006-02-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.86_52"
+>1.86_52 DEV
+  (ANDK on 2006-02-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.86_51"
+>1.86_51 DEV
+  (ANDK on 2006-02-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.86"
+>1.86
+  (ANDK on 2006-02-20)</option>
+<option
+  
+  value="ANDK/CPAN-1.85"
+>1.85
+  (ANDK on 2006-02-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.84"
+>1.84
+  (ANDK on 2006-02-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_69"
+>1.83_69 DEV
+  (ANDK on 2006-02-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_68"
+>1.83_68 DEV
+  (ANDK on 2006-02-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_67"
+>1.83_67 DEV
+  (ANDK on 2006-02-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_66"
+>1.83_66 DEV
+  (ANDK on 2006-02-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_65"
+>1.83_65 DEV
+  (ANDK on 2006-02-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_64"
+>1.83_64 DEV
+  (ANDK on 2006-02-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_63"
+>1.83_63 DEV
+  (ANDK on 2006-02-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_62"
+>1.83_62 DEV
+  (ANDK on 2006-01-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_61"
+>1.83_61 DEV
+  (ANDK on 2006-01-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_60"
+>1.83_60 DEV
+  (ANDK on 2006-01-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_59"
+>1.83_59 DEV
+  (ANDK on 2006-01-25)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_58"
+>1.83_58 DEV
+  (ANDK on 2006-01-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_57"
+>1.83_57 DEV
+  (ANDK on 2006-01-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_56"
+>1.83_56 DEV
+  (ANDK on 2006-01-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_55"
+>1.83_55 DEV
+  (ANDK on 2006-01-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_54"
+>1.83_54 DEV
+  (ANDK on 2006-01-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_53"
+>1.83_53 DEV
+  (ANDK on 2006-01-12)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_52"
+>1.83_52 DEV
+  (ANDK on 2006-01-10)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_51"
+>1.83_51 DEV
+  (ANDK on 2006-01-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.83"
+>1.83
+  (ANDK on 2006-01-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.82"
+>1.82
+  (ANDK on 2006-01-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.81"
+>1.81
+  (ANDK on 2006-01-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_58"
+>1.80_58 DEV
+  (ANDK on 2006-01-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_57"
+>1.80_57 DEV
+  (ANDK on 2005-12-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_56"
+>1.80_56 DEV
+  (ANDK on 2005-12-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_55"
+>1.80_55 DEV
+  (ANDK on 2005-12-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_54"
+>1.80_54 DEV
+  (ANDK on 2005-12-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_53"
+>1.80_53 DEV
+  (ANDK on 2005-12-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_51"
+>1.80_51 DEV
+  (ANDK on 2005-12-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.80"
+>1.80
+  (ANDK on 2005-12-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_65"
+>1.76_65 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_64"
+>1.76_64 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_63"
+>1.76_63 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_62"
+>1.76_62 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_61"
+>1.76_61 DEV
+  (ANDK on 2005-11-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_60"
+>1.76_60 DEV
+  (ANDK on 2005-11-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_59"
+>1.76_59 DEV
+  (ANDK on 2005-11-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_58"
+>1.76_58 DEV
+  (ANDK on 2005-11-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_57"
+>1.76_57 DEV
+  (ANDK on 2005-10-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_56"
+>1.76_56 DEV
+  (ANDK on 2005-10-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_55"
+>1.76_55 DEV
+  (ANDK on 2005-10-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_54"
+>1.76_54 DEV
+  (ANDK on 2005-10-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_53"
+>1.76_53 DEV
+  (ANDK on 2005-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_52"
+>1.76_52 DEV
+  (ANDK on 2005-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_51"
+>1.76_51 DEV
+  (ANDK on 2005-09-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_01"
+>1.76_01 DEV
+  (ANDK on 2003-09-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.76"
+>1.76
+  (ANDK on 2003-07-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.75"
+>1.75
+  (ANDK on 2003-07-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.74"
+>1.74
+  (ANDK on 2003-07-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.73"
+>1.73
+  (ANDK on 2003-07-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.72"
+>1.72
+  (ANDK on 2003-07-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.71"
+>1.71
+  (ANDK on 2003-07-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.70_54"
+>1.70_54 DEV
+  (ANDK on 2003-05-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.70_53"
+>1.70_53 DEV
+  (ANDK on 2003-04-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.70_52"
+>1.70_52 DEV
+  (ANDK on 2003-04-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.70"
+>1.70
+  (ANDK on 2003-03-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.65"
+>1.65
+  (ANDK on 2003-02-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.64"
+>1.64
+  (ANDK on 2003-02-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.63"
+>1.63
+  (ANDK on 2002-08-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.62"
+>1.62
+  (ANDK on 2002-07-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.61"
+>1.61
+  (ANDK on 2002-05-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.60b"
+>1.60b
+  (ANDK on 2002-04-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.60a"
+>1.60a
+  (ANDK on 2002-04-20)</option>
+<option
+  
+  value="ANDK/CPAN-1.60"
+>1.60
+  (ANDK on 2002-04-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_54"
+>1.59_54 DEV
+  (ANDK on 2001-02-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_53"
+>1.59_53 DEV
+  (ANDK on 2001-01-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_52"
+>1.59_52 DEV
+  (ANDK on 2000-12-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_51"
+>1.59_51 DEV
+  (ANDK on 2000-12-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.59"
+>1.59
+  (ANDK on 2000-12-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_93"
+>1.58_93 DEV
+  (ANDK on 2000-11-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_92"
+>1.58_92 DEV
+  (ANDK on 2000-11-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_91"
+>1.58_91 DEV
+  (ANDK on 2000-11-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_90"
+>1.58_90 DEV
+  (ANDK on 2000-11-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_57"
+>1.58_57 DEV
+  (ANDK on 2000-11-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_56"
+>1.58_56 DEV
+  (ANDK on 2000-11-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_55"
+>1.58_55 DEV
+  (ANDK on 2000-10-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_54"
+>1.58_54 DEV
+  (ANDK on 2000-10-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_53"
+>1.58_53 DEV
+  (ANDK on 2000-10-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_52"
+>1.58_52 DEV
+  (ANDK on 2000-10-25)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_51"
+>1.58_51 DEV
+  (ANDK on 2000-10-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.58"
+>1.58
+  (ANDK on 2000-10-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.57_68RC"
+>1.57_68RC DEV
+  (ANDK on 2000-10-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.57_67"
+>1.57_67 DEV
+  (ANDK on 2000-09-17)</option>
+<option
+  
+  value="ANDK/CPAN-1.57_66"
+>1.57_66 DEV
+  (ANDK on 2000-09-12)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/ANDK/CPAN-2.36/diff/' + encodeURIComponent(this.value) + '/lib/CPAN/Distribution.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="ANDK/CPAN-2.36"
+>2.36
+  (ANDK on 2023-05-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.36-TRIAL"
+>2.36-TRIAL DEV
+  (ANDK on 2023-05-10)</option>
+<option
+  
+  value="ANDK/CPAN-2.35"
+>2.35
+  (ANDK on 2023-04-27)</option>
+<option
+  
+  value="ANDK/CPAN-2.33-TRIAL"
+>2.33-TRIAL DEV
+  (ANDK on 2022-01-21)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ANDK/CPAN-2.35-TRIAL"
+>2.35-TRIAL DEV
+  (ANDK on 2023-04-15)</option>
+<option
+  
+  value="ANDK/CPAN-2.34"
+>2.34
+  (ANDK on 2022-04-17)</option>
+<option
+  
+  value="ANDK/CPAN-2.34-TRIAL"
+>2.34-TRIAL DEV
+  (ANDK on 2022-04-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.33"
+>2.33
+  (ANDK on 2022-03-27)</option>
+<option
+  
+  value="ANDK/CPAN-2.32-TRIAL"
+>2.32-TRIAL DEV
+  (ANDK on 2021-12-26)</option>
+<option
+  
+  value="ANDK/CPAN-2.31-TRIAL"
+>2.31-TRIAL DEV
+  (ANDK on 2021-12-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.30-TRIAL"
+>2.30-TRIAL DEV
+  (ANDK on 2021-12-12)</option>
+<option
+  
+  value="ANDK/CPAN-2.29"
+>2.29
+  (ANDK on 2021-11-23)</option>
+<option
+  
+  value="ANDK/CPAN-2.28"
+>2.28
+  (ANDK on 2020-06-13)</option>
+<option
+  
+  value="ANDK/CPAN-2.28-TRIAL"
+>2.28-TRIAL DEV
+  (ANDK on 2020-04-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.27"
+>2.27
+  (ANDK on 2019-07-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.27-TRIAL2"
+>2.27-TRIAL2 DEV
+  (ANDK on 2019-06-09)</option>
+<option
+  
+  value="ANDK/CPAN-2.27-TRIAL"
+>2.27-TRIAL DEV
+  (ANDK on 2019-05-31)</option>
+<option
+  
+  value="ANDK/CPAN-2.26"
+>2.26
+  (ANDK on 2019-03-19)</option>
+<option
+  
+  value="ANDK/CPAN-2.25"
+>2.25
+  (ANDK on 2019-03-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.25-TRIAL"
+>2.25-TRIAL DEV
+  (ANDK on 2019-02-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.24-TRIAL"
+>2.24-TRIAL DEV
+  (ANDK on 2019-02-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.23-TRIAL"
+>2.23-TRIAL DEV
+  (ANDK on 2019-02-10)</option>
+<option
+  
+  value="ANDK/CPAN-2.22"
+>2.22
+  (ANDK on 2018-12-23)</option>
+<option
+  
+  value="ANDK/CPAN-2.22-TRIAL"
+>2.22-TRIAL DEV
+  (ANDK on 2018-12-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.21-TRIAL"
+>2.21-TRIAL DEV
+  (ANDK on 2018-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-2.20-TRIAL"
+>2.20-TRIAL DEV
+  (ANDK on 2017-11-26)</option>
+<option
+  
+  value="ANDK/CPAN-2.19-TRIAL"
+>2.19-TRIAL DEV
+  (ANDK on 2017-11-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.18-TRIAL"
+>2.18-TRIAL DEV
+  (ANDK on 2017-03-30)</option>
+<option
+  
+  value="ANDK/CPAN-2.17-TRIAL2"
+>2.17-TRIAL2 DEV
+  (ANDK on 2017-02-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.17-TRIAL"
+>2.17-TRIAL DEV
+  (ANDK on 2017-02-15)</option>
+<option
+  
+  value="ANDK/CPAN-2.16"
+>2.16
+  (ANDK on 2017-02-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.16-TRIAL2"
+>2.16-TRIAL2 DEV
+  (ANDK on 2017-01-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.16-TRIAL"
+>2.16-TRIAL DEV
+  (ANDK on 2017-01-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.15-TRIAL"
+>2.15-TRIAL DEV
+  (ANDK on 2016-07-17)</option>
+<option
+  
+  value="ANDK/CPAN-2.14"
+>2.14
+  (ANDK on 2016-06-25)</option>
+<option
+  
+  value="ANDK/CPAN-2.14-TRIAL"
+>2.14-TRIAL DEV
+  (ANDK on 2016-06-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.13-TRIAL"
+>2.13-TRIAL DEV
+  (ANDK on 2016-05-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.12-TRIAL"
+>2.12-TRIAL DEV
+  (ANDK on 2015-12-31)</option>
+<option
+  
+  value="ANDK/CPAN-2.10"
+>2.10
+  (ANDK on 2015-03-13)</option>
+<option
+  
+  value="ANDK/CPAN-2.10-TRIAL"
+>2.10-TRIAL DEV
+  (ANDK on 2015-02-22)</option>
+<option
+  
+  value="ANDK/CPAN-2.09-TRIAL"
+>2.09-TRIAL DEV
+  (ANDK on 2015-02-02)</option>
+<option
+  
+  value="ANDK/CPAN-2.08-TRIAL"
+>2.08-TRIAL DEV
+  (ANDK on 2015-01-05)</option>
+<option
+  
+  value="ANDK/CPAN-2.07-TRIAL"
+>2.07-TRIAL DEV
+  (ANDK on 2015-01-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.06-TRIAL"
+>2.06-TRIAL DEV
+  (ANDK on 2014-08-06)</option>
+<option
+  
+  value="ANDK/CPAN-2.05"
+>2.05
+  (ANDK on 2014-04-18)</option>
+<option
+  
+  value="ANDK/CPAN-2.05-TRIAL2"
+>2.05-TRIAL2 DEV
+  (ANDK on 2014-04-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.05-TRIAL"
+>2.05-TRIAL DEV
+  (ANDK on 2014-03-31)</option>
+<option
+  
+  value="ANDK/CPAN-2.04-TRIAL"
+>2.04-TRIAL DEV
+  (ANDK on 2014-03-18)</option>
+<option
+  
+  value="ANDK/CPAN-2.03-TRIAL"
+>2.03-TRIAL DEV
+  (ANDK on 2013-09-15)</option>
+<option
+  
+  value="ANDK/CPAN-2.02-TRIAL"
+>2.02-TRIAL DEV
+  (ANDK on 2013-06-23)</option>
+<option
+  
+  value="ANDK/CPAN-2.01-TRIAL"
+>2.01-TRIAL DEV
+  (ANDK on 2013-06-22)</option>
+<option
+  
+  value="ANDK/CPAN-2.00"
+>2.00
+  (ANDK on 2013-04-12)</option>
+<option
+  
+  value="ANDK/CPAN-2.00-TRIAL"
+>2.00-TRIAL DEV
+  (ANDK on 2013-02-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.99_51"
+>1.99_51 DEV
+  (ANDK on 2012-10-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.9800"
+>1.9800
+  (ANDK on 2011-08-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.97_51"
+>1.97_51 DEV
+  (ANDK on 2011-06-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.9600"
+>1.9600
+  (ANDK on 2011-03-12)</option>
+<option
+  
+  value="DAGOLDEN/CPAN-1.94_65"
+>1.94_65 DEV
+  (DAGOLDEN on 2011-02-14)</option>
+<option
+  
+  value="DAGOLDEN/CPAN-1.94_64"
+>1.94_64 DEV
+  (DAGOLDEN on 2011-01-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_63"
+>1.94_63 DEV
+  (ANDK on 2011-01-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_62"
+>1.94_62 DEV
+  (ANDK on 2010-10-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_61"
+>1.94_61 DEV
+  (ANDK on 2010-10-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_60"
+>1.94_60 DEV
+  (ANDK on 2010-09-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_59"
+>1.94_59 DEV
+  (ANDK on 2010-09-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_58"
+>1.94_58 DEV
+  (ANDK on 2010-06-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_57"
+>1.94_57 DEV
+  (ANDK on 2010-05-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_56"
+>1.94_56 DEV
+  (ANDK on 2010-02-17)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_55"
+>1.94_55 DEV
+  (ANDK on 2010-02-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_54"
+>1.94_54 DEV
+  (ANDK on 2010-01-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_53"
+>1.94_53 DEV
+  (ANDK on 2009-12-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_52"
+>1.94_52 DEV
+  (ANDK on 2009-10-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_51"
+>1.94_51 DEV
+  (ANDK on 2009-09-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.9402"
+>1.9402
+  (ANDK on 2009-06-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_01"
+>1.94_01 DEV
+  (ANDK on 2009-06-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.94"
+>1.94
+  (ANDK on 2009-05-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_54"
+>1.93_54 DEV
+  (ANDK on 2009-05-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_53"
+>1.93_53 DEV
+  (ANDK on 2009-05-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_52"
+>1.93_52 DEV
+  (ANDK on 2009-04-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.9304"
+>1.9304
+  (ANDK on 2009-02-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_51"
+>1.93_51 DEV
+  (ANDK on 2009-02-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_03"
+>1.93_03 DEV
+  (ANDK on 2009-02-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_02"
+>1.93_02 DEV
+  (ANDK on 2009-01-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.9301"
+>1.9301
+  (ANDK on 2008-10-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.93"
+>1.93
+  (ANDK on 2008-10-12)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_66"
+>1.92_66 DEV
+  (ANDK on 2008-09-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_65"
+>1.92_65 DEV
+  (ANDK on 2008-09-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_64"
+>1.92_64 DEV
+  (ANDK on 2008-09-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_63"
+>1.92_63 DEV
+  (ANDK on 2008-06-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_62"
+>1.92_62 DEV
+  (ANDK on 2008-05-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_61"
+>1.92_61 DEV
+  (ANDK on 2008-04-25)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_60"
+>1.92_60 DEV
+  (ANDK on 2008-03-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_59"
+>1.92_59 DEV
+  (ANDK on 2008-03-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_58"
+>1.92_58 DEV
+  (ANDK on 2008-03-12)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_57"
+>1.92_57 DEV
+  (ANDK on 2008-02-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_56"
+>1.92_56 DEV
+  (ANDK on 2008-02-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_55"
+>1.92_55 DEV
+  (ANDK on 2007-12-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_54"
+>1.92_54 DEV
+  (ANDK on 2007-12-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_53"
+>1.92_53 DEV
+  (ANDK on 2007-12-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.9205"
+>1.9205
+  (ANDK on 2007-11-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_52"
+>1.92_52 DEV
+  (ANDK on 2007-11-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.9204"
+>1.9204
+  (ANDK on 2007-11-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_51"
+>1.92_51 DEV
+  (ANDK on 2007-11-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.9203"
+>1.9203
+  (ANDK on 2007-09-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.9202"
+>1.9202
+  (ANDK on 2007-09-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.9201"
+>1.9201
+  (ANDK on 2007-09-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.92"
+>1.92
+  (ANDK on 2007-09-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_55"
+>1.91_55 DEV
+  (ANDK on 2007-09-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_54"
+>1.91_54 DEV
+  (ANDK on 2007-09-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_53"
+>1.91_53 DEV
+  (ANDK on 2007-08-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_52"
+>1.91_52 DEV
+  (ANDK on 2007-07-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_51"
+>1.91_51 DEV
+  (ANDK on 2007-07-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.9102"
+>1.9102
+  (ANDK on 2007-05-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.9101"
+>1.9101
+  (ANDK on 2007-04-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.91"
+>1.91
+  (ANDK on 2007-04-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.90"
+>1.90
+  (ANDK on 2007-04-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_79"
+>1.88_79 DEV
+  (ANDK on 2007-03-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_78"
+>1.88_78 DEV
+  (ANDK on 2007-03-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_77"
+>1.88_77 DEV
+  (ANDK on 2007-02-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_76"
+>1.88_76 DEV
+  (ANDK on 2007-02-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_75"
+>1.88_75 DEV
+  (ANDK on 2007-02-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_74"
+>1.88_74 DEV
+  (ANDK on 2007-02-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_73"
+>1.88_73 DEV
+  (ANDK on 2007-02-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_72"
+>1.88_72 DEV
+  (ANDK on 2007-01-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_71"
+>1.88_71 DEV
+  (ANDK on 2007-01-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_69"
+>1.88_69 DEV
+  (ANDK on 2007-01-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_68"
+>1.88_68 DEV
+  (ANDK on 2007-01-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_67"
+>1.88_67 DEV
+  (ANDK on 2006-12-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_66"
+>1.88_66 DEV
+  (ANDK on 2006-12-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_65"
+>1.88_65 DEV
+  (ANDK on 2006-12-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_64"
+>1.88_64 DEV
+  (ANDK on 2006-12-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_63"
+>1.88_63 DEV
+  (ANDK on 2006-11-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_62"
+>1.88_62 DEV
+  (ANDK on 2006-11-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_61"
+>1.88_61 DEV
+  (ANDK on 2006-11-10)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_59"
+>1.88_59 DEV
+  (ANDK on 2006-11-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_58"
+>1.88_58 DEV
+  (ANDK on 2006-10-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_57"
+>1.88_57 DEV
+  (ANDK on 2006-10-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.8802"
+>1.8802
+  (ANDK on 2006-10-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_56"
+>1.88_56 DEV
+  (ANDK on 2006-10-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_55"
+>1.88_55 DEV
+  (ANDK on 2006-10-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_54"
+>1.88_54 DEV
+  (ANDK on 2006-10-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_53"
+>1.88_53 DEV
+  (ANDK on 2006-10-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_52"
+>1.88_52 DEV
+  (ANDK on 2006-10-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_51"
+>1.88_51 DEV
+  (ANDK on 2006-09-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.8801"
+>1.8801
+  (ANDK on 2006-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.88"
+>1.88
+  (ANDK on 2006-09-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_65"
+>1.87_65 DEV
+  (ANDK on 2006-09-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_64"
+>1.87_64 DEV
+  (ANDK on 2006-09-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_63"
+>1.87_63 DEV
+  (ANDK on 2006-09-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_62"
+>1.87_62 DEV
+  (ANDK on 2006-09-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_61"
+>1.87_61 DEV
+  (ANDK on 2006-09-10)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_59"
+>1.87_59 DEV
+  (ANDK on 2006-09-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_58"
+>1.87_58 DEV
+  (ANDK on 2006-08-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_57"
+>1.87_57 DEV
+  (ANDK on 2006-08-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_56"
+>1.87_56 DEV
+  (ANDK on 2006-08-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_55"
+>1.87_55 DEV
+  (ANDK on 2006-07-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_54"
+>1.87_54 DEV
+  (ANDK on 2006-07-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_53"
+>1.87_53 DEV
+  (ANDK on 2006-07-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_52"
+>1.87_52 DEV
+  (ANDK on 2006-07-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_51"
+>1.87_51 DEV
+  (ANDK on 2006-03-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.87"
+>1.87
+  (ANDK on 2006-02-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.86_53"
+>1.86_53 DEV
+  (ANDK on 2006-02-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.86_52"
+>1.86_52 DEV
+  (ANDK on 2006-02-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.86_51"
+>1.86_51 DEV
+  (ANDK on 2006-02-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.86"
+>1.86
+  (ANDK on 2006-02-20)</option>
+<option
+  
+  value="ANDK/CPAN-1.85"
+>1.85
+  (ANDK on 2006-02-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.84"
+>1.84
+  (ANDK on 2006-02-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_69"
+>1.83_69 DEV
+  (ANDK on 2006-02-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_68"
+>1.83_68 DEV
+  (ANDK on 2006-02-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_67"
+>1.83_67 DEV
+  (ANDK on 2006-02-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_66"
+>1.83_66 DEV
+  (ANDK on 2006-02-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_65"
+>1.83_65 DEV
+  (ANDK on 2006-02-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_64"
+>1.83_64 DEV
+  (ANDK on 2006-02-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_63"
+>1.83_63 DEV
+  (ANDK on 2006-02-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_62"
+>1.83_62 DEV
+  (ANDK on 2006-01-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_61"
+>1.83_61 DEV
+  (ANDK on 2006-01-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_60"
+>1.83_60 DEV
+  (ANDK on 2006-01-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_59"
+>1.83_59 DEV
+  (ANDK on 2006-01-25)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_58"
+>1.83_58 DEV
+  (ANDK on 2006-01-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_57"
+>1.83_57 DEV
+  (ANDK on 2006-01-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_56"
+>1.83_56 DEV
+  (ANDK on 2006-01-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_55"
+>1.83_55 DEV
+  (ANDK on 2006-01-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_54"
+>1.83_54 DEV
+  (ANDK on 2006-01-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_53"
+>1.83_53 DEV
+  (ANDK on 2006-01-12)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_52"
+>1.83_52 DEV
+  (ANDK on 2006-01-10)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_51"
+>1.83_51 DEV
+  (ANDK on 2006-01-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.83"
+>1.83
+  (ANDK on 2006-01-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.82"
+>1.82
+  (ANDK on 2006-01-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.81"
+>1.81
+  (ANDK on 2006-01-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_58"
+>1.80_58 DEV
+  (ANDK on 2006-01-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_57"
+>1.80_57 DEV
+  (ANDK on 2005-12-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_56"
+>1.80_56 DEV
+  (ANDK on 2005-12-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_55"
+>1.80_55 DEV
+  (ANDK on 2005-12-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_54"
+>1.80_54 DEV
+  (ANDK on 2005-12-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_53"
+>1.80_53 DEV
+  (ANDK on 2005-12-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_51"
+>1.80_51 DEV
+  (ANDK on 2005-12-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.80"
+>1.80
+  (ANDK on 2005-12-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_65"
+>1.76_65 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_64"
+>1.76_64 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_63"
+>1.76_63 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_62"
+>1.76_62 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_61"
+>1.76_61 DEV
+  (ANDK on 2005-11-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_60"
+>1.76_60 DEV
+  (ANDK on 2005-11-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_59"
+>1.76_59 DEV
+  (ANDK on 2005-11-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_58"
+>1.76_58 DEV
+  (ANDK on 2005-11-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_57"
+>1.76_57 DEV
+  (ANDK on 2005-10-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_56"
+>1.76_56 DEV
+  (ANDK on 2005-10-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_55"
+>1.76_55 DEV
+  (ANDK on 2005-10-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_54"
+>1.76_54 DEV
+  (ANDK on 2005-10-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_53"
+>1.76_53 DEV
+  (ANDK on 2005-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_52"
+>1.76_52 DEV
+  (ANDK on 2005-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_51"
+>1.76_51 DEV
+  (ANDK on 2005-09-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_01"
+>1.76_01 DEV
+  (ANDK on 2003-09-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.76"
+>1.76
+  (ANDK on 2003-07-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.75"
+>1.75
+  (ANDK on 2003-07-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.74"
+>1.74
+  (ANDK on 2003-07-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.73"
+>1.73
+  (ANDK on 2003-07-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.72"
+>1.72
+  (ANDK on 2003-07-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.71"
+>1.71
+  (ANDK on 2003-07-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.70_54"
+>1.70_54 DEV
+  (ANDK on 2003-05-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.70_53"
+>1.70_53 DEV
+  (ANDK on 2003-04-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.70_52"
+>1.70_52 DEV
+  (ANDK on 2003-04-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.70"
+>1.70
+  (ANDK on 2003-03-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.65"
+>1.65
+  (ANDK on 2003-02-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.64"
+>1.64
+  (ANDK on 2003-02-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.63"
+>1.63
+  (ANDK on 2002-08-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.62"
+>1.62
+  (ANDK on 2002-07-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.61"
+>1.61
+  (ANDK on 2002-05-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.60b"
+>1.60b
+  (ANDK on 2002-04-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.60a"
+>1.60a
+  (ANDK on 2002-04-20)</option>
+<option
+  
+  value="ANDK/CPAN-1.60"
+>1.60
+  (ANDK on 2002-04-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_54"
+>1.59_54 DEV
+  (ANDK on 2001-02-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_53"
+>1.59_53 DEV
+  (ANDK on 2001-01-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_52"
+>1.59_52 DEV
+  (ANDK on 2000-12-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_51"
+>1.59_51 DEV
+  (ANDK on 2000-12-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.59"
+>1.59
+  (ANDK on 2000-12-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_93"
+>1.58_93 DEV
+  (ANDK on 2000-11-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_92"
+>1.58_92 DEV
+  (ANDK on 2000-11-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_91"
+>1.58_91 DEV
+  (ANDK on 2000-11-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_90"
+>1.58_90 DEV
+  (ANDK on 2000-11-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_57"
+>1.58_57 DEV
+  (ANDK on 2000-11-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_56"
+>1.58_56 DEV
+  (ANDK on 2000-11-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_55"
+>1.58_55 DEV
+  (ANDK on 2000-10-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_54"
+>1.58_54 DEV
+  (ANDK on 2000-10-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_53"
+>1.58_53 DEV
+  (ANDK on 2000-10-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_52"
+>1.58_52 DEV
+  (ANDK on 2000-10-25)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_51"
+>1.58_51 DEV
+  (ANDK on 2000-10-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.58"
+>1.58
+  (ANDK on 2000-10-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.57_68RC"
+>1.57_68RC DEV
+  (ANDK on 2000-10-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.57_67"
+>1.57_67 DEV
+  (ANDK on 2000-09-17)</option>
+<option
+  
+  value="ANDK/CPAN-1.57_66"
+>1.57_66 DEV
+  (ANDK on 2000-09-12)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Archive::Tar" title="Archive::Tar" class="ellipsis">Archive::Tar</a></li>
+  <li><a href="./Archive::Zip.html" title="Archive::Zip" class="ellipsis">Archive::Zip</a></li>
+  <li><a href="https://metacpan.org/pod/CPAN::Checksums" title="CPAN::Checksums" class="ellipsis">CPAN::Checksums</a></li>
+  <li><a href="https://metacpan.org/pod/CPAN::Meta" title="CPAN::Meta" class="ellipsis">CPAN::Meta</a></li>
+  <li><a href="https://metacpan.org/pod/CPAN::Meta::Requirements" title="CPAN::Meta::Requirements" class="ellipsis">CPAN::Meta::Requirements</a></li>
+  <li><a href="https://metacpan.org/pod/CPAN::Meta::YAML" title="CPAN::Meta::YAML" class="ellipsis">CPAN::Meta::YAML</a></li>
+  <li><a href="https://metacpan.org/pod/CPAN::Perl::Releases" title="CPAN::Perl::Releases" class="ellipsis">CPAN::Perl::Releases</a></li>
+  <li><a href="./Compress::Bzip2.html" title="Compress::Bzip2" class="ellipsis">Compress::Bzip2</a></li>
+  <li><a href="https://metacpan.org/pod/Compress::Zlib" title="Compress::Zlib" class="ellipsis">Compress::Zlib</a></li>
+  <li><a href="https://metacpan.org/pod/Data::Dumper" title="Data::Dumper" class="ellipsis">Data::Dumper</a></li>
+  <li><a href="https://metacpan.org/pod/Digest::MD5" title="Digest::MD5" class="ellipsis">Digest::MD5</a></li>
+  <li><a href="https://metacpan.org/pod/Digest::SHA" title="Digest::SHA" class="ellipsis">Digest::SHA</a></li>
+  <li><a href="Expect.html" title="Expect" class="ellipsis">Expect</a></li>
+  <li><a href="https://metacpan.org/pod/Exporter" title="Exporter" class="ellipsis">Exporter</a></li>
+  <li><a href="https://metacpan.org/pod/Exporter::Heavy" title="Exporter::Heavy" class="ellipsis">Exporter::Heavy</a></li>
+  <li><a href="https://metacpan.org/pod/ExtUtils::CBuilder" title="ExtUtils::CBuilder" class="ellipsis">ExtUtils::CBuilder</a></li>
+  <li><a href="https://metacpan.org/pod/File::Copy" title="File::Copy" class="ellipsis">File::Copy</a></li>
+  <li><a href="https://metacpan.org/pod/File::HomeDir" title="File::HomeDir" class="ellipsis">File::HomeDir</a></li>
+  <li><a href="https://metacpan.org/pod/File::Spec" title="File::Spec" class="ellipsis">File::Spec</a></li>
+  <li><a href="https://metacpan.org/pod/File::Temp" title="File::Temp" class="ellipsis">File::Temp</a></li>
+  <li><a href="https://metacpan.org/pod/File::Which" title="File::Which" class="ellipsis">File::Which</a></li>
+  <li><a href="https://metacpan.org/pod/HTTP::Tiny" title="HTTP::Tiny" class="ellipsis">HTTP::Tiny</a></li>
+  <li><a href="https://metacpan.org/pod/IO::Compress::Base" title="IO::Compress::Base" class="ellipsis">IO::Compress::Base</a></li>
+  <li><a href="https://metacpan.org/pod/IO::Zlib" title="IO::Zlib" class="ellipsis">IO::Zlib</a></li>
+  <li><a href="https://metacpan.org/pod/JSON::PP" title="JSON::PP" class="ellipsis">JSON::PP</a></li>
+  <li><a href="./LWP::UserAgent.html" title="LWP::UserAgent" class="ellipsis">LWP::UserAgent</a></li>
+  <li><a href="./Log::Log4perl.html" title="Log::Log4perl" class="ellipsis">Log::Log4perl</a></li>
+  <li><a href="https://metacpan.org/pod/MIME::Base64" title="MIME::Base64" class="ellipsis">MIME::Base64</a></li>
+  <li><a href="./Module::Build.html" title="Module::Build" class="ellipsis">Module::Build</a></li>
+  <li><a href="https://metacpan.org/pod/Module::Signature" title="Module::Signature" class="ellipsis">Module::Signature</a></li>
+  <li><a href="https://metacpan.org/pod/Net::FTP" title="Net::FTP" class="ellipsis">Net::FTP</a></li>
+  <li><a href="https://metacpan.org/pod/Net::Ping" title="Net::Ping" class="ellipsis">Net::Ping</a></li>
+  <li><a href="https://metacpan.org/pod/Parse::CPAN::Meta" title="Parse::CPAN::Meta" class="ellipsis">Parse::CPAN::Meta</a></li>
+  <li><a href="https://metacpan.org/pod/Pod::Perldoc" title="Pod::Perldoc" class="ellipsis">Pod::Perldoc</a></li>
+  <li><a href="https://metacpan.org/pod/Pod::Perldoc::ToMan" title="Pod::Perldoc::ToMan" class="ellipsis">Pod::Perldoc::ToMan</a></li>
+  <li><a href="https://metacpan.org/pod/Scalar::Util" title="Scalar::Util" class="ellipsis">Scalar::Util</a></li>
+  <li><a href="https://metacpan.org/pod/Socket" title="Socket" class="ellipsis">Socket</a></li>
+  <li><a href="./Term::ReadKey.html" title="Term::ReadKey" class="ellipsis">Term::ReadKey</a></li>
+  <li><a href="https://metacpan.org/pod/Test::Harness" title="Test::Harness" class="ellipsis">Test::Harness</a></li>
+  <li><a href="https://metacpan.org/pod/Test::More" title="Test::More" class="ellipsis">Test::More</a></li>
+  <li><a href="https://metacpan.org/pod/Text::Glob" title="Text::Glob" class="ellipsis">Text::Glob</a></li>
+  <li><a href="https://metacpan.org/pod/Text::ParseWords" title="Text::ParseWords" class="ellipsis">Text::ParseWords</a></li>
+  <li><a href="https://metacpan.org/pod/Text::Wrap" title="Text::Wrap" class="ellipsis">Text::Wrap</a></li>
+  <li><a href="YAML.html" title="YAML" class="ellipsis">YAML</a></li>
+  <li><a href="./YAML::Syck.html" title="YAML::Syck" class="ellipsis">YAML::Syck</a></li>
+  <li><a href="./YAML::XS.html" title="YAML::XS" class="ellipsis">YAML::XS</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/CPAN::Distribution/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=CPAN%3A%3ADistribution">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=CPAN">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/ANDK/CPAN-2.36/view/lib/CPAN/Distribution.pm">This version</a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/CPAN/view/lib/CPAN/Distribution.pm">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/BEROV"><img src="https://www.gravatar.com/avatar/eae0eb4092a9f63426c13408e343b803?d=identicon&amp;s=20" title="BEROV" alt="BEROV"></a>
+<a class="display-all" href="https://metacpan.org/author/PINGAN"><img src="https://www.gravatar.com/avatar/a02222e5e0e4fd24d52fc29a08ac6bcb?d=identicon&amp;s=20" title="PINGAN" alt="PINGAN"></a>
+<a class="display-all" href="https://metacpan.org/author/DOHERTY"><img src="https://www.gravatar.com/avatar/9533c36b6385c8321bad636c98e9c0a8?d=identicon&amp;s=20" title="DOHERTY" alt="DOHERTY"></a>
+<a class="display-all" href="https://metacpan.org/author/DOUGDUDE"><img src="https://www.gravatar.com/avatar/55ec7e7ef06ffa35decf218a2ca6485a?d=identicon&amp;s=20" title="DOUGDUDE" alt="DOUGDUDE"></a>
+<a class="display-all" href="https://metacpan.org/author/SYP"><img src="https://www.gravatar.com/avatar/9b6fa62677be03c25ee1af4d95472042?d=identicon&amp;s=20" title="SYP" alt="SYP"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/CPAN/plussers">19 PAUSE users</a>
+</div>
+<div>
+    19 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-contrib-email="andreas.koenig.gmwojprw@franz.ak.mind.de"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Andreas Koenig
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/ANDK" class="author-name">Andreas J. König</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/CPAN/Distribution.pm&#39;" class="">
+<option
+  selected
+  value="ANDK/CPAN-2.36"
+>2.36
+  (ANDK on 2023-05-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.36-TRIAL"
+>2.36-TRIAL DEV
+  (ANDK on 2023-05-10)</option>
+<option
+  
+  value="ANDK/CPAN-2.35"
+>2.35
+  (ANDK on 2023-04-27)</option>
+<option
+  
+  value="ANDK/CPAN-2.33-TRIAL"
+>2.33-TRIAL DEV
+  (ANDK on 2022-01-21)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ANDK/CPAN-2.35-TRIAL"
+>2.35-TRIAL DEV
+  (ANDK on 2023-04-15)</option>
+<option
+  
+  value="ANDK/CPAN-2.34"
+>2.34
+  (ANDK on 2022-04-17)</option>
+<option
+  
+  value="ANDK/CPAN-2.34-TRIAL"
+>2.34-TRIAL DEV
+  (ANDK on 2022-04-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.33"
+>2.33
+  (ANDK on 2022-03-27)</option>
+<option
+  
+  value="ANDK/CPAN-2.32-TRIAL"
+>2.32-TRIAL DEV
+  (ANDK on 2021-12-26)</option>
+<option
+  
+  value="ANDK/CPAN-2.31-TRIAL"
+>2.31-TRIAL DEV
+  (ANDK on 2021-12-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.30-TRIAL"
+>2.30-TRIAL DEV
+  (ANDK on 2021-12-12)</option>
+<option
+  
+  value="ANDK/CPAN-2.29"
+>2.29
+  (ANDK on 2021-11-23)</option>
+<option
+  
+  value="ANDK/CPAN-2.28"
+>2.28
+  (ANDK on 2020-06-13)</option>
+<option
+  
+  value="ANDK/CPAN-2.28-TRIAL"
+>2.28-TRIAL DEV
+  (ANDK on 2020-04-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.27"
+>2.27
+  (ANDK on 2019-07-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.27-TRIAL2"
+>2.27-TRIAL2 DEV
+  (ANDK on 2019-06-09)</option>
+<option
+  
+  value="ANDK/CPAN-2.27-TRIAL"
+>2.27-TRIAL DEV
+  (ANDK on 2019-05-31)</option>
+<option
+  
+  value="ANDK/CPAN-2.26"
+>2.26
+  (ANDK on 2019-03-19)</option>
+<option
+  
+  value="ANDK/CPAN-2.25"
+>2.25
+  (ANDK on 2019-03-03)</option>
+<option
+  
+  value="ANDK/CPAN-2.25-TRIAL"
+>2.25-TRIAL DEV
+  (ANDK on 2019-02-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.24-TRIAL"
+>2.24-TRIAL DEV
+  (ANDK on 2019-02-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.23-TRIAL"
+>2.23-TRIAL DEV
+  (ANDK on 2019-02-10)</option>
+<option
+  
+  value="ANDK/CPAN-2.22"
+>2.22
+  (ANDK on 2018-12-23)</option>
+<option
+  
+  value="ANDK/CPAN-2.22-TRIAL"
+>2.22-TRIAL DEV
+  (ANDK on 2018-12-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.21-TRIAL"
+>2.21-TRIAL DEV
+  (ANDK on 2018-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-2.20-TRIAL"
+>2.20-TRIAL DEV
+  (ANDK on 2017-11-26)</option>
+<option
+  
+  value="ANDK/CPAN-2.19-TRIAL"
+>2.19-TRIAL DEV
+  (ANDK on 2017-11-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.18-TRIAL"
+>2.18-TRIAL DEV
+  (ANDK on 2017-03-30)</option>
+<option
+  
+  value="ANDK/CPAN-2.17-TRIAL2"
+>2.17-TRIAL2 DEV
+  (ANDK on 2017-02-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.17-TRIAL"
+>2.17-TRIAL DEV
+  (ANDK on 2017-02-15)</option>
+<option
+  
+  value="ANDK/CPAN-2.16"
+>2.16
+  (ANDK on 2017-02-14)</option>
+<option
+  
+  value="ANDK/CPAN-2.16-TRIAL2"
+>2.16-TRIAL2 DEV
+  (ANDK on 2017-01-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.16-TRIAL"
+>2.16-TRIAL DEV
+  (ANDK on 2017-01-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.15-TRIAL"
+>2.15-TRIAL DEV
+  (ANDK on 2016-07-17)</option>
+<option
+  
+  value="ANDK/CPAN-2.14"
+>2.14
+  (ANDK on 2016-06-25)</option>
+<option
+  
+  value="ANDK/CPAN-2.14-TRIAL"
+>2.14-TRIAL DEV
+  (ANDK on 2016-06-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.13-TRIAL"
+>2.13-TRIAL DEV
+  (ANDK on 2016-05-16)</option>
+<option
+  
+  value="ANDK/CPAN-2.12-TRIAL"
+>2.12-TRIAL DEV
+  (ANDK on 2015-12-31)</option>
+<option
+  
+  value="ANDK/CPAN-2.10"
+>2.10
+  (ANDK on 2015-03-13)</option>
+<option
+  
+  value="ANDK/CPAN-2.10-TRIAL"
+>2.10-TRIAL DEV
+  (ANDK on 2015-02-22)</option>
+<option
+  
+  value="ANDK/CPAN-2.09-TRIAL"
+>2.09-TRIAL DEV
+  (ANDK on 2015-02-02)</option>
+<option
+  
+  value="ANDK/CPAN-2.08-TRIAL"
+>2.08-TRIAL DEV
+  (ANDK on 2015-01-05)</option>
+<option
+  
+  value="ANDK/CPAN-2.07-TRIAL"
+>2.07-TRIAL DEV
+  (ANDK on 2015-01-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.06-TRIAL"
+>2.06-TRIAL DEV
+  (ANDK on 2014-08-06)</option>
+<option
+  
+  value="ANDK/CPAN-2.05"
+>2.05
+  (ANDK on 2014-04-18)</option>
+<option
+  
+  value="ANDK/CPAN-2.05-TRIAL2"
+>2.05-TRIAL2 DEV
+  (ANDK on 2014-04-04)</option>
+<option
+  
+  value="ANDK/CPAN-2.05-TRIAL"
+>2.05-TRIAL DEV
+  (ANDK on 2014-03-31)</option>
+<option
+  
+  value="ANDK/CPAN-2.04-TRIAL"
+>2.04-TRIAL DEV
+  (ANDK on 2014-03-18)</option>
+<option
+  
+  value="ANDK/CPAN-2.03-TRIAL"
+>2.03-TRIAL DEV
+  (ANDK on 2013-09-15)</option>
+<option
+  
+  value="ANDK/CPAN-2.02-TRIAL"
+>2.02-TRIAL DEV
+  (ANDK on 2013-06-23)</option>
+<option
+  
+  value="ANDK/CPAN-2.01-TRIAL"
+>2.01-TRIAL DEV
+  (ANDK on 2013-06-22)</option>
+<option
+  
+  value="ANDK/CPAN-2.00"
+>2.00
+  (ANDK on 2013-04-12)</option>
+<option
+  
+  value="ANDK/CPAN-2.00-TRIAL"
+>2.00-TRIAL DEV
+  (ANDK on 2013-02-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.99_51"
+>1.99_51 DEV
+  (ANDK on 2012-10-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.9800"
+>1.9800
+  (ANDK on 2011-08-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.97_51"
+>1.97_51 DEV
+  (ANDK on 2011-06-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.9600"
+>1.9600
+  (ANDK on 2011-03-12)</option>
+<option
+  
+  value="DAGOLDEN/CPAN-1.94_65"
+>1.94_65 DEV
+  (DAGOLDEN on 2011-02-14)</option>
+<option
+  
+  value="DAGOLDEN/CPAN-1.94_64"
+>1.94_64 DEV
+  (DAGOLDEN on 2011-01-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_63"
+>1.94_63 DEV
+  (ANDK on 2011-01-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_62"
+>1.94_62 DEV
+  (ANDK on 2010-10-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_61"
+>1.94_61 DEV
+  (ANDK on 2010-10-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_60"
+>1.94_60 DEV
+  (ANDK on 2010-09-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_59"
+>1.94_59 DEV
+  (ANDK on 2010-09-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_58"
+>1.94_58 DEV
+  (ANDK on 2010-06-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_57"
+>1.94_57 DEV
+  (ANDK on 2010-05-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_56"
+>1.94_56 DEV
+  (ANDK on 2010-02-17)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_55"
+>1.94_55 DEV
+  (ANDK on 2010-02-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_54"
+>1.94_54 DEV
+  (ANDK on 2010-01-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_53"
+>1.94_53 DEV
+  (ANDK on 2009-12-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_52"
+>1.94_52 DEV
+  (ANDK on 2009-10-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_51"
+>1.94_51 DEV
+  (ANDK on 2009-09-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.9402"
+>1.9402
+  (ANDK on 2009-06-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.94_01"
+>1.94_01 DEV
+  (ANDK on 2009-06-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.94"
+>1.94
+  (ANDK on 2009-05-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_54"
+>1.93_54 DEV
+  (ANDK on 2009-05-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_53"
+>1.93_53 DEV
+  (ANDK on 2009-05-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_52"
+>1.93_52 DEV
+  (ANDK on 2009-04-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.9304"
+>1.9304
+  (ANDK on 2009-02-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_51"
+>1.93_51 DEV
+  (ANDK on 2009-02-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_03"
+>1.93_03 DEV
+  (ANDK on 2009-02-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.93_02"
+>1.93_02 DEV
+  (ANDK on 2009-01-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.9301"
+>1.9301
+  (ANDK on 2008-10-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.93"
+>1.93
+  (ANDK on 2008-10-12)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_66"
+>1.92_66 DEV
+  (ANDK on 2008-09-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_65"
+>1.92_65 DEV
+  (ANDK on 2008-09-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_64"
+>1.92_64 DEV
+  (ANDK on 2008-09-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_63"
+>1.92_63 DEV
+  (ANDK on 2008-06-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_62"
+>1.92_62 DEV
+  (ANDK on 2008-05-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_61"
+>1.92_61 DEV
+  (ANDK on 2008-04-25)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_60"
+>1.92_60 DEV
+  (ANDK on 2008-03-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_59"
+>1.92_59 DEV
+  (ANDK on 2008-03-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_58"
+>1.92_58 DEV
+  (ANDK on 2008-03-12)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_57"
+>1.92_57 DEV
+  (ANDK on 2008-02-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_56"
+>1.92_56 DEV
+  (ANDK on 2008-02-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_55"
+>1.92_55 DEV
+  (ANDK on 2007-12-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_54"
+>1.92_54 DEV
+  (ANDK on 2007-12-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_53"
+>1.92_53 DEV
+  (ANDK on 2007-12-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.9205"
+>1.9205
+  (ANDK on 2007-11-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_52"
+>1.92_52 DEV
+  (ANDK on 2007-11-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.9204"
+>1.9204
+  (ANDK on 2007-11-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.92_51"
+>1.92_51 DEV
+  (ANDK on 2007-11-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.9203"
+>1.9203
+  (ANDK on 2007-09-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.9202"
+>1.9202
+  (ANDK on 2007-09-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.9201"
+>1.9201
+  (ANDK on 2007-09-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.92"
+>1.92
+  (ANDK on 2007-09-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_55"
+>1.91_55 DEV
+  (ANDK on 2007-09-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_54"
+>1.91_54 DEV
+  (ANDK on 2007-09-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_53"
+>1.91_53 DEV
+  (ANDK on 2007-08-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_52"
+>1.91_52 DEV
+  (ANDK on 2007-07-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.91_51"
+>1.91_51 DEV
+  (ANDK on 2007-07-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.9102"
+>1.9102
+  (ANDK on 2007-05-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.9101"
+>1.9101
+  (ANDK on 2007-04-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.91"
+>1.91
+  (ANDK on 2007-04-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.90"
+>1.90
+  (ANDK on 2007-04-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_79"
+>1.88_79 DEV
+  (ANDK on 2007-03-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_78"
+>1.88_78 DEV
+  (ANDK on 2007-03-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_77"
+>1.88_77 DEV
+  (ANDK on 2007-02-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_76"
+>1.88_76 DEV
+  (ANDK on 2007-02-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_75"
+>1.88_75 DEV
+  (ANDK on 2007-02-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_74"
+>1.88_74 DEV
+  (ANDK on 2007-02-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_73"
+>1.88_73 DEV
+  (ANDK on 2007-02-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_72"
+>1.88_72 DEV
+  (ANDK on 2007-01-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_71"
+>1.88_71 DEV
+  (ANDK on 2007-01-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_69"
+>1.88_69 DEV
+  (ANDK on 2007-01-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_68"
+>1.88_68 DEV
+  (ANDK on 2007-01-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_67"
+>1.88_67 DEV
+  (ANDK on 2006-12-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_66"
+>1.88_66 DEV
+  (ANDK on 2006-12-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_65"
+>1.88_65 DEV
+  (ANDK on 2006-12-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_64"
+>1.88_64 DEV
+  (ANDK on 2006-12-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_63"
+>1.88_63 DEV
+  (ANDK on 2006-11-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_62"
+>1.88_62 DEV
+  (ANDK on 2006-11-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_61"
+>1.88_61 DEV
+  (ANDK on 2006-11-10)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_59"
+>1.88_59 DEV
+  (ANDK on 2006-11-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_58"
+>1.88_58 DEV
+  (ANDK on 2006-10-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_57"
+>1.88_57 DEV
+  (ANDK on 2006-10-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.8802"
+>1.8802
+  (ANDK on 2006-10-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_56"
+>1.88_56 DEV
+  (ANDK on 2006-10-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_55"
+>1.88_55 DEV
+  (ANDK on 2006-10-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_54"
+>1.88_54 DEV
+  (ANDK on 2006-10-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_53"
+>1.88_53 DEV
+  (ANDK on 2006-10-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_52"
+>1.88_52 DEV
+  (ANDK on 2006-10-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.88_51"
+>1.88_51 DEV
+  (ANDK on 2006-09-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.8801"
+>1.8801
+  (ANDK on 2006-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.88"
+>1.88
+  (ANDK on 2006-09-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_65"
+>1.87_65 DEV
+  (ANDK on 2006-09-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_64"
+>1.87_64 DEV
+  (ANDK on 2006-09-16)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_63"
+>1.87_63 DEV
+  (ANDK on 2006-09-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_62"
+>1.87_62 DEV
+  (ANDK on 2006-09-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_61"
+>1.87_61 DEV
+  (ANDK on 2006-09-10)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_59"
+>1.87_59 DEV
+  (ANDK on 2006-09-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_58"
+>1.87_58 DEV
+  (ANDK on 2006-08-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_57"
+>1.87_57 DEV
+  (ANDK on 2006-08-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_56"
+>1.87_56 DEV
+  (ANDK on 2006-08-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_55"
+>1.87_55 DEV
+  (ANDK on 2006-07-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_54"
+>1.87_54 DEV
+  (ANDK on 2006-07-23)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_53"
+>1.87_53 DEV
+  (ANDK on 2006-07-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_52"
+>1.87_52 DEV
+  (ANDK on 2006-07-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.87_51"
+>1.87_51 DEV
+  (ANDK on 2006-03-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.87"
+>1.87
+  (ANDK on 2006-02-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.86_53"
+>1.86_53 DEV
+  (ANDK on 2006-02-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.86_52"
+>1.86_52 DEV
+  (ANDK on 2006-02-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.86_51"
+>1.86_51 DEV
+  (ANDK on 2006-02-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.86"
+>1.86
+  (ANDK on 2006-02-20)</option>
+<option
+  
+  value="ANDK/CPAN-1.85"
+>1.85
+  (ANDK on 2006-02-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.84"
+>1.84
+  (ANDK on 2006-02-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_69"
+>1.83_69 DEV
+  (ANDK on 2006-02-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_68"
+>1.83_68 DEV
+  (ANDK on 2006-02-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_67"
+>1.83_67 DEV
+  (ANDK on 2006-02-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_66"
+>1.83_66 DEV
+  (ANDK on 2006-02-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_65"
+>1.83_65 DEV
+  (ANDK on 2006-02-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_64"
+>1.83_64 DEV
+  (ANDK on 2006-02-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_63"
+>1.83_63 DEV
+  (ANDK on 2006-02-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_62"
+>1.83_62 DEV
+  (ANDK on 2006-01-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_61"
+>1.83_61 DEV
+  (ANDK on 2006-01-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_60"
+>1.83_60 DEV
+  (ANDK on 2006-01-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_59"
+>1.83_59 DEV
+  (ANDK on 2006-01-25)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_58"
+>1.83_58 DEV
+  (ANDK on 2006-01-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_57"
+>1.83_57 DEV
+  (ANDK on 2006-01-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_56"
+>1.83_56 DEV
+  (ANDK on 2006-01-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_55"
+>1.83_55 DEV
+  (ANDK on 2006-01-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_54"
+>1.83_54 DEV
+  (ANDK on 2006-01-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_53"
+>1.83_53 DEV
+  (ANDK on 2006-01-12)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_52"
+>1.83_52 DEV
+  (ANDK on 2006-01-10)</option>
+<option
+  
+  value="ANDK/CPAN-1.83_51"
+>1.83_51 DEV
+  (ANDK on 2006-01-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.83"
+>1.83
+  (ANDK on 2006-01-05)</option>
+<option
+  
+  value="ANDK/CPAN-1.82"
+>1.82
+  (ANDK on 2006-01-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.81"
+>1.81
+  (ANDK on 2006-01-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_58"
+>1.80_58 DEV
+  (ANDK on 2006-01-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_57"
+>1.80_57 DEV
+  (ANDK on 2005-12-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_56"
+>1.80_56 DEV
+  (ANDK on 2005-12-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_55"
+>1.80_55 DEV
+  (ANDK on 2005-12-24)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_54"
+>1.80_54 DEV
+  (ANDK on 2005-12-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_53"
+>1.80_53 DEV
+  (ANDK on 2005-12-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.80_51"
+>1.80_51 DEV
+  (ANDK on 2005-12-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.80"
+>1.80
+  (ANDK on 2005-12-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_65"
+>1.76_65 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_64"
+>1.76_64 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_63"
+>1.76_63 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_62"
+>1.76_62 DEV
+  (ANDK on 2005-11-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_61"
+>1.76_61 DEV
+  (ANDK on 2005-11-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_60"
+>1.76_60 DEV
+  (ANDK on 2005-11-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_59"
+>1.76_59 DEV
+  (ANDK on 2005-11-03)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_58"
+>1.76_58 DEV
+  (ANDK on 2005-11-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_57"
+>1.76_57 DEV
+  (ANDK on 2005-10-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_56"
+>1.76_56 DEV
+  (ANDK on 2005-10-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_55"
+>1.76_55 DEV
+  (ANDK on 2005-10-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_54"
+>1.76_54 DEV
+  (ANDK on 2005-10-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_53"
+>1.76_53 DEV
+  (ANDK on 2005-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_52"
+>1.76_52 DEV
+  (ANDK on 2005-09-22)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_51"
+>1.76_51 DEV
+  (ANDK on 2005-09-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.76_01"
+>1.76_01 DEV
+  (ANDK on 2003-09-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.76"
+>1.76
+  (ANDK on 2003-07-31)</option>
+<option
+  
+  value="ANDK/CPAN-1.75"
+>1.75
+  (ANDK on 2003-07-29)</option>
+<option
+  
+  value="ANDK/CPAN-1.74"
+>1.74
+  (ANDK on 2003-07-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.73"
+>1.73
+  (ANDK on 2003-07-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.72"
+>1.72
+  (ANDK on 2003-07-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.71"
+>1.71
+  (ANDK on 2003-07-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.70_54"
+>1.70_54 DEV
+  (ANDK on 2003-05-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.70_53"
+>1.70_53 DEV
+  (ANDK on 2003-04-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.70_52"
+>1.70_52 DEV
+  (ANDK on 2003-04-11)</option>
+<option
+  
+  value="ANDK/CPAN-1.70"
+>1.70
+  (ANDK on 2003-03-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.65"
+>1.65
+  (ANDK on 2003-02-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.64"
+>1.64
+  (ANDK on 2003-02-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.63"
+>1.63
+  (ANDK on 2002-08-30)</option>
+<option
+  
+  value="ANDK/CPAN-1.62"
+>1.62
+  (ANDK on 2002-07-28)</option>
+<option
+  
+  value="ANDK/CPAN-1.61"
+>1.61
+  (ANDK on 2002-05-07)</option>
+<option
+  
+  value="ANDK/CPAN-1.60b"
+>1.60b
+  (ANDK on 2002-04-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.60a"
+>1.60a
+  (ANDK on 2002-04-20)</option>
+<option
+  
+  value="ANDK/CPAN-1.60"
+>1.60
+  (ANDK on 2002-04-19)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_54"
+>1.59_54 DEV
+  (ANDK on 2001-02-09)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_53"
+>1.59_53 DEV
+  (ANDK on 2001-01-02)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_52"
+>1.59_52 DEV
+  (ANDK on 2000-12-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.59_51"
+>1.59_51 DEV
+  (ANDK on 2000-12-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.59"
+>1.59
+  (ANDK on 2000-12-01)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_93"
+>1.58_93 DEV
+  (ANDK on 2000-11-15)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_92"
+>1.58_92 DEV
+  (ANDK on 2000-11-14)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_91"
+>1.58_91 DEV
+  (ANDK on 2000-11-13)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_90"
+>1.58_90 DEV
+  (ANDK on 2000-11-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_57"
+>1.58_57 DEV
+  (ANDK on 2000-11-06)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_56"
+>1.58_56 DEV
+  (ANDK on 2000-11-04)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_55"
+>1.58_55 DEV
+  (ANDK on 2000-10-27)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_54"
+>1.58_54 DEV
+  (ANDK on 2000-10-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_53"
+>1.58_53 DEV
+  (ANDK on 2000-10-26)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_52"
+>1.58_52 DEV
+  (ANDK on 2000-10-25)</option>
+<option
+  
+  value="ANDK/CPAN-1.58_51"
+>1.58_51 DEV
+  (ANDK on 2000-10-21)</option>
+<option
+  
+  value="ANDK/CPAN-1.58"
+>1.58
+  (ANDK on 2000-10-18)</option>
+<option
+  
+  value="ANDK/CPAN-1.57_68RC"
+>1.57_68RC DEV
+  (ANDK on 2000-10-08)</option>
+<option
+  
+  value="ANDK/CPAN-1.57_67"
+>1.57_67 DEV
+  (ANDK on 2000-09-17)</option>
+<option
+  
+  value="ANDK/CPAN-1.57_66"
+>1.57_66 DEV
+  (ANDK on 2000-09-12)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/CPAN">CPAN-2.36</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 53 direct dependents &#10;          • 522 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="CPAN-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="CPAN-2.36">
+    <input type="hidden" name="author" value="ANDK">
+    <input type="hidden" name="distribution" value="CPAN">
+    <button type="submit" class="favorite highlight"><span>38</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./CPAN::Distribution.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>38</span> ++</a>
+</div>
+   / <span>CPAN::Distribution</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<div class="pod anchors">
+  <p class="pod-error">
+    No POD found for <code>Distribution.pm</code>.
+    Time to <a href="https://metacpan.org/dist/CPAN/source/lib/CPAN/Distribution.pm">read the source</a>?
+  </p>
+</div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install CPAN, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm CPAN</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install CPAN</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./CPAN::Distribution.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,2871 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Log::Report - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Log-Report - MetaCPAN" href="https://metacpan.org/dist/Log-Report/releases.rss" />
+        <link rel="canonical" href="./Log::Report.html" />
+        <meta name="description" content="report a problem, pluggable handlers and language support" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Log::Report" />
+<meta name="twitter:title"       content="Log::Report" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Log::Report.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Log-Report was released.">
+      <span class="relatize">27 Oct 2023 13:07:42 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Log-Report">Log-Report</a>
+  </li>
+  <li>
+    Module version: 1.36
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Log-Report/source/lib/Log/Report.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Log-Report/source/lib/Log/Report.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g p" href="https://metacpan.org/dist/Log-Report/source/lib/Log/Report.pod">Pod Source</a>
+    (<a href="https://metacpan.org/dist/Log-Report/source/lib/Log/Report.pod?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Log-Report/source/lib/Log">Browse</a>
+    (<a href="https://metacpan.org/dist/Log-Report/source/lib/Log?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Log-Report/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="http://perl.overmeer.net/CPAN/">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Log-Report/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/markov2/perl5-Log-Report">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Log-Report">Issues</a>
+      (0)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Log-Report+1.36" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/L/Log-Report.html?oncpan=1&amp;distmat=1&amp;version=1.36&amp;grade=2" style="color: #090">388</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/L/Log-Report.html?oncpan=1&amp;distmat=1&amp;version=1.36&amp;grade=3" style="color: #900">4</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/L/Log-Report.html?oncpan=1&amp;distmat=1&amp;version=1.36&amp;grade=4">2</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/MARKOV/Log-Report-1.36">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Log-Report who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Log-Report/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/M/MA/MARKOV/Log-Report-1.36.tar.gz">
+      Download (<span itemprop="fileSize">99.31KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FMARKOV%2FLog-Report-1.36%2Flib%2FLog%2FReport.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Log-Report/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Log-Report/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Log-Report">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Log-Report">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Log/Report.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="MARKOV/Log-Report-1.36"
+>1.36
+  (MARKOV on 2023-10-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.35"
+>1.35
+  (MARKOV on 2023-10-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.34"
+>1.34
+  (MARKOV on 2022-09-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.33"
+>1.33
+  (MARKOV on 2021-07-17)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.32"
+>1.32
+  (MARKOV on 2021-01-26)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MARKOV/Log-Report-1.31"
+>1.31
+  (MARKOV on 2021-01-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.30"
+>1.30
+  (MARKOV on 2021-01-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.29"
+>1.29
+  (MARKOV on 2019-11-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.28"
+>1.28
+  (MARKOV on 2019-05-14)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.27"
+>1.27
+  (MARKOV on 2018-06-01)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.26"
+>1.26
+  (MARKOV on 2018-01-24)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.25"
+>1.25
+  (MARKOV on 2017-12-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.24"
+>1.24
+  (MARKOV on 2017-12-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.23"
+>1.23
+  (MARKOV on 2017-11-02)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.22"
+>1.22
+  (MARKOV on 2017-10-12)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.21"
+>1.21
+  (MARKOV on 2017-07-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.20"
+>1.20
+  (MARKOV on 2017-06-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.19"
+>1.19
+  (MARKOV on 2017-02-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.18"
+>1.18
+  (MARKOV on 2016-10-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.17"
+>1.17
+  (MARKOV on 2016-09-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.16"
+>1.16
+  (MARKOV on 2016-05-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.15"
+>1.15
+  (MARKOV on 2016-04-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.14"
+>1.14
+  (MARKOV on 2016-04-12)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.13"
+>1.13
+  (MARKOV on 2016-02-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.12"
+>1.12
+  (MARKOV on 2016-01-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.11"
+>1.11
+  (MARKOV on 2016-01-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.10"
+>1.10
+  (MARKOV on 2015-11-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.09"
+>1.09
+  (MARKOV on 2015-10-20)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.08"
+>1.08
+  (MARKOV on 2015-10-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.07"
+>1.07
+  (MARKOV on 2015-07-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.06"
+>1.06
+  (MARKOV on 2015-06-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.05"
+>1.05
+  (MARKOV on 2014-06-25)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.04"
+>1.04
+  (MARKOV on 2014-06-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.03"
+>1.03
+  (MARKOV on 2014-05-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.02"
+>1.02
+  (MARKOV on 2014-03-10)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.01"
+>1.01
+  (MARKOV on 2014-01-06)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.00"
+>1.00
+  (MARKOV on 2014-01-05)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.998"
+>0.998
+  (MARKOV on 2013-10-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.997"
+>0.997
+  (MARKOV on 2013-09-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.996"
+>0.996
+  (MARKOV on 2013-09-04)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.995"
+>0.995
+  (MARKOV on 2013-08-29)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.994"
+>0.994
+  (MARKOV on 2013-08-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.993"
+>0.993
+  (MARKOV on 2013-03-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.992"
+>0.992
+  (MARKOV on 2012-12-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.991"
+>0.991
+  (MARKOV on 2012-11-26)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.99"
+>0.99
+  (MARKOV on 2012-10-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.98"
+>0.98
+  (MARKOV on 2012-09-06)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.97"
+>0.97
+  (MARKOV on 2012-09-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.96"
+>0.96
+  (MARKOV on 2012-08-31)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.95"
+>0.95
+  (MARKOV on 2012-08-30)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.94"
+>0.94
+  (MARKOV on 2011-08-23)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.93"
+>0.93
+  (MARKOV on 2011-06-30)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.92"
+>0.92
+  (MARKOV on 2011-04-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.91"
+>0.91
+  (MARKOV on 2011-01-26)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.90"
+>0.90
+  (MARKOV on 2010-12-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.28"
+>0.28
+  (MARKOV on 2010-05-31)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.27"
+>0.27
+  (MARKOV on 2010-05-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.26"
+>0.26
+  (MARKOV on 2010-02-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.25"
+>0.25
+  (MARKOV on 2009-07-16)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.24"
+>0.24
+  (MARKOV on 2009-04-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.23"
+>0.23
+  (MARKOV on 2009-04-24)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.22"
+>0.22
+  (MARKOV on 2009-01-26)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.21"
+>0.21
+  (MARKOV on 2009-01-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.20"
+>0.20
+  (MARKOV on 2008-12-11)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.19"
+>0.19
+  (MARKOV on 2008-11-24)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.18"
+>0.18
+  (MARKOV on 2008-05-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.17"
+>0.17
+  (MARKOV on 2008-04-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.16"
+>0.16
+  (MARKOV on 2008-03-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.15"
+>0.15
+  (MARKOV on 2008-02-25)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.14"
+>0.14
+  (MARKOV on 2007-11-02)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.13"
+>0.13
+  (MARKOV on 2007-10-29)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.12"
+>0.12
+  (MARKOV on 2007-10-23)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.11"
+>0.11
+  (MARKOV on 2007-10-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.10"
+>0.10
+  (MARKOV on 2007-10-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.09"
+>0.09
+  (MARKOV on 2007-08-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.08"
+>0.08
+  (MARKOV on 2007-07-11)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.07"
+>0.07
+  (MARKOV on 2007-06-20)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.06"
+>0.06
+  (MARKOV on 2007-06-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.05"
+>0.05
+  (MARKOV on 2007-06-07)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.04"
+>0.04
+  (MARKOV on 2007-06-04)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.03"
+>0.03
+  (MARKOV on 2007-05-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.02"
+>0.02
+  (MARKOV on 2007-05-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.01"
+>0.01
+  (MARKOV on 2007-05-25)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/MARKOV/Log-Report-1.36/diff/' + encodeURIComponent(this.value) + '/lib/Log/Report.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="MARKOV/Log-Report-1.36"
+>1.36
+  (MARKOV on 2023-10-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.35"
+>1.35
+  (MARKOV on 2023-10-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.34"
+>1.34
+  (MARKOV on 2022-09-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.33"
+>1.33
+  (MARKOV on 2021-07-17)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.32"
+>1.32
+  (MARKOV on 2021-01-26)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MARKOV/Log-Report-1.31"
+>1.31
+  (MARKOV on 2021-01-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.30"
+>1.30
+  (MARKOV on 2021-01-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.29"
+>1.29
+  (MARKOV on 2019-11-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.28"
+>1.28
+  (MARKOV on 2019-05-14)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.27"
+>1.27
+  (MARKOV on 2018-06-01)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.26"
+>1.26
+  (MARKOV on 2018-01-24)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.25"
+>1.25
+  (MARKOV on 2017-12-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.24"
+>1.24
+  (MARKOV on 2017-12-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.23"
+>1.23
+  (MARKOV on 2017-11-02)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.22"
+>1.22
+  (MARKOV on 2017-10-12)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.21"
+>1.21
+  (MARKOV on 2017-07-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.20"
+>1.20
+  (MARKOV on 2017-06-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.19"
+>1.19
+  (MARKOV on 2017-02-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.18"
+>1.18
+  (MARKOV on 2016-10-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.17"
+>1.17
+  (MARKOV on 2016-09-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.16"
+>1.16
+  (MARKOV on 2016-05-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.15"
+>1.15
+  (MARKOV on 2016-04-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.14"
+>1.14
+  (MARKOV on 2016-04-12)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.13"
+>1.13
+  (MARKOV on 2016-02-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.12"
+>1.12
+  (MARKOV on 2016-01-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.11"
+>1.11
+  (MARKOV on 2016-01-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.10"
+>1.10
+  (MARKOV on 2015-11-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.09"
+>1.09
+  (MARKOV on 2015-10-20)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.08"
+>1.08
+  (MARKOV on 2015-10-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.07"
+>1.07
+  (MARKOV on 2015-07-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.06"
+>1.06
+  (MARKOV on 2015-06-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.05"
+>1.05
+  (MARKOV on 2014-06-25)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.04"
+>1.04
+  (MARKOV on 2014-06-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.03"
+>1.03
+  (MARKOV on 2014-05-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.02"
+>1.02
+  (MARKOV on 2014-03-10)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.01"
+>1.01
+  (MARKOV on 2014-01-06)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.00"
+>1.00
+  (MARKOV on 2014-01-05)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.998"
+>0.998
+  (MARKOV on 2013-10-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.997"
+>0.997
+  (MARKOV on 2013-09-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.996"
+>0.996
+  (MARKOV on 2013-09-04)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.995"
+>0.995
+  (MARKOV on 2013-08-29)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.994"
+>0.994
+  (MARKOV on 2013-08-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.993"
+>0.993
+  (MARKOV on 2013-03-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.992"
+>0.992
+  (MARKOV on 2012-12-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.991"
+>0.991
+  (MARKOV on 2012-11-26)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.99"
+>0.99
+  (MARKOV on 2012-10-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.98"
+>0.98
+  (MARKOV on 2012-09-06)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.97"
+>0.97
+  (MARKOV on 2012-09-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.96"
+>0.96
+  (MARKOV on 2012-08-31)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.95"
+>0.95
+  (MARKOV on 2012-08-30)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.94"
+>0.94
+  (MARKOV on 2011-08-23)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.93"
+>0.93
+  (MARKOV on 2011-06-30)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.92"
+>0.92
+  (MARKOV on 2011-04-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.91"
+>0.91
+  (MARKOV on 2011-01-26)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.90"
+>0.90
+  (MARKOV on 2010-12-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.28"
+>0.28
+  (MARKOV on 2010-05-31)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.27"
+>0.27
+  (MARKOV on 2010-05-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.26"
+>0.26
+  (MARKOV on 2010-02-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.25"
+>0.25
+  (MARKOV on 2009-07-16)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.24"
+>0.24
+  (MARKOV on 2009-04-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.23"
+>0.23
+  (MARKOV on 2009-04-24)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.22"
+>0.22
+  (MARKOV on 2009-01-26)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.21"
+>0.21
+  (MARKOV on 2009-01-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.20"
+>0.20
+  (MARKOV on 2008-12-11)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.19"
+>0.19
+  (MARKOV on 2008-11-24)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.18"
+>0.18
+  (MARKOV on 2008-05-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.17"
+>0.17
+  (MARKOV on 2008-04-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.16"
+>0.16
+  (MARKOV on 2008-03-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.15"
+>0.15
+  (MARKOV on 2008-02-25)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.14"
+>0.14
+  (MARKOV on 2007-11-02)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.13"
+>0.13
+  (MARKOV on 2007-10-29)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.12"
+>0.12
+  (MARKOV on 2007-10-23)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.11"
+>0.11
+  (MARKOV on 2007-10-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.10"
+>0.10
+  (MARKOV on 2007-10-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.09"
+>0.09
+  (MARKOV on 2007-08-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.08"
+>0.08
+  (MARKOV on 2007-07-11)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.07"
+>0.07
+  (MARKOV on 2007-06-20)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.06"
+>0.06
+  (MARKOV on 2007-06-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.05"
+>0.05
+  (MARKOV on 2007-06-07)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.04"
+>0.04
+  (MARKOV on 2007-06-04)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.03"
+>0.03
+  (MARKOV on 2007-05-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.02"
+>0.02
+  (MARKOV on 2007-05-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.01"
+>0.01
+  (MARKOV on 2007-05-25)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Devel::GlobalDestruction" title="Devel::GlobalDestruction" class="ellipsis">Devel::GlobalDestruction</a></li>
+  <li><a href="https://metacpan.org/pod/Encode" title="Encode" class="ellipsis">Encode</a></li>
+  <li><a href="https://metacpan.org/pod/Log::Report::Optional" title="Log::Report::Optional" class="ellipsis">Log::Report::Optional</a></li>
+  <li><a href="https://metacpan.org/pod/Scalar::Util" title="Scalar::Util" class="ellipsis">Scalar::Util</a></li>
+  <li><a href="https://metacpan.org/pod/String::Print" title="String::Print" class="ellipsis">String::Print</a></li>
+  <li><a href="https://metacpan.org/pod/Sys::Syslog" title="Sys::Syslog" class="ellipsis">Sys::Syslog</a></li>
+  <li><a href="https://metacpan.org/pod/Test::More" title="Test::More" class="ellipsis">Test::More</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Log::Report/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Log%3A%3AReport">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Log-Report">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/MARKOV/Log-Report-1.36/view/lib/Log/Report.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Log::Report.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/ALEXPAN"><img src="https://www.gravatar.com/avatar/70e0ed15dcfbb2cf0e09fbb0d09c9bf8?d=identicon&amp;s=20" title="ALEXPAN" alt="ALEXPAN"></a>
+<a class="display-all" href="https://metacpan.org/author/ABEVERLEY"><img src="https://www.gravatar.com/avatar/06a1bbc5df344e2367d31f1289061db9?d=identicon&amp;s=20" title="ABEVERLEY" alt="ABEVERLEY"></a>
+<a class="display-all" href="https://metacpan.org/author/PWBENNETT"><img src="https://www.gravatar.com/avatar/41a085cce4a7061cf4ee49d02b9bed0e?d=identicon&amp;s=20" title="PWBENNETT" alt="PWBENNETT"></a>
+<a class="display-all" href="https://metacpan.org/author/RSCHABER"><img src="https://www.gravatar.com/avatar/8735b8d5583ee0a0155a41f993cab4f3?d=identicon&amp;s=20" title="RSCHABER" alt="RSCHABER"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Log-Report/plussers">4 PAUSE users</a>
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/MARKOV" class="author-name">Mark Overmeer</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Log/Report.pm&#39;" class="">
+<option
+  selected
+  value="MARKOV/Log-Report-1.36"
+>1.36
+  (MARKOV on 2023-10-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.35"
+>1.35
+  (MARKOV on 2023-10-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.34"
+>1.34
+  (MARKOV on 2022-09-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.33"
+>1.33
+  (MARKOV on 2021-07-17)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.32"
+>1.32
+  (MARKOV on 2021-01-26)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MARKOV/Log-Report-1.31"
+>1.31
+  (MARKOV on 2021-01-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.30"
+>1.30
+  (MARKOV on 2021-01-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.29"
+>1.29
+  (MARKOV on 2019-11-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.28"
+>1.28
+  (MARKOV on 2019-05-14)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.27"
+>1.27
+  (MARKOV on 2018-06-01)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.26"
+>1.26
+  (MARKOV on 2018-01-24)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.25"
+>1.25
+  (MARKOV on 2017-12-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.24"
+>1.24
+  (MARKOV on 2017-12-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.23"
+>1.23
+  (MARKOV on 2017-11-02)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.22"
+>1.22
+  (MARKOV on 2017-10-12)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.21"
+>1.21
+  (MARKOV on 2017-07-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.20"
+>1.20
+  (MARKOV on 2017-06-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.19"
+>1.19
+  (MARKOV on 2017-02-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.18"
+>1.18
+  (MARKOV on 2016-10-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.17"
+>1.17
+  (MARKOV on 2016-09-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.16"
+>1.16
+  (MARKOV on 2016-05-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.15"
+>1.15
+  (MARKOV on 2016-04-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.14"
+>1.14
+  (MARKOV on 2016-04-12)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.13"
+>1.13
+  (MARKOV on 2016-02-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.12"
+>1.12
+  (MARKOV on 2016-01-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.11"
+>1.11
+  (MARKOV on 2016-01-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.10"
+>1.10
+  (MARKOV on 2015-11-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.09"
+>1.09
+  (MARKOV on 2015-10-20)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.08"
+>1.08
+  (MARKOV on 2015-10-08)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.07"
+>1.07
+  (MARKOV on 2015-07-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.06"
+>1.06
+  (MARKOV on 2015-06-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.05"
+>1.05
+  (MARKOV on 2014-06-25)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.04"
+>1.04
+  (MARKOV on 2014-06-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.03"
+>1.03
+  (MARKOV on 2014-05-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.02"
+>1.02
+  (MARKOV on 2014-03-10)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.01"
+>1.01
+  (MARKOV on 2014-01-06)</option>
+<option
+  
+  value="MARKOV/Log-Report-1.00"
+>1.00
+  (MARKOV on 2014-01-05)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.998"
+>0.998
+  (MARKOV on 2013-10-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.997"
+>0.997
+  (MARKOV on 2013-09-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.996"
+>0.996
+  (MARKOV on 2013-09-04)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.995"
+>0.995
+  (MARKOV on 2013-08-29)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.994"
+>0.994
+  (MARKOV on 2013-08-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.993"
+>0.993
+  (MARKOV on 2013-03-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.992"
+>0.992
+  (MARKOV on 2012-12-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.991"
+>0.991
+  (MARKOV on 2012-11-26)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.99"
+>0.99
+  (MARKOV on 2012-10-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.98"
+>0.98
+  (MARKOV on 2012-09-06)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.97"
+>0.97
+  (MARKOV on 2012-09-03)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.96"
+>0.96
+  (MARKOV on 2012-08-31)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.95"
+>0.95
+  (MARKOV on 2012-08-30)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.94"
+>0.94
+  (MARKOV on 2011-08-23)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.93"
+>0.93
+  (MARKOV on 2011-06-30)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.92"
+>0.92
+  (MARKOV on 2011-04-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.91"
+>0.91
+  (MARKOV on 2011-01-26)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.90"
+>0.90
+  (MARKOV on 2010-12-22)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.28"
+>0.28
+  (MARKOV on 2010-05-31)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.27"
+>0.27
+  (MARKOV on 2010-05-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.26"
+>0.26
+  (MARKOV on 2010-02-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.25"
+>0.25
+  (MARKOV on 2009-07-16)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.24"
+>0.24
+  (MARKOV on 2009-04-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.23"
+>0.23
+  (MARKOV on 2009-04-24)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.22"
+>0.22
+  (MARKOV on 2009-01-26)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.21"
+>0.21
+  (MARKOV on 2009-01-21)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.20"
+>0.20
+  (MARKOV on 2008-12-11)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.19"
+>0.19
+  (MARKOV on 2008-11-24)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.18"
+>0.18
+  (MARKOV on 2008-05-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.17"
+>0.17
+  (MARKOV on 2008-04-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.16"
+>0.16
+  (MARKOV on 2008-03-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.15"
+>0.15
+  (MARKOV on 2008-02-25)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.14"
+>0.14
+  (MARKOV on 2007-11-02)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.13"
+>0.13
+  (MARKOV on 2007-10-29)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.12"
+>0.12
+  (MARKOV on 2007-10-23)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.11"
+>0.11
+  (MARKOV on 2007-10-18)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.10"
+>0.10
+  (MARKOV on 2007-10-15)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.09"
+>0.09
+  (MARKOV on 2007-08-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.08"
+>0.08
+  (MARKOV on 2007-07-11)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.07"
+>0.07
+  (MARKOV on 2007-06-20)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.06"
+>0.06
+  (MARKOV on 2007-06-09)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.05"
+>0.05
+  (MARKOV on 2007-06-07)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.04"
+>0.04
+  (MARKOV on 2007-06-04)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.03"
+>0.03
+  (MARKOV on 2007-05-28)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.02"
+>0.02
+  (MARKOV on 2007-05-27)</option>
+<option
+  
+  value="MARKOV/Log-Report-0.01"
+>0.01
+  (MARKOV on 2007-05-25)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Log-Report">Log-Report-1.36</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage two &#10;
+          • 36 direct dependents &#10;          • 86 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Log-Report-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Log-Report-1.36">
+    <input type="hidden" name="author" value="MARKOV">
+    <input type="hidden" name="distribution" value="Log-Report">
+    <button type="submit" class="favorite highlight"><span>4</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Log::Report.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>4</span> ++</a>
+</div>
+   / <span>Log::Report</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Log::Report.html#NAME">NAME</a></li>
+  <li><a href="./Log::Report.html#INHERITANCE">INHERITANCE</a></li>
+  <li><a href="./Log::Report.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Log::Report.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Log::Report.html#FUNCTIONS">FUNCTIONS</a>
+    <ul>
+      <li><a href="./Log::Report.html#Report-Production-and-Configuration">Report Production and Configuration</a></li>
+      <li><a href="./Log::Report.html#Abbreviations-for-report()">Abbreviations for report()</a></li>
+      <li><a href="./Log::Report.html#Messages-(optionally-translatable)">Messages (optionally translatable)</a>
+        <ul>
+          <li><a href="./Log::Report.html#Messages-with-msgctxt">Messages with msgctxt</a></li>
+        </ul>
+      </li>
+      <li><a href="./Log::Report.html#Configuration">Configuration</a></li>
+      <li><a href="./Log::Report.html#Reasons">Reasons</a></li>
+    </ul>
+  </li>
+  <li><a href="./Log::Report.html#DETAILS">DETAILS</a>
+    <ul>
+      <li><a href="./Log::Report.html#Introduction">Introduction</a></li>
+      <li><a href="./Log::Report.html#Background-ideas">Background ideas</a></li>
+      <li><a href="./Log::Report.html#Error-handling-models">Error handling models</a>
+        <ul>
+          <li><a href="./Log::Report.html#The-Reason-for-the-report">The Reason for the report</a></li>
+          <li><a href="./Log::Report.html#Report-levels">Report levels</a></li>
+          <li><a href="./Log::Report.html#Run-modes">Run modes</a></li>
+          <li><a href="./Log::Report.html#Exceptions">Exceptions</a></li>
+        </ul>
+      </li>
+      <li><a href="./Log::Report.html#Comparison">Comparison</a>
+        <ul>
+          <li><a href="./Log::Report.html#die/warn/Carp">die/warn/Carp</a></li>
+          <li><a href="./Log::Report.html#Log::Dispatch-and-Log::Log4perl">Log::Dispatch and Log::Log4perl</a></li>
+          <li><a href="./Log::Report.html#Locale::gettext-and-Locate::TextDomain">Locale::gettext and Locate::TextDomain</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="./Log::Report.html#DIAGNOSTICS">DIAGNOSTICS</a></li>
+  <li><a href="./Log::Report.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Log::Report.html#LICENSE">LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Log::Report - report a problem, with exceptions and translation support</p>
+
+<h1 id="INHERITANCE">INHERITANCE</h1>
+
+<pre><code> Log::Report
+   is an Exporter</code></pre>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code> # Invocation with &#39;mode&#39; to get trace and verbose messages
+ use Log::Report mode =&gt; &#39;DEBUG&#39;;
+
+ # Usually invoked with a domain, which groups packages for translation
+ use Log::Report &#39;my-domain&#39;, %options;
+
+ # Interpolation syntax via String::Print
+ # First step to translations, once you need it.
+ print __x&quot;my name is {name}&quot;, name =&gt; $n;  # print, so no exception
+ print __&quot;Hello World\n&quot;;     # no interpolation, optional translation
+ print __x&#39;Hello World&#39;;      # SYNTAX ERROR!!  &#39; is alternative for ::
+
+ # Functions replacing die/warn/carp, casting exceptions.
+ error &quot;oops&quot;;                # exception like die(), no translation
+ -f $config or panic &quot;Help!&quot;; # alert/error/fault/info/...more
+
+ # Combined exception, interpolation, and optional translation
+ error __x&quot;Help!&quot;;            # __x() creates ::Message object
+ error __x(&#39;gettext msgid&#39;, param =&gt; $value, ...)
+     if $condition;
+
+ # Also non fatal &quot;exceptions&quot; find their way to dispatchers
+ info __x&quot;started {pid}&quot;, pid =&gt; $$;   # translatable
+ debug &quot;$i was here!&quot;;        # you probably do not want to translate debug
+ panic &quot;arrghhh&quot;;             # like Carp::Confess
+
+ # Many destinations for an exception message (may exist in parallel)
+ dispatcher PERL =&gt; &#39;default&#39; # see Log::Report::Dispatcher: use die/warn
+   , reasons =&gt; &#39;NOTICE-&#39;;    # this dispatcher is already present at start
+
+ dispatcher SYSLOG =&gt; &#39;syslog&#39;# also send to syslog
+   , charset =&gt; &#39;iso-8859-1&#39;  # explicit character conversions
+   , locale =&gt; &#39;en_US&#39;;       # overrule user&#39;s locale
+
+ dispatcher close =&gt; &#39;default&#39;;  # stop default die/warn dispatcher
+
+ # Fill-in values, like Locale::TextDomain and gettext
+ # See Log::Report::Message section DETAILS
+ fault __x&quot;cannot allocate {size} bytes&quot;, size =&gt; $size;
+ fault &quot;cannot allocate $size bytes&quot;;     # no translation, ok
+ fault __x&quot;cannot allocate $size bytes&quot;;  # not translatable, wrong
+
+ # Translation depending on count
+ # Leading and trailing whitespace stay magically outside translation
+ # tables.  @files in scalar context.  Special parameter with _
+ print __xn&quot;found one file\n&quot;, &quot;found {_count} files&quot;, @files;
+
+ # Borrow from an other text-domain (see Log::Report::Message)
+ print __x(+&quot;errors in {line}&quot;, _domain =&gt; &#39;global&#39;, line =&gt; $line);
+
+ # catch errors (implements hidden eval/die)
+ try { error };
+ if($@) {...}      # $@ isa Log::Report::Dispatcher::Try
+ if(my $exception = $@-&gt;wasFatal)         # ::Exception object
+
+ # Language translations at the output component
+ # Translation management via Log::Report::Lexicon
+ use POSIX::1003::Locale qw/setlocale LC_ALL/;
+ setlocale(LC_ALL, &#39;nl_NL&#39;);
+ info __&quot;Hello World!&quot;;      # in Dutch, if translation table found
+
+ # Exception classes, see Log::Report::Exception
+ try { error __x&quot;something&quot;, _class =&gt; &#39;parsing,schema&#39; };
+ if($@-&gt;wasFatal-&gt;inClass(&#39;parsing&#39;)) ...</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>Get messages to users and logs. <code>Log::Report</code> combines three tasks which are closely related in one:</p>
+
+<dl>
+
+<dt id=".-logging-(like-Log::Log4Perl-and-syslog),-and"><a id="logging--like-Log::Log4Perl-and-syslog--and"></a>. logging (like <a href="https://metacpan.org/pod/Log::Log4Perl">Log::Log4Perl</a> and syslog), and</dt>
+<dd>
+
+</dd>
+<dt id=".-exceptions-(like-error-and-info),-with"><a id="exceptions--like-error-and-info--with"></a>. exceptions (like error and info), with</dt>
+<dd>
+
+</dd>
+<dt id=".-translations-(like-gettext-and-Locale::TextDomain)"><a id="translations--like-gettext-and-Locale::TextDomain"></a>. translations (like <code>gettext</code> and <a href="https://metacpan.org/pod/Locale::TextDomain">Locale::TextDomain</a>)</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>You <b>do not need</b> to use this module for all three reasons: pick what you need now, maybe extend the usage later. Read more about how and why in the <a href="./Log::Report.html#DETAILS">&quot;DETAILS&quot;</a> section, below. Especially, you should <b>read about the REASON parameter</b>.</p>
+
+<p>Also, you can study this module swiftly via the article published in the German Perl <code>$foo-magazine</code>. English version: <i>http://perl.overmeer.net/log-report/papers/201306-PerlMagazine-article-en.html</i></p>
+
+<h1 id="FUNCTIONS">FUNCTIONS</h1>
+
+<h2 id="Report-Production-and-Configuration"><a id="Report"></a>Report Production and Configuration</h2>
+
+<dl>
+
+<dt id="dispatcher(-&lt;$type,-$name,-%options&gt;|&lt;$command,-@names&gt;-)"><a id="dispatcher"></a><a id="dispatcher---type---name---options-command---names"></a><b>dispatcher</b>( &lt;$type, $name, %options&gt;|&lt;$command, @names&gt; )</dt>
+<dd>
+
+<p>The <code>dispatcher</code> function controls access to dispatchers: the back-ends which process messages, do the logging. Dispatchers are global entities, addressed by a symbolic $name. Please read <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Dispatcher.pod">Log::Report::Dispatcher</a> as well.</p>
+
+<p>The <code>Log::Report</code> suite has its own dispatcher @types, but also connects to external dispatching frameworks. Each need some (minor) conversions, especially with respect to translation of REASONS of the reports into log-levels as the back-end understands.</p>
+
+<p>[1.10] When you open a dispatcher with a $name which is already in use, that existing dispatcher gets closed. Except when you have given an &#39;dispatcher &quot;do-not-reopen&quot;&#39; earlier, in which case the first object stays alive, and the second attempt ignored. [1.11] The automatically created default dispatcher will get replaced, even when this option is given, by another dispatcher which is named &#39;default&#39;.</p>
+
+<p>The %options are a mixture of parameters needed for the Log::Report dispatcher wrapper and the settings of the back-end. See <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Dispatcher.pod">Log::Report::Dispatcher</a>, the documentation for the back-end specific wrappers, and the back-ends for more details.</p>
+
+<p>Implemented COMMANDs are <code>close</code>, <code>find</code>, <code>list</code>, <code>disable</code>, <code>enable</code>, <code>mode</code>, <code>filter</code>, <code>needs</code>, <code>active-try</code>, and <code>do-not-reopen</code>.</p>
+
+<p>Most commands are followed by a LIST of dispatcher @names to be addressed. For <code>mode</code> see section <a href="./Log::Report.html#Run-modes">&quot;Run modes&quot;</a>; it requires a MODE argument before the LIST of NAMEs. Non-existing names will be ignored. When <code>ALL</code> is specified, then all existing dispatchers will get addressed. For <code>filter</code> see <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Dispatcher.pod#Filters">&quot;Filters&quot; in Log::Report::Dispatcher</a>; it requires a CODE reference before the @names of the dispatchers which will have the it applied (defaults to all).</p>
+
+<p>With <code>needs</code>, you only provide a REASON: it will return the list of dispatchers which need to be called in case of a message with the REASON is triggered. The <code>active-try</code> [1.09] returns the closest surrounding exception catcher, a <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Dispatcher/Try.pod">Log::Report::Dispatcher::Try</a> object.</p>
+
+<p>For both the creation as COMMANDs version of this method, all objects involved are returned as LIST, non-existing ones skipped. In SCALAR context with only one name, the one object is returned.</p>
+
+<p>example: play with dispatchers</p>
+
+<pre><code> dispatcher Log::Dispatcher::File =&gt; mylog =&gt;
+   , accept   =&gt; &#39;MISTAKE-&#39;              # for wrapper
+   , locale   =&gt; &#39;pt_BR&#39;                 # other language
+   , filename =&gt; &#39;logfile&#39;;              # for back-end
+
+ dispatcher close =&gt; &#39;mylog&#39;;            # cleanup
+ my $obj = dispatcher find =&gt; &#39;mylog&#39;; 
+ my @obj = dispatcher &#39;list&#39;;
+ dispatcher disable =&gt; &#39;syslog&#39;;
+ dispatcher enable =&gt; &#39;mylog&#39;, &#39;syslog&#39;; # more at a time
+ dispatcher mode =&gt; &#39;DEBUG&#39;, &#39;mylog&#39;;
+ dispatcher mode =&gt; &#39;DEBUG&#39;, &#39;ALL&#39;;
+ my $catcher = dispatcher &#39;active-try&#39;;
+ dispatcher &#39;do-not-reopen&#39;;
+
+ my @need_info = dispatcher needs =&gt; &#39;INFO&#39;;
+ if(dispatcher needs =&gt; &#39;INFO&#39;) ...      # anyone needs INFO
+
+ # Getopt::Long integration: see Log::Report::Dispatcher::mode()
+ dispatcher PERL =&gt; &#39;default&#39;, mode =&gt; &#39;DEBUG&#39;, accept =&gt; &#39;ALL&#39;
+     if $debug;</code></pre>
+
+</dd>
+<dt id="report(-[%options],-$reason,-$message|&lt;STRING,$params&gt;,-)"><a id="report"></a><a id="report---options---reason---message-STRING-params"></a><b>report</b>( [%options], $reason, $message|&lt;STRING,$params&gt;, )</dt>
+<dd>
+
+<p>The <code>report</code> function is sending (for some $reason) a $message to be displayed or logged (by a `dispatcher&#39;). This function is the core for <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Abbreviations-for-report()">error()</a>, <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Abbreviations-for-report()">info()</a> etc functions, which are nicer names for this exception throwing: better use those short names.</p>
+
+<p>The $reason is a string like &#39;ERROR&#39; (for function <code>error()</code>). The $message is a <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Message.pod">Log::Report::Message</a> object (which are created with the special translation syntax like <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Messages-(optionally-translatable)">__x()</a>). The $message may also be a plain string, or an <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Exception.pod">Log::Report::Exception</a> object. The optional first parameter is a HASH which can be used to influence the dispatchers.</p>
+
+<p>The optional %options are listed below. Quite differently from other functions and methods, they have to be passed in a HASH as first parameter.</p>
+
+<p>This function returns the LIST of dispatchers which accepted the $message. When empty, no back-end has accepted it so the $message was &quot;lost&quot;. Even when no back-end needs the message, the program will still exit when there is a $reason to <code>die()</code>.</p>
+
+<pre><code> -Option  --Default
+  errno     $! or 1
+  is_fatal  &lt;depends on reason&gt;
+  locale    undef
+  location  undef
+  stack     undef
+  to        undef</code></pre>
+
+<dl>
+
+<dt id="errno-=&gt;-INTEGER"><a id="errno"></a><a id="errno---INTEGER"></a>errno =&gt; INTEGER</dt>
+<dd>
+
+<p>When the $reason includes the error text (See <a href="./Log::Report.html#Run-modes">&quot;Run modes&quot;</a>), you can overrule the error code kept in <code>$!</code>. In other cases, the return code defaults to <code>1</code> (historical UNIX behavior). When the message $reason (combined with the run-mode) is severe enough to stop the program, this value as return code of the program. The use of this option itself will not trigger an <code>die()</code>.</p>
+
+</dd>
+<dt id="is_fatal-=&gt;-BOOLEAN"><a id="is_fatal"></a><a id="is_fatal---BOOLEAN"></a>is_fatal =&gt; BOOLEAN</dt>
+<dd>
+
+<p>Some logged exceptions are fatal, other aren&#39;t. The default usually is correct. However, you may want an error to be caught (usually with <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Report-Production-and-Configuration">try()</a>), redispatch it to syslog, but without it killing the main program.</p>
+
+</dd>
+<dt id="locale-=&gt;-LOCALE"><a id="locale"></a><a id="locale---LOCALE"></a>locale =&gt; LOCALE</dt>
+<dd>
+
+<p>Use this specific locale, in stead of the user&#39;s preference.</p>
+
+</dd>
+<dt id="location-=&gt;-STRING"><a id="location"></a><a id="location---STRING"></a>location =&gt; STRING</dt>
+<dd>
+
+<p>When defined, this location is used in the display. Otherwise, it is determined automatically if needed. An empty string will disable any attempt to display this line.</p>
+
+</dd>
+<dt id="stack-=&gt;-ARRAY"><a id="stack"></a><a id="stack---ARRAY"></a>stack =&gt; ARRAY</dt>
+<dd>
+
+<p>When defined, that data is used to display the call stack. Otherwise, it is collected via <code>caller()</code> if needed.</p>
+
+</dd>
+<dt id="to-=&gt;-NAME|ARRAY-of-NAMEs"><a id="to"></a><a id="to---NAME-ARRAY-of-NAMEs"></a>to =&gt; NAME|ARRAY-of-NAMEs</dt>
+<dd>
+
+<p>Sent the $message only to the NAMEd dispatchers. Ignore unknown NAMEs. Still, the dispatcher needs to be enabled and accept the REASONs.</p>
+
+</dd>
+</dl>
+
+<p>example: for use of <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Report-Production-and-Configuration">report()</a></p>
+
+<pre><code> # long syntax example
+ report TRACE =&gt; &quot;start processing now&quot;;
+ report INFO  =&gt; &#39;500: &#39; . __&#39;Internal Server Error&#39;;
+
+ # explicit dispatcher, no translation
+ report {to =&gt; &#39;syslog&#39;}, NOTICE =&gt; &quot;started process $$&quot;;
+ notice &quot;started process $$&quot;, _to =&gt; &#39;syslog&#39;;   # same
+
+ # short syntax examples
+ trace &quot;start processing now&quot;;
+ warning  __x&#39;Disk {percent%.2f}% full&#39;, percent =&gt; $p
+     if $p &gt; 97;
+
+ # error message, overruled to be printed in Brazilian
+ report {locale =&gt; &#39;pt_BR&#39;}
+    , WARNING =&gt; &quot;do this at home!&quot;;</code></pre>
+
+</dd>
+<dt id="try(CODE,-%options)"><a id="try"></a><a id="try-CODE---options"></a><b>try</b>(CODE, %options)</dt>
+<dd>
+
+<p>Execute the CODE while blocking all dispatchers as long as it is running. The exceptions which occur while running the CODE are caught until it has finished. When there where no fatal errors, the result of the CODE execution is returned.</p>
+
+<p>After the CODE was tried, the <code>$@</code> will contain a <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Dispatcher/Try.pod">Log::Report::Dispatcher::Try</a> object, which contains the collected messages. Read that manual page to understand <code>try</code>.</p>
+
+<p>Run-time errors from Perl and die&#39;s, croak&#39;s and confess&#39;s within the program (which shouldn&#39;t appear, but you never know) are collected into an <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Message.pod">Log::Report::Message</a> object, using <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Die.pod">Log::Report::Die</a>.</p>
+
+<p>The %options are passed to the constructor of the try-dispatcher, see <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Dispatcher/Try.pod#Constructors">Log::Report::Dispatcher::Try::new()</a>. For instance, you may like to add <code>mode =&gt; &#39;DEBUG&#39;</code>, or <code>accept =&gt; &#39;ERROR-&#39;</code>.</p>
+
+<p><b>Be warned</b> that the parameter to <code>try</code> is a CODE reference. This means that you shall not use a comma after the block when there are %options specified. On the other hand, you shall use a semi-colon after the block if there are no arguments.</p>
+
+<p><b>Be warned</b> that the {} are interpreted as subroutine, which means that, for instance, it has its own <code>@_</code>. The manual-page of Try::Tiny lists a few more side-effects of this.</p>
+
+<p>example:</p>
+
+<pre><code> my $x = try { 3/$x };  # mind the &#39;;&#39; !!
+ if($@) {               # signals something went wrong
+
+ if(try {...}) {        # block ended normally, returns bool
+
+ try { ... }            # no comma!!
+    mode =&gt; &#39;DEBUG&#39;, accept =&gt; &#39;ERROR-&#39;;
+
+ try sub { ... },       # with comma, also \&amp;function
+    mode =&gt; &#39;DEBUG&#39;, accept =&gt; &#39;ALL&#39;;
+
+ my $response = try { $ua-&gt;request($request) };
+ if(my $e = $@-&gt;wasFatal) ...</code></pre>
+
+</dd>
+</dl>
+
+<h2 id="Abbreviations-for-report()"><a id="Abbreviations"></a><a id="Abbreviations-for-report"></a>Abbreviations for report()</h2>
+
+<p>The following functions are all wrappers for calls to <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Report-Production-and-Configuration">report()</a>, and available when &quot;syntax is SHORT&quot; (by default, see <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Configuration">import()</a>). You cannot specify additional options to influence the behavior of <code>report()</code>, which are usually not needed anyway.</p>
+
+<dl>
+
+<dt id="alert($message)"><a id="alert"></a><a id="alert-message"></a><b>alert</b>($message)</dt>
+<dd>
+
+<p>Short for <code>report ALERT =&gt; $message</code></p>
+
+</dd>
+<dt id="assert($message)"><a id="assert"></a><a id="assert-message"></a><b>assert</b>($message)</dt>
+<dd>
+
+<p>Short for <code>report ASSERT =&gt; $message</code></p>
+
+</dd>
+<dt id="error($message)"><a id="error"></a><a id="error-message"></a><b>error</b>($message)</dt>
+<dd>
+
+<p>Short for <code>report ERROR =&gt; $message</code></p>
+
+</dd>
+<dt id="failure($message)"><a id="failure"></a><a id="failure-message"></a><b>failure</b>($message)</dt>
+<dd>
+
+<p>Short for <code>report FAILURE =&gt; $message</code></p>
+
+</dd>
+<dt id="fault($message)"><a id="fault"></a><a id="fault-message"></a><b>fault</b>($message)</dt>
+<dd>
+
+<p>Short for <code>report FAULT =&gt; $message</code></p>
+
+</dd>
+<dt id="info($message)"><a id="info"></a><a id="info-message"></a><b>info</b>($message)</dt>
+<dd>
+
+<p>Short for <code>report INFO =&gt; $message</code></p>
+
+</dd>
+<dt id="mistake($message)"><a id="mistake"></a><a id="mistake-message"></a><b>mistake</b>($message)</dt>
+<dd>
+
+<p>Short for <code>report MISTAKE =&gt; $message</code></p>
+
+</dd>
+<dt id="notice($message)"><a id="notice"></a><a id="notice-message"></a><b>notice</b>($message)</dt>
+<dd>
+
+<p>Short for <code>report NOTICE =&gt; $message</code></p>
+
+</dd>
+<dt id="panic($message)"><a id="panic"></a><a id="panic-message"></a><b>panic</b>($message)</dt>
+<dd>
+
+<p>Short for <code>report PANIC =&gt; $message</code></p>
+
+</dd>
+<dt id="trace($message)"><a id="trace"></a><a id="trace-message"></a><b>trace</b>($message)</dt>
+<dd>
+
+<p>Short for <code>report TRACE =&gt; $message</code></p>
+
+</dd>
+<dt id="warning($message)"><a id="warning"></a><a id="warning-message"></a><b>warning</b>($message)</dt>
+<dd>
+
+<p>Short for <code>report WARNING =&gt; $message</code></p>
+
+</dd>
+</dl>
+
+<h2 id="Messages-(optionally-translatable)"><a id="Messages"></a><a id="Messages--optionally-translatable"></a>Messages (optionally translatable)</h2>
+
+<p>Even when you do not support translations (yet) you may want to use message objects to improve the logging feature. For instance, you get very powerful interpolation from <a href="https://metacpan.org/pod/String::Print">String::Print</a>.</p>
+
+<p>The language translations are initiate by limited set of functions which contain <b>two under-scores</b> (<code>__</code>) in their name. Most of them return a <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Message.pod">Log::Report::Message</a> object.</p>
+
+<p><b>Be warned(1)</b> that -in general- its considered very bad practice to combine multiple translations into one message: translating may also affect the order of the translated components. Besides, when the person which translates only sees smaller parts of the text, his (or her) job becomes more complex. So:</p>
+
+<pre><code> print __&quot;Hello&quot; . &#39;, &#39; . __&quot;World!&quot;;  # works, but to be avoided
+ print __&quot;Hello, World!&quot;;              # preferred, complete sentence</code></pre>
+
+<p>The the former case, tricks with overloading used by the <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Message.pod">Log::Report::Message</a> objects will still make delayed translations work.</p>
+
+<p>In normal situations, it is not a problem to translate interpolated values:</p>
+
+<pre><code> print __&quot;the color is {c}&quot;, c =&gt; __&quot;red&quot;;</code></pre>
+
+<p><b>Be warned(2)</b> that using <code>__&#39;Hello&#39;</code> will produce a syntax error like &quot;String found where operator expected at .... Can&#39;t find string terminator &quot;&#39;&quot; anywhere before EOF&quot;. The first quote is the cause of the complaint, but the second generates the error. In the early days of Perl, the single quote was used to separate package name from function name, a role which was later replaced by a double-colon. So <code>__&#39;Hello&#39;</code> gets interpreted as <code>__::Hello &#39;</code>. Then, there is a trailing single quote which has no counterpart.</p>
+
+<dl>
+
+<dt id="N__($msgid)"><a id="N__"></a><a id="N__-msgid"></a><b>N__</b>($msgid)</dt>
+<dd>
+
+<p>Label to indicate that the string is a text which will be translated later. The function itself does nothing. See also <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Messages-(optionally-translatable)">N__w()</a>.</p>
+
+<p>This no-op function is used as label to the xgettext program to build the translation tables.</p>
+
+<p>example: how to use N__()</p>
+
+<pre><code> # add three msgids to the translation table
+ my @colors = (N__&quot;red&quot;, N__&quot;green&quot;, N__&quot;blue&quot;);
+ my @colors = N__w &quot;red green blue&quot;;   # same
+ print __ $colors[1];                  # translate green
+
+ # using __(), would work as well
+ my @colors = (__&quot;red&quot;, __&quot;green&quot;, __&quot;blue&quot;);
+ print $colors[1];
+ # however: this will always create all Log::Report::Message objects,
+ # where maybe only one is used.</code></pre>
+
+</dd>
+<dt id="N__n($single_msgid,-$plural_msgid)"><a id="N__n"></a><a id="N__n-single_msgid---plural_msgid"></a><b>N__n</b>($single_msgid, $plural_msgid)</dt>
+<dd>
+
+<p>Label to indicate that the two MSGIDs are related, the first as single, the seconds as its plural. Only used to find the text fragments to be translated. The function itself does nothing.</p>
+
+<p>example: how to use <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Messages-(optionally-translatable)">N__n()</a></p>
+
+<pre><code> my @save = N__n &quot;save file&quot;, &quot;save files&quot;;
+ my @save = (N__n &quot;save file&quot;, &quot;save files&quot;);
+ my @save = N__n(&quot;save file&quot;, &quot;save files&quot;);
+
+ # be warned about SCALARs in prototype!
+ print __n @save, $nr_files;  # wrong!
+ print __n $save[0], $save[1], @files, %vars;</code></pre>
+
+</dd>
+<dt id="N__w(STRING)"><a id="N__w"></a><a id="N__w-STRING"></a><b>N__w</b>(STRING)</dt>
+<dd>
+
+<p>This extension to the Locale::TextDomain syntax, is a combined <code>qw</code> (list of quoted words) and <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Messages-(optionally-translatable)">N__()</a> into a list of translatable words.</p>
+
+<p>example: of <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Messages-(optionally-translatable)">N__w()</a></p>
+
+<pre><code>  my @colors = (N__&quot;red&quot;, N__&quot;green&quot;, N__&quot;blue&quot;);
+  my @colors = N__w&quot;red green blue&quot;;  # same
+  print __ $colors[1];</code></pre>
+
+</dd>
+<dt id="__($msgid)"><a id="__"></a><a id="msgid"></a><b>__</b>($msgid)</dt>
+<dd>
+
+<p>This function (name is <b>two</b> under-score characters) will cause the $msgid to be replaced by the translations when doing the actual output. Returned is a <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Message.pod">Log::Report::Message</a> object, which will be used in translation later. Translating is invoked when the object gets stringified. When you have no translation tables, the $msgid will be shown untranslated.</p>
+
+<p>If you need options for <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Message.pod#Constructors">Log::Report::Message::new()</a> then use <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Messages-(optionally-translatable)">__x()</a>; the prototype of this function does not permit parameters: it is a prefix operator!</p>
+
+<p>example: how to use __()</p>
+
+<pre><code> print __&quot;Hello World&quot;;      # translated into user&#39;s language
+ print __&#39;Hello World&#39;;      # syntax error!
+ print __(&#39;Hello World&#39;);    # ok, translated
+ print __&quot;Hello&quot;, &quot; World&quot;;  # World not translated
+
+ my $s = __&quot;Hello World&quot;;    # creates object, not yet translated
+ print ref $s;               # Log::Report::Message
+ print $s;                   # ok, translated
+ print $s-&gt;toString(&#39;fr&#39;);   # ok, forced into French</code></pre>
+
+</dd>
+<dt id="__n($msgid,-$plural_msgid,-$count,-PAIRS)"><a id="__n"></a><a id="n-msgid---plural_msgid---count--PAIRS"></a><b>__n</b>($msgid, $plural_msgid, $count, PAIRS)</dt>
+<dd>
+
+<p>It depends on the value of $count (and the selected language) which text will be displayed. When translations can not be performed, then $msgid will be used when $count is 1, and PLURAL_MSGSID in other cases. However, some languages have more complex schemes than English.</p>
+
+<p>The PAIRS are options for <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Message.pod#Constructors">Log::Report::Message::new()</a> and variables to be filled in.</p>
+
+<p>example: how to use __n()</p>
+
+<pre><code> print __n &quot;one&quot;, &quot;more&quot;, $a;
+ print __n(&quot;one&quot;, &quot;more&quot;, $a), &quot;\n&quot;;
+ print +(__n &quot;one&quot;, &quot;more&quot;, $a), &quot;\n&quot;;
+
+ # new-lines are ignore at lookup, but printed.
+ print __n &quot;one\n&quot;, &quot;more\n&quot;, $a;
+
+ # count is in scalar context
+ # the value is also available as _count
+ print __n &quot;found one\n&quot;, &quot;found {_count}\n&quot;, @r;
+
+ # ARRAYs and HASHes are counted
+ print __n &quot;one&quot;, &quot;more&quot;, \@r;</code></pre>
+
+</dd>
+<dt id="__nx($msgid,-$plural_msgid,-$count,-PAIRS)"><a id="__nx"></a><a id="nx-msgid---plural_msgid---count--PAIRS"></a><b>__nx</b>($msgid, $plural_msgid, $count, PAIRS)</dt>
+<dd>
+
+<p>It depends on the value of $count (and the selected language) which text will be displayed. See details in <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Messages-(optionally-translatable)">__n()</a>. After translation, the VARIABLES will be filled-in.</p>
+
+<p>The PAIRS are options for <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Message.pod#Constructors">Log::Report::Message::new()</a> and variables to be filled in.</p>
+
+<p>example: how to use __nx()</p>
+
+<pre><code> print __nx &quot;one file&quot;, &quot;{_count} files&quot;, $nr_files;
+ print __nx &quot;one file&quot;, &quot;{_count} files&quot;, @files;
+
+ local $&quot; = &#39;, &#39;;
+ print __nx &quot;one file: {f}&quot;, &quot;{_count} files: {f}&quot;, @files, f =&gt; \@files;</code></pre>
+
+</dd>
+<dt id="__x($msgid,-PAIRS)"><a id="__x"></a><a id="x-msgid--PAIRS"></a><b>__x</b>($msgid, PAIRS)</dt>
+<dd>
+
+<p>Translate the $msgid and then interpolate the VARIABLES in that string. Of course, translation and interpolation is delayed as long as possible. Both OPTIONS and VARIABLES are key-value pairs.</p>
+
+<p>The PAIRS are options for <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Message.pod#Constructors">Log::Report::Message::new()</a> and variables to be filled in.</p>
+
+</dd>
+<dt id="__xn($single_msgid,-$plural_msgid,-$count,-$paurs)"><a id="__xn"></a><a id="xn-single_msgid---plural_msgid---count---paurs"></a><b>__xn</b>($single_msgid, $plural_msgid, $count, $paurs)</dt>
+<dd>
+
+<p>Same as <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Messages-(optionally-translatable)">__nx()</a>, because we have no preferred order for &#39;x&#39; and &#39;n&#39;.</p>
+
+</dd>
+</dl>
+
+<h3 id="Messages-with-msgctxt"><a id="Messages1"></a>Messages with msgctxt</h3>
+
+<p>In Log::Report, the message context (mgsctxt in the PO-files --in the translation tables) can be used in a very powerful way. Read all about it in <a href="https://metacpan.org/pod/Log::Report::Translator::Context">Log::Report::Translator::Context</a></p>
+
+<p>The msgctxt versions of the tranditional gettext infrastructure are far less useful for Log::Report, because we can easily work with different text domains within the same program. That should avoid most of the accidental translation conflicts between components of the code.</p>
+
+<p>Just for compatibility with Locale::TextDomain and completeness, the &#39;p&#39; versions of above methods are supported. See examples for these functions in Locale::TextDomain.</p>
+
+<p><b>Warnings:</b> Functions <code>N__p()</code> and <code>N__np()</code> seem not to be usable in reality, hence not implemented. The script xgettext-perl and <a href="https://metacpan.org/pod/Log::Report::Extract::PerlPPI">Log::Report::Extract::PerlPPI</a> (both in the <a href="https://metacpan.org/pod/Log::Report::Lexicon">Log::Report::Lexicon</a> distribution) do not yet support these functions.</p>
+
+<dl>
+
+<dt id="__np($msgctxt,-$msgid,-$plural,-count)"><a id="__np"></a><a id="np-msgctxt---msgid---plural--count"></a><b>__np</b>($msgctxt, $msgid, $plural, count)</dt>
+<dd>
+
+</dd>
+<dt id="__npx($msgctxt,-$msgid,-$plural,-count,-PAIRS)"><a id="__npx"></a><a id="npx-msgctxt---msgid---plural--count--PAIRS"></a><b>__npx</b>($msgctxt, $msgid, $plural, count, PAIRS)</dt>
+<dd>
+
+</dd>
+<dt id="__p($msgctxt,-$msgid)"><a id="__p"></a><a id="p-msgctxt---msgid"></a><b>__p</b>($msgctxt, $msgid)</dt>
+<dd>
+
+</dd>
+<dt id="__px($msgctxt,-$msgid,-PAIRS)"><a id="__px"></a><a id="px-msgctxt---msgid--PAIRS"></a><b>__px</b>($msgctxt, $msgid, PAIRS)</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h2 id="Configuration">Configuration</h2>
+
+<dl>
+
+<dt id="$obj-&gt;import(-[$level,][$domain,]-%options-)"><a id="obj--import---level-domain---options"></a>$obj-&gt;<b>import</b>( [$level,][$domain,] %options )</dt>
+<dd>
+
+<p>The import is automatically called when the package is compiled. For all packages but one in your distribution, it will only contain the name of the $domain.</p>
+
+<p>For one package, the import list may additionally contain textdomain configuration %options. These %options are used for all packages which use the same $domain. These are alternatives:</p>
+
+<pre><code>  # Do not use variables in the %*config!  They are not yet initialized
+  # when Log::Report-&gt;import is run!!!
+  use Log::Report &#39;my-domain&#39;, %config, %domain_config;
+
+  use Log::Report &#39;my-domain&#39;, %config;
+  textdomain &#39;my-domain&#39;, %domain_config;   # vars allowed</code></pre>
+
+<p>The latter syntax has major advantages, when the configuration of the domain is determined at run-time. It is probably also easier to understand.</p>
+
+<p>See <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Domain.pod#Attributes">Log::Report::Domain::configure()</a>, for the <b>list of %options</b> for the domain configuration. Here, we only list the options which are related to the normal import behavior.</p>
+
+<p>The export $level is a plus (+) followed by a number, for instance <code>+1</code>, to indicate to on which caller level we need to work. This is used in <a href="https://metacpan.org/pod/Log::Report::Optional">Log::Report::Optional</a>. It defaults to &#39;0&#39;: my direct caller.</p>
+
+<pre><code> -Option       --Default
+  import         undef
+  message_class  Log::Report::Message
+  mode           &#39;NORMAL&#39;
+  syntax         &#39;SHORT&#39;</code></pre>
+
+<dl>
+
+<dt id="import-=&gt;-FUNCTION|ARRAY"><a id="import"></a><a id="import---FUNCTION-ARRAY"></a>import =&gt; FUNCTION|ARRAY</dt>
+<dd>
+
+<p>[0.998] When not specified, the <code>syntax</code> option determines the list of functions which are being exported. With this option, the <code>syntax</code> option is ignored and only the specified FUNCTION(s) are imported.</p>
+
+</dd>
+<dt id="message_class-=&gt;-CLASS"><a id="message_class"></a><a id="message_class---CLASS"></a>message_class =&gt; CLASS</dt>
+<dd>
+
+<p>[1.08] Use a more powerful message object class, for instance because your messages need extra attributes. The provided CLASS must extend <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Message.pod">Log::Report::Message</a></p>
+
+</dd>
+<dt id="mode-=&gt;-LEVEL"><a id="mode"></a><a id="mode---LEVEL"></a>mode =&gt; LEVEL</dt>
+<dd>
+
+<p>This sets the default mode for all created dispatchers. You can also selectively change the output mode, like dispatcher PERL =&gt; &#39;default&#39;, mode =&gt; 3</p>
+
+</dd>
+<dt id="syntax-=&gt;-&#39;REPORT&#39;|&#39;SHORT&#39;|&#39;LONG&#39;"><a id="syntax"></a><a id="syntax----REPORT-SHORT-LONG"></a>syntax =&gt; &#39;REPORT&#39;|&#39;SHORT&#39;|&#39;LONG&#39;</dt>
+<dd>
+
+<p>The SHORT syntax will add the report abbreviations (like function <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Abbreviations-for-report()">error()</a>) to your name-space. Otherwise, each message must be produced with <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Report-Production-and-Configuration">report()</a>. <code>LONG</code> is an alternative to <code>REPORT</code>: both do not pollute your namespace with the useful abbrev functions.</p>
+
+</dd>
+</dl>
+
+<p>example: of import</p>
+
+<pre><code> use Log::Report mode =&gt; 3;     # &#39;3&#39; or &#39;DEBUG&#39;
+
+ use Log::Report &#39;my-domain&#39;;   # in each package producing messages
+
+ use Log::Report &#39;my-domain&#39;    # in one package, top of distr
+  , mode            =&gt; &#39;VERBOSE&#39;
+  , syntax          =&gt; &#39;REPORT&#39; # report ERROR, not error()
+  , translator      =&gt; Log::Report::Translator::POT-&gt;new
+     ( lexicon =&gt; &#39;/home/mine/locale&#39;  # translation tables
+     )
+  , native_language =&gt; &#39;nl_NL&#39;; # untranslated msgs are Dutch
+
+ use Log::Report import =&gt; &#39;try&#39;;      # or ARRAY of functions</code></pre>
+
+</dd>
+<dt id="textdomain(-&lt;[$name],$config&gt;|&lt;$name,-&#39;DELETE&#39;|&#39;EXISTS&#39;&gt;|$domain-)"><a id="textdomain"></a><a id="textdomain---name-config-name---DELETE-EXISTS-domain"></a><b>textdomain</b>( &lt;[$name],$config&gt;|&lt;$name, &#39;DELETE&#39;|&#39;EXISTS&#39;&gt;|$domain )</dt>
+<dd>
+
+<p>[1.00] Without CONFIGuration, this returns the <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Domain.pod">Log::Report::Domain</a> object which administers the $domain, by default the domain effective in the scope of the package.</p>
+
+<p>A very special case is &quot;DELETE&quot;, which will remove the domain configuration. [1.20] &quot;EXISTS&quot; will check for existence: when it exists, it will be returned, but a domain will not be automagically created.</p>
+
+<p>[1.20] You may also pass a pre-configured domain.</p>
+
+</dd>
+</dl>
+
+<h2 id="Reasons">Reasons</h2>
+
+<dl>
+
+<dt id="Log::Report-&gt;needs(-$reason,-[$reasons]-)"><a id="Log"></a><a id="Log::Report--needs---reason---reasons"></a>Log::Report-&gt;<b>needs</b>( $reason, [$reasons] )</dt>
+<dd>
+
+<p>Returns true when the reporter needs any of the $reasons, when any of the active dispatchers is collecting messages in the specified level. This is useful when the processing of data for the message is relatively expensive, but for instance only required in debug mode.</p>
+
+<p>example:</p>
+
+<pre><code>  if(Log::Report-&gt;needs(&#39;TRACE&#39;))
+  {   my @args = ...expensive calculation...;
+      trace &quot;your options are: @args&quot;;
+  }</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="DETAILS">DETAILS</h1>
+
+<h2 id="Introduction">Introduction</h2>
+
+<p>Getting messages to users and logs. The distincting concept of this module, is that three tasks which are strongly related are merged into one simple syntax. The three tasks:</p>
+
+<dl>
+
+<dt id="produce-some-text-on-a-certain-condition,"><a id="produce"></a><a id="produce-some-text-on-a-certain-condition"></a>produce some text on a certain condition,</dt>
+<dd>
+
+</dd>
+<dt id="translate-it-to-the-proper-language,-and"><a id="translate"></a><a id="translate-it-to-the-proper-language--and"></a>translate it to the proper language, and</dt>
+<dd>
+
+</dd>
+<dt id="deliver-it-in-some-way-to-a-user."><a id="deliver"></a><a id="deliver-it-in-some-way-to-a-user"></a>deliver it in some way to a user.</dt>
+<dd>
+
+</dd>
+</dl>
+
+<p>Text messages in Perl are produced by commands like <code>print</code>, <code>die</code>, <code>warn</code>, <code>carp</code>, or <code>croak</code>. But where is that output directed to? Translations is hard. There is no clean exception mechanism.</p>
+
+<p>Besides, the <code>print</code>/<code>warn</code>/<code>die</code> together produce only three different output &quot;levels&quot; with a message. Think of the variation syslog offers: more than 7 levels. Many people manually implement their own tricks to get additional levels, like verbose and debug flags. Log::Report offers that variety.</p>
+
+<p>The (optional) translations use the beautiful syntax defined by Locale::TextDomain, with some own extensions (of course). A very important difference is that translations are delayed till the delivery step: until a dispatcher actually writes your message into a file, sends it to syslog, or shows it on the screen. This means that the pop-up in the graphical interface of the user may show the text in the language of the user --say Chinese in utf8--, but at the same time syslog may write the latin1 English version of the same message.</p>
+
+<h2 id="Background-ideas"><a id="Background"></a>Background ideas</h2>
+
+<p>The following ideas are the base of this implementation:</p>
+
+<dl>
+
+<dt id=".-simplification"><a id="simplification"></a>. simplification</dt>
+<dd>
+
+<p>Handling errors and warnings is probably the most labor-intensive task for a programmer: when programs are written correctly, up-to three-quarters of the code is related to testing, reporting, and handling (problem) conditions. Simplifying the way to create reports, simplifies programming and maintenance.</p>
+
+</dd>
+<dt id=".-multiple-dispatchers"><a id="multiple-dispatchers"></a>. multiple dispatchers</dt>
+<dd>
+
+<p>It is not the location where the (for instance) error occurs which determines what will happen with the text, but the main application which uses the the complaining module has control. Messages have a reason. Based on the `reason&#39; classification, they can get ignored, send to one or multiple dispatchers, like Log::Dispatch, Log::Log4perl, or UNIX syslog.</p>
+
+</dd>
+<dt id=".-delayed-translations"><a id="delayed-translations"></a>. delayed translations</dt>
+<dd>
+
+<p>The background ideas are that of Locale::TextDomain, based on <code>gettext()</code>. However, in the <code>Log::Report</code> infrastructure, translations are postponed until the text is dispatched to a screen or log-file; the same report can be sent to syslog in (for instance) English and to the user interface in Dutch.</p>
+
+</dd>
+<dt id=".-context-sensitive"><a id="context-sensitive"></a>. context sensitive</dt>
+<dd>
+
+<p>Using contexts, you can set-up how to translate or rewrite messages, to improve messages. A typical problem is whether to use gender in text (use &#39;his&#39; or &#39;her&#39;): you can set a gender in a context, and the use translation tables to pick the right one.</p>
+
+</dd>
+</dl>
+
+<h2 id="Error-handling-models"><a id="Error"></a>Error handling models</h2>
+
+<p>There are two approaches to handling errors and warnings. In the first approach, as produced by <code>die</code>, <code>warn</code> and the <code>carp</code> family of commands, the program handles the problem immediately on the location where the problem appears. In the second approach, an <i>exception</i> is thrown on the spot where the problem is created, and then somewhere else in the program the condition is handled.</p>
+
+<p>The implementation of exceptions in Perl5 is done with a eval-die pair: on the spot where the problem occurs, <code>die</code> is called. But, because of the execution of that routine is placed within an <code>eval</code>, the program as a whole will not die, just the execution of a part of the program will seize. However, what if the condition which caused the routine to die is solvable on a higher level? Or what if the user of the code doesn&#39;t bother that a part fails, because it has implemented alternatives for that situation? Exception handling is quite clumsy in Perl5.</p>
+
+<p>The <code>Log::Report</code> set of distributions let modules concentrate on the program flow, and let the main program decide on the report handling model. The infrastructure to translate messages into multiple languages, whether to create exceptions or carp/die, to collect longer explanations with the messages, to log to mail or syslog, and so on, is decided in pluggable back-ends.</p>
+
+<h3 id="The-Reason-for-the-report"><a id="The"></a>The Reason for the report</h3>
+
+<p>Traditionally, perl has a very simple view on error reports: you either have a warning or an error. However, it would be much clearer for user&#39;s and module-using applications, when a distinction is made between various causes. For instance, a configuration error is quite different from a disk-full situation. In <code>Log::Report</code>, the produced reports in the code tell <i>what</i> is wrong. The main application defines loggers, which interpret the cause into (syslog) levels.</p>
+
+<p>Defined by <code>Log::Report</code> are</p>
+
+<dl>
+
+<dt id=".-trace-(debug,-program)"><a id="trace--debug--program"></a>. trace (debug, program)</dt>
+<dd>
+
+<p>The message will be used when some logger has debugging enabled. The messages show steps taken by the program, which are of interest by the developers and maintainers of the code, but not for end-users.</p>
+
+</dd>
+<dt id=".-assert-(program)"><a id="assert--program"></a>. assert (program)</dt>
+<dd>
+
+<p>Shows an unexpected condition, but continues to run. When you want the program to abort in such situation, that use <code>panic</code>.</p>
+
+</dd>
+<dt id=".-info-(verbose,-program)"><a id="info--verbose--program"></a>. info (verbose, program)</dt>
+<dd>
+
+<p>These messages show larger steps in the execution of the program. Experienced users of the program usually do not want to see all these intermediate steps. Most programs will display info messages (and higher) when some <code>verbose</code> flag is given on the command-line.</p>
+
+</dd>
+<dt id=".-notice-(program)"><a id="notice--program"></a>. notice (program)</dt>
+<dd>
+
+<p>An user may need to be aware of the program&#39;s accidental smart behavior, for instance, that it initializes a lasting <code>Desktop</code> directory in your home directory. Notices should be sparse.</p>
+
+</dd>
+<dt id=".-warning-(program)"><a id="warning--program"></a>. warning (program)</dt>
+<dd>
+
+<p>The program encountered some problems, but was able to work around it by smart behavior. For instance, the program does not understand a line from a log-file, but simply skips the line.</p>
+
+</dd>
+<dt id=".-mistake-(user)"><a id="mistake--user"></a>. mistake (user)</dt>
+<dd>
+
+<p>When a user does something wrong, but what is correctable by smart behavior of the program. For instance, in some configuration file, you can fill-in &quot;yes&quot; or &quot;no&quot;, but the user wrote &quot;yeah&quot;. The program interprets this as &quot;yes&quot;, producing a mistake message as warning.</p>
+
+<p>It is much nicer to tell someone that he/she made a mistake, than to call that an error.</p>
+
+</dd>
+<dt id=".-error-(user)"><a id="error--user"></a>. error (user)</dt>
+<dd>
+
+<p>The user did something wrong, which is not automatically correctable or the program is not willing to correct it automatically for reasons of code quality. For instance, an unknown option flag is given on the command-line. These are configuration issues, and have no useful value in <code>$!</code>. The program will be stopped, usually before taken off.</p>
+
+</dd>
+<dt id=".-fault-(system)"><a id="fault--system"></a>. fault (system)</dt>
+<dd>
+
+<p>The program encountered a situation where it has no work-around. For instance, a file cannot be opened to be written. The cause of that problem can be some user error (i.e. wrong filename), or external (you accidentally removed a directory yesterday). In any case, the <code>$!</code> (<code>$ERRNO</code>) variable is set here.</p>
+
+</dd>
+<dt id=".-alert-(system)"><a id="alert--system"></a>. alert (system)</dt>
+<dd>
+
+<p>Some external cause disturbs the execution of the program, but the program stays alive and will try to continue operation. For instance, the connection to the database is lost. After a few attempts, the database can be reached and the program continues as if nothing happened. The cause is external, so <code>$!</code> is set. Usually, a system administrator needs to be informed about the problem.</p>
+
+</dd>
+<dt id=".-failure-(system)"><a id="failure--system"></a>. failure (system)</dt>
+<dd>
+
+<p>Some external cause makes it impossible for this program to continue. <code>$!</code> is set, and usually the system administrator wants to be informed. The program will die.</p>
+
+<p>The difference with <code>fault</code> is subtile and not always clear. A fault reports an error returned by an operating system call, where the failure would report an operational problem, like a failing mount.</p>
+
+</dd>
+<dt id=".-panic-(program)"><a id="panic--program"></a>. panic (program)</dt>
+<dd>
+
+<p>All above report classes are expected: some predictable situation is encountered, and therefore a message is produced. However, programs often do some internal checking. Of course, these conditions should never be triggered, but if they do... then we can only stop.</p>
+
+<p>For instance, in an OO perl module, the base class requires all sub-classes to implement a certain method. The base class will produce a stub method with triggers a panic when called. The non-dieing version of this test <code>assert</code>.</p>
+
+</dd>
+</dl>
+
+<p><i>Debugging</i> or being <code>verbose</code> are run-time behaviors, and have nothing directly to do with the type of message which is produced. These two are <b>modes</b> which can be set on the dispatchers: one dispatcher may be more verbose that some other.</p>
+
+<p>On purpose, we do not use the terms <code>die</code> or <code>fatal</code>, because the dispatcher can be configured what to do in cause of which condition. For instance, it may decide to stop execution on warnings as well.</p>
+
+<p>The terms <code>carp</code> and <code>croak</code> are avoided, because the program cause versus user cause distinction (warn vs carp) is reflected in the use of different reasons. There is no need for <code>confess</code> and <code>croak</code> either, because the dispatcher can be configured to produce stack-trace information (for a limited sub-set of dispatchers)</p>
+
+<h3 id="Report-levels"><a id="Report1"></a>Report levels</h3>
+
+<p>Various frameworks used with perl programs define different labels to indicate the reason for the message to be produced.</p>
+
+<pre><code> Perl5 Log::Dispatch Syslog Log4Perl Log::Report
+ print   0,debug     debug  debug    trace
+ print   0,debug     debug  debug    assert
+ print   1,info      info   info     info
+ warn\n  2,notice    notice info     notice
+ warn    3,warning   warn   warn     mistake
+ carp    3,warning   warn   warn     warning
+ die\n   4,error     err    error    error
+ die     5,critical  crit   fatal    fault
+ croak   6,alert     alert  fatal    alert  
+ croak   7,emergency emerg  fatal    failure
+ confess 7,emergency emerg  fatal    panic</code></pre>
+
+<h3 id="Run-modes"><a id="Run"></a>Run modes</h3>
+
+<p>The run-mode change which messages are passed to a dispatcher, but from a different angle than the dispatch filters; the mode changes behavioral aspects of the messages, which are described in detail in <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Dispatcher.pod#Processing-the-message">&quot;Processing the message&quot; in Log::Report::Dispatcher</a>. However, it should behave as you expect: the DEBUG mode shows more than the VERBOSE mode, and both show more than the NORMAL mode.</p>
+
+<p><b>. Example: extract run mode from Getopt::Long</b></p>
+
+<p>The <code>GetOptions()</code> function will count the number of <code>v</code> options on the command-line when a <code>+</code> is after the option name.</p>
+
+<pre><code> use Log::Report;
+ use Getopt::Long qw(:config no_ignore_case bundling);
+
+ my $mode;    # defaults to NORMAL
+ GetOptions &#39;v+&#39;        =&gt; \$mode
+          , &#39;verbose=i&#39; =&gt; \$mode
+          , &#39;mode=s&#39;    =&gt; \$mode
+     or exit 1;
+
+ dispatcher &#39;PERL&#39;, &#39;default&#39;, mode =&gt; $mode;</code></pre>
+
+<p>Now, <code>-vv</code> will set <code>$mode</code> to <code>2</code>, as will <code>--verbose 2</code> and <code>--verbose=2</code> and <code>--mode=ASSERT</code>. Of course, you do not need to provide all these options to the user: make a choice.</p>
+
+<p><b>. Example: the mode of a dispatcher</b></p>
+
+<pre><code> my $mode = dispatcher(find =&gt; &#39;myname&#39;)-&gt;mode;</code></pre>
+
+<p><b>. Example: run-time change mode of a dispatcher</b></p>
+
+<p>To change the running mode of the dispatcher, you can do dispatcher mode =&gt; DEBUG =&gt; &#39;myname&#39;;</p>
+
+<p>However, be warned that this does not change the types of messages accepted by the dispatcher! So: probably you will not receive the trace, assert, and info messages after all. So, probably you need to replace the dispatcher with a new one with the same name: dispatcher FILE =&gt; &#39;myname&#39;, to =&gt; ..., mode =&gt; &#39;DEBUG&#39;;</p>
+
+<p>This may reopen connections (depends on the actual dispatcher), which might be not what you wish to happened. In that case, you must take the following approach:</p>
+
+<pre><code>  # at the start of your program
+  dispatcher FILE =&gt; &#39;myname&#39;, to =&gt; ...
+     , accept =&gt; &#39;ALL&#39;;    # overrule the default &#39;NOTICE-&#39; !!
+
+  # now it works
+  dispatcher mode =&gt; DEBUG =&gt; &#39;myname&#39;;    # debugging on
+  ...
+  dispatcher mode =&gt; NORMAL =&gt; &#39;myname&#39;;   # debugging off</code></pre>
+
+<p>Of course, this comes with a small overall performance penalty.</p>
+
+<h3 id="Exceptions">Exceptions</h3>
+
+<p>The simple view on live says: you &#39;re dead when you die. However, more complex situations try to revive the dead. Typically, the &quot;die&quot; is considered a terminating exception, but not terminating the whole program, but only some logical block. Of course, a wrapper round that block must decide what to do with these emerging problems.</p>
+
+<p>Java-like languages do not &quot;die&quot; but throw exceptions which contain the information about what went wrong. Perl modules like <code>Exception::Class</code> simulate this. It&#39;s a hassle to create exception class objects for each emerging problem, and the same amount of work to walk through all the options.</p>
+
+<p>Log::Report follows a simpler scheme. Fatal messages will &quot;die&quot;, which is caught with &quot;eval&quot;, just the Perl way (used invisible to you). However, the wrapper gets its hands on the message as the user has specified it: untranslated, with all unprocessed parameters still at hand.</p>
+
+<pre><code> try { fault __x &quot;cannot open file {file}&quot;, file =&gt; $fn };
+ if($@)                         # is Log::Report::Dispatcher::Try
+ {   my $cause = $@-&gt;wasFatal;  # is Log::Report::Exception
+     $cause-&gt;throw if $cause-&gt;message-&gt;msgid =~ m/ open /;
+     # all other problems ignored
+ }</code></pre>
+
+<p>See <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Dispatcher/Try.pod">Log::Report::Dispatcher::Try</a> and <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Exception.pod">Log::Report::Exception</a>.</p>
+
+<h2 id="Comparison">Comparison</h2>
+
+<p>Some notes on differences between the Log::Report approach and other Perl concepts.</p>
+
+<h3 id="die/warn/Carp"><a id="die"></a><a id="die-warn-Carp"></a>die/warn/Carp</h3>
+
+<p>Perl&#39;s built-in exception system is very primitive: &quot;die&quot; and &quot;warn&quot;. Most programming languages provide a much more detailed exception mechanism.</p>
+
+<p>A typical perl program can look like this:</p>
+
+<pre><code> my $dir = &#39;/etc&#39;;
+
+ File::Spec-&gt;file_name is_absolute($dir)
+     or die &quot;ERROR: directory name must be absolute.\n&quot;;
+
+ -d $dir
+     or die &quot;ERROR: what platform are you on?&quot;;
+
+ until(opendir DIR, $dir)
+ {   warn &quot;ERROR: cannot read system directory $dir: $!&quot;;
+     sleep 60;
+ }
+
+ print &quot;Processing directory $dir\n&quot;
+     if $verbose;
+
+ while(defined(my $file = readdir DIR))
+ {   if($file =~ m/\.bak$/)
+     {   warn &quot;WARNING: found backup file $dir/$f\n&quot;;
+         next;
+     }
+
+     die &quot;ERROR: file $dir/$file is binary&quot;
+         if $debug &amp;&amp; -B &quot;$dir/$file&quot;;
+
+     print &quot;DEBUG: processing file $dir/$file\n&quot;
+         if $debug;
+
+     open FILE, &quot;&lt;&quot;, &quot;$dir/$file&quot;
+         or die &quot;ERROR: cannot read from $dir/$f: $!&quot;;
+
+     close FILE
+         or croak &quot;ERROR: read errors in $dir/$file: $!&quot;;
+ }</code></pre>
+
+<p>Where <code>die</code>, <code>warn</code>, and <code>print</code> are used for various tasks. With <code>Log::Report</code>, you would write</p>
+
+<pre><code> use Log::Report;
+
+ # can be left-out when there is no debug/verbose
+ dispatcher PERL =&gt; &#39;default&#39;, mode =&gt; &#39;DEBUG&#39;;
+
+ my $dir = &#39;/etc&#39;;
+
+ File::Spec-&gt;file_name is_absolute($dir)
+     or mistake &quot;directory name must be absolute&quot;;
+
+ -d $dir
+     or panic &quot;what platform are you on?&quot;;
+
+ until(opendir DIR, $dir)
+ {   alert &quot;cannot read system directory $dir&quot;;
+     sleep 60;
+ }
+
+ info &quot;Processing directory $dir&quot;;
+
+ while(defined(my $file = readdir DIR))
+ {   if($file =~ m/\.bak$/)
+     {   notice &quot;found backup file $dir/$f&quot;;
+         next;
+     }
+
+     assert &quot;file $dir/$file is binary&quot;
+         if -B &quot;$dir/$file&quot;;
+
+     trace &quot;processing file $dir/$file&quot;;
+
+     unless(open FILE, &quot;&lt;&quot;, &quot;$dir/$file&quot;)
+     {   error &quot;no permission to read from $dir/$f&quot;
+             if $!==ENOPERM;
+         fault &quot;unable to read from $dir/$f&quot;;
+     }
+
+     close FILE
+         or failure &quot;read errors in $dir/$file&quot;;
+ }</code></pre>
+
+<p>A lot of things are quite visibly different, and there are a few smaller changes. There is no need for a new-line after the text of the message. When applicable (error about system problem), then the <code>$!</code> is added automatically.</p>
+
+<h3 id="Log::Dispatch-and-Log::Log4perl"><a id="Log1"></a>Log::Dispatch and Log::Log4perl</h3>
+
+<p>The two major logging frameworks for Perl are Log::Dispatch and Log::Log4perl; both provide a pluggable logging interface.</p>
+
+<p>Both frameworks do not have (gettext or maketext) language translation support, which has various consequences. When you wish for to report in some other language, it must be translated before the logging function is called. This may mean that an error message is produced in Chinese, and therefore also ends-up in the syslog file in Chinese. When this is not your language, you have a problem.</p>
+
+<p>Log::Report translates only in the back-end, which means that the user may get the message in Chinese, but you get your report in your beloved Dutch. When no dispatcher needs to report the message, then no time is lost in translating.</p>
+
+<p>With both logging frameworks, you use terminology comparable to syslog: the module programmer determines the seriousness of the error message, not the application which integrates multiple modules. This is the way perl programs usually work, but often the cause for inconsequent user interaction.</p>
+
+<h3 id="Locale::gettext-and-Locate::TextDomain"><a id="Locale"></a>Locale::gettext and Locate::TextDomain</h3>
+
+<p>Both on GNU gettext based implementations can be used as translation frameworks. Locale::TextDomain syntax is supported, with quite some extensions. Read the excellent documentation of Locale::Textdomain. Only the tried access via <code>$__</code> and <code>%__</code> are not supported.</p>
+
+<p>The main difference with these modules is the moment when the translation takes place. In Locale::TextDomain, an <code>__x()</code> will result in an immediate translation request via <code>gettext()</code>. <code>Log::Report</code>&#39;s version of <code>__x()</code> will only capture what needs to be translated in an object. When the object is used in a print statement, only then the translation will take place. This is needed to offer ways to send different translations of the message to different destinations.</p>
+
+<p>To be able to postpone translation, objects are returned which stringify into the translated text.</p>
+
+<h1 id="DIAGNOSTICS">DIAGNOSTICS</h1>
+
+<dl>
+
+<dt id="Error:-in-SCALAR-context,-only-one-dispatcher-name-accepted"><a id="Error1"></a><a id="Error:-in-SCALAR-context--only-one-dispatcher-name-accepted"></a>Error: in SCALAR context, only one dispatcher name accepted</dt>
+<dd>
+
+<p>The <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report.pod#Report-Production-and-Configuration">dispatcher()</a> method returns the <a href="https://metacpan.org/pod/distribution/Log-Report/lib/Log/Report/Dispatcher.pod">Log::Report::Dispatcher</a> objects which it has accessed. When multiple names where given, it wishes to return a LIST of objects, not the count of them.</p>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p>This module is part of Log-Report distribution version 1.36, built on October 27, 2023. Website: <i>http://perl.overmeer.net/CPAN/</i></p>
+
+<h1 id="LICENSE">LICENSE</h1>
+
+<p>Copyrights 2007-2023 by [Mark Overmeer &lt;markov@cpan.org&gt;]. For other contributors see ChangeLog.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself. See <i>http://dev.perl.org/licenses/</i></p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Log::Report, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Log::Report</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Log::Report</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Log::Report.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

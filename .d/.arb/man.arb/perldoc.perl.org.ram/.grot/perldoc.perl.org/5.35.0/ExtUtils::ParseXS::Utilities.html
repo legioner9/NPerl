@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ExtUtils::ParseXS::Utilities - Subroutines used with ExtUtils::ParseXS - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/ExtUtils::ParseXS::Utilities">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./ExtUtils::ParseXS::Utilities.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/ExtUtils::ParseXS::Utilities">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/ExtUtils::ParseXS::Utilities">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/ExtUtils::ParseXS::Utilities">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/ExtUtils::ParseXS::Utilities">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/ExtUtils::ParseXS::Utilities">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/ExtUtils::ParseXS::Utilities">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/ExtUtils::ParseXS::Utilities">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/ExtUtils::ParseXS::Utilities">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/ExtUtils::ParseXS::Utilities">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/ExtUtils::ParseXS::Utilities">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/ExtUtils::ParseXS::Utilities">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/ExtUtils::ParseXS::Utilities">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/ExtUtils::ParseXS::Utilities">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/ExtUtils::ParseXS::Utilities">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/ExtUtils::ParseXS::Utilities">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/ExtUtils::ParseXS::Utilities">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/ExtUtils::ParseXS::Utilities">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/ExtUtils::ParseXS::Utilities">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/ExtUtils::ParseXS::Utilities">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/ExtUtils::ParseXS::Utilities">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/ExtUtils::ParseXS::Utilities">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/ExtUtils::ParseXS::Utilities">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/ExtUtils::ParseXS::Utilities">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/ExtUtils::ParseXS::Utilities">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/ExtUtils::ParseXS::Utilities">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/ExtUtils::ParseXS::Utilities">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/ExtUtils::ParseXS::Utilities">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/ExtUtils::ParseXS::Utilities">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/ExtUtils::ParseXS::Utilities">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/ExtUtils::ParseXS::Utilities">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/ExtUtils::ParseXS::Utilities">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/ExtUtils::ParseXS::Utilities">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/ExtUtils::ParseXS::Utilities">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/ExtUtils::ParseXS::Utilities">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/ExtUtils::ParseXS::Utilities">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/ExtUtils::ParseXS::Utilities">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/ExtUtils::ParseXS::Utilities">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/ExtUtils::ParseXS::Utilities">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/ExtUtils::ParseXS::Utilities">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/ExtUtils::ParseXS::Utilities">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/ExtUtils::ParseXS::Utilities">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/ExtUtils::ParseXS::Utilities">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/ExtUtils::ParseXS::Utilities">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/ExtUtils::ParseXS::Utilities">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/ExtUtils::ParseXS::Utilities">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/ExtUtils::ParseXS::Utilities">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/ExtUtils::ParseXS::Utilities">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/ExtUtils::ParseXS::Utilities">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/ExtUtils::ParseXS::Utilities">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/ExtUtils::ParseXS::Utilities">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/ExtUtils::ParseXS::Utilities">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/ExtUtils::ParseXS::Utilities">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/ExtUtils::ParseXS::Utilities">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/ExtUtils::ParseXS::Utilities">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/ExtUtils::ParseXS::Utilities">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/ExtUtils::ParseXS::Utilities">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/ExtUtils::ParseXS::Utilities">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/ExtUtils::ParseXS::Utilities">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/ExtUtils::ParseXS::Utilities">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/ExtUtils::ParseXS::Utilities">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/ExtUtils::ParseXS::Utilities">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/ExtUtils::ParseXS::Utilities">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/ExtUtils::ParseXS::Utilities">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/ExtUtils::ParseXS::Utilities">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/ExtUtils::ParseXS::Utilities">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/ExtUtils::ParseXS::Utilities">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/ExtUtils::ParseXS::Utilities">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/ExtUtils::ParseXS::Utilities">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/ExtUtils::ParseXS::Utilities">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/ExtUtils::ParseXS::Utilities">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/ExtUtils::ParseXS::Utilities">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/ExtUtils::ParseXS::Utilities">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/ExtUtils::ParseXS::Utilities">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/ExtUtils::ParseXS::Utilities">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/ExtUtils::ParseXS::Utilities">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/ExtUtils::ParseXS::Utilities">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/ExtUtils::ParseXS::Utilities">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/ExtUtils::ParseXS::Utilities">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/ExtUtils::ParseXS::Utilities">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/ExtUtils::ParseXS::Utilities">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./ExtUtils::ParseXS::Utilities.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/ExtUtils::ParseXS::Utilities">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/ExtUtils::ParseXS::Utilities">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/ExtUtils::ParseXS::Utilities">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/ExtUtils::ParseXS::Utilities">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/ExtUtils::ParseXS::Utilities">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/ExtUtils::ParseXS::Utilities">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/ExtUtils::ParseXS::Utilities">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/ExtUtils::ParseXS::Utilities">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/ExtUtils::ParseXS::Utilities">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/ExtUtils::ParseXS::Utilities">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/ExtUtils::ParseXS::Utilities">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/ExtUtils::ParseXS::Utilities">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/ExtUtils::ParseXS::Utilities">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/ExtUtils::ParseXS::Utilities">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/ExtUtils::ParseXS::Utilities">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/ExtUtils::ParseXS::Utilities">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/ExtUtils::ParseXS::Utilities">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/ExtUtils::ParseXS::Utilities">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/ExtUtils::ParseXS::Utilities">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/ExtUtils::ParseXS::Utilities">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/ExtUtils::ParseXS::Utilities">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/ExtUtils::ParseXS::Utilities">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/ExtUtils::ParseXS::Utilities">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/ExtUtils::ParseXS::Utilities">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/ExtUtils::ParseXS::Utilities">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/ExtUtils::ParseXS::Utilities">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/ExtUtils::ParseXS::Utilities">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/ExtUtils::ParseXS::Utilities">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/ExtUtils::ParseXS::Utilities">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/ExtUtils::ParseXS::Utilities">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/ExtUtils::ParseXS::Utilities">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/ExtUtils::ParseXS::Utilities">5.35.1</a>
+          <a class="dropdown-item active" href="./ExtUtils::ParseXS::Utilities.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./ExtUtils::ParseXS::Utilities.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./ExtUtils::ParseXS::Utilities.html">ExtUtils::ParseXS::Utilities</a>
+          <div id="more">
+            (<a href="./ExtUtils::ParseXS::Utilities.txt">source</a>,
+            <a href="https://metacpan.org/pod/ExtUtils::ParseXS::Utilities">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 3.43</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#SUBROUTINES">SUBROUTINES</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#standard_typemap_locations()">standard_typemap_locations()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#trim_whitespace()">trim_whitespace()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#C_string()">C_string()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#valid_proto_string()">valid_proto_string()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#process_typemaps()">process_typemaps()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#map_type()">map_type()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#standard_XS_defs()">standard_XS_defs()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#assign_func_args()">assign_func_args()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#analyze_preprocessor_statements()">analyze_preprocessor_statements()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#set_cond()">set_cond()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#current_line_number()">current_line_number()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#Warn()">Warn()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#blurt()">blurt()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#death()">death()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#check_conditional_preprocessor_statements()">check_conditional_preprocessor_statements()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#escape_file_for_line_directive()">escape_file_for_line_directive()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./ExtUtils::ParseXS::Utilities.html#report_typemap_failure">report_typemap_failure</a>
+              </li>
+          </ul>
+
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#NAME">#</a>NAME</h1>
+
+<p>ExtUtils::ParseXS::Utilities - Subroutines used with ExtUtils::ParseXS</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use ExtUtils::ParseXS::Utilities qw(
+  standard_typemap_locations
+  trim_whitespace
+  C_string
+  valid_proto_string
+  process_typemaps
+  map_type
+  standard_XS_defs
+  assign_func_args
+  analyze_preprocessor_statements
+  set_cond
+  Warn
+  blurt
+  death
+  check_conditional_preprocessor_statements
+  escape_file_for_line_directive
+  report_typemap_failure
+);</code></pre>
+
+<h1 id="SUBROUTINES"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#SUBROUTINES">#</a>SUBROUTINES</h1>
+
+<p>The following functions are not considered to be part of the public interface. They are documented here for the benefit of future maintainers of this module.</p>
+
+<h2 id="standard_typemap_locations()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#standard_typemap_locations()">#</a><a id="standard_typemap_locations"></a><code>standard_typemap_locations()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Provide a list of filepaths where <i>typemap</i> files may be found. The filepaths -- relative paths to files (not just directory paths) -- appear in this list in lowest-to-highest priority.</p>
+
+<p>The highest priority is to look in the current directory.</p>
+
+<pre><code class="plaintext">&#39;typemap&#39;</code></pre>
+
+<p>The second and third highest priorities are to look in the parent of the current directory and a directory called <i>lib/ExtUtils</i> underneath the parent directory.</p>
+
+<pre><code class="plaintext">&#39;../typemap&#39;,
+&#39;../lib/ExtUtils/typemap&#39;,</code></pre>
+
+<p>The fourth through ninth highest priorities are to look in the corresponding grandparent, great-grandparent and great-great-grandparent directories.</p>
+
+<pre><code class="plaintext">&#39;../../typemap&#39;,
+&#39;../../lib/ExtUtils/typemap&#39;,
+&#39;../../../typemap&#39;,
+&#39;../../../lib/ExtUtils/typemap&#39;,
+&#39;../../../../typemap&#39;,
+&#39;../../../../lib/ExtUtils/typemap&#39;,</code></pre>
+
+<p>The tenth and subsequent priorities are to look in directories named <i>ExtUtils</i> which are subdirectories of directories found in <code>@INC</code> -- <i>provided</i> a file named <i>typemap</i> actually exists in such a directory. Example:</p>
+
+<pre><code class="plaintext">&#39;/usr/local/lib/perl5/5.10.1/ExtUtils/typemap&#39;,</code></pre>
+
+<p>However, these filepaths appear in the list returned by <code>standard_typemap_locations()</code> in reverse order, <i>i.e.</i>, lowest-to-highest.</p>
+
+<pre><code class="plaintext">&#39;/usr/local/lib/perl5/5.10.1/ExtUtils/typemap&#39;,
+&#39;../../../../lib/ExtUtils/typemap&#39;,
+&#39;../../../../typemap&#39;,
+&#39;../../../lib/ExtUtils/typemap&#39;,
+&#39;../../../typemap&#39;,
+&#39;../../lib/ExtUtils/typemap&#39;,
+&#39;../../typemap&#39;,
+&#39;../lib/ExtUtils/typemap&#39;,
+&#39;../typemap&#39;,
+&#39;typemap&#39;</code></pre>
+
+</li>
+<li><p>Arguments</p>
+
+<pre><code>my @stl = standard_typemap_locations( \@INC );</code></pre>
+
+<p>Reference to <code>@INC</code>.</p>
+
+</li>
+<li><p>Return Value</p>
+
+<p>Array holding list of directories to be searched for <i>typemap</i> files.</p>
+
+</li>
+</ul>
+
+<h2 id="trim_whitespace()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#trim_whitespace()">#</a><a id="trim_whitespace"></a><code>trim_whitespace()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Perform an in-place trimming of leading and trailing whitespace from the first argument provided to the function.</p>
+
+</li>
+<li><p>Argument</p>
+
+<pre><code>trim_whitespace($arg);</code></pre>
+
+</li>
+<li><p>Return Value</p>
+
+<p>None. Remember: this is an <i>in-place</i> modification of the argument.</p>
+
+</li>
+</ul>
+
+<h2 id="C_string()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#C_string()">#</a><a id="C_string"></a><code>C_string()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Escape backslashes (<code>\</code>) in prototype strings.</p>
+
+</li>
+<li><p>Arguments</p>
+
+<pre><code>$ProtoThisXSUB = C_string($_);</code></pre>
+
+<p>String needing escaping.</p>
+
+</li>
+<li><p>Return Value</p>
+
+<p>Properly escaped string.</p>
+
+</li>
+</ul>
+
+<h2 id="valid_proto_string()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#valid_proto_string()">#</a><a id="valid_proto_string"></a><code>valid_proto_string()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Validate prototype string.</p>
+
+</li>
+<li><p>Arguments</p>
+
+<p>String needing checking.</p>
+
+</li>
+<li><p>Return Value</p>
+
+<p>Upon success, returns the same string passed as argument.</p>
+
+<p>Upon failure, returns <code>0</code>.</p>
+
+</li>
+</ul>
+
+<h2 id="process_typemaps()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#process_typemaps()">#</a><a id="process_typemaps"></a><code>process_typemaps()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Process all typemap files.</p>
+
+</li>
+<li><p>Arguments</p>
+
+<pre><code>my $typemaps_object = process_typemaps( $args{typemap}, $pwd );</code></pre>
+
+<p>List of two elements: <code>typemap</code> element from <code>%args</code>; current working directory.</p>
+
+</li>
+<li><p>Return Value</p>
+
+<p>Upon success, returns an <a href="./ExtUtils::Typemaps.html">ExtUtils::Typemaps</a> object.</p>
+
+</li>
+</ul>
+
+<h2 id="map_type()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#map_type()">#</a><a id="map_type"></a><code>map_type()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Performs a mapping at several places inside <code>PARAGRAPH</code> loop.</p>
+
+</li>
+<li><p>Arguments</p>
+
+<pre><code>$type = map_type($self, $type, $varname);</code></pre>
+
+<p>List of three arguments.</p>
+
+</li>
+<li><p>Return Value</p>
+
+<p>String holding augmented version of second argument.</p>
+
+</li>
+</ul>
+
+<h2 id="standard_XS_defs()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#standard_XS_defs()">#</a><a id="standard_XS_defs"></a><code>standard_XS_defs()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Writes to the <code>.c</code> output file certain preprocessor directives and function headers needed in all such files.</p>
+
+</li>
+<li><p>Arguments</p>
+
+<p>None.</p>
+
+</li>
+<li><p>Return Value</p>
+
+<p>Returns true.</p>
+
+</li>
+</ul>
+
+<h2 id="assign_func_args()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#assign_func_args()">#</a><a id="assign_func_args"></a><code>assign_func_args()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Perform assignment to the <code>func_args</code> attribute.</p>
+
+</li>
+<li><p>Arguments</p>
+
+<pre><code>$string = assign_func_args($self, $argsref, $class);</code></pre>
+
+<p>List of three elements. Second is an array reference; third is a string.</p>
+
+</li>
+<li><p>Return Value</p>
+
+<p>String.</p>
+
+</li>
+</ul>
+
+<h2 id="analyze_preprocessor_statements()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#analyze_preprocessor_statements()">#</a><a id="analyze_preprocessor_statements"></a><code>analyze_preprocessor_statements()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Within each function inside each Xsub, print to the <i>.c</i> output file certain preprocessor statements.</p>
+
+</li>
+<li><p>Arguments</p>
+
+<pre><code>( $self, $XSS_work_idx, $BootCode_ref ) =
+  analyze_preprocessor_statements(
+    $self, $statement, $XSS_work_idx, $BootCode_ref
+  );</code></pre>
+
+<p>List of four elements.</p>
+
+</li>
+<li><p>Return Value</p>
+
+<p>Modifed values of three of the arguments passed to the function. In particular, the <code>XSStack</code> and <code>InitFileCode</code> attributes are modified.</p>
+
+</li>
+</ul>
+
+<h2 id="set_cond()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#set_cond()">#</a><a id="set_cond"></a><code>set_cond()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+</li>
+<li><p>Arguments</p>
+
+</li>
+<li><p>Return Value</p>
+
+</li>
+</ul>
+
+<h2 id="current_line_number()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#current_line_number()">#</a><a id="current_line_number"></a><code>current_line_number()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Figures out the current line number in the XS file.</p>
+
+</li>
+<li><p>Arguments</p>
+
+<p><code>$self</code></p>
+
+</li>
+<li><p>Return Value</p>
+
+<p>The current line number.</p>
+
+</li>
+</ul>
+
+<h2 id="Warn()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#Warn()">#</a><a id="Warn"></a><code>Warn()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+</li>
+<li><p>Arguments</p>
+
+</li>
+<li><p>Return Value</p>
+
+</li>
+</ul>
+
+<h2 id="blurt()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#blurt()">#</a><a id="blurt"></a><code>blurt()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+</li>
+<li><p>Arguments</p>
+
+</li>
+<li><p>Return Value</p>
+
+</li>
+</ul>
+
+<h2 id="death()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#death()">#</a><a id="death"></a><code>death()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+</li>
+<li><p>Arguments</p>
+
+</li>
+<li><p>Return Value</p>
+
+</li>
+</ul>
+
+<h2 id="check_conditional_preprocessor_statements()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#check_conditional_preprocessor_statements()">#</a><a id="check_conditional_preprocessor_statements"></a><code>check_conditional_preprocessor_statements()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+</li>
+<li><p>Arguments</p>
+
+</li>
+<li><p>Return Value</p>
+
+</li>
+</ul>
+
+<h2 id="escape_file_for_line_directive()"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#escape_file_for_line_directive()">#</a><a id="escape_file_for_line_directive"></a><code>escape_file_for_line_directive()</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Escapes a given code source name (typically a file name but can also be a command that was read from) so that double-quotes and backslashes are escaped.</p>
+
+</li>
+<li><p>Arguments</p>
+
+<p>A string.</p>
+
+</li>
+<li><p>Return Value</p>
+
+<p>A string with escapes for double-quotes and backslashes.</p>
+
+</li>
+</ul>
+
+<h2 id="report_typemap_failure"><a class="permalink" href="./ExtUtils::ParseXS::Utilities.html#report_typemap_failure">#</a><code>report_typemap_failure</code></h2>
+
+<ul>
+
+<li><p>Purpose</p>
+
+<p>Do error reporting for missing typemaps.</p>
+
+</li>
+<li><p>Arguments</p>
+
+<p>The <code>ExtUtils::ParseXS</code> object.</p>
+
+<p>An <code>ExtUtils::Typemaps</code> object.</p>
+
+<p>The string that represents the C type that was not found in the typemap.</p>
+
+<p>Optionally, the string <code>death</code> or <code>blurt</code> to choose whether the error is immediately fatal or not. Default: <code>blurt</code></p>
+
+</li>
+<li><p>Return Value</p>
+
+<p>Returns nothing. Depending on the arguments, this may call <code>death</code> or <code>blurt</code>, the former of which is fatal.</p>
+
+</li>
+</ul>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

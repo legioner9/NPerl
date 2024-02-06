@@ -1,0 +1,4994 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Mojo::UserAgent - Non-blocking I/O HTTP and WebSocket user agent - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Mojolicious - MetaCPAN" href="https://metacpan.org/dist/Mojolicious/releases.rss" />
+        <link rel="canonical" href="./Mojo::UserAgent.html" />
+        <meta name="description" content="Non-blocking I/O HTTP and WebSocket user agent" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Mojo::UserAgent" />
+<meta name="twitter:title"       content="Mojo::UserAgent" />
+<meta name="twitter:description" content="Non-blocking I/O HTTP and WebSocket user agent" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Mojo::UserAgent.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Mojolicious was released.">
+      <span class="relatize">27 Oct 2023 17:11:42 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Mojolicious">Mojolicious</a>
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Mojolicious/source/lib/Mojo/UserAgent.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Mojolicious/source/lib/Mojo/UserAgent.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Mojolicious/source/lib/Mojo">Browse</a>
+    (<a href="https://metacpan.org/dist/Mojolicious/source/lib/Mojo?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Mojolicious/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://mojolicious.org">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Mojolicious/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/mojolicious/mojo">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/mojolicious/mojo/issues">Issues</a>
+      (69)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Mojolicious+9.35" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/M/Mojolicious.html?oncpan=1&amp;distmat=1&amp;version=9.35&amp;grade=2" style="color: #090">1693</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/M/Mojolicious.html?oncpan=1&amp;distmat=1&amp;version=9.35&amp;grade=3" style="color: #900">42</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/M/Mojolicious.html?oncpan=1&amp;distmat=1&amp;version=9.35&amp;grade=4">27</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/SRI/Mojolicious-9.35">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Mojolicious who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 3
+      </div>
+    </li>
+    <li>
+      License: artistic_2
+    </li>
+    <li>
+      Perl: v5.16.0
+    </li>
+    <li class="chat-banner">
+      <div><a rel="noopener nofollow" target="_blank" href="https://web.libera.chat/#mojo">Chat with us!</a></div>
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Mojolicious/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/S/SR/SRI/Mojolicious-9.35.tar.gz">
+      Download (<span itemprop="fileSize">839.99KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FSRI%2FMojolicious-9.35%2Flib%2FMojo%2FUserAgent.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Mojolicious/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Mojolicious/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Mojolicious">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Mojolicious">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Mojo/UserAgent.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="SRI/Mojolicious-9.35"
+>9.35
+  (SRI on 2023-10-27)</option>
+<option
+  
+  value="SRI/Mojolicious-9.34"
+>9.34
+  (SRI on 2023-09-11)</option>
+<option
+  
+  value="SRI/Mojolicious-9.33"
+>9.33
+  (SRI on 2023-06-14)</option>
+<option
+  
+  value="SRI/Mojolicious-9.32"
+>9.32
+  (SRI on 2023-05-08)</option>
+<option
+  
+  value="SRI/Mojolicious-9.31"
+>9.31
+  (SRI on 2022-12-21)</option>
+<option
+  
+  value="SRI/Mojolicious-9.30"
+>9.30
+  (SRI on 2022-11-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.29"
+>9.29
+  (SRI on 2022-11-11)</option>
+<option
+  
+  value="SRI/Mojolicious-9.28"
+>9.28
+  (SRI on 2022-10-14)</option>
+<option
+  
+  value="SRI/Mojolicious-9.27"
+>9.27
+  (SRI on 2022-09-12)</option>
+<option
+  
+  value="SRI/Mojolicious-9.26"
+>9.26
+  (SRI on 2022-05-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.25"
+>9.25
+  (SRI on 2022-04-28)</option>
+<option
+  
+  value="SRI/Mojolicious-9.24"
+>9.24
+  (SRI on 2022-04-18)</option>
+<option
+  
+  value="SRI/Mojolicious-9.23"
+>9.23
+  (SRI on 2022-03-25)</option>
+<option
+  
+  value="SRI/Mojolicious-9.22"
+>9.22
+  (SRI on 2021-10-21)</option>
+<option
+  
+  value="SRI/Mojolicious-9.21"
+>9.21
+  (SRI on 2021-08-13)</option>
+<option
+  
+  value="SRI/Mojolicious-9.20"
+>9.20
+  (SRI on 2021-08-09)</option>
+<option
+  
+  value="SRI/Mojolicious-9.19"
+>9.19
+  (SRI on 2021-06-02)</option>
+<option
+  
+  value="SRI/Mojolicious-9.18"
+>9.18
+  (SRI on 2021-05-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.17"
+>9.17
+  (SRI on 2021-04-13)</option>
+<option
+  
+  value="SRI/Mojolicious-9.16"
+>9.16
+  (SRI on 2021-04-09)</option>
+<option
+  
+  value="SRI/Mojolicious-9.15"
+>9.15
+  (SRI on 2021-04-06)</option>
+<option
+  
+  value="SRI/Mojolicious-9.14"
+>9.14
+  (SRI on 2021-03-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.13"
+>9.13
+  (SRI on 2021-03-22)</option>
+<option
+  
+  value="SRI/Mojolicious-9.12"
+>9.12
+  (SRI on 2021-03-20)</option>
+<option
+  
+  value="SRI/Mojolicious-9.11"
+>9.11
+  (SRI on 2021-03-20)</option>
+<option
+  
+  value="SRI/Mojolicious-9.10"
+>9.10
+  (SRI on 2021-03-15)</option>
+<option
+  
+  value="SRI/Mojolicious-9.09"
+>9.09
+  (SRI on 2021-03-14)</option>
+<option
+  
+  value="SRI/Mojolicious-9.08"
+>9.08
+  (SRI on 2021-03-12)</option>
+<option
+  
+  value="SRI/Mojolicious-9.07"
+>9.07
+  (SRI on 2021-03-11)</option>
+<option
+  
+  value="SRI/Mojolicious-9.03"
+>9.03
+  (SRI on 2021-03-07)</option>
+<option
+  
+  value="SRI/Mojolicious-9.02"
+>9.02
+  (SRI on 2021-03-01)</option>
+<option
+  
+  value="SRI/Mojolicious-9.01"
+>9.01
+  (SRI on 2021-02-16)</option>
+<option
+  
+  value="SRI/Mojolicious-9.0"
+>9.0
+  (SRI on 2021-02-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.73"
+>8.73
+  (SRI on 2021-02-06)</option>
+<option
+  
+  value="SRI/Mojolicious-8.72"
+>8.72
+  (SRI on 2021-01-27)</option>
+<option
+  
+  value="SRI/Mojolicious-8.71"
+>8.71
+  (SRI on 2021-01-17)</option>
+<option
+  
+  value="SRI/Mojolicious-8.70"
+>8.70
+  (SRI on 2020-12-30)</option>
+<option
+  
+  value="SRI/Mojolicious-8.69"
+>8.69
+  (SRI on 2020-12-28)</option>
+<option
+  
+  value="SRI/Mojolicious-8.68"
+>8.68
+  (SRI on 2020-12-27)</option>
+<option
+  
+  value="SRI/Mojolicious-8.67"
+>8.67
+  (SRI on 2020-12-05)</option>
+<option
+  
+  value="SRI/Mojolicious-8.66"
+>8.66
+  (SRI on 2020-11-30)</option>
+<option
+  
+  value="SRI/Mojolicious-8.65"
+>8.65
+  (SRI on 2020-11-11)</option>
+<option
+  
+  value="SRI/Mojolicious-8.64"
+>8.64
+  (SRI on 2020-11-06)</option>
+<option
+  
+  value="SRI/Mojolicious-8.63"
+>8.63
+  (SRI on 2020-10-13)</option>
+<option
+  
+  value="SRI/Mojolicious-8.62"
+>8.62
+  (SRI on 2020-10-12)</option>
+<option
+  
+  value="SRI/Mojolicious-8.61"
+>8.61
+  (SRI on 2020-10-02)</option>
+<option
+  
+  value="SRI/Mojolicious-8.60"
+>8.60
+  (SRI on 2020-09-27)</option>
+<option
+  
+  value="SRI/Mojolicious-8.59"
+>8.59
+  (SRI on 2020-09-13)</option>
+<option
+  
+  value="SRI/Mojolicious-8.58"
+>8.58
+  (SRI on 2020-08-10)</option>
+<option
+  
+  value="SRI/Mojolicious-8.57"
+>8.57
+  (SRI on 2020-07-17)</option>
+<option
+  
+  value="SRI/Mojolicious-8.56"
+>8.56
+  (SRI on 2020-06-26)</option>
+<option
+  
+  value="SRI/Mojolicious-8.55"
+>8.55
+  (SRI on 2020-06-18)</option>
+<option
+  
+  value="SRI/Mojolicious-8.54"
+>8.54
+  (SRI on 2020-06-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.53"
+>8.53
+  (SRI on 2020-06-10)</option>
+<option
+  
+  value="SRI/Mojolicious-8.52"
+>8.52
+  (SRI on 2020-06-03)</option>
+<option
+  
+  value="SRI/Mojolicious-8.51"
+>8.51
+  (SRI on 2020-05-31)</option>
+<option
+  
+  value="SRI/Mojolicious-8.50"
+>8.50
+  (SRI on 2020-05-25)</option>
+<option
+  
+  value="SRI/Mojolicious-8.43"
+>8.43
+  (SRI on 2020-05-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.42"
+>8.42
+  (SRI on 2020-05-04)</option>
+<option
+  
+  value="SRI/Mojolicious-8.41"
+>8.41
+  (SRI on 2020-05-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.40"
+>8.40
+  (SRI on 2020-04-23)</option>
+<option
+  
+  value="SRI/Mojolicious-8.39"
+>8.39
+  (SRI on 2020-04-22)</option>
+<option
+  
+  value="SRI/Mojolicious-8.38"
+>8.38
+  (SRI on 2020-04-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.37"
+>8.37
+  (SRI on 2020-04-19)</option>
+<option
+  
+  value="SRI/Mojolicious-8.36"
+>8.36
+  (SRI on 2020-04-02)</option>
+<option
+  
+  value="SRI/Mojolicious-8.35"
+>8.35
+  (SRI on 2020-03-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.34"
+>8.34
+  (SRI on 2020-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-8.33"
+>8.33
+  (SRI on 2020-02-11)</option>
+<option
+  
+  value="SRI/Mojolicious-8.32"
+>8.32
+  (SRI on 2020-01-19)</option>
+<option
+  
+  value="SRI/Mojolicious-8.31"
+>8.31
+  (SRI on 2020-01-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.30"
+>8.30
+  (SRI on 2020-01-09)</option>
+<option
+  
+  value="SRI/Mojolicious-8.29"
+>8.29
+  (SRI on 2019-12-28)</option>
+<option
+  
+  value="SRI/Mojolicious-8.28"
+>8.28
+  (SRI on 2019-12-26)</option>
+<option
+  
+  value="SRI/Mojolicious-8.27"
+>8.27
+  (SRI on 2019-12-04)</option>
+<option
+  
+  value="SRI/Mojolicious-8.26"
+>8.26
+  (SRI on 2019-11-03)</option>
+<option
+  
+  value="SRI/Mojolicious-8.25"
+>8.25
+  (SRI on 2019-09-29)</option>
+<option
+  
+  value="SRI/Mojolicious-8.24"
+>8.24
+  (SRI on 2019-09-11)</option>
+<option
+  
+  value="SRI/Mojolicious-8.23"
+>8.23
+  (SRI on 2019-08-12)</option>
+<option
+  
+  value="SRI/Mojolicious-8.22"
+>8.22
+  (SRI on 2019-07-17)</option>
+<option
+  
+  value="SRI/Mojolicious-8.21"
+>8.21
+  (SRI on 2019-07-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.20"
+>8.20
+  (SRI on 2019-07-09)</option>
+<option
+  
+  value="SRI/Mojolicious-8.19"
+>8.19
+  (SRI on 2019-07-08)</option>
+<option
+  
+  value="SRI/Mojolicious-8.18"
+>8.18
+  (SRI on 2019-06-28)</option>
+<option
+  
+  value="SRI/Mojolicious-8.17"
+>8.17
+  (SRI on 2019-05-23)</option>
+<option
+  
+  value="SRI/Mojolicious-8.16"
+>8.16
+  (SRI on 2019-05-19)</option>
+<option
+  
+  value="SRI/Mojolicious-8.15"
+>8.15
+  (SRI on 2019-04-26)</option>
+<option
+  
+  value="SRI/Mojolicious-8.14"
+>8.14
+  (SRI on 2019-04-18)</option>
+<option
+  
+  value="SRI/Mojolicious-8.13"
+>8.13
+  (SRI on 2019-03-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.12"
+>8.12
+  (SRI on 2019-02-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.11"
+>8.11
+  (SRI on 2019-01-02)</option>
+<option
+  
+  value="SRI/Mojolicious-8.10"
+>8.10
+  (SRI on 2018-12-20)</option>
+<option
+  
+  value="SRI/Mojolicious-8.09"
+>8.09
+  (SRI on 2018-12-04)</option>
+<option
+  
+  value="SRI/Mojolicious-8.08"
+>8.08
+  (SRI on 2018-12-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.07"
+>8.07
+  (SRI on 2018-11-18)</option>
+<option
+  
+  value="SRI/Mojolicious-8.06"
+>8.06
+  (SRI on 2018-11-08)</option>
+<option
+  
+  value="SRI/Mojolicious-8.05"
+>8.05
+  (SRI on 2018-11-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.04"
+>8.04
+  (SRI on 2018-10-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.03"
+>8.03
+  (SRI on 2018-10-16)</option>
+<option
+  
+  value="SRI/Mojolicious-8.02"
+>8.02
+  (SRI on 2018-10-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.01"
+>8.01
+  (SRI on 2018-09-25)</option>
+<option
+  
+  value="SRI/Mojolicious-8.0"
+>8.0
+  (SRI on 2018-09-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.94"
+>7.94
+  (SRI on 2018-08-31)</option>
+<option
+  
+  value="SRI/Mojolicious-7.93"
+>7.93
+  (SRI on 2018-08-12)</option>
+<option
+  
+  value="SRI/Mojolicious-7.54"
+>7.54
+  (SRI on 2017-11-04)</option>
+<option
+  
+  value="JBERGER/Mojolicious-7.07"
+>7.07
+  (JBERGER on 2016-09-20)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="SRI/Mojolicious-7.92"
+>7.92
+  (SRI on 2018-08-09)</option>
+<option
+  
+  value="SRI/Mojolicious-7.91"
+>7.91
+  (SRI on 2018-08-09)</option>
+<option
+  
+  value="SRI/Mojolicious-7.90"
+>7.90
+  (SRI on 2018-08-08)</option>
+<option
+  
+  value="SRI/Mojolicious-7.89"
+>7.89
+  (SRI on 2018-08-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.88"
+>7.88
+  (SRI on 2018-07-13)</option>
+<option
+  
+  value="SRI/Mojolicious-7.87"
+>7.87
+  (SRI on 2018-07-04)</option>
+<option
+  
+  value="SRI/Mojolicious-7.86"
+>7.86
+  (SRI on 2018-07-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.85"
+>7.85
+  (SRI on 2018-06-19)</option>
+<option
+  
+  value="SRI/Mojolicious-7.84"
+>7.84
+  (SRI on 2018-06-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.83"
+>7.83
+  (SRI on 2018-06-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.82"
+>7.82
+  (SRI on 2018-05-27)</option>
+<option
+  
+  value="SRI/Mojolicious-7.81"
+>7.81
+  (SRI on 2018-05-21)</option>
+<option
+  
+  value="SRI/Mojolicious-7.80"
+>7.80
+  (SRI on 2018-05-20)</option>
+<option
+  
+  value="SRI/Mojolicious-7.79"
+>7.79
+  (SRI on 2018-05-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.78"
+>7.78
+  (SRI on 2018-05-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.77"
+>7.77
+  (SRI on 2018-05-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.76"
+>7.76
+  (SRI on 2018-04-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.75"
+>7.75
+  (SRI on 2018-04-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.74"
+>7.74
+  (SRI on 2018-04-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.73"
+>7.73
+  (SRI on 2018-04-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.72"
+>7.72
+  (SRI on 2018-04-02)</option>
+<option
+  
+  value="SRI/Mojolicious-7.71"
+>7.71
+  (SRI on 2018-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-7.70"
+>7.70
+  (SRI on 2018-02-28)</option>
+<option
+  
+  value="SRI/Mojolicious-7.69"
+>7.69
+  (SRI on 2018-02-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.68"
+>7.68
+  (SRI on 2018-02-23)</option>
+<option
+  
+  value="SRI/Mojolicious-7.67"
+>7.67
+  (SRI on 2018-02-19)</option>
+<option
+  
+  value="SRI/Mojolicious-7.66"
+>7.66
+  (SRI on 2018-02-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.65"
+>7.65
+  (SRI on 2018-02-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.64"
+>7.64
+  (SRI on 2018-02-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.63"
+>7.63
+  (SRI on 2018-02-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.62"
+>7.62
+  (SRI on 2018-02-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.61"
+>7.61
+  (SRI on 2018-01-15)</option>
+<option
+  
+  value="SRI/Mojolicious-7.60"
+>7.60
+  (SRI on 2018-01-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.59"
+>7.59
+  (SRI on 2017-12-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.58"
+>7.58
+  (SRI on 2017-12-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.57"
+>7.57
+  (SRI on 2017-11-18)</option>
+<option
+  
+  value="SRI/Mojolicious-7.56"
+>7.56
+  (SRI on 2017-11-16)</option>
+<option
+  
+  value="SRI/Mojolicious-7.55"
+>7.55
+  (SRI on 2017-11-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.53"
+>7.53
+  (SRI on 2017-11-04)</option>
+<option
+  
+  value="SRI/Mojolicious-7.52"
+>7.52
+  (SRI on 2017-11-02)</option>
+<option
+  
+  value="SRI/Mojolicious-7.51"
+>7.51
+  (SRI on 2017-10-31)</option>
+<option
+  
+  value="SRI/Mojolicious-7.50"
+>7.50
+  (SRI on 2017-10-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.49"
+>7.49
+  (SRI on 2017-10-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.48"
+>7.48
+  (SRI on 2017-10-21)</option>
+<option
+  
+  value="SRI/Mojolicious-7.47"
+>7.47
+  (SRI on 2017-10-12)</option>
+<option
+  
+  value="SRI/Mojolicious-7.46"
+>7.46
+  (SRI on 2017-09-12)</option>
+<option
+  
+  value="SRI/Mojolicious-7.45"
+>7.45
+  (SRI on 2017-09-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.44"
+>7.44
+  (SRI on 2017-09-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.43"
+>7.43
+  (SRI on 2017-08-18)</option>
+<option
+  
+  value="SRI/Mojolicious-7.42"
+>7.42
+  (SRI on 2017-08-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.41"
+>7.41
+  (SRI on 2017-08-16)</option>
+<option
+  
+  value="SRI/Mojolicious-7.40"
+>7.40
+  (SRI on 2017-08-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.39"
+>7.39
+  (SRI on 2017-08-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.38"
+>7.38
+  (SRI on 2017-08-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.37"
+>7.37
+  (SRI on 2017-07-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.36"
+>7.36
+  (SRI on 2017-07-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.35"
+>7.35
+  (SRI on 2017-07-05)</option>
+<option
+  
+  value="SRI/Mojolicious-7.34"
+>7.34
+  (SRI on 2017-07-02)</option>
+<option
+  
+  value="SRI/Mojolicious-7.33"
+>7.33
+  (SRI on 2017-06-05)</option>
+<option
+  
+  value="SRI/Mojolicious-7.32"
+>7.32
+  (SRI on 2017-05-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.31"
+>7.31
+  (SRI on 2017-04-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.30"
+>7.30
+  (SRI on 2017-04-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.29"
+>7.29
+  (SRI on 2017-03-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.28"
+>7.28
+  (SRI on 2017-03-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.27"
+>7.27
+  (SRI on 2017-02-27)</option>
+<option
+  
+  value="SRI/Mojolicious-7.26"
+>7.26
+  (SRI on 2017-02-15)</option>
+<option
+  
+  value="SRI/Mojolicious-7.25"
+>7.25
+  (SRI on 2017-02-09)</option>
+<option
+  
+  value="SRI/Mojolicious-7.24"
+>7.24
+  (SRI on 2017-02-05)</option>
+<option
+  
+  value="SRI/Mojolicious-7.23"
+>7.23
+  (SRI on 2017-01-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.22"
+>7.22
+  (SRI on 2017-01-25)</option>
+<option
+  
+  value="SRI/Mojolicious-7.21"
+>7.21
+  (SRI on 2017-01-22)</option>
+<option
+  
+  value="SRI/Mojolicious-7.20"
+>7.20
+  (SRI on 2017-01-18)</option>
+<option
+  
+  value="SRI/Mojolicious-7.19"
+>7.19
+  (SRI on 2017-01-15)</option>
+<option
+  
+  value="SRI/Mojolicious-7.18"
+>7.18
+  (SRI on 2017-01-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.17"
+>7.17
+  (SRI on 2017-01-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.16"
+>7.16
+  (SRI on 2017-01-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.15"
+>7.15
+  (SRI on 2017-01-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.14"
+>7.14
+  (SRI on 2017-01-04)</option>
+<option
+  
+  value="SRI/Mojolicious-7.13"
+>7.13
+  (SRI on 2016-12-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.12"
+>7.12
+  (SRI on 2016-12-20)</option>
+<option
+  
+  value="SRI/Mojolicious-7.11"
+>7.11
+  (SRI on 2016-11-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.10"
+>7.10
+  (SRI on 2016-11-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.09"
+>7.09
+  (SRI on 2016-10-23)</option>
+<option
+  
+  value="SRI/Mojolicious-7.08"
+>7.08
+  (SRI on 2016-09-23)</option>
+<option
+  
+  value="SRI/Mojolicious-7.06"
+>7.06
+  (SRI on 2016-09-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.05"
+>7.05
+  (SRI on 2016-08-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.04"
+>7.04
+  (SRI on 2016-08-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.03"
+>7.03
+  (SRI on 2016-08-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.02"
+>7.02
+  (SRI on 2016-08-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.01"
+>7.01
+  (SRI on 2016-08-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.0"
+>7.0
+  (SRI on 2016-07-19)</option>
+<option
+  
+  value="SRI/Mojolicious-6.66"
+>6.66
+  (SRI on 2016-06-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.65"
+>6.65
+  (SRI on 2016-06-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.64"
+>6.64
+  (SRI on 2016-06-09)</option>
+<option
+  
+  value="SRI/Mojolicious-6.63"
+>6.63
+  (SRI on 2016-06-03)</option>
+<option
+  
+  value="SRI/Mojolicious-6.62"
+>6.62
+  (SRI on 2016-05-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.61"
+>6.61
+  (SRI on 2016-05-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.60"
+>6.60
+  (SRI on 2016-04-26)</option>
+<option
+  
+  value="SRI/Mojolicious-6.59"
+>6.59
+  (SRI on 2016-04-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.58"
+>6.58
+  (SRI on 2016-04-10)</option>
+<option
+  
+  value="SRI/Mojolicious-6.57"
+>6.57
+  (SRI on 2016-03-23)</option>
+<option
+  
+  value="SRI/Mojolicious-6.56"
+>6.56
+  (SRI on 2016-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.55"
+>6.55
+  (SRI on 2016-03-08)</option>
+<option
+  
+  value="SRI/Mojolicious-6.54"
+>6.54
+  (SRI on 2016-03-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.53"
+>6.53
+  (SRI on 2016-03-04)</option>
+<option
+  
+  value="SRI/Mojolicious-6.52"
+>6.52
+  (SRI on 2016-03-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.51"
+>6.51
+  (SRI on 2016-02-29)</option>
+<option
+  
+  value="SRI/Mojolicious-6.50"
+>6.50
+  (SRI on 2016-02-27)</option>
+<option
+  
+  value="SRI/Mojolicious-6.49"
+>6.49
+  (SRI on 2016-02-26)</option>
+<option
+  
+  value="SRI/Mojolicious-6.48"
+>6.48
+  (SRI on 2016-02-24)</option>
+<option
+  
+  value="SRI/Mojolicious-6.47"
+>6.47
+  (SRI on 2016-02-19)</option>
+<option
+  
+  value="SRI/Mojolicious-6.46"
+>6.46
+  (SRI on 2016-02-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.45"
+>6.45
+  (SRI on 2016-02-09)</option>
+<option
+  
+  value="SRI/Mojolicious-6.44"
+>6.44
+  (SRI on 2016-02-05)</option>
+<option
+  
+  value="SRI/Mojolicious-6.43"
+>6.43
+  (SRI on 2016-02-01)</option>
+<option
+  
+  value="SRI/Mojolicious-6.42"
+>6.42
+  (SRI on 2016-01-24)</option>
+<option
+  
+  value="SRI/Mojolicious-6.40"
+>6.40
+  (SRI on 2016-01-13)</option>
+<option
+  
+  value="SRI/Mojolicious-6.33"
+>6.33
+  (SRI on 2015-11-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.32"
+>6.32
+  (SRI on 2015-11-18)</option>
+<option
+  
+  value="SRI/Mojolicious-6.31"
+>6.31
+  (SRI on 2015-11-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.30"
+>6.30
+  (SRI on 2015-11-12)</option>
+<option
+  
+  value="SRI/Mojolicious-6.28"
+>6.28
+  (SRI on 2015-11-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.27"
+>6.27
+  (SRI on 2015-10-30)</option>
+<option
+  
+  value="SRI/Mojolicious-6.26"
+>6.26
+  (SRI on 2015-10-29)</option>
+<option
+  
+  value="SRI/Mojolicious-6.25"
+>6.25
+  (SRI on 2015-10-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.24"
+>6.24
+  (SRI on 2015-10-13)</option>
+<option
+  
+  value="SRI/Mojolicious-6.23"
+>6.23
+  (SRI on 2015-10-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.22"
+>6.22
+  (SRI on 2015-09-27)</option>
+<option
+  
+  value="SRI/Mojolicious-6.21"
+>6.21
+  (SRI on 2015-09-23)</option>
+<option
+  
+  value="SRI/Mojolicious-6.20"
+>6.20
+  (SRI on 2015-09-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.19"
+>6.19
+  (SRI on 2015-09-12)</option>
+<option
+  
+  value="SRI/Mojolicious-6.18"
+>6.18
+  (SRI on 2015-09-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.17"
+>6.17
+  (SRI on 2015-08-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.16"
+>6.16
+  (SRI on 2015-08-20)</option>
+<option
+  
+  value="DBOOK/Mojolicious-6.12"
+>6.12
+  (DBOOK on 2015-06-18)</option>
+<option
+  
+  value="SRI/Mojolicious-6.11"
+>6.11
+  (SRI on 2015-05-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.10"
+>6.10
+  (SRI on 2015-04-27)</option>
+<option
+  
+  value="SRI/Mojolicious-6.09"
+>6.09
+  (SRI on 2015-04-26)</option>
+<option
+  
+  value="SRI/Mojolicious-6.08"
+>6.08
+  (SRI on 2015-04-09)</option>
+<option
+  
+  value="SRI/Mojolicious-6.07"
+>6.07
+  (SRI on 2015-04-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.06"
+>6.06
+  (SRI on 2015-04-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.05"
+>6.05
+  (SRI on 2015-03-25)</option>
+<option
+  
+  value="SRI/Mojolicious-6.04"
+>6.04
+  (SRI on 2015-03-23)</option>
+<option
+  
+  value="SRI/Mojolicious-6.03"
+>6.03
+  (SRI on 2015-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.02"
+>6.02
+  (SRI on 2015-03-10)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/SRI/Mojolicious-9.35/diff/' + encodeURIComponent(this.value) + '/lib/Mojo/UserAgent.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="SRI/Mojolicious-9.35"
+>9.35
+  (SRI on 2023-10-27)</option>
+<option
+  
+  value="SRI/Mojolicious-9.34"
+>9.34
+  (SRI on 2023-09-11)</option>
+<option
+  
+  value="SRI/Mojolicious-9.33"
+>9.33
+  (SRI on 2023-06-14)</option>
+<option
+  
+  value="SRI/Mojolicious-9.32"
+>9.32
+  (SRI on 2023-05-08)</option>
+<option
+  
+  value="SRI/Mojolicious-9.31"
+>9.31
+  (SRI on 2022-12-21)</option>
+<option
+  
+  value="SRI/Mojolicious-9.30"
+>9.30
+  (SRI on 2022-11-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.29"
+>9.29
+  (SRI on 2022-11-11)</option>
+<option
+  
+  value="SRI/Mojolicious-9.28"
+>9.28
+  (SRI on 2022-10-14)</option>
+<option
+  
+  value="SRI/Mojolicious-9.27"
+>9.27
+  (SRI on 2022-09-12)</option>
+<option
+  
+  value="SRI/Mojolicious-9.26"
+>9.26
+  (SRI on 2022-05-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.25"
+>9.25
+  (SRI on 2022-04-28)</option>
+<option
+  
+  value="SRI/Mojolicious-9.24"
+>9.24
+  (SRI on 2022-04-18)</option>
+<option
+  
+  value="SRI/Mojolicious-9.23"
+>9.23
+  (SRI on 2022-03-25)</option>
+<option
+  
+  value="SRI/Mojolicious-9.22"
+>9.22
+  (SRI on 2021-10-21)</option>
+<option
+  
+  value="SRI/Mojolicious-9.21"
+>9.21
+  (SRI on 2021-08-13)</option>
+<option
+  
+  value="SRI/Mojolicious-9.20"
+>9.20
+  (SRI on 2021-08-09)</option>
+<option
+  
+  value="SRI/Mojolicious-9.19"
+>9.19
+  (SRI on 2021-06-02)</option>
+<option
+  
+  value="SRI/Mojolicious-9.18"
+>9.18
+  (SRI on 2021-05-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.17"
+>9.17
+  (SRI on 2021-04-13)</option>
+<option
+  
+  value="SRI/Mojolicious-9.16"
+>9.16
+  (SRI on 2021-04-09)</option>
+<option
+  
+  value="SRI/Mojolicious-9.15"
+>9.15
+  (SRI on 2021-04-06)</option>
+<option
+  
+  value="SRI/Mojolicious-9.14"
+>9.14
+  (SRI on 2021-03-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.13"
+>9.13
+  (SRI on 2021-03-22)</option>
+<option
+  
+  value="SRI/Mojolicious-9.12"
+>9.12
+  (SRI on 2021-03-20)</option>
+<option
+  
+  value="SRI/Mojolicious-9.11"
+>9.11
+  (SRI on 2021-03-20)</option>
+<option
+  
+  value="SRI/Mojolicious-9.10"
+>9.10
+  (SRI on 2021-03-15)</option>
+<option
+  
+  value="SRI/Mojolicious-9.09"
+>9.09
+  (SRI on 2021-03-14)</option>
+<option
+  
+  value="SRI/Mojolicious-9.08"
+>9.08
+  (SRI on 2021-03-12)</option>
+<option
+  
+  value="SRI/Mojolicious-9.07"
+>9.07
+  (SRI on 2021-03-11)</option>
+<option
+  
+  value="SRI/Mojolicious-9.03"
+>9.03
+  (SRI on 2021-03-07)</option>
+<option
+  
+  value="SRI/Mojolicious-9.02"
+>9.02
+  (SRI on 2021-03-01)</option>
+<option
+  
+  value="SRI/Mojolicious-9.01"
+>9.01
+  (SRI on 2021-02-16)</option>
+<option
+  
+  value="SRI/Mojolicious-9.0"
+>9.0
+  (SRI on 2021-02-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.73"
+>8.73
+  (SRI on 2021-02-06)</option>
+<option
+  
+  value="SRI/Mojolicious-8.72"
+>8.72
+  (SRI on 2021-01-27)</option>
+<option
+  
+  value="SRI/Mojolicious-8.71"
+>8.71
+  (SRI on 2021-01-17)</option>
+<option
+  
+  value="SRI/Mojolicious-8.70"
+>8.70
+  (SRI on 2020-12-30)</option>
+<option
+  
+  value="SRI/Mojolicious-8.69"
+>8.69
+  (SRI on 2020-12-28)</option>
+<option
+  
+  value="SRI/Mojolicious-8.68"
+>8.68
+  (SRI on 2020-12-27)</option>
+<option
+  
+  value="SRI/Mojolicious-8.67"
+>8.67
+  (SRI on 2020-12-05)</option>
+<option
+  
+  value="SRI/Mojolicious-8.66"
+>8.66
+  (SRI on 2020-11-30)</option>
+<option
+  
+  value="SRI/Mojolicious-8.65"
+>8.65
+  (SRI on 2020-11-11)</option>
+<option
+  
+  value="SRI/Mojolicious-8.64"
+>8.64
+  (SRI on 2020-11-06)</option>
+<option
+  
+  value="SRI/Mojolicious-8.63"
+>8.63
+  (SRI on 2020-10-13)</option>
+<option
+  
+  value="SRI/Mojolicious-8.62"
+>8.62
+  (SRI on 2020-10-12)</option>
+<option
+  
+  value="SRI/Mojolicious-8.61"
+>8.61
+  (SRI on 2020-10-02)</option>
+<option
+  
+  value="SRI/Mojolicious-8.60"
+>8.60
+  (SRI on 2020-09-27)</option>
+<option
+  
+  value="SRI/Mojolicious-8.59"
+>8.59
+  (SRI on 2020-09-13)</option>
+<option
+  
+  value="SRI/Mojolicious-8.58"
+>8.58
+  (SRI on 2020-08-10)</option>
+<option
+  
+  value="SRI/Mojolicious-8.57"
+>8.57
+  (SRI on 2020-07-17)</option>
+<option
+  
+  value="SRI/Mojolicious-8.56"
+>8.56
+  (SRI on 2020-06-26)</option>
+<option
+  
+  value="SRI/Mojolicious-8.55"
+>8.55
+  (SRI on 2020-06-18)</option>
+<option
+  
+  value="SRI/Mojolicious-8.54"
+>8.54
+  (SRI on 2020-06-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.53"
+>8.53
+  (SRI on 2020-06-10)</option>
+<option
+  
+  value="SRI/Mojolicious-8.52"
+>8.52
+  (SRI on 2020-06-03)</option>
+<option
+  
+  value="SRI/Mojolicious-8.51"
+>8.51
+  (SRI on 2020-05-31)</option>
+<option
+  
+  value="SRI/Mojolicious-8.50"
+>8.50
+  (SRI on 2020-05-25)</option>
+<option
+  
+  value="SRI/Mojolicious-8.43"
+>8.43
+  (SRI on 2020-05-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.42"
+>8.42
+  (SRI on 2020-05-04)</option>
+<option
+  
+  value="SRI/Mojolicious-8.41"
+>8.41
+  (SRI on 2020-05-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.40"
+>8.40
+  (SRI on 2020-04-23)</option>
+<option
+  
+  value="SRI/Mojolicious-8.39"
+>8.39
+  (SRI on 2020-04-22)</option>
+<option
+  
+  value="SRI/Mojolicious-8.38"
+>8.38
+  (SRI on 2020-04-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.37"
+>8.37
+  (SRI on 2020-04-19)</option>
+<option
+  
+  value="SRI/Mojolicious-8.36"
+>8.36
+  (SRI on 2020-04-02)</option>
+<option
+  
+  value="SRI/Mojolicious-8.35"
+>8.35
+  (SRI on 2020-03-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.34"
+>8.34
+  (SRI on 2020-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-8.33"
+>8.33
+  (SRI on 2020-02-11)</option>
+<option
+  
+  value="SRI/Mojolicious-8.32"
+>8.32
+  (SRI on 2020-01-19)</option>
+<option
+  
+  value="SRI/Mojolicious-8.31"
+>8.31
+  (SRI on 2020-01-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.30"
+>8.30
+  (SRI on 2020-01-09)</option>
+<option
+  
+  value="SRI/Mojolicious-8.29"
+>8.29
+  (SRI on 2019-12-28)</option>
+<option
+  
+  value="SRI/Mojolicious-8.28"
+>8.28
+  (SRI on 2019-12-26)</option>
+<option
+  
+  value="SRI/Mojolicious-8.27"
+>8.27
+  (SRI on 2019-12-04)</option>
+<option
+  
+  value="SRI/Mojolicious-8.26"
+>8.26
+  (SRI on 2019-11-03)</option>
+<option
+  
+  value="SRI/Mojolicious-8.25"
+>8.25
+  (SRI on 2019-09-29)</option>
+<option
+  
+  value="SRI/Mojolicious-8.24"
+>8.24
+  (SRI on 2019-09-11)</option>
+<option
+  
+  value="SRI/Mojolicious-8.23"
+>8.23
+  (SRI on 2019-08-12)</option>
+<option
+  
+  value="SRI/Mojolicious-8.22"
+>8.22
+  (SRI on 2019-07-17)</option>
+<option
+  
+  value="SRI/Mojolicious-8.21"
+>8.21
+  (SRI on 2019-07-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.20"
+>8.20
+  (SRI on 2019-07-09)</option>
+<option
+  
+  value="SRI/Mojolicious-8.19"
+>8.19
+  (SRI on 2019-07-08)</option>
+<option
+  
+  value="SRI/Mojolicious-8.18"
+>8.18
+  (SRI on 2019-06-28)</option>
+<option
+  
+  value="SRI/Mojolicious-8.17"
+>8.17
+  (SRI on 2019-05-23)</option>
+<option
+  
+  value="SRI/Mojolicious-8.16"
+>8.16
+  (SRI on 2019-05-19)</option>
+<option
+  
+  value="SRI/Mojolicious-8.15"
+>8.15
+  (SRI on 2019-04-26)</option>
+<option
+  
+  value="SRI/Mojolicious-8.14"
+>8.14
+  (SRI on 2019-04-18)</option>
+<option
+  
+  value="SRI/Mojolicious-8.13"
+>8.13
+  (SRI on 2019-03-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.12"
+>8.12
+  (SRI on 2019-02-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.11"
+>8.11
+  (SRI on 2019-01-02)</option>
+<option
+  
+  value="SRI/Mojolicious-8.10"
+>8.10
+  (SRI on 2018-12-20)</option>
+<option
+  
+  value="SRI/Mojolicious-8.09"
+>8.09
+  (SRI on 2018-12-04)</option>
+<option
+  
+  value="SRI/Mojolicious-8.08"
+>8.08
+  (SRI on 2018-12-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.07"
+>8.07
+  (SRI on 2018-11-18)</option>
+<option
+  
+  value="SRI/Mojolicious-8.06"
+>8.06
+  (SRI on 2018-11-08)</option>
+<option
+  
+  value="SRI/Mojolicious-8.05"
+>8.05
+  (SRI on 2018-11-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.04"
+>8.04
+  (SRI on 2018-10-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.03"
+>8.03
+  (SRI on 2018-10-16)</option>
+<option
+  
+  value="SRI/Mojolicious-8.02"
+>8.02
+  (SRI on 2018-10-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.01"
+>8.01
+  (SRI on 2018-09-25)</option>
+<option
+  
+  value="SRI/Mojolicious-8.0"
+>8.0
+  (SRI on 2018-09-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.94"
+>7.94
+  (SRI on 2018-08-31)</option>
+<option
+  
+  value="SRI/Mojolicious-7.93"
+>7.93
+  (SRI on 2018-08-12)</option>
+<option
+  
+  value="SRI/Mojolicious-7.54"
+>7.54
+  (SRI on 2017-11-04)</option>
+<option
+  
+  value="JBERGER/Mojolicious-7.07"
+>7.07
+  (JBERGER on 2016-09-20)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="SRI/Mojolicious-7.92"
+>7.92
+  (SRI on 2018-08-09)</option>
+<option
+  
+  value="SRI/Mojolicious-7.91"
+>7.91
+  (SRI on 2018-08-09)</option>
+<option
+  
+  value="SRI/Mojolicious-7.90"
+>7.90
+  (SRI on 2018-08-08)</option>
+<option
+  
+  value="SRI/Mojolicious-7.89"
+>7.89
+  (SRI on 2018-08-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.88"
+>7.88
+  (SRI on 2018-07-13)</option>
+<option
+  
+  value="SRI/Mojolicious-7.87"
+>7.87
+  (SRI on 2018-07-04)</option>
+<option
+  
+  value="SRI/Mojolicious-7.86"
+>7.86
+  (SRI on 2018-07-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.85"
+>7.85
+  (SRI on 2018-06-19)</option>
+<option
+  
+  value="SRI/Mojolicious-7.84"
+>7.84
+  (SRI on 2018-06-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.83"
+>7.83
+  (SRI on 2018-06-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.82"
+>7.82
+  (SRI on 2018-05-27)</option>
+<option
+  
+  value="SRI/Mojolicious-7.81"
+>7.81
+  (SRI on 2018-05-21)</option>
+<option
+  
+  value="SRI/Mojolicious-7.80"
+>7.80
+  (SRI on 2018-05-20)</option>
+<option
+  
+  value="SRI/Mojolicious-7.79"
+>7.79
+  (SRI on 2018-05-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.78"
+>7.78
+  (SRI on 2018-05-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.77"
+>7.77
+  (SRI on 2018-05-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.76"
+>7.76
+  (SRI on 2018-04-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.75"
+>7.75
+  (SRI on 2018-04-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.74"
+>7.74
+  (SRI on 2018-04-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.73"
+>7.73
+  (SRI on 2018-04-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.72"
+>7.72
+  (SRI on 2018-04-02)</option>
+<option
+  
+  value="SRI/Mojolicious-7.71"
+>7.71
+  (SRI on 2018-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-7.70"
+>7.70
+  (SRI on 2018-02-28)</option>
+<option
+  
+  value="SRI/Mojolicious-7.69"
+>7.69
+  (SRI on 2018-02-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.68"
+>7.68
+  (SRI on 2018-02-23)</option>
+<option
+  
+  value="SRI/Mojolicious-7.67"
+>7.67
+  (SRI on 2018-02-19)</option>
+<option
+  
+  value="SRI/Mojolicious-7.66"
+>7.66
+  (SRI on 2018-02-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.65"
+>7.65
+  (SRI on 2018-02-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.64"
+>7.64
+  (SRI on 2018-02-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.63"
+>7.63
+  (SRI on 2018-02-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.62"
+>7.62
+  (SRI on 2018-02-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.61"
+>7.61
+  (SRI on 2018-01-15)</option>
+<option
+  
+  value="SRI/Mojolicious-7.60"
+>7.60
+  (SRI on 2018-01-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.59"
+>7.59
+  (SRI on 2017-12-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.58"
+>7.58
+  (SRI on 2017-12-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.57"
+>7.57
+  (SRI on 2017-11-18)</option>
+<option
+  
+  value="SRI/Mojolicious-7.56"
+>7.56
+  (SRI on 2017-11-16)</option>
+<option
+  
+  value="SRI/Mojolicious-7.55"
+>7.55
+  (SRI on 2017-11-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.53"
+>7.53
+  (SRI on 2017-11-04)</option>
+<option
+  
+  value="SRI/Mojolicious-7.52"
+>7.52
+  (SRI on 2017-11-02)</option>
+<option
+  
+  value="SRI/Mojolicious-7.51"
+>7.51
+  (SRI on 2017-10-31)</option>
+<option
+  
+  value="SRI/Mojolicious-7.50"
+>7.50
+  (SRI on 2017-10-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.49"
+>7.49
+  (SRI on 2017-10-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.48"
+>7.48
+  (SRI on 2017-10-21)</option>
+<option
+  
+  value="SRI/Mojolicious-7.47"
+>7.47
+  (SRI on 2017-10-12)</option>
+<option
+  
+  value="SRI/Mojolicious-7.46"
+>7.46
+  (SRI on 2017-09-12)</option>
+<option
+  
+  value="SRI/Mojolicious-7.45"
+>7.45
+  (SRI on 2017-09-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.44"
+>7.44
+  (SRI on 2017-09-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.43"
+>7.43
+  (SRI on 2017-08-18)</option>
+<option
+  
+  value="SRI/Mojolicious-7.42"
+>7.42
+  (SRI on 2017-08-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.41"
+>7.41
+  (SRI on 2017-08-16)</option>
+<option
+  
+  value="SRI/Mojolicious-7.40"
+>7.40
+  (SRI on 2017-08-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.39"
+>7.39
+  (SRI on 2017-08-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.38"
+>7.38
+  (SRI on 2017-08-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.37"
+>7.37
+  (SRI on 2017-07-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.36"
+>7.36
+  (SRI on 2017-07-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.35"
+>7.35
+  (SRI on 2017-07-05)</option>
+<option
+  
+  value="SRI/Mojolicious-7.34"
+>7.34
+  (SRI on 2017-07-02)</option>
+<option
+  
+  value="SRI/Mojolicious-7.33"
+>7.33
+  (SRI on 2017-06-05)</option>
+<option
+  
+  value="SRI/Mojolicious-7.32"
+>7.32
+  (SRI on 2017-05-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.31"
+>7.31
+  (SRI on 2017-04-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.30"
+>7.30
+  (SRI on 2017-04-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.29"
+>7.29
+  (SRI on 2017-03-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.28"
+>7.28
+  (SRI on 2017-03-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.27"
+>7.27
+  (SRI on 2017-02-27)</option>
+<option
+  
+  value="SRI/Mojolicious-7.26"
+>7.26
+  (SRI on 2017-02-15)</option>
+<option
+  
+  value="SRI/Mojolicious-7.25"
+>7.25
+  (SRI on 2017-02-09)</option>
+<option
+  
+  value="SRI/Mojolicious-7.24"
+>7.24
+  (SRI on 2017-02-05)</option>
+<option
+  
+  value="SRI/Mojolicious-7.23"
+>7.23
+  (SRI on 2017-01-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.22"
+>7.22
+  (SRI on 2017-01-25)</option>
+<option
+  
+  value="SRI/Mojolicious-7.21"
+>7.21
+  (SRI on 2017-01-22)</option>
+<option
+  
+  value="SRI/Mojolicious-7.20"
+>7.20
+  (SRI on 2017-01-18)</option>
+<option
+  
+  value="SRI/Mojolicious-7.19"
+>7.19
+  (SRI on 2017-01-15)</option>
+<option
+  
+  value="SRI/Mojolicious-7.18"
+>7.18
+  (SRI on 2017-01-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.17"
+>7.17
+  (SRI on 2017-01-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.16"
+>7.16
+  (SRI on 2017-01-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.15"
+>7.15
+  (SRI on 2017-01-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.14"
+>7.14
+  (SRI on 2017-01-04)</option>
+<option
+  
+  value="SRI/Mojolicious-7.13"
+>7.13
+  (SRI on 2016-12-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.12"
+>7.12
+  (SRI on 2016-12-20)</option>
+<option
+  
+  value="SRI/Mojolicious-7.11"
+>7.11
+  (SRI on 2016-11-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.10"
+>7.10
+  (SRI on 2016-11-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.09"
+>7.09
+  (SRI on 2016-10-23)</option>
+<option
+  
+  value="SRI/Mojolicious-7.08"
+>7.08
+  (SRI on 2016-09-23)</option>
+<option
+  
+  value="SRI/Mojolicious-7.06"
+>7.06
+  (SRI on 2016-09-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.05"
+>7.05
+  (SRI on 2016-08-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.04"
+>7.04
+  (SRI on 2016-08-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.03"
+>7.03
+  (SRI on 2016-08-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.02"
+>7.02
+  (SRI on 2016-08-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.01"
+>7.01
+  (SRI on 2016-08-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.0"
+>7.0
+  (SRI on 2016-07-19)</option>
+<option
+  
+  value="SRI/Mojolicious-6.66"
+>6.66
+  (SRI on 2016-06-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.65"
+>6.65
+  (SRI on 2016-06-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.64"
+>6.64
+  (SRI on 2016-06-09)</option>
+<option
+  
+  value="SRI/Mojolicious-6.63"
+>6.63
+  (SRI on 2016-06-03)</option>
+<option
+  
+  value="SRI/Mojolicious-6.62"
+>6.62
+  (SRI on 2016-05-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.61"
+>6.61
+  (SRI on 2016-05-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.60"
+>6.60
+  (SRI on 2016-04-26)</option>
+<option
+  
+  value="SRI/Mojolicious-6.59"
+>6.59
+  (SRI on 2016-04-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.58"
+>6.58
+  (SRI on 2016-04-10)</option>
+<option
+  
+  value="SRI/Mojolicious-6.57"
+>6.57
+  (SRI on 2016-03-23)</option>
+<option
+  
+  value="SRI/Mojolicious-6.56"
+>6.56
+  (SRI on 2016-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.55"
+>6.55
+  (SRI on 2016-03-08)</option>
+<option
+  
+  value="SRI/Mojolicious-6.54"
+>6.54
+  (SRI on 2016-03-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.53"
+>6.53
+  (SRI on 2016-03-04)</option>
+<option
+  
+  value="SRI/Mojolicious-6.52"
+>6.52
+  (SRI on 2016-03-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.51"
+>6.51
+  (SRI on 2016-02-29)</option>
+<option
+  
+  value="SRI/Mojolicious-6.50"
+>6.50
+  (SRI on 2016-02-27)</option>
+<option
+  
+  value="SRI/Mojolicious-6.49"
+>6.49
+  (SRI on 2016-02-26)</option>
+<option
+  
+  value="SRI/Mojolicious-6.48"
+>6.48
+  (SRI on 2016-02-24)</option>
+<option
+  
+  value="SRI/Mojolicious-6.47"
+>6.47
+  (SRI on 2016-02-19)</option>
+<option
+  
+  value="SRI/Mojolicious-6.46"
+>6.46
+  (SRI on 2016-02-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.45"
+>6.45
+  (SRI on 2016-02-09)</option>
+<option
+  
+  value="SRI/Mojolicious-6.44"
+>6.44
+  (SRI on 2016-02-05)</option>
+<option
+  
+  value="SRI/Mojolicious-6.43"
+>6.43
+  (SRI on 2016-02-01)</option>
+<option
+  
+  value="SRI/Mojolicious-6.42"
+>6.42
+  (SRI on 2016-01-24)</option>
+<option
+  
+  value="SRI/Mojolicious-6.40"
+>6.40
+  (SRI on 2016-01-13)</option>
+<option
+  
+  value="SRI/Mojolicious-6.33"
+>6.33
+  (SRI on 2015-11-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.32"
+>6.32
+  (SRI on 2015-11-18)</option>
+<option
+  
+  value="SRI/Mojolicious-6.31"
+>6.31
+  (SRI on 2015-11-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.30"
+>6.30
+  (SRI on 2015-11-12)</option>
+<option
+  
+  value="SRI/Mojolicious-6.28"
+>6.28
+  (SRI on 2015-11-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.27"
+>6.27
+  (SRI on 2015-10-30)</option>
+<option
+  
+  value="SRI/Mojolicious-6.26"
+>6.26
+  (SRI on 2015-10-29)</option>
+<option
+  
+  value="SRI/Mojolicious-6.25"
+>6.25
+  (SRI on 2015-10-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.24"
+>6.24
+  (SRI on 2015-10-13)</option>
+<option
+  
+  value="SRI/Mojolicious-6.23"
+>6.23
+  (SRI on 2015-10-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.22"
+>6.22
+  (SRI on 2015-09-27)</option>
+<option
+  
+  value="SRI/Mojolicious-6.21"
+>6.21
+  (SRI on 2015-09-23)</option>
+<option
+  
+  value="SRI/Mojolicious-6.20"
+>6.20
+  (SRI on 2015-09-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.19"
+>6.19
+  (SRI on 2015-09-12)</option>
+<option
+  
+  value="SRI/Mojolicious-6.18"
+>6.18
+  (SRI on 2015-09-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.17"
+>6.17
+  (SRI on 2015-08-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.16"
+>6.16
+  (SRI on 2015-08-20)</option>
+<option
+  
+  value="DBOOK/Mojolicious-6.12"
+>6.12
+  (DBOOK on 2015-06-18)</option>
+<option
+  
+  value="SRI/Mojolicious-6.11"
+>6.11
+  (SRI on 2015-05-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.10"
+>6.10
+  (SRI on 2015-04-27)</option>
+<option
+  
+  value="SRI/Mojolicious-6.09"
+>6.09
+  (SRI on 2015-04-26)</option>
+<option
+  
+  value="SRI/Mojolicious-6.08"
+>6.08
+  (SRI on 2015-04-09)</option>
+<option
+  
+  value="SRI/Mojolicious-6.07"
+>6.07
+  (SRI on 2015-04-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.06"
+>6.06
+  (SRI on 2015-04-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.05"
+>6.05
+  (SRI on 2015-03-25)</option>
+<option
+  
+  value="SRI/Mojolicious-6.04"
+>6.04
+  (SRI on 2015-03-23)</option>
+<option
+  
+  value="SRI/Mojolicious-6.03"
+>6.03
+  (SRI on 2015-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.02"
+>6.02
+  (SRI on 2015-03-10)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/IO::Socket::IP" title="IO::Socket::IP" class="ellipsis">IO::Socket::IP</a></li>
+  <li><a href="https://metacpan.org/pod/Sub::Util" title="Sub::Util" class="ellipsis">Sub::Util</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Mojo::UserAgent/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Mojo%3A%3AUserAgent">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Mojolicious">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/SRI/Mojolicious-9.35/view/lib/Mojo/UserAgent.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Mojo::UserAgent.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/NGLENN"><img src="https://www.gravatar.com/avatar/d760ed3250a704f6ae9e2c9b4d73cc1f?d=identicon&amp;s=20" title="NGLENN" alt="NGLENN"></a>
+<a class="display-all" href="https://metacpan.org/author/GRAF"><img src="https://www.gravatar.com/avatar/eeca475456edfc1325b3bff88ed5f5a7?d=identicon&amp;s=20" title="GRAF" alt="GRAF"></a>
+<a class="display-all" href="https://metacpan.org/author/DRAKON"><img src="https://www.gravatar.com/avatar/47f3c8e725bfee96d54eb9e8b8faf3db?d=identicon&amp;s=20" title="DRAKON" alt="DRAKON"></a>
+<a class="display-all" href="https://metacpan.org/author/VOEGELAS"><img src="https://www.gravatar.com/avatar/b748542b466dd73c8513245b1b609750?d=identicon&amp;s=20" title="VOEGELAS" alt="VOEGELAS"></a>
+<a class="display-all" href="https://metacpan.org/author/MPOLIIU"><img src="https://www.gravatar.com/avatar/8a56fd1eea87770eabcd261fc3087744?d=identicon&amp;s=20" title="MPOLIIU" alt="MPOLIIU"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Mojolicious/plussers">199 PAUSE users</a>
+</div>
+<div>
+    293 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/SRI" class="author-name">Sebastian Riedel</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Mojo/UserAgent.pm&#39;" class="">
+<option
+  selected
+  value="SRI/Mojolicious-9.35"
+>9.35
+  (SRI on 2023-10-27)</option>
+<option
+  
+  value="SRI/Mojolicious-9.34"
+>9.34
+  (SRI on 2023-09-11)</option>
+<option
+  
+  value="SRI/Mojolicious-9.33"
+>9.33
+  (SRI on 2023-06-14)</option>
+<option
+  
+  value="SRI/Mojolicious-9.32"
+>9.32
+  (SRI on 2023-05-08)</option>
+<option
+  
+  value="SRI/Mojolicious-9.31"
+>9.31
+  (SRI on 2022-12-21)</option>
+<option
+  
+  value="SRI/Mojolicious-9.30"
+>9.30
+  (SRI on 2022-11-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.29"
+>9.29
+  (SRI on 2022-11-11)</option>
+<option
+  
+  value="SRI/Mojolicious-9.28"
+>9.28
+  (SRI on 2022-10-14)</option>
+<option
+  
+  value="SRI/Mojolicious-9.27"
+>9.27
+  (SRI on 2022-09-12)</option>
+<option
+  
+  value="SRI/Mojolicious-9.26"
+>9.26
+  (SRI on 2022-05-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.25"
+>9.25
+  (SRI on 2022-04-28)</option>
+<option
+  
+  value="SRI/Mojolicious-9.24"
+>9.24
+  (SRI on 2022-04-18)</option>
+<option
+  
+  value="SRI/Mojolicious-9.23"
+>9.23
+  (SRI on 2022-03-25)</option>
+<option
+  
+  value="SRI/Mojolicious-9.22"
+>9.22
+  (SRI on 2021-10-21)</option>
+<option
+  
+  value="SRI/Mojolicious-9.21"
+>9.21
+  (SRI on 2021-08-13)</option>
+<option
+  
+  value="SRI/Mojolicious-9.20"
+>9.20
+  (SRI on 2021-08-09)</option>
+<option
+  
+  value="SRI/Mojolicious-9.19"
+>9.19
+  (SRI on 2021-06-02)</option>
+<option
+  
+  value="SRI/Mojolicious-9.18"
+>9.18
+  (SRI on 2021-05-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.17"
+>9.17
+  (SRI on 2021-04-13)</option>
+<option
+  
+  value="SRI/Mojolicious-9.16"
+>9.16
+  (SRI on 2021-04-09)</option>
+<option
+  
+  value="SRI/Mojolicious-9.15"
+>9.15
+  (SRI on 2021-04-06)</option>
+<option
+  
+  value="SRI/Mojolicious-9.14"
+>9.14
+  (SRI on 2021-03-23)</option>
+<option
+  
+  value="SRI/Mojolicious-9.13"
+>9.13
+  (SRI on 2021-03-22)</option>
+<option
+  
+  value="SRI/Mojolicious-9.12"
+>9.12
+  (SRI on 2021-03-20)</option>
+<option
+  
+  value="SRI/Mojolicious-9.11"
+>9.11
+  (SRI on 2021-03-20)</option>
+<option
+  
+  value="SRI/Mojolicious-9.10"
+>9.10
+  (SRI on 2021-03-15)</option>
+<option
+  
+  value="SRI/Mojolicious-9.09"
+>9.09
+  (SRI on 2021-03-14)</option>
+<option
+  
+  value="SRI/Mojolicious-9.08"
+>9.08
+  (SRI on 2021-03-12)</option>
+<option
+  
+  value="SRI/Mojolicious-9.07"
+>9.07
+  (SRI on 2021-03-11)</option>
+<option
+  
+  value="SRI/Mojolicious-9.03"
+>9.03
+  (SRI on 2021-03-07)</option>
+<option
+  
+  value="SRI/Mojolicious-9.02"
+>9.02
+  (SRI on 2021-03-01)</option>
+<option
+  
+  value="SRI/Mojolicious-9.01"
+>9.01
+  (SRI on 2021-02-16)</option>
+<option
+  
+  value="SRI/Mojolicious-9.0"
+>9.0
+  (SRI on 2021-02-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.73"
+>8.73
+  (SRI on 2021-02-06)</option>
+<option
+  
+  value="SRI/Mojolicious-8.72"
+>8.72
+  (SRI on 2021-01-27)</option>
+<option
+  
+  value="SRI/Mojolicious-8.71"
+>8.71
+  (SRI on 2021-01-17)</option>
+<option
+  
+  value="SRI/Mojolicious-8.70"
+>8.70
+  (SRI on 2020-12-30)</option>
+<option
+  
+  value="SRI/Mojolicious-8.69"
+>8.69
+  (SRI on 2020-12-28)</option>
+<option
+  
+  value="SRI/Mojolicious-8.68"
+>8.68
+  (SRI on 2020-12-27)</option>
+<option
+  
+  value="SRI/Mojolicious-8.67"
+>8.67
+  (SRI on 2020-12-05)</option>
+<option
+  
+  value="SRI/Mojolicious-8.66"
+>8.66
+  (SRI on 2020-11-30)</option>
+<option
+  
+  value="SRI/Mojolicious-8.65"
+>8.65
+  (SRI on 2020-11-11)</option>
+<option
+  
+  value="SRI/Mojolicious-8.64"
+>8.64
+  (SRI on 2020-11-06)</option>
+<option
+  
+  value="SRI/Mojolicious-8.63"
+>8.63
+  (SRI on 2020-10-13)</option>
+<option
+  
+  value="SRI/Mojolicious-8.62"
+>8.62
+  (SRI on 2020-10-12)</option>
+<option
+  
+  value="SRI/Mojolicious-8.61"
+>8.61
+  (SRI on 2020-10-02)</option>
+<option
+  
+  value="SRI/Mojolicious-8.60"
+>8.60
+  (SRI on 2020-09-27)</option>
+<option
+  
+  value="SRI/Mojolicious-8.59"
+>8.59
+  (SRI on 2020-09-13)</option>
+<option
+  
+  value="SRI/Mojolicious-8.58"
+>8.58
+  (SRI on 2020-08-10)</option>
+<option
+  
+  value="SRI/Mojolicious-8.57"
+>8.57
+  (SRI on 2020-07-17)</option>
+<option
+  
+  value="SRI/Mojolicious-8.56"
+>8.56
+  (SRI on 2020-06-26)</option>
+<option
+  
+  value="SRI/Mojolicious-8.55"
+>8.55
+  (SRI on 2020-06-18)</option>
+<option
+  
+  value="SRI/Mojolicious-8.54"
+>8.54
+  (SRI on 2020-06-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.53"
+>8.53
+  (SRI on 2020-06-10)</option>
+<option
+  
+  value="SRI/Mojolicious-8.52"
+>8.52
+  (SRI on 2020-06-03)</option>
+<option
+  
+  value="SRI/Mojolicious-8.51"
+>8.51
+  (SRI on 2020-05-31)</option>
+<option
+  
+  value="SRI/Mojolicious-8.50"
+>8.50
+  (SRI on 2020-05-25)</option>
+<option
+  
+  value="SRI/Mojolicious-8.43"
+>8.43
+  (SRI on 2020-05-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.42"
+>8.42
+  (SRI on 2020-05-04)</option>
+<option
+  
+  value="SRI/Mojolicious-8.41"
+>8.41
+  (SRI on 2020-05-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.40"
+>8.40
+  (SRI on 2020-04-23)</option>
+<option
+  
+  value="SRI/Mojolicious-8.39"
+>8.39
+  (SRI on 2020-04-22)</option>
+<option
+  
+  value="SRI/Mojolicious-8.38"
+>8.38
+  (SRI on 2020-04-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.37"
+>8.37
+  (SRI on 2020-04-19)</option>
+<option
+  
+  value="SRI/Mojolicious-8.36"
+>8.36
+  (SRI on 2020-04-02)</option>
+<option
+  
+  value="SRI/Mojolicious-8.35"
+>8.35
+  (SRI on 2020-03-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.34"
+>8.34
+  (SRI on 2020-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-8.33"
+>8.33
+  (SRI on 2020-02-11)</option>
+<option
+  
+  value="SRI/Mojolicious-8.32"
+>8.32
+  (SRI on 2020-01-19)</option>
+<option
+  
+  value="SRI/Mojolicious-8.31"
+>8.31
+  (SRI on 2020-01-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.30"
+>8.30
+  (SRI on 2020-01-09)</option>
+<option
+  
+  value="SRI/Mojolicious-8.29"
+>8.29
+  (SRI on 2019-12-28)</option>
+<option
+  
+  value="SRI/Mojolicious-8.28"
+>8.28
+  (SRI on 2019-12-26)</option>
+<option
+  
+  value="SRI/Mojolicious-8.27"
+>8.27
+  (SRI on 2019-12-04)</option>
+<option
+  
+  value="SRI/Mojolicious-8.26"
+>8.26
+  (SRI on 2019-11-03)</option>
+<option
+  
+  value="SRI/Mojolicious-8.25"
+>8.25
+  (SRI on 2019-09-29)</option>
+<option
+  
+  value="SRI/Mojolicious-8.24"
+>8.24
+  (SRI on 2019-09-11)</option>
+<option
+  
+  value="SRI/Mojolicious-8.23"
+>8.23
+  (SRI on 2019-08-12)</option>
+<option
+  
+  value="SRI/Mojolicious-8.22"
+>8.22
+  (SRI on 2019-07-17)</option>
+<option
+  
+  value="SRI/Mojolicious-8.21"
+>8.21
+  (SRI on 2019-07-14)</option>
+<option
+  
+  value="SRI/Mojolicious-8.20"
+>8.20
+  (SRI on 2019-07-09)</option>
+<option
+  
+  value="SRI/Mojolicious-8.19"
+>8.19
+  (SRI on 2019-07-08)</option>
+<option
+  
+  value="SRI/Mojolicious-8.18"
+>8.18
+  (SRI on 2019-06-28)</option>
+<option
+  
+  value="SRI/Mojolicious-8.17"
+>8.17
+  (SRI on 2019-05-23)</option>
+<option
+  
+  value="SRI/Mojolicious-8.16"
+>8.16
+  (SRI on 2019-05-19)</option>
+<option
+  
+  value="SRI/Mojolicious-8.15"
+>8.15
+  (SRI on 2019-04-26)</option>
+<option
+  
+  value="SRI/Mojolicious-8.14"
+>8.14
+  (SRI on 2019-04-18)</option>
+<option
+  
+  value="SRI/Mojolicious-8.13"
+>8.13
+  (SRI on 2019-03-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.12"
+>8.12
+  (SRI on 2019-02-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.11"
+>8.11
+  (SRI on 2019-01-02)</option>
+<option
+  
+  value="SRI/Mojolicious-8.10"
+>8.10
+  (SRI on 2018-12-20)</option>
+<option
+  
+  value="SRI/Mojolicious-8.09"
+>8.09
+  (SRI on 2018-12-04)</option>
+<option
+  
+  value="SRI/Mojolicious-8.08"
+>8.08
+  (SRI on 2018-12-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.07"
+>8.07
+  (SRI on 2018-11-18)</option>
+<option
+  
+  value="SRI/Mojolicious-8.06"
+>8.06
+  (SRI on 2018-11-08)</option>
+<option
+  
+  value="SRI/Mojolicious-8.05"
+>8.05
+  (SRI on 2018-11-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.04"
+>8.04
+  (SRI on 2018-10-21)</option>
+<option
+  
+  value="SRI/Mojolicious-8.03"
+>8.03
+  (SRI on 2018-10-16)</option>
+<option
+  
+  value="SRI/Mojolicious-8.02"
+>8.02
+  (SRI on 2018-10-01)</option>
+<option
+  
+  value="SRI/Mojolicious-8.01"
+>8.01
+  (SRI on 2018-09-25)</option>
+<option
+  
+  value="SRI/Mojolicious-8.0"
+>8.0
+  (SRI on 2018-09-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.94"
+>7.94
+  (SRI on 2018-08-31)</option>
+<option
+  
+  value="SRI/Mojolicious-7.93"
+>7.93
+  (SRI on 2018-08-12)</option>
+<option
+  
+  value="SRI/Mojolicious-7.54"
+>7.54
+  (SRI on 2017-11-04)</option>
+<option
+  
+  value="JBERGER/Mojolicious-7.07"
+>7.07
+  (JBERGER on 2016-09-20)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="SRI/Mojolicious-7.92"
+>7.92
+  (SRI on 2018-08-09)</option>
+<option
+  
+  value="SRI/Mojolicious-7.91"
+>7.91
+  (SRI on 2018-08-09)</option>
+<option
+  
+  value="SRI/Mojolicious-7.90"
+>7.90
+  (SRI on 2018-08-08)</option>
+<option
+  
+  value="SRI/Mojolicious-7.89"
+>7.89
+  (SRI on 2018-08-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.88"
+>7.88
+  (SRI on 2018-07-13)</option>
+<option
+  
+  value="SRI/Mojolicious-7.87"
+>7.87
+  (SRI on 2018-07-04)</option>
+<option
+  
+  value="SRI/Mojolicious-7.86"
+>7.86
+  (SRI on 2018-07-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.85"
+>7.85
+  (SRI on 2018-06-19)</option>
+<option
+  
+  value="SRI/Mojolicious-7.84"
+>7.84
+  (SRI on 2018-06-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.83"
+>7.83
+  (SRI on 2018-06-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.82"
+>7.82
+  (SRI on 2018-05-27)</option>
+<option
+  
+  value="SRI/Mojolicious-7.81"
+>7.81
+  (SRI on 2018-05-21)</option>
+<option
+  
+  value="SRI/Mojolicious-7.80"
+>7.80
+  (SRI on 2018-05-20)</option>
+<option
+  
+  value="SRI/Mojolicious-7.79"
+>7.79
+  (SRI on 2018-05-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.78"
+>7.78
+  (SRI on 2018-05-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.77"
+>7.77
+  (SRI on 2018-05-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.76"
+>7.76
+  (SRI on 2018-04-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.75"
+>7.75
+  (SRI on 2018-04-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.74"
+>7.74
+  (SRI on 2018-04-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.73"
+>7.73
+  (SRI on 2018-04-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.72"
+>7.72
+  (SRI on 2018-04-02)</option>
+<option
+  
+  value="SRI/Mojolicious-7.71"
+>7.71
+  (SRI on 2018-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-7.70"
+>7.70
+  (SRI on 2018-02-28)</option>
+<option
+  
+  value="SRI/Mojolicious-7.69"
+>7.69
+  (SRI on 2018-02-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.68"
+>7.68
+  (SRI on 2018-02-23)</option>
+<option
+  
+  value="SRI/Mojolicious-7.67"
+>7.67
+  (SRI on 2018-02-19)</option>
+<option
+  
+  value="SRI/Mojolicious-7.66"
+>7.66
+  (SRI on 2018-02-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.65"
+>7.65
+  (SRI on 2018-02-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.64"
+>7.64
+  (SRI on 2018-02-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.63"
+>7.63
+  (SRI on 2018-02-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.62"
+>7.62
+  (SRI on 2018-02-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.61"
+>7.61
+  (SRI on 2018-01-15)</option>
+<option
+  
+  value="SRI/Mojolicious-7.60"
+>7.60
+  (SRI on 2018-01-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.59"
+>7.59
+  (SRI on 2017-12-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.58"
+>7.58
+  (SRI on 2017-12-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.57"
+>7.57
+  (SRI on 2017-11-18)</option>
+<option
+  
+  value="SRI/Mojolicious-7.56"
+>7.56
+  (SRI on 2017-11-16)</option>
+<option
+  
+  value="SRI/Mojolicious-7.55"
+>7.55
+  (SRI on 2017-11-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.53"
+>7.53
+  (SRI on 2017-11-04)</option>
+<option
+  
+  value="SRI/Mojolicious-7.52"
+>7.52
+  (SRI on 2017-11-02)</option>
+<option
+  
+  value="SRI/Mojolicious-7.51"
+>7.51
+  (SRI on 2017-10-31)</option>
+<option
+  
+  value="SRI/Mojolicious-7.50"
+>7.50
+  (SRI on 2017-10-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.49"
+>7.49
+  (SRI on 2017-10-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.48"
+>7.48
+  (SRI on 2017-10-21)</option>
+<option
+  
+  value="SRI/Mojolicious-7.47"
+>7.47
+  (SRI on 2017-10-12)</option>
+<option
+  
+  value="SRI/Mojolicious-7.46"
+>7.46
+  (SRI on 2017-09-12)</option>
+<option
+  
+  value="SRI/Mojolicious-7.45"
+>7.45
+  (SRI on 2017-09-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.44"
+>7.44
+  (SRI on 2017-09-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.43"
+>7.43
+  (SRI on 2017-08-18)</option>
+<option
+  
+  value="SRI/Mojolicious-7.42"
+>7.42
+  (SRI on 2017-08-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.41"
+>7.41
+  (SRI on 2017-08-16)</option>
+<option
+  
+  value="SRI/Mojolicious-7.40"
+>7.40
+  (SRI on 2017-08-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.39"
+>7.39
+  (SRI on 2017-08-03)</option>
+<option
+  
+  value="SRI/Mojolicious-7.38"
+>7.38
+  (SRI on 2017-08-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.37"
+>7.37
+  (SRI on 2017-07-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.36"
+>7.36
+  (SRI on 2017-07-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.35"
+>7.35
+  (SRI on 2017-07-05)</option>
+<option
+  
+  value="SRI/Mojolicious-7.34"
+>7.34
+  (SRI on 2017-07-02)</option>
+<option
+  
+  value="SRI/Mojolicious-7.33"
+>7.33
+  (SRI on 2017-06-05)</option>
+<option
+  
+  value="SRI/Mojolicious-7.32"
+>7.32
+  (SRI on 2017-05-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.31"
+>7.31
+  (SRI on 2017-04-24)</option>
+<option
+  
+  value="SRI/Mojolicious-7.30"
+>7.30
+  (SRI on 2017-04-06)</option>
+<option
+  
+  value="SRI/Mojolicious-7.29"
+>7.29
+  (SRI on 2017-03-14)</option>
+<option
+  
+  value="SRI/Mojolicious-7.28"
+>7.28
+  (SRI on 2017-03-07)</option>
+<option
+  
+  value="SRI/Mojolicious-7.27"
+>7.27
+  (SRI on 2017-02-27)</option>
+<option
+  
+  value="SRI/Mojolicious-7.26"
+>7.26
+  (SRI on 2017-02-15)</option>
+<option
+  
+  value="SRI/Mojolicious-7.25"
+>7.25
+  (SRI on 2017-02-09)</option>
+<option
+  
+  value="SRI/Mojolicious-7.24"
+>7.24
+  (SRI on 2017-02-05)</option>
+<option
+  
+  value="SRI/Mojolicious-7.23"
+>7.23
+  (SRI on 2017-01-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.22"
+>7.22
+  (SRI on 2017-01-25)</option>
+<option
+  
+  value="SRI/Mojolicious-7.21"
+>7.21
+  (SRI on 2017-01-22)</option>
+<option
+  
+  value="SRI/Mojolicious-7.20"
+>7.20
+  (SRI on 2017-01-18)</option>
+<option
+  
+  value="SRI/Mojolicious-7.19"
+>7.19
+  (SRI on 2017-01-15)</option>
+<option
+  
+  value="SRI/Mojolicious-7.18"
+>7.18
+  (SRI on 2017-01-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.17"
+>7.17
+  (SRI on 2017-01-11)</option>
+<option
+  
+  value="SRI/Mojolicious-7.16"
+>7.16
+  (SRI on 2017-01-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.15"
+>7.15
+  (SRI on 2017-01-10)</option>
+<option
+  
+  value="SRI/Mojolicious-7.14"
+>7.14
+  (SRI on 2017-01-04)</option>
+<option
+  
+  value="SRI/Mojolicious-7.13"
+>7.13
+  (SRI on 2016-12-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.12"
+>7.12
+  (SRI on 2016-12-20)</option>
+<option
+  
+  value="SRI/Mojolicious-7.11"
+>7.11
+  (SRI on 2016-11-30)</option>
+<option
+  
+  value="SRI/Mojolicious-7.10"
+>7.10
+  (SRI on 2016-11-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.09"
+>7.09
+  (SRI on 2016-10-23)</option>
+<option
+  
+  value="SRI/Mojolicious-7.08"
+>7.08
+  (SRI on 2016-09-23)</option>
+<option
+  
+  value="SRI/Mojolicious-7.06"
+>7.06
+  (SRI on 2016-09-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.05"
+>7.05
+  (SRI on 2016-08-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.04"
+>7.04
+  (SRI on 2016-08-29)</option>
+<option
+  
+  value="SRI/Mojolicious-7.03"
+>7.03
+  (SRI on 2016-08-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.02"
+>7.02
+  (SRI on 2016-08-17)</option>
+<option
+  
+  value="SRI/Mojolicious-7.01"
+>7.01
+  (SRI on 2016-08-01)</option>
+<option
+  
+  value="SRI/Mojolicious-7.0"
+>7.0
+  (SRI on 2016-07-19)</option>
+<option
+  
+  value="SRI/Mojolicious-6.66"
+>6.66
+  (SRI on 2016-06-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.65"
+>6.65
+  (SRI on 2016-06-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.64"
+>6.64
+  (SRI on 2016-06-09)</option>
+<option
+  
+  value="SRI/Mojolicious-6.63"
+>6.63
+  (SRI on 2016-06-03)</option>
+<option
+  
+  value="SRI/Mojolicious-6.62"
+>6.62
+  (SRI on 2016-05-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.61"
+>6.61
+  (SRI on 2016-05-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.60"
+>6.60
+  (SRI on 2016-04-26)</option>
+<option
+  
+  value="SRI/Mojolicious-6.59"
+>6.59
+  (SRI on 2016-04-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.58"
+>6.58
+  (SRI on 2016-04-10)</option>
+<option
+  
+  value="SRI/Mojolicious-6.57"
+>6.57
+  (SRI on 2016-03-23)</option>
+<option
+  
+  value="SRI/Mojolicious-6.56"
+>6.56
+  (SRI on 2016-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.55"
+>6.55
+  (SRI on 2016-03-08)</option>
+<option
+  
+  value="SRI/Mojolicious-6.54"
+>6.54
+  (SRI on 2016-03-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.53"
+>6.53
+  (SRI on 2016-03-04)</option>
+<option
+  
+  value="SRI/Mojolicious-6.52"
+>6.52
+  (SRI on 2016-03-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.51"
+>6.51
+  (SRI on 2016-02-29)</option>
+<option
+  
+  value="SRI/Mojolicious-6.50"
+>6.50
+  (SRI on 2016-02-27)</option>
+<option
+  
+  value="SRI/Mojolicious-6.49"
+>6.49
+  (SRI on 2016-02-26)</option>
+<option
+  
+  value="SRI/Mojolicious-6.48"
+>6.48
+  (SRI on 2016-02-24)</option>
+<option
+  
+  value="SRI/Mojolicious-6.47"
+>6.47
+  (SRI on 2016-02-19)</option>
+<option
+  
+  value="SRI/Mojolicious-6.46"
+>6.46
+  (SRI on 2016-02-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.45"
+>6.45
+  (SRI on 2016-02-09)</option>
+<option
+  
+  value="SRI/Mojolicious-6.44"
+>6.44
+  (SRI on 2016-02-05)</option>
+<option
+  
+  value="SRI/Mojolicious-6.43"
+>6.43
+  (SRI on 2016-02-01)</option>
+<option
+  
+  value="SRI/Mojolicious-6.42"
+>6.42
+  (SRI on 2016-01-24)</option>
+<option
+  
+  value="SRI/Mojolicious-6.40"
+>6.40
+  (SRI on 2016-01-13)</option>
+<option
+  
+  value="SRI/Mojolicious-6.33"
+>6.33
+  (SRI on 2015-11-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.32"
+>6.32
+  (SRI on 2015-11-18)</option>
+<option
+  
+  value="SRI/Mojolicious-6.31"
+>6.31
+  (SRI on 2015-11-14)</option>
+<option
+  
+  value="SRI/Mojolicious-6.30"
+>6.30
+  (SRI on 2015-11-12)</option>
+<option
+  
+  value="SRI/Mojolicious-6.28"
+>6.28
+  (SRI on 2015-11-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.27"
+>6.27
+  (SRI on 2015-10-30)</option>
+<option
+  
+  value="SRI/Mojolicious-6.26"
+>6.26
+  (SRI on 2015-10-29)</option>
+<option
+  
+  value="SRI/Mojolicious-6.25"
+>6.25
+  (SRI on 2015-10-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.24"
+>6.24
+  (SRI on 2015-10-13)</option>
+<option
+  
+  value="SRI/Mojolicious-6.23"
+>6.23
+  (SRI on 2015-10-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.22"
+>6.22
+  (SRI on 2015-09-27)</option>
+<option
+  
+  value="SRI/Mojolicious-6.21"
+>6.21
+  (SRI on 2015-09-23)</option>
+<option
+  
+  value="SRI/Mojolicious-6.20"
+>6.20
+  (SRI on 2015-09-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.19"
+>6.19
+  (SRI on 2015-09-12)</option>
+<option
+  
+  value="SRI/Mojolicious-6.18"
+>6.18
+  (SRI on 2015-09-02)</option>
+<option
+  
+  value="SRI/Mojolicious-6.17"
+>6.17
+  (SRI on 2015-08-22)</option>
+<option
+  
+  value="SRI/Mojolicious-6.16"
+>6.16
+  (SRI on 2015-08-20)</option>
+<option
+  
+  value="DBOOK/Mojolicious-6.12"
+>6.12
+  (DBOOK on 2015-06-18)</option>
+<option
+  
+  value="SRI/Mojolicious-6.11"
+>6.11
+  (SRI on 2015-05-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.10"
+>6.10
+  (SRI on 2015-04-27)</option>
+<option
+  
+  value="SRI/Mojolicious-6.09"
+>6.09
+  (SRI on 2015-04-26)</option>
+<option
+  
+  value="SRI/Mojolicious-6.08"
+>6.08
+  (SRI on 2015-04-09)</option>
+<option
+  
+  value="SRI/Mojolicious-6.07"
+>6.07
+  (SRI on 2015-04-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.06"
+>6.06
+  (SRI on 2015-04-07)</option>
+<option
+  
+  value="SRI/Mojolicious-6.05"
+>6.05
+  (SRI on 2015-03-25)</option>
+<option
+  
+  value="SRI/Mojolicious-6.04"
+>6.04
+  (SRI on 2015-03-23)</option>
+<option
+  
+  value="SRI/Mojolicious-6.03"
+>6.03
+  (SRI on 2015-03-16)</option>
+<option
+  
+  value="SRI/Mojolicious-6.02"
+>6.02
+  (SRI on 2015-03-10)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Mojolicious">Mojolicious-9.35</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage four &#10;
+          • 943 direct dependents &#10;          • 1041 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Mojolicious-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Mojolicious-9.35">
+    <input type="hidden" name="author" value="SRI">
+    <input type="hidden" name="distribution" value="Mojolicious">
+    <button type="submit" class="favorite highlight"><span>492</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Mojo::UserAgent.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>492</span> ++</a>
+</div>
+   / <span>Mojo::UserAgent</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Mojo::UserAgent.html#NAME">NAME</a></li>
+  <li><a href="./Mojo::UserAgent.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Mojo::UserAgent.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Mojo::UserAgent.html#EVENTS">EVENTS</a>
+    <ul>
+      <li><a href="./Mojo::UserAgent.html#prepare">prepare</a></li>
+      <li><a href="./Mojo::UserAgent.html#start">start</a></li>
+    </ul>
+  </li>
+  <li><a href="./Mojo::UserAgent.html#ATTRIBUTES">ATTRIBUTES</a>
+    <ul>
+      <li><a href="./Mojo::UserAgent.html#ca">ca</a></li>
+      <li><a href="./Mojo::UserAgent.html#cert">cert</a></li>
+      <li><a href="./Mojo::UserAgent.html#connect_timeout">connect_timeout</a></li>
+      <li><a href="./Mojo::UserAgent.html#cookie_jar">cookie_jar</a></li>
+      <li><a href="./Mojo::UserAgent.html#inactivity_timeout">inactivity_timeout</a></li>
+      <li><a href="./Mojo::UserAgent.html#insecure">insecure</a></li>
+      <li><a href="./Mojo::UserAgent.html#ioloop">ioloop</a></li>
+      <li><a href="./Mojo::UserAgent.html#key">key</a></li>
+      <li><a href="./Mojo::UserAgent.html#max_connections">max_connections</a></li>
+      <li><a href="./Mojo::UserAgent.html#max_redirects">max_redirects</a></li>
+      <li><a href="./Mojo::UserAgent.html#max_response_size">max_response_size</a></li>
+      <li><a href="./Mojo::UserAgent.html#proxy">proxy</a></li>
+      <li><a href="./Mojo::UserAgent.html#request_timeout">request_timeout</a></li>
+      <li><a href="./Mojo::UserAgent.html#server">server</a></li>
+      <li><a href="./Mojo::UserAgent.html#socket_options">socket_options</a></li>
+      <li><a href="./Mojo::UserAgent.html#tls_options">tls_options</a></li>
+      <li><a href="./Mojo::UserAgent.html#transactor">transactor</a></li>
+    </ul>
+  </li>
+  <li><a href="./Mojo::UserAgent.html#METHODS">METHODS</a>
+    <ul>
+      <li><a href="./Mojo::UserAgent.html#build_tx">build_tx</a></li>
+      <li><a href="./Mojo::UserAgent.html#build_websocket_tx">build_websocket_tx</a></li>
+      <li><a href="./Mojo::UserAgent.html#delete">delete</a></li>
+      <li><a href="./Mojo::UserAgent.html#delete_p">delete_p</a></li>
+      <li><a href="./Mojo::UserAgent.html#get">get</a></li>
+      <li><a href="./Mojo::UserAgent.html#get_p">get_p</a></li>
+      <li><a href="./Mojo::UserAgent.html#head">head</a></li>
+      <li><a href="./Mojo::UserAgent.html#head_p">head_p</a></li>
+      <li><a href="./Mojo::UserAgent.html#options">options</a></li>
+      <li><a href="./Mojo::UserAgent.html#options_p">options_p</a></li>
+      <li><a href="./Mojo::UserAgent.html#patch">patch</a></li>
+      <li><a href="./Mojo::UserAgent.html#patch_p">patch_p</a></li>
+      <li><a href="./Mojo::UserAgent.html#post">post</a></li>
+      <li><a href="./Mojo::UserAgent.html#post_p">post_p</a></li>
+      <li><a href="./Mojo::UserAgent.html#put">put</a></li>
+      <li><a href="./Mojo::UserAgent.html#put_p">put_p</a></li>
+      <li><a href="./Mojo::UserAgent.html#start1">start</a></li>
+      <li><a href="./Mojo::UserAgent.html#start_p">start_p</a></li>
+      <li><a href="./Mojo::UserAgent.html#websocket">websocket</a></li>
+      <li><a href="./Mojo::UserAgent.html#websocket_p">websocket_p</a></li>
+    </ul>
+  </li>
+  <li><a href="./Mojo::UserAgent.html#DEBUGGING">DEBUGGING</a></li>
+  <li><a href="./Mojo::UserAgent.html#SEE-ALSO">SEE ALSO</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Mojo::UserAgent - Non-blocking I/O HTTP and WebSocket user agent</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  use Mojo::UserAgent;
+
+  # Fine grained response handling (dies on connection errors)
+  my $ua  = Mojo::UserAgent-&gt;new;
+  my $res = $ua-&gt;get(&#39;docs.mojolicious.org&#39;)-&gt;result;
+  if    ($res-&gt;is_success)  { say $res-&gt;body }
+  elsif ($res-&gt;is_error)    { say $res-&gt;message }
+  elsif ($res-&gt;code == 301) { say $res-&gt;headers-&gt;location }
+  else                      { say &#39;Whatever...&#39; }
+
+  # Say hello to the Unicode snowman and include an Accept header
+  say $ua-&gt;get(&#39;www.&#x2603;.net?hello=there&#39; =&gt; {Accept =&gt; &#39;*/*&#39;})-&gt;result-&gt;body;
+
+  # Extract data from HTML and XML resources with CSS selectors
+  say $ua-&gt;get(&#39;www.perl.org&#39;)-&gt;result-&gt;dom-&gt;at(&#39;title&#39;)-&gt;text;
+
+  # Scrape the latest headlines from a news site
+  say $ua-&gt;get(&#39;blogs.perl.org&#39;)-&gt;result-&gt;dom-&gt;find(&#39;h2 &gt; a&#39;)-&gt;map(&#39;text&#39;)-&gt;join(&quot;\n&quot;);
+
+  # IPv6 PUT request with Content-Type header and content
+  my $tx = $ua-&gt;put(&#39;[::1]:3000&#39; =&gt; {&#39;Content-Type&#39; =&gt; &#39;text/plain&#39;} =&gt; &#39;Hi!&#39;);
+
+  # Quick JSON API request with Basic authentication
+  my $url = Mojo::URL-&gt;new(&#39;https://example.com/test.json&#39;)-&gt;userinfo(&#39;sri:&#x2603;&#39;);
+  my $value = $ua-&gt;get($url)-&gt;result-&gt;json;
+
+  # JSON POST (application/json) with TLS certificate authentication
+  my $tx = $ua-&gt;cert(&#39;tls.crt&#39;)-&gt;key(&#39;tls.key&#39;)-&gt;post(&#39;https://example.com&#39; =&gt; json =&gt; {top =&gt; &#39;secret&#39;});
+
+  # Form POST (application/x-www-form-urlencoded)
+  my $tx = $ua-&gt;post(&#39;https://metacpan.org/search&#39; =&gt; form =&gt; {q =&gt; &#39;mojo&#39;});
+
+  # Search DuckDuckGo anonymously through Tor
+  $ua-&gt;proxy-&gt;http(&#39;socks://127.0.0.1:9050&#39;);
+  say $ua-&gt;get(&#39;api.3g2upl4pq6kufc4m.onion/?q=mojolicious&amp;format=json&#39;)-&gt;result-&gt;json(&#39;/Abstract&#39;);
+
+  # GET request via UNIX domain socket &quot;/tmp/myapp.sock&quot; (percent encoded slash)
+  say $ua-&gt;get(&#39;http+unix://%2Ftmp%2Fmyapp.sock/test&#39;)-&gt;result-&gt;body;
+
+  # Follow redirects to download Mojolicious from GitHub
+  $ua-&gt;max_redirects(5)
+    -&gt;get(&#39;https://www.github.com/mojolicious/mojo/tarball/main&#39;)
+    -&gt;result-&gt;save_to(&#39;/home/sri/mojo.tar.gz&#39;);
+
+  # Non-blocking request
+  $ua-&gt;get(&#39;mojolicious.org&#39; =&gt; sub ($ua, $tx) { say $tx-&gt;result-&gt;dom-&gt;at(&#39;title&#39;)-&gt;text });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;
+
+  # Concurrent non-blocking requests (synchronized with promises)
+  my $mojo_promise = $ua-&gt;get_p(&#39;mojolicious.org&#39;);
+  my $cpan_promise = $ua-&gt;get_p(&#39;cpan.org&#39;);
+  Mojo::Promise-&gt;all($mojo_promise, $cpan_promise)-&gt;then(sub ($mojo, $cpan) {
+    say $mojo-&gt;[0]-&gt;result-&gt;dom-&gt;at(&#39;title&#39;)-&gt;text;
+    say $cpan-&gt;[0]-&gt;result-&gt;dom-&gt;at(&#39;title&#39;)-&gt;text;
+  })-&gt;wait;
+
+  # WebSocket connection sending and receiving JSON via UNIX domain socket
+  $ua-&gt;websocket(&#39;ws+unix://%2Ftmp%2Fmyapp.sock/echo.json&#39; =&gt; sub ($ua, $tx) {
+    say &#39;WebSocket handshake failed!&#39; and return unless $tx-&gt;is_websocket;
+    $tx-&gt;on(json =&gt; sub ($tx, $hash) {
+      say &quot;WebSocket message via JSON: $hash-&gt;{msg}&quot;;
+      $tx-&gt;finish;
+    });
+    $tx-&gt;send({json =&gt; {msg =&gt; &#39;Hello World!&#39;}});
+  });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p><a href="./Mojo::UserAgent.html">Mojo::UserAgent</a> is a full featured non-blocking I/O HTTP and WebSocket user agent, with IPv6, TLS, SNI, IDNA, HTTP/SOCKS5 proxy, UNIX domain socket, Comet (long polling), Promises/A+, keep-alive, connection pooling, timeout, cookie, multipart, gzip compression and multiple event loop support.</p>
+
+<p>All connections will be reset automatically if a new process has been forked, this allows multiple processes to share the same <a href="./Mojo::UserAgent.html">Mojo::UserAgent</a> object safely.</p>
+
+<p>For better scalability (epoll, kqueue) and to provide non-blocking name resolution, SOCKS5 as well as TLS support, the optional modules <a href="https://metacpan.org/pod/EV">EV</a> (4.32+), <a href="https://metacpan.org/pod/Net::DNS::Native">Net::DNS::Native</a> (0.15+), <a href="https://metacpan.org/pod/IO::Socket::Socks">IO::Socket::Socks</a> (0.64+) and <a href="./IO::Socket::SSL.html">IO::Socket::SSL</a> (2.009+) will be used automatically if possible. Individual features can also be disabled with the <code>MOJO_NO_NNR</code>, <code>MOJO_NO_SOCKS</code> and <code>MOJO_NO_TLS</code> environment variables.</p>
+
+<p>See <a href="https://metacpan.org/pod/distribution/Mojolicious/lib/Mojolicious/Guides/Cookbook.pod#USER-AGENT">&quot;USER AGENT&quot; in Mojolicious::Guides::Cookbook</a> for more.</p>
+
+<h1 id="EVENTS">EVENTS</h1>
+
+<p><a href="./Mojo::UserAgent.html">Mojo::UserAgent</a> inherits all events from <a href="https://metacpan.org/pod/Mojo::EventEmitter">Mojo::EventEmitter</a> and can emit the following new ones.</p>
+
+<h2 id="prepare">prepare</h2>
+
+<pre><code>  $ua-&gt;on(prepare =&gt; sub ($ua, $tx) {...});</code></pre>
+
+<p>Emitted whenever a new transaction is being prepared, before relative URLs are rewritten and cookies added. This includes automatically prepared proxy <code>CONNECT</code> requests and followed redirects.</p>
+
+<pre><code>  $ua-&gt;on(prepare =&gt; sub ($ua, $tx) {
+    $tx-&gt;req-&gt;url(Mojo::URL-&gt;new(&#39;/mock-mojolicious&#39;)) if $tx-&gt;req-&gt;url-&gt;host eq &#39;mojolicious.org&#39;;
+  });</code></pre>
+
+<h2 id="start">start</h2>
+
+<pre><code>  $ua-&gt;on(start =&gt; sub ($ua, $tx) {...});</code></pre>
+
+<p>Emitted whenever a new transaction is about to start. This includes automatically prepared proxy <code>CONNECT</code> requests and followed redirects.</p>
+
+<pre><code>  $ua-&gt;on(start =&gt; sub ($ua, $tx) {
+    $tx-&gt;req-&gt;headers-&gt;header(&#39;X-Bender&#39; =&gt; &#39;Bite my shiny metal ass!&#39;);
+  });</code></pre>
+
+<h1 id="ATTRIBUTES">ATTRIBUTES</h1>
+
+<p><a href="./Mojo::UserAgent.html">Mojo::UserAgent</a> implements the following attributes.</p>
+
+<h2 id="ca">ca</h2>
+
+<pre><code>  my $ca = $ua-&gt;ca;
+  $ua    = $ua-&gt;ca(&#39;/etc/tls/ca.crt&#39;);</code></pre>
+
+<p>Path to TLS certificate authority file used to verify the peer certificate, defaults to the value of the <code>MOJO_CA_FILE</code> environment variable.</p>
+
+<pre><code>  # Show certificate authorities for debugging
+  IO::Socket::SSL::set_defaults(SSL_verify_callback =&gt; sub { say &quot;Authority: $_[2]&quot; and return $_[0] });</code></pre>
+
+<h2 id="cert">cert</h2>
+
+<pre><code>  my $cert = $ua-&gt;cert;
+  $ua      = $ua-&gt;cert(&#39;/etc/tls/client.crt&#39;);</code></pre>
+
+<p>Path to TLS certificate file, defaults to the value of the <code>MOJO_CERT_FILE</code> environment variable.</p>
+
+<h2 id="connect_timeout">connect_timeout</h2>
+
+<pre><code>  my $timeout = $ua-&gt;connect_timeout;
+  $ua         = $ua-&gt;connect_timeout(5);</code></pre>
+
+<p>Maximum amount of time in seconds establishing a connection may take before getting canceled, defaults to the value of the <code>MOJO_CONNECT_TIMEOUT</code> environment variable or <code>10</code>.</p>
+
+<h2 id="cookie_jar">cookie_jar</h2>
+
+<pre><code>  my $cookie_jar = $ua-&gt;cookie_jar;
+  $ua            = $ua-&gt;cookie_jar(Mojo::UserAgent::CookieJar-&gt;new);</code></pre>
+
+<p>Cookie jar to use for requests performed by this user agent, defaults to a <a href="https://metacpan.org/pod/Mojo::UserAgent::CookieJar">Mojo::UserAgent::CookieJar</a> object.</p>
+
+<pre><code>  # Ignore all cookies
+  $ua-&gt;cookie_jar-&gt;ignore(sub { 1 });
+
+  # Ignore cookies for public suffixes
+  my $ps = IO::Socket::SSL::PublicSuffix-&gt;default;
+  $ua-&gt;cookie_jar-&gt;ignore(sub ($cookie) {
+    return undef unless my $domain = $cookie-&gt;domain;
+    return ($ps-&gt;public_suffix($domain))[0] eq &#39;&#39;;
+  });
+
+  # Add custom cookie to the jar
+  $ua-&gt;cookie_jar-&gt;add(
+    Mojo::Cookie::Response-&gt;new(
+      name   =&gt; &#39;foo&#39;,
+      value  =&gt; &#39;bar&#39;,
+      domain =&gt; &#39;docs.mojolicious.org&#39;,
+      path   =&gt; &#39;/Mojolicious&#39;
+    )
+  );</code></pre>
+
+<h2 id="inactivity_timeout">inactivity_timeout</h2>
+
+<pre><code>  my $timeout = $ua-&gt;inactivity_timeout;
+  $ua         = $ua-&gt;inactivity_timeout(15);</code></pre>
+
+<p>Maximum amount of time in seconds a connection can be inactive before getting closed, defaults to the value of the <code>MOJO_INACTIVITY_TIMEOUT</code> environment variable or <code>40</code>. Setting the value to <code>0</code> will allow connections to be inactive indefinitely.</p>
+
+<h2 id="insecure">insecure</h2>
+
+<pre><code>  my $bool = $ua-&gt;insecure;
+  $ua      = $ua-&gt;insecure($bool);</code></pre>
+
+<p>Do not require a valid TLS certificate to access HTTPS/WSS sites, defaults to the value of the <code>MOJO_INSECURE</code> environment variable.</p>
+
+<pre><code>  # Disable TLS certificate verification for testing
+  say $ua-&gt;insecure(1)-&gt;get(&#39;https://127.0.0.1:3000&#39;)-&gt;result-&gt;code;</code></pre>
+
+<h2 id="ioloop">ioloop</h2>
+
+<pre><code>  my $loop = $ua-&gt;ioloop;
+  $ua      = $ua-&gt;ioloop(Mojo::IOLoop-&gt;new);</code></pre>
+
+<p>Event loop object to use for blocking I/O operations, defaults to a <a href="https://metacpan.org/pod/Mojo::IOLoop">Mojo::IOLoop</a> object.</p>
+
+<h2 id="key">key</h2>
+
+<pre><code>  my $key = $ua-&gt;key;
+  $ua     = $ua-&gt;key(&#39;/etc/tls/client.crt&#39;);</code></pre>
+
+<p>Path to TLS key file, defaults to the value of the <code>MOJO_KEY_FILE</code> environment variable.</p>
+
+<h2 id="max_connections">max_connections</h2>
+
+<pre><code>  my $max = $ua-&gt;max_connections;
+  $ua     = $ua-&gt;max_connections(5);</code></pre>
+
+<p>Maximum number of keep-alive connections that the user agent will retain before it starts closing the oldest ones, defaults to <code>5</code>. Setting the value to <code>0</code> will prevent any connections from being kept alive.</p>
+
+<h2 id="max_redirects">max_redirects</h2>
+
+<pre><code>  my $max = $ua-&gt;max_redirects;
+  $ua     = $ua-&gt;max_redirects(3);</code></pre>
+
+<p>Maximum number of redirects the user agent will follow before it fails, defaults to the value of the <code>MOJO_MAX_REDIRECTS</code> environment variable or <code>0</code>.</p>
+
+<h2 id="max_response_size">max_response_size</h2>
+
+<pre><code>  my $max = $ua-&gt;max_response_size;
+  $ua     = $ua-&gt;max_response_size(16777216);</code></pre>
+
+<p>Maximum response size in bytes, defaults to the value of <a href="https://metacpan.org/pod/Mojo::Message::Response#max_message_size">&quot;max_message_size&quot; in Mojo::Message::Response</a>. Setting the value to <code>0</code> will allow responses of indefinite size. Note that increasing this value can also drastically increase memory usage, should you for example attempt to parse an excessively large response body with the methods <a href="https://metacpan.org/pod/Mojo::Message#dom">&quot;dom&quot; in Mojo::Message</a> or <a href="https://metacpan.org/pod/Mojo::Message#json">&quot;json&quot; in Mojo::Message</a>.</p>
+
+<h2 id="proxy">proxy</h2>
+
+<pre><code>  my $proxy = $ua-&gt;proxy;
+  $ua       = $ua-&gt;proxy(Mojo::UserAgent::Proxy-&gt;new);</code></pre>
+
+<p>Proxy manager, defaults to a <a href="https://metacpan.org/pod/Mojo::UserAgent::Proxy">Mojo::UserAgent::Proxy</a> object.</p>
+
+<pre><code>  # Detect proxy servers from environment
+  $ua-&gt;proxy-&gt;detect;
+
+  # Manually configure HTTP proxy (using CONNECT for HTTPS/WebSockets)
+  $ua-&gt;proxy-&gt;http(&#39;http://127.0.0.1:8080&#39;)-&gt;https(&#39;http://127.0.0.1:8080&#39;);
+
+  # Manually configure Tor (SOCKS5)
+  $ua-&gt;proxy-&gt;http(&#39;socks://127.0.0.1:9050&#39;)-&gt;https(&#39;socks://127.0.0.1:9050&#39;);
+
+  # Manually configure UNIX domain socket (using CONNECT for HTTPS/WebSockets)
+  $ua-&gt;proxy-&gt;http(&#39;http+unix://%2Ftmp%2Fproxy.sock&#39;) -&gt;https(&#39;http+unix://%2Ftmp%2Fproxy.sock&#39;);</code></pre>
+
+<h2 id="request_timeout">request_timeout</h2>
+
+<pre><code>  my $timeout = $ua-&gt;request_timeout;
+  $ua         = $ua-&gt;request_timeout(5);</code></pre>
+
+<p>Maximum amount of time in seconds establishing a connection, sending the request and receiving a whole response may take before getting canceled, defaults to the value of the <code>MOJO_REQUEST_TIMEOUT</code> environment variable or <code>0</code>. Setting the value to <code>0</code> will allow the user agent to wait indefinitely. The timeout will reset for every followed redirect.</p>
+
+<pre><code>  # Total limit of 5 seconds, of which 3 seconds may be spent connecting
+  $ua-&gt;max_redirects(0)-&gt;connect_timeout(3)-&gt;request_timeout(5);</code></pre>
+
+<h2 id="server">server</h2>
+
+<pre><code>  my $server = $ua-&gt;server;
+  $ua        = $ua-&gt;server(Mojo::UserAgent::Server-&gt;new);</code></pre>
+
+<p>Application server relative URLs will be processed with, defaults to a <a href="https://metacpan.org/pod/Mojo::UserAgent::Server">Mojo::UserAgent::Server</a> object.</p>
+
+<pre><code>  # Mock web service
+  $ua-&gt;server-&gt;app(Mojolicious-&gt;new);
+  $ua-&gt;server-&gt;app-&gt;routes-&gt;get(&#39;/time&#39; =&gt; sub ($c) {
+    $c-&gt;render(json =&gt; {now =&gt; time});
+  });
+  my $time = $ua-&gt;get(&#39;/time&#39;)-&gt;result-&gt;json-&gt;{now};
+
+  # Change log level
+  $ua-&gt;server-&gt;app-&gt;log-&gt;level(&#39;fatal&#39;);
+
+  # Port currently used for processing relative URLs blocking
+  say $ua-&gt;server-&gt;url-&gt;port;
+
+  # Port currently used for processing relative URLs non-blocking
+  say $ua-&gt;server-&gt;nb_url-&gt;port;</code></pre>
+
+<h2 id="socket_options">socket_options</h2>
+
+<pre><code>  my $options = $ua-&gt;socket_options;
+  $ua         = $ua-&gt;socket_options({LocalAddr =&gt; &#39;127.0.0.1&#39;});</code></pre>
+
+<p>Additional options for <a href="https://metacpan.org/pod/IO::Socket::IP">IO::Socket::IP</a> when opening new connections.</p>
+
+<h2 id="tls_options">tls_options</h2>
+
+<pre><code>  my $options = $ua-&gt;tls_options;
+  $ua         = $ua-&gt;tls_options({SSL_cipher_list =&gt; &#39;DEFAULT:!DH@SECLEVEL=1&#39;});</code></pre>
+
+<p>Additional options for <a href="./IO::Socket::SSL.html">IO::Socket::SSL</a> when opening new connections.</p>
+
+<h2 id="transactor">transactor</h2>
+
+<pre><code>  my $t = $ua-&gt;transactor;
+  $ua   = $ua-&gt;transactor(Mojo::UserAgent::Transactor-&gt;new);</code></pre>
+
+<p>Transaction builder, defaults to a <a href="https://metacpan.org/pod/Mojo::UserAgent::Transactor">Mojo::UserAgent::Transactor</a> object.</p>
+
+<pre><code>  # Change name of user agent
+  $ua-&gt;transactor-&gt;name(&#39;MyUA 1.0&#39;);
+
+  # Disable compression
+  $ua-&gt;transactor-&gt;compressed(0);</code></pre>
+
+<h1 id="METHODS">METHODS</h1>
+
+<p><a href="./Mojo::UserAgent.html">Mojo::UserAgent</a> inherits all methods from <a href="https://metacpan.org/pod/Mojo::EventEmitter">Mojo::EventEmitter</a> and implements the following new ones.</p>
+
+<h2 id="build_tx">build_tx</h2>
+
+<pre><code>  my $tx = $ua-&gt;build_tx(GET =&gt; &#39;example.com&#39;);
+  my $tx = $ua-&gt;build_tx(PUT =&gt; &#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; &#39;Content!&#39;);
+  my $tx = $ua-&gt;build_tx(PUT =&gt; &#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; form =&gt; {a =&gt; &#39;b&#39;});
+  my $tx = $ua-&gt;build_tx(PUT =&gt; &#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; json =&gt; {a =&gt; &#39;b&#39;});</code></pre>
+
+<p>Generate <a href="https://metacpan.org/pod/Mojo::Transaction::HTTP">Mojo::Transaction::HTTP</a> object with <a href="https://metacpan.org/pod/Mojo::UserAgent::Transactor#tx">&quot;tx&quot; in Mojo::UserAgent::Transactor</a>.</p>
+
+<pre><code>  # Request with custom cookie
+  my $tx = $ua-&gt;build_tx(GET =&gt; &#39;https://example.com/account&#39;);
+  $tx-&gt;req-&gt;cookies({name =&gt; &#39;user&#39;, value =&gt; &#39;sri&#39;});
+  $tx = $ua-&gt;start($tx);
+
+  # Deactivate gzip compression
+  my $tx = $ua-&gt;build_tx(GET =&gt; &#39;example.com&#39;);
+  $tx-&gt;req-&gt;headers-&gt;remove(&#39;Accept-Encoding&#39;);
+  $tx = $ua-&gt;start($tx);
+
+  # Interrupt response by raising an error
+  my $tx = $ua-&gt;build_tx(GET =&gt; &#39;http://example.com&#39;);
+  $tx-&gt;res-&gt;on(progress =&gt; sub ($res) {
+    return unless my $server = $res-&gt;headers-&gt;server;
+    $res-&gt;error({message =&gt; &#39;Oh noes, it is IIS!&#39;}) if $server =~ /IIS/;
+  });
+  $tx = $ua-&gt;start($tx);</code></pre>
+
+<h2 id="build_websocket_tx">build_websocket_tx</h2>
+
+<pre><code>  my $tx = $ua-&gt;build_websocket_tx(&#39;ws://example.com&#39;);
+  my $tx = $ua-&gt;build_websocket_tx( &#39;ws://example.com&#39; =&gt; {DNT =&gt; 1} =&gt; [&#39;v1.proto&#39;]);</code></pre>
+
+<p>Generate <a href="https://metacpan.org/pod/Mojo::Transaction::HTTP">Mojo::Transaction::HTTP</a> object with <a href="https://metacpan.org/pod/Mojo::UserAgent::Transactor#websocket">&quot;websocket&quot; in Mojo::UserAgent::Transactor</a>.</p>
+
+<pre><code>  # Custom WebSocket handshake with cookie
+  my $tx = $ua-&gt;build_websocket_tx(&#39;wss://example.com/echo&#39;);
+  $tx-&gt;req-&gt;cookies({name =&gt; &#39;user&#39;, value =&gt; &#39;sri&#39;});
+  $ua-&gt;start($tx =&gt; sub ($ua, $tx) {
+    say &#39;WebSocket handshake failed!&#39; and return unless $tx-&gt;is_websocket;
+    $tx-&gt;on(message =&gt; sub ($tx, $msg) {
+      say &quot;WebSocket message: $msg&quot;;
+      $tx-&gt;finish;
+    });
+    $tx-&gt;send(&#39;Hi!&#39;);
+  });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;</code></pre>
+
+<h2 id="delete">delete</h2>
+
+<pre><code>  my $tx = $ua-&gt;delete(&#39;example.com&#39;);
+  my $tx = $ua-&gt;delete(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; &#39;Content!&#39;);
+  my $tx = $ua-&gt;delete(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; form =&gt; {a =&gt; &#39;b&#39;});
+  my $tx = $ua-&gt;delete(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; json =&gt; {a =&gt; &#39;b&#39;});</code></pre>
+
+<p>Perform blocking <code>DELETE</code> request and return resulting <a href="https://metacpan.org/pod/Mojo::Transaction::HTTP">Mojo::Transaction::HTTP</a> object, takes the same arguments as <a href="https://metacpan.org/pod/Mojo::UserAgent::Transactor#tx">&quot;tx&quot; in Mojo::UserAgent::Transactor</a> (except for the <code>DELETE</code> method, which is implied). You can also append a callback to perform requests non-blocking.</p>
+
+<pre><code>  $ua-&gt;delete(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;} =&gt; sub ($ua, $tx) { say $tx-&gt;result-&gt;body });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;</code></pre>
+
+<h2 id="delete_p">delete_p</h2>
+
+<pre><code>  my $promise = $ua-&gt;delete_p(&#39;http://example.com&#39;);</code></pre>
+
+<p>Same as <a href="./Mojo::UserAgent.html#delete">&quot;delete&quot;</a>, but performs all requests non-blocking and returns a <a href="https://metacpan.org/pod/Mojo::Promise">Mojo::Promise</a> object instead of accepting a callback.</p>
+
+<pre><code>  $ua-&gt;delete_p(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;})-&gt;then(sub ($tx) {
+    say $tx-&gt;result-&gt;body;
+  })-&gt;catch(sub ($err) {
+    warn &quot;Connection error: $err&quot;;
+  })-&gt;wait;</code></pre>
+
+<h2 id="get">get</h2>
+
+<pre><code>  my $tx = $ua-&gt;get(&#39;example.com&#39;);
+  my $tx = $ua-&gt;get(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; &#39;Content!&#39;);
+  my $tx = $ua-&gt;get(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; form =&gt; {a =&gt; &#39;b&#39;});
+  my $tx = $ua-&gt;get(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; json =&gt; {a =&gt; &#39;b&#39;});</code></pre>
+
+<p>Perform blocking <code>GET</code> request and return resulting <a href="https://metacpan.org/pod/Mojo::Transaction::HTTP">Mojo::Transaction::HTTP</a> object, takes the same arguments as <a href="https://metacpan.org/pod/Mojo::UserAgent::Transactor#tx">&quot;tx&quot; in Mojo::UserAgent::Transactor</a> (except for the <code>GET</code> method, which is implied). You can also append a callback to perform requests non-blocking.</p>
+
+<pre><code>  $ua-&gt;get(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;} =&gt; sub ($ua, $tx) { say $tx-&gt;result-&gt;body });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;</code></pre>
+
+<h2 id="get_p">get_p</h2>
+
+<pre><code>  my $promise = $ua-&gt;get_p(&#39;http://example.com&#39;);</code></pre>
+
+<p>Same as <a href="./Mojo::UserAgent.html#get">&quot;get&quot;</a>, but performs all requests non-blocking and returns a <a href="https://metacpan.org/pod/Mojo::Promise">Mojo::Promise</a> object instead of accepting a callback.</p>
+
+<pre><code>  $ua-&gt;get_p(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;})-&gt;then(sub ($tx) {
+    say $tx-&gt;result-&gt;body;
+  })-&gt;catch(sub ($err) {
+    warn &quot;Connection error: $err&quot;;
+  })-&gt;wait;</code></pre>
+
+<h2 id="head">head</h2>
+
+<pre><code>  my $tx = $ua-&gt;head(&#39;example.com&#39;);
+  my $tx = $ua-&gt;head(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; &#39;Content!&#39;);
+  my $tx = $ua-&gt;head(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; form =&gt; {a =&gt; &#39;b&#39;});
+  my $tx = $ua-&gt;head(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; json =&gt; {a =&gt; &#39;b&#39;});</code></pre>
+
+<p>Perform blocking <code>HEAD</code> request and return resulting <a href="https://metacpan.org/pod/Mojo::Transaction::HTTP">Mojo::Transaction::HTTP</a> object, takes the same arguments as <a href="https://metacpan.org/pod/Mojo::UserAgent::Transactor#tx">&quot;tx&quot; in Mojo::UserAgent::Transactor</a> (except for the <code>HEAD</code> method, which is implied). You can also append a callback to perform requests non-blocking.</p>
+
+<pre><code>  $ua-&gt;head(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;} =&gt; sub ($ua, $tx) { say $tx-&gt;result-&gt;body });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;</code></pre>
+
+<h2 id="head_p">head_p</h2>
+
+<pre><code>  my $promise = $ua-&gt;head_p(&#39;http://example.com&#39;);</code></pre>
+
+<p>Same as <a href="./Mojo::UserAgent.html#head">&quot;head&quot;</a>, but performs all requests non-blocking and returns a <a href="https://metacpan.org/pod/Mojo::Promise">Mojo::Promise</a> object instead of accepting a callback.</p>
+
+<pre><code>  $ua-&gt;head_p(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;})-&gt;then(sub ($tx) {
+    say $tx-&gt;result-&gt;body;
+  })-&gt;catch(sub ($err) {
+    warn &quot;Connection error: $err&quot;;
+  })-&gt;wait;</code></pre>
+
+<h2 id="options">options</h2>
+
+<pre><code>  my $tx = $ua-&gt;options(&#39;example.com&#39;);
+  my $tx = $ua-&gt;options(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; &#39;Content!&#39;);
+  my $tx = $ua-&gt;options(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; form =&gt; {a =&gt; &#39;b&#39;});
+  my $tx = $ua-&gt;options(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; json =&gt; {a =&gt; &#39;b&#39;});</code></pre>
+
+<p>Perform blocking <code>OPTIONS</code> request and return resulting <a href="https://metacpan.org/pod/Mojo::Transaction::HTTP">Mojo::Transaction::HTTP</a> object, takes the same arguments as <a href="https://metacpan.org/pod/Mojo::UserAgent::Transactor#tx">&quot;tx&quot; in Mojo::UserAgent::Transactor</a> (except for the <code>OPTIONS</code> method, which is implied). You can also append a callback to perform requests non-blocking.</p>
+
+<pre><code>  $ua-&gt;options(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;} =&gt; sub ($ua, $tx) { say $tx-&gt;result-&gt;body });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;</code></pre>
+
+<h2 id="options_p">options_p</h2>
+
+<pre><code>  my $promise = $ua-&gt;options_p(&#39;http://example.com&#39;);</code></pre>
+
+<p>Same as <a href="./Mojo::UserAgent.html#options">&quot;options&quot;</a>, but performs all requests non-blocking and returns a <a href="https://metacpan.org/pod/Mojo::Promise">Mojo::Promise</a> object instead of accepting a callback.</p>
+
+<pre><code>  $ua-&gt;options_p(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;})-&gt;then(sub ($tx) {
+    say $tx-&gt;result-&gt;body;
+  })-&gt;catch(sub ($err) {
+    warn &quot;Connection error: $err&quot;;
+  })-&gt;wait;</code></pre>
+
+<h2 id="patch">patch</h2>
+
+<pre><code>  my $tx = $ua-&gt;patch(&#39;example.com&#39;);
+  my $tx = $ua-&gt;patch(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; &#39;Content!&#39;);
+  my $tx = $ua-&gt;patch(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; form =&gt; {a =&gt; &#39;b&#39;});
+  my $tx = $ua-&gt;patch(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; json =&gt; {a =&gt; &#39;b&#39;});</code></pre>
+
+<p>Perform blocking <code>PATCH</code> request and return resulting <a href="https://metacpan.org/pod/Mojo::Transaction::HTTP">Mojo::Transaction::HTTP</a> object, takes the same arguments as <a href="https://metacpan.org/pod/Mojo::UserAgent::Transactor#tx">&quot;tx&quot; in Mojo::UserAgent::Transactor</a> (except for the <code>PATCH</code> method, which is implied). You can also append a callback to perform requests non-blocking.</p>
+
+<pre><code>  $ua-&gt;patch(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;} =&gt; sub ($ua, $tx) { say $tx-&gt;result-&gt;body });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;</code></pre>
+
+<h2 id="patch_p">patch_p</h2>
+
+<pre><code>  my $promise = $ua-&gt;patch_p(&#39;http://example.com&#39;);</code></pre>
+
+<p>Same as <a href="./Mojo::UserAgent.html#patch">&quot;patch&quot;</a>, but performs all requests non-blocking and returns a <a href="https://metacpan.org/pod/Mojo::Promise">Mojo::Promise</a> object instead of accepting a callback.</p>
+
+<pre><code>  $ua-&gt;patch_p(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;})-&gt;then(sub ($tx) {
+    say $tx-&gt;result-&gt;body;
+  })-&gt;catch(sub ($err) {
+    warn &quot;Connection error: $err&quot;;
+  })-&gt;wait;</code></pre>
+
+<h2 id="post">post</h2>
+
+<pre><code>  my $tx = $ua-&gt;post(&#39;example.com&#39;);
+  my $tx = $ua-&gt;post(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; &#39;Content!&#39;);
+  my $tx = $ua-&gt;post(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; form =&gt; {a =&gt; &#39;b&#39;});
+  my $tx = $ua-&gt;post(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; json =&gt; {a =&gt; &#39;b&#39;});</code></pre>
+
+<p>Perform blocking <code>POST</code> request and return resulting <a href="https://metacpan.org/pod/Mojo::Transaction::HTTP">Mojo::Transaction::HTTP</a> object, takes the same arguments as <a href="https://metacpan.org/pod/Mojo::UserAgent::Transactor#tx">&quot;tx&quot; in Mojo::UserAgent::Transactor</a> (except for the <code>POST</code> method, which is implied). You can also append a callback to perform requests non-blocking.</p>
+
+<pre><code>  $ua-&gt;post(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;} =&gt; sub ($ua, $tx) { say $tx-&gt;result-&gt;body });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;</code></pre>
+
+<h2 id="post_p">post_p</h2>
+
+<pre><code>  my $promise = $ua-&gt;post_p(&#39;http://example.com&#39;);</code></pre>
+
+<p>Same as <a href="./Mojo::UserAgent.html#post">&quot;post&quot;</a>, but performs all requests non-blocking and returns a <a href="https://metacpan.org/pod/Mojo::Promise">Mojo::Promise</a> object instead of accepting a callback.</p>
+
+<pre><code>  $ua-&gt;post_p(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;})-&gt;then(sub ($tx) {
+    say $tx-&gt;result-&gt;body;
+  })-&gt;catch(sub ($err) {
+    warn &quot;Connection error: $err&quot;;
+  })-&gt;wait;</code></pre>
+
+<h2 id="put">put</h2>
+
+<pre><code>  my $tx = $ua-&gt;put(&#39;example.com&#39;);
+  my $tx = $ua-&gt;put(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; &#39;Content!&#39;);
+  my $tx = $ua-&gt;put(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; form =&gt; {a =&gt; &#39;b&#39;});
+  my $tx = $ua-&gt;put(&#39;http://example.com&#39; =&gt; {Accept =&gt; &#39;*/*&#39;} =&gt; json =&gt; {a =&gt; &#39;b&#39;});</code></pre>
+
+<p>Perform blocking <code>PUT</code> request and return resulting <a href="https://metacpan.org/pod/Mojo::Transaction::HTTP">Mojo::Transaction::HTTP</a> object, takes the same arguments as <a href="https://metacpan.org/pod/Mojo::UserAgent::Transactor#tx">&quot;tx&quot; in Mojo::UserAgent::Transactor</a> (except for the <code>PUT</code> method, which is implied). You can also append a callback to perform requests non-blocking.</p>
+
+<pre><code>  $ua-&gt;put(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;} =&gt; sub ($ua, $tx) { say $tx-&gt;result-&gt;body });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;</code></pre>
+
+<h2 id="put_p">put_p</h2>
+
+<pre><code>  my $promise = $ua-&gt;put_p(&#39;http://example.com&#39;);</code></pre>
+
+<p>Same as <a href="./Mojo::UserAgent.html#put">&quot;put&quot;</a>, but performs all requests non-blocking and returns a <a href="https://metacpan.org/pod/Mojo::Promise">Mojo::Promise</a> object instead of accepting a callback.</p>
+
+<pre><code>  $ua-&gt;put_p(&#39;http://example.com&#39; =&gt; json =&gt; {a =&gt; &#39;b&#39;})-&gt;then(sub ($tx) {
+    say $tx-&gt;result-&gt;body;
+  })-&gt;catch(sub ($err) {
+    warn &quot;Connection error: $err&quot;;
+  })-&gt;wait;</code></pre>
+
+<h2 id="start1">start</h2>
+
+<pre><code>  my $tx = $ua-&gt;start(Mojo::Transaction::HTTP-&gt;new);</code></pre>
+
+<p>Perform blocking request for a custom <a href="https://metacpan.org/pod/Mojo::Transaction::HTTP">Mojo::Transaction::HTTP</a> object, which can be prepared manually or with <a href="./Mojo::UserAgent.html#build_tx">&quot;build_tx&quot;</a>. You can also append a callback to perform requests non-blocking.</p>
+
+<pre><code>  my $tx = $ua-&gt;build_tx(GET =&gt; &#39;http://example.com&#39;);
+  $ua-&gt;start($tx =&gt; sub ($ua, $tx) { say $tx-&gt;result-&gt;body });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;</code></pre>
+
+<h2 id="start_p">start_p</h2>
+
+<pre><code>  my $promise = $ua-&gt;start_p(Mojo::Transaction::HTTP-&gt;new);</code></pre>
+
+<p>Same as <a href="./Mojo::UserAgent.html#start">&quot;start&quot;</a>, but performs all requests non-blocking and returns a <a href="https://metacpan.org/pod/Mojo::Promise">Mojo::Promise</a> object instead of accepting a callback.</p>
+
+<pre><code>  my $tx = $ua-&gt;build_tx(GET =&gt; &#39;http://example.com&#39;);
+  $ua-&gt;start_p($tx)-&gt;then(sub ($tx) {
+    say $tx-&gt;result-&gt;body;
+  })-&gt;catch(sub ($err) {
+    warn &quot;Connection error: $err&quot;;
+  })-&gt;wait;</code></pre>
+
+<h2 id="websocket">websocket</h2>
+
+<pre><code>  $ua-&gt;websocket(&#39;ws://example.com&#39; =&gt; sub {...});
+  $ua-&gt;websocket(&#39;ws://example.com&#39; =&gt; {DNT =&gt; 1} =&gt; [&#39;v1.proto&#39;] =&gt; sub {...});</code></pre>
+
+<p>Open a non-blocking WebSocket connection with transparent handshake, takes the same arguments as <a href="https://metacpan.org/pod/Mojo::UserAgent::Transactor#websocket">&quot;websocket&quot; in Mojo::UserAgent::Transactor</a>. The callback will receive either a <a href="https://metacpan.org/pod/Mojo::Transaction::WebSocket">Mojo::Transaction::WebSocket</a> or <a href="https://metacpan.org/pod/Mojo::Transaction::HTTP">Mojo::Transaction::HTTP</a> object, depending on if the handshake was successful.</p>
+
+<pre><code>  $ua-&gt;websocket(&#39;wss://example.com/echo&#39; =&gt; [&#39;v1.proto&#39;] =&gt; sub ($ua, $tx) {
+    say &#39;WebSocket handshake failed!&#39; and return unless $tx-&gt;is_websocket;
+    say &#39;Subprotocol negotiation failed!&#39; and return unless $tx-&gt;protocol;
+    $tx-&gt;on(finish =&gt; sub ($tx, $code, $reason) { say &quot;WebSocket closed with status $code.&quot; });
+    $tx-&gt;on(message =&gt; sub ($tx, $msg) {
+      say &quot;WebSocket message: $msg&quot;;
+      $tx-&gt;finish;
+    });
+    $tx-&gt;send(&#39;Hi!&#39;);
+  });
+  Mojo::IOLoop-&gt;start unless Mojo::IOLoop-&gt;is_running;</code></pre>
+
+<p>You can activate <code>permessage-deflate</code> compression by setting the <code>Sec-WebSocket-Extensions</code> header, this can result in much better performance, but also increases memory usage by up to 300KiB per connection.</p>
+
+<pre><code>  $ua-&gt;websocket(&#39;ws://example.com/foo&#39; =&gt; {
+    &#39;Sec-WebSocket-Extensions&#39; =&gt; &#39;permessage-deflate&#39;
+  } =&gt; sub {...});</code></pre>
+
+<h2 id="websocket_p">websocket_p</h2>
+
+<pre><code>  my $promise = $ua-&gt;websocket_p(&#39;ws://example.com&#39;);</code></pre>
+
+<p>Same as <a href="./Mojo::UserAgent.html#websocket">&quot;websocket&quot;</a>, but returns a <a href="https://metacpan.org/pod/Mojo::Promise">Mojo::Promise</a> object instead of accepting a callback.</p>
+
+<pre><code>  $ua-&gt;websocket_p(&#39;wss://example.com/echo&#39;)-&gt;then(sub ($tx) {
+    my $promise = Mojo::Promise-&gt;new;
+    $tx-&gt;on(finish =&gt; sub { $promise-&gt;resolve });
+    $tx-&gt;on(message =&gt; sub ($tx, $msg) {
+      say &quot;WebSocket message: $msg&quot;;
+      $tx-&gt;finish;
+    });
+    $tx-&gt;send(&#39;Hi!&#39;);
+    return $promise;
+  })-&gt;catch(sub ($err) {
+    warn &quot;WebSocket error: $err&quot;;
+  })-&gt;wait;</code></pre>
+
+<h1 id="DEBUGGING">DEBUGGING</h1>
+
+<p>You can set the <code>MOJO_CLIENT_DEBUG</code> environment variable to get some advanced diagnostics information printed to <code>STDERR</code>.</p>
+
+<pre><code>  MOJO_CLIENT_DEBUG=1</code></pre>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="Mojolicious.html">Mojolicious</a>, <a href="https://metacpan.org/pod/distribution/Mojolicious/lib/Mojolicious/Guides.pod">Mojolicious::Guides</a>, <a href="https://mojolicious.org">https://mojolicious.org</a>.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Mojolicious, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Mojolicious</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Mojolicious</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Mojo::UserAgent.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

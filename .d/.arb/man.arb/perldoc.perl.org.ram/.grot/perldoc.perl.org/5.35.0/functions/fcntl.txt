@@ -1,0 +1,46 @@
+=over
+
+=item fcntl FILEHANDLE,FUNCTION,SCALAR
+X<fcntl>
+
+Implements the L<fcntl(2)> function.  You'll probably have to say
+
+    use Fcntl;
+
+first to get the correct constant definitions.  Argument processing and
+value returned work just like L<C<ioctl>|/ioctl
+FILEHANDLE,FUNCTION,SCALAR> below.  For example:
+
+    use Fcntl;
+    my $flags = fcntl($filehandle, F_GETFL, 0)
+        or die "Can't fcntl F_GETFL: $!";
+
+You don't have to check for L<C<defined>|/defined EXPR> on the return
+from L<C<fcntl>|/fcntl FILEHANDLE,FUNCTION,SCALAR>.  Like
+L<C<ioctl>|/ioctl FILEHANDLE,FUNCTION,SCALAR>, it maps a C<0> return
+from the system call into C<"0 but true"> in Perl.  This string is true
+in boolean context and C<0> in numeric context.  It is also exempt from
+the normal
+L<C<Argument "..." isn't numeric>|perldiag/Argument "%s" isn't numeric%s>
+L<warnings> on improper numeric conversions.
+
+Note that L<C<fcntl>|/fcntl FILEHANDLE,FUNCTION,SCALAR> raises an
+exception if used on a machine that doesn't implement L<fcntl(2)>.  See
+the L<Fcntl> module or your L<fcntl(2)> manpage to learn what functions
+are available on your system.
+
+Here's an example of setting a filehandle named C<$REMOTE> to be
+non-blocking at the system level.  You'll have to negotiate
+L<C<$E<verbar>>|perlvar/$E<verbar>> on your own, though.
+
+    use Fcntl qw(F_GETFL F_SETFL O_NONBLOCK);
+
+    my $flags = fcntl($REMOTE, F_GETFL, 0)
+        or die "Can't get flags for the socket: $!\n";
+
+    fcntl($REMOTE, F_SETFL, $flags | O_NONBLOCK)
+        or die "Can't set flags for the socket: $!\n";
+
+Portability issues: L<perlport/fcntl>.
+
+=back

@@ -1,0 +1,163 @@
+=over
+
+=item use Module VERSION LIST
+X<use> X<module> X<import>
+
+=item use Module VERSION
+
+=item use Module LIST
+
+=item use Module
+
+=item use VERSION
+
+Imports some semantics into the current package from the named module,
+generally by aliasing certain subroutine or variable names into your
+package.  It is exactly equivalent to
+
+    BEGIN { require Module; Module->import( LIST ); }
+
+except that Module I<must> be a bareword.
+The importation can be made conditional by using the L<if> module.
+
+In the C<use VERSION> form, VERSION may be either a v-string such as
+v5.24.1, which will be compared to L<C<$^V>|perlvar/$^V> (aka
+$PERL_VERSION), or a numeric argument of the form 5.024001, which will
+be compared to L<C<$]>|perlvar/$]>.  An exception is raised if VERSION
+is greater than the version of the current Perl interpreter; Perl will
+not attempt to parse the rest of the file.  Compare with
+L<C<require>|/require VERSION>, which can do a similar check at run
+time.  Symmetrically, C<no VERSION> allows you to specify that you
+want a version of Perl older than the specified one.
+
+Specifying VERSION as a numeric argument of the form 5.024001 should
+generally be avoided as older less readable syntax compared to
+v5.24.1. Before perl 5.8.0 released in 2002 the more verbose numeric
+form was the only supported syntax, which is why you might see it in
+
+    use v5.24.1;    # compile time version check
+    use 5.24.1;     # ditto
+    use 5.024_001;  # ditto; older syntax compatible with perl 5.6
+
+This is often useful if you need to check the current Perl version before
+L<C<use>|/use Module VERSION LIST>ing library modules that won't work
+with older versions of Perl.
+(We try not to do this more than we have to.)
+
+C<use VERSION> also lexically enables all features available in the requested
+version as defined by the L<feature> pragma, disabling any features
+not in the requested version's feature bundle.  See L<feature>.
+Similarly, if the specified Perl version is greater than or equal to
+5.12.0, strictures are enabled lexically as
+with L<C<use strict>|strict>.  Any explicit use of
+C<use strict> or C<no strict> overrides C<use VERSION>, even if it comes
+before it.  Later use of C<use VERSION>
+will override all behavior of a previous
+C<use VERSION>, possibly removing the C<strict> and C<feature> added by
+C<use VERSION>.  C<use VERSION> does not
+load the F<feature.pm> or F<strict.pm>
+files.
+
+The C<BEGIN> forces the L<C<require>|/require VERSION> and
+L<C<import>|/import LIST> to happen at compile time.  The
+L<C<require>|/require VERSION> makes sure the module is loaded into
+memory if it hasn't been yet.  The L<C<import>|/import LIST> is not a
+builtin; it's just an ordinary static method
+call into the C<Module> package to tell the module to import the list of
+features back into the current package.  The module can implement its
+L<C<import>|/import LIST> method any way it likes, though most modules
+just choose to derive their L<C<import>|/import LIST> method via
+inheritance from the C<Exporter> class that is defined in the
+L<C<Exporter>|Exporter> module.  See L<Exporter>.  If no
+L<C<import>|/import LIST> method can be found, then the call is skipped,
+even if there is an AUTOLOAD method.
+
+If you do not want to call the package's L<C<import>|/import LIST>
+method (for instance,
+to stop your namespace from being altered), explicitly supply the empty list:
+
+    use Module ();
+
+That is exactly equivalent to
+
+    BEGIN { require Module }
+
+If the VERSION argument is present between Module and LIST, then the
+L<C<use>|/use Module VERSION LIST> will call the C<VERSION> method in
+class Module with the given version as an argument:
+
+    use Module 12.34;
+
+is equivalent to:
+
+    BEGIN { require Module; Module->VERSION(12.34) }
+
+The L<default C<VERSION> method|UNIVERSAL/C<VERSION ( [ REQUIRE ] )>>,
+inherited from the L<C<UNIVERSAL>|UNIVERSAL> class, croaks if the given
+version is larger than the value of the variable C<$Module::VERSION>.
+
+The VERSION argument cannot be an arbitrary expression.  It only counts
+as a VERSION argument if it is a version number literal, starting with
+either a digit or C<v> followed by a digit.  Anything that doesn't
+look like a version literal will be parsed as the start of the LIST.
+Nevertheless, many attempts to use an arbitrary expression as a VERSION
+argument will appear to work, because L<Exporter>'s C<import> method
+handles numeric arguments specially, performing version checks rather
+than treating them as things to export.
+
+Again, there is a distinction between omitting LIST (L<C<import>|/import
+LIST> called with no arguments) and an explicit empty LIST C<()>
+(L<C<import>|/import LIST> not called).  Note that there is no comma
+after VERSION!
+
+Because this is a wide-open interface, pragmas (compiler directives)
+are also implemented this way.  Some of the currently implemented
+pragmas are:
+
+    use constant;
+    use diagnostics;
+    use integer;
+    use sigtrap  qw(SEGV BUS);
+    use strict   qw(subs vars refs);
+    use subs     qw(afunc blurfl);
+    use warnings qw(all);
+    use sort     qw(stable);
+
+Some of these pseudo-modules import semantics into the current
+block scope (like L<C<strict>|strict> or L<C<integer>|integer>, unlike
+ordinary modules, which import symbols into the current package (which
+are effective through the end of the file).
+
+Because L<C<use>|/use Module VERSION LIST> takes effect at compile time,
+it doesn't respect the ordinary flow control of the code being compiled.
+In particular, putting a L<C<use>|/use Module VERSION LIST> inside the
+false branch of a conditional doesn't prevent it
+from being processed.  If a module or pragma only needs to be loaded
+conditionally, this can be done using the L<if> pragma:
+
+    use if $] < 5.008, "utf8";
+    use if WANT_WARNINGS, warnings => qw(all);
+
+There's a corresponding L<C<no>|/no MODULE VERSION LIST> declaration
+that unimports meanings imported by L<C<use>|/use Module VERSION LIST>,
+i.e., it calls C<< Module->unimport(LIST) >> instead of
+L<C<import>|/import LIST>.  It behaves just as L<C<import>|/import LIST>
+does with VERSION, an omitted or empty LIST,
+or no unimport method being found.
+
+    no integer;
+    no strict 'refs';
+    no warnings;
+
+Care should be taken when using the C<no VERSION> form of L<C<no>|/no
+MODULE VERSION LIST>.  It is
+I<only> meant to be used to assert that the running Perl is of a earlier
+version than its argument and I<not> to undo the feature-enabling side effects
+of C<use VERSION>.
+
+See L<perlmodlib> for a list of standard modules and pragmas.  See
+L<perlrun|perlrun/-m[-]module> for the C<-M> and C<-m> command-line
+options to Perl that give L<C<use>|/use Module VERSION LIST>
+functionality from the command-line.
+
+=back

@@ -1,0 +1,41 @@
+=over
+
+=item sysread FILEHANDLE,SCALAR,LENGTH,OFFSET
+X<sysread>
+
+=item sysread FILEHANDLE,SCALAR,LENGTH
+
+Attempts to read LENGTH bytes of data into variable SCALAR from the
+specified FILEHANDLE, using L<read(2)>.  It bypasses any L<PerlIO> layers
+including buffered IO (but is affected by the presence of the C<:utf8>
+layer as described later), so mixing this with other kinds of reads,
+L<C<print>|/print FILEHANDLE LIST>, L<C<write>|/write FILEHANDLE>,
+L<C<seek>|/seek FILEHANDLE,POSITION,WHENCE>,
+L<C<tell>|/tell FILEHANDLE>, or L<C<eof>|/eof FILEHANDLE> can cause
+confusion because the
+C<:perlio> or C<:crlf> layers usually buffer data.  Returns the number of
+bytes actually read, C<0> at end of file, or undef if there was an
+error (in the latter case L<C<$!>|perlvar/$!> is also set).  SCALAR will
+be grown or
+shrunk so that the last byte actually read is the last byte of the
+scalar after the read.
+
+An OFFSET may be specified to place the read data at some place in the
+string other than the beginning.  A negative OFFSET specifies
+placement at that many characters counting backwards from the end of
+the string.  A positive OFFSET greater than the length of SCALAR
+results in the string being padded to the required size with C<"\0">
+bytes before the result of the read is appended.
+
+There is no syseof() function, which is ok, since
+L<C<eof>|/eof FILEHANDLE> doesn't work well on device files (like ttys)
+anyway.  Use L<C<sysread>|/sysread FILEHANDLE,SCALAR,LENGTH,OFFSET> and
+check for a return value of 0 to decide whether you're done.
+
+Note that if the filehandle has been marked as C<:utf8>, C<sysread> will
+throw an exception.  The C<:encoding(...)> layer implicitly
+introduces the C<:utf8> layer.  See
+L<C<binmode>|/binmode FILEHANDLE, LAYER>,
+L<C<open>|/open FILEHANDLE,MODE,EXPR>, and the L<open> pragma.
+
+=back

@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>JSON::MaybeXS - Use Cpanel::JSON::XS with a fallback to JSON::XS and JSON::PP - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of JSON-MaybeXS - MetaCPAN" href="https://metacpan.org/dist/JSON-MaybeXS/releases.rss" />
+        <link rel="canonical" href="./JSON::MaybeXS.html" />
+        <meta name="description" content="Use Cpanel::JSON::XS with a fallback to JSON::XS and JSON::PP" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/JSON::MaybeXS" />
+<meta name="twitter:title"       content="JSON::MaybeXS" />
+<meta name="twitter:description" content="Use Cpanel::JSON::XS with a fallback to JSON::XS and JSON::PP" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./JSON::MaybeXS.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of JSON-MaybeXS was released.">
+      <span class="relatize">30 Apr 2023 08:58:24 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/JSON-MaybeXS">JSON-MaybeXS</a>
+  </li>
+  <li>
+    Module version: 1.004005
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/JSON-MaybeXS/source/lib/JSON/MaybeXS.pm">Source</a>
+    (<a href="https://metacpan.org/dist/JSON-MaybeXS/source/lib/JSON/MaybeXS.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/JSON-MaybeXS/source/lib/JSON">Browse</a>
+    (<a href="https://metacpan.org/dist/JSON-MaybeXS/source/lib/JSON?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/JSON-MaybeXS/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/JSON-MaybeXS/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/p5sagit/JSON-MaybeXS">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=JSON-MaybeXS">Issues</a>
+      (1)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=JSON-MaybeXS+1.004005" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/J/JSON-MaybeXS.html?oncpan=1&amp;distmat=1&amp;version=1.004005&amp;grade=2" style="color: #090">2755</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/J/JSON-MaybeXS.html?oncpan=1&amp;distmat=1&amp;version=1.004005&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/J/JSON-MaybeXS.html?oncpan=1&amp;distmat=1&amp;version=1.004005&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/ETHER/JSON-MaybeXS-1.004005">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on JSON-MaybeXS who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 6
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/JSON-MaybeXS-1.004005/index.html">% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.6.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/JSON-MaybeXS/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/E/ET/ETHER/JSON-MaybeXS-1.004005.tar.gz">
+      Download (<span itemprop="fileSize">22.59KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FETHER%2FJSON-MaybeXS-1.004005%2Flib%2FJSON%2FMaybeXS.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/JSON-MaybeXS/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/JSON-MaybeXS/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:JSON-MaybeXS">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="JSON-MaybeXS">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/JSON/MaybeXS.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="ETHER/JSON-MaybeXS-1.004005"
+>1.004005
+  (ETHER on 2023-04-30)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004004"
+>1.004004
+  (ETHER on 2022-09-17)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004003"
+>1.004003
+  (ETHER on 2020-11-13)</option>
+<option
+  
+  value="HAARG/JSON-MaybeXS-1.004000"
+>1.004000
+  (HAARG on 2018-04-19)</option>
+<option
+  
+  value="HAARG/JSON-MaybeXS-1.003010"
+>1.003010
+  (HAARG on 2018-01-28)</option>
+<option
+  
+  value="MSTROUT/JSON-MaybeXS-1.001000"
+>1.001000
+  (MSTROUT on 2013-12-11)</option>
+<option
+  
+  value="MSTROUT/JSON-MaybeXS-1.000000"
+>1.000000
+  (MSTROUT on 2013-05-22)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004002"
+>1.004002
+  (ETHER on 2020-05-17)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004001"
+>1.004001
+  (ETHER on 2020-05-01)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003009"
+>1.003009
+  (ETHER on 2017-02-27)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003008"
+>1.003008
+  (ETHER on 2016-10-03)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003007"
+>1.003007
+  (ETHER on 2016-09-11)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003006_001"
+>1.003006_001 DEV
+  (ETHER on 2016-06-28)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003005"
+>1.003005
+  (ETHER on 2015-03-22)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003004"
+>1.003004
+  (ETHER on 2015-03-14)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003003"
+>1.003003
+  (ETHER on 2014-12-06)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003002"
+>1.003002
+  (ETHER on 2014-11-16)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003001"
+>1.003001
+  (ETHER on 2014-11-13)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003_000"
+>1.003_000 DEV
+  (ETHER on 2014-10-30)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002006"
+>1.002006
+  (ETHER on 2014-10-22)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002005"
+>1.002005
+  (ETHER on 2014-10-12)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002004"
+>1.002004
+  (ETHER on 2014-10-11)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002003"
+>1.002003
+  (ETHER on 2014-10-07)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002002"
+>1.002002
+  (ETHER on 2014-04-24)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002001"
+>1.002001
+  (ETHER on 2014-04-23)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002000"
+>1.002000
+  (ETHER on 2014-04-23)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/ETHER/JSON-MaybeXS-1.004005/diff/' + encodeURIComponent(this.value) + '/lib/JSON/MaybeXS.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="ETHER/JSON-MaybeXS-1.004005"
+>1.004005
+  (ETHER on 2023-04-30)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004004"
+>1.004004
+  (ETHER on 2022-09-17)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004003"
+>1.004003
+  (ETHER on 2020-11-13)</option>
+<option
+  
+  value="HAARG/JSON-MaybeXS-1.004000"
+>1.004000
+  (HAARG on 2018-04-19)</option>
+<option
+  
+  value="HAARG/JSON-MaybeXS-1.003010"
+>1.003010
+  (HAARG on 2018-01-28)</option>
+<option
+  
+  value="MSTROUT/JSON-MaybeXS-1.001000"
+>1.001000
+  (MSTROUT on 2013-12-11)</option>
+<option
+  
+  value="MSTROUT/JSON-MaybeXS-1.000000"
+>1.000000
+  (MSTROUT on 2013-05-22)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004002"
+>1.004002
+  (ETHER on 2020-05-17)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004001"
+>1.004001
+  (ETHER on 2020-05-01)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003009"
+>1.003009
+  (ETHER on 2017-02-27)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003008"
+>1.003008
+  (ETHER on 2016-10-03)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003007"
+>1.003007
+  (ETHER on 2016-09-11)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003006_001"
+>1.003006_001 DEV
+  (ETHER on 2016-06-28)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003005"
+>1.003005
+  (ETHER on 2015-03-22)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003004"
+>1.003004
+  (ETHER on 2015-03-14)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003003"
+>1.003003
+  (ETHER on 2014-12-06)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003002"
+>1.003002
+  (ETHER on 2014-11-16)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003001"
+>1.003001
+  (ETHER on 2014-11-13)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003_000"
+>1.003_000 DEV
+  (ETHER on 2014-10-30)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002006"
+>1.002006
+  (ETHER on 2014-10-22)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002005"
+>1.002005
+  (ETHER on 2014-10-12)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002004"
+>1.002004
+  (ETHER on 2014-10-11)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002003"
+>1.002003
+  (ETHER on 2014-10-07)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002002"
+>1.002002
+  (ETHER on 2014-04-24)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002001"
+>1.002001
+  (ETHER on 2014-04-23)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002000"
+>1.002000
+  (ETHER on 2014-04-23)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Carp" title="Carp" class="ellipsis">Carp</a></li>
+  <li><a href="https://metacpan.org/pod/JSON::PP" title="JSON::PP" class="ellipsis">JSON::PP</a></li>
+  <li><a href="https://metacpan.org/pod/Scalar::Util" title="Scalar::Util" class="ellipsis">Scalar::Util</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/JSON::MaybeXS/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=JSON%3A%3AMaybeXS">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=JSON-MaybeXS">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/ETHER/JSON-MaybeXS-1.004005/view/lib/JSON/MaybeXS.pm">This version</a>
+    </li>
+    <li>
+      <a href="./JSON::MaybeXS.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/GETTY"><img src="https://www.gravatar.com/avatar/d374f794bb2f39232c29d0b376b9dcc4?d=identicon&amp;s=20" title="GETTY" alt="GETTY"></a>
+<a class="display-all" href="https://metacpan.org/author/PHAYLON"><img src="https://www.gravatar.com/avatar/32ab988963e09ce6fbda10b86b030470?d=identicon&amp;s=20" title="PHAYLON" alt="PHAYLON"></a>
+<a class="display-all" href="https://metacpan.org/author/ESABOL"><img src="https://www.gravatar.com/avatar/539e6f9968426ec02d3370d7654849e2?d=identicon&amp;s=20" title="ESABOL" alt="ESABOL"></a>
+<a class="display-all" href="https://metacpan.org/author/RRWO"><img src="https://www.gravatar.com/avatar/4a5274bc5d690ee3d619f044778771a7?d=identicon&amp;s=20" title="RRWO" alt="RRWO"></a>
+<a class="display-all" href="https://metacpan.org/author/ECARROLL"><img src="https://www.gravatar.com/avatar/5cac64b33d070e3736a62bbc2b4bdba4?d=identicon&amp;s=20" title="ECARROLL" alt="ECARROLL"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/JSON-MaybeXS/plussers">22 PAUSE users</a>
+</div>
+<div>
+    24 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 5 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-contrib-email="mst@shadowcat.co.uk"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      mst - Matt S. Trout (cpan:MSTROUT)
+    </li>
+    <li class="contributor"
+      data-cpan-author="DRTECH"
+      data-contrib-email="develop@traveljury.com"
+    >
+      <a href="https://metacpan.org/author/DRTECH" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/27b7980e18cec76c38d1730544fa3373?d=identicon&amp;s=20" />
+      Clinton Gormley
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="HAARG"
+      data-contrib-email="haarg@haarg.org"
+    >
+      <a href="https://metacpan.org/author/HAARG" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/5037faf9ba40cf736778820fe83fc2ae?d=identicon&amp;s=20" />
+      Graham Knop
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="GENEHACK"
+      data-contrib-email="genehack@genehack.org"
+    >
+      <a href="https://metacpan.org/author/GENEHACK" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/025d30f04795e1efc142701e4ac89bfd?d=identicon&amp;s=20" />
+      John SJ Anderson
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="ZARQUON"
+      data-contrib-email="diment@gmail.com"
+    >
+      <a href="https://metacpan.org/author/ZARQUON" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/8569a7561c19a6645ca052f319fd762e?d=identicon&amp;s=20" />
+      Kieren Diment
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/ETHER" class="author-name">Karen Etheridge 🐾 🌋🦑🇹🇼🇭🇰🇺🇦</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/JSON/MaybeXS.pm&#39;" class="">
+<option
+  selected
+  value="ETHER/JSON-MaybeXS-1.004005"
+>1.004005
+  (ETHER on 2023-04-30)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004004"
+>1.004004
+  (ETHER on 2022-09-17)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004003"
+>1.004003
+  (ETHER on 2020-11-13)</option>
+<option
+  
+  value="HAARG/JSON-MaybeXS-1.004000"
+>1.004000
+  (HAARG on 2018-04-19)</option>
+<option
+  
+  value="HAARG/JSON-MaybeXS-1.003010"
+>1.003010
+  (HAARG on 2018-01-28)</option>
+<option
+  
+  value="MSTROUT/JSON-MaybeXS-1.001000"
+>1.001000
+  (MSTROUT on 2013-12-11)</option>
+<option
+  
+  value="MSTROUT/JSON-MaybeXS-1.000000"
+>1.000000
+  (MSTROUT on 2013-05-22)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004002"
+>1.004002
+  (ETHER on 2020-05-17)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.004001"
+>1.004001
+  (ETHER on 2020-05-01)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003009"
+>1.003009
+  (ETHER on 2017-02-27)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003008"
+>1.003008
+  (ETHER on 2016-10-03)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003007"
+>1.003007
+  (ETHER on 2016-09-11)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003006_001"
+>1.003006_001 DEV
+  (ETHER on 2016-06-28)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003005"
+>1.003005
+  (ETHER on 2015-03-22)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003004"
+>1.003004
+  (ETHER on 2015-03-14)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003003"
+>1.003003
+  (ETHER on 2014-12-06)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003002"
+>1.003002
+  (ETHER on 2014-11-16)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003001"
+>1.003001
+  (ETHER on 2014-11-13)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.003_000"
+>1.003_000 DEV
+  (ETHER on 2014-10-30)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002006"
+>1.002006
+  (ETHER on 2014-10-22)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002005"
+>1.002005
+  (ETHER on 2014-10-12)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002004"
+>1.002004
+  (ETHER on 2014-10-11)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002003"
+>1.002003
+  (ETHER on 2014-10-07)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002002"
+>1.002002
+  (ETHER on 2014-04-24)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002001"
+>1.002001
+  (ETHER on 2014-04-23)</option>
+<option
+  
+  value="ETHER/JSON-MaybeXS-1.002000"
+>1.002000
+  (ETHER on 2014-04-23)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/JSON-MaybeXS">JSON-MaybeXS-1.004005</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage four &#10;
+          • 457 direct dependents &#10;          • 4528 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="JSON-MaybeXS-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="JSON-MaybeXS-1.004005">
+    <input type="hidden" name="author" value="ETHER">
+    <input type="hidden" name="distribution" value="JSON-MaybeXS">
+    <button type="submit" class="favorite highlight"><span>46</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./JSON::MaybeXS.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>46</span> ++</a>
+</div>
+   / <span>JSON::MaybeXS</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./JSON::MaybeXS.html#NAME">NAME</a></li>
+  <li><a href="./JSON::MaybeXS.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./JSON::MaybeXS.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./JSON::MaybeXS.html#EXPORTS">EXPORTS</a>
+    <ul>
+      <li><a href="./JSON::MaybeXS.html#encode_json">encode_json</a></li>
+      <li><a href="./JSON::MaybeXS.html#decode_json">decode_json</a></li>
+      <li><a href="./JSON::MaybeXS.html#to_json">to_json</a></li>
+      <li><a href="./JSON::MaybeXS.html#from_json">from_json</a></li>
+      <li><a href="./JSON::MaybeXS.html#JSON">JSON</a></li>
+      <li><a href="./JSON::MaybeXS.html#is_bool">is_bool</a></li>
+    </ul>
+  </li>
+  <li><a href="./JSON::MaybeXS.html#CONSTRUCTOR">CONSTRUCTOR</a>
+    <ul>
+      <li><a href="./JSON::MaybeXS.html#new">new</a></li>
+    </ul>
+  </li>
+  <li><a href="./JSON::MaybeXS.html#BOOLEANS">BOOLEANS</a></li>
+  <li><a href="./JSON::MaybeXS.html#CONVERTING-FROM-JSON::Any">CONVERTING FROM JSON::Any</a></li>
+  <li><a href="./JSON::MaybeXS.html#CAVEATS">CAVEATS</a></li>
+  <li><a href="./JSON::MaybeXS.html#INSTALLATION">INSTALLATION</a></li>
+  <li><a href="./JSON::MaybeXS.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./JSON::MaybeXS.html#CONTRIBUTORS">CONTRIBUTORS</a></li>
+  <li><a href="./JSON::MaybeXS.html#COPYRIGHT">COPYRIGHT</a></li>
+  <li><a href="./JSON::MaybeXS.html#LICENSE">LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>JSON::MaybeXS - Use <a href="./Cpanel::JSON::XS.html">Cpanel::JSON::XS</a> with a fallback to <a href="./JSON::XS.html">JSON::XS</a> and <a href="https://metacpan.org/pod/JSON::PP">JSON::PP</a></p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  use JSON::MaybeXS;
+
+  my $data_structure = decode_json($json_input);
+
+  my $json_output = encode_json($data_structure);
+
+  my $json = JSON()-&gt;new;
+
+  my $json_with_args = JSON::MaybeXS-&gt;new(utf8 =&gt; 1); # or { utf8 =&gt; 1 }</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module first checks to see if either <a href="./Cpanel::JSON::XS.html">Cpanel::JSON::XS</a> or <a href="./JSON::XS.html">JSON::XS</a> (at at least version 3.0) is already loaded, in which case it uses that module. Otherwise it tries to load <a href="./Cpanel::JSON::XS.html">Cpanel::JSON::XS</a>, then <a href="./JSON::XS.html">JSON::XS</a>, then <a href="https://metacpan.org/pod/JSON::PP">JSON::PP</a> in order, and either uses the first module it finds or throws an error.</p>
+
+<p>It then exports the <code>encode_json</code> and <code>decode_json</code> functions from the loaded module, along with a <code>JSON</code> constant that returns the class name for calling <code>new</code> on.</p>
+
+<p>If you&#39;re writing fresh code rather than replacing <a href="JSON.html">JSON.pm</a> usage, you might want to pass options as constructor args rather than calling mutators, so we provide our own <code>new</code> method that supports that.</p>
+
+<h1 id="EXPORTS">EXPORTS</h1>
+
+<p><code>encode_json</code>, <code>decode_json</code> and <code>JSON</code> are exported by default; <code>is_bool</code> is exported on request.</p>
+
+<p>To import only some symbols, specify them on the <code>use</code> line:</p>
+
+<pre><code>  use JSON::MaybeXS qw(encode_json decode_json is_bool); # functions only
+
+  use JSON::MaybeXS qw(JSON); # JSON constant only</code></pre>
+
+<p>To import all available sensible symbols (<code>encode_json</code>, <code>decode_json</code>, and <code>is_bool</code>), use <code>:all</code>:</p>
+
+<pre><code>  use JSON::MaybeXS &#39;:all&#39;;</code></pre>
+
+<p>To import all symbols including those needed by legacy apps that use <a href="https://metacpan.org/pod/JSON::PP">JSON::PP</a>:</p>
+
+<pre><code>  use JSON::MaybeXS &#39;:legacy&#39;;</code></pre>
+
+<p>This imports the <code>to_json</code> and <code>from_json</code> symbols as well as everything in <code>:all</code>. NOTE: This is to support legacy code that makes extensive use of <code>to_json</code> and <code>from_json</code> which you are not yet in a position to refactor. DO NOT use this import tag in new code, in order to avoid the crawling horrors of getting UTF-8 support subtly wrong. See the documentation for <a href="JSON.html">JSON</a> for further details.</p>
+
+<h2 id="encode_json">encode_json</h2>
+
+<p>This is the <code>encode_json</code> function provided by the selected implementation module, and takes a perl data structure which is serialised to JSON text.</p>
+
+<pre><code>  my $json_text = encode_json($data_structure);</code></pre>
+
+<h2 id="decode_json">decode_json</h2>
+
+<p>This is the <code>decode_json</code> function provided by the selected implementation module, and takes a string of JSON text to deserialise to a perl data structure.</p>
+
+<pre><code>  my $data_structure = decode_json($json_text);</code></pre>
+
+<h2 id="to_json">to_json</h2>
+
+<p>This function is equivalent to calling <code>JSON()-&gt;new-&gt;encode($data_structure)</code>. It takes a perl data structure which is serialised to JSON text without encoding it to UTF-8. You should only use this function if you expect another layer to handle the UTF-8 encoding of the resulting JSON text.</p>
+
+<pre><code>  my $json_text = to_json($data_structure);</code></pre>
+
+<p>Additional arguments can be passed and will be handled as in <a href="JSON.html#to_json">&quot;to_json&quot; in JSON</a>, this is included to support legacy code <b>only</b>.</p>
+
+<h2 id="from_json">from_json</h2>
+
+<p>This function is equivalent to calling <code>JSON()-&gt;new-&gt;decode($json_text)</code>. It takes a string of unencoded JSON text to deserialise to a perl data structure. You should only use this function if another layer is already handling the UTF-8 decoding of the input JSON text.</p>
+
+<pre><code>  my $data_structure = from_json($json_text);</code></pre>
+
+<p>Additional arguments can be passed and will be handled as in <a href="JSON.html#from_json">&quot;from_json&quot; in JSON</a>, this is included to support legacy code <b>only</b>.</p>
+
+<h2 id="JSON">JSON</h2>
+
+<p>The <code>JSON</code> constant returns the selected implementation module&#39;s name for use as a class name - so:</p>
+
+<pre><code>  my $json_obj = JSON()-&gt;new; # returns a Cpanel::JSON::XS or JSON::PP object</code></pre>
+
+<p>and that object can then be used normally:</p>
+
+<pre><code>  my $data_structure = $json_obj-&gt;decode($json_text); # etc.</code></pre>
+
+<p>The use of parentheses here is optional, and only used as a hint to the reader that this use of <code>JSON</code> is a <i>subroutine</i> call, <i>not</i> a class name.</p>
+
+<h2 id="is_bool">is_bool</h2>
+
+<pre><code>  $is_boolean = is_bool($scalar)</code></pre>
+
+<p>Returns true if the passed scalar represents either <code>true</code> or <code>false</code>, two constants that act like <code>1</code> and <code>0</code>, respectively and are used to represent JSON <code>true</code> and <code>false</code> values in Perl.</p>
+
+<p>Since this is a bare sub in the various backend classes, it cannot be called as a class method like the other interfaces; it must be called as a function, with no invocant. It supports the representation used in all JSON backends.</p>
+
+<p>Available since version 1.002004.</p>
+
+<h1 id="CONSTRUCTOR">CONSTRUCTOR</h1>
+
+<h2 id="new">new</h2>
+
+<p>With <a href="https://metacpan.org/pod/JSON::PP">JSON::PP</a>, <a href="./JSON::XS.html">JSON::XS</a> and <a href="./Cpanel::JSON::XS.html">Cpanel::JSON::XS</a> you are required to call mutators to set options, such as:</p>
+
+<pre><code>  my $json = $class-&gt;new-&gt;utf8(1)-&gt;pretty(1);</code></pre>
+
+<p>Since this is a trifle irritating and noticeably un-perlish, we also offer:</p>
+
+<pre><code>  my $json = JSON::MaybeXS-&gt;new(utf8 =&gt; 1, pretty =&gt; 1);</code></pre>
+
+<p>which works equivalently to the above (and in the usual tradition will accept a hashref instead of a hash, should you so desire).</p>
+
+<p>The resulting object is blessed into the underlying backend, which offers (at least) the methods <code>encode</code> and <code>decode</code>.</p>
+
+<h1 id="BOOLEANS">BOOLEANS</h1>
+
+<p>To include JSON-aware booleans (<code>true</code>, <code>false</code>) in your data, just do:</p>
+
+<pre><code>    use JSON::MaybeXS;
+    my $true = JSON()-&gt;true;
+    my $false = JSON()-&gt;false;</code></pre>
+
+<p>The booleans are also available as subs or methods on JSON::MaybeXS.</p>
+
+<pre><code>    use JSON::MaybeXS ();
+    my $true = JSON::MaybeXS::true;
+    my $true = JSON::MaybeXS-&gt;true;
+    my $false = JSON::MaybeXS::false;
+    my $false = JSON::MaybeXS-&gt;false;</code></pre>
+
+<h1 id="CONVERTING-FROM-JSON::Any"><a id="CONVERTING"></a>CONVERTING FROM JSON::Any</h1>
+
+<p><a href="https://metacpan.org/pod/JSON::Any">JSON::Any</a> used to be the favoured compatibility layer above the various JSON backends, but over time has grown a lot of extra code to deal with legacy backends (e.g. <a href="https://metacpan.org/pod/JSON::Syck">JSON::Syck</a>) that are no longer needed. This is a rough guide of translating such code:</p>
+
+<p>Change code from:</p>
+
+<pre><code>    use JSON::Any;
+    my $json = JSON::Any-&gt;new-&gt;objToJson($data);    # or to_json($data), or Dump($data)</code></pre>
+
+<p>to:</p>
+
+<pre><code>    use JSON::MaybeXS;
+    my $json = encode_json($data);</code></pre>
+
+<p>Change code from:</p>
+
+<pre><code>    use JSON::Any;
+    my $data = JSON::Any-&gt;new-&gt;jsonToObj($json);    # or from_json($json), or Load($json)</code></pre>
+
+<p>to:</p>
+
+<pre><code>    use JSON::MaybeXS;
+    my $json = decode_json($data);</code></pre>
+
+<h1 id="CAVEATS">CAVEATS</h1>
+
+<p>The <code>new()</code> method in this module is technically a factory, not a constructor, because the objects it returns will <i>NOT</i> be blessed into the <code>JSON::MaybeXS</code> class.</p>
+
+<p>If you are using an object returned by this module as a Moo(se) attribute, this type constraint code:</p>
+
+<pre><code>    is &#39;json&#39; =&gt; ( isa =&gt; &#39;JSON::MaybeXS&#39; );</code></pre>
+
+<p>will <i>NOT</i> do what you expect. Instead, either rely on the <code>JSON</code> class constant described above, as so:</p>
+
+<pre><code>    is &#39;json&#39; =&gt; ( isa =&gt; JSON::MaybeXS::JSON() );</code></pre>
+
+<p>Alternatively, you can use duck typing:</p>
+
+<pre><code>    use Moose::Util::TypeConstraints &#39;duck_type&#39;;
+    is &#39;json&#39; =&gt; ( isa =&gt; Object , duck_type([qw/ encode decode /]));</code></pre>
+
+<h1 id="INSTALLATION">INSTALLATION</h1>
+
+<p>At installation time, <i>Makefile.PL</i> will attempt to determine if you have a working compiler available, and therefore whether you are able to run XS code. If so, <a href="./Cpanel::JSON::XS.html">Cpanel::JSON::XS</a> will be added to the prerequisite list, unless <a href="./JSON::XS.html">JSON::XS</a> is already installed at a high enough version. <a href="./JSON::XS.html">JSON::XS</a> may also be upgraded to fix any incompatibility issues.</p>
+
+<p>Because running XS code is not mandatory and <a href="https://metacpan.org/pod/JSON::PP">JSON::PP</a> (which is in perl core) is used as a fallback backend, this module is safe to be used in a suite of code that is fatpacked or installed into a restricted-resource environment.</p>
+
+<p>You can also prevent any XS dependencies from being installed by setting <code>PUREPERL_ONLY=1</code> in <i>Makefile.PL</i> options (or in the <code>PERL_MM_OPT</code> environment variable), or using the <code>--pp</code> or <code>--pureperl</code> flags with the <a href="https://metacpan.org/pod/cpanm">cpanminus client</a>.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>mst - Matt S. Trout (cpan:MSTROUT) &lt;mst@shadowcat.co.uk&gt;</p>
+
+<h1 id="CONTRIBUTORS">CONTRIBUTORS</h1>
+
+<ul>
+
+<li><p>Clinton Gormley &lt;drtech@cpan.org&gt;</p>
+
+</li>
+<li><p>Karen Etheridge &lt;ether@cpan.org&gt;</p>
+
+</li>
+<li><p>Kieren Diment &lt;diment@gmail.com&gt;</p>
+
+</li>
+</ul>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright (c) 2013 the <code>JSON::MaybeXS</code> <a href="./JSON::MaybeXS.html#AUTHOR">&quot;AUTHOR&quot;</a> and <a href="./JSON::MaybeXS.html#CONTRIBUTORS">&quot;CONTRIBUTORS&quot;</a> as listed above.</p>
+
+<h1 id="LICENSE">LICENSE</h1>
+
+<p>This library is free software and may be distributed under the same terms as perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install JSON::MaybeXS, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm JSON::MaybeXS</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install JSON::MaybeXS</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./JSON::MaybeXS.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

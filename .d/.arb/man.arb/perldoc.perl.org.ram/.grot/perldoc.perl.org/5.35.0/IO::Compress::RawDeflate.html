@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IO::Compress::RawDeflate - Write RFC 1951 files/buffers - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/IO::Compress::RawDeflate">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IO::Compress::RawDeflate.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/IO::Compress::RawDeflate">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/IO::Compress::RawDeflate">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/IO::Compress::RawDeflate">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/IO::Compress::RawDeflate">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/IO::Compress::RawDeflate">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/IO::Compress::RawDeflate">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/IO::Compress::RawDeflate">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/IO::Compress::RawDeflate">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/IO::Compress::RawDeflate">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/IO::Compress::RawDeflate">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/IO::Compress::RawDeflate">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/IO::Compress::RawDeflate">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/IO::Compress::RawDeflate">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/IO::Compress::RawDeflate">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/IO::Compress::RawDeflate">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/IO::Compress::RawDeflate">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/IO::Compress::RawDeflate">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/IO::Compress::RawDeflate">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/IO::Compress::RawDeflate">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/IO::Compress::RawDeflate">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/IO::Compress::RawDeflate">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/IO::Compress::RawDeflate">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/IO::Compress::RawDeflate">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/IO::Compress::RawDeflate">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/IO::Compress::RawDeflate">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/IO::Compress::RawDeflate">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/IO::Compress::RawDeflate">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/IO::Compress::RawDeflate">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/IO::Compress::RawDeflate">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/IO::Compress::RawDeflate">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/IO::Compress::RawDeflate">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/IO::Compress::RawDeflate">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/IO::Compress::RawDeflate">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/IO::Compress::RawDeflate">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/IO::Compress::RawDeflate">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/IO::Compress::RawDeflate">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/IO::Compress::RawDeflate">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/IO::Compress::RawDeflate">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/IO::Compress::RawDeflate">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/IO::Compress::RawDeflate">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/IO::Compress::RawDeflate">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/IO::Compress::RawDeflate">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/IO::Compress::RawDeflate">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/IO::Compress::RawDeflate">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/IO::Compress::RawDeflate">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/IO::Compress::RawDeflate">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/IO::Compress::RawDeflate">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/IO::Compress::RawDeflate">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/IO::Compress::RawDeflate">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/IO::Compress::RawDeflate">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/IO::Compress::RawDeflate">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/IO::Compress::RawDeflate">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/IO::Compress::RawDeflate">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/IO::Compress::RawDeflate">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/IO::Compress::RawDeflate">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/IO::Compress::RawDeflate">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/IO::Compress::RawDeflate">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/IO::Compress::RawDeflate">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/IO::Compress::RawDeflate">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/IO::Compress::RawDeflate">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/IO::Compress::RawDeflate">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/IO::Compress::RawDeflate">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/IO::Compress::RawDeflate">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/IO::Compress::RawDeflate">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/IO::Compress::RawDeflate">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/IO::Compress::RawDeflate">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/IO::Compress::RawDeflate">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/IO::Compress::RawDeflate">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/IO::Compress::RawDeflate">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/IO::Compress::RawDeflate">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/IO::Compress::RawDeflate">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/IO::Compress::RawDeflate">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/IO::Compress::RawDeflate">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/IO::Compress::RawDeflate">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/IO::Compress::RawDeflate">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/IO::Compress::RawDeflate">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/IO::Compress::RawDeflate">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/IO::Compress::RawDeflate">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/IO::Compress::RawDeflate">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/IO::Compress::RawDeflate">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IO::Compress::RawDeflate.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/IO::Compress::RawDeflate">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/IO::Compress::RawDeflate">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/IO::Compress::RawDeflate">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/IO::Compress::RawDeflate">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/IO::Compress::RawDeflate">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/IO::Compress::RawDeflate">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/IO::Compress::RawDeflate">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/IO::Compress::RawDeflate">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/IO::Compress::RawDeflate">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/IO::Compress::RawDeflate">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/IO::Compress::RawDeflate">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/IO::Compress::RawDeflate">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/IO::Compress::RawDeflate">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/IO::Compress::RawDeflate">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/IO::Compress::RawDeflate">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/IO::Compress::RawDeflate">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/IO::Compress::RawDeflate">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/IO::Compress::RawDeflate">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/IO::Compress::RawDeflate">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/IO::Compress::RawDeflate">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/IO::Compress::RawDeflate">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/IO::Compress::RawDeflate">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/IO::Compress::RawDeflate">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/IO::Compress::RawDeflate">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/IO::Compress::RawDeflate">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/IO::Compress::RawDeflate">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/IO::Compress::RawDeflate">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/IO::Compress::RawDeflate">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/IO::Compress::RawDeflate">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/IO::Compress::RawDeflate">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/IO::Compress::RawDeflate">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/IO::Compress::RawDeflate">5.35.1</a>
+          <a class="dropdown-item active" href="./IO::Compress::RawDeflate.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IO::Compress::RawDeflate.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./IO::Compress::RawDeflate.html">IO::Compress::RawDeflate</a>
+          <div id="more">
+            (<a href="./IO::Compress::RawDeflate.txt">source</a>,
+            <a href="https://metacpan.org/pod/IO::Compress::RawDeflate">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 2.102</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Functional-Interface">Functional Interface</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#rawdeflate-$input_filename_or_reference-=%3E-$output_filename_or_reference-%5B,-OPTS%5D">rawdeflate $input_filename_or_reference =&gt; $output_filename_or_reference [, OPTS]</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#The-$input_filename_or_reference-parameter">The $input_filename_or_reference parameter</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#The-$output_filename_or_reference-parameter">The $output_filename_or_reference parameter</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Notes">Notes</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Optional-Parameters">Optional Parameters</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Examples">Examples</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Streaming">Streaming</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Compressing-a-file-from-the-filesystem">Compressing a file from the filesystem</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Reading-from-a-Filehandle-and-writing-to-an-in-memory-buffer">Reading from a Filehandle and writing to an in-memory buffer</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Compressing-multiple-files">Compressing multiple files</a>
+              </li>
+          </ul>
+
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#OO-Interface">OO Interface</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Constructor">Constructor</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Constructor-Options">Constructor Options</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Examples1">Examples</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Methods">Methods</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#print">print</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#printf">printf</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#syswrite">syswrite</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#write">write</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#flush">flush</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#tell">tell</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#eof">eof</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#seek">seek</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#binmode">binmode</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#opened">opened</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#autoflush">autoflush</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#input_line_number">input_line_number</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#fileno">fileno</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#close">close</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#newStream(%5BOPTS%5D)">newStream([OPTS])</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#deflateParams">deflateParams</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Importing">Importing</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#EXAMPLES">EXAMPLES</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Apache::GZip-Revisited">Apache::GZip Revisited</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#Working-with-Net::FTP">Working with Net::FTP</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#SUPPORT">SUPPORT</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#MODIFICATION-HISTORY">MODIFICATION HISTORY</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Compress::RawDeflate.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./IO::Compress::RawDeflate.html#NAME">#</a>NAME</h1>
+
+<p>IO::Compress::RawDeflate - Write RFC 1951 files/buffers</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./IO::Compress::RawDeflate.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+
+my $status = rawdeflate $input =&gt; $output [,OPTS]
+    or die &quot;rawdeflate failed: $RawDeflateError\n&quot;;
+
+my $z = IO::Compress::RawDeflate-&gt;new( $output [,OPTS] )
+    or die &quot;rawdeflate failed: $RawDeflateError\n&quot;;
+
+$z-&gt;print($string);
+$z-&gt;printf($format, $string);
+$z-&gt;write($string);
+$z-&gt;syswrite($string [, $length, $offset]);
+$z-&gt;flush();
+$z-&gt;tell();
+$z-&gt;eof();
+$z-&gt;seek($position, $whence);
+$z-&gt;binmode();
+$z-&gt;fileno();
+$z-&gt;opened();
+$z-&gt;autoflush();
+$z-&gt;input_line_number();
+$z-&gt;newStream( [OPTS] );
+
+$z-&gt;deflateParams();
+
+$z-&gt;close() ;
+
+$RawDeflateError ;
+
+# IO::File mode
+
+print $z $string;
+printf $z $format, $string;
+tell $z
+eof $z
+seek $z, $position, $whence
+binmode $z
+fileno $z
+close $z ;</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./IO::Compress::RawDeflate.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This module provides a Perl interface that allows writing compressed data to files or buffer as defined in RFC 1951.</p>
+
+<p>Note that RFC 1951 data is not a good choice of compression format to use in isolation, especially if you want to auto-detect it.</p>
+
+<p>For reading RFC 1951 files/buffers, see the companion module <a href="./IO::Uncompress::RawInflate.html">IO::Uncompress::RawInflate</a>.</p>
+
+<h1 id="Functional-Interface"><a class="permalink" href="./IO::Compress::RawDeflate.html#Functional-Interface">#</a><a id="Functional"></a>Functional Interface</h1>
+
+<p>A top-level function, <code>rawdeflate</code>, is provided to carry out &quot;one-shot&quot; compression between buffers and/or files. For finer control over the compression process, see the <a href="./IO::Compress::RawDeflate.html#OO-Interface">&quot;OO Interface&quot;</a> section.</p>
+
+<pre><code>use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+
+rawdeflate $input_filename_or_reference =&gt; $output_filename_or_reference [,OPTS]
+    or die &quot;rawdeflate failed: $RawDeflateError\n&quot;;</code></pre>
+
+<p>The functional interface needs Perl5.005 or better.</p>
+
+<h2 id="rawdeflate-$input_filename_or_reference-=&gt;-$output_filename_or_reference-[,-OPTS]"><a class="permalink" href="./IO::Compress::RawDeflate.html#rawdeflate-$input_filename_or_reference-=%3E-$output_filename_or_reference-%5B,-OPTS%5D">#</a><a id="rawdeflate"></a><a id="rawdeflate-input_filename_or_reference-output_filename_or_reference-OPTS"></a>rawdeflate $input_filename_or_reference =&gt; $output_filename_or_reference [, OPTS]</h2>
+
+<p><code>rawdeflate</code> expects at least two parameters, <code>$input_filename_or_reference</code> and <code>$output_filename_or_reference</code> and zero or more optional parameters (see <a href="./IO::Compress::RawDeflate.html#Optional-Parameters">&quot;Optional Parameters&quot;</a>)</p>
+
+<h3 id="The-$input_filename_or_reference-parameter"><a class="permalink" href="./IO::Compress::RawDeflate.html#The-$input_filename_or_reference-parameter">#</a><a id="The"></a><a id="The-input_filename_or_reference-parameter"></a>The <code>$input_filename_or_reference</code> parameter</h3>
+
+<p>The parameter, <code>$input_filename_or_reference</code>, is used to define the source of the uncompressed data.</p>
+
+<p>It can take one of the following forms:</p>
+
+<dl>
+
+<dt id="A-filename"><a class="permalink" href="./IO::Compress::RawDeflate.html#A-filename">#</a><a id="A"></a>A filename</dt>
+<dd>
+
+<p>If the <code>$input_filename_or_reference</code> parameter is a simple scalar, it is assumed to be a filename. This file will be opened for reading and the input data will be read from it.</p>
+
+</dd>
+<dt id="A-filehandle"><a class="permalink" href="./IO::Compress::RawDeflate.html#A-filehandle">#</a><a id="A1"></a>A filehandle</dt>
+<dd>
+
+<p>If the <code>$input_filename_or_reference</code> parameter is a filehandle, the input data will be read from it. The string &#39;-&#39; can be used as an alias for standard input.</p>
+
+</dd>
+<dt id="A-scalar-reference"><a class="permalink" href="./IO::Compress::RawDeflate.html#A-scalar-reference">#</a><a id="A2"></a>A scalar reference</dt>
+<dd>
+
+<p>If <code>$input_filename_or_reference</code> is a scalar reference, the input data will be read from <code>$$input_filename_or_reference</code>.</p>
+
+</dd>
+<dt id="An-array-reference"><a class="permalink" href="./IO::Compress::RawDeflate.html#An-array-reference">#</a><a id="An"></a>An array reference</dt>
+<dd>
+
+<p>If <code>$input_filename_or_reference</code> is an array reference, each element in the array must be a filename.</p>
+
+<p>The input data will be read from each file in turn.</p>
+
+<p>The complete array will be walked to ensure that it only contains valid filenames before any data is compressed.</p>
+
+</dd>
+<dt id="An-Input-FileGlob-string"><a class="permalink" href="./IO::Compress::RawDeflate.html#An-Input-FileGlob-string">#</a><a id="An1"></a>An Input FileGlob string</dt>
+<dd>
+
+<p>If <code>$input_filename_or_reference</code> is a string that is delimited by the characters &quot;&lt;&quot; and &quot;&gt;&quot; <code>rawdeflate</code> will assume that it is an <i>input fileglob string</i>. The input is the list of files that match the fileglob.</p>
+
+<p>See <a href="./File::GlobMapper.html">File::GlobMapper</a> for more details.</p>
+
+</dd>
+</dl>
+
+<p>If the <code>$input_filename_or_reference</code> parameter is any other type, <code>undef</code> will be returned.</p>
+
+<h3 id="The-$output_filename_or_reference-parameter"><a class="permalink" href="./IO::Compress::RawDeflate.html#The-$output_filename_or_reference-parameter">#</a><a id="The1"></a><a id="The-output_filename_or_reference-parameter"></a>The <code>$output_filename_or_reference</code> parameter</h3>
+
+<p>The parameter <code>$output_filename_or_reference</code> is used to control the destination of the compressed data. This parameter can take one of these forms.</p>
+
+<dl>
+
+<dt id="A-filename1"><a class="permalink" href="./IO::Compress::RawDeflate.html#A-filename1">#</a><a id="A3"></a>A filename</dt>
+<dd>
+
+<p>If the <code>$output_filename_or_reference</code> parameter is a simple scalar, it is assumed to be a filename. This file will be opened for writing and the compressed data will be written to it.</p>
+
+</dd>
+<dt id="A-filehandle1"><a class="permalink" href="./IO::Compress::RawDeflate.html#A-filehandle1">#</a><a id="A4"></a>A filehandle</dt>
+<dd>
+
+<p>If the <code>$output_filename_or_reference</code> parameter is a filehandle, the compressed data will be written to it. The string &#39;-&#39; can be used as an alias for standard output.</p>
+
+</dd>
+<dt id="A-scalar-reference1"><a class="permalink" href="./IO::Compress::RawDeflate.html#A-scalar-reference1">#</a><a id="A5"></a>A scalar reference</dt>
+<dd>
+
+<p>If <code>$output_filename_or_reference</code> is a scalar reference, the compressed data will be stored in <code>$$output_filename_or_reference</code>.</p>
+
+</dd>
+<dt id="An-Array-Reference"><a class="permalink" href="./IO::Compress::RawDeflate.html#An-Array-Reference">#</a><a id="An2"></a>An Array Reference</dt>
+<dd>
+
+<p>If <code>$output_filename_or_reference</code> is an array reference, the compressed data will be pushed onto the array.</p>
+
+</dd>
+<dt id="An-Output-FileGlob"><a class="permalink" href="./IO::Compress::RawDeflate.html#An-Output-FileGlob">#</a><a id="An3"></a>An Output FileGlob</dt>
+<dd>
+
+<p>If <code>$output_filename_or_reference</code> is a string that is delimited by the characters &quot;&lt;&quot; and &quot;&gt;&quot; <code>rawdeflate</code> will assume that it is an <i>output fileglob string</i>. The output is the list of files that match the fileglob.</p>
+
+<p>When <code>$output_filename_or_reference</code> is an fileglob string, <code>$input_filename_or_reference</code> must also be a fileglob string. Anything else is an error.</p>
+
+<p>See <a href="./File::GlobMapper.html">File::GlobMapper</a> for more details.</p>
+
+</dd>
+</dl>
+
+<p>If the <code>$output_filename_or_reference</code> parameter is any other type, <code>undef</code> will be returned.</p>
+
+<h2 id="Notes"><a class="permalink" href="./IO::Compress::RawDeflate.html#Notes">#</a>Notes</h2>
+
+<p>When <code>$input_filename_or_reference</code> maps to multiple files/buffers and <code>$output_filename_or_reference</code> is a single file/buffer the input files/buffers will be stored in <code>$output_filename_or_reference</code> as a concatenated series of compressed data streams.</p>
+
+<h2 id="Optional-Parameters"><a class="permalink" href="./IO::Compress::RawDeflate.html#Optional-Parameters">#</a><a id="Optional"></a>Optional Parameters</h2>
+
+<p>The optional parameters for the one-shot function <code>rawdeflate</code> are (for the most part) identical to those used with the OO interface defined in the <a href="./IO::Compress::RawDeflate.html#Constructor-Options">&quot;Constructor Options&quot;</a> section. The exceptions are listed below</p>
+
+<dl>
+
+<dt id="AutoClose-=&gt;-0|1"><a class="permalink" href="./IO::Compress::RawDeflate.html#AutoClose-=%3E-0%7C1">#</a><a id="AutoClose"></a><a id="AutoClose-0-1"></a><code>AutoClose =&gt; 0|1</code></dt>
+<dd>
+
+<p>This option applies to any input or output data streams to <code>rawdeflate</code> that are filehandles.</p>
+
+<p>If <code>AutoClose</code> is specified, and the value is true, it will result in all input and/or output filehandles being closed once <code>rawdeflate</code> has completed.</p>
+
+<p>This parameter defaults to 0.</p>
+
+</dd>
+<dt id="BinModeIn-=&gt;-0|1"><a class="permalink" href="./IO::Compress::RawDeflate.html#BinModeIn-=%3E-0%7C1">#</a><a id="BinModeIn"></a><a id="BinModeIn-0-1"></a><code>BinModeIn =&gt; 0|1</code></dt>
+<dd>
+
+<p>This option is now a no-op. All files will be read in binmode.</p>
+
+</dd>
+<dt id="Append-=&gt;-0|1"><a class="permalink" href="./IO::Compress::RawDeflate.html#Append-=%3E-0%7C1">#</a><a id="Append"></a><a id="Append-0-1"></a><code>Append =&gt; 0|1</code></dt>
+<dd>
+
+<p>The behaviour of this option is dependent on the type of output data stream.</p>
+
+<ul>
+
+<li><p>A Buffer</p>
+
+<p>If <code>Append</code> is enabled, all compressed data will be append to the end of the output buffer. Otherwise the output buffer will be cleared before any compressed data is written to it.</p>
+
+</li>
+<li><p>A Filename</p>
+
+<p>If <code>Append</code> is enabled, the file will be opened in append mode. Otherwise the contents of the file, if any, will be truncated before any compressed data is written to it.</p>
+
+</li>
+<li><p>A Filehandle</p>
+
+<p>If <code>Append</code> is enabled, the filehandle will be positioned to the end of the file via a call to <code>seek</code> before any compressed data is written to it. Otherwise the file pointer will not be moved.</p>
+
+</li>
+</ul>
+
+<p>When <code>Append</code> is specified, and set to true, it will <i>append</i> all compressed data to the output data stream.</p>
+
+<p>So when the output is a filehandle it will carry out a seek to the eof before writing any compressed data. If the output is a filename, it will be opened for appending. If the output is a buffer, all compressed data will be appended to the existing buffer.</p>
+
+<p>Conversely when <code>Append</code> is not specified, or it is present and is set to false, it will operate as follows.</p>
+
+<p>When the output is a filename, it will truncate the contents of the file before writing any compressed data. If the output is a filehandle its position will not be changed. If the output is a buffer, it will be wiped before any compressed data is output.</p>
+
+<p>Defaults to 0.</p>
+
+</dd>
+</dl>
+
+<h2 id="Examples"><a class="permalink" href="./IO::Compress::RawDeflate.html#Examples">#</a>Examples</h2>
+
+<p>Here are a few example that show the capabilities of the module.</p>
+
+<h3 id="Streaming"><a class="permalink" href="./IO::Compress::RawDeflate.html#Streaming">#</a>Streaming</h3>
+
+<p>This very simple command line example demonstrates the streaming capabilities of the module. The code reads data from STDIN, compresses it, and writes the compressed data to STDOUT.</p>
+
+<pre><code class="plaintext">$ echo hello world | perl -MIO::Compress::RawDeflate=rawdeflate -e &#39;rawdeflate \*STDIN =&gt; \*STDOUT&#39; &gt;output.1951</code></pre>
+
+<p>The special filename &quot;-&quot; can be used as a standin for both <code>\*STDIN</code> and <code>\*STDOUT</code>, so the above can be rewritten as</p>
+
+<pre><code class="plaintext">$ echo hello world | perl -MIO::Compress::RawDeflate=rawdeflate -e &#39;rawdeflate &quot;-&quot; =&gt; &quot;-&quot;&#39; &gt;output.1951</code></pre>
+
+<h3 id="Compressing-a-file-from-the-filesystem"><a class="permalink" href="./IO::Compress::RawDeflate.html#Compressing-a-file-from-the-filesystem">#</a><a id="Compressing"></a>Compressing a file from the filesystem</h3>
+
+<p>To read the contents of the file <code>file1.txt</code> and write the compressed data to the file <code>file1.txt.1951</code>.</p>
+
+<pre><code>use strict ;
+use warnings ;
+use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+
+my $input = &quot;file1.txt&quot;;
+rawdeflate $input =&gt; &quot;$input.1951&quot;
+    or die &quot;rawdeflate failed: $RawDeflateError\n&quot;;</code></pre>
+
+<h3 id="Reading-from-a-Filehandle-and-writing-to-an-in-memory-buffer"><a class="permalink" href="./IO::Compress::RawDeflate.html#Reading-from-a-Filehandle-and-writing-to-an-in-memory-buffer">#</a><a id="Reading"></a>Reading from a Filehandle and writing to an in-memory buffer</h3>
+
+<p>To read from an existing Perl filehandle, <code>$input</code>, and write the compressed data to a buffer, <code>$buffer</code>.</p>
+
+<pre><code>use strict ;
+use warnings ;
+use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+use IO::File ;
+
+my $input = IO::File-&gt;new( &quot;&lt;file1.txt&quot; )
+    or die &quot;Cannot open &#39;file1.txt&#39;: $!\n&quot; ;
+my $buffer ;
+rawdeflate $input =&gt; \$buffer
+    or die &quot;rawdeflate failed: $RawDeflateError\n&quot;;</code></pre>
+
+<h3 id="Compressing-multiple-files"><a class="permalink" href="./IO::Compress::RawDeflate.html#Compressing-multiple-files">#</a><a id="Compressing1"></a>Compressing multiple files</h3>
+
+<p>To compress all files in the directory &quot;/my/home&quot; that match &quot;*.txt&quot; and store the compressed data in the same directory</p>
+
+<pre><code>use strict ;
+use warnings ;
+use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+
+rawdeflate &#39;&lt;/my/home/*.txt&gt;&#39; =&gt; &#39;&lt;*.1951&gt;&#39;
+    or die &quot;rawdeflate failed: $RawDeflateError\n&quot;;</code></pre>
+
+<p>and if you want to compress each file one at a time, this will do the trick</p>
+
+<pre><code>use strict ;
+use warnings ;
+use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError) ;
+
+for my $input ( glob &quot;/my/home/*.txt&quot; )
+{
+    my $output = &quot;$input.1951&quot; ;
+    rawdeflate $input =&gt; $output
+        or die &quot;Error compressing &#39;$input&#39;: $RawDeflateError\n&quot;;
+}</code></pre>
+
+<h1 id="OO-Interface"><a class="permalink" href="./IO::Compress::RawDeflate.html#OO-Interface">#</a><a id="OO"></a>OO Interface</h1>
+
+<h2 id="Constructor"><a class="permalink" href="./IO::Compress::RawDeflate.html#Constructor">#</a>Constructor</h2>
+
+<p>The format of the constructor for <code>IO::Compress::RawDeflate</code> is shown below</p>
+
+<pre><code>my $z = IO::Compress::RawDeflate-&gt;new( $output [,OPTS] )
+    or die &quot;IO::Compress::RawDeflate failed: $RawDeflateError\n&quot;;</code></pre>
+
+<p>It returns an <code>IO::Compress::RawDeflate</code> object on success and undef on failure. The variable <code>$RawDeflateError</code> will contain an error message on failure.</p>
+
+<p>If you are running Perl 5.005 or better the object, <code>$z</code>, returned from IO::Compress::RawDeflate can be used exactly like an <a href="./IO::File.html">IO::File</a> filehandle. This means that all normal output file operations can be carried out with <code>$z</code>. For example, to write to a compressed file/buffer you can use either of these forms</p>
+
+<pre><code>$z-&gt;print(&quot;hello world\n&quot;);
+print $z &quot;hello world\n&quot;;</code></pre>
+
+<p>The mandatory parameter <code>$output</code> is used to control the destination of the compressed data. This parameter can take one of these forms.</p>
+
+<dl>
+
+<dt id="A-filename2"><a class="permalink" href="./IO::Compress::RawDeflate.html#A-filename2">#</a><a id="A6"></a>A filename</dt>
+<dd>
+
+<p>If the <code>$output</code> parameter is a simple scalar, it is assumed to be a filename. This file will be opened for writing and the compressed data will be written to it.</p>
+
+</dd>
+<dt id="A-filehandle2"><a class="permalink" href="./IO::Compress::RawDeflate.html#A-filehandle2">#</a><a id="A7"></a>A filehandle</dt>
+<dd>
+
+<p>If the <code>$output</code> parameter is a filehandle, the compressed data will be written to it. The string &#39;-&#39; can be used as an alias for standard output.</p>
+
+</dd>
+<dt id="A-scalar-reference2"><a class="permalink" href="./IO::Compress::RawDeflate.html#A-scalar-reference2">#</a><a id="A8"></a>A scalar reference</dt>
+<dd>
+
+<p>If <code>$output</code> is a scalar reference, the compressed data will be stored in <code>$$output</code>.</p>
+
+</dd>
+</dl>
+
+<p>If the <code>$output</code> parameter is any other type, <code>IO::Compress::RawDeflate</code>::new will return undef.</p>
+
+<h2 id="Constructor-Options"><a class="permalink" href="./IO::Compress::RawDeflate.html#Constructor-Options">#</a><a id="Constructor1"></a>Constructor Options</h2>
+
+<p><code>OPTS</code> is any combination of zero or more the following options:</p>
+
+<dl>
+
+<dt id="AutoClose-=&gt;-0|11"><a class="permalink" href="./IO::Compress::RawDeflate.html#AutoClose-=%3E-0%7C11">#</a><a id="AutoClose1"></a><a id="AutoClose-0-11"></a><code>AutoClose =&gt; 0|1</code></dt>
+<dd>
+
+<p>This option is only valid when the <code>$output</code> parameter is a filehandle. If specified, and the value is true, it will result in the <code>$output</code> being closed once either the <code>close</code> method is called or the <code>IO::Compress::RawDeflate</code> object is destroyed.</p>
+
+<p>This parameter defaults to 0.</p>
+
+</dd>
+<dt id="Append-=&gt;-0|11"><a class="permalink" href="./IO::Compress::RawDeflate.html#Append-=%3E-0%7C11">#</a><a id="Append1"></a><a id="Append-0-11"></a><code>Append =&gt; 0|1</code></dt>
+<dd>
+
+<p>Opens <code>$output</code> in append mode.</p>
+
+<p>The behaviour of this option is dependent on the type of <code>$output</code>.</p>
+
+<ul>
+
+<li><p>A Buffer</p>
+
+<p>If <code>$output</code> is a buffer and <code>Append</code> is enabled, all compressed data will be append to the end of <code>$output</code>. Otherwise <code>$output</code> will be cleared before any data is written to it.</p>
+
+</li>
+<li><p>A Filename</p>
+
+<p>If <code>$output</code> is a filename and <code>Append</code> is enabled, the file will be opened in append mode. Otherwise the contents of the file, if any, will be truncated before any compressed data is written to it.</p>
+
+</li>
+<li><p>A Filehandle</p>
+
+<p>If <code>$output</code> is a filehandle, the file pointer will be positioned to the end of the file via a call to <code>seek</code> before any compressed data is written to it. Otherwise the file pointer will not be moved.</p>
+
+</li>
+</ul>
+
+<p>This parameter defaults to 0.</p>
+
+</dd>
+<dt id="Merge-=&gt;-0|1"><a class="permalink" href="./IO::Compress::RawDeflate.html#Merge-=%3E-0%7C1">#</a><a id="Merge"></a><a id="Merge-0-1"></a><code>Merge =&gt; 0|1</code></dt>
+<dd>
+
+<p>This option is used to compress input data and append it to an existing compressed data stream in <code>$output</code>. The end result is a single compressed data stream stored in <code>$output</code>.</p>
+
+<p>It is a fatal error to attempt to use this option when <code>$output</code> is not an RFC 1951 data stream.</p>
+
+<p>There are a number of other limitations with the <code>Merge</code> option:</p>
+
+<ol>
+
+<li><p>This module needs to have been built with zlib 1.2.1 or better to work. A fatal error will be thrown if <code>Merge</code> is used with an older version of zlib.</p>
+
+</li>
+<li><p>If <code>$output</code> is a file or a filehandle, it must be seekable.</p>
+
+</li>
+</ol>
+
+<p>This parameter defaults to 0.</p>
+
+</dd>
+<dt id="-Level"><a class="permalink" href="./IO::Compress::RawDeflate.html#-Level">#</a><a id="Level"></a>-Level</dt>
+<dd>
+
+<p>Defines the compression level used by zlib. The value should either be a number between 0 and 9 (0 means no compression and 9 is maximum compression), or one of the symbolic constants defined below.</p>
+
+<pre><code class="plaintext">Z_NO_COMPRESSION
+Z_BEST_SPEED
+Z_BEST_COMPRESSION
+Z_DEFAULT_COMPRESSION</code></pre>
+
+<p>The default is Z_DEFAULT_COMPRESSION.</p>
+
+<p>Note, these constants are not imported by <code>IO::Compress::RawDeflate</code> by default.</p>
+
+<pre><code>use IO::Compress::RawDeflate qw(:strategy);
+use IO::Compress::RawDeflate qw(:constants);
+use IO::Compress::RawDeflate qw(:all);</code></pre>
+
+</dd>
+<dt id="-Strategy"><a class="permalink" href="./IO::Compress::RawDeflate.html#-Strategy">#</a><a id="Strategy"></a>-Strategy</dt>
+<dd>
+
+<p>Defines the strategy used to tune the compression. Use one of the symbolic constants defined below.</p>
+
+<pre><code class="plaintext">Z_FILTERED
+Z_HUFFMAN_ONLY
+Z_RLE
+Z_FIXED
+Z_DEFAULT_STRATEGY</code></pre>
+
+<p>The default is Z_DEFAULT_STRATEGY.</p>
+
+</dd>
+<dt id="Strict-=&gt;-0|1"><a class="permalink" href="./IO::Compress::RawDeflate.html#Strict-=%3E-0%7C1">#</a><a id="Strict"></a><a id="Strict-0-1"></a><code>Strict =&gt; 0|1</code></dt>
+<dd>
+
+<p>This is a placeholder option.</p>
+
+</dd>
+</dl>
+
+<h2 id="Examples1"><a class="permalink" href="./IO::Compress::RawDeflate.html#Examples1">#</a>Examples</h2>
+
+<p>TODO</p>
+
+<h1 id="Methods"><a class="permalink" href="./IO::Compress::RawDeflate.html#Methods">#</a>Methods</h1>
+
+<h2 id="print"><a class="permalink" href="./IO::Compress::RawDeflate.html#print">#</a>print</h2>
+
+<p>Usage is</p>
+
+<pre><code>$z-&gt;print($data)
+print $z $data</code></pre>
+
+<p>Compresses and outputs the contents of the <code>$data</code> parameter. This has the same behaviour as the <code>print</code> built-in.</p>
+
+<p>Returns true if successful.</p>
+
+<h2 id="printf"><a class="permalink" href="./IO::Compress::RawDeflate.html#printf">#</a>printf</h2>
+
+<p>Usage is</p>
+
+<pre><code>$z-&gt;printf($format, $data)
+printf $z $format, $data</code></pre>
+
+<p>Compresses and outputs the contents of the <code>$data</code> parameter.</p>
+
+<p>Returns true if successful.</p>
+
+<h2 id="syswrite"><a class="permalink" href="./IO::Compress::RawDeflate.html#syswrite">#</a>syswrite</h2>
+
+<p>Usage is</p>
+
+<pre><code>$z-&gt;syswrite $data
+$z-&gt;syswrite $data, $length
+$z-&gt;syswrite $data, $length, $offset</code></pre>
+
+<p>Compresses and outputs the contents of the <code>$data</code> parameter.</p>
+
+<p>Returns the number of uncompressed bytes written, or <code>undef</code> if unsuccessful.</p>
+
+<h2 id="write"><a class="permalink" href="./IO::Compress::RawDeflate.html#write">#</a>write</h2>
+
+<p>Usage is</p>
+
+<pre><code>$z-&gt;write $data
+$z-&gt;write $data, $length
+$z-&gt;write $data, $length, $offset</code></pre>
+
+<p>Compresses and outputs the contents of the <code>$data</code> parameter.</p>
+
+<p>Returns the number of uncompressed bytes written, or <code>undef</code> if unsuccessful.</p>
+
+<h2 id="flush"><a class="permalink" href="./IO::Compress::RawDeflate.html#flush">#</a>flush</h2>
+
+<p>Usage is</p>
+
+<pre><code>$z-&gt;flush;
+$z-&gt;flush($flush_type);</code></pre>
+
+<p>Flushes any pending compressed data to the output file/buffer.</p>
+
+<p>This method takes an optional parameter, <code>$flush_type</code>, that controls how the flushing will be carried out. By default the <code>$flush_type</code> used is <code>Z_FINISH</code>. Other valid values for <code>$flush_type</code> are <code>Z_NO_FLUSH</code>, <code>Z_SYNC_FLUSH</code>, <code>Z_FULL_FLUSH</code> and <code>Z_BLOCK</code>. It is strongly recommended that you only set the <code>flush_type</code> parameter if you fully understand the implications of what it does - overuse of <code>flush</code> can seriously degrade the level of compression achieved. See the <code>zlib</code> documentation for details.</p>
+
+<p>Returns true on success.</p>
+
+<h2 id="tell"><a class="permalink" href="./IO::Compress::RawDeflate.html#tell">#</a>tell</h2>
+
+<p>Usage is</p>
+
+<pre><code>$z-&gt;tell()
+tell $z</code></pre>
+
+<p>Returns the uncompressed file offset.</p>
+
+<h2 id="eof"><a class="permalink" href="./IO::Compress::RawDeflate.html#eof">#</a>eof</h2>
+
+<p>Usage is</p>
+
+<pre><code>$z-&gt;eof();
+eof($z);</code></pre>
+
+<p>Returns true if the <code>close</code> method has been called.</p>
+
+<h2 id="seek"><a class="permalink" href="./IO::Compress::RawDeflate.html#seek">#</a>seek</h2>
+
+<pre><code>$z-&gt;seek($position, $whence);
+seek($z, $position, $whence);</code></pre>
+
+<p>Provides a sub-set of the <code>seek</code> functionality, with the restriction that it is only legal to seek forward in the output file/buffer. It is a fatal error to attempt to seek backward.</p>
+
+<p>Empty parts of the file/buffer will have NULL (0x00) bytes written to them.</p>
+
+<p>The <code>$whence</code> parameter takes one the usual values, namely SEEK_SET, SEEK_CUR or SEEK_END.</p>
+
+<p>Returns 1 on success, 0 on failure.</p>
+
+<h2 id="binmode"><a class="permalink" href="./IO::Compress::RawDeflate.html#binmode">#</a>binmode</h2>
+
+<p>Usage is</p>
+
+<pre><code>$z-&gt;binmode
+binmode $z ;</code></pre>
+
+<p>This is a noop provided for completeness.</p>
+
+<h2 id="opened"><a class="permalink" href="./IO::Compress::RawDeflate.html#opened">#</a>opened</h2>
+
+<pre><code>$z-&gt;opened()</code></pre>
+
+<p>Returns true if the object currently refers to a opened file/buffer.</p>
+
+<h2 id="autoflush"><a class="permalink" href="./IO::Compress::RawDeflate.html#autoflush">#</a>autoflush</h2>
+
+<pre><code>my $prev = $z-&gt;autoflush()
+my $prev = $z-&gt;autoflush(EXPR)</code></pre>
+
+<p>If the <code>$z</code> object is associated with a file or a filehandle, this method returns the current autoflush setting for the underlying filehandle. If <code>EXPR</code> is present, and is non-zero, it will enable flushing after every write/print operation.</p>
+
+<p>If <code>$z</code> is associated with a buffer, this method has no effect and always returns <code>undef</code>.</p>
+
+<p><b>Note</b> that the special variable <code>$|</code> <b>cannot</b> be used to set or retrieve the autoflush setting.</p>
+
+<h2 id="input_line_number"><a class="permalink" href="./IO::Compress::RawDeflate.html#input_line_number">#</a>input_line_number</h2>
+
+<pre><code>$z-&gt;input_line_number()
+$z-&gt;input_line_number(EXPR)</code></pre>
+
+<p>This method always returns <code>undef</code> when compressing.</p>
+
+<h2 id="fileno"><a class="permalink" href="./IO::Compress::RawDeflate.html#fileno">#</a>fileno</h2>
+
+<pre><code>$z-&gt;fileno()
+fileno($z)</code></pre>
+
+<p>If the <code>$z</code> object is associated with a file or a filehandle, <code>fileno</code> will return the underlying file descriptor. Once the <code>close</code> method is called <code>fileno</code> will return <code>undef</code>.</p>
+
+<p>If the <code>$z</code> object is associated with a buffer, this method will return <code>undef</code>.</p>
+
+<h2 id="close"><a class="permalink" href="./IO::Compress::RawDeflate.html#close">#</a>close</h2>
+
+<pre><code>$z-&gt;close() ;
+close $z ;</code></pre>
+
+<p>Flushes any pending compressed data and then closes the output file/buffer.</p>
+
+<p>For most versions of Perl this method will be automatically invoked if the IO::Compress::RawDeflate object is destroyed (either explicitly or by the variable with the reference to the object going out of scope). The exceptions are Perl versions 5.005 through 5.00504 and 5.8.0. In these cases, the <code>close</code> method will be called automatically, but not until global destruction of all live objects when the program is terminating.</p>
+
+<p>Therefore, if you want your scripts to be able to run on all versions of Perl, you should call <code>close</code> explicitly and not rely on automatic closing.</p>
+
+<p>Returns true on success, otherwise 0.</p>
+
+<p>If the <code>AutoClose</code> option has been enabled when the IO::Compress::RawDeflate object was created, and the object is associated with a file, the underlying file will also be closed.</p>
+
+<h2 id="newStream([OPTS])"><a class="permalink" href="./IO::Compress::RawDeflate.html#newStream(%5BOPTS%5D)">#</a><a id="newStream"></a><a id="newStream-OPTS"></a>newStream([OPTS])</h2>
+
+<p>Usage is</p>
+
+<pre><code>$z-&gt;newStream( [OPTS] )</code></pre>
+
+<p>Closes the current compressed data stream and starts a new one.</p>
+
+<p>OPTS consists of any of the options that are available when creating the <code>$z</code> object.</p>
+
+<p>See the <a href="./IO::Compress::RawDeflate.html#Constructor-Options">&quot;Constructor Options&quot;</a> section for more details.</p>
+
+<h2 id="deflateParams"><a class="permalink" href="./IO::Compress::RawDeflate.html#deflateParams">#</a>deflateParams</h2>
+
+<p>Usage is</p>
+
+<pre><code>$z-&gt;deflateParams</code></pre>
+
+<p>TODO</p>
+
+<h1 id="Importing"><a class="permalink" href="./IO::Compress::RawDeflate.html#Importing">#</a>Importing</h1>
+
+<p>A number of symbolic constants are required by some methods in <code>IO::Compress::RawDeflate</code>. None are imported by default.</p>
+
+<dl>
+
+<dt id=":all"><a class="permalink" href="./IO::Compress::RawDeflate.html#:all">#</a><a id="all"></a>:all</dt>
+<dd>
+
+<p>Imports <code>rawdeflate</code>, <code>$RawDeflateError</code> and all symbolic constants that can be used by <code>IO::Compress::RawDeflate</code>. Same as doing this</p>
+
+<pre><code>use IO::Compress::RawDeflate qw(rawdeflate $RawDeflateError :constants) ;</code></pre>
+
+</dd>
+<dt id=":constants"><a class="permalink" href="./IO::Compress::RawDeflate.html#:constants">#</a><a id="constants"></a>:constants</dt>
+<dd>
+
+<p>Import all symbolic constants. Same as doing this</p>
+
+<pre><code>use IO::Compress::RawDeflate qw(:flush :level :strategy) ;</code></pre>
+
+</dd>
+<dt id=":flush"><a class="permalink" href="./IO::Compress::RawDeflate.html#:flush">#</a><a id="flush1"></a>:flush</dt>
+<dd>
+
+<p>These symbolic constants are used by the <code>flush</code> method.</p>
+
+<pre><code class="plaintext">Z_NO_FLUSH
+Z_PARTIAL_FLUSH
+Z_SYNC_FLUSH
+Z_FULL_FLUSH
+Z_FINISH
+Z_BLOCK</code></pre>
+
+</dd>
+<dt id=":level"><a class="permalink" href="./IO::Compress::RawDeflate.html#:level">#</a><a id="level"></a>:level</dt>
+<dd>
+
+<p>These symbolic constants are used by the <code>Level</code> option in the constructor.</p>
+
+<pre><code class="plaintext">Z_NO_COMPRESSION
+Z_BEST_SPEED
+Z_BEST_COMPRESSION
+Z_DEFAULT_COMPRESSION</code></pre>
+
+</dd>
+<dt id=":strategy"><a class="permalink" href="./IO::Compress::RawDeflate.html#:strategy">#</a><a id="strategy"></a>:strategy</dt>
+<dd>
+
+<p>These symbolic constants are used by the <code>Strategy</code> option in the constructor.</p>
+
+<pre><code class="plaintext">Z_FILTERED
+Z_HUFFMAN_ONLY
+Z_RLE
+Z_FIXED
+Z_DEFAULT_STRATEGY</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="EXAMPLES"><a class="permalink" href="./IO::Compress::RawDeflate.html#EXAMPLES">#</a>EXAMPLES</h1>
+
+<h2 id="Apache::GZip-Revisited"><a class="permalink" href="./IO::Compress::RawDeflate.html#Apache::GZip-Revisited">#</a><a id="Apache"></a>Apache::GZip Revisited</h2>
+
+<p>See <a href="./IO::Compress::FAQ.html#Apache%3A%3AGZip-Revisited">IO::Compress::FAQ</a></p>
+
+<h2 id="Working-with-Net::FTP"><a class="permalink" href="./IO::Compress::RawDeflate.html#Working-with-Net::FTP">#</a><a id="Working"></a>Working with Net::FTP</h2>
+
+<p>See <a href="./IO::Compress::FAQ.html#Compressed-files-and-Net%3A%3AFTP">IO::Compress::FAQ</a></p>
+
+<h1 id="SUPPORT"><a class="permalink" href="./IO::Compress::RawDeflate.html#SUPPORT">#</a>SUPPORT</h1>
+
+<p>General feedback/questions/bug reports should be sent to <a href="https://github.com/pmqs/IO-Compress/issues">https://github.com/pmqs/IO-Compress/issues</a> (preferred) or <a href="https://rt.cpan.org/Public/Dist/Display.html?Name=IO-Compress">https://rt.cpan.org/Public/Dist/Display.html?Name=IO-Compress</a>.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./IO::Compress::RawDeflate.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Compress::Zlib.html">Compress::Zlib</a>, <a href="./IO::Compress::Gzip.html">IO::Compress::Gzip</a>, <a href="./IO::Uncompress::Gunzip.html">IO::Uncompress::Gunzip</a>, <a href="./IO::Compress::Deflate.html">IO::Compress::Deflate</a>, <a href="./IO::Uncompress::Inflate.html">IO::Uncompress::Inflate</a>, <a href="./IO::Uncompress::RawInflate.html">IO::Uncompress::RawInflate</a>, <a href="./IO::Compress::Bzip2.html">IO::Compress::Bzip2</a>, <a href="./IO::Uncompress::Bunzip2.html">IO::Uncompress::Bunzip2</a>, <a href="./IO::Compress::Lzma.html">IO::Compress::Lzma</a>, <a href="./IO::Uncompress::UnLzma.html">IO::Uncompress::UnLzma</a>, <a href="./IO::Compress::Xz.html">IO::Compress::Xz</a>, <a href="./IO::Uncompress::UnXz.html">IO::Uncompress::UnXz</a>, <a href="./IO::Compress::Lzip.html">IO::Compress::Lzip</a>, <a href="./IO::Uncompress::UnLzip.html">IO::Uncompress::UnLzip</a>, <a href="./IO::Compress::Lzop.html">IO::Compress::Lzop</a>, <a href="./IO::Uncompress::UnLzop.html">IO::Uncompress::UnLzop</a>, <a href="./IO::Compress::Lzf.html">IO::Compress::Lzf</a>, <a href="./IO::Uncompress::UnLzf.html">IO::Uncompress::UnLzf</a>, <a href="./IO::Compress::Zstd.html">IO::Compress::Zstd</a>, <a href="./IO::Uncompress::UnZstd.html">IO::Uncompress::UnZstd</a>, <a href="./IO::Uncompress::AnyInflate.html">IO::Uncompress::AnyInflate</a>, <a href="./IO::Uncompress::AnyUncompress.html">IO::Uncompress::AnyUncompress</a></p>
+
+<p><a href="./IO::Compress::FAQ.html">IO::Compress::FAQ</a></p>
+
+<p><a href="./File::GlobMapper.html">File::GlobMapper</a>, <a href="./Archive::Zip.html">Archive::Zip</a>, <a href="./Archive::Tar.html">Archive::Tar</a>, <a href="./IO::Zlib.html">IO::Zlib</a></p>
+
+<p>For RFC 1950, 1951 and 1952 see <a href="http://www.faqs.org/rfcs/rfc1950.html">http://www.faqs.org/rfcs/rfc1950.html</a>, <a href="http://www.faqs.org/rfcs/rfc1951.html">http://www.faqs.org/rfcs/rfc1951.html</a> and <a href="http://www.faqs.org/rfcs/rfc1952.html">http://www.faqs.org/rfcs/rfc1952.html</a></p>
+
+<p>The <i>zlib</i> compression library was written by Jean-loup Gailly <code>gzip@prep.ai.mit.edu</code> and Mark Adler <code>madler@alumni.caltech.edu</code>.</p>
+
+<p>The primary site for the <i>zlib</i> compression library is <a href="http://www.zlib.org">http://www.zlib.org</a>.</p>
+
+<p>The primary site for gzip is <a href="http://www.gzip.org">http://www.gzip.org</a>.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./IO::Compress::RawDeflate.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>This module was written by Paul Marquess, <code>pmqs@cpan.org</code>.</p>
+
+<h1 id="MODIFICATION-HISTORY"><a class="permalink" href="./IO::Compress::RawDeflate.html#MODIFICATION-HISTORY">#</a><a id="MODIFICATION"></a>MODIFICATION HISTORY</h1>
+
+<p>See the Changes file.</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a class="permalink" href="./IO::Compress::RawDeflate.html#COPYRIGHT-AND-LICENSE">#</a><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>Copyright (c) 2005-2021 Paul Marquess. All rights reserved.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

@@ -1,0 +1,180 @@
+=over
+
+=item split /PATTERN/,EXPR,LIMIT
+X<split>
+
+=item split /PATTERN/,EXPR
+
+=item split /PATTERN/
+
+=item split
+
+Splits the string EXPR into a list of strings and returns the
+list in list context, or the size of the list in scalar context.
+(Prior to Perl 5.11, it also overwrote C<@_> with the list in
+void and scalar context. If you target old perls, beware.)
+
+If only PATTERN is given, EXPR defaults to L<C<$_>|perlvar/$_>.
+
+Anything in EXPR that matches PATTERN is taken to be a separator
+that separates the EXPR into substrings (called "I<fields>") that
+do B<not> include the separator.  Note that a separator may be
+longer than one character or even have no characters at all (the
+empty string, which is a zero-width match).
+
+The PATTERN need not be constant; an expression may be used
+to specify a pattern that varies at runtime.
+
+If PATTERN matches the empty string, the EXPR is split at the match
+position (between characters).  As an example, the following:
+
+    my @x = split(/b/, "abc"); # ("a", "c")
+
+uses the C<b> in C<'abc'> as a separator to produce the list ("a", "c").
+However, this:
+
+    my @x = split(//, "abc"); # ("a", "b", "c")
+
+uses empty string matches as separators; thus, the empty string
+may be used to split EXPR into a list of its component characters.
+
+As a special case for L<C<split>|/split E<sol>PATTERNE<sol>,EXPR,LIMIT>,
+the empty pattern given in
+L<match operator|perlop/"m/PATTERN/msixpodualngc"> syntax (C<//>)
+specifically matches the empty string, which is contrary to its usual
+interpretation as the last successful match.
+
+If PATTERN is C</^/>, then it is treated as if it used the
+L<multiline modifier|perlreref/OPERATORS> (C</^/m>), since it
+isn't much use otherwise.
+
+C<E<sol>m> and any of the other pattern modifiers valid for C<qr>
+(summarized in L<perlop/qrE<sol>STRINGE<sol>msixpodualn>) may be
+specified explicitly.
+
+As another special case,
+L<C<split>|/split E<sol>PATTERNE<sol>,EXPR,LIMIT> emulates the default
+behavior of the
+command line tool B<awk> when the PATTERN is either omitted or a
+string composed of a single space character (such as S<C<' '>> or
+S<C<"\x20">>, but not e.g. S<C</ />>).  In this case, any leading
+whitespace in EXPR is removed before splitting occurs, and the PATTERN is
+instead treated as if it were C</\s+/>; in particular, this means that
+I<any> contiguous whitespace (not just a single space character) is used as
+a separator.
+
+    my @x = split(" ", "  Quick brown fox\n");
+    # ("Quick", "brown", "fox")
+
+    my @x = split(" ", "RED\tGREEN\tBLUE");
+    # ("RED", "GREEN", "BLUE")
+
+Using split in this fashion is very similar to how
+L<C<qwE<sol>E<sol>>|/qwE<sol>STRINGE<sol>> works.
+
+However, this special treatment can be avoided by specifying
+the pattern S<C</ />> instead of the string S<C<" ">>, thereby allowing
+only a single space character to be a separator.  In earlier Perls this
+special case was restricted to the use of a plain S<C<" ">> as the
+pattern argument to split; in Perl 5.18.0 and later this special case is
+triggered by any expression which evaluates to the simple string S<C<" ">>.
+
+As of Perl 5.28, this special-cased whitespace splitting works as expected in
+the scope of L<< S<C<"use feature 'unicode_strings'">>|feature/The
+'unicode_strings' feature >>. In previous versions, and outside the scope of
+that feature, it exhibits L<perlunicode/The "Unicode Bug">: characters that are
+whitespace according to Unicode rules but not according to ASCII rules can be
+treated as part of fields rather than as field separators, depending on the
+string's internal encoding.
+
+If omitted, PATTERN defaults to a single space, S<C<" ">>, triggering
+the previously described I<awk> emulation.
+
+If LIMIT is specified and positive, it represents the maximum number
+of fields into which the EXPR may be split; in other words, LIMIT is
+one greater than the maximum number of times EXPR may be split.  Thus,
+the LIMIT value C<1> means that EXPR may be split a maximum of zero
+times, producing a maximum of one field (namely, the entire value of
+EXPR).  For instance:
+
+    my @x = split(//, "abc", 1); # ("abc")
+    my @x = split(//, "abc", 2); # ("a", "bc")
+    my @x = split(//, "abc", 3); # ("a", "b", "c")
+    my @x = split(//, "abc", 4); # ("a", "b", "c")
+
+If LIMIT is negative, it is treated as if it were instead arbitrarily
+large; as many fields as possible are produced.
+
+If LIMIT is omitted (or, equivalently, zero), then it is usually
+treated as if it were instead negative but with the exception that
+trailing empty fields are stripped (empty leading fields are always
+preserved); if all fields are empty, then all fields are considered to
+be trailing (and are thus stripped in this case).  Thus, the following:
+
+    my @x = split(/,/, "a,b,c,,,"); # ("a", "b", "c")
+
+produces only a three element list.
+
+    my @x = split(/,/, "a,b,c,,,", -1); # ("a", "b", "c", "", "", "")
+
+produces a six element list.
+
+In time-critical applications, it is worthwhile to avoid splitting
+into more fields than necessary.  Thus, when assigning to a list,
+if LIMIT is omitted (or zero), then LIMIT is treated as though it
+were one larger than the number of variables in the list; for the
+following, LIMIT is implicitly 3:
+
+    my ($login, $passwd) = split(/:/);
+
+Note that splitting an EXPR that evaluates to the empty string always
+produces zero fields, regardless of the LIMIT specified.
+
+An empty leading field is produced when there is a positive-width
+match at the beginning of EXPR.  For instance:
+
+    my @x = split(/ /, " abc"); # ("", "abc")
+
+splits into two elements.  However, a zero-width match at the
+beginning of EXPR never produces an empty field, so that:
+
+    my @x = split(//, " abc"); # (" ", "a", "b", "c")
+
+splits into four elements instead of five.
+
+An empty trailing field, on the other hand, is produced when there is a
+match at the end of EXPR, regardless of the length of the match
+(of course, unless a non-zero LIMIT is given explicitly, such fields are
+removed, as in the last example).  Thus:
+
+    my @x = split(//, " abc", -1); # (" ", "a", "b", "c", "")
+
+If the PATTERN contains
+L<capturing groups|perlretut/Grouping things and hierarchical matching>,
+then for each separator, an additional field is produced for each substring
+captured by a group (in the order in which the groups are specified,
+as per L<backreferences|perlretut/Backreferences>); if any group does not
+match, then it captures the L<C<undef>|/undef EXPR> value instead of a
+substring.  Also,
+note that any such additional field is produced whenever there is a
+separator (that is, whenever a split occurs), and such an additional field
+does B<not> count towards the LIMIT.  Consider the following expressions
+evaluated in list context (each returned list is provided in the associated
+comment):
+
+    my @x = split(/-|,/    , "1-10,20", 3);
+    # ("1", "10", "20")
+
+    my @x = split(/(-|,)/  , "1-10,20", 3);
+    # ("1", "-", "10", ",", "20")
+
+    my @x = split(/-|(,)/  , "1-10,20", 3);
+    # ("1", undef, "10", ",", "20")
+
+    my @x = split(/(-)|,/  , "1-10,20", 3);
+    # ("1", "-", "10", undef, "20")
+
+    my @x = split(/(-)|(,)/, "1-10,20", 3);
+    # ("1", "-", undef, "10", undef, ",", "20")
+
+=back

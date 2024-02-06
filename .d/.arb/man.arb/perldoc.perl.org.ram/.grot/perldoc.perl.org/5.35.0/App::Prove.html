@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>App::Prove - Implements the prove command. - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/App::Prove">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./App::Prove.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/App::Prove">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/App::Prove">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/App::Prove">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/App::Prove">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/App::Prove">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/App::Prove">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/App::Prove">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/App::Prove">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/App::Prove">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/App::Prove">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/App::Prove">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/App::Prove">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/App::Prove">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/App::Prove">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/App::Prove">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/App::Prove">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/App::Prove">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/App::Prove">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/App::Prove">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/App::Prove">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/App::Prove">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/App::Prove">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/App::Prove">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/App::Prove">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/App::Prove">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/App::Prove">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/App::Prove">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/App::Prove">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/App::Prove">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/App::Prove">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/App::Prove">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/App::Prove">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/App::Prove">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/App::Prove">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/App::Prove">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/App::Prove">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/App::Prove">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/App::Prove">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/App::Prove">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/App::Prove">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/App::Prove">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/App::Prove">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/App::Prove">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/App::Prove">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/App::Prove">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/App::Prove">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/App::Prove">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/App::Prove">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/App::Prove">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/App::Prove">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/App::Prove">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/App::Prove">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/App::Prove">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/App::Prove">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/App::Prove">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/App::Prove">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/App::Prove">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/App::Prove">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/App::Prove">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/App::Prove">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/App::Prove">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/App::Prove">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/App::Prove">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/App::Prove">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/App::Prove">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/App::Prove">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/App::Prove">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/App::Prove">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/App::Prove">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/App::Prove">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/App::Prove">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/App::Prove">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/App::Prove">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/App::Prove">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/App::Prove">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/App::Prove">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/App::Prove">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/App::Prove">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/App::Prove">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/App::Prove">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./App::Prove.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/App::Prove">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/App::Prove">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/App::Prove">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/App::Prove">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/App::Prove">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/App::Prove">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/App::Prove">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/App::Prove">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/App::Prove">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/App::Prove">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/App::Prove">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/App::Prove">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/App::Prove">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/App::Prove">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/App::Prove">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/App::Prove">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/App::Prove">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/App::Prove">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/App::Prove">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/App::Prove">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/App::Prove">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/App::Prove">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/App::Prove">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/App::Prove">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/App::Prove">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/App::Prove">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/App::Prove">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/App::Prove">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/App::Prove">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/App::Prove">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/App::Prove">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/App::Prove">5.35.1</a>
+          <a class="dropdown-item active" href="./App::Prove.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./App::Prove.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./App::Prove.html">App::Prove</a>
+          <div id="more">
+            (<a href="./App::Prove.txt">source</a>,
+            <a href="https://metacpan.org/pod/App::Prove">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 3.43</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#VERSION">VERSION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#METHODS">METHODS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#Class-Methods">Class Methods</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#new">new</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#state_class">state_class</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#state_manager">state_manager</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#add_rc_file">add_rc_file</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#process_args">process_args</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#run">run</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#require_harness">require_harness</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#print_version">print_version</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#Attributes">Attributes</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#PLUGINS">PLUGINS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#Sample-Plugin">Sample Plugin</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./App::Prove.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./App::Prove.html#NAME">#</a>NAME</h1>
+
+<p>App::Prove - Implements the <code>prove</code> command.</p>
+
+<h1 id="VERSION"><a class="permalink" href="./App::Prove.html#VERSION">#</a>VERSION</h1>
+
+<p>Version 3.43</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./App::Prove.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p><a href="./Test::Harness.html">Test::Harness</a> provides a command, <code>prove</code>, which runs a TAP based test suite and prints a report. The <code>prove</code> command is a minimal wrapper around an instance of this module.</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./App::Prove.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use App::Prove;
+
+my $app = App::Prove-&gt;new;
+$app-&gt;process_args(@ARGV);
+$app-&gt;run;</code></pre>
+
+<h1 id="METHODS"><a class="permalink" href="./App::Prove.html#METHODS">#</a>METHODS</h1>
+
+<h2 id="Class-Methods"><a class="permalink" href="./App::Prove.html#Class-Methods">#</a><a id="Class"></a>Class Methods</h2>
+
+<h3 id="new"><a class="permalink" href="./App::Prove.html#new">#</a><code>new</code></h3>
+
+<p>Create a new <code>App::Prove</code>. Optionally a hash ref of attribute initializers may be passed.</p>
+
+<h3 id="state_class"><a class="permalink" href="./App::Prove.html#state_class">#</a><code>state_class</code></h3>
+
+<p>Getter/setter for the name of the class used for maintaining state. This class should either subclass from <code>App::Prove::State</code> or provide an identical interface.</p>
+
+<h3 id="state_manager"><a class="permalink" href="./App::Prove.html#state_manager">#</a><code>state_manager</code></h3>
+
+<p>Getter/setter for the instance of the <code>state_class</code>.</p>
+
+<h3 id="add_rc_file"><a class="permalink" href="./App::Prove.html#add_rc_file">#</a><code>add_rc_file</code></h3>
+
+<pre><code>$prove-&gt;add_rc_file(&#39;myproj/.proverc&#39;);</code></pre>
+
+<p>Called before <code>process_args</code> to prepend the contents of an rc file to the options.</p>
+
+<h3 id="process_args"><a class="permalink" href="./App::Prove.html#process_args">#</a><code>process_args</code></h3>
+
+<pre><code>$prove-&gt;process_args(@args);</code></pre>
+
+<p>Processes the command-line arguments. Attributes will be set appropriately. Any filenames may be found in the <code>argv</code> attribute.</p>
+
+<p>Dies on invalid arguments.</p>
+
+<h3 id="run"><a class="permalink" href="./App::Prove.html#run">#</a><code>run</code></h3>
+
+<p>Perform whatever actions the command line args specified. The <code>prove</code> command line tool consists of the following code:</p>
+
+<pre><code>use App::Prove;
+
+my $app = App::Prove-&gt;new;
+$app-&gt;process_args(@ARGV);
+exit( $app-&gt;run ? 0 : 1 );  # if you need the exit code</code></pre>
+
+<h3 id="require_harness"><a class="permalink" href="./App::Prove.html#require_harness">#</a><code>require_harness</code></h3>
+
+<p>Load a harness replacement class.</p>
+
+<pre><code>$prove-&gt;require_harness($for =&gt; $class_name);</code></pre>
+
+<h3 id="print_version"><a class="permalink" href="./App::Prove.html#print_version">#</a><code>print_version</code></h3>
+
+<p>Display the version numbers of the loaded <a href="./TAP::Harness.html">TAP::Harness</a> and the current Perl.</p>
+
+<h2 id="Attributes"><a class="permalink" href="./App::Prove.html#Attributes">#</a>Attributes</h2>
+
+<p>After command line parsing the following attributes reflect the values of the corresponding command line switches. They may be altered before calling <code>run</code>.</p>
+
+<dl>
+
+<dt id="archive"><a class="permalink" href="./App::Prove.html#archive">#</a><code>archive</code></dt>
+<dd>
+
+</dd>
+<dt id="argv"><a class="permalink" href="./App::Prove.html#argv">#</a><code>argv</code></dt>
+<dd>
+
+</dd>
+<dt id="backwards"><a class="permalink" href="./App::Prove.html#backwards">#</a><code>backwards</code></dt>
+<dd>
+
+</dd>
+<dt id="blib"><a class="permalink" href="./App::Prove.html#blib">#</a><code>blib</code></dt>
+<dd>
+
+</dd>
+<dt id="color"><a class="permalink" href="./App::Prove.html#color">#</a><code>color</code></dt>
+<dd>
+
+</dd>
+<dt id="directives"><a class="permalink" href="./App::Prove.html#directives">#</a><code>directives</code></dt>
+<dd>
+
+</dd>
+<dt id="dry"><a class="permalink" href="./App::Prove.html#dry">#</a><code>dry</code></dt>
+<dd>
+
+</dd>
+<dt id="exec"><a class="permalink" href="./App::Prove.html#exec">#</a><code>exec</code></dt>
+<dd>
+
+</dd>
+<dt id="extensions"><a class="permalink" href="./App::Prove.html#extensions">#</a><code>extensions</code></dt>
+<dd>
+
+</dd>
+<dt id="failures"><a class="permalink" href="./App::Prove.html#failures">#</a><code>failures</code></dt>
+<dd>
+
+</dd>
+<dt id="comments"><a class="permalink" href="./App::Prove.html#comments">#</a><code>comments</code></dt>
+<dd>
+
+</dd>
+<dt id="formatter"><a class="permalink" href="./App::Prove.html#formatter">#</a><code>formatter</code></dt>
+<dd>
+
+</dd>
+<dt id="harness"><a class="permalink" href="./App::Prove.html#harness">#</a><code>harness</code></dt>
+<dd>
+
+</dd>
+<dt id="ignore_exit"><a class="permalink" href="./App::Prove.html#ignore_exit">#</a><code>ignore_exit</code></dt>
+<dd>
+
+</dd>
+<dt id="includes"><a class="permalink" href="./App::Prove.html#includes">#</a><code>includes</code></dt>
+<dd>
+
+</dd>
+<dt id="jobs"><a class="permalink" href="./App::Prove.html#jobs">#</a><code>jobs</code></dt>
+<dd>
+
+</dd>
+<dt id="lib"><a class="permalink" href="./App::Prove.html#lib">#</a><code>lib</code></dt>
+<dd>
+
+</dd>
+<dt id="merge"><a class="permalink" href="./App::Prove.html#merge">#</a><code>merge</code></dt>
+<dd>
+
+</dd>
+<dt id="modules"><a class="permalink" href="./App::Prove.html#modules">#</a><code>modules</code></dt>
+<dd>
+
+</dd>
+<dt id="parse"><a class="permalink" href="./App::Prove.html#parse">#</a><code>parse</code></dt>
+<dd>
+
+</dd>
+<dt id="plugins"><a class="permalink" href="./App::Prove.html#plugins">#</a><code>plugins</code></dt>
+<dd>
+
+</dd>
+<dt id="quiet"><a class="permalink" href="./App::Prove.html#quiet">#</a><code>quiet</code></dt>
+<dd>
+
+</dd>
+<dt id="really_quiet"><a class="permalink" href="./App::Prove.html#really_quiet">#</a><code>really_quiet</code></dt>
+<dd>
+
+</dd>
+<dt id="recurse"><a class="permalink" href="./App::Prove.html#recurse">#</a><code>recurse</code></dt>
+<dd>
+
+</dd>
+<dt id="rules"><a class="permalink" href="./App::Prove.html#rules">#</a><code>rules</code></dt>
+<dd>
+
+</dd>
+<dt id="show_count"><a class="permalink" href="./App::Prove.html#show_count">#</a><code>show_count</code></dt>
+<dd>
+
+</dd>
+<dt id="show_help"><a class="permalink" href="./App::Prove.html#show_help">#</a><code>show_help</code></dt>
+<dd>
+
+</dd>
+<dt id="show_man"><a class="permalink" href="./App::Prove.html#show_man">#</a><code>show_man</code></dt>
+<dd>
+
+</dd>
+<dt id="show_version"><a class="permalink" href="./App::Prove.html#show_version">#</a><code>show_version</code></dt>
+<dd>
+
+</dd>
+<dt id="shuffle"><a class="permalink" href="./App::Prove.html#shuffle">#</a><code>shuffle</code></dt>
+<dd>
+
+</dd>
+<dt id="state"><a class="permalink" href="./App::Prove.html#state">#</a><code>state</code></dt>
+<dd>
+
+</dd>
+<dt id="state_class1"><a class="permalink" href="./App::Prove.html#state_class1">#</a><code>state_class</code></dt>
+<dd>
+
+</dd>
+<dt id="taint_fail"><a class="permalink" href="./App::Prove.html#taint_fail">#</a><code>taint_fail</code></dt>
+<dd>
+
+</dd>
+<dt id="taint_warn"><a class="permalink" href="./App::Prove.html#taint_warn">#</a><code>taint_warn</code></dt>
+<dd>
+
+</dd>
+<dt id="test_args"><a class="permalink" href="./App::Prove.html#test_args">#</a><code>test_args</code></dt>
+<dd>
+
+</dd>
+<dt id="timer"><a class="permalink" href="./App::Prove.html#timer">#</a><code>timer</code></dt>
+<dd>
+
+</dd>
+<dt id="verbose"><a class="permalink" href="./App::Prove.html#verbose">#</a><code>verbose</code></dt>
+<dd>
+
+</dd>
+<dt id="warnings_fail"><a class="permalink" href="./App::Prove.html#warnings_fail">#</a><code>warnings_fail</code></dt>
+<dd>
+
+</dd>
+<dt id="warnings_warn"><a class="permalink" href="./App::Prove.html#warnings_warn">#</a><code>warnings_warn</code></dt>
+<dd>
+
+</dd>
+<dt id="tapversion"><a class="permalink" href="./App::Prove.html#tapversion">#</a><code>tapversion</code></dt>
+<dd>
+
+</dd>
+<dt id="trap"><a class="permalink" href="./App::Prove.html#trap">#</a><code>trap</code></dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="PLUGINS"><a class="permalink" href="./App::Prove.html#PLUGINS">#</a>PLUGINS</h1>
+
+<p><code>App::Prove</code> provides support for 3rd-party plugins. These are currently loaded at run-time, <i>after</i> arguments have been parsed (so you can not change the way arguments are processed, sorry), typically with the <code>-P<i>plugin</i></code> switch, eg:</p>
+
+<pre><code class="plaintext">prove -PMyPlugin</code></pre>
+
+<p>This will search for a module named <code>App::Prove::Plugin::MyPlugin</code>, or failing that, <code>MyPlugin</code>. If the plugin can&#39;t be found, <code>prove</code> will complain &amp; exit.</p>
+
+<p>You can pass an argument to your plugin by appending an <code>=</code> after the plugin name, eg <code>-PMyPlugin=foo</code>. You can pass multiple arguments using commas:</p>
+
+<pre><code class="plaintext">prove -PMyPlugin=foo,bar,baz</code></pre>
+
+<p>These are passed in to your plugin&#39;s <code>load()</code> class method (if it has one), along with a reference to the <code>App::Prove</code> object that is invoking your plugin:</p>
+
+<pre><code>sub load {
+    my ($class, $p) = @_;
+
+    my @args = @{ $p-&gt;{args} };
+    # @args will contain ( &#39;foo&#39;, &#39;bar&#39;, &#39;baz&#39; )
+    $p-&gt;{app_prove}-&gt;do_something;
+    ...
+}</code></pre>
+
+<p>Note that the user&#39;s arguments are also passed to your plugin&#39;s <code>import()</code> function as a list, eg:</p>
+
+<pre><code>sub import {
+    my ($class, @args) = @_;
+    # @args will contain ( &#39;foo&#39;, &#39;bar&#39;, &#39;baz&#39; )
+    ...
+}</code></pre>
+
+<p>This is for backwards compatibility, and may be deprecated in the future.</p>
+
+<h2 id="Sample-Plugin"><a class="permalink" href="./App::Prove.html#Sample-Plugin">#</a><a id="Sample"></a>Sample Plugin</h2>
+
+<p>Here&#39;s a sample plugin, for your reference:</p>
+
+<pre><code>package App::Prove::Plugin::Foo;
+
+# Sample plugin, try running with:
+# prove -PFoo=bar -r -j3
+# prove -PFoo -Q
+# prove -PFoo=bar,My::Formatter
+
+use strict;
+use warnings;
+
+sub load {
+    my ($class, $p) = @_;
+    my @args = @{ $p-&gt;{args} };
+    my $app  = $p-&gt;{app_prove};
+
+    print &quot;loading plugin: $class, args: &quot;, join(&#39;, &#39;, @args ), &quot;\n&quot;;
+
+    # turn on verbosity
+    $app-&gt;verbose( 1 );
+
+    # set the formatter?
+    $app-&gt;formatter( $args[1] ) if @args &gt; 1;
+
+    # print some of App::Prove&#39;s state:
+    for my $attr (qw( jobs quiet really_quiet recurse verbose )) {
+        my $val = $app-&gt;$attr;
+        $val    = &#39;undef&#39; unless defined( $val );
+        print &quot;$attr: $val\n&quot;;
+    }
+
+    return 1;
+}
+
+1;</code></pre>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./App::Prove.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="prove.html">prove</a>, <a href="./TAP::Harness.html">TAP::Harness</a></p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

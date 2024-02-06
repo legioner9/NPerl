@@ -1,0 +1,56 @@
+=over
+
+=item close FILEHANDLE
+X<close>
+
+=item close
+
+Closes the file or pipe associated with the filehandle, flushes the IO
+buffers, and closes the system file descriptor.  Returns true if those
+operations succeed and if no error was reported by any PerlIO
+layer.  Closes the currently selected filehandle if the argument is
+omitted.
+
+You don't have to close FILEHANDLE if you are immediately going to do
+another L<C<open>|/open FILEHANDLE,MODE,EXPR> on it, because
+L<C<open>|/open FILEHANDLE,MODE,EXPR> closes it for you.  (See
+L<C<open>|/open FILEHANDLE,MODE,EXPR>.) However, an explicit
+L<C<close>|/close FILEHANDLE> on an input file resets the line counter
+(L<C<$.>|perlvar/$.>), while the implicit close done by
+L<C<open>|/open FILEHANDLE,MODE,EXPR> does not.
+
+If the filehandle came from a piped open, L<C<close>|/close FILEHANDLE>
+returns false if one of the other syscalls involved fails or if its
+program exits with non-zero status.  If the only problem was that the
+program exited non-zero, L<C<$!>|perlvar/$!> will be set to C<0>.
+Closing a pipe also waits for the process executing on the pipe to
+exit--in case you wish to look at the output of the pipe afterwards--and
+implicitly puts the exit status value of that command into
+L<C<$?>|perlvar/$?> and
+L<C<${^CHILD_ERROR_NATIVE}>|perlvar/${^CHILD_ERROR_NATIVE}>.
+
+If there are multiple threads running, L<C<close>|/close FILEHANDLE> on
+a filehandle from a piped open returns true without waiting for the
+child process to terminate, if the filehandle is still open in another
+thread.
+
+Closing the read end of a pipe before the process writing to it at the
+other end is done writing results in the writer receiving a SIGPIPE.  If
+the other end can't handle that, be sure to read all the data before
+closing the pipe.
+
+Example:
+
+    open(OUTPUT, '|sort >foo')  # pipe to sort
+        or die "Can't start sort: $!";
+    #...                        # print stuff to output
+    close OUTPUT                # wait for sort to finish
+        or warn $! ? "Error closing sort pipe: $!"
+                   : "Exit status $? from sort";
+    open(INPUT, 'foo')          # get sort's results
+        or die "Can't open 'foo' for input: $!";
+
+FILEHANDLE may be an expression whose value can be used as an indirect
+filehandle, usually the real filehandle name or an autovivified handle.
+
+=back

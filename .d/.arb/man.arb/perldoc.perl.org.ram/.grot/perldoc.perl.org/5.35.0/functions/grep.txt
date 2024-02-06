@@ -1,0 +1,37 @@
+=over
+
+=item grep BLOCK LIST
+X<grep>
+
+=item grep EXPR,LIST
+
+This is similar in spirit to, but not the same as, L<grep(1)> and its
+relatives.  In particular, it is not limited to using regular expressions.
+
+Evaluates the BLOCK or EXPR for each element of LIST (locally setting
+L<C<$_>|perlvar/$_> to each element) and returns the list value
+consisting of those
+elements for which the expression evaluated to true.  In scalar
+context, returns the number of times the expression was true.
+
+    my @foo = grep(!/^#/, @bar);    # weed out comments
+
+or equivalently,
+
+    my @foo = grep {!/^#/} @bar;    # weed out comments
+
+Note that L<C<$_>|perlvar/$_> is an alias to the list value, so it can
+be used to
+modify the elements of the LIST.  While this is useful and supported,
+it can cause bizarre results if the elements of LIST are not variables.
+Similarly, grep returns aliases into the original list, much as a for
+loop's index variable aliases the list elements.  That is, modifying an
+element of a list returned by grep (for example, in a C<foreach>,
+L<C<map>|/map BLOCK LIST> or another L<C<grep>|/grep BLOCK LIST>)
+actually modifies the element in the original list.
+This is usually something to be avoided when writing clear code.
+
+See also L<C<map>|/map BLOCK LIST> for a list composed of the results of
+the BLOCK or EXPR.
+
+=back

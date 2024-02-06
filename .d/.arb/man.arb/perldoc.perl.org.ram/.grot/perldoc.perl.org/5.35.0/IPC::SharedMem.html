@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IPC::SharedMem - SysV Shared Memory IPC object class - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/IPC::SharedMem">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IPC::SharedMem.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/IPC::SharedMem">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/IPC::SharedMem">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/IPC::SharedMem">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/IPC::SharedMem">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/IPC::SharedMem">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/IPC::SharedMem">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/IPC::SharedMem">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/IPC::SharedMem">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/IPC::SharedMem">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/IPC::SharedMem">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/IPC::SharedMem">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/IPC::SharedMem">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/IPC::SharedMem">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/IPC::SharedMem">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/IPC::SharedMem">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/IPC::SharedMem">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/IPC::SharedMem">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/IPC::SharedMem">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/IPC::SharedMem">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/IPC::SharedMem">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/IPC::SharedMem">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/IPC::SharedMem">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/IPC::SharedMem">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/IPC::SharedMem">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/IPC::SharedMem">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/IPC::SharedMem">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/IPC::SharedMem">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/IPC::SharedMem">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/IPC::SharedMem">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/IPC::SharedMem">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/IPC::SharedMem">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/IPC::SharedMem">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/IPC::SharedMem">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/IPC::SharedMem">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/IPC::SharedMem">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/IPC::SharedMem">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/IPC::SharedMem">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/IPC::SharedMem">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/IPC::SharedMem">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/IPC::SharedMem">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/IPC::SharedMem">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/IPC::SharedMem">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/IPC::SharedMem">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/IPC::SharedMem">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/IPC::SharedMem">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/IPC::SharedMem">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/IPC::SharedMem">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/IPC::SharedMem">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/IPC::SharedMem">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/IPC::SharedMem">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/IPC::SharedMem">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/IPC::SharedMem">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/IPC::SharedMem">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/IPC::SharedMem">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/IPC::SharedMem">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/IPC::SharedMem">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/IPC::SharedMem">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/IPC::SharedMem">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/IPC::SharedMem">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/IPC::SharedMem">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/IPC::SharedMem">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/IPC::SharedMem">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/IPC::SharedMem">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/IPC::SharedMem">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/IPC::SharedMem">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/IPC::SharedMem">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/IPC::SharedMem">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/IPC::SharedMem">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/IPC::SharedMem">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/IPC::SharedMem">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/IPC::SharedMem">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/IPC::SharedMem">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/IPC::SharedMem">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/IPC::SharedMem">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/IPC::SharedMem">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/IPC::SharedMem">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/IPC::SharedMem">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/IPC::SharedMem">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/IPC::SharedMem">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/IPC::SharedMem">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IPC::SharedMem.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/IPC::SharedMem">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/IPC::SharedMem">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/IPC::SharedMem">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/IPC::SharedMem">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/IPC::SharedMem">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/IPC::SharedMem">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/IPC::SharedMem">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/IPC::SharedMem">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/IPC::SharedMem">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/IPC::SharedMem">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/IPC::SharedMem">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/IPC::SharedMem">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/IPC::SharedMem">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/IPC::SharedMem">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/IPC::SharedMem">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/IPC::SharedMem">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/IPC::SharedMem">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/IPC::SharedMem">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/IPC::SharedMem">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/IPC::SharedMem">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/IPC::SharedMem">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/IPC::SharedMem">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/IPC::SharedMem">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/IPC::SharedMem">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/IPC::SharedMem">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/IPC::SharedMem">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/IPC::SharedMem">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/IPC::SharedMem">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/IPC::SharedMem">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/IPC::SharedMem">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/IPC::SharedMem">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/IPC::SharedMem">5.35.1</a>
+          <a class="dropdown-item active" href="./IPC::SharedMem.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IPC::SharedMem.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./IPC::SharedMem.html">IPC::SharedMem</a>
+          <div id="more">
+            (<a href="./IPC::SharedMem.txt">source</a>,
+            <a href="https://metacpan.org/pod/IPC::SharedMem">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 2.09</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./IPC::SharedMem.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IPC::SharedMem.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IPC::SharedMem.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IPC::SharedMem.html#METHODS">METHODS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IPC::SharedMem.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IPC::SharedMem.html#AUTHORS">AUTHORS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IPC::SharedMem.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./IPC::SharedMem.html#NAME">#</a>NAME</h1>
+
+<p>IPC::SharedMem - SysV Shared Memory IPC object class</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./IPC::SharedMem.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use IPC::SysV qw(IPC_PRIVATE S_IRUSR S_IWUSR);
+use IPC::SharedMem;
+
+$shm = IPC::SharedMem-&gt;new(IPC_PRIVATE, 8, S_IRWXU);
+
+$shm-&gt;write(pack(&quot;S&quot;, 4711), 2, 2);
+
+$data = $shm-&gt;read(0, 2);
+
+$ds = $shm-&gt;stat;
+
+$shm-&gt;remove;</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./IPC::SharedMem.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>A class providing an object based interface to SysV IPC shared memory.</p>
+
+<h1 id="METHODS"><a class="permalink" href="./IPC::SharedMem.html#METHODS">#</a>METHODS</h1>
+
+<dl>
+
+<dt id="new-(-KEY-,-SIZE-,-FLAGS-)"><a class="permalink" href="./IPC::SharedMem.html#new-(-KEY-,-SIZE-,-FLAGS-)">#</a><a id="new"></a><a id="new-KEY-SIZE-FLAGS"></a>new ( KEY , SIZE , FLAGS )</dt>
+<dd>
+
+<p>Creates a new shared memory segment of <code>SIZE</code> bytes size associated with <code>KEY</code>. A new segment is created if</p>
+
+<ul>
+
+<li><p><code>KEY</code> is equal to <code>IPC_PRIVATE</code></p>
+
+</li>
+<li><p><code>KEY</code> does not already have a shared memory segment associated with it, and <code><i>FLAGS</i> &amp; IPC_CREAT</code> is true.</p>
+
+</li>
+</ul>
+
+<p>On creation of a new shared memory segment <code>FLAGS</code> is used to set the permissions. Be careful not to set any flags that the Sys V IPC implementation does not allow: in some systems setting execute bits makes the operations fail.</p>
+
+</dd>
+<dt id="id"><a class="permalink" href="./IPC::SharedMem.html#id">#</a>id</dt>
+<dd>
+
+<p>Returns the shared memory identifier.</p>
+
+</dd>
+<dt id="read-(-POS,-SIZE-)"><a class="permalink" href="./IPC::SharedMem.html#read-(-POS,-SIZE-)">#</a><a id="read"></a><a id="read-POS-SIZE"></a>read ( POS, SIZE )</dt>
+<dd>
+
+<p>Read <code>SIZE</code> bytes from the shared memory segment at <code>POS</code>. Returns the string read, or <code>undef</code> if there was an error. The return value becomes tainted. See <a href="https://perldoc.perl.org/5.35.0/shmread">shmread</a>.</p>
+
+</dd>
+<dt id="write-(-STRING,-POS,-SIZE-)"><a class="permalink" href="./IPC::SharedMem.html#write-(-STRING,-POS,-SIZE-)">#</a><a id="write"></a><a id="write-STRING-POS-SIZE"></a>write ( STRING, POS, SIZE )</dt>
+<dd>
+
+<p>Write <code>SIZE</code> bytes to the shared memory segment at <code>POS</code>. Returns true if successful, or false if there is an error. See <a href="https://perldoc.perl.org/5.35.0/shmwrite">shmwrite</a>.</p>
+
+</dd>
+<dt id="remove"><a class="permalink" href="./IPC::SharedMem.html#remove">#</a>remove</dt>
+<dd>
+
+<p>Remove the shared memory segment from the system or mark it as removed as long as any processes are still attached to it.</p>
+
+</dd>
+<dt id="is_removed"><a class="permalink" href="./IPC::SharedMem.html#is_removed">#</a>is_removed</dt>
+<dd>
+
+<p>Returns true if the shared memory segment has been removed or marked for removal.</p>
+
+</dd>
+<dt id="stat"><a class="permalink" href="./IPC::SharedMem.html#stat">#</a>stat</dt>
+<dd>
+
+<p>Returns an object of type <code>IPC::SharedMem::stat</code> which is a sub-class of <code>Class::Struct</code>. It provides the following fields. For a description of these fields see you system documentation.</p>
+
+<pre><code class="plaintext">uid
+gid
+cuid
+cgid
+mode
+segsz
+lpid
+cpid
+nattch
+atime
+dtime
+ctime</code></pre>
+
+</dd>
+<dt id="attach-(-[FLAG]-)"><a class="permalink" href="./IPC::SharedMem.html#attach-(-%5BFLAG%5D-)">#</a><a id="attach"></a><a id="attach-FLAG"></a>attach ( [FLAG] )</dt>
+<dd>
+
+<p>Permanently attach to the shared memory segment. When a <code>IPC::SharedMem</code> object is attached, it will use <a href="https://perldoc.perl.org/5.35.0/memread">memread</a> and <a href="https://perldoc.perl.org/5.35.0/memwrite">memwrite</a> instead of <a href="https://perldoc.perl.org/5.35.0/shmread">shmread</a> and <a href="https://perldoc.perl.org/5.35.0/shmwrite">shmwrite</a> for accessing the shared memory segment. Returns true if successful, or false on error. See <a href="http://man.he.net/man2/shmat">shmat(2)</a>.</p>
+
+</dd>
+<dt id="detach"><a class="permalink" href="./IPC::SharedMem.html#detach">#</a>detach</dt>
+<dd>
+
+<p>Detach from the shared memory segment that previously has been attached to. Returns true if successful, or false on error. See <a href="http://man.he.net/man2/shmdt">shmdt(2)</a>.</p>
+
+</dd>
+<dt id="addr"><a class="permalink" href="./IPC::SharedMem.html#addr">#</a>addr</dt>
+<dd>
+
+<p>Returns the address of the shared memory that has been attached to in a format suitable for use with <code>pack(&#39;P&#39;)</code>. Returns <code>undef</code> if the shared memory has not been attached.</p>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./IPC::SharedMem.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./IPC::SysV.html">IPC::SysV</a>, <a href="./Class::Struct.html">Class::Struct</a></p>
+
+<h1 id="AUTHORS"><a class="permalink" href="./IPC::SharedMem.html#AUTHORS">#</a>AUTHORS</h1>
+
+<p>Marcus Holland-Moritz &lt;mhx@cpan.org&gt;</p>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="./IPC::SharedMem.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>Version 2.x, Copyright (C) 2007-2013, Marcus Holland-Moritz.</p>
+
+<p>Version 1.x, Copyright (c) 1997, Graham Barr.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

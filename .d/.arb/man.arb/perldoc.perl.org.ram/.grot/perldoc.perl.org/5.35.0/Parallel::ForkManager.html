@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Parallel::ForkManager - A simple parallel processing fork manager - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Parallel-ForkManager - MetaCPAN" href="https://metacpan.org/dist/Parallel-ForkManager/releases.rss" />
+        <link rel="canonical" href="./Parallel::ForkManager.html" />
+        <meta name="description" content="A simple parallel processing fork manager" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Parallel::ForkManager" />
+<meta name="twitter:title"       content="Parallel::ForkManager" />
+<meta name="twitter:description" content="A simple parallel processing fork manager" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Parallel::ForkManager.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Parallel-ForkManager was released.">
+      <span class="relatize">08 Oct 2018 23:21:03 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Parallel-ForkManager">Parallel-ForkManager</a>
+  </li>
+  <li>
+    Module version: 2.02
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Parallel-ForkManager/source/lib/Parallel/ForkManager.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Parallel-ForkManager/source/lib/Parallel/ForkManager.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Parallel-ForkManager/source/lib/Parallel">Browse</a>
+    (<a href="https://metacpan.org/dist/Parallel-ForkManager/source/lib/Parallel?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Parallel-ForkManager/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://github.com/dluxhu/perl-parallel-forkmanager">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Parallel-ForkManager/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/dluxhu/perl-parallel-forkmanager">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/dluxhu/perl-parallel-forkmanager/issues">Issues</a>
+      (15)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Parallel-ForkManager+2.02" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Parallel-ForkManager.html?oncpan=1&amp;distmat=1&amp;version=2.02&amp;grade=2" style="color: #090">7867</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Parallel-ForkManager.html?oncpan=1&amp;distmat=1&amp;version=2.02&amp;grade=3" style="color: #900">21</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Parallel-ForkManager.html?oncpan=1&amp;distmat=1&amp;version=2.02&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/YANICK/Parallel-ForkManager-2.02">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Parallel-ForkManager who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Parallel-ForkManager-2.02/index.html">75.52% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Parallel-ForkManager/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/Y/YA/YANICK/Parallel-ForkManager-2.02.tar.gz">
+      Download (<span itemprop="fileSize">32.67KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FYANICK%2FParallel-ForkManager-2.02%2Flib%2FParallel%2FForkManager.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Parallel-ForkManager/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Parallel-ForkManager/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Parallel-ForkManager">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Parallel-ForkManager">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Parallel/ForkManager.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="YANICK/Parallel-ForkManager-2.02"
+>2.02
+  (YANICK on 2018-10-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-2.01-TRIAL"
+>2.01-TRIAL DEV
+  (YANICK on 2018-08-23)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-2.00-TRIAL"
+>2.00-TRIAL DEV
+  (YANICK on 2018-08-23)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.20"
+>1.20
+  (YANICK on 2018-07-19)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.19"
+>1.19
+  (YANICK on 2016-06-28)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.18"
+>1.18
+  (YANICK on 2016-03-29)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.17"
+>1.17
+  (YANICK on 2015-11-28)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.16"
+>1.16
+  (YANICK on 2015-10-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.15"
+>1.15
+  (YANICK on 2015-07-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.14"
+>1.14
+  (YANICK on 2015-05-17)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.13"
+>1.13
+  (YANICK on 2015-05-11)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.12"
+>1.12
+  (YANICK on 2015-02-23)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.11"
+>1.11
+  (YANICK on 2015-01-30)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.10_2"
+>1.10_2 DEV
+  (YANICK on 2015-01-26)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.10_1"
+>1.10_1 DEV
+  (YANICK on 2015-01-22)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.10"
+>1.10
+  (YANICK on 2015-01-15)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.09"
+>1.09
+  (YANICK on 2015-01-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.08"
+>1.08
+  (YANICK on 2015-01-07)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.9"
+>0.7.9
+  (DLUX on 2010-11-01)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.7"
+>0.7.7
+  (DLUX on 2010-09-27)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.6"
+>0.7.6
+  (DLUX on 2010-08-15)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.5"
+>0.7.5
+  (DLUX on 2002-12-25)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.07"
+>1.07
+  (SZABGAB on 2014-11-10)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.06"
+>1.06
+  (SZABGAB on 2013-12-24)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.05"
+>1.05
+  (SZABGAB on 2013-09-18)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.04"
+>1.04
+  (SZABGAB on 2013-09-03)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.03"
+>1.03
+  (SZABGAB on 2013-03-06)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.02"
+>1.02
+  (SZABGAB on 2012-12-24)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.01"
+>1.01
+  (SZABGAB on 2012-12-23)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.0.0"
+>1.0.0
+  (SZABGAB on 2012-12-23)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.8"
+>0.7.8
+  (DLUX on 2010-10-25)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.4"
+>0.7.4
+  (DLUX on 2002-07-04)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.3"
+>0.7.3
+  (DLUX on 2001-10-24)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.2"
+>0.7.2
+  (DLUX on 2001-05-14)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7"
+>0.7
+  (DLUX on 2001-04-04)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.6"
+>0.6
+  (DLUX on 2000-11-30)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.5"
+>0.5
+  (DLUX on 2000-10-19)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/YANICK/Parallel-ForkManager-2.02/diff/' + encodeURIComponent(this.value) + '/lib/Parallel/ForkManager.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="YANICK/Parallel-ForkManager-2.02"
+>2.02
+  (YANICK on 2018-10-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-2.01-TRIAL"
+>2.01-TRIAL DEV
+  (YANICK on 2018-08-23)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-2.00-TRIAL"
+>2.00-TRIAL DEV
+  (YANICK on 2018-08-23)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.20"
+>1.20
+  (YANICK on 2018-07-19)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.19"
+>1.19
+  (YANICK on 2016-06-28)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.18"
+>1.18
+  (YANICK on 2016-03-29)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.17"
+>1.17
+  (YANICK on 2015-11-28)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.16"
+>1.16
+  (YANICK on 2015-10-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.15"
+>1.15
+  (YANICK on 2015-07-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.14"
+>1.14
+  (YANICK on 2015-05-17)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.13"
+>1.13
+  (YANICK on 2015-05-11)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.12"
+>1.12
+  (YANICK on 2015-02-23)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.11"
+>1.11
+  (YANICK on 2015-01-30)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.10_2"
+>1.10_2 DEV
+  (YANICK on 2015-01-26)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.10_1"
+>1.10_1 DEV
+  (YANICK on 2015-01-22)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.10"
+>1.10
+  (YANICK on 2015-01-15)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.09"
+>1.09
+  (YANICK on 2015-01-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.08"
+>1.08
+  (YANICK on 2015-01-07)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.9"
+>0.7.9
+  (DLUX on 2010-11-01)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.7"
+>0.7.7
+  (DLUX on 2010-09-27)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.6"
+>0.7.6
+  (DLUX on 2010-08-15)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.5"
+>0.7.5
+  (DLUX on 2002-12-25)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.07"
+>1.07
+  (SZABGAB on 2014-11-10)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.06"
+>1.06
+  (SZABGAB on 2013-12-24)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.05"
+>1.05
+  (SZABGAB on 2013-09-18)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.04"
+>1.04
+  (SZABGAB on 2013-09-03)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.03"
+>1.03
+  (SZABGAB on 2013-03-06)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.02"
+>1.02
+  (SZABGAB on 2012-12-24)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.01"
+>1.01
+  (SZABGAB on 2012-12-23)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.0.0"
+>1.0.0
+  (SZABGAB on 2012-12-23)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.8"
+>0.7.8
+  (DLUX on 2010-10-25)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.4"
+>0.7.4
+  (DLUX on 2002-07-04)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.3"
+>0.7.3
+  (DLUX on 2001-10-24)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.2"
+>0.7.2
+  (DLUX on 2001-05-14)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7"
+>0.7
+  (DLUX on 2001-04-04)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.6"
+>0.6
+  (DLUX on 2000-11-30)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.5"
+>0.5
+  (DLUX on 2000-10-19)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Carp" title="Carp" class="ellipsis">Carp</a></li>
+  <li><a href="https://metacpan.org/pod/File::Path" title="File::Path" class="ellipsis">File::Path</a></li>
+  <li><a href="https://metacpan.org/pod/File::Spec" title="File::Spec" class="ellipsis">File::Spec</a></li>
+  <li><a href="https://metacpan.org/pod/File::Temp" title="File::Temp" class="ellipsis">File::Temp</a></li>
+  <li><a href="Moo.html" title="Moo" class="ellipsis">Moo</a></li>
+  <li><a href="https://metacpan.org/pod/Moo::Role" title="Moo::Role" class="ellipsis">Moo::Role</a></li>
+  <li><a href="https://metacpan.org/pod/POSIX" title="POSIX" class="ellipsis">POSIX</a></li>
+  <li><a href="https://metacpan.org/pod/Storable" title="Storable" class="ellipsis">Storable</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/warnings" title="warnings" class="ellipsis">warnings</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Parallel::ForkManager/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Parallel%3A%3AForkManager">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Parallel-ForkManager">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/YANICK/Parallel-ForkManager-2.02/view/lib/Parallel/ForkManager.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Parallel::ForkManager.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/PERLBOY"><img src="https://www.gravatar.com/avatar/8553a87a00c8d2efcd77fb16e6eb73c9?d=identicon&amp;s=20" title="PERLBOY" alt="PERLBOY"></a>
+<a class="display-all" href="https://metacpan.org/author/PLU"><img src="https://www.gravatar.com/avatar/b4db07dda59c4fcacce75e943ff4cbb7?d=identicon&amp;s=20" title="PLU" alt="PLU"></a>
+<a class="display-all" href="https://metacpan.org/author/MPERRY"><img src="https://www.gravatar.com/avatar/5b9c91a7e965d444f1c444fd8c03d80c?d=identicon&amp;s=20" title="MPERRY" alt="MPERRY"></a>
+<a class="display-all" href="https://metacpan.org/author/RRWO"><img src="https://www.gravatar.com/avatar/4a5274bc5d690ee3d619f044778771a7?d=identicon&amp;s=20" title="RRWO" alt="RRWO"></a>
+<a class="display-all" href="https://metacpan.org/author/JKUTEJ"><img src="https://www.gravatar.com/avatar/dd8704659cdd56fa6c4d1ba5b0909c69?d=identicon&amp;s=20" title="JKUTEJ" alt="JKUTEJ"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Parallel-ForkManager/plussers">51 PAUSE users</a>
+</div>
+<div>
+    45 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 5 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="DLUX"
+      data-contrib-email="dlux@dlux.hu"
+    >
+      <a href="https://metacpan.org/author/DLUX" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/2b3ab67feb925003fcd9aa4130c92c9b?d=identicon&amp;s=20" />
+      dLux (Szabó, Balázs)
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="SZABGAB"
+      data-contrib-email="gabor@szabgab.com"
+    >
+      <a href="https://metacpan.org/author/SZABGAB" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/4e0a6fe2acda5df6095514e7d6329e91?d=identicon&amp;s=20" />
+      Gabor Szabo
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="kevin@9b.io"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Ninebit
+    </li>
+    <li class="contributor"
+      data-cpan-author="RJBS"
+      data-contrib-email="rjbs@cpan.org"
+    >
+      <a href="https://metacpan.org/author/RJBS" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/cec6b9b88295ead26c65f8747a76561b?d=identicon&amp;s=20" />
+      Ricardo Signes
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="SHLOMIF"
+      data-contrib-email="shlomif@shlomifish.org"
+    >
+      <a href="https://metacpan.org/author/SHLOMIF" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/072331b92b0e6e9d9bc31c3af8f8ccea?d=identicon&amp;s=20" />
+      Shlomi Fish
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/YANICK" class="author-name">Yanick Champoux</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Parallel/ForkManager.pm&#39;" class="">
+<option
+  selected
+  value="YANICK/Parallel-ForkManager-2.02"
+>2.02
+  (YANICK on 2018-10-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-2.01-TRIAL"
+>2.01-TRIAL DEV
+  (YANICK on 2018-08-23)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-2.00-TRIAL"
+>2.00-TRIAL DEV
+  (YANICK on 2018-08-23)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.20"
+>1.20
+  (YANICK on 2018-07-19)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.19"
+>1.19
+  (YANICK on 2016-06-28)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.18"
+>1.18
+  (YANICK on 2016-03-29)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.17"
+>1.17
+  (YANICK on 2015-11-28)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.16"
+>1.16
+  (YANICK on 2015-10-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.15"
+>1.15
+  (YANICK on 2015-07-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.14"
+>1.14
+  (YANICK on 2015-05-17)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.13"
+>1.13
+  (YANICK on 2015-05-11)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.12"
+>1.12
+  (YANICK on 2015-02-23)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.11"
+>1.11
+  (YANICK on 2015-01-30)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.10_2"
+>1.10_2 DEV
+  (YANICK on 2015-01-26)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.10_1"
+>1.10_1 DEV
+  (YANICK on 2015-01-22)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.10"
+>1.10
+  (YANICK on 2015-01-15)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.09"
+>1.09
+  (YANICK on 2015-01-08)</option>
+<option
+  
+  value="YANICK/Parallel-ForkManager-1.08"
+>1.08
+  (YANICK on 2015-01-07)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.9"
+>0.7.9
+  (DLUX on 2010-11-01)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.7"
+>0.7.7
+  (DLUX on 2010-09-27)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.6"
+>0.7.6
+  (DLUX on 2010-08-15)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.5"
+>0.7.5
+  (DLUX on 2002-12-25)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.07"
+>1.07
+  (SZABGAB on 2014-11-10)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.06"
+>1.06
+  (SZABGAB on 2013-12-24)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.05"
+>1.05
+  (SZABGAB on 2013-09-18)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.04"
+>1.04
+  (SZABGAB on 2013-09-03)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.03"
+>1.03
+  (SZABGAB on 2013-03-06)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.02"
+>1.02
+  (SZABGAB on 2012-12-24)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.01"
+>1.01
+  (SZABGAB on 2012-12-23)</option>
+<option
+  
+  value="SZABGAB/Parallel-ForkManager-1.0.0"
+>1.0.0
+  (SZABGAB on 2012-12-23)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.8"
+>0.7.8
+  (DLUX on 2010-10-25)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.4"
+>0.7.4
+  (DLUX on 2002-07-04)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.3"
+>0.7.3
+  (DLUX on 2001-10-24)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7.2"
+>0.7.2
+  (DLUX on 2001-05-14)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.7"
+>0.7
+  (DLUX on 2001-04-04)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.6"
+>0.6
+  (DLUX on 2000-11-30)</option>
+<option
+  
+  value="DLUX/Parallel-ForkManager-0.5"
+>0.5
+  (DLUX on 2000-10-19)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Parallel-ForkManager">Parallel-ForkManager-2.02</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 59 direct dependents &#10;          • 142 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Parallel-ForkManager-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Parallel-ForkManager-2.02">
+    <input type="hidden" name="author" value="YANICK">
+    <input type="hidden" name="distribution" value="Parallel-ForkManager">
+    <button type="submit" class="favorite highlight"><span>96</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Parallel::ForkManager.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>96</span> ++</a>
+</div>
+   / <span>Parallel::ForkManager</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Parallel::ForkManager.html#NAME">NAME</a></li>
+  <li><a href="./Parallel::ForkManager.html#VERSION">VERSION</a></li>
+  <li><a href="./Parallel::ForkManager.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Parallel::ForkManager.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Parallel::ForkManager.html#METHODS">METHODS</a></li>
+  <li><a href="./Parallel::ForkManager.html#CALLBACKS">CALLBACKS</a></li>
+  <li><a href="./Parallel::ForkManager.html#BLOCKING-CALLS">BLOCKING CALLS</a></li>
+  <li><a href="./Parallel::ForkManager.html#RETRIEVING-DATASTRUCTURES-from-child-processes">RETRIEVING DATASTRUCTURES from child processes</a></li>
+  <li><a href="./Parallel::ForkManager.html#EXAMPLES">EXAMPLES</a>
+    <ul>
+      <li><a href="./Parallel::ForkManager.html#Parallel-get">Parallel get</a></li>
+      <li><a href="./Parallel::ForkManager.html#Callbacks">Callbacks</a></li>
+      <li><a href="./Parallel::ForkManager.html#Data-structure-retrieval">Data structure retrieval</a></li>
+    </ul>
+  </li>
+  <li><a href="./Parallel::ForkManager.html#USING-RAND()-IN-FORKED-PROCESSES">USING RAND() IN FORKED PROCESSES</a></li>
+  <li><a href="./Parallel::ForkManager.html#EXTENDING">EXTENDING</a>
+    <ul>
+      <li><a href="./Parallel::ForkManager.html#Example:-store-and-retrieve-data-via-a-web-service">Example: store and retrieve data via a web service</a></li>
+      <li><a href="./Parallel::ForkManager.html#Example:-have-the-child-processes-exit-differently">Example: have the child processes exit differently</a></li>
+    </ul>
+  </li>
+  <li><a href="./Parallel::ForkManager.html#SECURITY">SECURITY</a></li>
+  <li><a href="./Parallel::ForkManager.html#TROUBLESHOOTING">TROUBLESHOOTING</a>
+    <ul>
+      <li><a href="./Parallel::ForkManager.html#PerlIO::gzip-and-Parallel::ForkManager-do-not-play-nice-together">PerlIO::gzip and Parallel::ForkManager do not play nice together</a></li>
+    </ul>
+  </li>
+  <li><a href="./Parallel::ForkManager.html#BUGS-AND-LIMITATIONS">BUGS AND LIMITATIONS</a></li>
+  <li><a href="./Parallel::ForkManager.html#CREDITS">CREDITS</a></li>
+  <li><a href="./Parallel::ForkManager.html#AUTHORS">AUTHORS</a></li>
+  <li><a href="./Parallel::ForkManager.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Parallel::ForkManager - A simple parallel processing fork manager</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>version 2.02</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  use Parallel::ForkManager;
+
+  my $pm = Parallel::ForkManager-&gt;new($MAX_PROCESSES);
+
+  DATA_LOOP:
+  foreach my $data (@all_data) {
+    # Forks and returns the pid for the child:
+    my $pid = $pm-&gt;start and next DATA_LOOP;
+
+    ... do some work with $data in the child process ...
+
+    $pm-&gt;finish; # Terminates the child process
+  }</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module is intended for use in operations that can be done in parallel where the number of processes to be forked off should be limited. Typical use is a downloader which will be retrieving hundreds/thousands of files.</p>
+
+<p>The code for a downloader would look something like this:</p>
+
+<pre><code>  use LWP::Simple;
+  use Parallel::ForkManager;
+
+  ...
+
+  my @links=(
+    [&quot;http://www.foo.bar/rulez.data&quot;,&quot;rulez_data.txt&quot;],
+    [&quot;http://new.host/more_data.doc&quot;,&quot;more_data.doc&quot;],
+    ...
+  );
+
+  ...
+
+  # Max 30 processes for parallel download
+  my $pm = Parallel::ForkManager-&gt;new(30);
+
+  LINKS:
+  foreach my $linkarray (@links) {
+    $pm-&gt;start and next LINKS; # do the fork
+
+    my ($link, $fn) = @$linkarray;
+    warn &quot;Cannot get $fn from $link&quot;
+      if getstore($link, $fn) != RC_OK;
+
+    $pm-&gt;finish; # do the exit in the child process
+  }
+  $pm-&gt;wait_all_children;</code></pre>
+
+<p>First you need to instantiate the ForkManager with the &quot;new&quot; constructor. You must specify the maximum number of processes to be created. If you specify 0, then NO fork will be done; this is good for debugging purposes.</p>
+
+<p>Next, use $pm-&gt;start to do the fork. $pm returns 0 for the child process, and child pid for the parent process (see also <a>&quot;fork()&quot; in perlfunc(1p)</a>). The &quot;and next&quot; skips the internal loop in the parent process. NOTE: $pm-&gt;start dies if the fork fails.</p>
+
+<p>$pm-&gt;finish terminates the child process (assuming a fork was done in the &quot;start&quot;).</p>
+
+<p>NOTE: You cannot use $pm-&gt;start if you are already in the child process. If you want to manage another set of subprocesses in the child process, you must instantiate another Parallel::ForkManager object!</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<p>The comment letter indicates where the method should be run. P for parent, C for child.</p>
+
+<dl>
+
+<dt id="new-$processes"><a id="new"></a><a id="new--processes"></a>new $processes</dt>
+<dd>
+
+<p>Instantiate a new Parallel::ForkManager object. You must specify the maximum number of children to fork off. If you specify 0 (zero), then no children will be forked. This is intended for debugging purposes.</p>
+
+<p>The optional second parameter, $tempdir, is only used if you want the children to send back a reference to some data (see RETRIEVING DATASTRUCTURES below). If not provided, it is set via a call to <a href="https://metacpan.org/pod/File::Temp">File::Temp</a>::tempdir().</p>
+
+<p>The new method will die if the temporary directory does not exist or it is not a directory.</p>
+
+<p>Since version 2.00, the constructor can also be called in the typical Moo/Moose fashion. I.e.</p>
+
+<pre><code>    my $fm = Parallel::ForkManager-&gt;new(
+        max_procs =&gt; 4,
+        tempdir =&gt; &#39;...&#39;,
+        child_role =&gt; &#39;Parallel::ForkManager::CustomChild&#39;,
+    );</code></pre>
+
+</dd>
+<dt id="child_role">child_role</dt>
+<dd>
+
+<p>Returns the name of the role consumed by the ForkManager object in child processes. Defaults to <a href="https://metacpan.org/pod/Parallel::ForkManager::Child">Parallel::ForkManager::Child</a> and can be set to something else via the constructor.</p>
+
+</dd>
+<dt id="start-[-$process_identifier-]"><a id="start"></a><a id="start----process_identifier"></a>start [ $process_identifier ]</dt>
+<dd>
+
+<p>This method does the fork. It returns the pid of the child process for the parent, and 0 for the child process. If the $processes parameter for the constructor is 0 then, assuming you&#39;re in the child process, $pm-&gt;start simply returns 0.</p>
+
+<p>An optional $process_identifier can be provided to this method... It is used by the &quot;run_on_finish&quot; callback (see CALLBACKS) for identifying the finished process.</p>
+
+</dd>
+<dt id="start_child-[-$process_identifier,-]-\&amp;callback"><a id="start_child"></a><a id="start_child----process_identifier-----callback"></a>start_child [ $process_identifier, ] \&amp;callback</dt>
+<dd>
+
+<p>Like <code>start</code>, but will run the <code>&amp;callback</code> as the child. If the callback returns anything, it&#39;ll be passed as the data to transmit back to the parent process via <code>finish()</code>.</p>
+
+</dd>
+<dt id="finish-[-$exit_code-[,-$data_structure_reference]-]"><a id="finish"></a><a id="finish----exit_code----data_structure_reference"></a>finish [ $exit_code [, $data_structure_reference] ]</dt>
+<dd>
+
+<p>Closes the child process by exiting and accepts an optional exit code (default exit code is 0) which can be retrieved in the parent via callback. If the second optional parameter is provided, the child attempts to send its contents back to the parent. If you use the program in debug mode ($processes == 0), this method just calls the callback.</p>
+
+<p>If the $data_structure_reference is provided, then it is serialized and passed to the parent process. See RETRIEVING DATASTRUCTURES for more info.</p>
+
+</dd>
+<dt id="set_max_procs-$processes"><a id="set_max_procs"></a><a id="set_max_procs--processes"></a>set_max_procs $processes</dt>
+<dd>
+
+<p>Allows you to set a new maximum number of children to maintain.</p>
+
+</dd>
+<dt id="wait_all_children">wait_all_children</dt>
+<dd>
+
+<p>You can call this method to wait for all the processes which have been forked. This is a blocking wait.</p>
+
+</dd>
+<dt id="reap_finished_children">reap_finished_children</dt>
+<dd>
+
+<p>This is a non-blocking call to reap children and execute callbacks independent of calls to &quot;start&quot; or &quot;wait_all_children&quot;. Use this in scenarios where &quot;start&quot; is called infrequently but you would like the callbacks executed quickly.</p>
+
+</dd>
+<dt id="is_parent">is_parent</dt>
+<dd>
+
+<p>Returns <code>true</code> if within the parent or <code>false</code> if within the child.</p>
+
+</dd>
+<dt id="is_child">is_child</dt>
+<dd>
+
+<p>Returns <code>true</code> if within the child or <code>false</code> if within the parent.</p>
+
+</dd>
+<dt id="max_procs">max_procs</dt>
+<dd>
+
+<p>Returns the maximal number of processes the object will fork.</p>
+
+</dd>
+<dt id="running_procs">running_procs</dt>
+<dd>
+
+<p>Returns the pids of the forked processes currently monitored by the <code>Parallel::ForkManager</code>. Note that children are still reported as running until the fork manager harvest them, via the next call to <code>start</code> or <code>wait_all_children</code>.</p>
+
+<pre><code>    my @pids = $pm-&gt;running_procs;
+
+    my $nbr_children =- $pm-&gt;running_procs;</code></pre>
+
+</dd>
+<dt id="wait_for_available_procs(-$n-)"><a id="wait_for_available_procs"></a><a id="wait_for_available_procs---n"></a>wait_for_available_procs( $n )</dt>
+<dd>
+
+<p>Wait until <code>$n</code> available process slots are available. If <code>$n</code> is not given, defaults to <i>1</i>.</p>
+
+</dd>
+<dt id="waitpid_blocking_sleep">waitpid_blocking_sleep</dt>
+<dd>
+
+<p>Returns the sleep period, in seconds, of the pseudo-blocking calls. The sleep period can be a fraction of second.</p>
+
+<p>Returns <code>0</code> if disabled.</p>
+
+<p>Defaults to 1 second.</p>
+
+<p>See <i>BLOCKING CALLS</i> for more details.</p>
+
+</dd>
+<dt id="set_waitpid_blocking_sleep-$seconds"><a id="set_waitpid_blocking_sleep"></a><a id="set_waitpid_blocking_sleep--seconds"></a>set_waitpid_blocking_sleep $seconds</dt>
+<dd>
+
+<p>Sets the the sleep period, in seconds, of the pseudo-blocking calls. Set to <code>0</code> to disable.</p>
+
+<p>See <i>BLOCKING CALLS</i> for more details.</p>
+
+</dd>
+</dl>
+
+<h1 id="CALLBACKS">CALLBACKS</h1>
+
+<p>You can define callbacks in the code, which are called on events like starting a process or upon finish. Declare these before the first call to start().</p>
+
+<p>The callbacks can be defined with the following methods:</p>
+
+<dl>
+
+<dt id="run_on_finish-$code-[,-$pid-]"><a id="run_on_finish"></a><a id="run_on_finish--code----pid"></a>run_on_finish $code [, $pid ]</dt>
+<dd>
+
+<p>You can define a subroutine which is called when a child is terminated. It is called in the parent process.</p>
+
+<p>The parameters of the $code are the following:</p>
+
+<pre><code>  - pid of the process, which is terminated
+  - exit code of the program
+  - identification of the process (if provided in the &quot;start&quot; method)
+  - exit signal (0-127: signal name)
+  - core dump (1 if there was core dump at exit)
+  - datastructure reference or undef (see RETRIEVING DATASTRUCTURES)</code></pre>
+
+</dd>
+<dt id="run_on_start-$code"><a id="run_on_start"></a><a id="run_on_start--code"></a>run_on_start $code</dt>
+<dd>
+
+<p>You can define a subroutine which is called when a child is started. It called after the successful startup of a child in the parent process.</p>
+
+<p>The parameters of the $code are the following:</p>
+
+<pre><code>  - pid of the process which has been started
+  - identification of the process (if provided in the &quot;start&quot; method)</code></pre>
+
+</dd>
+<dt id="run_on_wait-$code,-[$period]"><a id="run_on_wait"></a><a id="run_on_wait--code---period"></a>run_on_wait $code, [$period]</dt>
+<dd>
+
+<p>You can define a subroutine which is called when the child process needs to wait for the startup. If $period is not defined, then one call is done per child. If $period is defined, then $code is called periodically and the module waits for $period seconds between the two calls. Note, $period can be fractional number also. The exact &quot;$period seconds&quot; is not guaranteed, signals can shorten and the process scheduler can make it longer (on busy systems).</p>
+
+<p>The $code called in the &quot;start&quot; and the &quot;wait_all_children&quot; method also.</p>
+
+<p>No parameters are passed to the $code on the call.</p>
+
+</dd>
+</dl>
+
+<h1 id="BLOCKING-CALLS"><a id="BLOCKING"></a>BLOCKING CALLS</h1>
+
+<p>When it comes to waiting for child processes to terminate, <code>Parallel::ForkManager</code> is between a fork and a hard place (if you excuse the terrible pun). The underlying Perl <code>waitpid</code> function that the module relies on can block until either one specific or any child process terminate, but not for a process part of a given group.</p>
+
+<p>This means that the module can do one of two things when it waits for one of its child processes to terminate:</p>
+
+<dl>
+
+<dt id="Only-wait-for-its-own-child-processes"><a id="Only"></a>Only wait for its own child processes</dt>
+<dd>
+
+<p>This is done via a loop using a <code>waitpid</code> non-blocking call and a sleep statement. The code does something along the lines of</p>
+
+<pre><code>    while(1) {
+        if ( any of the P::FM child process terminated ) {
+            return its pid
+        }
+
+        sleep $sleep_period
+    }</code></pre>
+
+<p>This is the default behavior that the module will use. This is not the most efficient way to wait for child processes, but it&#39;s the safest way to ensure that <code>Parallel::ForkManager</code> won&#39;t interfere with any other part of the codebase.</p>
+
+<p>The sleep period is set via the method <code>set_waitpid_blocking_sleep</code>.</p>
+
+</dd>
+<dt id="Block-until-any-process-terminate"><a id="Block"></a>Block until any process terminate</dt>
+<dd>
+
+<p>Alternatively, <code>Parallel::ForkManager</code> can call <code>waitpid</code> such that it will block until any child process terminate. If the child process was not one of the monitored subprocesses, the wait will resume. This is more efficient, but mean that <code>P::FM</code> can captures (and discards) the termination notification that a different part of the code might be waiting for.</p>
+
+<p>If this is a race condition that doesn&#39;t apply to your codebase, you can set the <i>waitpid_blocking_sleep</i> period to <code>0</code>, which will enable <code>waitpid</code> call blocking.</p>
+
+<pre><code>    my $pm = Parallel::ForkManager-&gt;new( 4 );
+
+    $pm-&gt;set_waitpid_blocking_sleep(0);  # true blocking calls enabled
+
+    for ( 1..100 ) {
+        $pm-&gt;start and next;
+
+        ...; # do work
+
+        $pm-&gt;finish;
+    }</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="RETRIEVING-DATASTRUCTURES-from-child-processes"><a id="RETRIEVING"></a>RETRIEVING DATASTRUCTURES from child processes</h1>
+
+<p>The ability for the parent to retrieve data structures is new as of version 0.7.6.</p>
+
+<p>Each child process may optionally send 1 data structure back to the parent. By data structure, we mean a reference to a string, hash or array. The contents of the data structure are written out to temporary files on disc using the <a href="https://metacpan.org/pod/Storable">Storable</a> modules&#39; store() method. The reference is then retrieved from within the code you send to the run_on_finish callback.</p>
+
+<p>The data structure can be any scalar perl data structure which makes sense: string, numeric value or a reference to an array, hash or object.</p>
+
+<p>There are 2 steps involved in retrieving data structures:</p>
+
+<p>1) A reference to the data structure the child wishes to send back to the parent is provided as the second argument to the finish() call. It is up to the child to decide whether or not to send anything back to the parent.</p>
+
+<p>2) The data structure reference is retrieved using the callback provided in the run_on_finish() method.</p>
+
+<p>Keep in mind that data structure retrieval is not the same as returning a data structure from a method call. That is not what actually occurs. The data structure referenced in a given child process is serialized and written out to a file by <a href="https://metacpan.org/pod/Storable">Storable</a>. The file is subsequently read back into memory and a new data structure belonging to the parent process is created. Please consider the performance penalty it can imply, so try to keep the returned structure small.</p>
+
+<h1 id="EXAMPLES">EXAMPLES</h1>
+
+<h2 id="Parallel-get"><a id="Parallel"></a>Parallel get</h2>
+
+<p>This small example can be used to get URLs in parallel.</p>
+
+<pre><code>  use Parallel::ForkManager;
+  use LWP::Simple;
+
+  my $pm = Parallel::ForkManager-&gt;new(10);
+
+  LINKS:
+  for my $link (@ARGV) {
+    $pm-&gt;start and next LINKS;
+    my ($fn) = $link =~ /^.*\/(.*?)$/;
+    if (!$fn) {
+      warn &quot;Cannot determine filename from $fn\n&quot;;
+    } else {
+      $0 .= &quot; &quot; . $fn;
+      print &quot;Getting $fn from $link\n&quot;;
+      my $rc = getstore($link, $fn);
+      print &quot;$link downloaded. response code: $rc\n&quot;;
+    };
+    $pm-&gt;finish;
+  };</code></pre>
+
+<h2 id="Callbacks">Callbacks</h2>
+
+<p>Example of a program using callbacks to get child exit codes:</p>
+
+<pre><code>  use strict;
+  use Parallel::ForkManager;
+
+  my $max_procs = 5;
+  my @names = qw( Fred Jim Lily Steve Jessica Bob Dave Christine Rico Sara );
+  # hash to resolve PID&#39;s back to child specific information
+
+  my $pm = Parallel::ForkManager-&gt;new($max_procs);
+
+  # Setup a callback for when a child finishes up so we can
+  # get it&#39;s exit code
+  $pm-&gt;run_on_finish( sub {
+      my ($pid, $exit_code, $ident) = @_;
+      print &quot;** $ident just got out of the pool &quot;.
+        &quot;with PID $pid and exit code: $exit_code\n&quot;;
+  });
+
+  $pm-&gt;run_on_start( sub {
+      my ($pid, $ident)=@_;
+      print &quot;** $ident started, pid: $pid\n&quot;;
+  });
+
+  $pm-&gt;run_on_wait( sub {
+      print &quot;** Have to wait for one children ...\n&quot;
+    },
+    0.5
+  );
+
+  NAMES:
+  foreach my $child ( 0 .. $#names ) {
+    my $pid = $pm-&gt;start($names[$child]) and next NAMES;
+
+    # This code is the child process
+    print &quot;This is $names[$child], Child number $child\n&quot;;
+    sleep ( 2 * $child );
+    print &quot;$names[$child], Child $child is about to get out...\n&quot;;
+    sleep 1;
+    $pm-&gt;finish($child); # pass an exit code to finish
+  }
+
+  print &quot;Waiting for Children...\n&quot;;
+  $pm-&gt;wait_all_children;
+  print &quot;Everybody is out of the pool!\n&quot;;</code></pre>
+
+<h2 id="Data-structure-retrieval"><a id="Data"></a>Data structure retrieval</h2>
+
+<p>In this simple example, each child sends back a string reference.</p>
+
+<pre><code>  use Parallel::ForkManager 0.7.6;
+  use strict;
+
+  my $pm = Parallel::ForkManager-&gt;new(2, &#39;/server/path/to/temp/dir/&#39;);
+
+  # data structure retrieval and handling
+  $pm -&gt; run_on_finish ( # called BEFORE the first call to start()
+    sub {
+      my ($pid, $exit_code, $ident, $exit_signal, $core_dump, $data_structure_reference) = @_;
+
+      # retrieve data structure from child
+      if (defined($data_structure_reference)) {  # children are not forced to send anything
+        my $string = ${$data_structure_reference};  # child passed a string reference
+        print &quot;$string\n&quot;;
+      }
+      else {  # problems occurring during storage or retrieval will throw a warning
+        print qq|No message received from child process $pid!\n|;
+      }
+    }
+  );
+
+  # prep random statement components
+  my @foods = (&#39;chocolate&#39;, &#39;ice cream&#39;, &#39;peanut butter&#39;, &#39;pickles&#39;, &#39;pizza&#39;, &#39;bacon&#39;, &#39;pancakes&#39;, &#39;spaghetti&#39;, &#39;cookies&#39;);
+  my @preferences = (&#39;loves&#39;, q|can&#39;t stand|, &#39;always wants more&#39;, &#39;will walk 100 miles for&#39;, &#39;only eats&#39;, &#39;would starve rather than eat&#39;);
+
+  # run the parallel processes
+  PERSONS:
+  foreach my $person (qw(Fred Wilma Ernie Bert Lucy Ethel Curly Moe Larry)) {
+    $pm-&gt;start() and next PERSONS;
+
+    # generate a random statement about food preferences
+    my $statement = $person . &#39; &#39; . $preferences[int(rand @preferences)] . &#39; &#39; . $foods[int(rand @foods)];
+
+    # send it back to the parent process
+    $pm-&gt;finish(0, \$statement);  # note that it&#39;s a scalar REFERENCE, not the scalar itself
+  }
+  $pm-&gt;wait_all_children;</code></pre>
+
+<p>A second datastructure retrieval example demonstrates how children decide whether or not to send anything back, what to send and how the parent should process whatever is retrieved.</p>
+
+<pre><code>  use Parallel::ForkManager 0.7.6;
+  use Data::Dumper;  # to display the data structures retrieved.
+  use strict;
+
+  my $pm = Parallel::ForkManager-&gt;new(20);  # using the system temp dir $L&lt;File::Temp::tempdir()
+
+  # data structure retrieval and handling
+  my %retrieved_responses = ();  # for collecting responses
+  $pm -&gt; run_on_finish (
+    sub {
+      my ($pid, $exit_code, $ident, $exit_signal, $core_dump, $data_structure_reference) = @_;
+
+      # see what the child sent us, if anything
+      if (defined($data_structure_reference)) {  # test rather than assume child sent anything
+        my $reftype = ref($data_structure_reference);
+        print qq|ident &quot;$ident&quot; returned a &quot;$reftype&quot; reference.\n\n|;
+        if (1) {  # simple on/off switch to display the contents
+          print &amp;Dumper($data_structure_reference) . qq|end of &quot;$ident&quot; sent structure\n\n|;
+        }
+
+        # we can also collect retrieved data structures for processing after all children have exited
+        $retrieved_responses{$ident} = $data_structure_reference;
+      } else {
+        print qq|ident &quot;$ident&quot; did not send anything.\n\n|;
+      }
+    }
+  );
+
+  # generate a list of instructions
+  my @instructions = (  # a unique identifier and what the child process should send
+    {&#39;name&#39; =&gt; &#39;%ENV keys as a string&#39;, &#39;send&#39; =&gt; &#39;keys&#39;},
+    {&#39;name&#39; =&gt; &#39;Send Nothing&#39;},  # not instructing the child to send anything back to the parent
+    {&#39;name&#39; =&gt; &#39;Childs %ENV&#39;, &#39;send&#39; =&gt; &#39;all&#39;},
+    {&#39;name&#39; =&gt; &#39;Child chooses randomly&#39;, &#39;send&#39; =&gt; &#39;random&#39;},
+    {&#39;name&#39; =&gt; &#39;Invalid send instructions&#39;, &#39;send&#39; =&gt; &#39;Na Na Nana Na&#39;},
+    {&#39;name&#39; =&gt; &#39;ENV values in an array&#39;, &#39;send&#39; =&gt; &#39;values&#39;},
+  );
+
+  INSTRUCTS:
+  foreach my $instruction (@instructions) {
+    $pm-&gt;start($instruction-&gt;{&#39;name&#39;}) and next INSTRUCTS;  # this time we are using an explicit, unique child process identifier
+
+    # last step in child processing
+    $pm-&gt;finish(0) unless $instruction-&gt;{&#39;send&#39;};  # no data structure is sent unless this child is told what to send.
+
+    if ($instruction-&gt;{&#39;send&#39;} eq &#39;keys&#39;) {
+      $pm-&gt;finish(0, \join(&#39;, &#39;, keys %ENV));
+
+    } elsif ($instruction-&gt;{&#39;send&#39;} eq &#39;values&#39;) {
+      $pm-&gt;finish(0, [values %ENV]);  # kinda useless without knowing which keys they belong to...
+
+    } elsif ($instruction-&gt;{&#39;send&#39;} eq &#39;all&#39;) {
+      $pm-&gt;finish(0, \%ENV);  # remember, we are not &quot;returning&quot; anything, just copying the hash to disc
+
+    # demonstrate clearly that the child determines what type of reference to send
+    } elsif ($instruction-&gt;{&#39;send&#39;} eq &#39;random&#39;) {
+      my $string = q|I&#39;m just a string.|;
+      my @array = qw(I am an array);
+      my %hash = (type =&gt; &#39;associative array&#39;, synonym =&gt; &#39;hash&#39;, cool =&gt; &#39;very :)&#39;);
+      my $return_choice = (&#39;string&#39;, &#39;array&#39;, &#39;hash&#39;)[int(rand 3)];  # randomly choose return data type
+      $pm-&gt;finish(0, \$string) if ($return_choice eq &#39;string&#39;);
+      $pm-&gt;finish(0, \@array) if ($return_choice eq &#39;array&#39;);
+      $pm-&gt;finish(0, \%hash) if ($return_choice eq &#39;hash&#39;);
+
+    # as a responsible child, inform parent that their instruction was invalid
+    } else {
+      $pm-&gt;finish(0, \qq|Invalid instructions: &quot;$instruction-&gt;{&#39;send&#39;}&quot;.|);  # ordinarily I wouldn&#39;t include invalid input in a response...
+    }
+  }
+  $pm-&gt;wait_all_children;  # blocks until all forked processes have exited
+
+  # post fork processing of returned data structures
+  for (sort keys %retrieved_responses) {
+    print qq|Post processing &quot;$_&quot;...\n|;
+  }</code></pre>
+
+<h1 id="USING-RAND()-IN-FORKED-PROCESSES"><a id="USING"></a><a id="USING-RAND--IN-FORKED-PROCESSES"></a>USING RAND() IN FORKED PROCESSES</h1>
+
+<p>A caveat worth noting is that all forked processes will use the same random seed, so potentially providing the same results (see <a href="http://blogs.perl.org/users/brian_phillips/2010/06/when-rand-isnt-random.html">http://blogs.perl.org/users/brian_phillips/2010/06/when-rand-isnt-random.html</a>). If you are using <code>rand()</code> and want each forked child to use a different seed, you can add the following to your program:</p>
+
+<pre><code>    $pm-&gt;run_on_start(sub { srand });</code></pre>
+
+<h1 id="EXTENDING">EXTENDING</h1>
+
+<p>As of version 2.0.0, <code>Parallel::ForkManager</code> uses <a href="Moo.html">Moo</a> under the hood. When a process is being forked from the parent object, the forked instance of the object will be modified to consume the <a href="https://metacpan.org/pod/Parallel::ForkManager::Child">Parallel::ForkManager::Child</a> role. All of this makes extending <a href="./Parallel::ForkManager.html">Parallel::ForkManager</a> to implement any storing/retrieving mechanism or any other behavior fairly easy.</p>
+
+<h2 id="Example:-store-and-retrieve-data-via-a-web-service"><a id="Example"></a>Example: store and retrieve data via a web service</h2>
+
+<pre><code>    {
+        package Parallel::ForkManager::Web;
+
+        use HTTP::Tiny;
+
+        use Moo;
+        extends &#39;Parallel::ForkManager&#39;;
+
+        has ua =&gt; (
+            is =&gt; &#39;ro&#39;,
+            lazy =&gt; 1,
+            default =&gt; sub {
+                HTTP::Tiny-&gt;new;
+            }
+        );
+
+        sub store {
+            my( $self, $data ) = @_;
+
+            $self-&gt;ua-&gt;post( &quot;http://.../store/$$&quot;, { body =&gt; $data } );
+        }
+
+        sub retrieve {
+            my( $self, $kid_id ) = @_;
+
+            $self-&gt;ua-&gt;get( &quot;http://.../store/$kid_id&quot; )-&gt;{content};
+        }
+
+    }
+
+    my $fm = Parallel::ForkManager::Web-&gt;new(2);
+
+    $fm-&gt;run_on_finish(sub{
+        my $retrieved = $_[5];
+
+        print &quot;got &quot;, $retrieved, &quot;\n&quot;;
+    });
+
+    $fm-&gt;start_child(sub {
+        return $_**2;
+    }) for 1..3;
+
+    $fm-&gt;wait_all_children;</code></pre>
+
+<h2 id="Example:-have-the-child-processes-exit-differently"><a id="Example1"></a>Example: have the child processes exit differently</h2>
+
+<pre><code>    use Parallel::ForkManager;
+
+    package Parallel::ForkManager::Child::PosixExit {
+        use Moo::Role;
+        with &#39;Parallel::ForkManager::Child&#39;;
+
+        sub finish  { POSIX::_exit() };
+    }
+
+    my $fm = Parallel::ForkManager-&gt;new(
+        max_proc   =&gt; 1,
+        child_role =&gt; &#39;Parallel::ForkManager::Child::PosixExit&#39;
+    );</code></pre>
+
+<h1 id="SECURITY">SECURITY</h1>
+
+<p>Parallel::ForkManager uses temporary files when a child process returns information to its parent process. The filenames are based on the process of the parent and child processes, so they are fairly easy to guess. So if security is a concern in your environment, make sure the directory used by Parallel::ForkManager is restricted to the current user only (the default behavior is to create a directory, via <a href="https://metacpan.org/pod/File::Temp">File::Temp</a>&#39;s <code>tempdir</code>, which does that).</p>
+
+<h1 id="TROUBLESHOOTING">TROUBLESHOOTING</h1>
+
+<h2 id="PerlIO::gzip-and-Parallel::ForkManager-do-not-play-nice-together"><a id="PerlIO"></a>PerlIO::gzip and Parallel::ForkManager do not play nice together</h2>
+
+<p>If you are using <a href="https://metacpan.org/pod/PerlIO::gzip">PerlIO::gzip</a> in your child processes, you may end up with garbled files. This is not really P::FM&#39;s fault, but rather a problem between <a href="https://metacpan.org/pod/PerlIO::gzip">PerlIO::gzip</a> and <code>fork()</code> (see <a href="https://rt.cpan.org/Public/Bug/Display.html?id=114557">https://rt.cpan.org/Public/Bug/Display.html?id=114557</a>).</p>
+
+<p>Fortunately, it seems there is an easy way to fix the problem by adding the &quot;unix&quot; layer? I.e.,</p>
+
+<pre><code>    open(IN, &#39;&lt;:unix:gzip&#39;, ...</code></pre>
+
+<h1 id="BUGS-AND-LIMITATIONS"><a id="BUGS"></a>BUGS AND LIMITATIONS</h1>
+
+<p>Do not use Parallel::ForkManager in an environment where other child processes can affect the run of the main program; using this module is not recommended in an environment where fork() / wait() is already used.</p>
+
+<p>If you want to use more than one copies of the Parallel::ForkManager, then you have to make sure that all children processes are terminated, before you use the second object in the main program.</p>
+
+<p>You are free to use a new copy of Parallel::ForkManager in the child processes, although I don&#39;t think it makes sense.</p>
+
+<h1 id="CREDITS">CREDITS</h1>
+
+<pre><code>  Michael Gang (bug report)
+  Noah Robin &lt;sitz@onastick.net&gt; (documentation tweaks)
+  Chuck Hirstius &lt;chirstius@megapathdsl.net&gt; (callback exit status, example)
+  Grant Hopwood &lt;hopwoodg@valero.com&gt; (win32 port)
+  Mark Southern &lt;mark_southern@merck.com&gt; (bugfix)
+  Ken Clarke &lt;www.perlprogrammer.net&gt;  (datastructure retrieval)</code></pre>
+
+<h1 id="AUTHORS">AUTHORS</h1>
+
+<ul>
+
+<li><p>dLux (Szab&oacute;, Bal&aacute;zs) &lt;dlux@dlux.hu&gt;</p>
+
+</li>
+<li><p>Yanick Champoux &lt;yanick@cpan.org&gt;</p>
+
+</li>
+<li><p>Gabor Szabo &lt;gabor@szabgab.com&gt;</p>
+
+</li>
+</ul>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>This software is copyright (c) 2018, 2016, 2015 by Bal&aacute;zs Szab&oacute;.</p>
+
+<p>This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Parallel::ForkManager, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Parallel::ForkManager</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Parallel::ForkManager</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Parallel::ForkManager.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

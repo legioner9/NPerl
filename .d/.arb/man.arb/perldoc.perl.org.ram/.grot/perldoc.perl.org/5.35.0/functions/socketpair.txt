@@ -1,0 +1,30 @@
+=over
+
+=item socketpair SOCKET1,SOCKET2,DOMAIN,TYPE,PROTOCOL
+X<socketpair>
+
+Creates an unnamed pair of sockets in the specified domain, of the
+specified type.  DOMAIN, TYPE, and PROTOCOL are specified the same as
+for the syscall of the same name.  If unimplemented, raises an exception.
+Returns true if successful.
+
+On systems that support a close-on-exec flag on files, the flag will
+be set for the newly opened file descriptors, as determined by the value
+of L<C<$^F>|perlvar/$^F>.  See L<perlvar/$^F>.
+
+Some systems define L<C<pipe>|/pipe READHANDLE,WRITEHANDLE> in terms of
+L<C<socketpair>|/socketpair SOCKET1,SOCKET2,DOMAIN,TYPE,PROTOCOL>, in
+which a call to C<pipe($rdr, $wtr)> is essentially:
+
+    use Socket;
+    socketpair(my $rdr, my $wtr, AF_UNIX, SOCK_STREAM, PF_UNSPEC);
+    shutdown($rdr, 1);        # no more writing for reader
+    shutdown($wtr, 0);        # no more reading for writer
+
+See L<perlipc> for an example of socketpair use.  Perl 5.8 and later will
+emulate socketpair using IP sockets to localhost if your system implements
+sockets but not socketpair.
+
+Portability issues: L<perlport/socketpair>.
+
+=back

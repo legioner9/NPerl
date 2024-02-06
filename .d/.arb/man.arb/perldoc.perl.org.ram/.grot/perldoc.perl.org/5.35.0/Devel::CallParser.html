@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Devel::CallParser - custom parsing attached to subroutines - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Devel-CallParser - MetaCPAN" href="https://metacpan.org/dist/Devel-CallParser/releases.rss" />
+        <link rel="canonical" href="./Devel::CallParser.html" />
+        <meta name="description" content="custom parsing attached to subroutines" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Devel::CallParser" />
+<meta name="twitter:title"       content="Devel::CallParser" />
+<meta name="twitter:description" content="custom parsing attached to subroutines" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Devel::CallParser.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Devel-CallParser was released.">
+      <span class="relatize">21 Sep 2013 19:28:11 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Devel-CallParser">Devel-CallParser</a>
+  </li>
+  <li>
+    Module version: 0.002
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Devel-CallParser/source/lib/Devel/CallParser.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Devel-CallParser/source/lib/Devel/CallParser.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Devel-CallParser/source/lib/Devel">Browse</a>
+    (<a href="https://metacpan.org/dist/Devel-CallParser/source/lib/Devel?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Devel-CallParser/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Devel-CallParser/contribute">How to Contribute</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Devel-CallParser">Issues</a>
+      (6)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Devel-CallParser+0.002" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-CallParser.html?oncpan=1&amp;distmat=1&amp;version=0.002&amp;grade=2" style="color: #090">272</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-CallParser.html?oncpan=1&amp;distmat=1&amp;version=0.002&amp;grade=3" style="color: #900">46</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-CallParser.html?oncpan=1&amp;distmat=1&amp;version=0.002&amp;grade=4">1</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/ZEFRAM/Devel-CallParser-0.002">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Devel-CallParser who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Devel-CallParser-0.002/index.html">100.00% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.11.2
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Devel-CallParser/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/Z/ZE/ZEFRAM/Devel-CallParser-0.002.tar.gz">
+      Download (<span itemprop="fileSize">24.21KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FZEFRAM%2FDevel-CallParser-0.002%2Flib%2FDevel%2FCallParser.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-CallParser/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-CallParser/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Devel-CallParser">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Devel-CallParser">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Devel/CallParser.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="ZEFRAM/Devel-CallParser-0.002"
+>0.002
+  (ZEFRAM on 2013-09-21)</option>
+<option
+  
+  value="ZEFRAM/Devel-CallParser-0.001"
+>0.001
+  (ZEFRAM on 2011-05-20)</option>
+<option
+  
+  value="ZEFRAM/Devel-CallParser-0.000"
+>0.000
+  (ZEFRAM on 2011-04-29)</option>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/ZEFRAM/Devel-CallParser-0.002/diff/' + encodeURIComponent(this.value) + '/lib/Devel/CallParser.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="ZEFRAM/Devel-CallParser-0.002"
+>0.002
+  (ZEFRAM on 2013-09-21)</option>
+<option
+  
+  value="ZEFRAM/Devel-CallParser-0.001"
+>0.001
+  (ZEFRAM on 2011-05-20)</option>
+<option
+  
+  value="ZEFRAM/Devel-CallParser-0.000"
+>0.000
+  (ZEFRAM on 2011-04-29)</option>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Devel::CallChecker" title="Devel::CallChecker" class="ellipsis">Devel::CallChecker</a></li>
+  <li><a href="https://metacpan.org/pod/DynaLoader" title="DynaLoader" class="ellipsis">DynaLoader</a></li>
+  <li><a href="https://metacpan.org/pod/DynaLoader::Functions" title="DynaLoader::Functions" class="ellipsis">DynaLoader::Functions</a></li>
+  <li><a href="https://metacpan.org/pod/Exporter" title="Exporter" class="ellipsis">Exporter</a></li>
+  <li><a href="https://metacpan.org/pod/parent" title="parent" class="ellipsis">parent</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/warnings" title="warnings" class="ellipsis">warnings</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Devel::CallParser/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Devel%3A%3ACallParser">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Devel-CallParser">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/ZEFRAM/Devel-CallParser-0.002/view/lib/Devel/CallParser.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Devel::CallParser.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/KEEDI"><img src="https://www.gravatar.com/avatar/95f905a7a4ccc573c711e9d264c0fde8?d=identicon&amp;s=20" title="KEEDI" alt="KEEDI"></a>
+<a class="display-all" href="https://metacpan.org/author/KES"><img src="https://www.gravatar.com/avatar/e8530f00b43b4f6a056f8ad4ee52ea47?d=identicon&amp;s=20" title="KES" alt="KES"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Devel-CallParser/plussers">2 PAUSE users</a>
+</div>
+<div>
+    3 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/ZEFRAM" class="author-name">Andrew Main (Zefram)</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Devel/CallParser.pm&#39;" class="">
+<option
+  selected
+  value="ZEFRAM/Devel-CallParser-0.002"
+>0.002
+  (ZEFRAM on 2013-09-21)</option>
+<option
+  
+  value="ZEFRAM/Devel-CallParser-0.001"
+>0.001
+  (ZEFRAM on 2011-05-20)</option>
+<option
+  
+  value="ZEFRAM/Devel-CallParser-0.000"
+>0.000
+  (ZEFRAM on 2011-04-29)</option>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Devel-CallParser">Devel-CallParser-0.002</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage two &#10;
+          • 11 direct dependents &#10;          • 48 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Devel-CallParser-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Devel-CallParser-0.002">
+    <input type="hidden" name="author" value="ZEFRAM">
+    <input type="hidden" name="distribution" value="Devel-CallParser">
+    <button type="submit" class="favorite highlight"><span>5</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Devel::CallParser.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>5</span> ++</a>
+</div>
+   / <span>Devel::CallParser</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Devel::CallParser.html#NAME">NAME</a></li>
+  <li><a href="./Devel::CallParser.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Devel::CallParser.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Devel::CallParser.html#CONSTANTS">CONSTANTS</a></li>
+  <li><a href="./Devel::CallParser.html#C-FUNCTIONS">C FUNCTIONS</a></li>
+  <li><a href="./Devel::CallParser.html#BUGS">BUGS</a></li>
+  <li><a href="./Devel::CallParser.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Devel::CallParser.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Devel::CallParser.html#COPYRIGHT">COPYRIGHT</a></li>
+  <li><a href="./Devel::CallParser.html#LICENSE">LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Devel::CallParser - custom parsing attached to subroutines</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>        # to generate header prior to XS compilation
+
+        perl -MDevel::CallParser=callparser0_h \
+                -e &#39;print callparser0_h&#39; &gt; callparser0.h
+        perl -MDevel::CallParser=callparser1_h \
+                -e &#39;print callparser1_h&#39; &gt; callparser1.h
+
+        # in Perl part of module
+
+        use Devel::CallParser;
+
+        /* in XS */
+
+        #include &quot;callparser0.h&quot;
+
+        cv_get_call_parser(cv, &amp;psfun, &amp;psobj);
+        static OP *my_psfun(pTHX_ GV *namegv, SV *psobj, U32 *flagsp);
+        cv_set_call_parser(cv, my_psfun, psobj);
+
+        #include &quot;callparser1.h&quot;
+
+        cv_get_call_parser(cv, &amp;psfun, &amp;psobj);
+        static OP *my_psfun(pTHX_ GV *namegv, SV *psobj, U32 *flagsp);
+        cv_set_call_parser(cv, my_psfun, psobj);
+
+        args = parse_args_parenthesised(&amp;flags);
+        args = parse_args_nullary(&amp;flags);
+        args = parse_args_unary(&amp;flags);
+        args = parse_args_list(&amp;flags);
+        args = parse_args_block_list(&amp;flags);
+        args = parse_args_proto(namegv, protosv, &amp;flags);
+        args = parse_args_proto_or_list(namegv, protosv, &amp;flags);</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module provides a C API, for XS modules, concerned with custom parsing. It is centred around the function <code>cv_set_call_parser</code>, which allows XS code to attach a magical annotation to a Perl subroutine, resulting in resolvable calls to that subroutine having their arguments parsed by arbitrary C code. (This is a more conveniently structured facility than the core&#39;s <code>PL_keyword_plugin</code> API.) This module makes <code>cv_set_call_parser</code> and several supporting functions available.</p>
+
+<p>This module provides the implementation of the functions at runtime. It also, at compile time, supplies the C header file and link library which provide access to the functions. In normal use, <a href="./Devel::CallParser.html#callparser0_h">&quot;callparser0_h&quot;</a>/<a href="./Devel::CallParser.html#callparser1_h">&quot;callparser1_h&quot;</a> and <a href="./Devel::CallParser.html#callparser_linkable">&quot;callparser_linkable&quot;</a> should be called at build time (not authoring time) for the module that wishes to use the C functions.</p>
+
+<h1 id="CONSTANTS">CONSTANTS</h1>
+
+<dl>
+
+<dt id="callparser0_h">callparser0_h</dt>
+<dd>
+
+<p>Content of a C header file, intended to be named &quot;<code>callparser0.h</code>&quot;. It is to be included in XS code, and <code>perl.h</code> must be included first. When the XS module is loaded at runtime, the <code>Devel::CallParser</code> module must be loaded first. This will result in a limited form of the C functions <code>cv_get_call_parser</code> and <code>cv_set_call_parser</code> being available to the XS code.</p>
+
+<p>The <code>cv_get_call_parser</code> and <code>cv_set_call_parser</code> functions supplied by this header are mostly as described below. However, for subroutines that have default argument parsing behaviour, <code>cv_get_call_parser</code> will return null pointers for the parsing function and its SV argument, rather than pointing to a real function that implements default parsing. Correspondingly, <code>cv_set_call_parser</code> will accept such a pair of null pointers to restore default argument parsing for a subroutine. The advantage of these modified semantics is that this much of the functionality is available on Perl versions where it is not possible to implement standard argument parsing as a distinct function. This is the case on all Perl versions prior to 5.13.8.</p>
+
+<p>This header is only available on Perl versions 5.11.2 and higher.</p>
+
+</dd>
+<dt id="callparser1_h">callparser1_h</dt>
+<dd>
+
+<p>Content of a C header file, intended to be named &quot;<code>callparser1.h</code>&quot;. It is to be included in XS code, and <code>perl.h</code> must be included first. When the XS module is loaded at runtime, the <code>Devel::CallParser</code> module must be loaded first. This will result in the C functions <code>cv_get_call_parser</code>, <code>cv_set_call_parser</code>, <code>parse_args_parenthesised</code>, <code>parse_args_nullary</code>, <code>parse_args_unary</code>, <code>parse_args_list</code>, <code>parse_args_block_list</code>, <code>parse_args_proto</code>, and <code>parse_args_proto_or_list</code>, as defined below, being available to the XS code.</p>
+
+<p>This header is only available on Perl versions 5.13.8 and higher.</p>
+
+</dd>
+<dt id="callparser_linkable">callparser_linkable</dt>
+<dd>
+
+<p>List of names of files that must be used as additional objects when linking an XS module that uses the C functions supplied by this module. This list will be empty on many platforms.</p>
+
+</dd>
+</dl>
+
+<h1 id="C-FUNCTIONS"><a id="C"></a>C FUNCTIONS</h1>
+
+<dl>
+
+<dt id="cv_get_call_parser">cv_get_call_parser</dt>
+<dd>
+
+<p>Retrieves the function that will be used to parse the arguments for a call to <i>cv</i>. Specifically, the function is used for a subroutine call, not marked with <code>&amp;</code>, where the callee can be identified at compile time as <i>cv</i>.</p>
+
+<p>The C-level function pointer is returned in <i>*psfun_p</i>, and an SV argument for it is returned in <i>*psobj_p</i>. The function is intended to be called in this manner:</p>
+
+<pre><code>    argsop = (*psfun_p)(aTHX_ namegv, (*psobj_p), &amp;flags);</code></pre>
+
+<p>This call is to be made when the parser has just scanned and accepted a bareword and determined that it begins the syntax of a call to <i>cv</i>. <i>namegv</i> is a GV supplying the name that should be used by the parsing function to refer to the callee if it needs to emit any diagnostics, and <i>flags</i> is a <code>U32</code> that the parsing function can write to as an additional output. It is permitted to apply the parsing function in non-standard situations, such as to a call to a different subroutine.</p>
+
+<p>The parsing function&#39;s main output is an op tree describing a list of argument expressions. This may be null for an empty list. The argument expressions will be combined with the expression that identified <i>cv</i> and used to build an <code>entersub</code> op describing a complete subroutine call. The parsing function may also set flag bits in <i>flags</i> for special effects. The bit <code>CALLPARSER_PARENS</code> indicates that the argument list was fully parenthesised, which makes a difference only in obscure situations. The bit <code>CALLPARSER_STATEMENT</code> indicates that what was parsed was syntactically not an expression but a statement.</p>
+
+<p>By default, the parsing function is <a href="./Devel::CallParser.html#parse_args_proto_or_list">Perl_parse_args_proto_or_list</a>, and the SV parameter is <i>cv</i> itself. This implements standard subroutine argument parsing. It can be changed, for a particular subroutine, by <a href="./Devel::CallParser.html#cv_set_call_parser">&quot;cv_set_call_parser&quot;</a>.</p>
+
+<pre><code>        void cv_get_call_parser(CV *cv, Perl_call_parser *psfun_p,
+                SV **psobj_p)</code></pre>
+
+</dd>
+<dt id="cv_set_call_parser">cv_set_call_parser</dt>
+<dd>
+
+<p>Sets the function that will be used to parse the arguments for a call to <i>cv</i>. Specifically, the function is used for a subroutine call, not marked with <code>&amp;</code>, where the callee can be identified at compile time as <i>cv</i>.</p>
+
+<p>The C-level function pointer is supplied in <i>psfun</i>, and an SV argument for it is supplied in <i>psobj</i>. The function is intended to be called in this manner:</p>
+
+<pre><code>    argsop = (*psfun_p)(aTHX_ namegv, (*psobj_p), &amp;flags);</code></pre>
+
+<p>This call is to be made when the parser has just scanned and accepted a bareword and determined that it begins the syntax of a call to <i>cv</i>. <i>namegv</i> is a GV supplying the name that should be used by the parsing function to refer to the callee if it needs to emit any diagnostics, and <i>flags</i> is a <code>U32</code> that the parsing function can write to as an additional output. It is permitted to apply the parsing function in non-standard situations, such as to a call to a different subroutine.</p>
+
+<p>The parsing function&#39;s main output is an op tree describing a list of argument expressions. This may be null for an empty list. The argument expressions will be combined with the expression that identified <i>cv</i> and used to build an <code>entersub</code> op describing a complete subroutine call. The parsing function may also set flag bits in <i>flags</i> for special effects. The bit <code>CALLPARSER_PARENS</code> indicates that the argument list was fully parenthesised, which makes a difference only in obscure situations. The bit <code>CALLPARSER_STATEMENT</code> indicates that what was parsed was syntactically not an expression but a statement.</p>
+
+<p>The current setting for a particular CV can be retrieved by <a href="./Devel::CallParser.html#cv_get_call_parser">&quot;cv_get_call_parser&quot;</a>.</p>
+
+<pre><code>        void cv_set_call_parser(CV *cv, Perl_call_parser psfun,
+                SV *psobj)</code></pre>
+
+</dd>
+<dt id="parse_args_parenthesised">parse_args_parenthesised</dt>
+<dd>
+
+<p>Parse a parenthesised argument list for a subroutine call. The argument list consists of an optional expression enclosed in parentheses. This is the syntax that is used for any subroutine call where the first thing following the subroutine name is an open parenthesis. It is used regardless of the subroutine&#39;s prototype.</p>
+
+<p>The op tree representing the argument list is returned. The bit <code>CALLPARSER_PARENS</code> is set in <i>*flags_p</i>, to indicate that the argument list was fully parenthesised.</p>
+
+<pre><code>        OP *parse_args_parenthesised(U32 *flags_p)</code></pre>
+
+</dd>
+<dt id="parse_args_nullary">parse_args_nullary</dt>
+<dd>
+
+<p>Parse an argument list for a call to a subroutine that is syntactically a nullary function. The argument list is either parenthesised or completely absent. This is the syntax that is used for a call to a subroutine with a <code>()</code> prototype.</p>
+
+<p>The op tree representing the argument list is returned. The bit <code>CALLPARSER_PARENS</code> is set in <i>*flags_p</i> if the argument list was parenthesised.</p>
+
+<pre><code>        OP *parse_args_nullary(U32 *flags_p)</code></pre>
+
+</dd>
+<dt id="parse_args_unary">parse_args_unary</dt>
+<dd>
+
+<p>Parse an argument list for a call to a subroutine that is syntactically a unary function. The argument list is either parenthesised, absent, or consists of an unparenthesised arithmetic expression. This is the syntax that is used for a call to a subroutine with prototype <code>($)</code>, <code>(;$)</code>, or certain similar prototypes.</p>
+
+<p>The op tree representing the argument list is returned. The bit <code>CALLPARSER_PARENS</code> is set in <i>*flags_p</i> if the argument list was parenthesised.</p>
+
+<pre><code>        OP *parse_args_unary(U32 *flags_p)</code></pre>
+
+</dd>
+<dt id="parse_args_list">parse_args_list</dt>
+<dd>
+
+<p>Parse an argument list for a call to a subroutine that is syntactically a list function. The argument list is either parenthesised, absent, or consists of an unparenthesised list expression. This is the syntax that is used for a call to a subroutine with any prototype that does not have special handling (such as <code>(@)</code> or <code>($$)</code>) or with no prototype at all.</p>
+
+<p>The op tree representing the argument list is returned. The bit <code>CALLPARSER_PARENS</code> is set in <i>*flags_p</i> if the argument list was parenthesised.</p>
+
+<pre><code>        OP *parse_args_list(U32 *flags_p)</code></pre>
+
+</dd>
+<dt id="parse_args_block_list">parse_args_block_list</dt>
+<dd>
+
+<p>Parse an argument list for a call to a subroutine that is syntactically a block-and-list function. The argument list is either parenthesised, absent, an unparenthesised list expression, or consists of a code block followed by an optionl list expression. Where the first thing seen is an open brace, it is always interpreted as a code block. This is the syntax that is used for a call to a subroutine with any prototype beginning with <code>&amp;</code>, such as <code>(&amp;@)</code> or <code>(&amp;$)</code>.</p>
+
+<p>The op tree representing the argument list is returned. The bit <code>CALLPARSER_PARENS</code> is set in <i>*flags_p</i> if the argument list was parenthesised.</p>
+
+<pre><code>        OP *parse_args_block_list(U32 *flags_p)</code></pre>
+
+</dd>
+<dt id="parse_args_proto">parse_args_proto</dt>
+<dd>
+
+<p>Parse a subroutine argument list based on a subroutine prototype. The syntax used for the argument list will be that implemented by <a href="./Devel::CallParser.html#parse_args_nullary">&quot;parse_args_nullary&quot;</a>, <a href="./Devel::CallParser.html#parse_args_unary">&quot;parse_args_unary&quot;</a>, <a href="./Devel::CallParser.html#parse_args_list">&quot;parse_args_list&quot;</a>, or <a href="./Devel::CallParser.html#parse_args_block_list">&quot;parse_args_block_list&quot;</a>, depending on the prototype. This is the standard treatment used on a subroutine call, not marked with <code>&amp;</code>, where the callee can be identified at compile time and has a prototype.</p>
+
+<p><i>protosv</i> supplies the subroutine prototype to be applied to the call. It may be a normal defined scalar, of which the string value will be used. Alternatively, for convenience, it may be a subroutine object (a <code>CV*</code> that has been cast to <code>SV*</code>) which has a prototype.</p>
+
+<p>The <i>namegv</i> parameter would be used to refer to the callee if required in any error message, but currently no message does so.</p>
+
+<p>The op tree representing the argument list is returned. The bit <code>CALLPARSER_PARENS</code> is set in <i>*flags_p</i> if the argument list was parenthesised.</p>
+
+<pre><code>        OP *parse_args_proto(GV *namegv, SV *protosv, U32 *flags_p)</code></pre>
+
+</dd>
+<dt id="parse_args_proto_or_list">parse_args_proto_or_list</dt>
+<dd>
+
+<p>Parse a subroutine argument list either based on a subroutine prototype or using default list-function syntax. The syntax used for the argument list will be that implemented by <a href="./Devel::CallParser.html#parse_args_nullary">&quot;parse_args_nullary&quot;</a>, <a href="./Devel::CallParser.html#parse_args_unary">&quot;parse_args_unary&quot;</a>, <a href="./Devel::CallParser.html#parse_args_list">&quot;parse_args_list&quot;</a>, or <a href="./Devel::CallParser.html#parse_args_block_list">&quot;parse_args_block_list&quot;</a>, depending on the prototype. This is the standard treatment used on a subroutine call, not marked with <code>&amp;</code>, where the callee can be identified at compile time.</p>
+
+<p><i>protosv</i> supplies the subroutine prototype to be applied to the call, or indicates that there is no prototype. It may be a normal scalar, in which case if it is defined then the string value will be used as a prototype, and if it is undefined then there is no prototype. Alternatively, for convenience, it may be a subroutine object (a <code>CV*</code> that has been cast to <code>SV*</code>), of which the prototype will be used if it has one.</p>
+
+<p>The <i>namegv</i> parameter would be used to refer to the callee if required in any error message, but currently no message does so.</p>
+
+<p>The op tree representing the argument list is returned. The bit <code>CALLPARSER_PARENS</code> is set in <i>*flags_p</i> if the argument list was parenthesised.</p>
+
+<pre><code>        OP *parse_args_proto_or_list(GV *namegv, SV *protosv,
+                U32 *flags_p)</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>Due to reliance on Perl core features to do anything interesting, only a very limited form of custom parsing is possible prior to Perl 5.13.8, and none at all prior to Perl 5.11.2.</p>
+
+<p>The way this module determines which parsing code to use for a subroutine conflicts with the expectations of some particularly tricky modules that use nasty hacks to perform custom parsing without proper support from the Perl core. In particular, this module is incompatible with versions of <a href="https://metacpan.org/pod/Devel::Declare">Devel::Declare</a> prior to 0.006004 and versions of <a href="./Data::Alias.html">Data::Alias</a> prior to 1.13. An arrangement has been reached that allows later versions of those modules to coexist with this module.</p>
+
+<p>Custom parsing code is only invoked if the subroutine to which it is attached is invoked using an unqualified name. For example, the name <code>foo</code> works, but the name <code>main::foo</code> will not, despite referring to the same subroutine. This is an unavoidable limitation imposed by the core&#39;s interim facility for custom parser plugins. This should be resolved if the API provided by this module, or something similar, migrates into the core in a future version of Perl.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/Devel::CallChecker">Devel::CallChecker</a></p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Andrew Main (Zefram) &lt;zefram@fysh.org&gt;</p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright (C) 2011, 2013 Andrew Main (Zefram) &lt;zefram@fysh.org&gt;</p>
+
+<h1 id="LICENSE">LICENSE</h1>
+
+<p>This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Devel::CallParser, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Devel::CallParser</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Devel::CallParser</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Devel::CallParser.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

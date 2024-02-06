@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>IO::Scalar - IO:: interface for reading/writing a scalar - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of IO-Stringy - MetaCPAN" href="https://metacpan.org/dist/IO-Stringy/releases.rss" />
+        <link rel="canonical" href="./IO::Scalar.html" />
+        <meta name="description" content="IO:: interface for reading/writing a scalar" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/IO::Scalar" />
+<meta name="twitter:title"       content="IO::Scalar" />
+<meta name="twitter:description" content="IO:: interface for reading/writing a scalar" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./IO::Scalar.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of IO-Stringy was released.">
+      <span class="relatize">17 Jan 2020 03:53:55 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/IO-Stringy">IO-Stringy</a>
+  </li>
+  <li>
+    Module version: 2.113
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/IO-Stringy/source/lib/IO/Scalar.pm">Source</a>
+    (<a href="https://metacpan.org/dist/IO-Stringy/source/lib/IO/Scalar.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/IO-Stringy/source/lib/IO">Browse</a>
+    (<a href="https://metacpan.org/dist/IO-Stringy/source/lib/IO?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/IO-Stringy/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://github.com/genio/IO-Stringy">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/IO-Stringy/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/genio/IO-Stringy">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/genio/IO-Stringy/issues">Issues</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=IO-Stringy+2.113" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IO-Stringy.html?oncpan=1&amp;distmat=1&amp;version=2.113&amp;grade=2" style="color: #090">7472</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IO-Stringy.html?oncpan=1&amp;distmat=1&amp;version=2.113&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/I/IO-Stringy.html?oncpan=1&amp;distmat=1&amp;version=2.113&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/CAPOEIRAB/IO-Stringy-2.113">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on IO-Stringy who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 3
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/IO-Stringy-2.113/index.html">68.01% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.8.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/IO-Stringy/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/C/CA/CAPOEIRAB/IO-Stringy-2.113.tar.gz">
+      Download (<span itemprop="fileSize">46.64KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FCAPOEIRAB%2FIO-Stringy-2.113%2Flib%2FIO%2FScalar.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/IO-Stringy/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/IO-Stringy/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:IO-Stringy">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="IO-Stringy">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/IO/Scalar.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="CAPOEIRAB/IO-Stringy-2.113"
+>2.113
+  (CAPOEIRAB on 2020-01-17)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="CAPOEIRAB/IO-Stringy-2.112"
+>2.112
+  (CAPOEIRAB on 2019-12-13)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/CAPOEIRAB/IO-Stringy-2.113/diff/' + encodeURIComponent(this.value) + '/lib/IO/Scalar.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="CAPOEIRAB/IO-Stringy-2.113"
+>2.113
+  (CAPOEIRAB on 2020-01-17)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="CAPOEIRAB/IO-Stringy-2.112"
+>2.112
+  (CAPOEIRAB on 2019-12-13)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Carp" title="Carp" class="ellipsis">Carp</a></li>
+  <li><a href="https://metacpan.org/pod/Exporter" title="Exporter" class="ellipsis">Exporter</a></li>
+  <li><a href="https://metacpan.org/pod/File::Spec" title="File::Spec" class="ellipsis">File::Spec</a></li>
+  <li><a href="https://metacpan.org/pod/FileHandle" title="FileHandle" class="ellipsis">FileHandle</a></li>
+  <li><a href="https://metacpan.org/pod/IO::File" title="IO::File" class="ellipsis">IO::File</a></li>
+  <li><a href="https://metacpan.org/pod/IO::Handle" title="IO::Handle" class="ellipsis">IO::Handle</a></li>
+  <li><a href="https://metacpan.org/pod/Symbol" title="Symbol" class="ellipsis">Symbol</a></li>
+  <li><a href="https://metacpan.org/pod/overload" title="overload" class="ellipsis">overload</a></li>
+  <li><a href="https://metacpan.org/pod/parent" title="parent" class="ellipsis">parent</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/warnings" title="warnings" class="ellipsis">warnings</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/IO::Scalar/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=IO%3A%3AScalar">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=IO-Stringy">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/CAPOEIRAB/IO-Stringy-2.113/view/lib/IO/Scalar.pm">This version</a>
+    </li>
+    <li>
+      <a href="./IO::Scalar.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/PINGAN"><img src="https://www.gravatar.com/avatar/a02222e5e0e4fd24d52fc29a08ac6bcb?d=identicon&amp;s=20" title="PINGAN" alt="PINGAN"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/IO-Stringy/plussers">1 PAUSE user</a>
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 2 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="ERYQ"
+      data-contrib-email="eryq@cpan.org"
+    >
+      <a href="https://metacpan.org/author/ERYQ" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/973cad95b09caa899ccede2359d9d2a2?d=identicon&amp;s=20" />
+      Erik Dorfman
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="DSKOLL"
+      data-contrib-email="dskoll@cpan.org"
+    >
+      <a href="https://metacpan.org/author/DSKOLL" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/77ceb1d700a17c6454d82e26e73d9807?d=identicon&amp;s=20" />
+      Dianne Skoll
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/CAPOEIRAB" class="author-name">Chase Whitener</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/IO/Scalar.pm&#39;" class="">
+<option
+  selected
+  value="CAPOEIRAB/IO-Stringy-2.113"
+>2.113
+  (CAPOEIRAB on 2020-01-17)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="CAPOEIRAB/IO-Stringy-2.112"
+>2.112
+  (CAPOEIRAB on 2019-12-13)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/IO-Stringy">IO-Stringy-2.113</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 164 direct dependents &#10;          • 819 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="IO-Stringy-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="IO-Stringy-2.113">
+    <input type="hidden" name="author" value="CAPOEIRAB">
+    <input type="hidden" name="distribution" value="IO-Stringy">
+    <button type="submit" class="favorite highlight"><span>1</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./IO::Scalar.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>1</span> ++</a>
+</div>
+   / <span>IO::Scalar</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./IO::Scalar.html#NAME">NAME</a></li>
+  <li><a href="./IO::Scalar.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./IO::Scalar.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./IO::Scalar.html#PUBLIC-INTERFACE">PUBLIC INTERFACE</a>
+    <ul>
+      <li><a href="./IO::Scalar.html#Construction">Construction</a></li>
+      <li><a href="./IO::Scalar.html#Input-and-output">Input and output</a></li>
+      <li><a href="./IO::Scalar.html#Seeking/telling-and-other-attributes">Seeking/telling and other attributes</a></li>
+    </ul>
+  </li>
+  <li><a href="./IO::Scalar.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./IO::Scalar.html#CONTRIBUTORS">CONTRIBUTORS</a></li>
+  <li><a href="./IO::Scalar.html#COPYRIGHT-&amp;-LICENSE">COPYRIGHT &amp; LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>IO::Scalar - IO:: interface for reading/writing a scalar</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p>Perform I/O on strings, using the basic OO interface...</p>
+
+<pre><code>    use 5.005;
+    use IO::Scalar;
+    $data = &quot;My message:\n&quot;;
+
+    ### Open a handle on a string, and append to it:
+    $SH = new IO::Scalar \$data;
+    $SH-&gt;print(&quot;Hello&quot;);
+    $SH-&gt;print(&quot;, world!\nBye now!\n&quot;);
+    print &quot;The string is now: &quot;, $data, &quot;\n&quot;;
+
+    ### Open a handle on a string, read it line-by-line, then close it:
+    $SH = new IO::Scalar \$data;
+    while (defined($_ = $SH-&gt;getline)) {
+        print &quot;Got line: $_&quot;;
+    }
+    $SH-&gt;close;
+
+    ### Open a handle on a string, and slurp in all the lines:
+    $SH = new IO::Scalar \$data;
+    print &quot;All lines:\n&quot;, $SH-&gt;getlines;
+
+    ### Get the current position (either of two ways):
+    $pos = $SH-&gt;getpos;
+    $offset = $SH-&gt;tell;
+
+    ### Set the current position (either of two ways):
+    $SH-&gt;setpos($pos);
+    $SH-&gt;seek($offset, 0);
+
+    ### Open an anonymous temporary scalar:
+    $SH = new IO::Scalar;
+    $SH-&gt;print(&quot;Hi there!&quot;);
+    print &quot;I printed: &quot;, ${$SH-&gt;sref}, &quot;\n&quot;;      ### get at value</code></pre>
+
+<p>Don&#39;t like OO for your I/O? No problem. Thanks to the magic of an invisible tie(), the following now works out of the box, just as it does with IO::Handle:</p>
+
+<pre><code>    use 5.005;
+    use IO::Scalar;
+    $data = &quot;My message:\n&quot;;
+
+    ### Open a handle on a string, and append to it:
+    $SH = new IO::Scalar \$data;
+    print $SH &quot;Hello&quot;;
+    print $SH &quot;, world!\nBye now!\n&quot;;
+    print &quot;The string is now: &quot;, $data, &quot;\n&quot;;
+
+    ### Open a handle on a string, read it line-by-line, then close it:
+    $SH = new IO::Scalar \$data;
+    while (&lt;$SH&gt;) {
+        print &quot;Got line: $_&quot;;
+    }
+    close $SH;
+
+    ### Open a handle on a string, and slurp in all the lines:
+    $SH = new IO::Scalar \$data;
+    print &quot;All lines:\n&quot;, &lt;$SH&gt;;
+
+    ### Get the current position (WARNING: requires 5.6):
+    $offset = tell $SH;
+
+    ### Set the current position (WARNING: requires 5.6):
+    seek $SH, $offset, 0;
+
+    ### Open an anonymous temporary scalar:
+    $SH = new IO::Scalar;
+    print $SH &quot;Hi there!&quot;;
+    print &quot;I printed: &quot;, ${$SH-&gt;sref}, &quot;\n&quot;;      ### get at value</code></pre>
+
+<p>And for you folks with 1.x code out there: the old tie() style still works, though this is <i>unnecessary and deprecated</i>:</p>
+
+<pre><code>    use IO::Scalar;
+
+    ### Writing to a scalar...
+    my $s;
+    tie *OUT, &#39;IO::Scalar&#39;, \$s;
+    print OUT &quot;line 1\nline 2\n&quot;, &quot;line 3\n&quot;;
+    print &quot;String is now: $s\n&quot;
+
+    ### Reading and writing an anonymous scalar...
+    tie *OUT, &#39;IO::Scalar&#39;;
+    print OUT &quot;line 1\nline 2\n&quot;, &quot;line 3\n&quot;;
+    tied(OUT)-&gt;seek(0,0);
+    while (&lt;OUT&gt;) {
+        print &quot;Got line: &quot;, $_;
+    }</code></pre>
+
+<p>Stringification works, too!</p>
+
+<pre><code>    my $SH = new IO::Scalar \$data;
+    print $SH &quot;Hello, &quot;;
+    print $SH &quot;world!&quot;;
+    print &quot;I printed: $SH\n&quot;;</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This class is part of the IO::Stringy distribution; see <a href="./IO::Stringy.html">IO::Stringy</a> for change log and general information.</p>
+
+<p>The IO::Scalar class implements objects which behave just like IO::Handle (or FileHandle) objects, except that you may use them to write to (or read from) scalars. These handles are automatically <code>tiehandle</code>d (though please see <a href="./IO::Scalar.html#WARNINGS">&quot;WARNINGS&quot;</a> for information relevant to your Perl version).</p>
+
+<p>Basically, this:</p>
+
+<pre><code>    my $s;
+    $SH = new IO::Scalar \$s;
+    $SH-&gt;print(&quot;Hel&quot;, &quot;lo, &quot;);         ### OO style
+    $SH-&gt;print(&quot;world!\n&quot;);            ### ditto</code></pre>
+
+<p>Or this:</p>
+
+<pre><code>    my $s;
+    $SH = tie *OUT, &#39;IO::Scalar&#39;, \$s;
+    print OUT &quot;Hel&quot;, &quot;lo, &quot;;           ### non-OO style
+    print OUT &quot;world!\n&quot;;              ### ditto</code></pre>
+
+<p>Causes $s to be set to:</p>
+
+<pre><code>    &quot;Hello, world!\n&quot;</code></pre>
+
+<h1 id="PUBLIC-INTERFACE"><a id="PUBLIC"></a>PUBLIC INTERFACE</h1>
+
+<h2 id="Construction">Construction</h2>
+
+<dl>
+
+<dt id="new-[ARGS...]"><a id="new"></a><a id="new--ARGS"></a>new [ARGS...]</dt>
+<dd>
+
+<p><i>Class method.</i> Return a new, unattached scalar handle. If any arguments are given, they&#39;re sent to open().</p>
+
+</dd>
+<dt id="open-[SCALARREF]"><a id="open"></a><a id="open--SCALARREF"></a>open [SCALARREF]</dt>
+<dd>
+
+<p><i>Instance method.</i> Open the scalar handle on a new scalar, pointed to by SCALARREF. If no SCALARREF is given, a &quot;private&quot; scalar is created to hold the file data.</p>
+
+<p>Returns the self object on success, undefined on error.</p>
+
+</dd>
+<dt id="opened">opened</dt>
+<dd>
+
+<p><i>Instance method.</i> Is the scalar handle opened on something?</p>
+
+</dd>
+<dt id="close">close</dt>
+<dd>
+
+<p><i>Instance method.</i> Disassociate the scalar handle from its underlying scalar. Done automatically on destroy.</p>
+
+</dd>
+</dl>
+
+<h2 id="Input-and-output"><a id="Input"></a>Input and output</h2>
+
+<dl>
+
+<dt id="flush">flush</dt>
+<dd>
+
+<p><i>Instance method.</i> No-op, provided for OO compatibility.</p>
+
+</dd>
+<dt id="fileno">fileno</dt>
+<dd>
+
+<p><i>Instance method.</i> No-op, returns undef</p>
+
+</dd>
+<dt id="getc">getc</dt>
+<dd>
+
+<p><i>Instance method.</i> Return the next character, or undef if none remain.</p>
+
+</dd>
+<dt id="getline">getline</dt>
+<dd>
+
+<p><i>Instance method.</i> Return the next line, or undef on end of string. Can safely be called in an array context. Currently, lines are delimited by &quot;\n&quot;.</p>
+
+</dd>
+<dt id="getlines">getlines</dt>
+<dd>
+
+<p><i>Instance method.</i> Get all remaining lines. It will croak() if accidentally called in a scalar context.</p>
+
+</dd>
+<dt id="print-ARGS..."><a id="print"></a><a id="print-ARGS"></a>print ARGS...</dt>
+<dd>
+
+<p><i>Instance method.</i> Print ARGS to the underlying scalar.</p>
+
+<p><b>Warning:</b> this continues to always cause a seek to the end of the string, but if you perform seek()s and tell()s, it is still safer to explicitly seek-to-end before subsequent print()s.</p>
+
+</dd>
+<dt id="read-BUF,-NBYTES,-[OFFSET]"><a id="read"></a><a id="read-BUF--NBYTES---OFFSET"></a>read BUF, NBYTES, [OFFSET]</dt>
+<dd>
+
+<p><i>Instance method.</i> Read some bytes from the scalar. Returns the number of bytes actually read, 0 on end-of-file, undef on error.</p>
+
+</dd>
+<dt id="write-BUF,-NBYTES,-[OFFSET]"><a id="write"></a><a id="write-BUF--NBYTES---OFFSET"></a>write BUF, NBYTES, [OFFSET]</dt>
+<dd>
+
+<p><i>Instance method.</i> Write some bytes to the scalar.</p>
+
+</dd>
+<dt id="sysread-BUF,-LEN,-[OFFSET]"><a id="sysread"></a><a id="sysread-BUF--LEN---OFFSET"></a>sysread BUF, LEN, [OFFSET]</dt>
+<dd>
+
+<p><i>Instance method.</i> Read some bytes from the scalar. Returns the number of bytes actually read, 0 on end-of-file, undef on error.</p>
+
+</dd>
+<dt id="syswrite-BUF,-NBYTES,-[OFFSET]"><a id="syswrite"></a><a id="syswrite-BUF--NBYTES---OFFSET"></a>syswrite BUF, NBYTES, [OFFSET]</dt>
+<dd>
+
+<p><i>Instance method.</i> Write some bytes to the scalar.</p>
+
+</dd>
+</dl>
+
+<h2 id="Seeking/telling-and-other-attributes"><a id="Seeking"></a><a id="Seeking-telling-and-other-attributes"></a>Seeking/telling and other attributes</h2>
+
+<dl>
+
+<dt id="autoflush">autoflush</dt>
+<dd>
+
+<p><i>Instance method.</i> No-op, provided for OO compatibility.</p>
+
+</dd>
+<dt id="binmode">binmode</dt>
+<dd>
+
+<p><i>Instance method.</i> No-op, provided for OO compatibility.</p>
+
+</dd>
+<dt id="clearerr">clearerr</dt>
+<dd>
+
+<p><i>Instance method.</i> Clear the error and EOF flags. A no-op.</p>
+
+</dd>
+<dt id="eof">eof</dt>
+<dd>
+
+<p><i>Instance method.</i> Are we at end of file?</p>
+
+</dd>
+<dt id="seek-OFFSET,-WHENCE"><a id="seek"></a><a id="seek-OFFSET--WHENCE"></a>seek OFFSET, WHENCE</dt>
+<dd>
+
+<p><i>Instance method.</i> Seek to a given position in the stream.</p>
+
+</dd>
+<dt id="sysseek-OFFSET,-WHENCE"><a id="sysseek"></a><a id="sysseek-OFFSET--WHENCE"></a>sysseek OFFSET, WHENCE</dt>
+<dd>
+
+<p><i>Instance method.</i> Identical to <code>seek OFFSET, WHENCE</code>, <i>q.v.</i></p>
+
+</dd>
+<dt id="tell">tell</dt>
+<dd>
+
+<p><i>Instance method.</i> Return the current position in the stream, as a numeric offset.</p>
+
+</dd>
+<dt id="setpos-POS"><a id="setpos"></a>setpos POS</dt>
+<dd>
+
+<p><i>Instance method.</i> Set the current position, using the opaque value returned by <code>getpos()</code>.</p>
+
+</dd>
+<dt id="getpos">getpos</dt>
+<dd>
+
+<p><i>Instance method.</i> Return the current position in the string, as an opaque object.</p>
+
+</dd>
+<dt id="sref">sref</dt>
+<dd>
+
+<p><i>Instance method.</i> Return a reference to the underlying scalar.</p>
+
+</dd>
+</dl>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Eryq (<i>eryq@zeegee.com</i>). President, ZeeGee Software Inc (<i>http://www.zeegee.com</i>).</p>
+
+<h1 id="CONTRIBUTORS">CONTRIBUTORS</h1>
+
+<p>Dianne Skoll (<i>dfs@roaringpenguin.com</i>).</p>
+
+<h1 id="COPYRIGHT-&amp;-LICENSE"><a id="COPYRIGHT"></a><a id="COPYRIGHT---LICENSE"></a>COPYRIGHT &amp; LICENSE</h1>
+
+<p>Copyright (c) 1997 Erik (Eryq) Dorfman, ZeeGee Software, Inc. All rights reserved.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install IO::Stringy, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm IO::Stringy</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install IO::Stringy</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./IO::Scalar.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

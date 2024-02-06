@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>B::Concise - Walk Perl syntax tree, printing concise info about ops - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/B::Concise">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./B::Concise.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/B::Concise">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/B::Concise">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/B::Concise">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/B::Concise">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/B::Concise">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/B::Concise">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/B::Concise">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/B::Concise">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/B::Concise">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/B::Concise">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/B::Concise">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/B::Concise">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/B::Concise">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/B::Concise">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/B::Concise">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/B::Concise">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/B::Concise">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/B::Concise">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/B::Concise">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/B::Concise">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/B::Concise">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/B::Concise">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/B::Concise">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/B::Concise">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/B::Concise">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/B::Concise">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/B::Concise">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/B::Concise">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/B::Concise">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/B::Concise">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/B::Concise">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/B::Concise">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/B::Concise">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/B::Concise">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/B::Concise">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/B::Concise">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/B::Concise">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/B::Concise">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/B::Concise">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/B::Concise">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/B::Concise">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/B::Concise">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/B::Concise">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/B::Concise">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/B::Concise">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/B::Concise">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/B::Concise">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/B::Concise">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/B::Concise">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/B::Concise">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/B::Concise">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/B::Concise">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/B::Concise">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/B::Concise">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/B::Concise">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/B::Concise">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/B::Concise">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/B::Concise">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/B::Concise">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/B::Concise">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/B::Concise">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/B::Concise">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/B::Concise">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/B::Concise">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/B::Concise">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/B::Concise">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/B::Concise">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/B::Concise">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/B::Concise">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/B::Concise">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/B::Concise">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/B::Concise">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/B::Concise">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/B::Concise">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/B::Concise">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/B::Concise">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/B::Concise">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/B::Concise">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/B::Concise">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/B::Concise">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./B::Concise.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/B::Concise">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/B::Concise">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/B::Concise">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/B::Concise">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/B::Concise">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/B::Concise">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/B::Concise">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/B::Concise">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/B::Concise">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/B::Concise">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/B::Concise">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/B::Concise">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/B::Concise">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/B::Concise">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/B::Concise">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/B::Concise">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/B::Concise">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/B::Concise">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/B::Concise">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/B::Concise">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/B::Concise">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/B::Concise">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/B::Concise">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/B::Concise">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/B::Concise">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/B::Concise">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/B::Concise">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/B::Concise">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/B::Concise">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/B::Concise">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/B::Concise">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/B::Concise">5.35.1</a>
+          <a class="dropdown-item active" href="./B::Concise.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./B::Concise.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./B::Concise.html">B::Concise</a>
+          <div id="more">
+            (<a href="./B::Concise.txt">source</a>,
+            <a href="https://metacpan.org/pod/B::Concise">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 1.004</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#EXAMPLE">EXAMPLE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#OPTIONS">OPTIONS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#Options-for-Opcode-Ordering">Options for Opcode Ordering</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#Options-for-Line-Style">Options for Line-Style</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#Options-for-tree-specific-formatting">Options for tree-specific formatting</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#Options-controlling-sequence-numbering">Options controlling sequence numbering</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#Other-options">Other options</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#Option-Stickiness">Option Stickiness</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#ABBREVIATIONS">ABBREVIATIONS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#OP-class-abbreviations">OP class abbreviations</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#OP-flags-abbreviations">OP flags abbreviations</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#FORMATTING-SPECIFICATIONS">FORMATTING SPECIFICATIONS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#Special-Patterns">Special Patterns</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#%23-Variables"># Variables</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#One-Liner-Command-tips">One-Liner Command tips</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#Using-B::Concise-outside-of-the-O-framework">Using B::Concise outside of the O framework</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#Example:-Altering-Concise-Renderings">Example: Altering Concise Renderings</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#set_style()">set_style()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#set_style_standard($name)">set_style_standard($name)</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#add_style-()">add_style ()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#add_callback-()">add_callback ()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#Running-B::Concise::compile()">Running B::Concise::compile()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#B::Concise::reset_sequence()">B::Concise::reset_sequence()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#Errors">Errors</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./B::Concise.html#AUTHOR">AUTHOR</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./B::Concise.html#NAME">#</a>NAME</h1>
+
+<p>B::Concise - Walk Perl syntax tree, printing concise info about ops</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./B::Concise.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>perl -MO=Concise[,OPTIONS] foo.pl
+
+use B::Concise qw(set_style add_callback);</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./B::Concise.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This compiler backend prints the internal OPs of a Perl program&#39;s syntax tree in one of several space-efficient text formats suitable for debugging the inner workings of perl or other compiler backends. It can print OPs in the order they appear in the OP tree, in the order they will execute, or in a text approximation to their tree structure, and the format of the information displayed is customizable. Its function is similar to that of perl&#39;s <b>-Dx</b> debugging flag or the <b>B::Terse</b> module, but it is more sophisticated and flexible.</p>
+
+<h1 id="EXAMPLE"><a class="permalink" href="./B::Concise.html#EXAMPLE">#</a>EXAMPLE</h1>
+
+<p>Here&#39;s two outputs (or &#39;renderings&#39;), using the -exec and -basic (i.e. default) formatting conventions on the same code snippet.</p>
+
+<pre><code>   % perl -MO=Concise,-exec -e &#39;$a = $b + 42&#39;
+   1  &lt;0&gt; enter
+   2  &lt;;&gt; nextstate(main 1 -e:1) v
+   3  &lt;#&gt; gvsv[*b] s
+   4  &lt;$&gt; const[IV 42] s
+*  5  &lt;2&gt; add[t3] sK/2
+   6  &lt;#&gt; gvsv[*a] s
+   7  &lt;2&gt; sassign vKS/2
+   8  &lt;@&gt; leave[1 ref] vKP/REFC</code></pre>
+
+<p>In this -exec rendering, each opcode is executed in the order shown. The add opcode, marked with &#39;*&#39;, is discussed in more detail.</p>
+
+<p>The 1st column is the op&#39;s sequence number, starting at 1, and is displayed in base 36 by default. Here they&#39;re purely linear; the sequences are very helpful when looking at code with loops and branches.</p>
+
+<p>The symbol between angle brackets indicates the op&#39;s type, for example; &lt;2&gt; is a BINOP, &lt;@&gt; a LISTOP, and &lt;#&gt; is a PADOP, which is used in threaded perls. (see <a href="./B::Concise.html#OP-class-abbreviations">&quot;OP class abbreviations&quot;</a>).</p>
+
+<p>The opname, as in <b>&#39;add[t1]&#39;</b>, may be followed by op-specific information in parentheses or brackets (ex <b>&#39;[t1]&#39;</b>).</p>
+
+<p>The op-flags (ex <b>&#39;sK/2&#39;</b>) are described in (<a href="./B::Concise.html#OP-flags-abbreviations">&quot;OP flags abbreviations&quot;</a>).</p>
+
+<pre><code>   % perl -MO=Concise -e &#39;$a = $b + 42&#39;
+   8  &lt;@&gt; leave[1 ref] vKP/REFC -&gt;(end)
+   1     &lt;0&gt; enter -&gt;2
+   2     &lt;;&gt; nextstate(main 1 -e:1) v -&gt;3
+   7     &lt;2&gt; sassign vKS/2 -&gt;8
+*  5        &lt;2&gt; add[t1] sK/2 -&gt;6
+   -           &lt;1&gt; ex-rv2sv sK/1 -&gt;4
+   3              &lt;$&gt; gvsv(*b) s -&gt;4
+   4           &lt;$&gt; const(IV 42) s -&gt;5
+   -        &lt;1&gt; ex-rv2sv sKRM*/1 -&gt;7
+   6           &lt;$&gt; gvsv(*a) s -&gt;7</code></pre>
+
+<p>The default rendering is top-down, so they&#39;re not in execution order. This form reflects the way the stack is used to parse and evaluate expressions; the add operates on the two terms below it in the tree.</p>
+
+<p>Nullops appear as <code>ex-opname</code>, where <i>opname</i> is an op that has been optimized away by perl. They&#39;re displayed with a sequence-number of &#39;-&#39;, because they are not executed (they don&#39;t appear in previous example), they&#39;re printed here because they reflect the parse.</p>
+
+<p>The arrow points to the sequence number of the next op; they&#39;re not displayed in -exec mode, for obvious reasons.</p>
+
+<p>Note that because this rendering was done on a non-threaded perl, the PADOPs in the previous examples are now SVOPs, and some (but not all) of the square brackets have been replaced by round ones. This is a subtle feature to provide some visual distinction between renderings on threaded and un-threaded perls.</p>
+
+<h1 id="OPTIONS"><a class="permalink" href="./B::Concise.html#OPTIONS">#</a>OPTIONS</h1>
+
+<p>Arguments that don&#39;t start with a hyphen are taken to be the names of subroutines or formats to render; if no such functions are specified, the main body of the program (outside any subroutines, and not including use&#39;d or require&#39;d files) is rendered. Passing <code>BEGIN</code>, <code>UNITCHECK</code>, <code>CHECK</code>, <code>INIT</code>, or <code>END</code> will cause all of the corresponding special blocks to be printed. Arguments must follow options.</p>
+
+<p>Options affect how things are rendered (ie printed). They&#39;re presented here by their visual effect, 1st being strongest. They&#39;re grouped according to how they interrelate; within each group the options are mutually exclusive (unless otherwise stated).</p>
+
+<h2 id="Options-for-Opcode-Ordering"><a class="permalink" href="./B::Concise.html#Options-for-Opcode-Ordering">#</a><a id="Options"></a>Options for Opcode Ordering</h2>
+
+<p>These options control the &#39;vertical display&#39; of opcodes. The display &#39;order&#39; is also called &#39;mode&#39; elsewhere in this document.</p>
+
+<dl>
+
+<dt id="-basic"><a class="permalink" href="./B::Concise.html#-basic">#</a><a id="basic"></a><b>-basic</b></dt>
+<dd>
+
+<p>Print OPs in the order they appear in the OP tree (a preorder traversal, starting at the root). The indentation of each OP shows its level in the tree, and the &#39;-&gt;&#39; at the end of the line indicates the next opcode in execution order. This mode is the default, so the flag is included simply for completeness.</p>
+
+</dd>
+<dt id="-exec"><a class="permalink" href="./B::Concise.html#-exec">#</a><a id="exec"></a><b>-exec</b></dt>
+<dd>
+
+<p>Print OPs in the order they would normally execute (for the majority of constructs this is a postorder traversal of the tree, ending at the root). In most cases the OP that usually follows a given OP will appear directly below it; alternate paths are shown by indentation. In cases like loops when control jumps out of a linear path, a &#39;goto&#39; line is generated.</p>
+
+</dd>
+<dt id="-tree"><a class="permalink" href="./B::Concise.html#-tree">#</a><a id="tree"></a><b>-tree</b></dt>
+<dd>
+
+<p>Print OPs in a text approximation of a tree, with the root of the tree at the left and &#39;left-to-right&#39; order of children transformed into &#39;top-to-bottom&#39;. Because this mode grows both to the right and down, it isn&#39;t suitable for large programs (unless you have a very wide terminal).</p>
+
+</dd>
+</dl>
+
+<h2 id="Options-for-Line-Style"><a class="permalink" href="./B::Concise.html#Options-for-Line-Style">#</a><a id="Options1"></a>Options for Line-Style</h2>
+
+<p>These options select the line-style (or just style) used to render each opcode, and dictates what info is actually printed into each line.</p>
+
+<dl>
+
+<dt id="-concise"><a class="permalink" href="./B::Concise.html#-concise">#</a><a id="concise"></a><b>-concise</b></dt>
+<dd>
+
+<p>Use the author&#39;s favorite set of formatting conventions. This is the default, of course.</p>
+
+</dd>
+<dt id="-terse"><a class="permalink" href="./B::Concise.html#-terse">#</a><a id="terse"></a><b>-terse</b></dt>
+<dd>
+
+<p>Use formatting conventions that emulate the output of <b>B::Terse</b>. The basic mode is almost indistinguishable from the real <b>B::Terse</b>, and the exec mode looks very similar, but is in a more logical order and lacks curly brackets. <b>B::Terse</b> doesn&#39;t have a tree mode, so the tree mode is only vaguely reminiscent of <b>B::Terse</b>.</p>
+
+</dd>
+<dt id="-linenoise"><a class="permalink" href="./B::Concise.html#-linenoise">#</a><a id="linenoise"></a><b>-linenoise</b></dt>
+<dd>
+
+<p>Use formatting conventions in which the name of each OP, rather than being written out in full, is represented by a one- or two-character abbreviation. This is mainly a joke.</p>
+
+</dd>
+<dt id="-debug"><a class="permalink" href="./B::Concise.html#-debug">#</a><a id="debug"></a><b>-debug</b></dt>
+<dd>
+
+<p>Use formatting conventions reminiscent of CPAN module <b>B::Debug</b>; these aren&#39;t very concise at all.</p>
+
+</dd>
+<dt id="-env"><a class="permalink" href="./B::Concise.html#-env">#</a><a id="env"></a><b>-env</b></dt>
+<dd>
+
+<p>Use formatting conventions read from the environment variables <code>B_CONCISE_FORMAT</code>, <code>B_CONCISE_GOTO_FORMAT</code>, and <code>B_CONCISE_TREE_FORMAT</code>.</p>
+
+</dd>
+</dl>
+
+<h2 id="Options-for-tree-specific-formatting"><a class="permalink" href="./B::Concise.html#Options-for-tree-specific-formatting">#</a><a id="Options2"></a>Options for tree-specific formatting</h2>
+
+<dl>
+
+<dt id="-compact"><a class="permalink" href="./B::Concise.html#-compact">#</a><a id="compact"></a><b>-compact</b></dt>
+<dd>
+
+<p>Use a tree format in which the minimum amount of space is used for the lines connecting nodes (one character in most cases). This squeezes out a few precious columns of screen real estate.</p>
+
+</dd>
+<dt id="-loose"><a class="permalink" href="./B::Concise.html#-loose">#</a><a id="loose"></a><b>-loose</b></dt>
+<dd>
+
+<p>Use a tree format that uses longer edges to separate OP nodes. This format tends to look better than the compact one, especially in ASCII, and is the default.</p>
+
+</dd>
+<dt id="-vt"><a class="permalink" href="./B::Concise.html#-vt">#</a><a id="vt"></a><b>-vt</b></dt>
+<dd>
+
+<p>Use tree connecting characters drawn from the VT100 line-drawing set. This looks better if your terminal supports it.</p>
+
+</dd>
+<dt id="-ascii"><a class="permalink" href="./B::Concise.html#-ascii">#</a><a id="ascii"></a><b>-ascii</b></dt>
+<dd>
+
+<p>Draw the tree with standard ASCII characters like <code>+</code> and <code>|</code>. These don&#39;t look as clean as the VT100 characters, but they&#39;ll work with almost any terminal (or the horizontal scrolling mode of less(1)) and are suitable for text documentation or email. This is the default.</p>
+
+</dd>
+</dl>
+
+<p>These are pairwise exclusive, i.e. compact or loose, vt or ascii.</p>
+
+<h2 id="Options-controlling-sequence-numbering"><a class="permalink" href="./B::Concise.html#Options-controlling-sequence-numbering">#</a><a id="Options3"></a>Options controlling sequence numbering</h2>
+
+<dl>
+
+<dt id="-basen"><a class="permalink" href="./B::Concise.html#-basen">#</a><a id="basen"></a><b>-base</b><i>n</i></dt>
+<dd>
+
+<p>Print OP sequence numbers in base <i>n</i>. If <i>n</i> is greater than 10, the digit for 11 will be &#39;a&#39;, and so on. If <i>n</i> is greater than 36, the digit for 37 will be &#39;A&#39;, and so on until 62. Values greater than 62 are not currently supported. The default is 36.</p>
+
+</dd>
+<dt id="-bigendian"><a class="permalink" href="./B::Concise.html#-bigendian">#</a><a id="bigendian"></a><b>-bigendian</b></dt>
+<dd>
+
+<p>Print sequence numbers with the most significant digit first. This is the usual convention for Arabic numerals, and the default.</p>
+
+</dd>
+<dt id="-littleendian"><a class="permalink" href="./B::Concise.html#-littleendian">#</a><a id="littleendian"></a><b>-littleendian</b></dt>
+<dd>
+
+<p>Print sequence numbers with the least significant digit first. This is obviously mutually exclusive with bigendian.</p>
+
+</dd>
+</dl>
+
+<h2 id="Other-options"><a class="permalink" href="./B::Concise.html#Other-options">#</a><a id="Other"></a>Other options</h2>
+
+<dl>
+
+<dt id="-src"><a class="permalink" href="./B::Concise.html#-src">#</a><a id="src"></a><b>-src</b></dt>
+<dd>
+
+<p>With this option, the rendering of each statement (starting with the nextstate OP) will be preceded by the 1st line of source code that generates it. For example:</p>
+
+<pre><code>1  &lt;0&gt; enter
+# 1: my $i;
+2  &lt;;&gt; nextstate(main 1 junk.pl:1) v:{
+3  &lt;0&gt; padsv[$i:1,10] vM/LVINTRO
+# 3: for $i (0..9) {
+4  &lt;;&gt; nextstate(main 3 junk.pl:3) v:{
+5  &lt;0&gt; pushmark s
+6  &lt;$&gt; const[IV 0] s
+7  &lt;$&gt; const[IV 9] s
+8  &lt;{&gt; enteriter(next-&gt;j last-&gt;m redo-&gt;9)[$i:1,10] lKS
+k  &lt;0&gt; iter s
+l  &lt;|&gt; and(other-&gt;9) vK/1
+# 4:     print &quot;line &quot;;
+9      &lt;;&gt; nextstate(main 2 junk.pl:4) v
+a      &lt;0&gt; pushmark s
+b      &lt;$&gt; const[PV &quot;line &quot;] s
+c      &lt;@&gt; print vK
+# 5:     print &quot;$i\n&quot;;
+...</code></pre>
+
+</dd>
+<dt id="-stash=&quot;somepackage&quot;"><a class="permalink" href="./B::Concise.html#-stash=%22somepackage%22">#</a><a id="stash-somepackage"></a><b>-stash=&quot;somepackage&quot;</b></dt>
+<dd>
+
+<p>With this, &quot;somepackage&quot; will be required, then the stash is inspected, and each function is rendered.</p>
+
+</dd>
+</dl>
+
+<p>The following options are pairwise exclusive.</p>
+
+<dl>
+
+<dt id="-main"><a class="permalink" href="./B::Concise.html#-main">#</a><a id="main"></a><b>-main</b></dt>
+<dd>
+
+<p>Include the main program in the output, even if subroutines were also specified. This rendering is normally suppressed when a subroutine name or reference is given.</p>
+
+</dd>
+<dt id="-nomain"><a class="permalink" href="./B::Concise.html#-nomain">#</a><a id="nomain"></a><b>-nomain</b></dt>
+<dd>
+
+<p>This restores the default behavior after you&#39;ve changed it with &#39;-main&#39; (it&#39;s not normally needed). If no subroutine name/ref is given, main is rendered, regardless of this flag.</p>
+
+</dd>
+<dt id="-nobanner"><a class="permalink" href="./B::Concise.html#-nobanner">#</a><a id="nobanner"></a><b>-nobanner</b></dt>
+<dd>
+
+<p>Renderings usually include a banner line identifying the function name or stringified subref. This suppresses the printing of the banner.</p>
+
+<p>TBC: Remove the stringified coderef; while it provides a &#39;cookie&#39; for each function rendered, the cookies used should be 1,2,3.. not a random hex-address. It also complicates string comparison of two different trees.</p>
+
+</dd>
+<dt id="-banner"><a class="permalink" href="./B::Concise.html#-banner">#</a><a id="banner"></a><b>-banner</b></dt>
+<dd>
+
+<p>restores default banner behavior.</p>
+
+</dd>
+<dt id="-banneris-=&gt;-subref"><a class="permalink" href="./B::Concise.html#-banneris-=%3E-subref">#</a><a id="banneris-subref"></a><b>-banneris</b> =&gt; subref</dt>
+<dd>
+
+<p>TBC: a hookpoint (and an option to set it) for a user-supplied function to produce a banner appropriate for users needs. It&#39;s not ideal, because the rendering-state variables, which are a natural candidate for use in concise.t, are unavailable to the user.</p>
+
+</dd>
+</dl>
+
+<h2 id="Option-Stickiness"><a class="permalink" href="./B::Concise.html#Option-Stickiness">#</a><a id="Option"></a>Option Stickiness</h2>
+
+<p>If you invoke Concise more than once in a program, you should know that the options are &#39;sticky&#39;. This means that the options you provide in the first call will be remembered for the 2nd call, unless you re-specify or change them.</p>
+
+<h1 id="ABBREVIATIONS"><a class="permalink" href="./B::Concise.html#ABBREVIATIONS">#</a>ABBREVIATIONS</h1>
+
+<p>The concise style uses symbols to convey maximum info with minimal clutter (like hex addresses). With just a little practice, you can start to see the flowers, not just the branches, in the trees.</p>
+
+<h2 id="OP-class-abbreviations"><a class="permalink" href="./B::Concise.html#OP-class-abbreviations">#</a><a id="OP"></a>OP class abbreviations</h2>
+
+<p>These symbols appear before the op-name, and indicate the B:: namespace that represents the ops in your Perl code.</p>
+
+<pre><code class="plaintext">0      OP (aka BASEOP)  An OP with no children
+1      UNOP             An OP with one child
++      UNOP_AUX         A UNOP with auxillary fields
+2      BINOP            An OP with two children
+|      LOGOP            A control branch OP
+@      LISTOP           An OP that could have lots of children
+/      PMOP             An OP with a regular expression
+$      SVOP             An OP with an SV
+&quot;      PVOP             An OP with a string
+{      LOOP             An OP that holds pointers for a loop
+;      COP              An OP that marks the start of a statement
+#      PADOP            An OP with a GV on the pad
+.      METHOP           An OP with method call info</code></pre>
+
+<h2 id="OP-flags-abbreviations"><a class="permalink" href="./B::Concise.html#OP-flags-abbreviations">#</a><a id="OP1"></a>OP flags abbreviations</h2>
+
+<p>OP flags are either public or private. The public flags alter the behavior of each opcode in consistent ways, and are represented by 0 or more single characters.</p>
+
+<pre><code class="plaintext">v      OPf_WANT_VOID    Want nothing (void context)
+s      OPf_WANT_SCALAR  Want single value (scalar context)
+l      OPf_WANT_LIST    Want list of any length (list context)
+                        Want is unknown
+K      OPf_KIDS         There is a firstborn child.
+P      OPf_PARENS       This operator was parenthesized.
+                         (Or block needs explicit scope entry.)
+R      OPf_REF          Certified reference.
+                         (Return container, not containee).
+M      OPf_MOD          Will modify (lvalue).
+S      OPf_STACKED      Some arg is arriving on the stack.
+*      OPf_SPECIAL      Do something weird for this op (see op.h)</code></pre>
+
+<p>Private flags, if any are set for an opcode, are displayed after a &#39;/&#39;</p>
+
+<pre><code>8  &lt;@&gt; leave[1 ref] vKP/REFC -&gt;(end)
+7     &lt;2&gt; sassign vKS/2 -&gt;8</code></pre>
+
+<p>They&#39;re opcode specific, and occur less often than the public ones, so they&#39;re represented by short mnemonics instead of single-chars; see B::Op_private and <i>regen/op_private</i> for more details.</p>
+
+<h1 id="FORMATTING-SPECIFICATIONS"><a class="permalink" href="./B::Concise.html#FORMATTING-SPECIFICATIONS">#</a><a id="FORMATTING"></a>FORMATTING SPECIFICATIONS</h1>
+
+<p>For each line-style (&#39;concise&#39;, &#39;terse&#39;, &#39;linenoise&#39;, etc.) there are 3 format-specs which control how OPs are rendered.</p>
+
+<p>The first is the &#39;default&#39; format, which is used in both basic and exec modes to print all opcodes. The 2nd, goto-format, is used in exec mode when branches are encountered. They&#39;re not real opcodes, and are inserted to look like a closing curly brace. The tree-format is tree specific.</p>
+
+<p>When a line is rendered, the correct format-spec is copied and scanned for the following items; data is substituted in, and other manipulations like basic indenting are done, for each opcode rendered.</p>
+
+<p>There are 3 kinds of items that may be populated; special patterns, #vars, and literal text, which is copied verbatim. (Yes, it&#39;s a set of s///g steps.)</p>
+
+<h2 id="Special-Patterns"><a class="permalink" href="./B::Concise.html#Special-Patterns">#</a><a id="Special"></a>Special Patterns</h2>
+
+<p>These items are the primitives used to perform indenting, and to select text from amongst alternatives.</p>
+
+<dl>
+
+<dt id="(x(exec_text;basic_text)x)"><a class="permalink" href="./B::Concise.html#(x(exec_text;basic_text)x)">#</a><a id="x-exec_text-basic_text-x"></a><b>(x(</b><i>exec_text</i><b>;</b><i>basic_text</i><b>)x)</b></dt>
+<dd>
+
+<p>Generates <i>exec_text</i> in exec mode, or <i>basic_text</i> in basic mode.</p>
+
+</dd>
+<dt id="(*(text)*)"><a class="permalink" href="./B::Concise.html#(*(text)*)">#</a><a id="text"></a><b>(*(</b><i>text</i><b>)*)</b></dt>
+<dd>
+
+<p>Generates one copy of <i>text</i> for each indentation level.</p>
+
+</dd>
+<dt id="(*(text1;text2)*)"><a class="permalink" href="./B::Concise.html#(*(text1;text2)*)">#</a><a id="text1-text2"></a><b>(*(</b><i>text1</i><b>;</b><i>text2</i><b>)*)</b></dt>
+<dd>
+
+<p>Generates one fewer copies of <i>text1</i> than the indentation level, followed by one copy of <i>text2</i> if the indentation level is more than 0.</p>
+
+</dd>
+<dt id="(?(text1#varText2)?)"><a class="permalink" href="./B::Concise.html#(?(text1%23varText2)?)">#</a><a id="text1-varText2"></a><b>(?(</b><i>text1</i><b>#</b><i>var</i><i>Text2</i><b>)?)</b></dt>
+<dd>
+
+<p>If the value of <i>var</i> is true (not empty or zero), generates the value of <i>var</i> surrounded by <i>text1</i> and <i>Text2</i>, otherwise nothing.</p>
+
+</dd>
+<dt id="~"><a class="permalink" href="./B::Concise.html#~">#</a><a id="pod"></a><b>~</b></dt>
+<dd>
+
+<p>Any number of tildes and surrounding whitespace will be collapsed to a single space.</p>
+
+</dd>
+</dl>
+
+<h2 id="#-Variables"><a class="permalink" href="./B::Concise.html#%23-Variables">#</a><a id="Variables"></a># Variables</h2>
+
+<p>These #vars represent opcode properties that you may want as part of your rendering. The &#39;#&#39; is intended as a private sigil; a #var&#39;s value is interpolated into the style-line, much like &quot;read $this&quot;.</p>
+
+<p>These vars take 3 forms:</p>
+
+<dl>
+
+<dt id="#var"><a class="permalink" href="./B::Concise.html#%23var">#</a><a id="var"></a><b>#</b><i>var</i></dt>
+<dd>
+
+<p>A property named &#39;var&#39; is assumed to exist for the opcodes, and is interpolated into the rendering.</p>
+
+</dd>
+<dt id="#varN"><a class="permalink" href="./B::Concise.html#%23varN">#</a><a id="varN"></a><b>#</b><i>var</i><i>N</i></dt>
+<dd>
+
+<p>Generates the value of <i>var</i>, left justified to fill <i>N</i> spaces. Note that this means while you can have properties &#39;foo&#39; and &#39;foo2&#39;, you cannot render &#39;foo2&#39;, but you could with &#39;foo2a&#39;. You would be wise not to rely on this behavior going forward ;-)</p>
+
+</dd>
+<dt id="#Var"><a class="permalink" href="./B::Concise.html#%23Var">#</a><a id="Var"></a><b>#</b><i>Var</i></dt>
+<dd>
+
+<p>This ucfirst form of #var generates a tag-value form of itself for display; it converts &#39;#Var&#39; into a &#39;Var =&gt; #var&#39; style, which is then handled as described above. (Imp-note: #Vars cannot be used for conditional-fills, because the =&gt; #var transform is done after the check for #Var&#39;s value).</p>
+
+</dd>
+</dl>
+
+<p>The following variables are &#39;defined&#39; by B::Concise; when they are used in a style, their respective values are plugged into the rendering of each opcode.</p>
+
+<p>Only some of these are used by the standard styles, the others are provided for you to delve into optree mechanics, should you wish to add a new style (see <a href="./B::Concise.html#add_style">&quot;add_style&quot;</a> below) that uses them. You can also add new ones using <a href="./B::Concise.html#add_callback">&quot;add_callback&quot;</a>.</p>
+
+<dl>
+
+<dt id="#addr"><a class="permalink" href="./B::Concise.html#%23addr">#</a><a id="addr"></a><b>#addr</b></dt>
+<dd>
+
+<p>The address of the OP, in hexadecimal.</p>
+
+</dd>
+<dt id="#arg"><a class="permalink" href="./B::Concise.html#%23arg">#</a><a id="arg"></a><b>#arg</b></dt>
+<dd>
+
+<p>The OP-specific information of the OP (such as the SV for an SVOP, the non-local exit pointers for a LOOP, etc.) enclosed in parentheses.</p>
+
+</dd>
+<dt id="#class"><a class="permalink" href="./B::Concise.html#%23class">#</a><a id="class"></a><b>#class</b></dt>
+<dd>
+
+<p>The B-determined class of the OP, in all caps.</p>
+
+</dd>
+<dt id="#classsym"><a class="permalink" href="./B::Concise.html#%23classsym">#</a><a id="classsym"></a><b>#classsym</b></dt>
+<dd>
+
+<p>A single symbol abbreviating the class of the OP.</p>
+
+</dd>
+<dt id="#coplabel"><a class="permalink" href="./B::Concise.html#%23coplabel">#</a><a id="coplabel"></a><b>#coplabel</b></dt>
+<dd>
+
+<p>The label of the statement or block the OP is the start of, if any.</p>
+
+</dd>
+<dt id="#exname"><a class="permalink" href="./B::Concise.html#%23exname">#</a><a id="exname"></a><b>#exname</b></dt>
+<dd>
+
+<p>The name of the OP, or &#39;ex-foo&#39; if the OP is a null that used to be a foo.</p>
+
+</dd>
+<dt id="#extarg"><a class="permalink" href="./B::Concise.html#%23extarg">#</a><a id="extarg"></a><b>#extarg</b></dt>
+<dd>
+
+<p>The target of the OP, or nothing for a nulled OP.</p>
+
+</dd>
+<dt id="#firstaddr"><a class="permalink" href="./B::Concise.html#%23firstaddr">#</a><a id="firstaddr"></a><b>#firstaddr</b></dt>
+<dd>
+
+<p>The address of the OP&#39;s first child, in hexadecimal.</p>
+
+</dd>
+<dt id="#flags"><a class="permalink" href="./B::Concise.html#%23flags">#</a><a id="flags"></a><b>#flags</b></dt>
+<dd>
+
+<p>The OP&#39;s flags, abbreviated as a series of symbols.</p>
+
+</dd>
+<dt id="#flagval"><a class="permalink" href="./B::Concise.html#%23flagval">#</a><a id="flagval"></a><b>#flagval</b></dt>
+<dd>
+
+<p>The numeric value of the OP&#39;s flags.</p>
+
+</dd>
+<dt id="#hints"><a class="permalink" href="./B::Concise.html#%23hints">#</a><a id="hints"></a><b>#hints</b></dt>
+<dd>
+
+<p>The COP&#39;s hint flags, rendered with abbreviated names if possible. An empty string if this is not a COP. Here are the symbols used:</p>
+
+<pre><code class="plaintext"> $ strict refs
+ &amp; strict subs
+ * strict vars
+x$ explicit use/no strict refs
+x&amp; explicit use/no strict subs
+x* explicit use/no strict vars
+ i integers
+ l locale
+ b bytes
+ { block scope
+ % localise %^H
+ &lt; open in
+ &gt; open out
+ I overload int
+ F overload float
+ B overload binary
+ S overload string
+ R overload re
+ T taint
+ E eval
+ X filetest access
+ U utf-8
+
+ us      use feature &#39;unicode_strings&#39;
+ fea=NNN feature bundle number</code></pre>
+
+</dd>
+<dt id="#hintsval"><a class="permalink" href="./B::Concise.html#%23hintsval">#</a><a id="hintsval"></a><b>#hintsval</b></dt>
+<dd>
+
+<p>The numeric value of the COP&#39;s hint flags, or an empty string if this is not a COP.</p>
+
+</dd>
+<dt id="#hyphseq"><a class="permalink" href="./B::Concise.html#%23hyphseq">#</a><a id="hyphseq"></a><b>#hyphseq</b></dt>
+<dd>
+
+<p>The sequence number of the OP, or a hyphen if it doesn&#39;t have one.</p>
+
+</dd>
+<dt id="#label"><a class="permalink" href="./B::Concise.html#%23label">#</a><a id="label"></a><b>#label</b></dt>
+<dd>
+
+<p>&#39;NEXT&#39;, &#39;LAST&#39;, or &#39;REDO&#39; if the OP is a target of one of those in exec mode, or empty otherwise.</p>
+
+</dd>
+<dt id="#lastaddr"><a class="permalink" href="./B::Concise.html#%23lastaddr">#</a><a id="lastaddr"></a><b>#lastaddr</b></dt>
+<dd>
+
+<p>The address of the OP&#39;s last child, in hexadecimal.</p>
+
+</dd>
+<dt id="#name"><a class="permalink" href="./B::Concise.html#%23name">#</a><a id="name"></a><b>#name</b></dt>
+<dd>
+
+<p>The OP&#39;s name.</p>
+
+</dd>
+<dt id="#NAME"><a class="permalink" href="./B::Concise.html#%23NAME">#</a><a id="NAME1"></a><b>#NAME</b></dt>
+<dd>
+
+<p>The OP&#39;s name, in all caps.</p>
+
+</dd>
+<dt id="#next"><a class="permalink" href="./B::Concise.html#%23next">#</a><a id="next"></a><b>#next</b></dt>
+<dd>
+
+<p>The sequence number of the OP&#39;s next OP.</p>
+
+</dd>
+<dt id="#nextaddr"><a class="permalink" href="./B::Concise.html#%23nextaddr">#</a><a id="nextaddr"></a><b>#nextaddr</b></dt>
+<dd>
+
+<p>The address of the OP&#39;s next OP, in hexadecimal.</p>
+
+</dd>
+<dt id="#noise"><a class="permalink" href="./B::Concise.html#%23noise">#</a><a id="noise"></a><b>#noise</b></dt>
+<dd>
+
+<p>A one- or two-character abbreviation for the OP&#39;s name.</p>
+
+</dd>
+<dt id="#private"><a class="permalink" href="./B::Concise.html#%23private">#</a><a id="private"></a><b>#private</b></dt>
+<dd>
+
+<p>The OP&#39;s private flags, rendered with abbreviated names if possible.</p>
+
+</dd>
+<dt id="#privval"><a class="permalink" href="./B::Concise.html#%23privval">#</a><a id="privval"></a><b>#privval</b></dt>
+<dd>
+
+<p>The numeric value of the OP&#39;s private flags.</p>
+
+</dd>
+<dt id="#seq"><a class="permalink" href="./B::Concise.html#%23seq">#</a><a id="seq"></a><b>#seq</b></dt>
+<dd>
+
+<p>The sequence number of the OP. Note that this is a sequence number generated by B::Concise.</p>
+
+</dd>
+<dt id="#opt"><a class="permalink" href="./B::Concise.html#%23opt">#</a><a id="opt"></a><b>#opt</b></dt>
+<dd>
+
+<p>Whether or not the op has been optimized by the peephole optimizer.</p>
+
+</dd>
+<dt id="#sibaddr"><a class="permalink" href="./B::Concise.html#%23sibaddr">#</a><a id="sibaddr"></a><b>#sibaddr</b></dt>
+<dd>
+
+<p>The address of the OP&#39;s next youngest sibling, in hexadecimal.</p>
+
+</dd>
+<dt id="#svaddr"><a class="permalink" href="./B::Concise.html#%23svaddr">#</a><a id="svaddr"></a><b>#svaddr</b></dt>
+<dd>
+
+<p>The address of the OP&#39;s SV, if it has an SV, in hexadecimal.</p>
+
+</dd>
+<dt id="#svclass"><a class="permalink" href="./B::Concise.html#%23svclass">#</a><a id="svclass"></a><b>#svclass</b></dt>
+<dd>
+
+<p>The class of the OP&#39;s SV, if it has one, in all caps (e.g., &#39;IV&#39;).</p>
+
+</dd>
+<dt id="#svval"><a class="permalink" href="./B::Concise.html#%23svval">#</a><a id="svval"></a><b>#svval</b></dt>
+<dd>
+
+<p>The value of the OP&#39;s SV, if it has one, in a short human-readable format.</p>
+
+</dd>
+<dt id="#targ"><a class="permalink" href="./B::Concise.html#%23targ">#</a><a id="targ"></a><b>#targ</b></dt>
+<dd>
+
+<p>The numeric value of the OP&#39;s targ.</p>
+
+</dd>
+<dt id="#targarg"><a class="permalink" href="./B::Concise.html#%23targarg">#</a><a id="targarg"></a><b>#targarg</b></dt>
+<dd>
+
+<p>The name of the variable the OP&#39;s targ refers to, if any, otherwise the letter t followed by the OP&#39;s targ in decimal.</p>
+
+</dd>
+<dt id="#targarglife"><a class="permalink" href="./B::Concise.html#%23targarglife">#</a><a id="targarglife"></a><b>#targarglife</b></dt>
+<dd>
+
+<p>Same as <b>#targarg</b>, but followed by the COP sequence numbers that delimit the variable&#39;s lifetime (or &#39;end&#39; for a variable in an open scope) for a variable.</p>
+
+</dd>
+<dt id="#typenum"><a class="permalink" href="./B::Concise.html#%23typenum">#</a><a id="typenum"></a><b>#typenum</b></dt>
+<dd>
+
+<p>The numeric value of the OP&#39;s type, in decimal.</p>
+
+</dd>
+</dl>
+
+<h1 id="One-Liner-Command-tips"><a class="permalink" href="./B::Concise.html#One-Liner-Command-tips">#</a><a id="One"></a>One-Liner Command tips</h1>
+
+<dl>
+
+<dt id="perl-MO=Concise,bar-foo.pl"><a class="permalink" href="./B::Concise.html#perl-MO=Concise,bar-foo.pl">#</a><a id="perl"></a><a id="perl--MO-Concise-bar-foo.pl"></a>perl -MO=Concise,bar foo.pl</dt>
+<dd>
+
+<p>Renders only bar() from foo.pl. To see main, drop the &#39;,bar&#39;. To see both, add &#39;,-main&#39;</p>
+
+</dd>
+<dt id="perl-MDigest::MD5=md5-MO=Concise,md5-e1"><a class="permalink" href="./B::Concise.html#perl-MDigest::MD5=md5-MO=Concise,md5-e1">#</a><a id="perl1"></a><a id="perl--MDigest::MD5-md5--MO-Concise-md5--e1"></a>perl -MDigest::MD5=md5 -MO=Concise,md5 -e1</dt>
+<dd>
+
+<p>Identifies md5 as an XS function. The export is needed so that BC can find it in main.</p>
+
+</dd>
+<dt id="perl-MPOSIX-MO=Concise,_POSIX_ARG_MAX-e1"><a class="permalink" href="./B::Concise.html#perl-MPOSIX-MO=Concise,_POSIX_ARG_MAX-e1">#</a><a id="perl2"></a><a id="perl--MPOSIX--MO-Concise-_POSIX_ARG_MAX--e1"></a>perl -MPOSIX -MO=Concise,_POSIX_ARG_MAX -e1</dt>
+<dd>
+
+<p>Identifies _POSIX_ARG_MAX as a constant sub, optimized to an IV. Although POSIX isn&#39;t entirely consistent across platforms, this is likely to be present in virtually all of them.</p>
+
+</dd>
+<dt id="perl-MPOSIX-MO=Concise,a-e-&#39;print-_POSIX_SAVED_IDS&#39;"><a class="permalink" href="./B::Concise.html#perl-MPOSIX-MO=Concise,a-e-&#39;print-_POSIX_SAVED_IDS&#39;">#</a><a id="perl3"></a><a id="perl--MPOSIX--MO-Concise-a--e-print-_POSIX_SAVED_IDS"></a>perl -MPOSIX -MO=Concise,a -e &#39;print _POSIX_SAVED_IDS&#39;</dt>
+<dd>
+
+<p>This renders a print statement, which includes a call to the function. It&#39;s identical to rendering a file with a use call and that single statement, except for the filename which appears in the nextstate ops.</p>
+
+</dd>
+<dt id="perl-MPOSIX-MO=Concise,a-e-&#39;sub-a{_POSIX_SAVED_IDS}&#39;"><a class="permalink" href="./B::Concise.html#perl-MPOSIX-MO=Concise,a-e-&#39;sub-a%7B_POSIX_SAVED_IDS%7D&#39;">#</a><a id="perl4"></a><a id="perl--MPOSIX--MO-Concise-a--e-sub-a-_POSIX_SAVED_IDS"></a>perl -MPOSIX -MO=Concise,a -e &#39;sub a{_POSIX_SAVED_IDS}&#39;</dt>
+<dd>
+
+<p>This is <b>very</b> similar to previous, only the first two ops differ. This subroutine rendering is more representative, insofar as a single main program will have many subs.</p>
+
+</dd>
+<dt id="perl-MB::Concise-e-&#39;B::Concise::compile(&quot;-exec&quot;,&quot;-src&quot;,-\%B::Concise::)-&gt;()&#39;"><a class="permalink" href="./B::Concise.html#perl-MB::Concise-e-&#39;B::Concise::compile(%22-exec%22,%22-src%22,-%5C%25B::Concise::)-%3E()&#39;">#</a><a id="perl5"></a><a id="perl--MB::Concise--e-B::Concise::compile--exec--src-B::Concise"></a>perl -MB::Concise -e &#39;B::Concise::compile(&quot;-exec&quot;,&quot;-src&quot;, \%B::Concise::)-&gt;()&#39;</dt>
+<dd>
+
+<p>This renders all functions in the B::Concise package with the source lines. It eschews the O framework so that the stashref can be passed directly to B::Concise::compile(). See -stash option for a more convenient way to render a package.</p>
+
+</dd>
+</dl>
+
+<h1 id="Using-B::Concise-outside-of-the-O-framework"><a class="permalink" href="./B::Concise.html#Using-B::Concise-outside-of-the-O-framework">#</a><a id="Using"></a>Using B::Concise outside of the O framework</h1>
+
+<p>The common (and original) usage of B::Concise was for command-line renderings of simple code, as given in EXAMPLE. But you can also use <b>B::Concise</b> from your code, and call compile() directly, and repeatedly. By doing so, you can avoid the compile-time only operation of O.pm, and even use the debugger to step through B::Concise::compile() itself.</p>
+
+<p>Once you&#39;re doing this, you may alter Concise output by adding new rendering styles, and by optionally adding callback routines which populate new variables, if such were referenced from those (just added) styles.</p>
+
+<h2 id="Example:-Altering-Concise-Renderings"><a class="permalink" href="./B::Concise.html#Example:-Altering-Concise-Renderings">#</a><a id="Example"></a>Example: Altering Concise Renderings</h2>
+
+<pre><code>use B::Concise qw(set_style add_callback);
+add_style($yourStyleName =&gt; $defaultfmt, $gotofmt, $treefmt);
+add_callback
+  ( sub {
+        my ($h, $op, $format, $level, $stylename) = @_;
+        $h-&gt;{variable} = some_func($op);
+    });
+$walker = B::Concise::compile(@options,@subnames,@subrefs);
+$walker-&gt;();</code></pre>
+
+<h2 id="set_style()"><a class="permalink" href="./B::Concise.html#set_style()">#</a><a id="set_style"></a>set_style()</h2>
+
+<p><b>set_style</b> accepts 3 arguments, and updates the three format-specs comprising a line-style (basic-exec, goto, tree). It has one minor drawback though; it doesn&#39;t register the style under a new name. This can become an issue if you render more than once and switch styles. Thus you may prefer to use add_style() and/or set_style_standard() instead.</p>
+
+<h2 id="set_style_standard($name)"><a class="permalink" href="./B::Concise.html#set_style_standard($name)">#</a><a id="set_style_standard"></a><a id="set_style_standard-name"></a>set_style_standard($name)</h2>
+
+<p>This restores one of the standard line-styles: <code>terse</code>, <code>concise</code>, <code>linenoise</code>, <code>debug</code>, <code>env</code>, into effect. It also accepts style names previously defined with add_style().</p>
+
+<h2 id="add_style-()"><a class="permalink" href="./B::Concise.html#add_style-()">#</a><a id="add_style"></a>add_style ()</h2>
+
+<p>This subroutine accepts a new style name and three style arguments as above, and creates, registers, and selects the newly named style. It is an error to re-add a style; call set_style_standard() to switch between several styles.</p>
+
+<h2 id="add_callback-()"><a class="permalink" href="./B::Concise.html#add_callback-()">#</a><a id="add_callback"></a>add_callback ()</h2>
+
+<p>If your newly minted styles refer to any new #variables, you&#39;ll need to define a callback subroutine that will populate (or modify) those variables. They are then available for use in the style you&#39;ve chosen.</p>
+
+<p>The callbacks are called for each opcode visited by Concise, in the same order as they are added. Each subroutine is passed five parameters.</p>
+
+<pre><code class="plaintext">1. A hashref, containing the variable names and values which are
+   populated into the report-line for the op
+2. the op, as a B&lt;B::OP&gt; object
+3. a reference to the format string
+4. the formatting (indent) level
+5. the selected stylename</code></pre>
+
+<p>To define your own variables, simply add them to the hash, or change existing values if you need to. The level and format are passed in as references to scalars, but it is unlikely that they will need to be changed or even used.</p>
+
+<h2 id="Running-B::Concise::compile()"><a class="permalink" href="./B::Concise.html#Running-B::Concise::compile()">#</a><a id="Running"></a><a id="Running-B::Concise::compile"></a>Running B::Concise::compile()</h2>
+
+<p><b>compile</b> accepts options as described above in <a href="./B::Concise.html#OPTIONS">&quot;OPTIONS&quot;</a>, and arguments, which are either coderefs, or subroutine names.</p>
+
+<p>It constructs and returns a $treewalker coderef, which when invoked, traverses, or walks, and renders the optrees of the given arguments to STDOUT. You can reuse this, and can change the rendering style used each time; thereafter the coderef renders in the new style.</p>
+
+<p><b>walk_output</b> lets you change the print destination from STDOUT to another open filehandle, or into a string passed as a ref (unless you&#39;ve built perl with -Uuseperlio).</p>
+
+<pre><code>my $walker = B::Concise::compile(&#39;-terse&#39;,&#39;aFuncName&#39;, \&amp;aSubRef); # 1
+walk_output(\my $buf);
+$walker-&gt;();			        # 1 renders -terse
+set_style_standard(&#39;concise&#39;);	# 2
+$walker-&gt;();  		        # 2 renders -concise
+$walker-&gt;(@new);			# 3 renders whatever
+print &quot;3 different renderings: terse, concise, and @new: $buf\n&quot;;</code></pre>
+
+<p>When $walker is called, it traverses the subroutines supplied when it was created, and renders them using the current style. You can change the style afterwards in several different ways:</p>
+
+<pre><code>1. call C&lt;compile&gt;, altering style or mode/order
+2. call C&lt;set_style_standard&gt;
+3. call $walker, passing @new options</code></pre>
+
+<p>Passing new options to the $walker is the easiest way to change amongst any pre-defined styles (the ones you add are automatically recognized as options), and is the only way to alter rendering order without calling compile again. Note however that rendering state is still shared amongst multiple $walker objects, so they must still be used in a coordinated manner.</p>
+
+<h2 id="B::Concise::reset_sequence()"><a class="permalink" href="./B::Concise.html#B::Concise::reset_sequence()">#</a><a id="B"></a><a id="B::Concise::reset_sequence"></a>B::Concise::reset_sequence()</h2>
+
+<p>This function (not exported) lets you reset the sequence numbers (note that they&#39;re numbered arbitrarily, their goal being to be human readable). Its purpose is mostly to support testing, i.e. to compare the concise output from two identical anonymous subroutines (but different instances). Without the reset, B::Concise, seeing that they&#39;re separate optrees, generates different sequence numbers in the output.</p>
+
+<h2 id="Errors"><a class="permalink" href="./B::Concise.html#Errors">#</a>Errors</h2>
+
+<p>Errors in rendering (non-existent function-name, non-existent coderef) are written to the STDOUT, or wherever you&#39;ve set it via walk_output().</p>
+
+<p>Errors using the various *style* calls, and bad args to walk_output(), result in die(). Use an eval if you wish to catch these errors and continue processing.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./B::Concise.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Stephen McCamant, &lt;smcc@CSUA.Berkeley.EDU&gt;.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

@@ -1,0 +1,3309 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>cpan2dist - The CPANPLUS distribution creator - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of CPANPLUS - MetaCPAN" href="https://metacpan.org/dist/CPANPLUS/releases.rss" />
+        <link rel="canonical" href="https://metacpan.org/dist/CPANPLUS/view/bin/cpan2dist" />
+        <meta name="description" content="The CPANPLUS distribution creator" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/cpan2dist" />
+<meta name="twitter:title"       content="cpan2dist" />
+<meta name="twitter:description" content="The CPANPLUS distribution creator" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="cpan2dist.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of CPANPLUS was released.">
+      <span class="relatize">23 Nov 2021 19:30:10 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/CPANPLUS">CPANPLUS</a>
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/CPANPLUS/source/bin/cpan2dist">Source</a>
+    (<a href="https://metacpan.org/dist/CPANPLUS/source/bin/cpan2dist?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/CPANPLUS/source/bin">Browse</a>
+    (<a href="https://metacpan.org/dist/CPANPLUS/source/bin?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/CPANPLUS/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://github.com/jib/cpanplus-devel">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/CPANPLUS/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/jib/cpanplus-devel">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/jib/cpanplus-devel/issues">Issues</a>
+      (3)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=CPANPLUS+0.9914" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/CPANPLUS.html?oncpan=1&amp;distmat=1&amp;version=0.9914&amp;grade=2" style="color: #090">805</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/CPANPLUS.html?oncpan=1&amp;distmat=1&amp;version=0.9914&amp;grade=3" style="color: #900">6</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/C/CPANPLUS.html?oncpan=1&amp;distmat=1&amp;version=0.9914&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/BINGOS/CPANPLUS-0.9914">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on CPANPLUS who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/CPANPLUS-0.9914/index.html">71.49% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/CPANPLUS/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/B/BI/BINGOS/CPANPLUS-0.9914.tar.gz">
+      Download (<span itemprop="fileSize">607.36KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FBINGOS%2FCPANPLUS-0.9914%2Fbin%2Fcpan2dist">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/CPANPLUS/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/CPANPLUS/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:CPANPLUS">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="CPANPLUS">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/bin/cpan2dist&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="BINGOS/CPANPLUS-0.9914"
+>0.9914
+  (BINGOS on 2021-11-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9912"
+>0.9912
+  (BINGOS on 2021-08-21)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9910"
+>0.9910
+  (BINGOS on 2020-12-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9908"
+>0.9908
+  (BINGOS on 2020-04-12)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.88"
+>0.88
+  (KANE on 2009-07-07)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.87_03"
+>0.87_03 DEV
+  (KANE on 2009-06-27)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.87_02"
+>0.87_02 DEV
+  (KANE on 2009-06-13)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.87_01"
+>0.87_01 DEV
+  (KANE on 2009-06-12)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.8601"
+>0.8601
+  (KANE on 2009-04-27)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.86"
+>0.86
+  (KANE on 2009-04-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_09"
+>0.85_09 DEV
+  (KANE on 2009-04-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_08"
+>0.85_08 DEV
+  (KANE on 2009-04-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_07"
+>0.85_07 DEV
+  (KANE on 2009-03-30)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_06"
+>0.85_06 DEV
+  (KANE on 2009-02-24)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_05"
+>0.85_05 DEV
+  (KANE on 2009-02-16)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_04"
+>0.85_04 DEV
+  (KANE on 2008-09-08)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_03"
+>0.85_03 DEV
+  (KANE on 2008-07-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_02"
+>0.85_02 DEV
+  (KANE on 2008-05-18)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.84"
+>0.84
+  (KANE on 2007-12-24)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.83_08"
+>0.83_08 DEV
+  (KANE on 2007-11-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.83_02"
+>0.83_02 DEV
+  (KANE on 2007-10-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.82"
+>0.82
+  (KANE on 2007-08-18)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.81_01"
+>0.81_01 DEV
+  (KANE on 2007-07-07)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.80"
+>0.80
+  (KANE on 2007-06-17)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_04"
+>0.79_04 DEV
+  (KANE on 2007-05-29)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_03"
+>0.79_03 DEV
+  (KANE on 2007-05-28)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_02"
+>0.79_02 DEV
+  (KANE on 2007-05-08)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_01"
+>0.79_01 DEV
+  (KANE on 2007-04-22)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.78"
+>0.78
+  (KANE on 2007-04-01)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_07"
+>0.77_07 DEV
+  (KANE on 2007-03-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_06"
+>0.77_06 DEV
+  (KANE on 2007-03-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_05"
+>0.77_05 DEV
+  (KANE on 2007-02-25)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_04"
+>0.77_04 DEV
+  (KANE on 2007-02-19)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_03"
+>0.77_03 DEV
+  (KANE on 2007-02-18)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_02"
+>0.77_02 DEV
+  (KANE on 2006-10-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.076"
+>0.076
+  (KANE on 2006-10-13)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.075_01"
+>0.075_01 DEV
+  (KANE on 2006-10-05)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.074"
+>0.074
+  (KANE on 2006-09-08)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.073_02"
+>0.073_02 DEV
+  (KANE on 2006-08-17)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.073_01"
+>0.073_01 DEV
+  (KANE on 2006-08-02)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.072"
+>0.072
+  (KANE on 2006-06-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.070_04"
+>0.070_04 DEV
+  (KANE on 2006-06-19)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.061"
+>0.061
+  (KANE on 2006-03-15)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.060"
+>0.060
+  (KANE on 2006-03-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.059_01"
+>0.059_01 DEV
+  (KANE on 2005-10-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.0562"
+>0.0562
+  (KANE on 2005-08-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.056_01"
+>0.056_01 DEV
+  (KANE on 2005-08-19)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.055"
+>0.055
+  (KANE on 2005-06-06)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.054"
+>0.054
+  (KANE on 2005-06-03)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.053"
+>0.053
+  (KANE on 2005-02-11)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.051"
+>0.051
+  (KANE on 2005-01-14)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_04"
+>0.050_04 DEV
+  (KANE on 2004-12-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_03"
+>0.050_03 DEV
+  (KANE on 2004-12-17)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_02"
+>0.050_02 DEV
+  (KANE on 2004-12-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_01"
+>0.050_01 DEV
+  (KANE on 2004-12-03)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BINGOS/CPANPLUS-0.9906"
+>0.9906
+  (BINGOS on 2020-01-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9904"
+>0.9904
+  (BINGOS on 2019-12-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9902"
+>0.9902
+  (BINGOS on 2019-11-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9180"
+>0.9180
+  (BINGOS on 2019-11-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9178"
+>0.9178
+  (BINGOS on 2019-07-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9176"
+>0.9176
+  (BINGOS on 2018-06-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9174"
+>0.9174
+  (BINGOS on 2018-05-21)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9172"
+>0.9172
+  (BINGOS on 2017-10-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9170"
+>0.9170
+  (BINGOS on 2017-09-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9168"
+>0.9168
+  (BINGOS on 2017-05-14)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9166"
+>0.9166
+  (BINGOS on 2017-04-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9164"
+>0.9164
+  (BINGOS on 2017-02-16)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9162"
+>0.9162
+  (BINGOS on 2017-01-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9160"
+>0.9160
+  (BINGOS on 2016-05-18)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9158"
+>0.9158
+  (BINGOS on 2016-05-18)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9156"
+>0.9156
+  (BINGOS on 2015-10-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9154"
+>0.9154
+  (BINGOS on 2015-07-04)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9152"
+>0.9152
+  (BINGOS on 2014-06-10)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9150"
+>0.9150
+  (BINGOS on 2014-06-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9148"
+>0.9148
+  (BINGOS on 2014-02-02)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9146"
+>0.9146
+  (BINGOS on 2014-02-01)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9144"
+>0.9144
+  (BINGOS on 2013-12-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9142"
+>0.9142
+  (BINGOS on 2013-08-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9140"
+>0.9140
+  (BINGOS on 2013-08-03)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9138"
+>0.9138
+  (BINGOS on 2013-05-20)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9136"
+>0.9136
+  (BINGOS on 2013-04-27)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9134"
+>0.9134
+  (BINGOS on 2013-01-21)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9133"
+>0.9133
+  (BINGOS on 2012-09-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9132"
+>0.9132
+  (BINGOS on 2012-09-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9131"
+>0.9131
+  (BINGOS on 2012-09-18)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9130"
+>0.9130
+  (BINGOS on 2012-05-24)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9129"
+>0.9129
+  (BINGOS on 2012-05-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9128"
+>0.9128
+  (BINGOS on 2012-04-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9127"
+>0.9127
+  (BINGOS on 2012-04-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9126"
+>0.9126
+  (BINGOS on 2012-04-27)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9125"
+>0.9125
+  (BINGOS on 2012-04-25)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9124"
+>0.9124
+  (BINGOS on 2012-04-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9123"
+>0.9123
+  (BINGOS on 2012-03-30)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9122"
+>0.9122
+  (BINGOS on 2012-03-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9121"
+>0.9121
+  (BINGOS on 2012-03-17)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9120"
+>0.9120
+  (BINGOS on 2012-03-04)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9119"
+>0.9119
+  (BINGOS on 2012-02-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9118"
+>0.9118
+  (BINGOS on 2012-02-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9117_02"
+>0.9117_02 DEV
+  (BINGOS on 2012-02-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9117_01"
+>0.9117_01 DEV
+  (BINGOS on 2012-02-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.91_17"
+>0.91_17 DEV
+  (BINGOS on 2012-02-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9116"
+>0.9116
+  (BINGOS on 2012-01-05)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9115"
+>0.9115
+  (BINGOS on 2011-12-20)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9114"
+>0.9114
+  (BINGOS on 2011-12-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9113"
+>0.9113
+  (BINGOS on 2011-12-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9112"
+>0.9112
+  (BINGOS on 2011-11-11)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9111"
+>0.9111
+  (BINGOS on 2011-09-16)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9110"
+>0.9110
+  (BINGOS on 2011-09-01)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9109"
+>0.9109
+  (BINGOS on 2011-07-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9108"
+>0.9108
+  (BINGOS on 2011-07-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9107"
+>0.9107
+  (BINGOS on 2011-07-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9106"
+>0.9106
+  (BINGOS on 2011-07-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9105"
+>0.9105
+  (BINGOS on 2011-05-05)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9104"
+>0.9104
+  (BINGOS on 2011-04-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9103"
+>0.9103
+  (BINGOS on 2011-03-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9102"
+>0.9102
+  (BINGOS on 2011-02-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9101"
+>0.9101
+  (BINGOS on 2011-02-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.91"
+>0.91
+  (BINGOS on 2011-02-11)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.90_13"
+>0.90_13 DEV
+  (BINGOS on 2011-02-07)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.90_12"
+>0.90_12 DEV
+  (BINGOS on 2011-02-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9011"
+>0.9011
+  (BINGOS on 2011-01-07)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9010"
+>0.9010
+  (BINGOS on 2010-10-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9009"
+>0.9009
+  (BINGOS on 2010-10-25)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9008"
+>0.9008
+  (BINGOS on 2010-10-25)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9007"
+>0.9007
+  (BINGOS on 2010-07-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9006"
+>0.9006
+  (BINGOS on 2010-07-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9005"
+>0.9005
+  (BINGOS on 2010-06-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9004"
+>0.9004
+  (BINGOS on 2010-05-08)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9003"
+>0.9003
+  (BINGOS on 2010-03-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9002"
+>0.9002
+  (BINGOS on 2010-03-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9001"
+>0.9001
+  (BINGOS on 2009-12-24)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.90"
+>0.90
+  (BINGOS on 2009-12-17)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_12"
+>0.89_12 DEV
+  (BINGOS on 2009-12-07)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_11"
+>0.89_11 DEV
+  (BINGOS on 2009-12-01)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_10"
+>0.89_10 DEV
+  (BINGOS on 2009-11-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_09"
+>0.89_09 DEV
+  (BINGOS on 2009-11-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_08"
+>0.89_08 DEV
+  (BINGOS on 2009-11-10)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_07"
+>0.89_07 DEV
+  (BINGOS on 2009-11-05)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_06"
+>0.89_06 DEV
+  (BINGOS on 2009-10-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_05"
+>0.89_05 DEV
+  (BINGOS on 2009-10-27)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_04"
+>0.89_04 DEV
+  (BINGOS on 2009-10-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_03"
+>0.89_03 DEV
+  (BINGOS on 2009-10-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_02"
+>0.89_02 DEV
+  (BINGOS on 2009-10-17)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_01"
+>0.89_01 DEV
+  (BINGOS on 2009-10-16)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.0561"
+>0.0561
+  (KANE on 2005-08-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.056"
+>0.056
+  (KANE on 2005-08-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.052"
+>0.052
+  (KANE on 2005-02-10)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.0499"
+>0.0499
+  (AUTRIJUS on 2004-09-20)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.049"
+>0.049
+  (AUTRIJUS on 2004-03-03)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.048"
+>0.048
+  (AUTRIJUS on 2003-12-11)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.047"
+>0.047
+  (AUTRIJUS on 2003-11-16)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.046"
+>0.046
+  (AUTRIJUS on 2003-11-15)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.045"
+>0.045
+  (AUTRIJUS on 2003-10-05)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.044"
+>0.044
+  (AUTRIJUS on 2003-09-07)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.043"
+>0.043
+  (AUTRIJUS on 2003-08-31)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.042"
+>0.042
+  (KANE on 2003-01-12)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.041"
+>0.041
+  (KANE on 2003-01-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.040"
+>0.040
+  (KANE on 2002-11-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.036"
+>0.036
+  (KANE on 2002-07-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.035"
+>0.035
+  (KANE on 2002-06-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.034"
+>0.034
+  (KANE on 2002-06-02)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.033"
+>0.033
+  (KANE on 2002-04-30)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.032"
+>0.032
+  (KANE on 2002-04-30)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.031"
+>0.031
+  (KANE on 2002-04-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.03"
+>0.03
+  (KANE on 2002-04-09)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.02"
+>0.02
+  (KANE on 2002-03-27)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.01"
+>0.01
+  (KANE on 2002-03-26)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/BINGOS/CPANPLUS-0.9914/diff/' + encodeURIComponent(this.value) + '/bin/cpan2dist'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="BINGOS/CPANPLUS-0.9914"
+>0.9914
+  (BINGOS on 2021-11-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9912"
+>0.9912
+  (BINGOS on 2021-08-21)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9910"
+>0.9910
+  (BINGOS on 2020-12-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9908"
+>0.9908
+  (BINGOS on 2020-04-12)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.88"
+>0.88
+  (KANE on 2009-07-07)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.87_03"
+>0.87_03 DEV
+  (KANE on 2009-06-27)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.87_02"
+>0.87_02 DEV
+  (KANE on 2009-06-13)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.87_01"
+>0.87_01 DEV
+  (KANE on 2009-06-12)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.8601"
+>0.8601
+  (KANE on 2009-04-27)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.86"
+>0.86
+  (KANE on 2009-04-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_09"
+>0.85_09 DEV
+  (KANE on 2009-04-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_08"
+>0.85_08 DEV
+  (KANE on 2009-04-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_07"
+>0.85_07 DEV
+  (KANE on 2009-03-30)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_06"
+>0.85_06 DEV
+  (KANE on 2009-02-24)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_05"
+>0.85_05 DEV
+  (KANE on 2009-02-16)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_04"
+>0.85_04 DEV
+  (KANE on 2008-09-08)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_03"
+>0.85_03 DEV
+  (KANE on 2008-07-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_02"
+>0.85_02 DEV
+  (KANE on 2008-05-18)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.84"
+>0.84
+  (KANE on 2007-12-24)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.83_08"
+>0.83_08 DEV
+  (KANE on 2007-11-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.83_02"
+>0.83_02 DEV
+  (KANE on 2007-10-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.82"
+>0.82
+  (KANE on 2007-08-18)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.81_01"
+>0.81_01 DEV
+  (KANE on 2007-07-07)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.80"
+>0.80
+  (KANE on 2007-06-17)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_04"
+>0.79_04 DEV
+  (KANE on 2007-05-29)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_03"
+>0.79_03 DEV
+  (KANE on 2007-05-28)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_02"
+>0.79_02 DEV
+  (KANE on 2007-05-08)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_01"
+>0.79_01 DEV
+  (KANE on 2007-04-22)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.78"
+>0.78
+  (KANE on 2007-04-01)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_07"
+>0.77_07 DEV
+  (KANE on 2007-03-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_06"
+>0.77_06 DEV
+  (KANE on 2007-03-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_05"
+>0.77_05 DEV
+  (KANE on 2007-02-25)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_04"
+>0.77_04 DEV
+  (KANE on 2007-02-19)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_03"
+>0.77_03 DEV
+  (KANE on 2007-02-18)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_02"
+>0.77_02 DEV
+  (KANE on 2006-10-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.076"
+>0.076
+  (KANE on 2006-10-13)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.075_01"
+>0.075_01 DEV
+  (KANE on 2006-10-05)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.074"
+>0.074
+  (KANE on 2006-09-08)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.073_02"
+>0.073_02 DEV
+  (KANE on 2006-08-17)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.073_01"
+>0.073_01 DEV
+  (KANE on 2006-08-02)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.072"
+>0.072
+  (KANE on 2006-06-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.070_04"
+>0.070_04 DEV
+  (KANE on 2006-06-19)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.061"
+>0.061
+  (KANE on 2006-03-15)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.060"
+>0.060
+  (KANE on 2006-03-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.059_01"
+>0.059_01 DEV
+  (KANE on 2005-10-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.0562"
+>0.0562
+  (KANE on 2005-08-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.056_01"
+>0.056_01 DEV
+  (KANE on 2005-08-19)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.055"
+>0.055
+  (KANE on 2005-06-06)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.054"
+>0.054
+  (KANE on 2005-06-03)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.053"
+>0.053
+  (KANE on 2005-02-11)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.051"
+>0.051
+  (KANE on 2005-01-14)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_04"
+>0.050_04 DEV
+  (KANE on 2004-12-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_03"
+>0.050_03 DEV
+  (KANE on 2004-12-17)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_02"
+>0.050_02 DEV
+  (KANE on 2004-12-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_01"
+>0.050_01 DEV
+  (KANE on 2004-12-03)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BINGOS/CPANPLUS-0.9906"
+>0.9906
+  (BINGOS on 2020-01-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9904"
+>0.9904
+  (BINGOS on 2019-12-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9902"
+>0.9902
+  (BINGOS on 2019-11-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9180"
+>0.9180
+  (BINGOS on 2019-11-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9178"
+>0.9178
+  (BINGOS on 2019-07-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9176"
+>0.9176
+  (BINGOS on 2018-06-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9174"
+>0.9174
+  (BINGOS on 2018-05-21)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9172"
+>0.9172
+  (BINGOS on 2017-10-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9170"
+>0.9170
+  (BINGOS on 2017-09-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9168"
+>0.9168
+  (BINGOS on 2017-05-14)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9166"
+>0.9166
+  (BINGOS on 2017-04-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9164"
+>0.9164
+  (BINGOS on 2017-02-16)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9162"
+>0.9162
+  (BINGOS on 2017-01-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9160"
+>0.9160
+  (BINGOS on 2016-05-18)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9158"
+>0.9158
+  (BINGOS on 2016-05-18)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9156"
+>0.9156
+  (BINGOS on 2015-10-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9154"
+>0.9154
+  (BINGOS on 2015-07-04)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9152"
+>0.9152
+  (BINGOS on 2014-06-10)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9150"
+>0.9150
+  (BINGOS on 2014-06-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9148"
+>0.9148
+  (BINGOS on 2014-02-02)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9146"
+>0.9146
+  (BINGOS on 2014-02-01)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9144"
+>0.9144
+  (BINGOS on 2013-12-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9142"
+>0.9142
+  (BINGOS on 2013-08-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9140"
+>0.9140
+  (BINGOS on 2013-08-03)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9138"
+>0.9138
+  (BINGOS on 2013-05-20)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9136"
+>0.9136
+  (BINGOS on 2013-04-27)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9134"
+>0.9134
+  (BINGOS on 2013-01-21)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9133"
+>0.9133
+  (BINGOS on 2012-09-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9132"
+>0.9132
+  (BINGOS on 2012-09-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9131"
+>0.9131
+  (BINGOS on 2012-09-18)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9130"
+>0.9130
+  (BINGOS on 2012-05-24)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9129"
+>0.9129
+  (BINGOS on 2012-05-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9128"
+>0.9128
+  (BINGOS on 2012-04-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9127"
+>0.9127
+  (BINGOS on 2012-04-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9126"
+>0.9126
+  (BINGOS on 2012-04-27)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9125"
+>0.9125
+  (BINGOS on 2012-04-25)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9124"
+>0.9124
+  (BINGOS on 2012-04-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9123"
+>0.9123
+  (BINGOS on 2012-03-30)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9122"
+>0.9122
+  (BINGOS on 2012-03-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9121"
+>0.9121
+  (BINGOS on 2012-03-17)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9120"
+>0.9120
+  (BINGOS on 2012-03-04)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9119"
+>0.9119
+  (BINGOS on 2012-02-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9118"
+>0.9118
+  (BINGOS on 2012-02-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9117_02"
+>0.9117_02 DEV
+  (BINGOS on 2012-02-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9117_01"
+>0.9117_01 DEV
+  (BINGOS on 2012-02-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.91_17"
+>0.91_17 DEV
+  (BINGOS on 2012-02-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9116"
+>0.9116
+  (BINGOS on 2012-01-05)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9115"
+>0.9115
+  (BINGOS on 2011-12-20)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9114"
+>0.9114
+  (BINGOS on 2011-12-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9113"
+>0.9113
+  (BINGOS on 2011-12-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9112"
+>0.9112
+  (BINGOS on 2011-11-11)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9111"
+>0.9111
+  (BINGOS on 2011-09-16)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9110"
+>0.9110
+  (BINGOS on 2011-09-01)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9109"
+>0.9109
+  (BINGOS on 2011-07-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9108"
+>0.9108
+  (BINGOS on 2011-07-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9107"
+>0.9107
+  (BINGOS on 2011-07-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9106"
+>0.9106
+  (BINGOS on 2011-07-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9105"
+>0.9105
+  (BINGOS on 2011-05-05)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9104"
+>0.9104
+  (BINGOS on 2011-04-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9103"
+>0.9103
+  (BINGOS on 2011-03-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9102"
+>0.9102
+  (BINGOS on 2011-02-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9101"
+>0.9101
+  (BINGOS on 2011-02-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.91"
+>0.91
+  (BINGOS on 2011-02-11)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.90_13"
+>0.90_13 DEV
+  (BINGOS on 2011-02-07)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.90_12"
+>0.90_12 DEV
+  (BINGOS on 2011-02-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9011"
+>0.9011
+  (BINGOS on 2011-01-07)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9010"
+>0.9010
+  (BINGOS on 2010-10-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9009"
+>0.9009
+  (BINGOS on 2010-10-25)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9008"
+>0.9008
+  (BINGOS on 2010-10-25)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9007"
+>0.9007
+  (BINGOS on 2010-07-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9006"
+>0.9006
+  (BINGOS on 2010-07-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9005"
+>0.9005
+  (BINGOS on 2010-06-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9004"
+>0.9004
+  (BINGOS on 2010-05-08)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9003"
+>0.9003
+  (BINGOS on 2010-03-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9002"
+>0.9002
+  (BINGOS on 2010-03-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9001"
+>0.9001
+  (BINGOS on 2009-12-24)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.90"
+>0.90
+  (BINGOS on 2009-12-17)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_12"
+>0.89_12 DEV
+  (BINGOS on 2009-12-07)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_11"
+>0.89_11 DEV
+  (BINGOS on 2009-12-01)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_10"
+>0.89_10 DEV
+  (BINGOS on 2009-11-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_09"
+>0.89_09 DEV
+  (BINGOS on 2009-11-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_08"
+>0.89_08 DEV
+  (BINGOS on 2009-11-10)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_07"
+>0.89_07 DEV
+  (BINGOS on 2009-11-05)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_06"
+>0.89_06 DEV
+  (BINGOS on 2009-10-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_05"
+>0.89_05 DEV
+  (BINGOS on 2009-10-27)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_04"
+>0.89_04 DEV
+  (BINGOS on 2009-10-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_03"
+>0.89_03 DEV
+  (BINGOS on 2009-10-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_02"
+>0.89_02 DEV
+  (BINGOS on 2009-10-17)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_01"
+>0.89_01 DEV
+  (BINGOS on 2009-10-16)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.0561"
+>0.0561
+  (KANE on 2005-08-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.056"
+>0.056
+  (KANE on 2005-08-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.052"
+>0.052
+  (KANE on 2005-02-10)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.0499"
+>0.0499
+  (AUTRIJUS on 2004-09-20)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.049"
+>0.049
+  (AUTRIJUS on 2004-03-03)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.048"
+>0.048
+  (AUTRIJUS on 2003-12-11)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.047"
+>0.047
+  (AUTRIJUS on 2003-11-16)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.046"
+>0.046
+  (AUTRIJUS on 2003-11-15)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.045"
+>0.045
+  (AUTRIJUS on 2003-10-05)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.044"
+>0.044
+  (AUTRIJUS on 2003-09-07)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.043"
+>0.043
+  (AUTRIJUS on 2003-08-31)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.042"
+>0.042
+  (KANE on 2003-01-12)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.041"
+>0.041
+  (KANE on 2003-01-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.040"
+>0.040
+  (KANE on 2002-11-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.036"
+>0.036
+  (KANE on 2002-07-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.035"
+>0.035
+  (KANE on 2002-06-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.034"
+>0.034
+  (KANE on 2002-06-02)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.033"
+>0.033
+  (KANE on 2002-04-30)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.032"
+>0.032
+  (KANE on 2002-04-30)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.031"
+>0.031
+  (KANE on 2002-04-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.03"
+>0.03
+  (KANE on 2002-04-09)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.02"
+>0.02
+  (KANE on 2002-03-27)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.01"
+>0.01
+  (KANE on 2002-03-26)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><i class="ttip" title="dynamic_config enabled">unknown</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/cpan2dist/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=cpan2dist">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=CPANPLUS">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/BINGOS/CPANPLUS-0.9914/view/bin/cpan2dist">This version</a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/CPANPLUS/view/bin/cpan2dist">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/JNBEK"><img src="https://www.gravatar.com/avatar/499c962737f2931cbce15097c5cf4002?d=identicon&amp;s=20" title="JNBEK" alt="JNBEK"></a>
+<a class="display-all" href="https://metacpan.org/author/DAGOLDEN"><img src="https://www.gravatar.com/avatar/bb755c989fcb9897f28a2c6e00df61e2?d=identicon&amp;s=20" title="DAGOLDEN" alt="DAGOLDEN"></a>
+<a class="display-all" href="https://metacpan.org/author/VOEGELAS"><img src="https://www.gravatar.com/avatar/b748542b466dd73c8513245b1b609750?d=identicon&amp;s=20" title="VOEGELAS" alt="VOEGELAS"></a>
+<a class="display-all" href="https://metacpan.org/author/KEEDI"><img src="https://www.gravatar.com/avatar/95f905a7a4ccc573c711e9d264c0fde8?d=identicon&amp;s=20" title="KEEDI" alt="KEEDI"></a>
+<a class="display-all" href="https://metacpan.org/author/YUSRIDEB"><img src="https://www.gravatar.com/avatar/3342dac370884f180af4e24f1cd2318f?d=identicon&amp;s=20" title="YUSRIDEB" alt="YUSRIDEB"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/CPANPLUS/plussers">6 PAUSE users</a>
+</div>
+<div>
+    7 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="KANE"
+      data-contrib-email="kane@cpan.org"
+    >
+      <a href="https://metacpan.org/author/KANE" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/865e6607ca0e330f1926fe5d55f67d08?d=identicon&amp;s=20" />
+      Jos Boumans
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/BINGOS" class="author-name">Chris Williams</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/bin/cpan2dist&#39;" class="">
+<option
+  selected
+  value="BINGOS/CPANPLUS-0.9914"
+>0.9914
+  (BINGOS on 2021-11-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9912"
+>0.9912
+  (BINGOS on 2021-08-21)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9910"
+>0.9910
+  (BINGOS on 2020-12-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9908"
+>0.9908
+  (BINGOS on 2020-04-12)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.88"
+>0.88
+  (KANE on 2009-07-07)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.87_03"
+>0.87_03 DEV
+  (KANE on 2009-06-27)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.87_02"
+>0.87_02 DEV
+  (KANE on 2009-06-13)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.87_01"
+>0.87_01 DEV
+  (KANE on 2009-06-12)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.8601"
+>0.8601
+  (KANE on 2009-04-27)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.86"
+>0.86
+  (KANE on 2009-04-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_09"
+>0.85_09 DEV
+  (KANE on 2009-04-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_08"
+>0.85_08 DEV
+  (KANE on 2009-04-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_07"
+>0.85_07 DEV
+  (KANE on 2009-03-30)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_06"
+>0.85_06 DEV
+  (KANE on 2009-02-24)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_05"
+>0.85_05 DEV
+  (KANE on 2009-02-16)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_04"
+>0.85_04 DEV
+  (KANE on 2008-09-08)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_03"
+>0.85_03 DEV
+  (KANE on 2008-07-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.85_02"
+>0.85_02 DEV
+  (KANE on 2008-05-18)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.84"
+>0.84
+  (KANE on 2007-12-24)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.83_08"
+>0.83_08 DEV
+  (KANE on 2007-11-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.83_02"
+>0.83_02 DEV
+  (KANE on 2007-10-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.82"
+>0.82
+  (KANE on 2007-08-18)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.81_01"
+>0.81_01 DEV
+  (KANE on 2007-07-07)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.80"
+>0.80
+  (KANE on 2007-06-17)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_04"
+>0.79_04 DEV
+  (KANE on 2007-05-29)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_03"
+>0.79_03 DEV
+  (KANE on 2007-05-28)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_02"
+>0.79_02 DEV
+  (KANE on 2007-05-08)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.79_01"
+>0.79_01 DEV
+  (KANE on 2007-04-22)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.78"
+>0.78
+  (KANE on 2007-04-01)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_07"
+>0.77_07 DEV
+  (KANE on 2007-03-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_06"
+>0.77_06 DEV
+  (KANE on 2007-03-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_05"
+>0.77_05 DEV
+  (KANE on 2007-02-25)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_04"
+>0.77_04 DEV
+  (KANE on 2007-02-19)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_03"
+>0.77_03 DEV
+  (KANE on 2007-02-18)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.77_02"
+>0.77_02 DEV
+  (KANE on 2006-10-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.076"
+>0.076
+  (KANE on 2006-10-13)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.075_01"
+>0.075_01 DEV
+  (KANE on 2006-10-05)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.074"
+>0.074
+  (KANE on 2006-09-08)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.073_02"
+>0.073_02 DEV
+  (KANE on 2006-08-17)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.073_01"
+>0.073_01 DEV
+  (KANE on 2006-08-02)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.072"
+>0.072
+  (KANE on 2006-06-23)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.070_04"
+>0.070_04 DEV
+  (KANE on 2006-06-19)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.061"
+>0.061
+  (KANE on 2006-03-15)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.060"
+>0.060
+  (KANE on 2006-03-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.059_01"
+>0.059_01 DEV
+  (KANE on 2005-10-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.0562"
+>0.0562
+  (KANE on 2005-08-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.056_01"
+>0.056_01 DEV
+  (KANE on 2005-08-19)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.055"
+>0.055
+  (KANE on 2005-06-06)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.054"
+>0.054
+  (KANE on 2005-06-03)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.053"
+>0.053
+  (KANE on 2005-02-11)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.051"
+>0.051
+  (KANE on 2005-01-14)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_04"
+>0.050_04 DEV
+  (KANE on 2004-12-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_03"
+>0.050_03 DEV
+  (KANE on 2004-12-17)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_02"
+>0.050_02 DEV
+  (KANE on 2004-12-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.050_01"
+>0.050_01 DEV
+  (KANE on 2004-12-03)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="BINGOS/CPANPLUS-0.9906"
+>0.9906
+  (BINGOS on 2020-01-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9904"
+>0.9904
+  (BINGOS on 2019-12-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9902"
+>0.9902
+  (BINGOS on 2019-11-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9180"
+>0.9180
+  (BINGOS on 2019-11-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9178"
+>0.9178
+  (BINGOS on 2019-07-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9176"
+>0.9176
+  (BINGOS on 2018-06-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9174"
+>0.9174
+  (BINGOS on 2018-05-21)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9172"
+>0.9172
+  (BINGOS on 2017-10-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9170"
+>0.9170
+  (BINGOS on 2017-09-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9168"
+>0.9168
+  (BINGOS on 2017-05-14)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9166"
+>0.9166
+  (BINGOS on 2017-04-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9164"
+>0.9164
+  (BINGOS on 2017-02-16)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9162"
+>0.9162
+  (BINGOS on 2017-01-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9160"
+>0.9160
+  (BINGOS on 2016-05-18)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9158"
+>0.9158
+  (BINGOS on 2016-05-18)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9156"
+>0.9156
+  (BINGOS on 2015-10-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9154"
+>0.9154
+  (BINGOS on 2015-07-04)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9152"
+>0.9152
+  (BINGOS on 2014-06-10)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9150"
+>0.9150
+  (BINGOS on 2014-06-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9148"
+>0.9148
+  (BINGOS on 2014-02-02)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9146"
+>0.9146
+  (BINGOS on 2014-02-01)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9144"
+>0.9144
+  (BINGOS on 2013-12-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9142"
+>0.9142
+  (BINGOS on 2013-08-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9140"
+>0.9140
+  (BINGOS on 2013-08-03)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9138"
+>0.9138
+  (BINGOS on 2013-05-20)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9136"
+>0.9136
+  (BINGOS on 2013-04-27)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9134"
+>0.9134
+  (BINGOS on 2013-01-21)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9133"
+>0.9133
+  (BINGOS on 2012-09-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9132"
+>0.9132
+  (BINGOS on 2012-09-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9131"
+>0.9131
+  (BINGOS on 2012-09-18)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9130"
+>0.9130
+  (BINGOS on 2012-05-24)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9129"
+>0.9129
+  (BINGOS on 2012-05-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9128"
+>0.9128
+  (BINGOS on 2012-04-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9127"
+>0.9127
+  (BINGOS on 2012-04-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9126"
+>0.9126
+  (BINGOS on 2012-04-27)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9125"
+>0.9125
+  (BINGOS on 2012-04-25)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9124"
+>0.9124
+  (BINGOS on 2012-04-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9123"
+>0.9123
+  (BINGOS on 2012-03-30)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9122"
+>0.9122
+  (BINGOS on 2012-03-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9121"
+>0.9121
+  (BINGOS on 2012-03-17)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9120"
+>0.9120
+  (BINGOS on 2012-03-04)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9119"
+>0.9119
+  (BINGOS on 2012-02-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9118"
+>0.9118
+  (BINGOS on 2012-02-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9117_02"
+>0.9117_02 DEV
+  (BINGOS on 2012-02-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9117_01"
+>0.9117_01 DEV
+  (BINGOS on 2012-02-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.91_17"
+>0.91_17 DEV
+  (BINGOS on 2012-02-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9116"
+>0.9116
+  (BINGOS on 2012-01-05)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9115"
+>0.9115
+  (BINGOS on 2011-12-20)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9114"
+>0.9114
+  (BINGOS on 2011-12-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9113"
+>0.9113
+  (BINGOS on 2011-12-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9112"
+>0.9112
+  (BINGOS on 2011-11-11)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9111"
+>0.9111
+  (BINGOS on 2011-09-16)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9110"
+>0.9110
+  (BINGOS on 2011-09-01)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9109"
+>0.9109
+  (BINGOS on 2011-07-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9108"
+>0.9108
+  (BINGOS on 2011-07-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9107"
+>0.9107
+  (BINGOS on 2011-07-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9106"
+>0.9106
+  (BINGOS on 2011-07-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9105"
+>0.9105
+  (BINGOS on 2011-05-05)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9104"
+>0.9104
+  (BINGOS on 2011-04-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9103"
+>0.9103
+  (BINGOS on 2011-03-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9102"
+>0.9102
+  (BINGOS on 2011-02-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9101"
+>0.9101
+  (BINGOS on 2011-02-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.91"
+>0.91
+  (BINGOS on 2011-02-11)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.90_13"
+>0.90_13 DEV
+  (BINGOS on 2011-02-07)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.90_12"
+>0.90_12 DEV
+  (BINGOS on 2011-02-06)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9011"
+>0.9011
+  (BINGOS on 2011-01-07)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9010"
+>0.9010
+  (BINGOS on 2010-10-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9009"
+>0.9009
+  (BINGOS on 2010-10-25)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9008"
+>0.9008
+  (BINGOS on 2010-10-25)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9007"
+>0.9007
+  (BINGOS on 2010-07-13)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9006"
+>0.9006
+  (BINGOS on 2010-07-09)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9005"
+>0.9005
+  (BINGOS on 2010-06-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9004"
+>0.9004
+  (BINGOS on 2010-05-08)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9003"
+>0.9003
+  (BINGOS on 2010-03-15)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9002"
+>0.9002
+  (BINGOS on 2010-03-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.9001"
+>0.9001
+  (BINGOS on 2009-12-24)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.90"
+>0.90
+  (BINGOS on 2009-12-17)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_12"
+>0.89_12 DEV
+  (BINGOS on 2009-12-07)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_11"
+>0.89_11 DEV
+  (BINGOS on 2009-12-01)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_10"
+>0.89_10 DEV
+  (BINGOS on 2009-11-28)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_09"
+>0.89_09 DEV
+  (BINGOS on 2009-11-12)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_08"
+>0.89_08 DEV
+  (BINGOS on 2009-11-10)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_07"
+>0.89_07 DEV
+  (BINGOS on 2009-11-05)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_06"
+>0.89_06 DEV
+  (BINGOS on 2009-10-29)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_05"
+>0.89_05 DEV
+  (BINGOS on 2009-10-27)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_04"
+>0.89_04 DEV
+  (BINGOS on 2009-10-23)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_03"
+>0.89_03 DEV
+  (BINGOS on 2009-10-19)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_02"
+>0.89_02 DEV
+  (BINGOS on 2009-10-17)</option>
+<option
+  
+  value="BINGOS/CPANPLUS-0.89_01"
+>0.89_01 DEV
+  (BINGOS on 2009-10-16)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.0561"
+>0.0561
+  (KANE on 2005-08-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.056"
+>0.056
+  (KANE on 2005-08-20)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.052"
+>0.052
+  (KANE on 2005-02-10)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.0499"
+>0.0499
+  (AUTRIJUS on 2004-09-20)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.049"
+>0.049
+  (AUTRIJUS on 2004-03-03)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.048"
+>0.048
+  (AUTRIJUS on 2003-12-11)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.047"
+>0.047
+  (AUTRIJUS on 2003-11-16)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.046"
+>0.046
+  (AUTRIJUS on 2003-11-15)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.045"
+>0.045
+  (AUTRIJUS on 2003-10-05)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.044"
+>0.044
+  (AUTRIJUS on 2003-09-07)</option>
+<option
+  
+  value="AUTRIJUS/CPANPLUS-0.043"
+>0.043
+  (AUTRIJUS on 2003-08-31)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.042"
+>0.042
+  (KANE on 2003-01-12)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.041"
+>0.041
+  (KANE on 2003-01-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.040"
+>0.040
+  (KANE on 2002-11-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.036"
+>0.036
+  (KANE on 2002-07-26)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.035"
+>0.035
+  (KANE on 2002-06-04)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.034"
+>0.034
+  (KANE on 2002-06-02)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.033"
+>0.033
+  (KANE on 2002-04-30)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.032"
+>0.032
+  (KANE on 2002-04-30)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.031"
+>0.031
+  (KANE on 2002-04-10)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.03"
+>0.03
+  (KANE on 2002-04-09)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.02"
+>0.02
+  (KANE on 2002-03-27)</option>
+<option
+  
+  value="KANE/CPANPLUS-0.01"
+>0.01
+  (KANE on 2002-03-26)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/CPANPLUS">CPANPLUS-0.9914</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage two &#10;
+          • 35 direct dependents &#10;          • 40 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="CPANPLUS-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="CPANPLUS-0.9914">
+    <input type="hidden" name="author" value="BINGOS">
+    <input type="hidden" name="distribution" value="CPANPLUS">
+    <button type="submit" class="favorite highlight"><span>13</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="cpan2dist.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>13</span> ++</a>
+</div>
+   / <span>cpan2dist</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="cpan2dist.html#NAME">NAME</a></li>
+  <li><a href="cpan2dist.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="cpan2dist.html#USAGE">USAGE</a></li>
+  <li><a href="cpan2dist.html#Built-In-Filter-Lists">Built-In Filter Lists</a>
+    <ul>
+      <li><a href="cpan2dist.html#Built-In-Ignore-List">Built-In Ignore List</a></li>
+      <li><a href="cpan2dist.html#Built-In-Ban-list">Built-In Ban list</a></li>
+    </ul>
+  </li>
+  <li><a href="cpan2dist.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="cpan2dist.html#BUG-REPORTS">BUG REPORTS</a></li>
+  <li><a href="cpan2dist.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="cpan2dist.html#COPYRIGHT">COPYRIGHT</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>cpan2dist - The CPANPLUS distribution creator</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This script will create distributions of <code>CPAN</code> modules of the format you specify, including its prerequisites. These packages can then be installed using the corresponding package manager for the format.</p>
+
+<p>Note, you can also do this interactively from the default shell, <code>CPANPLUS::Shell::Default</code>. See the <code>CPANPLUS::Dist</code> documentation, as well as the documentation of your format of choice for any format specific documentation.</p>
+
+<h1 id="USAGE">USAGE</h1>
+
+<pre><code> Usage: cpan2dist [--format FMT] [OPTS] Mod::Name [Mod::Name, ...]
+        cpan2dist [--format FMT] [OPTS] --modulelist /tmp/mods.list
+        cpan2dist [--format FMT] [OPTS] --archive /tmp/dist [/tmp/dist2]
+
+    Will create a distribution of type FMT of the modules
+    specified on the command line, and all their prerequisites.
+
+    Can also create a distribution of type FMT from a local
+    archive and all of its prerequisites.</code></pre>
+
+<p>Options:</p>
+
+<pre><code>    ### take no argument:
+    --help          Show this help message
+    --install       Install this package (and any prerequisites you built)
+                    after building it.
+    --skiptest      Skip tests. Can be negated using --noskiptest
+    --force         Force operation. Can be negated using --noforce
+    --verbose       Be verbose. Can be negated using --noverbose
+    --keepsource    Keep sources after building distribution. Can be
+                    negated by --nokeepsource. May not be supported
+                    by all formats
+    --makefile      Prefer Makefile.PL over Build.PL. Can be negated
+                    using --nomakefile. Defaults to your config setting
+    --buildprereq   Build packages of any prerequisites, even if they are
+                    already uptodate on the local system. Can be negated
+                    using --nobuildprereq. Defaults to false.
+    --archive       Indicate that all modules listed are actually archives
+    --flushcache    Update CPANPLUS&#39; cache before commencing any operation
+    --defaults      Instruct ExtUtils::MakeMaker and Module::Build to use
+                    default answers during &#39;perl Makefile.PL&#39; or &#39;perl
+                    Build.PL&#39; calls where possible
+    --edit-metafile Edit the distributions metafile(s) before the distribution
+                    is built. Requires a configured editor.
+
+    ### take argument:
+    --format      Installer format to use (defaults to config setting)
+    --ban         Patterns of module names to skip during installation,
+                  case-insensitive (affects prerequisites too)
+                  May be given multiple times
+    --banlist     File containing patterns that could be given to --ban
+                  Are appended to the ban list built up by --ban
+                  May be given multiple times.
+    --ignore      Patterns of modules to exclude from prereq list. Useful
+                  for when a prereq listed by a CPAN module is resolved
+                  in another way than from its corresponding CPAN package
+                  (Match is done on both module name, and package name of
+                  the package the module is in, case-insensitive)
+    --ignorelist  File containing patterns that may be given to --ignore.
+                  Are appended to the ban list built up by --ignore.
+                  May be given multiple times.
+    --modulelist  File containing a list of modules that should be built.
+                  Are appended to the list of command line modules.
+                  May be given multiple times.
+    --logfile     File to log all output to. By default, all output goes
+                  to the console.
+    --timeout     The allowed time for building a distribution before
+                  aborting. This is useful to terminate any build that
+                  hang or happen to be interactive despite being told not
+                  to be. Defaults to 300 seconds. To turn off, you can
+                  set it to 0.
+    --set-config  Change any options as specified in your config for this
+                  invocation only. See CPANPLUS::Config for a list of
+                  supported options.
+    --set-program Change any programs as specified in your config for this
+                  invocation only. See CPANPLUS::Config for a list of
+                  supported programs.
+    --dist-opts   Arbitrary options passed along to the chosen installer
+                  format&#39;s prepare()/create() routine. Please see the
+                  documentation of the installer of your choice for
+                  options it accepts.
+
+    ### builtin lists
+    --default-banlist    Use our builtin banlist. Works just like --ban
+                         and --banlist, but with pre-set lists. See the
+                         &quot;Builtin Lists&quot; section for details.
+    --default-ignorelist Use our builtin ignorelist. Works just like
+                         --ignore and --ignorelist but with pre-set lists.
+                         See the &quot;Builtin Lists&quot; section for details.</code></pre>
+
+<p>Examples:</p>
+
+<pre><code>    ### build a debian package of DBI and its prerequisites,
+    ### don&#39;t bother running tests
+    cpan2dist --format CPANPLUS::Dist::Deb --buildprereq --skiptest DBI
+
+    ### build a debian package of DBI and its prerequisites and install them
+    cpan2dist --format CPANPLUS::Dist::Deb --buildprereq --install DBI
+
+    ### Build a package, whose format is determined by your config, of
+    ### the local tarball, reloading cpanplus&#39; indices first and using
+    ### the tarballs Makefile.PL if it has one.
+    cpan2dist --makefile --flushcache --archive /path/to/Cwd-1.0.tgz
+
+    ### build a package from Net::FTP, but don&#39;t build any packages or
+    ### dependencies whose name match &#39;Foo&#39;, &#39;Bar&#39; or any of the
+    ### patterns mentioned in /tmp/ban
+    cpan2dist --ban Foo --ban Bar --banlist /tmp/ban Net::FTP
+
+    ### build a package from Net::FTP, but ignore its listed dependency
+    ### on IO::Socket, as it&#39;s shipped per default with the OS we&#39;re on
+    cpan2dist --ignore IO::Socket Net::FTP
+
+    ### building all modules listed, plus their prerequisites
+    cpan2dist --ignorelist /tmp/modules.ignore --banlist /tmp/modules.ban
+      --modulelist /tmp/modules.list --buildprereq --flushcache
+      --makefile --defaults
+
+    ### pass arbitrary options to the format&#39;s prepare()/create() routine
+    cpan2dist --dist-opts deb_version=3 --dist-opts prefix=corp</code></pre>
+
+<h1 id="Built-In-Filter-Lists"><a id="Built"></a>Built-In Filter Lists</h1>
+
+<p>Some modules you&#39;d rather not package. Some because they are part of core-perl and you don&#39;t want a new package. Some because they won&#39;t build on your system. Some because your package manager of choice already packages them for you.</p>
+
+<p>There may be a myriad of reasons. You can use the <code>--ignore</code> and <code>--ban</code> options for this, but we provide some built-in lists that catch common cases. You can use these built-in lists if you like, or supply your own if need be.</p>
+
+<h2 id="Built-In-Ignore-List"><a id="Built1"></a>Built-In Ignore List</h2>
+
+<p>You can use this list of regexes to ignore modules matching to be listed as prerequisites of a package. Particularly useful if they are bundled with core-perl anyway and they have known issues building.</p>
+
+<p>Toggle it by supplying the <code>--default-ignorelist</code> option.</p>
+
+<pre><code>    ^IO$                    # Provided with core anyway
+    ^Cwd$                   # Provided with core anyway
+    ^File::Spec             # Provided with core anyway
+    ^Config$                # Perl&#39;s own config, not shipped separately
+    ^ExtUtils::MakeMaker$   # Shipped with perl, recent versions
+                            # have bug 14721 (see rt.cpan.org)
+    ^ExtUtils::Install$     # Part of of EU::MM, same reason</code></pre>
+
+<h2 id="Built-In-Ban-list"><a id="Built2"></a>Built-In Ban list</h2>
+
+<p>You can use this list of regexes to disable building of these modules altogether.</p>
+
+<p>Toggle it by supplying the <code>--default-banlist</code> option.</p>
+
+<pre><code>    ^GD$                # Needs c libraries
+    ^Berk.*DB           # DB packages require specific options &amp; linking
+    ^DBD::              # DBD drivers require database files/headers
+    ^XML::              # XML modules usually require expat libraries
+    Apache              # These usually require apache libraries
+    SSL                 # These usually require SSL certificates &amp; libs
+    Image::Magick       # Needs ImageMagick C libraries
+    Mail::ClamAV        # Needs ClamAV C Libraries
+    ^Verilog            # Needs Verilog C Libraries
+    ^Authen::PAM$       # Needs PAM C libraries &amp; Headers</code></pre>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/CPANPLUS::Dist">CPANPLUS::Dist</a>, <a href="https://metacpan.org/pod/CPANPLUS::Module">CPANPLUS::Module</a>, <a href="https://metacpan.org/pod/CPANPLUS::Shell::Default">CPANPLUS::Shell::Default</a>, <code>cpanp</code></p>
+
+<h1 id="BUG-REPORTS"><a id="BUG"></a>BUG REPORTS</h1>
+
+<p>Please report bugs or other issues to &lt;bug-cpanplus@rt.cpan.org&lt;gt&gt;.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>This module by Jos Boumans &lt;kane@cpan.org&gt;.</p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>The CPAN++ interface (of which this module is a part of) is copyright (c) 2001 - 2007, Jos Boumans &lt;kane@cpan.org&gt;. All rights reserved.</p>
+
+<p>This library is free software; you may redistribute and/or modify it under the same terms as Perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install CPANPLUS, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm CPANPLUS</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install CPANPLUS</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="cpan2dist.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

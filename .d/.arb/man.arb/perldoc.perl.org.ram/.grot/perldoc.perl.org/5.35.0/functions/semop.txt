@@ -1,0 +1,23 @@
+=over
+
+=item semop KEY,OPSTRING
+X<semop>
+
+Calls the System V IPC function L<semop(2)> for semaphore operations
+such as signalling and waiting.  OPSTRING must be a packed array of
+semop structures.  Each semop structure can be generated with
+C<pack("s!3", $semnum, $semop, $semflag)>.  The length of OPSTRING
+implies the number of semaphore operations.  Returns true if
+successful, false on error.  As an example, the
+following code waits on semaphore $semnum of semaphore id $semid:
+
+    my $semop = pack("s!3", $semnum, -1, 0);
+    die "Semaphore trouble: $!\n" unless semop($semid, $semop);
+
+To signal the semaphore, replace C<-1> with C<1>.  See also
+L<perlipc/"SysV IPC"> and the documentation for
+L<C<IPC::SysV>|IPC::SysV> and L<C<IPC::Semaphore>|IPC::Semaphore>.
+
+Portability issues: L<perlport/semop>.
+
+=back

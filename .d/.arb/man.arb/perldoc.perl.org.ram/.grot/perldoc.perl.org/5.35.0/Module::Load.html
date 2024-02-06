@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Module::Load - runtime require of both modules and files - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Module::Load">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Module::Load.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Module::Load">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Module::Load">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Module::Load">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Module::Load">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Module::Load">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Module::Load">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Module::Load">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Module::Load">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Module::Load">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Module::Load">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Module::Load">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Module::Load">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Module::Load">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Module::Load">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Module::Load">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Module::Load">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Module::Load">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Module::Load">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Module::Load">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Module::Load">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Module::Load">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Module::Load">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Module::Load">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Module::Load">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Module::Load">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Module::Load">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Module::Load">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Module::Load">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Module::Load">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Module::Load">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Module::Load">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Module::Load">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Module::Load">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Module::Load">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Module::Load">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Module::Load">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Module::Load">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Module::Load">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Module::Load">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Module::Load">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Module::Load">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Module::Load">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Module::Load">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Module::Load">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Module::Load">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Module::Load">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Module::Load">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Module::Load">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Module::Load">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Module::Load">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Module::Load">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Module::Load">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Module::Load">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Module::Load">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Module::Load">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Module::Load">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Module::Load">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Module::Load">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Module::Load">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Module::Load">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Module::Load">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Module::Load">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Module::Load">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Module::Load">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Module::Load">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Module::Load">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Module::Load">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Module::Load">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Module::Load">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Module::Load">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Module::Load">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Module::Load">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Module::Load">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Module::Load">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Module::Load">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Module::Load">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Module::Load">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Module::Load">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Module::Load">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Module::Load">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Module::Load.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Module::Load">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Module::Load">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Module::Load">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Module::Load">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Module::Load">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Module::Load">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Module::Load">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Module::Load">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Module::Load">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Module::Load">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Module::Load">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Module::Load">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Module::Load">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Module::Load">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Module::Load">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Module::Load">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Module::Load">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Module::Load">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Module::Load">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Module::Load">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Module::Load">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Module::Load">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Module::Load">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Module::Load">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Module::Load">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Module::Load">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Module::Load">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Module::Load">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Module::Load">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Module::Load">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Module::Load">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Module::Load">5.35.1</a>
+          <a class="dropdown-item active" href="./Module::Load.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Module::Load.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Module::Load.html">Module::Load</a>
+          <div id="more">
+            (<a href="./Module::Load.txt">source</a>,
+            <a href="https://metacpan.org/pod/Module::Load">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 0.36</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#Difference-between-load-and-autoload">Difference between load and autoload</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#FUNCTIONS">FUNCTIONS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#Rules">Rules</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#IMPORTS-THE-FUNCTIONS">IMPORTS THE FUNCTIONS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#Caveats">Caveats</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#BUG-REPORTS">BUG REPORTS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Module::Load.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Module::Load.html#NAME">#</a>NAME</h1>
+
+<p>Module::Load - runtime require of both modules and files</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Module::Load.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Module::Load;
+
+my $module = &#39;Data::Dumper&#39;;
+
+load Data::Dumper;     # loads that module, but not import any functions
+                       # -&gt; cannot use &#39;Dumper&#39; function
+
+load &#39;Data::Dumper&#39;;   # ditto
+load $module           # tritto
+
+autoload Data::Dumper; # loads that module and imports the default functions
+                       # -&gt; can use &#39;Dumper&#39; function
+
+my $script = &#39;some/script.pl&#39;
+load $script;
+load &#39;some/script.pl&#39;;  # use quotes because of punctuations
+
+load thing;             # try &#39;thing&#39; first, then &#39;thing.pm&#39;
+
+load CGI, &#39;:all&#39;;       # like &#39;use CGI qw[:standard]&#39;</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Module::Load.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p><code>Module::Load</code> eliminates the need to know whether you are trying to require either a file or a module.</p>
+
+<p>If you consult <code>perldoc -f require</code> you will see that <code>require</code> will behave differently when given a bareword or a string.</p>
+
+<p>In the case of a string, <code>require</code> assumes you are wanting to load a file. But in the case of a bareword, it assumes you mean a module.</p>
+
+<p>This gives nasty overhead when you are trying to dynamically require modules at runtime, since you will need to change the module notation (<code>Acme::Comment</code>) to a file notation fitting the particular platform you are on.</p>
+
+<p><code>Module::Load</code> eliminates the need for this overhead and will just DWYM.</p>
+
+<h2 id="Difference-between-load-and-autoload"><a class="permalink" href="./Module::Load.html#Difference-between-load-and-autoload">#</a><a id="Difference"></a>Difference between <code>load</code> and <code>autoload</code></h2>
+
+<p><code>Module::Load</code> imports the two functions - <code>load</code> and <code>autoload</code></p>
+
+<p><code>autoload</code> imports the default functions automatically, but <code>load</code> do not import any functions.</p>
+
+<p><code>autoload</code> is usable under <code>BEGIN{};</code>.</p>
+
+<p>Both the functions can import the functions that are specified.</p>
+
+<p>Following codes are same.</p>
+
+<pre><code>load File::Spec::Functions, qw/splitpath/;
+
+autoload File::Spec::Functions, qw/splitpath/;</code></pre>
+
+<h1 id="FUNCTIONS"><a class="permalink" href="./Module::Load.html#FUNCTIONS">#</a>FUNCTIONS</h1>
+
+<dl>
+
+<dt id="load"><a class="permalink" href="./Module::Load.html#load">#</a>load</dt>
+<dd>
+
+<p>Loads a specified module.</p>
+
+<p>See <a href="./Module::Load.html#Rules">&quot;Rules&quot;</a> for detailed loading rule.</p>
+
+</dd>
+<dt id="autoload"><a class="permalink" href="./Module::Load.html#autoload">#</a>autoload</dt>
+<dd>
+
+<p>Loads a specified module and imports the default functions.</p>
+
+<p>Except importing the functions, &#39;autoload&#39; is same as &#39;load&#39;.</p>
+
+</dd>
+<dt id="load_remote"><a class="permalink" href="./Module::Load.html#load_remote">#</a>load_remote</dt>
+<dd>
+
+<p>Loads a specified module to the specified package.</p>
+
+<pre><code>use Module::Load &#39;load_remote&#39;;
+
+my $pkg = &#39;Other::Package&#39;;
+
+load_remote $pkg, &#39;Data::Dumper&#39;; # load a module to &#39;Other::Package&#39;
+                                  # but do not import &#39;Dumper&#39; function</code></pre>
+
+<p>A module for loading must be quoted.</p>
+
+<p>Except specifing the package and quoting module name, &#39;load_remote&#39; is same as &#39;load&#39;.</p>
+
+</dd>
+<dt id="autoload_remote"><a class="permalink" href="./Module::Load.html#autoload_remote">#</a>autoload_remote</dt>
+<dd>
+
+<p>Loads a specified module and imports the default functions to the specified package.</p>
+
+<pre><code>use Module::Load &#39;autoload_remote&#39;;
+
+my $pkg = &#39;Other::Package&#39;;
+
+autoload_remote $pkg, &#39;Data::Dumper&#39;; # load a module to &#39;Other::Package&#39;
+                                      # and imports &#39;Dumper&#39; function</code></pre>
+
+<p>A module for loading must be quoted.</p>
+
+<p>Except specifing the package and quoting module name, &#39;autoload_remote&#39; is same as &#39;load_remote&#39;.</p>
+
+</dd>
+</dl>
+
+<h1 id="Rules"><a class="permalink" href="./Module::Load.html#Rules">#</a>Rules</h1>
+
+<p>All functions have the following rules to decide what it thinks you want:</p>
+
+<ul>
+
+<li><p>If the argument has any characters in it other than those matching <code>\w</code>, <code>:</code> or <code>&#39;</code>, it must be a file</p>
+
+</li>
+<li><p>If the argument matches only <code>[\w:&#39;]</code>, it must be a module</p>
+
+</li>
+<li><p>If the argument matches only <code>\w</code>, it could either be a module or a file. We will try to find <code>file.pm</code> first in <code>@INC</code> and if that fails, we will try to find <code>file</code> in @INC. If both fail, we die with the respective error messages.</p>
+
+</li>
+</ul>
+
+<h1 id="IMPORTS-THE-FUNCTIONS"><a class="permalink" href="./Module::Load.html#IMPORTS-THE-FUNCTIONS">#</a><a id="IMPORTS"></a>IMPORTS THE FUNCTIONS</h1>
+
+<p>&#39;load&#39; and &#39;autoload&#39; are imported by default, but &#39;load_remote&#39; and &#39;autoload_remote&#39; are not imported.</p>
+
+<p>To use &#39;load_remote&#39; or &#39;autoload_remote&#39;, specify at &#39;use&#39;.</p>
+
+<dl>
+
+<dt id="&quot;load&quot;,&quot;autoload&quot;,&quot;load_remote&quot;,&quot;autoload_remote&quot;"><a class="permalink" href="./Module::Load.html#%22load%22,%22autoload%22,%22load_remote%22,%22autoload_remote%22">#</a><a id="load-autoload-load_remote-autoload_remote"></a>&quot;load&quot;,&quot;autoload&quot;,&quot;load_remote&quot;,&quot;autoload_remote&quot;</dt>
+<dd>
+
+<p>Imports the selected functions.</p>
+
+<pre><code># imports &#39;load&#39; and &#39;autoload&#39; (default)
+use Module::Load;
+
+# imports &#39;autoload&#39; only
+use Module::Load &#39;autoload&#39;;
+
+# imports &#39;autoload&#39; and &#39;autoload_remote&#39;, but don&#39;t import &#39;load&#39;;
+use Module::Load qw/autoload autoload_remote/;</code></pre>
+
+</dd>
+<dt id="&#39;all&#39;"><a class="permalink" href="./Module::Load.html#&#39;all&#39;">#</a><a id="all"></a>&#39;all&#39;</dt>
+<dd>
+
+<p>Imports all the functions.</p>
+
+<pre><code>use Module::Load &#39;all&#39;; # imports load, autoload, load_remote, autoload_remote</code></pre>
+
+</dd>
+<dt id="&#39;&#39;,&#39;none&#39;,undef"><a class="permalink" href="./Module::Load.html#&#39;&#39;,&#39;none&#39;,undef">#</a><a id="none-undef"></a>&#39;&#39;,&#39;none&#39;,undef</dt>
+<dd>
+
+<p>Not import any functions (<code>load</code> and <code>autoload</code> are not imported).</p>
+
+<pre><code>use Module::Load &#39;&#39;;
+
+use Module::Load &#39;none&#39;;
+
+use Module::Load undef;</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="Caveats"><a class="permalink" href="./Module::Load.html#Caveats">#</a>Caveats</h1>
+
+<p>Because of a bug in perl (#19213), at least in version 5.6.1, we have to hardcode the path separator for a require on Win32 to be <code>/</code>, like on Unix rather than the Win32 <code>\</code>. Otherwise perl will not read its own %INC accurately double load files if they are required again, or in the worst case, core dump.</p>
+
+<p><code>Module::Load</code> cannot do implicit imports, only explicit imports. (in other words, you always have to specify explicitly what you wish to import from a module, even if the functions are in that modules&#39; <code>@EXPORT</code>)</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./Module::Load.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Module::Runtime.html">Module::Runtime</a> provides functions for loading modules, checking the validity of a module name, converting a module name to partial <code>.pm</code> path, and related utility functions.</p>
+
+<p><a href="functions/CORE.html#require">&quot;require&quot; in perlfunc</a> and <a href="functions/CORE.html#use">&quot;use&quot; in perlfunc</a>.</p>
+
+<p><a href="./Mojo::Loader.html">Mojo::Loader</a> is a &quot;class loader and plugin framework&quot;, and is included in the <a href="https://metacpan.org/release/Mojolicious">Mojolicious</a> distribution.</p>
+
+<p><a href="./Module::Loader.html">Module::Loader</a> is a module for finding and loading modules in a given namespace, inspired by <code>Mojo::Loader</code>.</p>
+
+<h1 id="ACKNOWLEDGEMENTS"><a class="permalink" href="./Module::Load.html#ACKNOWLEDGEMENTS">#</a>ACKNOWLEDGEMENTS</h1>
+
+<p>Thanks to Jonas B. Nielsen for making explicit imports work.</p>
+
+<h1 id="BUG-REPORTS"><a class="permalink" href="./Module::Load.html#BUG-REPORTS">#</a><a id="BUG"></a>BUG REPORTS</h1>
+
+<p>Please report bugs or other issues to &lt;bug-module-load@rt.cpan.org&gt;.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./Module::Load.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>This module by Jos Boumans &lt;kane@cpan.org&gt;.</p>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="./Module::Load.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>This library is free software; you may redistribute and/or modify it under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

@@ -1,0 +1,2361 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Email::MIME - easy MIME message handling - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Email-MIME - MetaCPAN" href="https://metacpan.org/dist/Email-MIME/releases.rss" />
+        <link rel="canonical" href="./Email::MIME.html" />
+        <meta name="description" content="easy MIME message handling" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Email::MIME" />
+<meta name="twitter:title"       content="Email::MIME" />
+<meta name="twitter:description" content="easy MIME message handling" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Email::MIME.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Email-MIME was released.">
+      <span class="relatize">09 Jan 2023 00:03:49 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Email-MIME">Email-MIME</a>
+  </li>
+  <li>
+    Module version: 1.953
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Email-MIME/source/lib/Email/MIME.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Email-MIME/source/lib/Email/MIME.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Email-MIME/source/lib/Email">Browse</a>
+    (<a href="https://metacpan.org/dist/Email-MIME/source/lib/Email?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Email-MIME/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://github.com/rjbs/Email-MIME">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Email-MIME/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/rjbs/Email-MIME">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/rjbs/Email-MIME/issues">Issues</a>
+      (16)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Email-MIME+1.953" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/E/Email-MIME.html?oncpan=1&amp;distmat=1&amp;version=1.953&amp;grade=2" style="color: #090">161</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/E/Email-MIME.html?oncpan=1&amp;distmat=1&amp;version=1.953&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/E/Email-MIME.html?oncpan=1&amp;distmat=1&amp;version=1.953&amp;grade=4">6</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/RJBS/Email-MIME-1.953">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Email-MIME who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Email-MIME-1.953/index.html">87.66% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.12.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Email-MIME/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/R/RJ/RJBS/Email-MIME-1.953.tar.gz">
+      Download (<span itemprop="fileSize">121.45KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FRJBS%2FEmail-MIME-1.953%2Flib%2FEmail%2FMIME.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Email-MIME/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Email-MIME/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Email-MIME">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Email-MIME">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Email/MIME.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="RJBS/Email-MIME-1.953"
+>1.953
+  (RJBS on 2023-01-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.952"
+>1.952
+  (RJBS on 2021-12-14)</option>
+<option
+  
+  value="CWEST/Email-MIME-1.82"
+>1.82
+  (CWEST on 2004-11-18)</option>
+<option
+  
+  value="CWEST/Email-MIME-1.81"
+>1.81
+  (CWEST on 2004-10-30)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.8"
+>1.8
+  (SIMON on 2004-08-25)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.7"
+>1.7
+  (SIMON on 2004-07-05)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.6"
+>1.6
+  (SIMON on 2004-07-04)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.5"
+>1.5
+  (SIMON on 2004-07-01)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.4"
+>1.4
+  (SIMON on 2004-07-01)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.3"
+>1.3
+  (SIMON on 2004-04-05)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.2"
+>1.2
+  (SIMON on 2004-04-02)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.1"
+>1.1
+  (SIMON on 2004-03-24)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.0_01"
+>1.0_01 DEV
+  (SIMON on 2004-01-23)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RJBS/Email-MIME-1.951"
+>1.951
+  (RJBS on 2021-12-14)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.950-TRIAL"
+>1.950-TRIAL DEV
+  (RJBS on 2020-11-03)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.949"
+>1.949
+  (RJBS on 2020-05-24)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.948-TRIAL"
+>1.948-TRIAL DEV
+  (RJBS on 2020-05-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.947-TRIAL"
+>1.947-TRIAL DEV
+  (RJBS on 2020-05-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.946"
+>1.946
+  (RJBS on 2017-08-31)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.945"
+>1.945
+  (RJBS on 2017-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.944"
+>1.944
+  (RJBS on 2017-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.943-TRIAL"
+>1.943-TRIAL DEV
+  (RJBS on 2017-06-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.942-TRIAL"
+>1.942-TRIAL DEV
+  (RJBS on 2017-03-05)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.941-TRIAL"
+>1.941-TRIAL DEV
+  (RJBS on 2017-03-05)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.940"
+>1.940
+  (RJBS on 2017-01-29)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.939-TRIAL"
+>1.939-TRIAL DEV
+  (RJBS on 2017-01-14)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.938-TRIAL"
+>1.938-TRIAL DEV
+  (RJBS on 2017-01-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.937"
+>1.937
+  (RJBS on 2016-01-28)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.936"
+>1.936
+  (RJBS on 2015-09-11)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.935-TRIAL"
+>1.935-TRIAL DEV
+  (RJBS on 2015-08-31)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.934"
+>1.934
+  (RJBS on 2015-08-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.933"
+>1.933
+  (RJBS on 2015-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.932"
+>1.932
+  (RJBS on 2015-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.931-TRIAL"
+>1.931-TRIAL DEV
+  (RJBS on 2015-07-12)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.930-TRIAL"
+>1.930-TRIAL DEV
+  (RJBS on 2015-03-26)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.929"
+>1.929
+  (RJBS on 2015-02-17)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.928"
+>1.928
+  (RJBS on 2014-12-16)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.927"
+>1.927
+  (RJBS on 2014-12-04)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.926"
+>1.926
+  (RJBS on 2014-01-29)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.925"
+>1.925
+  (RJBS on 2013-11-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.924"
+>1.924
+  (RJBS on 2013-08-11)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.923"
+>1.923
+  (RJBS on 2013-08-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.922"
+>1.922
+  (RJBS on 2013-07-10)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.921"
+>1.921
+  (RJBS on 2013-07-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.920"
+>1.920
+  (RJBS on 2013-06-17)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.912_01"
+>1.912_01 DEV
+  (RJBS on 2013-04-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.911"
+>1.911
+  (RJBS on 2012-07-22)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.910"
+>1.910
+  (RJBS on 2011-09-12)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.909"
+>1.909
+  (RJBS on 2011-09-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.908"
+>1.908
+  (RJBS on 2011-06-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.907"
+>1.907
+  (RJBS on 2011-02-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.906"
+>1.906
+  (RJBS on 2010-10-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.905"
+>1.905
+  (RJBS on 2010-09-06)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.904"
+>1.904
+  (RJBS on 2010-09-04)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.903"
+>1.903
+  (RJBS on 2009-12-23)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.902"
+>1.902
+  (RJBS on 2009-11-11)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.901"
+>1.901
+  (RJBS on 2009-11-05)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.900"
+>1.900
+  (RJBS on 2009-11-03)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.863"
+>1.863
+  (RJBS on 2009-01-30)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.862"
+>1.862
+  (RJBS on 2009-01-24)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.861_01"
+>1.861_01 DEV
+  (RJBS on 2008-09-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.861"
+>1.861
+  (RJBS on 2007-11-06)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.860"
+>1.860
+  (RJBS on 2007-07-14)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.859"
+>1.859
+  (RJBS on 2007-03-21)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.858"
+>1.858
+  (RJBS on 2007-02-10)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.857"
+>1.857
+  (RJBS on 2006-11-28)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.856"
+>1.856
+  (RJBS on 2006-11-28)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.855"
+>1.855
+  (RJBS on 2006-10-19)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.854"
+>1.854
+  (RJBS on 2006-10-15)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.853"
+>1.853
+  (RJBS on 2006-10-12)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.852"
+>1.852
+  (RJBS on 2006-09-06)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.851"
+>1.851
+  (RJBS on 2006-08-22)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.85"
+>1.85
+  (RJBS on 2006-07-13)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/RJBS/Email-MIME-1.953/diff/' + encodeURIComponent(this.value) + '/lib/Email/MIME.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="RJBS/Email-MIME-1.953"
+>1.953
+  (RJBS on 2023-01-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.952"
+>1.952
+  (RJBS on 2021-12-14)</option>
+<option
+  
+  value="CWEST/Email-MIME-1.82"
+>1.82
+  (CWEST on 2004-11-18)</option>
+<option
+  
+  value="CWEST/Email-MIME-1.81"
+>1.81
+  (CWEST on 2004-10-30)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.8"
+>1.8
+  (SIMON on 2004-08-25)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.7"
+>1.7
+  (SIMON on 2004-07-05)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.6"
+>1.6
+  (SIMON on 2004-07-04)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.5"
+>1.5
+  (SIMON on 2004-07-01)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.4"
+>1.4
+  (SIMON on 2004-07-01)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.3"
+>1.3
+  (SIMON on 2004-04-05)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.2"
+>1.2
+  (SIMON on 2004-04-02)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.1"
+>1.1
+  (SIMON on 2004-03-24)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.0_01"
+>1.0_01 DEV
+  (SIMON on 2004-01-23)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RJBS/Email-MIME-1.951"
+>1.951
+  (RJBS on 2021-12-14)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.950-TRIAL"
+>1.950-TRIAL DEV
+  (RJBS on 2020-11-03)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.949"
+>1.949
+  (RJBS on 2020-05-24)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.948-TRIAL"
+>1.948-TRIAL DEV
+  (RJBS on 2020-05-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.947-TRIAL"
+>1.947-TRIAL DEV
+  (RJBS on 2020-05-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.946"
+>1.946
+  (RJBS on 2017-08-31)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.945"
+>1.945
+  (RJBS on 2017-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.944"
+>1.944
+  (RJBS on 2017-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.943-TRIAL"
+>1.943-TRIAL DEV
+  (RJBS on 2017-06-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.942-TRIAL"
+>1.942-TRIAL DEV
+  (RJBS on 2017-03-05)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.941-TRIAL"
+>1.941-TRIAL DEV
+  (RJBS on 2017-03-05)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.940"
+>1.940
+  (RJBS on 2017-01-29)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.939-TRIAL"
+>1.939-TRIAL DEV
+  (RJBS on 2017-01-14)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.938-TRIAL"
+>1.938-TRIAL DEV
+  (RJBS on 2017-01-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.937"
+>1.937
+  (RJBS on 2016-01-28)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.936"
+>1.936
+  (RJBS on 2015-09-11)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.935-TRIAL"
+>1.935-TRIAL DEV
+  (RJBS on 2015-08-31)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.934"
+>1.934
+  (RJBS on 2015-08-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.933"
+>1.933
+  (RJBS on 2015-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.932"
+>1.932
+  (RJBS on 2015-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.931-TRIAL"
+>1.931-TRIAL DEV
+  (RJBS on 2015-07-12)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.930-TRIAL"
+>1.930-TRIAL DEV
+  (RJBS on 2015-03-26)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.929"
+>1.929
+  (RJBS on 2015-02-17)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.928"
+>1.928
+  (RJBS on 2014-12-16)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.927"
+>1.927
+  (RJBS on 2014-12-04)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.926"
+>1.926
+  (RJBS on 2014-01-29)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.925"
+>1.925
+  (RJBS on 2013-11-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.924"
+>1.924
+  (RJBS on 2013-08-11)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.923"
+>1.923
+  (RJBS on 2013-08-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.922"
+>1.922
+  (RJBS on 2013-07-10)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.921"
+>1.921
+  (RJBS on 2013-07-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.920"
+>1.920
+  (RJBS on 2013-06-17)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.912_01"
+>1.912_01 DEV
+  (RJBS on 2013-04-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.911"
+>1.911
+  (RJBS on 2012-07-22)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.910"
+>1.910
+  (RJBS on 2011-09-12)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.909"
+>1.909
+  (RJBS on 2011-09-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.908"
+>1.908
+  (RJBS on 2011-06-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.907"
+>1.907
+  (RJBS on 2011-02-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.906"
+>1.906
+  (RJBS on 2010-10-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.905"
+>1.905
+  (RJBS on 2010-09-06)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.904"
+>1.904
+  (RJBS on 2010-09-04)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.903"
+>1.903
+  (RJBS on 2009-12-23)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.902"
+>1.902
+  (RJBS on 2009-11-11)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.901"
+>1.901
+  (RJBS on 2009-11-05)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.900"
+>1.900
+  (RJBS on 2009-11-03)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.863"
+>1.863
+  (RJBS on 2009-01-30)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.862"
+>1.862
+  (RJBS on 2009-01-24)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.861_01"
+>1.861_01 DEV
+  (RJBS on 2008-09-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.861"
+>1.861
+  (RJBS on 2007-11-06)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.860"
+>1.860
+  (RJBS on 2007-07-14)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.859"
+>1.859
+  (RJBS on 2007-03-21)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.858"
+>1.858
+  (RJBS on 2007-02-10)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.857"
+>1.857
+  (RJBS on 2006-11-28)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.856"
+>1.856
+  (RJBS on 2006-11-28)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.855"
+>1.855
+  (RJBS on 2006-10-19)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.854"
+>1.854
+  (RJBS on 2006-10-15)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.853"
+>1.853
+  (RJBS on 2006-10-12)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.852"
+>1.852
+  (RJBS on 2006-09-06)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.851"
+>1.851
+  (RJBS on 2006-08-22)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.85"
+>1.85
+  (RJBS on 2006-07-13)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Carp" title="Carp" class="ellipsis">Carp</a></li>
+  <li><a href="https://metacpan.org/pod/Email::Address::XS" title="Email::Address::XS" class="ellipsis">Email::Address::XS</a></li>
+  <li><a href="https://metacpan.org/pod/Email::MIME::ContentType" title="Email::MIME::ContentType" class="ellipsis">Email::MIME::ContentType</a></li>
+  <li><a href="https://metacpan.org/pod/Email::MIME::Encodings" title="Email::MIME::Encodings" class="ellipsis">Email::MIME::Encodings</a></li>
+  <li><a href="https://metacpan.org/pod/Email::MessageID" title="Email::MessageID" class="ellipsis">Email::MessageID</a></li>
+  <li><a href="https://metacpan.org/pod/Email::Simple" title="Email::Simple" class="ellipsis">Email::Simple</a></li>
+  <li><a href="https://metacpan.org/pod/Email::Simple::Creator" title="Email::Simple::Creator" class="ellipsis">Email::Simple::Creator</a></li>
+  <li><a href="https://metacpan.org/pod/Email::Simple::Header" title="Email::Simple::Header" class="ellipsis">Email::Simple::Header</a></li>
+  <li><a href="https://metacpan.org/pod/Encode" title="Encode" class="ellipsis">Encode</a></li>
+  <li><a href="https://metacpan.org/pod/MIME::Base64" title="MIME::Base64" class="ellipsis">MIME::Base64</a></li>
+  <li><a href="https://metacpan.org/pod/MIME::Types" title="MIME::Types" class="ellipsis">MIME::Types</a></li>
+  <li><a href="./Module::Runtime.html" title="Module::Runtime" class="ellipsis">Module::Runtime</a></li>
+  <li><a href="https://metacpan.org/pod/Scalar::Util" title="Scalar::Util" class="ellipsis">Scalar::Util</a></li>
+  <li><a href="https://metacpan.org/pod/parent" title="parent" class="ellipsis">parent</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/warnings" title="warnings" class="ellipsis">warnings</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Email::MIME/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Email%3A%3AMIME">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Email-MIME">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/RJBS/Email-MIME-1.953/view/lib/Email/MIME.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Email::MIME.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/GARU"><img src="https://www.gravatar.com/avatar/14c751a7de307f3f50a2cb67b38a6796?d=identicon&amp;s=20" title="GARU" alt="GARU"></a>
+<a class="display-all" href="https://metacpan.org/author/JWANG"><img src="https://www.gravatar.com/avatar/61d1e2eb0f8968080067151a9a9b5fe0?d=identicon&amp;s=20" title="JWANG" alt="JWANG"></a>
+<a class="display-all" href="https://metacpan.org/author/PINGAN"><img src="https://www.gravatar.com/avatar/a02222e5e0e4fd24d52fc29a08ac6bcb?d=identicon&amp;s=20" title="PINGAN" alt="PINGAN"></a>
+<a class="display-all" href="https://metacpan.org/author/WKI"><img src="https://www.gravatar.com/avatar/96e6cbd6079af929f3531d41081b9be1?d=identicon&amp;s=20" title="WKI" alt="WKI"></a>
+<a class="display-all" href="https://metacpan.org/author/JKUTEJ"><img src="https://www.gravatar.com/avatar/dd8704659cdd56fa6c4d1ba5b0909c69?d=identicon&amp;s=20" title="JKUTEJ" alt="JKUTEJ"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Email-MIME/plussers">10 PAUSE users</a>
+</div>
+<div>
+    10 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 25 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="CWEST"
+      data-contrib-email="casey@geeknest.com"
+    >
+      <a href="https://metacpan.org/author/CWEST" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/b3bb9984adabb61d974f96965b2ed074?d=identicon&amp;s=20" />
+      Casey West
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="SIMON"
+      data-contrib-email="simon@cpan.org"
+    >
+      <a href="https://metacpan.org/author/SIMON" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/e8b1f2c0077be8a15af0f08b55d59a36?d=identicon&amp;s=20" />
+      Simon Cozens
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="alexmv@mit.edu"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Alex Vandiver
+    </li>
+    <li class="contributor"
+      data-contrib-email="anirvan@users.noreply.github.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Anirvan Chatterjee
+    </li>
+    <li class="contributor"
+      data-cpan-author="FREW"
+      data-contrib-email="frioux@gmail.com"
+    >
+      <a href="https://metacpan.org/author/FREW" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/99d7d0aba169ea255ffa5c8c63f652ae?d=identicon&amp;s=20" />
+      Arthur Axel &#39;fREW&#39; Schmidt
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="BRICAS"
+      data-contrib-email="bricas@cpan.org"
+    >
+      <a href="https://metacpan.org/author/BRICAS" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/a12ace08cb63bace871a7648c2d6fc8c?d=identicon&amp;s=20" />
+      Brian Cassidy
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="damian.lukowski@credativ.de"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Damian Lukowski
+    </li>
+    <li class="contributor"
+      data-contrib-email="grinnz@gmail.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Dan Book
+    </li>
+    <li class="contributor"
+      data-contrib-email="dsteinbrunner@pobox.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      David Steinbrunner
+    </li>
+    <li class="contributor"
+      data-contrib-email="dotan@corky.net"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Dotan Dimet
+    </li>
+    <li class="contributor"
+      data-contrib-email="dan@element26.net"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      dxdc
+    </li>
+    <li class="contributor"
+      data-cpan-author="YHBT"
+      data-contrib-email="e@80x24.org"
+    >
+      <a href="https://metacpan.org/author/YHBT" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/b4f9de7a273a9ce36eb60a509387aed0?d=identicon&amp;s=20" />
+      Eric Wong
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="gedge-oss@yadn.org"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Geraint Edwards
+    </li>
+    <li class="contributor"
+      data-contrib-email="9122139+ivulfson@users.noreply.github.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      ivulfson
+    </li>
+    <li class="contributor"
+      data-contrib-email="doy@tozt.net"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Jesse Luehrs
+    </li>
+    <li class="contributor"
+      data-contrib-email="kboth@drkurt.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Kurt Anderson
+    </li>
+    <li class="contributor"
+      data-contrib-email="lance@bearcircle.net"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Lance A. Brown
+    </li>
+    <li class="contributor"
+      data-contrib-email="wolfsage@gmail.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Matthew Horsfall
+    </li>
+    <li class="contributor"
+      data-contrib-email="memememomo@gmail.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      memememomo
+    </li>
+    <li class="contributor"
+      data-contrib-email="michael@mcclimon.org"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Michael McClimon
+    </li>
+    <li class="contributor"
+      data-contrib-email="48946018+Mishrakk@users.noreply.github.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Mishrakk
+    </li>
+    <li class="contributor"
+      data-cpan-author="PALI"
+      data-contrib-email="pali@cpan.org"
+    >
+      <a href="https://metacpan.org/author/PALI" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d8f03d10174e68c6f26d9052b79e04e8?d=identicon&amp;s=20" />
+      Pali
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="rjbs@semiotic.systems"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Ricardo Signes
+    </li>
+    <li class="contributor"
+      data-contrib-email="ssoriche@coloredblocks.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Shawn Sorichetti
+    </li>
+    <li class="contributor"
+      data-cpan-author="BOKUTIN"
+      data-contrib-email="bokutin@bokut.in"
+    >
+      <a href="https://metacpan.org/author/BOKUTIN" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/84145aa8a9fa0188cd0b4cc066f0c6b3?d=identicon&amp;s=20" />
+      Tomohiro Hosaka
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/RJBS" class="author-name">Ricardo SIGNES 😄</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Email/MIME.pm&#39;" class="">
+<option
+  selected
+  value="RJBS/Email-MIME-1.953"
+>1.953
+  (RJBS on 2023-01-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.952"
+>1.952
+  (RJBS on 2021-12-14)</option>
+<option
+  
+  value="CWEST/Email-MIME-1.82"
+>1.82
+  (CWEST on 2004-11-18)</option>
+<option
+  
+  value="CWEST/Email-MIME-1.81"
+>1.81
+  (CWEST on 2004-10-30)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.8"
+>1.8
+  (SIMON on 2004-08-25)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.7"
+>1.7
+  (SIMON on 2004-07-05)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.6"
+>1.6
+  (SIMON on 2004-07-04)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.5"
+>1.5
+  (SIMON on 2004-07-01)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.4"
+>1.4
+  (SIMON on 2004-07-01)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.3"
+>1.3
+  (SIMON on 2004-04-05)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.2"
+>1.2
+  (SIMON on 2004-04-02)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.1"
+>1.1
+  (SIMON on 2004-03-24)</option>
+<option
+  
+  value="SIMON/Email-MIME-1.0_01"
+>1.0_01 DEV
+  (SIMON on 2004-01-23)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RJBS/Email-MIME-1.951"
+>1.951
+  (RJBS on 2021-12-14)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.950-TRIAL"
+>1.950-TRIAL DEV
+  (RJBS on 2020-11-03)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.949"
+>1.949
+  (RJBS on 2020-05-24)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.948-TRIAL"
+>1.948-TRIAL DEV
+  (RJBS on 2020-05-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.947-TRIAL"
+>1.947-TRIAL DEV
+  (RJBS on 2020-05-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.946"
+>1.946
+  (RJBS on 2017-08-31)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.945"
+>1.945
+  (RJBS on 2017-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.944"
+>1.944
+  (RJBS on 2017-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.943-TRIAL"
+>1.943-TRIAL DEV
+  (RJBS on 2017-06-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.942-TRIAL"
+>1.942-TRIAL DEV
+  (RJBS on 2017-03-05)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.941-TRIAL"
+>1.941-TRIAL DEV
+  (RJBS on 2017-03-05)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.940"
+>1.940
+  (RJBS on 2017-01-29)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.939-TRIAL"
+>1.939-TRIAL DEV
+  (RJBS on 2017-01-14)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.938-TRIAL"
+>1.938-TRIAL DEV
+  (RJBS on 2017-01-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.937"
+>1.937
+  (RJBS on 2016-01-28)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.936"
+>1.936
+  (RJBS on 2015-09-11)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.935-TRIAL"
+>1.935-TRIAL DEV
+  (RJBS on 2015-08-31)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.934"
+>1.934
+  (RJBS on 2015-08-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.933"
+>1.933
+  (RJBS on 2015-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.932"
+>1.932
+  (RJBS on 2015-07-25)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.931-TRIAL"
+>1.931-TRIAL DEV
+  (RJBS on 2015-07-12)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.930-TRIAL"
+>1.930-TRIAL DEV
+  (RJBS on 2015-03-26)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.929"
+>1.929
+  (RJBS on 2015-02-17)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.928"
+>1.928
+  (RJBS on 2014-12-16)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.927"
+>1.927
+  (RJBS on 2014-12-04)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.926"
+>1.926
+  (RJBS on 2014-01-29)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.925"
+>1.925
+  (RJBS on 2013-11-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.924"
+>1.924
+  (RJBS on 2013-08-11)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.923"
+>1.923
+  (RJBS on 2013-08-09)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.922"
+>1.922
+  (RJBS on 2013-07-10)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.921"
+>1.921
+  (RJBS on 2013-07-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.920"
+>1.920
+  (RJBS on 2013-06-17)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.912_01"
+>1.912_01 DEV
+  (RJBS on 2013-04-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.911"
+>1.911
+  (RJBS on 2012-07-22)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.910"
+>1.910
+  (RJBS on 2011-09-12)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.909"
+>1.909
+  (RJBS on 2011-09-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.908"
+>1.908
+  (RJBS on 2011-06-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.907"
+>1.907
+  (RJBS on 2011-02-02)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.906"
+>1.906
+  (RJBS on 2010-10-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.905"
+>1.905
+  (RJBS on 2010-09-06)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.904"
+>1.904
+  (RJBS on 2010-09-04)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.903"
+>1.903
+  (RJBS on 2009-12-23)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.902"
+>1.902
+  (RJBS on 2009-11-11)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.901"
+>1.901
+  (RJBS on 2009-11-05)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.900"
+>1.900
+  (RJBS on 2009-11-03)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.863"
+>1.863
+  (RJBS on 2009-01-30)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.862"
+>1.862
+  (RJBS on 2009-01-24)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.861_01"
+>1.861_01 DEV
+  (RJBS on 2008-09-08)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.861"
+>1.861
+  (RJBS on 2007-11-06)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.860"
+>1.860
+  (RJBS on 2007-07-14)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.859"
+>1.859
+  (RJBS on 2007-03-21)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.858"
+>1.858
+  (RJBS on 2007-02-10)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.857"
+>1.857
+  (RJBS on 2006-11-28)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.856"
+>1.856
+  (RJBS on 2006-11-28)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.855"
+>1.855
+  (RJBS on 2006-10-19)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.854"
+>1.854
+  (RJBS on 2006-10-15)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.853"
+>1.853
+  (RJBS on 2006-10-12)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.852"
+>1.852
+  (RJBS on 2006-09-06)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.851"
+>1.851
+  (RJBS on 2006-08-22)</option>
+<option
+  
+  value="RJBS/Email-MIME-1.85"
+>1.85
+  (RJBS on 2006-07-13)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Email-MIME">Email-MIME-1.953</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 66 direct dependents &#10;          • 140 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Email-MIME-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Email-MIME-1.953">
+    <input type="hidden" name="author" value="RJBS">
+    <input type="hidden" name="distribution" value="Email-MIME">
+    <button type="submit" class="favorite highlight"><span>20</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Email::MIME.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>20</span> ++</a>
+</div>
+   / <span>Email::MIME</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Email::MIME.html#NAME">NAME</a></li>
+  <li><a href="./Email::MIME.html#VERSION">VERSION</a></li>
+  <li><a href="./Email::MIME.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Email::MIME.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Email::MIME.html#PERL-VERSION">PERL VERSION</a></li>
+  <li><a href="./Email::MIME.html#METHODS">METHODS</a>
+    <ul>
+      <li><a href="./Email::MIME.html#create">create</a></li>
+      <li><a href="./Email::MIME.html#content_type_set">content_type_set</a></li>
+      <li><a href="./Email::MIME.html#charset_set">charset_set</a></li>
+      <li><a href="./Email::MIME.html#name_set">name_set</a></li>
+      <li><a href="./Email::MIME.html#format_set">format_set</a></li>
+      <li><a href="./Email::MIME.html#boundary_set">boundary_set</a></li>
+      <li><a href="./Email::MIME.html#encode_check">encode_check</a></li>
+      <li><a href="./Email::MIME.html#encode_check_set">encode_check_set</a></li>
+      <li><a href="./Email::MIME.html#encoding_set">encoding_set</a></li>
+      <li><a href="./Email::MIME.html#body_set">body_set</a></li>
+      <li><a href="./Email::MIME.html#body_str_set">body_str_set</a></li>
+      <li><a href="./Email::MIME.html#disposition_set">disposition_set</a></li>
+      <li><a href="./Email::MIME.html#filename_set">filename_set</a></li>
+      <li><a href="./Email::MIME.html#parts_set">parts_set</a></li>
+      <li><a href="./Email::MIME.html#parts_add">parts_add</a></li>
+      <li><a href="./Email::MIME.html#walk_parts">walk_parts</a></li>
+      <li><a href="./Email::MIME.html#header">header</a></li>
+      <li><a href="./Email::MIME.html#header_str_set">header_str_set</a></li>
+      <li><a href="./Email::MIME.html#header_str_pairs">header_str_pairs</a></li>
+      <li><a href="./Email::MIME.html#header_as_obj">header_as_obj</a></li>
+      <li><a href="./Email::MIME.html#parts">parts</a></li>
+      <li><a href="./Email::MIME.html#subparts">subparts</a></li>
+      <li><a href="./Email::MIME.html#body">body</a></li>
+      <li><a href="./Email::MIME.html#body_str">body_str</a></li>
+      <li><a href="./Email::MIME.html#body_raw">body_raw</a></li>
+      <li><a href="./Email::MIME.html#decode_hook">decode_hook</a></li>
+      <li><a href="./Email::MIME.html#content_type">content_type</a></li>
+      <li><a href="./Email::MIME.html#filename">filename</a></li>
+      <li><a href="./Email::MIME.html#invent_filename">invent_filename</a></li>
+      <li><a href="./Email::MIME.html#debug_structure">debug_structure</a></li>
+    </ul>
+  </li>
+  <li><a href="./Email::MIME.html#CONFIGURATION">CONFIGURATION</a></li>
+  <li><a href="./Email::MIME.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Email::MIME.html#THANKS">THANKS</a></li>
+  <li><a href="./Email::MIME.html#AUTHORS">AUTHORS</a></li>
+  <li><a href="./Email::MIME.html#CONTRIBUTORS">CONTRIBUTORS</a></li>
+  <li><a href="./Email::MIME.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Email::MIME - easy MIME message handling</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>version 1.953</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p><b>Wait!</b> Before you read this, maybe you just need <a href="./Email::Stuffer.html">Email::Stuffer</a>, which is a much easier-to-use tool for building simple email messages that might have attachments or both plain text and HTML. If that doesn&#39;t do it for you, then by all means keep reading.</p>
+
+<pre><code>  use Email::MIME;
+  my $parsed = Email::MIME-&gt;new($message);
+
+  my @parts = $parsed-&gt;parts; # These will be Email::MIME objects, too.
+  my $decoded = $parsed-&gt;body;
+  my $non_decoded = $parsed-&gt;body_raw;
+
+  my $content_type = $parsed-&gt;content_type;</code></pre>
+
+<p>...or...</p>
+
+<pre><code>  use Email::MIME;
+  use IO::All;
+
+  # multipart message
+  my @parts = (
+      Email::MIME-&gt;create(
+          attributes =&gt; {
+              filename     =&gt; &quot;report.pdf&quot;,
+              content_type =&gt; &quot;application/pdf&quot;,
+              encoding     =&gt; &quot;quoted-printable&quot;,
+              name         =&gt; &quot;2004-financials.pdf&quot;,
+          },
+          body =&gt; io( &quot;2004-financials.pdf&quot; )-&gt;binary-&gt;all,
+      ),
+      Email::MIME-&gt;create(
+          attributes =&gt; {
+              content_type =&gt; &quot;text/plain&quot;,
+              disposition  =&gt; &quot;attachment&quot;,
+              charset      =&gt; &quot;US-ASCII&quot;,
+          },
+          body_str =&gt; &quot;Hello there!&quot;,
+      ),
+  );
+
+  my $email = Email::MIME-&gt;create(
+      header_str =&gt; [
+          From =&gt; &#39;casey@geeknest.com&#39;,
+          To =&gt; [ &#39;user1@host.com&#39;, &#39;Name &lt;user2@host.com&gt;&#39; ],
+          Cc =&gt; Email::Address::XS-&gt;new(&quot;Display Name \N{U+1F600}&quot;, &#39;user@example.com&#39;),
+      ],
+      parts      =&gt; [ @parts ],
+  );
+
+  # nesting parts
+  $email-&gt;parts_set(
+      [
+        $email-&gt;parts,
+        Email::MIME-&gt;create( parts =&gt; [ @parts ] ),
+      ],
+  );
+
+  # standard modifications
+  $email-&gt;header_str_set( &#39;X-PoweredBy&#39; =&gt; &#39;RT v3.0&#39;      );
+  $email-&gt;header_str_set( To            =&gt; rcpts()        );
+  $email-&gt;header_str_set( Cc            =&gt; aux_rcpts()    );
+  $email-&gt;header_str_set( Bcc           =&gt; sekrit_rcpts() );
+
+  # more advanced
+  $_-&gt;encoding_set( &#39;base64&#39; ) for $email-&gt;parts;
+
+  # Quick multipart creation
+  my $email = Email::MIME-&gt;create(
+      header_str =&gt; [
+          From =&gt; &#39;my@address&#39;,
+          To   =&gt; &#39;your@address&#39;,
+      ],
+      parts =&gt; [
+          q[This is part one],
+          q[This is part two],
+          q[These could be binary too],
+      ],
+  );
+
+  print $email-&gt;as_string;</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This is an extension of the <a href="https://metacpan.org/pod/Email::Simple">Email::Simple</a> module, to handle MIME encoded messages. It takes a message as a string, splits it up into its constituent parts, and allows you access to various parts of the message. Headers are decoded from MIME encoding.</p>
+
+<h1 id="PERL-VERSION"><a id="PERL"></a>PERL VERSION</h1>
+
+<p>This library should run on perls released even a long time ago. It should work on any version of perl released in the last five years.</p>
+
+<p>Although it may work on older versions of perl, no guarantee is made that the minimum required version will not be increased. The version may be increased for any reason, and there is no promise that patches will be accepted to lower the minimum required perl.</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<p>Please see <a href="https://metacpan.org/pod/Email::Simple">Email::Simple</a> for the base set of methods. It won&#39;t take very long. Added to that, you have:</p>
+
+<h2 id="create">create</h2>
+
+<pre><code>  my $single = Email::MIME-&gt;create(
+    header_str =&gt; [ ... ],
+    body_str   =&gt; &#39;...&#39;,
+    attributes =&gt; { ... },
+  );
+
+  my $multi = Email::MIME-&gt;create(
+    header_str =&gt; [ ... ],
+    parts      =&gt; [ ... ],
+    attributes =&gt; { ... },
+  );</code></pre>
+
+<p>This method creates a new MIME part. The <code>header_str</code> parameter is a list of headers pairs to include in the message. The value for each pair is expected to be a text string that will be MIME-encoded as needed. Alternatively it can be an object with <code>as_mime_string</code> method which implements conversion of that object to MIME-encoded string. That object method is called with two named input parameters: <code>charset</code> and <code>header_name_length</code>. It should return MIME-encoded representation of the object. As of 2017-07-25, the header-value-as-object code is very young, and may yet change.</p>
+
+<p>In case header name is registered in <code>%Email::MIME::Header::header_to_class_map</code> hash then registered class is used for conversion from Unicode string to 8bit MIME encoding. Value can be either string or array reference to strings. Object is constructed via method <code>from_string</code> with string value (or values in case of array reference) and converted to MIME-encoded string via <code>as_mime_string</code> method.</p>
+
+<p>A similar <code>header</code> parameter can be provided in addition to or instead of <code>header_str</code>. Its values will be used verbatim.</p>
+
+<p><code>attributes</code> is a hash of MIME attributes to assign to the part, and may override portions of the header set in the <code>header</code> parameter. The hash keys correspond directly to methods for modifying a message. The allowed keys are: content_type, charset, name, format, boundary, encoding, disposition, and filename. They will be mapped to <code>&quot;$attr\_set&quot;</code> for message modification.</p>
+
+<p>The <code>parts</code> parameter is a list reference containing <code>Email::MIME</code> objects. Elements of the <code>parts</code> list can also be a non-reference string of data. In that case, an <code>Email::MIME</code> object will be created for you. Simple checks will determine if the part is binary or not, and all parts created in this fashion are encoded with <code>base64</code>, just in case.</p>
+
+<p>If <code>body</code> is given instead of <code>parts</code>, it specifies the body to be used for a flat (subpart-less) MIME message. It is assumed to be a sequence of octets.</p>
+
+<p>If <code>body_str</code> is given instead of <code>body</code> or <code>parts</code>, it is assumed to be a character string to be used as the body. If you provide a <code>body_str</code> parameter, you <b>must</b> provide <code>charset</code> and <code>encoding</code> attributes.</p>
+
+<h2 id="content_type_set">content_type_set</h2>
+
+<pre><code>  $email-&gt;content_type_set( &#39;text/html&#39; );</code></pre>
+
+<p>Change the content type. All <code>Content-Type</code> header attributes will remain intact.</p>
+
+<h2 id="charset_set">charset_set</h2>
+
+<h2 id="name_set">name_set</h2>
+
+<h2 id="format_set">format_set</h2>
+
+<h2 id="boundary_set">boundary_set</h2>
+
+<pre><code>  $email-&gt;charset_set( &#39;UTF-8&#39; );
+  $email-&gt;name_set( &#39;some_filename.txt&#39; );
+  $email-&gt;format_set( &#39;flowed&#39; );
+  $email-&gt;boundary_set( undef ); # remove the boundary</code></pre>
+
+<p>These four methods modify common <code>Content-Type</code> attributes. If set to <code>undef</code>, the attribute is removed. All other <code>Content-Type</code> header information is preserved when modifying an attribute.</p>
+
+<h2 id="encode_check">encode_check</h2>
+
+<h2 id="encode_check_set">encode_check_set</h2>
+
+<pre><code>  $email-&gt;encode_check;
+  $email-&gt;encode_check_set(0);
+  $email-&gt;encode_check_set(Encode::FB_DEFAULT);</code></pre>
+
+<p>Gets/sets the current <code>encode_check</code> setting (default: <i>FB_CROAK</i>). This is the parameter passed to <a href="https://metacpan.org/pod/Encode#decode">&quot;decode&quot; in Encode</a> and <a href="https://metacpan.org/pod/Encode#encode">&quot;encode&quot; in Encode</a> when <code>body_str()</code>, <code>body_str_set()</code>, and <code>create()</code> are called.</p>
+
+<p>With the default setting, Email::MIME may crash if the claimed charset of a body does not match its contents (for example - utf8 data in a text/plain; charset=us-ascii message).</p>
+
+<p>With an <code>encode_check</code> of 0, the unrecognized bytes will instead be replaced with the <code>REPLACEMENT CHARACTER</code> (U+0FFFD), and may end up as either that or question marks (?).</p>
+
+<p>See <a href="https://metacpan.org/pod/Encode#Handling-Malformed-Data">&quot;Handling Malformed Data&quot; in Encode</a> for more information.</p>
+
+<h2 id="encoding_set">encoding_set</h2>
+
+<pre><code>  $email-&gt;encoding_set( &#39;base64&#39; );
+  $email-&gt;encoding_set( &#39;quoted-printable&#39; );
+  $email-&gt;encoding_set( &#39;8bit&#39; );</code></pre>
+
+<p>Convert the message body and alter the <code>Content-Transfer-Encoding</code> header using this method. Your message body, the output of the <code>body()</code> method, will remain the same. The raw body, output with the <code>body_raw()</code> method, will be changed to reflect the new encoding.</p>
+
+<h2 id="body_set">body_set</h2>
+
+<pre><code>  $email-&gt;body_set( $unencoded_body_string );</code></pre>
+
+<p>This method will encode the new body you send using the encoding specified in the <code>Content-Transfer-Encoding</code> header, then set the body to the new encoded body.</p>
+
+<h2 id="body_str_set">body_str_set</h2>
+
+<pre><code>  $email-&gt;body_str_set($unicode_str);</code></pre>
+
+<p>This method behaves like <code>body_set</code>, but assumes that the given value is a Unicode string that should be encoded into the message&#39;s charset before being set.</p>
+
+<p>The charset must already be set, either manually (via the <code>attributes</code> argument to <code>create</code> or <code>charset_set</code>) or through the <code>Content-Type</code> of a parsed message. If the charset can&#39;t be determined, an exception is thrown.</p>
+
+<h2 id="disposition_set">disposition_set</h2>
+
+<pre><code>  $email-&gt;disposition_set( &#39;attachment&#39; );</code></pre>
+
+<p>Alter the <code>Content-Disposition</code> of a message. All header attributes will remain intact.</p>
+
+<h2 id="filename_set">filename_set</h2>
+
+<pre><code>  $email-&gt;filename_set( &#39;boo.pdf&#39; );</code></pre>
+
+<p>Sets the filename attribute in the <code>Content-Disposition</code> header. All other header information is preserved when setting this attribute.</p>
+
+<h2 id="parts_set">parts_set</h2>
+
+<pre><code>  $email-&gt;parts_set( \@new_parts );</code></pre>
+
+<p>Replaces the parts for an object. Accepts a reference to a list of <code>Email::MIME</code> objects, representing the new parts. If this message was originally a single part, the <code>Content-Type</code> header will be changed to <code>multipart/mixed</code>, and given a new boundary attribute.</p>
+
+<h2 id="parts_add">parts_add</h2>
+
+<pre><code>  $email-&gt;parts_add( \@more_parts );</code></pre>
+
+<p>Adds MIME parts onto the current MIME part. This is a simple extension of <code>parts_set</code> to make our lives easier. It accepts an array reference of additional parts.</p>
+
+<h2 id="walk_parts">walk_parts</h2>
+
+<pre><code>  $email-&gt;walk_parts(sub {
+      my ($part) = @_;
+      return if $part-&gt;subparts; # multipart
+
+      if ( $part-&gt;content_type =~ m[text/html]i ) {
+          my $body = $part-&gt;body;
+          $body =~ s/&lt;link [^&gt;]+&gt;//; # simple filter example
+          $part-&gt;body_set( $body );
+      }
+  });</code></pre>
+
+<p>Walks through all the MIME parts in a message and applies a callback to each. Accepts a code reference as its only argument. The code reference will be passed a single argument, the current MIME part within the top-level MIME object. All changes will be applied in place.</p>
+
+<h2 id="header">header</h2>
+
+<p><b>Achtung!</b> Beware this method! In Email::MIME, it means the same as <code>header_str</code>, but on an Email::Simple object, it means <code>header_raw</code>. Unless you always know what kind of object you have, you could get one of two significantly different behaviors.</p>
+
+<p>Try to use either <code>header_str</code> or <code>header_raw</code> as appropriate.</p>
+
+<h2 id="header_str_set">header_str_set</h2>
+
+<pre><code>  $email-&gt;header_str_set($header_name =&gt; @value_strings);</code></pre>
+
+<p>This behaves like <code>header_raw_set</code>, but expects Unicode (character) strings as the values to set, rather than pre-encoded byte strings. It will encode them as MIME encoded-words if they contain any control or 8-bit characters.</p>
+
+<p>Alternatively, values can be objects with <code>as_mime_string</code> method. Same as in method <code>create</code>.</p>
+
+<h2 id="header_str_pairs">header_str_pairs</h2>
+
+<pre><code>  my @pairs = $email-&gt;header_str_pairs;</code></pre>
+
+<p>This method behaves like <code>header_raw_pairs</code>, returning a list of field name/value pairs, but the values have been decoded to character strings, when possible.</p>
+
+<h2 id="header_as_obj">header_as_obj</h2>
+
+<pre><code>  my $first_obj = $email-&gt;header_as_obj($field);
+  my $nth_obj   = $email-&gt;header_as_obj($field, $index);
+  my @all_objs  = $email-&gt;header_as_obj($field);
+
+  my $nth_obj_of_class  = $email-&gt;header_as_obj($field, $index, $class);
+  my @all_objs_of_class = $email-&gt;header_as_obj($field, undef, $class);</code></pre>
+
+<p>This method returns an object representation of the header value. It instances new object via method <code>from_mime_string</code> of specified class. Input argument for that class method is list of the raw MIME-encoded values. If class argument is not specified then class name is taken from the hash <code>%Email::MIME::Header::header_to_class_map</code> via key field. Use class method <code>Email::MIME::Header-&gt;set_class_for_header($class, $field)</code> for adding new mapping.</p>
+
+<h2 id="parts">parts</h2>
+
+<p>This returns a list of <code>Email::MIME</code> objects reflecting the parts of the message. If it&#39;s a single-part message, you get the original object back.</p>
+
+<p>In scalar context, this method returns the number of parts.</p>
+
+<p>This is a stupid method. Don&#39;t use it.</p>
+
+<h2 id="subparts">subparts</h2>
+
+<p>This returns a list of <code>Email::MIME</code> objects reflecting the parts of the message. If it&#39;s a single-part message, this method returns an empty list.</p>
+
+<p>In scalar context, this method returns the number of subparts.</p>
+
+<h2 id="body">body</h2>
+
+<p>This decodes and returns the body of the object <i>as a byte string</i>. For top-level objects in multi-part messages, this is highly likely to be something like &quot;This is a multi-part message in MIME format.&quot;</p>
+
+<h2 id="body_str">body_str</h2>
+
+<p>This decodes both the Content-Transfer-Encoding layer of the body (like the <code>body</code> method) as well as the charset encoding of the body (unlike the <code>body</code> method), returning a Unicode string.</p>
+
+<p>If the charset is known, it is used. If there is no charset but the content type is either <code>text/plain</code> or <code>text/html</code>, us-ascii is assumed. Otherwise, an exception is thrown.</p>
+
+<h2 id="body_raw">body_raw</h2>
+
+<p>This returns the body of the object, but doesn&#39;t decode the transfer encoding.</p>
+
+<h2 id="decode_hook">decode_hook</h2>
+
+<p>This method is called before the <a href="https://metacpan.org/pod/Email::MIME::Encodings">Email::MIME::Encodings</a> <code>decode</code> method, to decode the body of non-binary messages (or binary messages, if the <code>force_decode_hook</code> method returns true). By default, this method does nothing, but subclasses may define behavior.</p>
+
+<p>This method could be used to implement the decryption of content in secure email, for example.</p>
+
+<h2 id="content_type">content_type</h2>
+
+<p>This is a shortcut for access to the content type header.</p>
+
+<h2 id="filename">filename</h2>
+
+<p>This provides the suggested filename for the attachment part. Normally it will return the filename from the headers, but if <code>filename</code> is passed a true parameter, it will generate an appropriate &quot;stable&quot; filename if one is not found in the MIME headers.</p>
+
+<h2 id="invent_filename">invent_filename</h2>
+
+<pre><code>  my $filename = Email::MIME-&gt;invent_filename($content_type);</code></pre>
+
+<p>This routine is used by <code>filename</code> to generate filenames for attached files. It will attempt to choose a reasonable extension, falling back to <i>dat</i>.</p>
+
+<h2 id="debug_structure">debug_structure</h2>
+
+<pre><code>  my $description = $email-&gt;debug_structure;</code></pre>
+
+<p>This method returns a string that describes the structure of the MIME entity. For example:</p>
+
+<pre><code>  + multipart/alternative; boundary=&quot;=_NextPart_2&quot;; charset=&quot;BIG-5&quot;
+    + text/plain
+    + text/html</code></pre>
+
+<h1 id="CONFIGURATION">CONFIGURATION</h1>
+
+<p>The variable <code>$Email::MIME::MAX_DEPTH</code> is the maximum depth of parts that will be processed. It defaults to 10, already higher than legitimate mail is ever likely to be. This value may go up over time as the parser is improved.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="https://metacpan.org/pod/Email::Simple">Email::Simple</a></p>
+
+<h1 id="THANKS">THANKS</h1>
+
+<p>This module was generously sponsored by Best Practical (http://www.bestpractical.com/), Pete Sergeant, and Pobox.com.</p>
+
+<h1 id="AUTHORS">AUTHORS</h1>
+
+<ul>
+
+<li><p>Ricardo SIGNES &lt;cpan@semiotic.systems&gt;</p>
+
+</li>
+<li><p>Casey West &lt;casey@geeknest.com&gt;</p>
+
+</li>
+<li><p>Simon Cozens &lt;simon@cpan.org&gt;</p>
+
+</li>
+</ul>
+
+<h1 id="CONTRIBUTORS">CONTRIBUTORS</h1>
+
+<ul>
+
+<li><p>Alex Vandiver &lt;alexmv@mit.edu&gt;</p>
+
+</li>
+<li><p>Anirvan Chatterjee &lt;anirvan@users.noreply.github.com&gt;</p>
+
+</li>
+<li><p>Arthur Axel &#39;fREW&#39; Schmidt &lt;frioux@gmail.com&gt;</p>
+
+</li>
+<li><p>Brian Cassidy &lt;bricas@cpan.org&gt;</p>
+
+</li>
+<li><p>Damian Lukowski &lt;damian.lukowski@credativ.de&gt;</p>
+
+</li>
+<li><p>Dan Book &lt;grinnz@gmail.com&gt;</p>
+
+</li>
+<li><p>David Steinbrunner &lt;dsteinbrunner@pobox.com&gt;</p>
+
+</li>
+<li><p>Dotan Dimet &lt;dotan@corky.net&gt;</p>
+
+</li>
+<li><p>dxdc &lt;dan@element26.net&gt;</p>
+
+</li>
+<li><p>Eric Wong &lt;e@80x24.org&gt;</p>
+
+</li>
+<li><p>Geraint Edwards &lt;gedge-oss@yadn.org&gt;</p>
+
+</li>
+<li><p>ivulfson &lt;9122139+ivulfson@users.noreply.github.com&gt;</p>
+
+</li>
+<li><p>Jesse Luehrs &lt;doy@tozt.net&gt;</p>
+
+</li>
+<li><p>Kurt Anderson &lt;kboth@drkurt.com&gt;</p>
+
+</li>
+<li><p>Lance A. Brown &lt;lance@bearcircle.net&gt;</p>
+
+</li>
+<li><p>Matthew Horsfall &lt;wolfsage@gmail.com&gt;</p>
+
+</li>
+<li><p>memememomo &lt;memememomo@gmail.com&gt;</p>
+
+</li>
+<li><p>Michael McClimon &lt;michael@mcclimon.org&gt;</p>
+
+</li>
+<li><p>Mishrakk &lt;48946018+Mishrakk@users.noreply.github.com&gt;</p>
+
+</li>
+<li><p>Pali &lt;pali@cpan.org&gt;</p>
+
+</li>
+<li><p>Ricardo Signes &lt;rjbs@semiotic.systems&gt;</p>
+
+</li>
+<li><p>Shawn Sorichetti &lt;ssoriche@coloredblocks.com&gt;</p>
+
+</li>
+<li><p>Tomohiro Hosaka &lt;bokutin@bokut.in&gt;</p>
+
+</li>
+</ul>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>This software is copyright (c) 2004 by Simon Cozens and Casey West.</p>
+
+<p>This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Email::MIME, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Email::MIME</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Email::MIME</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Email::MIME.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

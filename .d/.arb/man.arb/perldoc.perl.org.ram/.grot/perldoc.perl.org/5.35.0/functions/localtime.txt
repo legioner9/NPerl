@@ -1,0 +1,82 @@
+=over
+
+=item localtime EXPR
+X<localtime> X<ctime>
+
+=item localtime
+
+Converts a time as returned by the time function to a 9-element list
+with the time analyzed for the local time zone.  Typically used as
+follows:
+
+    #     0    1    2     3     4    5     6     7     8
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+                                                localtime(time);
+
+All list elements are numeric and come straight out of the C `struct
+tm'.  C<$sec>, C<$min>, and C<$hour> are the seconds, minutes, and hours
+of the specified time.
+
+C<$mday> is the day of the month and C<$mon> the month in
+the range C<0..11>, with 0 indicating January and 11 indicating December.
+This makes it easy to get a month name from a list:
+
+    my @abbr = qw(Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec);
+    print "$abbr[$mon] $mday";
+    # $mon=9, $mday=18 gives "Oct 18"
+
+C<$year> contains the number of years since 1900.  To get a 4-digit
+year write:
+
+    $year += 1900;
+
+To get the last two digits of the year (e.g., "01" in 2001) do:
+
+    $year = sprintf("%02d", $year % 100);
+
+C<$wday> is the day of the week, with 0 indicating Sunday and 3 indicating
+Wednesday.  C<$yday> is the day of the year, in the range C<0..364>
+(or C<0..365> in leap years.)
+
+C<$isdst> is true if the specified time occurs when Daylight Saving
+Time is in effect, false otherwise.
+
+If EXPR is omitted, L<C<localtime>|/localtime EXPR> uses the current
+time (as returned by L<C<time>|/time>).
+
+In scalar context, L<C<localtime>|/localtime EXPR> returns the
+L<ctime(3)> value:
+
+ my $now_string = localtime;  # e.g., "Thu Oct 13 04:54:34 1994"
+
+This scalar value is always in English, and is B<not> locale-dependent.
+To get similar but locale-dependent date strings, try for example:
+
+ use POSIX qw(strftime);
+ my $now_string = strftime "%a %b %e %H:%M:%S %Y", localtime;
+ # or for GMT formatted appropriately for your locale:
+ my $now_string = strftime "%a %b %e %H:%M:%S %Y", gmtime;
+
+C$now_string> will be formatted according to the current LC_TIME locale
+the program or thread is running in.  See L<perllocale> for how to set
+up and change that locale.  Note that C<%a> and C<%b>, the short forms
+of the day of the week and the month of the year, may not necessarily be
+three characters wide.
+
+The L<Time::gmtime> and L<Time::localtime> modules provide a convenient,
+by-name access mechanism to the L<C<gmtime>|/gmtime EXPR> and
+L<C<localtime>|/localtime EXPR> functions, respectively.
+
+For a comprehensive date and time representation look at the
+L<DateTime> module on CPAN.
+
+For GMT instead of local time use the L<C<gmtime>|/gmtime EXPR> builtin.
+
+See also the L<C<Time::Local>|Time::Local> module (for converting
+seconds, minutes, hours, and such back to the integer value returned by
+L<C<time>|/time>), and the L<POSIX> module's
+L<C<mktime>|POSIX/C<mktime>> function.
+
+Portability issues: L<perlport/localtime>.
+
+=back

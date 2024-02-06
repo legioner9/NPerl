@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pod::Checker - check pod documents for syntax errors - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Pod::Checker">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Pod::Checker.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Pod::Checker">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Pod::Checker">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Pod::Checker">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Pod::Checker">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Pod::Checker">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Pod::Checker">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Pod::Checker">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Pod::Checker">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Pod::Checker">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Pod::Checker">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Pod::Checker">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Pod::Checker">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Pod::Checker">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Pod::Checker">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Pod::Checker">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Pod::Checker">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Pod::Checker">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Pod::Checker">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Pod::Checker">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Pod::Checker">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Pod::Checker">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Pod::Checker">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Pod::Checker">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Pod::Checker">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Pod::Checker">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Pod::Checker">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Pod::Checker">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Pod::Checker">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Pod::Checker">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Pod::Checker">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Pod::Checker">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Pod::Checker">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Pod::Checker">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Pod::Checker">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Pod::Checker">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Pod::Checker">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Pod::Checker">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Pod::Checker">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Pod::Checker">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Pod::Checker">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Pod::Checker">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Pod::Checker">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Pod::Checker">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Pod::Checker">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Pod::Checker">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Pod::Checker">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Pod::Checker">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Pod::Checker">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Pod::Checker">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Pod::Checker">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Pod::Checker">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Pod::Checker">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Pod::Checker">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Pod::Checker">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Pod::Checker">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Pod::Checker">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Pod::Checker">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Pod::Checker">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Pod::Checker">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Pod::Checker">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Pod::Checker">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Pod::Checker">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Pod::Checker">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Pod::Checker">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Pod::Checker">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Pod::Checker">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Pod::Checker">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Pod::Checker">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Pod::Checker">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Pod::Checker">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Pod::Checker">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Pod::Checker">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Pod::Checker">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Pod::Checker">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Pod::Checker">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Pod::Checker">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Pod::Checker">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Pod::Checker">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Pod::Checker">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Pod::Checker">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Pod::Checker.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Pod::Checker">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Pod::Checker">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Pod::Checker">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Pod::Checker">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Pod::Checker">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Pod::Checker">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Pod::Checker">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Pod::Checker">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Pod::Checker">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Pod::Checker">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Pod::Checker">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Pod::Checker">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Pod::Checker">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Pod::Checker">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Pod::Checker">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Pod::Checker">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Pod::Checker">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Pod::Checker">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Pod::Checker">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Pod::Checker">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Pod::Checker">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Pod::Checker">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Pod::Checker">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Pod::Checker">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Pod::Checker">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Pod::Checker">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Pod::Checker">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Pod::Checker">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Pod::Checker">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Pod::Checker">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Pod::Checker">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Pod::Checker">5.35.1</a>
+          <a class="dropdown-item active" href="./Pod::Checker.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Pod::Checker.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Pod::Checker.html">Pod::Checker</a>
+          <div id="more">
+            (<a href="./Pod::Checker.txt">source</a>,
+            <a href="https://metacpan.org/pod/Pod::Checker">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 1.74</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#OPTIONS/ARGUMENTS">OPTIONS/ARGUMENTS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#podchecker()">podchecker()</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#DIAGNOSTICS">DIAGNOSTICS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#Errors">Errors</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#Warnings">Warnings</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#Hyperlinks">Hyperlinks</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#RETURN-VALUE">RETURN VALUE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#EXAMPLES">EXAMPLES</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#SCRIPTS">SCRIPTS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#INTERFACE">INTERFACE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Checker.html#AUTHOR">AUTHOR</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Pod::Checker.html#NAME">#</a>NAME</h1>
+
+<p>Pod::Checker - check pod documents for syntax errors</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Pod::Checker.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Pod::Checker;
+
+$syntax_okay = podchecker($filepath, $outputpath, %options);
+
+my $checker = Pod::Checker-&gt;new(%options);
+$checker-&gt;parse_from_file($filepath, \*STDERR);</code></pre>
+
+<h1 id="OPTIONS/ARGUMENTS"><a class="permalink" href="./Pod::Checker.html#OPTIONS/ARGUMENTS">#</a><a id="OPTIONS"></a><a id="OPTIONS-ARGUMENTS"></a>OPTIONS/ARGUMENTS</h1>
+
+<p><code>$filepath</code> is the input POD to read and <code>$outputpath</code> is where to write POD syntax error messages. Either argument may be a scalar indicating a file-path, or else a reference to an open filehandle. If unspecified, the input-file it defaults to <code>\*STDIN</code>, and the output-file defaults to <code>\*STDERR</code>.</p>
+
+<h2 id="podchecker()"><a class="permalink" href="./Pod::Checker.html#podchecker()">#</a><a id="podchecker"></a>podchecker()</h2>
+
+<p>This function can take a hash of options:</p>
+
+<dl>
+
+<dt id="-warnings-=&gt;-val"><a class="permalink" href="./Pod::Checker.html#-warnings-=%3E-val">#</a><a id="warnings-val"></a><b>-warnings</b> =&gt; <i>val</i></dt>
+<dd>
+
+<p>Turn warnings on/off. <i>val</i> is usually 1 for on, but higher values trigger additional warnings. See <a href="./Pod::Checker.html#Warnings">&quot;Warnings&quot;</a>.</p>
+
+</dd>
+<dt id="-quiet-=&gt;-val"><a class="permalink" href="./Pod::Checker.html#-quiet-=%3E-val">#</a><a id="quiet-val"></a><b>-quiet</b> =&gt; <i>val</i></dt>
+<dd>
+
+<p>If <code>val</code> is true, do not print any errors/warnings.</p>
+
+</dd>
+</dl>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Pod::Checker.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p><b>podchecker</b> will perform syntax checking of Perl5 POD format documentation.</p>
+
+<p>Curious/ambitious users are welcome to propose additional features they wish to see in <b>Pod::Checker</b> and <b>podchecker</b> and verify that the checks are consistent with <a href="perlpod.html">perlpod</a>.</p>
+
+<p>The following checks are currently performed:</p>
+
+<ul>
+
+<li><p>Unknown &#39;=xxxx&#39; commands, unknown &#39;X&lt;...&gt;&#39; interior-sequences, and unterminated interior sequences.</p>
+
+</li>
+<li><p>Check for proper balancing of <code>=begin</code> and <code>=end</code>. The contents of such a block are generally ignored, i.e. no syntax checks are performed.</p>
+
+</li>
+<li><p>Check for proper nesting and balancing of <code>=over</code>, <code>=item</code> and <code>=back</code>.</p>
+
+</li>
+<li><p>Check for same nested interior-sequences (e.g. <code>L&lt;...L&lt;...&gt;...&gt;</code>).</p>
+
+</li>
+<li><p>Check for malformed or non-existing entities <code>E&lt;...&gt;</code>.</p>
+
+</li>
+<li><p>Check for correct syntax of hyperlinks <code>L&lt;...&gt;</code>. See <a href="perlpod.html">perlpod</a> for details.</p>
+
+</li>
+<li><p>Check for unresolved document-internal links. This check may also reveal misspelled links that seem to be internal links but should be links to something else.</p>
+
+</li>
+</ul>
+
+<h1 id="DIAGNOSTICS"><a class="permalink" href="./Pod::Checker.html#DIAGNOSTICS">#</a>DIAGNOSTICS</h1>
+
+<h2 id="Errors"><a class="permalink" href="./Pod::Checker.html#Errors">#</a>Errors</h2>
+
+<ul>
+
+<li><p>empty =headn</p>
+
+<p>A heading (<code>=head1</code> or <code>=head2</code>) without any text? That ain&#39;t no heading!</p>
+
+</li>
+<li><p>=over on line <i>N</i> without closing =back</p>
+
+</li>
+<li><p>You forgot a &#39;=back&#39; before &#39;=head<i>N</i>&#39;</p>
+
+</li>
+<li><p>=over is the last thing in the document?!</p>
+
+<p>The <code>=over</code> command does not have a corresponding <code>=back</code> before the next heading (<code>=head1</code> or <code>=head2</code>) or the end of the file.</p>
+
+</li>
+<li><p>&#39;=item&#39; outside of any &#39;=over&#39;</p>
+
+</li>
+<li><p>=back without =over</p>
+
+<p>An <code>=item</code> or <code>=back</code> command has been found outside a <code>=over</code>/<code>=back</code> block.</p>
+
+</li>
+<li><p>Can&#39;t have a 0 in =over <i>N</i></p>
+
+<p>You need to indent a strictly positive number of spaces, not 0.</p>
+
+</li>
+<li><p>=over should be: &#39;=over&#39; or &#39;=over positive_number&#39;</p>
+
+<p>Either have an argumentless =over, or have its argument a strictly positive number.</p>
+
+</li>
+<li><p>=begin <i>TARGET</i> without matching =end <i>TARGET</i></p>
+
+<p>A <code>=begin</code> command was found that has no matching =end command.</p>
+
+</li>
+<li><p>=begin without a target?</p>
+
+<p>A <code>=begin</code> command was found that is not followed by the formatter specification.</p>
+
+</li>
+<li><p>=end <i>TARGET</i> without matching =begin.</p>
+
+<p>A standalone <code>=end</code> command was found.</p>
+
+</li>
+<li><p>&#39;=end&#39; without a target?</p>
+
+<p>&#39;=end&#39; directives need to have a target, just like =begin directives.</p>
+
+</li>
+<li><p>&#39;=end <i>TARGET</i>&#39; is invalid.</p>
+
+<p><i>TARGET</i> needs to be one word</p>
+
+</li>
+<li><p>=end <i>CONTENT</i> doesn&#39;t match =begin <i>TARGET</i></p>
+
+<p><i>CONTENT</i> needs to match =begin&#39;s <i>TARGET</i>.</p>
+
+</li>
+<li><p>=for without a target?</p>
+
+<p>There is no specification of the formatter after the <code>=for</code> command.</p>
+
+</li>
+<li><p>unresolved internal link <i>NAME</i></p>
+
+<p>The given link to <i>NAME</i> does not have a matching node in the current POD. This also happened when a single word node name is not enclosed in <code>&quot;&quot;</code>.</p>
+
+</li>
+<li><p>Unknown directive: <i>CMD</i></p>
+
+<p>An invalid POD command has been found. Valid are <code>=head1</code>, <code>=head2</code>, <code>=head3</code>, <code>=head4</code>, <code>=over</code>, <code>=item</code>, <code>=back</code>, <code>=begin</code>, <code>=end</code>, <code>=for</code>, <code>=pod</code>, <code>=cut</code></p>
+
+</li>
+<li><p>Deleting unknown formatting code <i>SEQ</i></p>
+
+<p>An invalid markup command has been encountered. Valid are: <code>B&lt;&gt;</code>, <code>C&lt;&gt;</code>, <code>E&lt;&gt;</code>, <code>F&lt;&gt;</code>, <code>I&lt;&gt;</code>, <code>L&lt;&gt;</code>, <code>S&lt;&gt;</code>, <code>X&lt;&gt;</code>, <code>Z&lt;&gt;</code></p>
+
+</li>
+<li><p>Unterminated <i>SEQ</i>&lt;&gt; sequence</p>
+
+<p>An unclosed formatting code</p>
+
+</li>
+<li><p>An E&lt;...&gt; surrounding strange content</p>
+
+<p>The <i>STRING</i> found cannot be interpreted as a character entity.</p>
+
+</li>
+<li><p>An empty E&lt;&gt;</p>
+
+</li>
+<li><p>An empty <code>L&lt;&gt;</code></p>
+
+</li>
+<li><p>An empty X&lt;&gt;</p>
+
+<p>There needs to be content inside E, L, and X formatting codes.</p>
+
+</li>
+<li><p>Spurious text after =pod / =cut</p>
+
+<p>The commands <code>=pod</code> and <code>=cut</code> do not take any arguments.</p>
+
+</li>
+<li><p>=back doesn&#39;t take any parameters, but you said =back <i>ARGUMENT</i></p>
+
+<p>The <code>=back</code> command does not take any arguments.</p>
+
+</li>
+<li><p>=pod directives shouldn&#39;t be over one line long! Ignoring all <i>N</i> lines of content</p>
+
+<p>Self explanatory</p>
+
+</li>
+<li><p>=cut found outside a pod block.</p>
+
+<p>A &#39;=cut&#39; directive found in the middle of non-POD</p>
+
+</li>
+<li><p>Invalid =encoding syntax: <i>CONTENT</i></p>
+
+<p>Syntax error in =encoding directive</p>
+
+</li>
+</ul>
+
+<h2 id="Warnings"><a class="permalink" href="./Pod::Checker.html#Warnings">#</a>Warnings</h2>
+
+<p>These may not necessarily cause trouble, but indicate mediocre style.</p>
+
+<ul>
+
+<li><p>nested commands <i>CMD</i>&lt;...<i>CMD</i>&lt;...&gt;...&gt;</p>
+
+<p>Two nested identical markup commands have been found. Generally this does not make sense.</p>
+
+</li>
+<li><p>multiple occurrences (<i>N</i>) of link target <i>name</i></p>
+
+<p>The POD file has some <code>=item</code> and/or <code>=head</code> commands that have the same text. Potential hyperlinks to such a text cannot be unique then. This warning is printed only with warning level greater than one.</p>
+
+</li>
+<li><p>line containing nothing but whitespace in paragraph</p>
+
+<p>There is some whitespace on a seemingly empty line. POD is very sensitive to such things, so this is flagged. <b>vi</b> users switch on the <b>list</b> option to avoid this problem.</p>
+
+</li>
+<li><p>=item has no contents</p>
+
+<p>There is a list <code>=item</code> that has no text contents. You probably want to delete empty items.</p>
+
+</li>
+<li><p>You can&#39;t have =items (as at line <i>N</i>) unless the first thing after the =over is an =item</p>
+
+<p>A list introduced by <code>=over</code> starts with a text or verbatim paragraph, but continues with <code>=item</code>s. Move the non-item paragraph out of the <code>=over</code>/<code>=back</code> block.</p>
+
+</li>
+<li><p>Expected &#39;=item <i>EXPECTED VALUE</i>&#39;</p>
+
+</li>
+<li><p>Expected &#39;=item *&#39;</p>
+
+</li>
+<li><p>Possible =item type mismatch: &#39;<i>x</i>&#39; found leading a supposed definition =item</p>
+
+<p>A list started with e.g. a bullet-like <code>=item</code> and continued with a numbered one. This is obviously inconsistent. For most translators the type of the <i>first</i> <code>=item</code> determines the type of the list.</p>
+
+</li>
+<li><p>You have &#39;=item x&#39; instead of the expected &#39;=item <i>N</i>&#39;</p>
+
+<p>Erroneous numbering of =item numbers; they need to ascend consecutively.</p>
+
+</li>
+<li><p>Unknown E content in E&lt;<i>CONTENT</i>&gt;</p>
+
+<p>A character entity was found that does not belong to the standard ISO set or the POD specials <code>verbar</code> and <code>sol</code>. <i>Currently, this warning only appears if a character entity was found that does not have a Unicode character. This should be fixed to adhere to the original warning.</i></p>
+
+</li>
+<li><p>empty =over/=back block</p>
+
+<p>The list opened with <code>=over</code> does not contain anything.</p>
+
+</li>
+<li><p>empty section in previous paragraph</p>
+
+<p>The previous section (introduced by a <code>=head</code> command) does not contain any valid content. This usually indicates that something is missing. Note: A <code>=head1</code> followed immediately by <code>=head2</code> does not trigger this warning.</p>
+
+</li>
+<li><p>Verbatim paragraph in NAME section</p>
+
+<p>The NAME section (<code>=head1 NAME</code>) should consist of a single paragraph with the script/module name, followed by a dash `-&#39; and a very short description of what the thing is good for.</p>
+
+</li>
+<li><p>=head<i>n</i> without preceding higher level</p>
+
+<p>For example if there is a <code>=head2</code> in the POD file prior to a <code>=head1</code>.</p>
+
+</li>
+<li><p>A non-empty Z&lt;&gt;</p>
+
+<p>The <code>Z&lt;&gt;</code> sequence is supposed to be empty. Caveat: this issue is detected in <a href="./Pod::Simple.html">Pod::Simple</a> and will be flagged as an <i>ERROR</i> by any client code; any contents of <code>Z&lt;...&gt;</code> will be disregarded, anyway.</p>
+
+</li>
+</ul>
+
+<h2 id="Hyperlinks"><a class="permalink" href="./Pod::Checker.html#Hyperlinks">#</a>Hyperlinks</h2>
+
+<p>There are some warnings with respect to malformed hyperlinks:</p>
+
+<ul>
+
+<li><p>ignoring leading/trailing whitespace in link</p>
+
+<p>There is whitespace at the beginning or the end of the contents of L&lt;...&gt;.</p>
+
+</li>
+<li><p>alternative text/node &#39;%s&#39; contains non-escaped | or /</p>
+
+<p>The characters <code>|</code> and <code>/</code> are special in the L&lt;...&gt; context. Although the hyperlink parser does its best to determine which &quot;/&quot; is text and which is a delimiter in case of doubt, one ought to escape these literal characters like this:</p>
+
+<pre><code class="plaintext">/     E&lt;sol&gt;
+|     E&lt;verbar&gt;</code></pre>
+
+</li>
+</ul>
+
+<p>Note that the line number of the error/warning may refer to the line number of the start of the paragraph in which the error/warning exists, not the line number that the error/warning is on. This bug is present in errors/warnings related to formatting codes. <i>This should be fixed.</i></p>
+
+<h1 id="RETURN-VALUE"><a class="permalink" href="./Pod::Checker.html#RETURN-VALUE">#</a><a id="RETURN"></a>RETURN VALUE</h1>
+
+<p><b>podchecker</b> returns the number of POD syntax errors found or -1 if there were no POD commands at all found in the file.</p>
+
+<h1 id="EXAMPLES"><a class="permalink" href="./Pod::Checker.html#EXAMPLES">#</a>EXAMPLES</h1>
+
+<p>See <a href="./Pod::Checker.html#SYNOPSIS">&quot;SYNOPSIS&quot;</a></p>
+
+<h1 id="SCRIPTS"><a class="permalink" href="./Pod::Checker.html#SCRIPTS">#</a>SCRIPTS</h1>
+
+<p>The <b>podchecker</b> script that comes with this distribution is a lean wrapper around this module. See the online manual with</p>
+
+<pre><code class="plaintext">podchecker -help
+podchecker -man</code></pre>
+
+<h1 id="INTERFACE"><a class="permalink" href="./Pod::Checker.html#INTERFACE">#</a>INTERFACE</h1>
+
+<p>While checking, this module collects document properties, e.g. the nodes for hyperlinks (<code>=headX</code>, <code>=item</code>) and index entries (<code>X&lt;&gt;</code>). POD translators can use this feature to syntax-check and get the nodes in a first pass before actually starting to convert. This is expensive in terms of execution time, but allows for very robust conversions.</p>
+
+<p>Since v1.24 the <b>Pod::Checker</b> module uses only the <b>poderror</b> method to print errors and warnings. The summary output (e.g. &quot;Pod syntax OK&quot;) has been dropped from the module and has been included in <b>podchecker</b> (the script). This allows users of <b>Pod::Checker</b> to control completely the output behavior. Users of <b>podchecker</b> (the script) get the well-known behavior.</p>
+
+<p>v1.45 inherits from <a href="./Pod::Simple.html">Pod::Simple</a> as opposed to all previous versions inheriting from Pod::Parser. Do <b>not</b> use Pod::Simple&#39;s interface when using Pod::Checker unless it is documented somewhere on this page. I repeat, DO <b>NOT</b> USE POD::SIMPLE&#39;S INTERFACE.</p>
+
+<p>The following list documents the overrides to Pod::Simple, primarily to make <a href="./Pod::Coverage.html">Pod::Coverage</a> happy:</p>
+
+<dl>
+
+<dt id="end_B"><a class="permalink" href="./Pod::Checker.html#end_B">#</a>end_B</dt>
+<dd>
+
+</dd>
+<dt id="end_C"><a class="permalink" href="./Pod::Checker.html#end_C">#</a>end_C</dt>
+<dd>
+
+</dd>
+<dt id="end_Document"><a class="permalink" href="./Pod::Checker.html#end_Document">#</a>end_Document</dt>
+<dd>
+
+</dd>
+<dt id="end_F"><a class="permalink" href="./Pod::Checker.html#end_F">#</a>end_F</dt>
+<dd>
+
+</dd>
+<dt id="end_I"><a class="permalink" href="./Pod::Checker.html#end_I">#</a>end_I</dt>
+<dd>
+
+</dd>
+<dt id="end_L"><a class="permalink" href="./Pod::Checker.html#end_L">#</a>end_L</dt>
+<dd>
+
+</dd>
+<dt id="end_Para"><a class="permalink" href="./Pod::Checker.html#end_Para">#</a>end_Para</dt>
+<dd>
+
+</dd>
+<dt id="end_S"><a class="permalink" href="./Pod::Checker.html#end_S">#</a>end_S</dt>
+<dd>
+
+</dd>
+<dt id="end_X"><a class="permalink" href="./Pod::Checker.html#end_X">#</a>end_X</dt>
+<dd>
+
+</dd>
+<dt id="end_fcode"><a class="permalink" href="./Pod::Checker.html#end_fcode">#</a>end_fcode</dt>
+<dd>
+
+</dd>
+<dt id="end_for"><a class="permalink" href="./Pod::Checker.html#end_for">#</a>end_for</dt>
+<dd>
+
+</dd>
+<dt id="end_head"><a class="permalink" href="./Pod::Checker.html#end_head">#</a>end_head</dt>
+<dd>
+
+</dd>
+<dt id="end_head1"><a class="permalink" href="./Pod::Checker.html#end_head1">#</a>end_head1</dt>
+<dd>
+
+</dd>
+<dt id="end_head2"><a class="permalink" href="./Pod::Checker.html#end_head2">#</a>end_head2</dt>
+<dd>
+
+</dd>
+<dt id="end_head3"><a class="permalink" href="./Pod::Checker.html#end_head3">#</a>end_head3</dt>
+<dd>
+
+</dd>
+<dt id="end_head4"><a class="permalink" href="./Pod::Checker.html#end_head4">#</a>end_head4</dt>
+<dd>
+
+</dd>
+<dt id="end_item"><a class="permalink" href="./Pod::Checker.html#end_item">#</a>end_item</dt>
+<dd>
+
+</dd>
+<dt id="end_item_bullet"><a class="permalink" href="./Pod::Checker.html#end_item_bullet">#</a>end_item_bullet</dt>
+<dd>
+
+</dd>
+<dt id="end_item_number"><a class="permalink" href="./Pod::Checker.html#end_item_number">#</a>end_item_number</dt>
+<dd>
+
+</dd>
+<dt id="end_item_text"><a class="permalink" href="./Pod::Checker.html#end_item_text">#</a>end_item_text</dt>
+<dd>
+
+</dd>
+<dt id="handle_pod_and_cut"><a class="permalink" href="./Pod::Checker.html#handle_pod_and_cut">#</a>handle_pod_and_cut</dt>
+<dd>
+
+</dd>
+<dt id="handle_text"><a class="permalink" href="./Pod::Checker.html#handle_text">#</a>handle_text</dt>
+<dd>
+
+</dd>
+<dt id="handle_whiteline"><a class="permalink" href="./Pod::Checker.html#handle_whiteline">#</a>handle_whiteline</dt>
+<dd>
+
+</dd>
+<dt id="hyperlink"><a class="permalink" href="./Pod::Checker.html#hyperlink">#</a>hyperlink</dt>
+<dd>
+
+</dd>
+<dt id="scream"><a class="permalink" href="./Pod::Checker.html#scream">#</a>scream</dt>
+<dd>
+
+</dd>
+<dt id="start_B"><a class="permalink" href="./Pod::Checker.html#start_B">#</a>start_B</dt>
+<dd>
+
+</dd>
+<dt id="start_C"><a class="permalink" href="./Pod::Checker.html#start_C">#</a>start_C</dt>
+<dd>
+
+</dd>
+<dt id="start_Data"><a class="permalink" href="./Pod::Checker.html#start_Data">#</a>start_Data</dt>
+<dd>
+
+</dd>
+<dt id="start_F"><a class="permalink" href="./Pod::Checker.html#start_F">#</a>start_F</dt>
+<dd>
+
+</dd>
+<dt id="start_I"><a class="permalink" href="./Pod::Checker.html#start_I">#</a>start_I</dt>
+<dd>
+
+</dd>
+<dt id="start_L"><a class="permalink" href="./Pod::Checker.html#start_L">#</a>start_L</dt>
+<dd>
+
+</dd>
+<dt id="start_Para"><a class="permalink" href="./Pod::Checker.html#start_Para">#</a>start_Para</dt>
+<dd>
+
+</dd>
+<dt id="start_S"><a class="permalink" href="./Pod::Checker.html#start_S">#</a>start_S</dt>
+<dd>
+
+</dd>
+<dt id="start_Verbatim"><a class="permalink" href="./Pod::Checker.html#start_Verbatim">#</a>start_Verbatim</dt>
+<dd>
+
+</dd>
+<dt id="start_X"><a class="permalink" href="./Pod::Checker.html#start_X">#</a>start_X</dt>
+<dd>
+
+</dd>
+<dt id="start_fcode"><a class="permalink" href="./Pod::Checker.html#start_fcode">#</a>start_fcode</dt>
+<dd>
+
+</dd>
+<dt id="start_for"><a class="permalink" href="./Pod::Checker.html#start_for">#</a>start_for</dt>
+<dd>
+
+</dd>
+<dt id="start_head"><a class="permalink" href="./Pod::Checker.html#start_head">#</a>start_head</dt>
+<dd>
+
+</dd>
+<dt id="start_head1"><a class="permalink" href="./Pod::Checker.html#start_head1">#</a>start_head1</dt>
+<dd>
+
+</dd>
+<dt id="start_head2"><a class="permalink" href="./Pod::Checker.html#start_head2">#</a>start_head2</dt>
+<dd>
+
+</dd>
+<dt id="start_head3"><a class="permalink" href="./Pod::Checker.html#start_head3">#</a>start_head3</dt>
+<dd>
+
+</dd>
+<dt id="start_head4"><a class="permalink" href="./Pod::Checker.html#start_head4">#</a>start_head4</dt>
+<dd>
+
+</dd>
+<dt id="start_item_bullet"><a class="permalink" href="./Pod::Checker.html#start_item_bullet">#</a>start_item_bullet</dt>
+<dd>
+
+</dd>
+<dt id="start_item_number"><a class="permalink" href="./Pod::Checker.html#start_item_number">#</a>start_item_number</dt>
+<dd>
+
+</dd>
+<dt id="start_item_text"><a class="permalink" href="./Pod::Checker.html#start_item_text">#</a>start_item_text</dt>
+<dd>
+
+</dd>
+<dt id="start_over"><a class="permalink" href="./Pod::Checker.html#start_over">#</a>start_over</dt>
+<dd>
+
+</dd>
+<dt id="start_over_block"><a class="permalink" href="./Pod::Checker.html#start_over_block">#</a>start_over_block</dt>
+<dd>
+
+</dd>
+<dt id="start_over_bullet"><a class="permalink" href="./Pod::Checker.html#start_over_bullet">#</a>start_over_bullet</dt>
+<dd>
+
+</dd>
+<dt id="start_over_empty"><a class="permalink" href="./Pod::Checker.html#start_over_empty">#</a>start_over_empty</dt>
+<dd>
+
+</dd>
+<dt id="start_over_number"><a class="permalink" href="./Pod::Checker.html#start_over_number">#</a>start_over_number</dt>
+<dd>
+
+</dd>
+<dt id="start_over_text"><a class="permalink" href="./Pod::Checker.html#start_over_text">#</a>start_over_text</dt>
+<dd>
+
+</dd>
+<dt id="whine"><a class="permalink" href="./Pod::Checker.html#whine">#</a>whine</dt>
+<dd>
+
+</dd>
+</dl>
+
+<dl>
+
+<dt id="Pod::Checker-&gt;new(-%options-)"><a class="permalink" href="./Pod::Checker.html#Pod::Checker-%3Enew(-%25options-)">#</a><a id="Pod"></a><a id="Pod::Checker-new-options"></a><code>Pod::Checker-&gt;new( %options )</code></dt>
+<dd>
+
+<p>Return a reference to a new Pod::Checker object that inherits from Pod::Simple and is used for calling the required methods later. The following options are recognized:</p>
+
+<p><code>-warnings =&gt; num</code> Print warnings if <code>num</code> is true. The higher the value of <code>num</code>, the more warnings are printed. Currently there are only levels 1 and 2.</p>
+
+<p><code>-quiet =&gt; num</code> If <code>num</code> is true, do not print any errors/warnings. This is useful when Pod::Checker is used to munge POD code into plain text from within POD formatters.</p>
+
+</dd>
+<dt id="$checker-&gt;poderror(-@args-)"><a class="permalink" href="./Pod::Checker.html#$checker-%3Epoderror(-@args-)">#</a><a id="poderror"></a><a id="checker-poderror-args"></a><code>$checker-&gt;poderror( @args )</code></dt>
+<dd>
+
+</dd>
+<dt id="$checker-&gt;poderror(-{%opts},-@args-)"><a class="permalink" href="./Pod::Checker.html#$checker-%3Epoderror(-%7B%25opts%7D,-@args-)">#</a><a id="poderror1"></a><a id="checker-poderror-opts-args"></a><code>$checker-&gt;poderror( {%opts}, @args )</code></dt>
+<dd>
+
+<p>Internal method for printing errors and warnings. If no options are given, simply prints &quot;@_&quot;. The following options are recognized and used to form the output:</p>
+
+<pre><code class="plaintext">-msg</code></pre>
+
+<p>A message to print prior to <code>@args</code>.</p>
+
+<pre><code class="plaintext">-line</code></pre>
+
+<p>The line number the error occurred in.</p>
+
+<pre><code class="plaintext">-file</code></pre>
+
+<p>The file (name) the error occurred in. Defaults to the name of the current file being processed.</p>
+
+<pre><code class="plaintext">-severity</code></pre>
+
+<p>The error level, should be &#39;WARNING&#39; or &#39;ERROR&#39;.</p>
+
+</dd>
+<dt id="$checker-&gt;num_errors()"><a class="permalink" href="./Pod::Checker.html#$checker-%3Enum_errors()">#</a><a id="num_errors"></a><a id="checker-num_errors"></a><code>$checker-&gt;num_errors()</code></dt>
+<dd>
+
+<p>Set (if argument specified) and retrieve the number of errors found.</p>
+
+</dd>
+<dt id="$checker-&gt;num_warnings()"><a class="permalink" href="./Pod::Checker.html#$checker-%3Enum_warnings()">#</a><a id="num_warnings"></a><a id="checker-num_warnings"></a><code>$checker-&gt;num_warnings()</code></dt>
+<dd>
+
+<p>Set (if argument specified) and retrieve the number of warnings found.</p>
+
+</dd>
+<dt id="$checker-&gt;name()"><a class="permalink" href="./Pod::Checker.html#$checker-%3Ename()">#</a><a id="name"></a><a id="checker-name"></a><code>$checker-&gt;name()</code></dt>
+<dd>
+
+<p>Set (if argument specified) and retrieve the canonical name of POD as found in the <code>=head1 NAME</code> section.</p>
+
+</dd>
+<dt id="$checker-&gt;node()"><a class="permalink" href="./Pod::Checker.html#$checker-%3Enode()">#</a><a id="node"></a><a id="checker-node"></a><code>$checker-&gt;node()</code></dt>
+<dd>
+
+<p>Add (if argument specified) and retrieve the nodes (as defined by <code>=headX</code> and <code>=item</code>) of the current POD. The nodes are returned in the order of their occurrence. They consist of plain text, each piece of whitespace is collapsed to a single blank.</p>
+
+</dd>
+<dt id="$checker-&gt;idx()"><a class="permalink" href="./Pod::Checker.html#$checker-%3Eidx()">#</a><a id="idx"></a><a id="checker-idx"></a><code>$checker-&gt;idx()</code></dt>
+<dd>
+
+<p>Add (if argument specified) and retrieve the index entries (as defined by <code>X&lt;&gt;</code>) of the current POD. They consist of plain text, each piece of whitespace is collapsed to a single blank.</p>
+
+</dd>
+<dt id="$checker-&gt;hyperlinks()"><a class="permalink" href="./Pod::Checker.html#$checker-%3Ehyperlinks()">#</a><a id="hyperlinks"></a><a id="checker-hyperlinks"></a><code>$checker-&gt;hyperlinks()</code></dt>
+<dd>
+
+<p>Retrieve an array containing the hyperlinks to things outside the current POD (as defined by <code>L&lt;&gt;</code>).</p>
+
+<p>Each is an instance of a class with the following methods:</p>
+
+</dd>
+<dt id="line()"><a class="permalink" href="./Pod::Checker.html#line()">#</a><a id="line"></a>line()</dt>
+<dd>
+
+<p>Returns the approximate line number in which the link was encountered</p>
+
+</dd>
+<dt id="type()"><a class="permalink" href="./Pod::Checker.html#type()">#</a><a id="type"></a>type()</dt>
+<dd>
+
+<p>Returns the type of the link; one of: <code>&quot;url&quot;</code> for things like <code>http://www.foo</code>, <code>&quot;man&quot;</code> for man pages, or <code>&quot;pod&quot;</code>.</p>
+
+</dd>
+<dt id="page()"><a class="permalink" href="./Pod::Checker.html#page()">#</a><a id="page"></a>page()</dt>
+<dd>
+
+<p>Returns the linked-to page or url.</p>
+
+</dd>
+<dt id="node()"><a class="permalink" href="./Pod::Checker.html#node()">#</a><a id="node1"></a>node()</dt>
+<dd>
+
+<p>Returns the anchor or node within the linked-to page, or an empty string (<code>&quot;&quot;</code>) if none appears in the link.</p>
+
+</dd>
+</dl>
+
+<h1 id="AUTHOR"><a class="permalink" href="./Pod::Checker.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Please report bugs using <a href="http://rt.cpan.org">http://rt.cpan.org</a>.</p>
+
+<p>Brad Appleton &lt;bradapp@enteract.com&gt; (initial version), Marek Rouchal &lt;marekr@cpan.org&gt;, Marc Green &lt;marcgreen@cpan.org&gt; (port to Pod::Simple) Ricardo Signes &lt;rjbs@cpan.org&gt; (more porting to Pod::Simple) Karl Williamson &lt;khw@cpan.org&gt; (more porting to Pod::Simple)</p>
+
+<p>Based on code for <b>Pod::Text::pod2text()</b> written by Tom Christiansen &lt;tchrist@mox.perl.com&gt;</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

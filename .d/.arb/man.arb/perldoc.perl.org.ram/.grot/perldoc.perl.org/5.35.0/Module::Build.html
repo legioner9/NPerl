@@ -1,0 +1,4586 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Module::Build - Build and install Perl modules - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Module-Build - MetaCPAN" href="https://metacpan.org/dist/Module-Build/releases.rss" />
+        <link rel="canonical" href="./Module::Build.html" />
+        <meta name="description" content="Build and install Perl modules" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Module::Build" />
+<meta name="twitter:title"       content="Module::Build" />
+<meta name="twitter:description" content="Build and install Perl modules" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Module::Build.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Module-Build was released.">
+      <span class="relatize">28 Apr 2023 08:59:31 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Module-Build">Module-Build</a>
+  </li>
+  <li>
+    Module version: 0.4234
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Module-Build/source/lib/Module/Build.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Module-Build/source/lib/Module/Build.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Module-Build/source/lib/Module">Browse</a>
+    (<a href="https://metacpan.org/dist/Module-Build/source/lib/Module?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Module-Build/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Module-Build/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/Perl-Toolchain-Gang/Module-Build">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Module-Build">Issues</a>
+      (116)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Module-Build+0.4234" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/M/Module-Build.html?oncpan=1&amp;distmat=1&amp;version=0.4234&amp;grade=2" style="color: #090">678</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/M/Module-Build.html?oncpan=1&amp;distmat=1&amp;version=0.4234&amp;grade=3" style="color: #900">9</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/M/Module-Build.html?oncpan=1&amp;distmat=1&amp;version=0.4234&amp;grade=4">1</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/LEONT/Module-Build-0.4234">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Module-Build who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 2
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Module-Build-0.4234/index.html">63.80% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.6.1
+    </li>
+    <li class="chat-banner">
+      <div><a rel="noopener nofollow" target="_blank" href="https://kiwiirc.com/nextclient/#irc://irc.perl.org/#toolchain?nick=mc-guest-?">Chat with us!</a></div>
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Module-Build/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/L/LE/LEONT/Module-Build-0.4234.tar.gz">
+      Download (<span itemprop="fileSize">304.36KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FLEONT%2FModule-Build-0.4234%2Flib%2FModule%2FBuild.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Module-Build/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Module-Build/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Module-Build">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Module-Build">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Module/Build.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_35"
+>0.42_35 DEV
+  (LEONT on 2023-04-30)</option>
+<option
+  disabled
+  value="LEONT/Module-Build-0.4234"
+>0.4234
+  (LEONT on 2023-04-28)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_33"
+>0.42_33 DEV
+  (LEONT on 2023-03-29)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4232"
+>0.4232
+  (LEONT on 2022-12-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3800"
+>0.3800
+  (DAGOLDEN on 2011-03-05)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.33"
+>0.33
+  (EWILHELM on 2009-05-04)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.32_01"
+>0.32_01 DEV
+  (EWILHELM on 2009-04-15)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.32"
+>0.32
+  (EWILHELM on 2009-02-26)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31_04"
+>0.31_04 DEV
+  (EWILHELM on 2009-02-20)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31_03"
+>0.31_03 DEV
+  (EWILHELM on 2009-02-08)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31_02"
+>0.31_02 DEV
+  (EWILHELM on 2009-01-27)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31012"
+>0.31012
+  (EWILHELM on 2009-01-14)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31011"
+>0.31011
+  (EWILHELM on 2009-01-13)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.3101"
+>0.3101
+  (EWILHELM on 2009-01-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.31"
+>0.31
+  (KWILLIAMS on 2008-12-20)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.30_02"
+>0.30_02 DEV
+  (EWILHELM on 2008-12-15)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.30_01"
+>0.30_01 DEV
+  (EWILHELM on 2008-12-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.30"
+>0.30
+  (KWILLIAMS on 2008-09-26)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_05"
+>0.2808_05 DEV
+  (EWILHELM on 2008-09-19)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_04"
+>0.2808_04 DEV
+  (EWILHELM on 2008-09-12)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_03"
+>0.2808_03 DEV
+  (EWILHELM on 2008-09-01)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_02"
+>0.2808_02 DEV
+  (EWILHELM on 2008-07-10)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2808_01"
+>0.2808_01 DEV
+  (KWILLIAMS on 2007-10-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2808"
+>0.2808
+  (KWILLIAMS on 2007-04-28)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="LEONT/Module-Build-0.4231"
+>0.4231
+  (LEONT on 2020-01-29)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_30"
+>0.42_30 DEV
+  (LEONT on 2019-07-31)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4229"
+>0.4229
+  (LEONT on 2019-04-15)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_28"
+>0.42_28 DEV
+  (LEONT on 2018-04-19)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_26"
+>0.42_26 DEV
+  (LEONT on 2017-12-13)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4224"
+>0.4224
+  (LEONT on 2017-05-30)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_23"
+>0.42_23 DEV
+  (LEONT on 2017-05-14)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4222"
+>0.4222
+  (LEONT on 2017-03-30)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_21"
+>0.42_21 DEV
+  (LEONT on 2017-03-22)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4220"
+>0.4220
+  (LEONT on 2016-08-16)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_19"
+>0.42_19 DEV
+  (LEONT on 2016-08-07)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4218"
+>0.4218
+  (LEONT on 2016-04-24)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_17"
+>0.42_17 DEV
+  (LEONT on 2016-03-21)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4216"
+>0.4216
+  (LEONT on 2016-01-20)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_15"
+>0.42_15 DEV
+  (LEONT on 2015-11-28)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4214"
+>0.4214
+  (LEONT on 2015-06-11)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_13"
+>0.42_13 DEV
+  (LEONT on 2015-06-06)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4212"
+>0.4212
+  (LEONT on 2015-05-16)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4211"
+>0.4211
+  (LEONT on 2015-01-20)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4210"
+>0.4210
+  (LEONT on 2014-09-01)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4209"
+>0.4209
+  (LEONT on 2014-09-01)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4208"
+>0.4208
+  (LEONT on 2014-08-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4207"
+>0.4207
+  (LEONT on 2014-08-16)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4206"
+>0.4206
+  (LEONT on 2014-07-13)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4205"
+>0.4205
+  (LEONT on 2014-02-09)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4204"
+>0.4204
+  (LEONT on 2014-01-11)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4203"
+>0.4203
+  (LEONT on 2013-11-27)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4202"
+>0.4202
+  (LEONT on 2013-11-19)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4201"
+>0.4201
+  (LEONT on 2013-11-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4200"
+>0.4200
+  (LEONT on 2013-11-12)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40_11"
+>0.40_11 DEV
+  (LEONT on 2013-11-06)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40_10"
+>0.40_10 DEV
+  (LEONT on 2013-11-05)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40_09"
+>0.40_09 DEV
+  (LEONT on 2013-11-04)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4008"
+>0.4008
+  (LEONT on 2013-11-04)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4007"
+>0.4007
+  (LEONT on 2013-07-19)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4006"
+>0.4006
+  (LEONT on 2013-07-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4005"
+>0.4005
+  (LEONT on 2013-04-25)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4004"
+>0.4004
+  (LEONT on 2013-03-29)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4003"
+>0.4003
+  (LEONT on 2012-08-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4002"
+>0.4002
+  (LEONT on 2012-07-27)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4001"
+>0.4001
+  (LEONT on 2012-06-26)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40"
+>0.40
+  (LEONT on 2012-02-24)</option>
+<option
+  
+  value="LEONT/Module-Build-0.39_02"
+>0.39_02 DEV
+  (LEONT on 2012-02-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.39_01"
+>0.39_01 DEV
+  (DAGOLDEN on 2011-07-21)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_06"
+>0.37_06 DEV
+  (DAGOLDEN on 2011-03-01)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_05"
+>0.37_05 DEV
+  (DAGOLDEN on 2011-02-20)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_04"
+>0.37_04 DEV
+  (DAGOLDEN on 2011-02-16)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_03"
+>0.37_03 DEV
+  (DAGOLDEN on 2011-02-16)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_02"
+>0.37_02 DEV
+  (DAGOLDEN on 2011-02-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_01"
+>0.37_01 DEV
+  (DAGOLDEN on 2011-02-03)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3624"
+>0.3624
+  (DAGOLDEN on 2011-01-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3623"
+>0.3623
+  (DAGOLDEN on 2011-01-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3622"
+>0.3622
+  (DAGOLDEN on 2011-01-25)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_21"
+>0.36_21 DEV
+  (DAGOLDEN on 2011-01-21)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_20"
+>0.36_20 DEV
+  (DAGOLDEN on 2010-12-10)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_19"
+>0.36_19 DEV
+  (DAGOLDEN on 2010-12-07)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_18"
+>0.36_18 DEV
+  (DAGOLDEN on 2010-12-06)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_17"
+>0.36_17 DEV
+  (DAGOLDEN on 2010-10-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_16"
+>0.36_16 DEV
+  (DAGOLDEN on 2010-08-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_15"
+>0.36_15 DEV
+  (DAGOLDEN on 2010-08-25)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_14"
+>0.36_14 DEV
+  (DAGOLDEN on 2010-08-23)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_13"
+>0.36_13 DEV
+  (DAGOLDEN on 2010-07-29)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_12"
+>0.36_12 DEV
+  (DAGOLDEN on 2010-07-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_11"
+>0.36_11 DEV
+  (DAGOLDEN on 2010-05-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_10"
+>0.36_10 DEV
+  (DAGOLDEN on 2010-05-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_09"
+>0.36_09 DEV
+  (DAGOLDEN on 2010-05-11)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_08"
+>0.36_08 DEV
+  (DAGOLDEN on 2010-04-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3607"
+>0.3607
+  (DAGOLDEN on 2010-04-01)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_06"
+>0.36_06 DEV
+  (DAGOLDEN on 2010-04-01)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3605"
+>0.3605
+  (DAGOLDEN on 2010-03-31)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_04"
+>0.36_04 DEV
+  (DAGOLDEN on 2010-03-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3603"
+>0.3603
+  (DAGOLDEN on 2010-01-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3602"
+>0.3602
+  (DAGOLDEN on 2010-01-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3601"
+>0.3601
+  (DAGOLDEN on 2009-12-21)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36"
+>0.36
+  (DAGOLDEN on 2009-12-20)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_15"
+>0.35_15 DEV
+  (DAGOLDEN on 2009-12-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_14"
+>0.35_14 DEV
+  (DAGOLDEN on 2009-12-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_13"
+>0.35_13 DEV
+  (DAGOLDEN on 2009-12-05)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_12"
+>0.35_12 DEV
+  (DAGOLDEN on 2009-12-05)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_11"
+>0.35_11 DEV
+  (DAGOLDEN on 2009-12-03)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_10"
+>0.35_10 DEV
+  (DAGOLDEN on 2009-11-25)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_09"
+>0.35_09 DEV
+  (DAGOLDEN on 2009-11-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_08"
+>0.35_08 DEV
+  (DAGOLDEN on 2009-11-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_07"
+>0.35_07 DEV
+  (DAGOLDEN on 2009-11-14)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_06"
+>0.35_06 DEV
+  (DAGOLDEN on 2009-11-13)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_05"
+>0.35_05 DEV
+  (DAGOLDEN on 2009-10-28)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_04"
+>0.35_04 DEV
+  (DAGOLDEN on 2009-10-23)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_03"
+>0.35_03 DEV
+  (DAGOLDEN on 2009-10-22)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3500_01"
+>0.3500_01 DEV
+  (DAGOLDEN on 2009-09-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_02"
+>0.35_02 DEV
+  (DAGOLDEN on 2009-09-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_01"
+>0.35_01 DEV
+  (DAGOLDEN on 2009-08-31)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35"
+>0.35
+  (DAGOLDEN on 2009-08-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_06"
+>0.34_06 DEV
+  (DAGOLDEN on 2009-08-23)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_05"
+>0.34_05 DEV
+  (DAGOLDEN on 2009-08-10)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.340201"
+>0.340201
+  (DAGOLDEN on 2009-08-10)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_04"
+>0.34_04 DEV
+  (DAGOLDEN on 2009-08-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_03"
+>0.34_03 DEV
+  (DAGOLDEN on 2009-08-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_02"
+>0.34_02 DEV
+  (DAGOLDEN on 2009-07-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_01"
+>0.34_01 DEV
+  (DAGOLDEN on 2009-07-18)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34"
+>0.34
+  (DAGOLDEN on 2009-07-07)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_06"
+>0.33_06 DEV
+  (DAGOLDEN on 2009-07-05)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_05"
+>0.33_05 DEV
+  (DAGOLDEN on 2009-06-29)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_04"
+>0.33_04 DEV
+  (DAGOLDEN on 2009-06-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_03"
+>0.33_03 DEV
+  (DAGOLDEN on 2009-06-22)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_02"
+>0.33_02 DEV
+  (DAGOLDEN on 2009-06-15)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_01"
+>0.33_01 DEV
+  (DAGOLDEN on 2009-06-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2807"
+>0.2807
+  (KWILLIAMS on 2007-03-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2806"
+>0.2806
+  (KWILLIAMS on 2006-12-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2805_01"
+>0.2805_01 DEV
+  (KWILLIAMS on 2006-09-08)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2805"
+>0.2805
+  (KWILLIAMS on 2006-07-30)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2804"
+>0.2804
+  (KWILLIAMS on 2006-07-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2803"
+>0.2803
+  (KWILLIAMS on 2006-07-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2802"
+>0.2802
+  (KWILLIAMS on 2006-07-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2801"
+>0.2801
+  (KWILLIAMS on 2006-05-21)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.28"
+>0.28
+  (KWILLIAMS on 2006-04-28)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_10"
+>0.27_10 DEV
+  (KWILLIAMS on 2006-03-29)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_09"
+>0.27_09 DEV
+  (KWILLIAMS on 2006-03-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_08"
+>0.27_08 DEV
+  (KWILLIAMS on 2006-03-04)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2612"
+>0.2612
+  (KWILLIAMS on 2006-03-03)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_07"
+>0.27_07 DEV
+  (KWILLIAMS on 2006-02-02)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_06"
+>0.27_06 DEV
+  (KWILLIAMS on 2006-01-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_05"
+>0.27_05 DEV
+  (KWILLIAMS on 2006-01-13)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_04"
+>0.27_04 DEV
+  (KWILLIAMS on 2005-12-23)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_03"
+>0.27_03 DEV
+  (KWILLIAMS on 2005-10-10)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_02"
+>0.27_02 DEV
+  (KWILLIAMS on 2005-07-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2611"
+>0.2611
+  (KWILLIAMS on 2005-06-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_01"
+>0.27_01 DEV
+  (KWILLIAMS on 2005-04-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2610"
+>0.2610
+  (KWILLIAMS on 2005-04-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2609"
+>0.2609
+  (KWILLIAMS on 2005-03-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2608"
+>0.2608
+  (KWILLIAMS on 2005-01-27)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2607"
+>0.2607
+  (KWILLIAMS on 2004-12-18)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2606"
+>0.2606
+  (KWILLIAMS on 2004-12-08)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2605"
+>0.2605
+  (KWILLIAMS on 2004-11-30)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2604"
+>0.2604
+  (KWILLIAMS on 2004-11-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2603"
+>0.2603
+  (KWILLIAMS on 2004-11-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2602"
+>0.2602
+  (KWILLIAMS on 2004-11-04)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2601"
+>0.2601
+  (KWILLIAMS on 2004-11-04)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.26"
+>0.26
+  (KWILLIAMS on 2004-10-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25_03"
+>0.25_03 DEV
+  (KWILLIAMS on 2004-09-05)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25_02"
+>0.25_02 DEV
+  (KWILLIAMS on 2004-07-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25_01"
+>0.25_01 DEV
+  (KWILLIAMS on 2004-06-02)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25"
+>0.25
+  (KWILLIAMS on 2004-04-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.24_01"
+>0.24_01 DEV
+  (KWILLIAMS on 2004-04-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.24"
+>0.24
+  (KWILLIAMS on 2004-02-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.23"
+>0.23
+  (KWILLIAMS on 2004-02-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.22"
+>0.22
+  (KWILLIAMS on 2004-01-11)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.21_02"
+>0.21_02 DEV
+  (KWILLIAMS on 2003-12-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.21_01"
+>0.21_01 DEV
+  (KWILLIAMS on 2003-12-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.21"
+>0.21
+  (KWILLIAMS on 2003-10-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.20_02"
+>0.20_02 DEV
+  (KWILLIAMS on 2003-09-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.20_01"
+>0.20_01 DEV
+  (KWILLIAMS on 2003-09-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.20"
+>0.20
+  (KWILLIAMS on 2003-08-26)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_05"
+>0.19_05 DEV
+  (KWILLIAMS on 2003-08-18)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_04"
+>0.19_04 DEV
+  (KWILLIAMS on 2003-08-01)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_03"
+>0.19_03 DEV
+  (KWILLIAMS on 2003-07-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_02"
+>0.19_02 DEV
+  (KWILLIAMS on 2003-07-21)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19"
+>0.19
+  (KWILLIAMS on 2003-07-10)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_04"
+>0.18_04 DEV
+  (KWILLIAMS on 2003-07-03)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_03"
+>0.18_03 DEV
+  (KWILLIAMS on 2003-07-01)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_02"
+>0.18_02 DEV
+  (KWILLIAMS on 2003-06-03)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_01"
+>0.18_01 DEV
+  (KWILLIAMS on 2003-05-22)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18"
+>0.18
+  (KWILLIAMS on 2003-04-08)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.17"
+>0.17
+  (KWILLIAMS on 2003-03-30)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.16"
+>0.16
+  (KWILLIAMS on 2003-02-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.15"
+>0.15
+  (KWILLIAMS on 2003-01-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.14"
+>0.14
+  (KWILLIAMS on 2002-12-13)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.13"
+>0.13
+  (KWILLIAMS on 2002-11-20)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.12"
+>0.12
+  (KWILLIAMS on 2002-11-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.11"
+>0.11
+  (KWILLIAMS on 2002-08-23)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.10"
+>0.10
+  (KWILLIAMS on 2002-08-07)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.09"
+>0.09
+  (KWILLIAMS on 2002-06-28)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.08"
+>0.08
+  (KWILLIAMS on 2002-06-26)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.07"
+>0.07
+  (KWILLIAMS on 2002-06-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.06"
+>0.06
+  (KWILLIAMS on 2002-04-02)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.05_01"
+>0.05_01 DEV
+  (KWILLIAMS on 2002-03-31)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.05"
+>0.05
+  (KWILLIAMS on 2002-01-11)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.04_01"
+>0.04_01 DEV
+  (KWILLIAMS on 2001-11-21)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.04"
+>0.04
+  (KWILLIAMS on 2001-11-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.03_1"
+>0.03_1 DEV
+  (KWILLIAMS on 2001-11-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.03"
+>0.03
+  (KWILLIAMS on 2001-11-11)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.02"
+>0.02
+  (KWILLIAMS on 2001-09-05)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.01"
+>0.01
+  (KWILLIAMS on 2001-08-11)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/LEONT/Module-Build-0.4234/diff/' + encodeURIComponent(this.value) + '/lib/Module/Build.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_35"
+>0.42_35 DEV
+  (LEONT on 2023-04-30)</option>
+<option
+  disabled
+  value="LEONT/Module-Build-0.4234"
+>0.4234
+  (LEONT on 2023-04-28)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_33"
+>0.42_33 DEV
+  (LEONT on 2023-03-29)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4232"
+>0.4232
+  (LEONT on 2022-12-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3800"
+>0.3800
+  (DAGOLDEN on 2011-03-05)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.33"
+>0.33
+  (EWILHELM on 2009-05-04)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.32_01"
+>0.32_01 DEV
+  (EWILHELM on 2009-04-15)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.32"
+>0.32
+  (EWILHELM on 2009-02-26)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31_04"
+>0.31_04 DEV
+  (EWILHELM on 2009-02-20)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31_03"
+>0.31_03 DEV
+  (EWILHELM on 2009-02-08)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31_02"
+>0.31_02 DEV
+  (EWILHELM on 2009-01-27)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31012"
+>0.31012
+  (EWILHELM on 2009-01-14)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31011"
+>0.31011
+  (EWILHELM on 2009-01-13)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.3101"
+>0.3101
+  (EWILHELM on 2009-01-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.31"
+>0.31
+  (KWILLIAMS on 2008-12-20)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.30_02"
+>0.30_02 DEV
+  (EWILHELM on 2008-12-15)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.30_01"
+>0.30_01 DEV
+  (EWILHELM on 2008-12-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.30"
+>0.30
+  (KWILLIAMS on 2008-09-26)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_05"
+>0.2808_05 DEV
+  (EWILHELM on 2008-09-19)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_04"
+>0.2808_04 DEV
+  (EWILHELM on 2008-09-12)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_03"
+>0.2808_03 DEV
+  (EWILHELM on 2008-09-01)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_02"
+>0.2808_02 DEV
+  (EWILHELM on 2008-07-10)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2808_01"
+>0.2808_01 DEV
+  (KWILLIAMS on 2007-10-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2808"
+>0.2808
+  (KWILLIAMS on 2007-04-28)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="LEONT/Module-Build-0.4231"
+>0.4231
+  (LEONT on 2020-01-29)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_30"
+>0.42_30 DEV
+  (LEONT on 2019-07-31)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4229"
+>0.4229
+  (LEONT on 2019-04-15)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_28"
+>0.42_28 DEV
+  (LEONT on 2018-04-19)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_26"
+>0.42_26 DEV
+  (LEONT on 2017-12-13)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4224"
+>0.4224
+  (LEONT on 2017-05-30)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_23"
+>0.42_23 DEV
+  (LEONT on 2017-05-14)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4222"
+>0.4222
+  (LEONT on 2017-03-30)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_21"
+>0.42_21 DEV
+  (LEONT on 2017-03-22)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4220"
+>0.4220
+  (LEONT on 2016-08-16)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_19"
+>0.42_19 DEV
+  (LEONT on 2016-08-07)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4218"
+>0.4218
+  (LEONT on 2016-04-24)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_17"
+>0.42_17 DEV
+  (LEONT on 2016-03-21)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4216"
+>0.4216
+  (LEONT on 2016-01-20)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_15"
+>0.42_15 DEV
+  (LEONT on 2015-11-28)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4214"
+>0.4214
+  (LEONT on 2015-06-11)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_13"
+>0.42_13 DEV
+  (LEONT on 2015-06-06)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4212"
+>0.4212
+  (LEONT on 2015-05-16)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4211"
+>0.4211
+  (LEONT on 2015-01-20)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4210"
+>0.4210
+  (LEONT on 2014-09-01)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4209"
+>0.4209
+  (LEONT on 2014-09-01)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4208"
+>0.4208
+  (LEONT on 2014-08-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4207"
+>0.4207
+  (LEONT on 2014-08-16)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4206"
+>0.4206
+  (LEONT on 2014-07-13)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4205"
+>0.4205
+  (LEONT on 2014-02-09)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4204"
+>0.4204
+  (LEONT on 2014-01-11)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4203"
+>0.4203
+  (LEONT on 2013-11-27)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4202"
+>0.4202
+  (LEONT on 2013-11-19)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4201"
+>0.4201
+  (LEONT on 2013-11-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4200"
+>0.4200
+  (LEONT on 2013-11-12)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40_11"
+>0.40_11 DEV
+  (LEONT on 2013-11-06)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40_10"
+>0.40_10 DEV
+  (LEONT on 2013-11-05)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40_09"
+>0.40_09 DEV
+  (LEONT on 2013-11-04)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4008"
+>0.4008
+  (LEONT on 2013-11-04)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4007"
+>0.4007
+  (LEONT on 2013-07-19)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4006"
+>0.4006
+  (LEONT on 2013-07-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4005"
+>0.4005
+  (LEONT on 2013-04-25)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4004"
+>0.4004
+  (LEONT on 2013-03-29)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4003"
+>0.4003
+  (LEONT on 2012-08-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4002"
+>0.4002
+  (LEONT on 2012-07-27)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4001"
+>0.4001
+  (LEONT on 2012-06-26)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40"
+>0.40
+  (LEONT on 2012-02-24)</option>
+<option
+  
+  value="LEONT/Module-Build-0.39_02"
+>0.39_02 DEV
+  (LEONT on 2012-02-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.39_01"
+>0.39_01 DEV
+  (DAGOLDEN on 2011-07-21)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_06"
+>0.37_06 DEV
+  (DAGOLDEN on 2011-03-01)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_05"
+>0.37_05 DEV
+  (DAGOLDEN on 2011-02-20)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_04"
+>0.37_04 DEV
+  (DAGOLDEN on 2011-02-16)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_03"
+>0.37_03 DEV
+  (DAGOLDEN on 2011-02-16)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_02"
+>0.37_02 DEV
+  (DAGOLDEN on 2011-02-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_01"
+>0.37_01 DEV
+  (DAGOLDEN on 2011-02-03)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3624"
+>0.3624
+  (DAGOLDEN on 2011-01-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3623"
+>0.3623
+  (DAGOLDEN on 2011-01-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3622"
+>0.3622
+  (DAGOLDEN on 2011-01-25)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_21"
+>0.36_21 DEV
+  (DAGOLDEN on 2011-01-21)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_20"
+>0.36_20 DEV
+  (DAGOLDEN on 2010-12-10)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_19"
+>0.36_19 DEV
+  (DAGOLDEN on 2010-12-07)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_18"
+>0.36_18 DEV
+  (DAGOLDEN on 2010-12-06)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_17"
+>0.36_17 DEV
+  (DAGOLDEN on 2010-10-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_16"
+>0.36_16 DEV
+  (DAGOLDEN on 2010-08-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_15"
+>0.36_15 DEV
+  (DAGOLDEN on 2010-08-25)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_14"
+>0.36_14 DEV
+  (DAGOLDEN on 2010-08-23)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_13"
+>0.36_13 DEV
+  (DAGOLDEN on 2010-07-29)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_12"
+>0.36_12 DEV
+  (DAGOLDEN on 2010-07-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_11"
+>0.36_11 DEV
+  (DAGOLDEN on 2010-05-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_10"
+>0.36_10 DEV
+  (DAGOLDEN on 2010-05-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_09"
+>0.36_09 DEV
+  (DAGOLDEN on 2010-05-11)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_08"
+>0.36_08 DEV
+  (DAGOLDEN on 2010-04-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3607"
+>0.3607
+  (DAGOLDEN on 2010-04-01)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_06"
+>0.36_06 DEV
+  (DAGOLDEN on 2010-04-01)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3605"
+>0.3605
+  (DAGOLDEN on 2010-03-31)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_04"
+>0.36_04 DEV
+  (DAGOLDEN on 2010-03-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3603"
+>0.3603
+  (DAGOLDEN on 2010-01-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3602"
+>0.3602
+  (DAGOLDEN on 2010-01-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3601"
+>0.3601
+  (DAGOLDEN on 2009-12-21)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36"
+>0.36
+  (DAGOLDEN on 2009-12-20)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_15"
+>0.35_15 DEV
+  (DAGOLDEN on 2009-12-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_14"
+>0.35_14 DEV
+  (DAGOLDEN on 2009-12-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_13"
+>0.35_13 DEV
+  (DAGOLDEN on 2009-12-05)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_12"
+>0.35_12 DEV
+  (DAGOLDEN on 2009-12-05)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_11"
+>0.35_11 DEV
+  (DAGOLDEN on 2009-12-03)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_10"
+>0.35_10 DEV
+  (DAGOLDEN on 2009-11-25)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_09"
+>0.35_09 DEV
+  (DAGOLDEN on 2009-11-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_08"
+>0.35_08 DEV
+  (DAGOLDEN on 2009-11-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_07"
+>0.35_07 DEV
+  (DAGOLDEN on 2009-11-14)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_06"
+>0.35_06 DEV
+  (DAGOLDEN on 2009-11-13)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_05"
+>0.35_05 DEV
+  (DAGOLDEN on 2009-10-28)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_04"
+>0.35_04 DEV
+  (DAGOLDEN on 2009-10-23)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_03"
+>0.35_03 DEV
+  (DAGOLDEN on 2009-10-22)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3500_01"
+>0.3500_01 DEV
+  (DAGOLDEN on 2009-09-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_02"
+>0.35_02 DEV
+  (DAGOLDEN on 2009-09-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_01"
+>0.35_01 DEV
+  (DAGOLDEN on 2009-08-31)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35"
+>0.35
+  (DAGOLDEN on 2009-08-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_06"
+>0.34_06 DEV
+  (DAGOLDEN on 2009-08-23)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_05"
+>0.34_05 DEV
+  (DAGOLDEN on 2009-08-10)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.340201"
+>0.340201
+  (DAGOLDEN on 2009-08-10)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_04"
+>0.34_04 DEV
+  (DAGOLDEN on 2009-08-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_03"
+>0.34_03 DEV
+  (DAGOLDEN on 2009-08-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_02"
+>0.34_02 DEV
+  (DAGOLDEN on 2009-07-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_01"
+>0.34_01 DEV
+  (DAGOLDEN on 2009-07-18)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34"
+>0.34
+  (DAGOLDEN on 2009-07-07)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_06"
+>0.33_06 DEV
+  (DAGOLDEN on 2009-07-05)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_05"
+>0.33_05 DEV
+  (DAGOLDEN on 2009-06-29)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_04"
+>0.33_04 DEV
+  (DAGOLDEN on 2009-06-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_03"
+>0.33_03 DEV
+  (DAGOLDEN on 2009-06-22)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_02"
+>0.33_02 DEV
+  (DAGOLDEN on 2009-06-15)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_01"
+>0.33_01 DEV
+  (DAGOLDEN on 2009-06-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2807"
+>0.2807
+  (KWILLIAMS on 2007-03-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2806"
+>0.2806
+  (KWILLIAMS on 2006-12-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2805_01"
+>0.2805_01 DEV
+  (KWILLIAMS on 2006-09-08)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2805"
+>0.2805
+  (KWILLIAMS on 2006-07-30)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2804"
+>0.2804
+  (KWILLIAMS on 2006-07-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2803"
+>0.2803
+  (KWILLIAMS on 2006-07-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2802"
+>0.2802
+  (KWILLIAMS on 2006-07-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2801"
+>0.2801
+  (KWILLIAMS on 2006-05-21)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.28"
+>0.28
+  (KWILLIAMS on 2006-04-28)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_10"
+>0.27_10 DEV
+  (KWILLIAMS on 2006-03-29)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_09"
+>0.27_09 DEV
+  (KWILLIAMS on 2006-03-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_08"
+>0.27_08 DEV
+  (KWILLIAMS on 2006-03-04)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2612"
+>0.2612
+  (KWILLIAMS on 2006-03-03)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_07"
+>0.27_07 DEV
+  (KWILLIAMS on 2006-02-02)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_06"
+>0.27_06 DEV
+  (KWILLIAMS on 2006-01-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_05"
+>0.27_05 DEV
+  (KWILLIAMS on 2006-01-13)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_04"
+>0.27_04 DEV
+  (KWILLIAMS on 2005-12-23)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_03"
+>0.27_03 DEV
+  (KWILLIAMS on 2005-10-10)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_02"
+>0.27_02 DEV
+  (KWILLIAMS on 2005-07-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2611"
+>0.2611
+  (KWILLIAMS on 2005-06-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_01"
+>0.27_01 DEV
+  (KWILLIAMS on 2005-04-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2610"
+>0.2610
+  (KWILLIAMS on 2005-04-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2609"
+>0.2609
+  (KWILLIAMS on 2005-03-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2608"
+>0.2608
+  (KWILLIAMS on 2005-01-27)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2607"
+>0.2607
+  (KWILLIAMS on 2004-12-18)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2606"
+>0.2606
+  (KWILLIAMS on 2004-12-08)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2605"
+>0.2605
+  (KWILLIAMS on 2004-11-30)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2604"
+>0.2604
+  (KWILLIAMS on 2004-11-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2603"
+>0.2603
+  (KWILLIAMS on 2004-11-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2602"
+>0.2602
+  (KWILLIAMS on 2004-11-04)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2601"
+>0.2601
+  (KWILLIAMS on 2004-11-04)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.26"
+>0.26
+  (KWILLIAMS on 2004-10-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25_03"
+>0.25_03 DEV
+  (KWILLIAMS on 2004-09-05)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25_02"
+>0.25_02 DEV
+  (KWILLIAMS on 2004-07-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25_01"
+>0.25_01 DEV
+  (KWILLIAMS on 2004-06-02)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25"
+>0.25
+  (KWILLIAMS on 2004-04-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.24_01"
+>0.24_01 DEV
+  (KWILLIAMS on 2004-04-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.24"
+>0.24
+  (KWILLIAMS on 2004-02-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.23"
+>0.23
+  (KWILLIAMS on 2004-02-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.22"
+>0.22
+  (KWILLIAMS on 2004-01-11)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.21_02"
+>0.21_02 DEV
+  (KWILLIAMS on 2003-12-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.21_01"
+>0.21_01 DEV
+  (KWILLIAMS on 2003-12-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.21"
+>0.21
+  (KWILLIAMS on 2003-10-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.20_02"
+>0.20_02 DEV
+  (KWILLIAMS on 2003-09-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.20_01"
+>0.20_01 DEV
+  (KWILLIAMS on 2003-09-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.20"
+>0.20
+  (KWILLIAMS on 2003-08-26)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_05"
+>0.19_05 DEV
+  (KWILLIAMS on 2003-08-18)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_04"
+>0.19_04 DEV
+  (KWILLIAMS on 2003-08-01)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_03"
+>0.19_03 DEV
+  (KWILLIAMS on 2003-07-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_02"
+>0.19_02 DEV
+  (KWILLIAMS on 2003-07-21)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19"
+>0.19
+  (KWILLIAMS on 2003-07-10)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_04"
+>0.18_04 DEV
+  (KWILLIAMS on 2003-07-03)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_03"
+>0.18_03 DEV
+  (KWILLIAMS on 2003-07-01)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_02"
+>0.18_02 DEV
+  (KWILLIAMS on 2003-06-03)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_01"
+>0.18_01 DEV
+  (KWILLIAMS on 2003-05-22)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18"
+>0.18
+  (KWILLIAMS on 2003-04-08)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.17"
+>0.17
+  (KWILLIAMS on 2003-03-30)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.16"
+>0.16
+  (KWILLIAMS on 2003-02-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.15"
+>0.15
+  (KWILLIAMS on 2003-01-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.14"
+>0.14
+  (KWILLIAMS on 2002-12-13)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.13"
+>0.13
+  (KWILLIAMS on 2002-11-20)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.12"
+>0.12
+  (KWILLIAMS on 2002-11-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.11"
+>0.11
+  (KWILLIAMS on 2002-08-23)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.10"
+>0.10
+  (KWILLIAMS on 2002-08-07)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.09"
+>0.09
+  (KWILLIAMS on 2002-06-28)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.08"
+>0.08
+  (KWILLIAMS on 2002-06-26)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.07"
+>0.07
+  (KWILLIAMS on 2002-06-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.06"
+>0.06
+  (KWILLIAMS on 2002-04-02)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.05_01"
+>0.05_01 DEV
+  (KWILLIAMS on 2002-03-31)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.05"
+>0.05
+  (KWILLIAMS on 2002-01-11)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.04_01"
+>0.04_01 DEV
+  (KWILLIAMS on 2001-11-21)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.04"
+>0.04
+  (KWILLIAMS on 2001-11-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.03_1"
+>0.03_1 DEV
+  (KWILLIAMS on 2001-11-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.03"
+>0.03
+  (KWILLIAMS on 2001-11-11)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.02"
+>0.02
+  (KWILLIAMS on 2001-09-05)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.01"
+>0.01
+  (KWILLIAMS on 2001-08-11)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/CPAN::Meta" title="CPAN::Meta" class="ellipsis">CPAN::Meta</a></li>
+  <li><a href="https://metacpan.org/pod/Cwd" title="Cwd" class="ellipsis">Cwd</a></li>
+  <li><a href="https://metacpan.org/pod/Data::Dumper" title="Data::Dumper" class="ellipsis">Data::Dumper</a></li>
+  <li><a href="https://metacpan.org/pod/ExtUtils::CBuilder" title="ExtUtils::CBuilder" class="ellipsis">ExtUtils::CBuilder</a></li>
+  <li><a href="https://metacpan.org/pod/ExtUtils::Install" title="ExtUtils::Install" class="ellipsis">ExtUtils::Install</a></li>
+  <li><a href="https://metacpan.org/pod/ExtUtils::Manifest" title="ExtUtils::Manifest" class="ellipsis">ExtUtils::Manifest</a></li>
+  <li><a href="https://metacpan.org/pod/ExtUtils::Mkbootstrap" title="ExtUtils::Mkbootstrap" class="ellipsis">ExtUtils::Mkbootstrap</a></li>
+  <li><a href="https://metacpan.org/pod/ExtUtils::ParseXS" title="ExtUtils::ParseXS" class="ellipsis">ExtUtils::ParseXS</a></li>
+  <li><a href="https://metacpan.org/pod/File::Basename" title="File::Basename" class="ellipsis">File::Basename</a></li>
+  <li><a href="https://metacpan.org/pod/File::Compare" title="File::Compare" class="ellipsis">File::Compare</a></li>
+  <li><a href="https://metacpan.org/pod/File::Copy" title="File::Copy" class="ellipsis">File::Copy</a></li>
+  <li><a href="https://metacpan.org/pod/File::Find" title="File::Find" class="ellipsis">File::Find</a></li>
+  <li><a href="https://metacpan.org/pod/File::Path" title="File::Path" class="ellipsis">File::Path</a></li>
+  <li><a href="https://metacpan.org/pod/File::Spec" title="File::Spec" class="ellipsis">File::Spec</a></li>
+  <li><a href="https://metacpan.org/pod/Getopt::Long" title="Getopt::Long" class="ellipsis">Getopt::Long</a></li>
+  <li><a href="https://metacpan.org/pod/Module::Metadata" title="Module::Metadata" class="ellipsis">Module::Metadata</a></li>
+  <li><a href="https://metacpan.org/pod/Perl::OSType" title="Perl::OSType" class="ellipsis">Perl::OSType</a></li>
+  <li><a href="https://metacpan.org/pod/TAP::Harness" title="TAP::Harness" class="ellipsis">TAP::Harness</a></li>
+  <li><a href="https://metacpan.org/pod/Text::Abbrev" title="Text::Abbrev" class="ellipsis">Text::Abbrev</a></li>
+  <li><a href="https://metacpan.org/pod/Text::ParseWords" title="Text::ParseWords" class="ellipsis">Text::ParseWords</a></li>
+  <li><a href="https://metacpan.org/pod/version" title="version" class="ellipsis">version</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Module::Build/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Module%3A%3ABuild">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Module-Build">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/LEONT/Module-Build-0.4234/view/lib/Module/Build.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Module::Build.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/KRAUTCAT"><img src="https://www.gravatar.com/avatar/efd137d1577aa9df7fc833f6306958d5?d=identicon&amp;s=20" title="KRAUTCAT" alt="KRAUTCAT"></a>
+<a class="display-all" href="https://metacpan.org/author/MAJENSEN"><img src="https://www.gravatar.com/avatar/981c143aac112b6548d5da915242ecdb?d=identicon&amp;s=20" title="MAJENSEN" alt="MAJENSEN"></a>
+<a class="display-all" href="https://metacpan.org/author/HANNIBAL"><img src="https://www.gravatar.com/avatar/325c153e70a65543b9496e0ad7cdca29?d=identicon&amp;s=20" title="HANNIBAL" alt="HANNIBAL"></a>
+<a class="display-all" href="https://metacpan.org/author/KES"><img src="https://www.gravatar.com/avatar/e8530f00b43b4f6a056f8ad4ee52ea47?d=identicon&amp;s=20" title="KES" alt="KES"></a>
+<a class="display-all" href="https://metacpan.org/author/AYOUNG"><img src="https://www.gravatar.com/avatar/8d1e4946c288fbe87d1e0394f3e41b24?d=identicon&amp;s=20" title="AYOUNG" alt="AYOUNG"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Module-Build/plussers">27 PAUSE users</a>
+</div>
+<div>
+    20 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 2 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="KWILLIAMS"
+      data-contrib-email="kwilliams@cpan.org"
+    >
+      <a href="https://metacpan.org/author/KWILLIAMS" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/88e4267539d19a65f372ce2075c05d71?d=identicon&amp;s=20" />
+      Ken Williams
+      </a>
+    </li>
+    <li class="contributor"
+      data-contrib-email="module-build@perl.org"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Module-Build mailing list at.
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/LEONT" class="author-name">Leon Timmermans</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Module/Build.pm&#39;" class="">
+<option
+  
+  value="LEONT/Module-Build-0.42_35"
+>0.42_35 DEV
+  (LEONT on 2023-04-30)</option>
+<option
+  selected
+  value="LEONT/Module-Build-0.4234"
+>0.4234
+  (LEONT on 2023-04-28)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_33"
+>0.42_33 DEV
+  (LEONT on 2023-03-29)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4232"
+>0.4232
+  (LEONT on 2022-12-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3800"
+>0.3800
+  (DAGOLDEN on 2011-03-05)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.33"
+>0.33
+  (EWILHELM on 2009-05-04)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.32_01"
+>0.32_01 DEV
+  (EWILHELM on 2009-04-15)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.32"
+>0.32
+  (EWILHELM on 2009-02-26)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31_04"
+>0.31_04 DEV
+  (EWILHELM on 2009-02-20)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31_03"
+>0.31_03 DEV
+  (EWILHELM on 2009-02-08)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31_02"
+>0.31_02 DEV
+  (EWILHELM on 2009-01-27)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31012"
+>0.31012
+  (EWILHELM on 2009-01-14)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.31011"
+>0.31011
+  (EWILHELM on 2009-01-13)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.3101"
+>0.3101
+  (EWILHELM on 2009-01-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.31"
+>0.31
+  (KWILLIAMS on 2008-12-20)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.30_02"
+>0.30_02 DEV
+  (EWILHELM on 2008-12-15)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.30_01"
+>0.30_01 DEV
+  (EWILHELM on 2008-12-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.30"
+>0.30
+  (KWILLIAMS on 2008-09-26)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_05"
+>0.2808_05 DEV
+  (EWILHELM on 2008-09-19)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_04"
+>0.2808_04 DEV
+  (EWILHELM on 2008-09-12)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_03"
+>0.2808_03 DEV
+  (EWILHELM on 2008-09-01)</option>
+<option
+  
+  value="EWILHELM/Module-Build-0.2808_02"
+>0.2808_02 DEV
+  (EWILHELM on 2008-07-10)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2808_01"
+>0.2808_01 DEV
+  (KWILLIAMS on 2007-10-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2808"
+>0.2808
+  (KWILLIAMS on 2007-04-28)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="LEONT/Module-Build-0.4231"
+>0.4231
+  (LEONT on 2020-01-29)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_30"
+>0.42_30 DEV
+  (LEONT on 2019-07-31)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4229"
+>0.4229
+  (LEONT on 2019-04-15)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_28"
+>0.42_28 DEV
+  (LEONT on 2018-04-19)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_26"
+>0.42_26 DEV
+  (LEONT on 2017-12-13)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4224"
+>0.4224
+  (LEONT on 2017-05-30)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_23"
+>0.42_23 DEV
+  (LEONT on 2017-05-14)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4222"
+>0.4222
+  (LEONT on 2017-03-30)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_21"
+>0.42_21 DEV
+  (LEONT on 2017-03-22)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4220"
+>0.4220
+  (LEONT on 2016-08-16)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_19"
+>0.42_19 DEV
+  (LEONT on 2016-08-07)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4218"
+>0.4218
+  (LEONT on 2016-04-24)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_17"
+>0.42_17 DEV
+  (LEONT on 2016-03-21)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4216"
+>0.4216
+  (LEONT on 2016-01-20)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_15"
+>0.42_15 DEV
+  (LEONT on 2015-11-28)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4214"
+>0.4214
+  (LEONT on 2015-06-11)</option>
+<option
+  
+  value="LEONT/Module-Build-0.42_13"
+>0.42_13 DEV
+  (LEONT on 2015-06-06)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4212"
+>0.4212
+  (LEONT on 2015-05-16)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4211"
+>0.4211
+  (LEONT on 2015-01-20)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4210"
+>0.4210
+  (LEONT on 2014-09-01)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4209"
+>0.4209
+  (LEONT on 2014-09-01)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4208"
+>0.4208
+  (LEONT on 2014-08-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4207"
+>0.4207
+  (LEONT on 2014-08-16)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4206"
+>0.4206
+  (LEONT on 2014-07-13)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4205"
+>0.4205
+  (LEONT on 2014-02-09)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4204"
+>0.4204
+  (LEONT on 2014-01-11)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4203"
+>0.4203
+  (LEONT on 2013-11-27)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4202"
+>0.4202
+  (LEONT on 2013-11-19)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4201"
+>0.4201
+  (LEONT on 2013-11-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4200"
+>0.4200
+  (LEONT on 2013-11-12)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40_11"
+>0.40_11 DEV
+  (LEONT on 2013-11-06)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40_10"
+>0.40_10 DEV
+  (LEONT on 2013-11-05)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40_09"
+>0.40_09 DEV
+  (LEONT on 2013-11-04)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4008"
+>0.4008
+  (LEONT on 2013-11-04)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4007"
+>0.4007
+  (LEONT on 2013-07-19)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4006"
+>0.4006
+  (LEONT on 2013-07-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4005"
+>0.4005
+  (LEONT on 2013-04-25)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4004"
+>0.4004
+  (LEONT on 2013-03-29)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4003"
+>0.4003
+  (LEONT on 2012-08-18)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4002"
+>0.4002
+  (LEONT on 2012-07-27)</option>
+<option
+  
+  value="LEONT/Module-Build-0.4001"
+>0.4001
+  (LEONT on 2012-06-26)</option>
+<option
+  
+  value="LEONT/Module-Build-0.40"
+>0.40
+  (LEONT on 2012-02-24)</option>
+<option
+  
+  value="LEONT/Module-Build-0.39_02"
+>0.39_02 DEV
+  (LEONT on 2012-02-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.39_01"
+>0.39_01 DEV
+  (DAGOLDEN on 2011-07-21)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_06"
+>0.37_06 DEV
+  (DAGOLDEN on 2011-03-01)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_05"
+>0.37_05 DEV
+  (DAGOLDEN on 2011-02-20)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_04"
+>0.37_04 DEV
+  (DAGOLDEN on 2011-02-16)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_03"
+>0.37_03 DEV
+  (DAGOLDEN on 2011-02-16)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_02"
+>0.37_02 DEV
+  (DAGOLDEN on 2011-02-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.37_01"
+>0.37_01 DEV
+  (DAGOLDEN on 2011-02-03)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3624"
+>0.3624
+  (DAGOLDEN on 2011-01-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3623"
+>0.3623
+  (DAGOLDEN on 2011-01-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3622"
+>0.3622
+  (DAGOLDEN on 2011-01-25)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_21"
+>0.36_21 DEV
+  (DAGOLDEN on 2011-01-21)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_20"
+>0.36_20 DEV
+  (DAGOLDEN on 2010-12-10)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_19"
+>0.36_19 DEV
+  (DAGOLDEN on 2010-12-07)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_18"
+>0.36_18 DEV
+  (DAGOLDEN on 2010-12-06)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_17"
+>0.36_17 DEV
+  (DAGOLDEN on 2010-10-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_16"
+>0.36_16 DEV
+  (DAGOLDEN on 2010-08-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_15"
+>0.36_15 DEV
+  (DAGOLDEN on 2010-08-25)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_14"
+>0.36_14 DEV
+  (DAGOLDEN on 2010-08-23)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_13"
+>0.36_13 DEV
+  (DAGOLDEN on 2010-07-29)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_12"
+>0.36_12 DEV
+  (DAGOLDEN on 2010-07-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_11"
+>0.36_11 DEV
+  (DAGOLDEN on 2010-05-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_10"
+>0.36_10 DEV
+  (DAGOLDEN on 2010-05-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_09"
+>0.36_09 DEV
+  (DAGOLDEN on 2010-05-11)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_08"
+>0.36_08 DEV
+  (DAGOLDEN on 2010-04-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3607"
+>0.3607
+  (DAGOLDEN on 2010-04-01)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_06"
+>0.36_06 DEV
+  (DAGOLDEN on 2010-04-01)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3605"
+>0.3605
+  (DAGOLDEN on 2010-03-31)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36_04"
+>0.36_04 DEV
+  (DAGOLDEN on 2010-03-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3603"
+>0.3603
+  (DAGOLDEN on 2010-01-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3602"
+>0.3602
+  (DAGOLDEN on 2010-01-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3601"
+>0.3601
+  (DAGOLDEN on 2009-12-21)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.36"
+>0.36
+  (DAGOLDEN on 2009-12-20)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_15"
+>0.35_15 DEV
+  (DAGOLDEN on 2009-12-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_14"
+>0.35_14 DEV
+  (DAGOLDEN on 2009-12-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_13"
+>0.35_13 DEV
+  (DAGOLDEN on 2009-12-05)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_12"
+>0.35_12 DEV
+  (DAGOLDEN on 2009-12-05)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_11"
+>0.35_11 DEV
+  (DAGOLDEN on 2009-12-03)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_10"
+>0.35_10 DEV
+  (DAGOLDEN on 2009-11-25)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_09"
+>0.35_09 DEV
+  (DAGOLDEN on 2009-11-19)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_08"
+>0.35_08 DEV
+  (DAGOLDEN on 2009-11-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_07"
+>0.35_07 DEV
+  (DAGOLDEN on 2009-11-14)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_06"
+>0.35_06 DEV
+  (DAGOLDEN on 2009-11-13)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_05"
+>0.35_05 DEV
+  (DAGOLDEN on 2009-10-28)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_04"
+>0.35_04 DEV
+  (DAGOLDEN on 2009-10-23)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_03"
+>0.35_03 DEV
+  (DAGOLDEN on 2009-10-22)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.3500_01"
+>0.3500_01 DEV
+  (DAGOLDEN on 2009-09-17)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_02"
+>0.35_02 DEV
+  (DAGOLDEN on 2009-09-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35_01"
+>0.35_01 DEV
+  (DAGOLDEN on 2009-08-31)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.35"
+>0.35
+  (DAGOLDEN on 2009-08-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_06"
+>0.34_06 DEV
+  (DAGOLDEN on 2009-08-23)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_05"
+>0.34_05 DEV
+  (DAGOLDEN on 2009-08-10)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.340201"
+>0.340201
+  (DAGOLDEN on 2009-08-10)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_04"
+>0.34_04 DEV
+  (DAGOLDEN on 2009-08-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_03"
+>0.34_03 DEV
+  (DAGOLDEN on 2009-08-08)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_02"
+>0.34_02 DEV
+  (DAGOLDEN on 2009-07-27)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34_01"
+>0.34_01 DEV
+  (DAGOLDEN on 2009-07-18)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.34"
+>0.34
+  (DAGOLDEN on 2009-07-07)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_06"
+>0.33_06 DEV
+  (DAGOLDEN on 2009-07-05)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_05"
+>0.33_05 DEV
+  (DAGOLDEN on 2009-06-29)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_04"
+>0.33_04 DEV
+  (DAGOLDEN on 2009-06-26)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_03"
+>0.33_03 DEV
+  (DAGOLDEN on 2009-06-22)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_02"
+>0.33_02 DEV
+  (DAGOLDEN on 2009-06-15)</option>
+<option
+  
+  value="DAGOLDEN/Module-Build-0.33_01"
+>0.33_01 DEV
+  (DAGOLDEN on 2009-06-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2807"
+>0.2807
+  (KWILLIAMS on 2007-03-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2806"
+>0.2806
+  (KWILLIAMS on 2006-12-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2805_01"
+>0.2805_01 DEV
+  (KWILLIAMS on 2006-09-08)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2805"
+>0.2805
+  (KWILLIAMS on 2006-07-30)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2804"
+>0.2804
+  (KWILLIAMS on 2006-07-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2803"
+>0.2803
+  (KWILLIAMS on 2006-07-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2802"
+>0.2802
+  (KWILLIAMS on 2006-07-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2801"
+>0.2801
+  (KWILLIAMS on 2006-05-21)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.28"
+>0.28
+  (KWILLIAMS on 2006-04-28)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_10"
+>0.27_10 DEV
+  (KWILLIAMS on 2006-03-29)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_09"
+>0.27_09 DEV
+  (KWILLIAMS on 2006-03-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_08"
+>0.27_08 DEV
+  (KWILLIAMS on 2006-03-04)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2612"
+>0.2612
+  (KWILLIAMS on 2006-03-03)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_07"
+>0.27_07 DEV
+  (KWILLIAMS on 2006-02-02)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_06"
+>0.27_06 DEV
+  (KWILLIAMS on 2006-01-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_05"
+>0.27_05 DEV
+  (KWILLIAMS on 2006-01-13)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_04"
+>0.27_04 DEV
+  (KWILLIAMS on 2005-12-23)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_03"
+>0.27_03 DEV
+  (KWILLIAMS on 2005-10-10)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_02"
+>0.27_02 DEV
+  (KWILLIAMS on 2005-07-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2611"
+>0.2611
+  (KWILLIAMS on 2005-06-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.27_01"
+>0.27_01 DEV
+  (KWILLIAMS on 2005-04-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2610"
+>0.2610
+  (KWILLIAMS on 2005-04-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2609"
+>0.2609
+  (KWILLIAMS on 2005-03-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2608"
+>0.2608
+  (KWILLIAMS on 2005-01-27)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2607"
+>0.2607
+  (KWILLIAMS on 2004-12-18)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2606"
+>0.2606
+  (KWILLIAMS on 2004-12-08)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2605"
+>0.2605
+  (KWILLIAMS on 2004-11-30)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2604"
+>0.2604
+  (KWILLIAMS on 2004-11-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2603"
+>0.2603
+  (KWILLIAMS on 2004-11-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2602"
+>0.2602
+  (KWILLIAMS on 2004-11-04)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.2601"
+>0.2601
+  (KWILLIAMS on 2004-11-04)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.26"
+>0.26
+  (KWILLIAMS on 2004-10-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25_03"
+>0.25_03 DEV
+  (KWILLIAMS on 2004-09-05)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25_02"
+>0.25_02 DEV
+  (KWILLIAMS on 2004-07-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25_01"
+>0.25_01 DEV
+  (KWILLIAMS on 2004-06-02)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.25"
+>0.25
+  (KWILLIAMS on 2004-04-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.24_01"
+>0.24_01 DEV
+  (KWILLIAMS on 2004-04-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.24"
+>0.24
+  (KWILLIAMS on 2004-02-25)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.23"
+>0.23
+  (KWILLIAMS on 2004-02-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.22"
+>0.22
+  (KWILLIAMS on 2004-01-11)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.21_02"
+>0.21_02 DEV
+  (KWILLIAMS on 2003-12-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.21_01"
+>0.21_01 DEV
+  (KWILLIAMS on 2003-12-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.21"
+>0.21
+  (KWILLIAMS on 2003-10-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.20_02"
+>0.20_02 DEV
+  (KWILLIAMS on 2003-09-15)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.20_01"
+>0.20_01 DEV
+  (KWILLIAMS on 2003-09-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.20"
+>0.20
+  (KWILLIAMS on 2003-08-26)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_05"
+>0.19_05 DEV
+  (KWILLIAMS on 2003-08-18)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_04"
+>0.19_04 DEV
+  (KWILLIAMS on 2003-08-01)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_03"
+>0.19_03 DEV
+  (KWILLIAMS on 2003-07-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19_02"
+>0.19_02 DEV
+  (KWILLIAMS on 2003-07-21)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.19"
+>0.19
+  (KWILLIAMS on 2003-07-10)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_04"
+>0.18_04 DEV
+  (KWILLIAMS on 2003-07-03)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_03"
+>0.18_03 DEV
+  (KWILLIAMS on 2003-07-01)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_02"
+>0.18_02 DEV
+  (KWILLIAMS on 2003-06-03)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18_01"
+>0.18_01 DEV
+  (KWILLIAMS on 2003-05-22)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.18"
+>0.18
+  (KWILLIAMS on 2003-04-08)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.17"
+>0.17
+  (KWILLIAMS on 2003-03-30)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.16"
+>0.16
+  (KWILLIAMS on 2003-02-24)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.15"
+>0.15
+  (KWILLIAMS on 2003-01-17)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.14"
+>0.14
+  (KWILLIAMS on 2002-12-13)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.13"
+>0.13
+  (KWILLIAMS on 2002-11-20)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.12"
+>0.12
+  (KWILLIAMS on 2002-11-14)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.11"
+>0.11
+  (KWILLIAMS on 2002-08-23)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.10"
+>0.10
+  (KWILLIAMS on 2002-08-07)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.09"
+>0.09
+  (KWILLIAMS on 2002-06-28)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.08"
+>0.08
+  (KWILLIAMS on 2002-06-26)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.07"
+>0.07
+  (KWILLIAMS on 2002-06-09)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.06"
+>0.06
+  (KWILLIAMS on 2002-04-02)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.05_01"
+>0.05_01 DEV
+  (KWILLIAMS on 2002-03-31)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.05"
+>0.05
+  (KWILLIAMS on 2002-01-11)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.04_01"
+>0.04_01 DEV
+  (KWILLIAMS on 2001-11-21)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.04"
+>0.04
+  (KWILLIAMS on 2001-11-16)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.03_1"
+>0.03_1 DEV
+  (KWILLIAMS on 2001-11-12)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.03"
+>0.03
+  (KWILLIAMS on 2001-11-11)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.02"
+>0.02
+  (KWILLIAMS on 2001-09-05)</option>
+<option
+  
+  value="KWILLIAMS/Module-Build-0.01"
+>0.01
+  (KWILLIAMS on 2001-08-11)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Module-Build">Module-Build-0.4234</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage five &#10;
+          • 4486 direct dependents &#10;          • 17571 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#7ea3f2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Module-Build-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Module-Build-0.4234">
+    <input type="hidden" name="author" value="LEONT">
+    <input type="hidden" name="distribution" value="Module-Build">
+    <button type="submit" class="favorite highlight"><span>47</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Module::Build.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>47</span> ++</a>
+</div>
+   / <span>Module::Build</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Module::Build.html#NAME">NAME</a></li>
+  <li><a href="./Module::Build.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Module::Build.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Module::Build.html#GUIDE-TO-DOCUMENTATION">GUIDE TO DOCUMENTATION</a></li>
+  <li><a href="./Module::Build.html#ACTIONS">ACTIONS</a></li>
+  <li><a href="./Module::Build.html#OPTIONS">OPTIONS</a>
+    <ul>
+      <li><a href="./Module::Build.html#Command-Line-Options">Command Line Options</a></li>
+      <li><a href="./Module::Build.html#Default-Options-File-(.modulebuildrc)">Default Options File (.modulebuildrc)</a></li>
+      <li><a href="./Module::Build.html#Environment-variables">Environment variables</a></li>
+    </ul>
+  </li>
+  <li><a href="./Module::Build.html#INSTALL-PATHS">INSTALL PATHS</a></li>
+  <li><a href="./Module::Build.html#COMPARISON">COMPARISON</a></li>
+  <li><a href="./Module::Build.html#TO-DO">TO DO</a></li>
+  <li><a href="./Module::Build.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Module::Build.html#COPYRIGHT">COPYRIGHT</a></li>
+  <li><a href="./Module::Build.html#SEE-ALSO">SEE ALSO</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Module::Build - Build and install Perl modules</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p>Standard process for building &amp; installing modules:</p>
+
+<pre><code>  perl Build.PL
+  ./Build
+  ./Build test
+  ./Build install</code></pre>
+
+<p>Or, if you&#39;re on a platform (like DOS or Windows) that doesn&#39;t require the &quot;./&quot; notation, you can do this:</p>
+
+<pre><code>  perl Build.PL
+  Build
+  Build test
+  Build install</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p><code>Module::Build</code> is a system for building, testing, and installing Perl modules. It is meant to be an alternative to <code>ExtUtils::MakeMaker</code>. Developers may alter the behavior of the module through subclassing. It also does not require a <code>make</code> on your system - most of the <code>Module::Build</code> code is pure-perl and written in a very cross-platform way.</p>
+
+<p>See <a href="./Module::Build.html#COMPARISON">&quot;COMPARISON&quot;</a> for more comparisons between <code>Module::Build</code> and other installer tools.</p>
+
+<p>To install <code>Module::Build</code>, and any other module that uses <code>Module::Build</code> for its installation process, do the following:</p>
+
+<pre><code>  perl Build.PL       # &#39;Build.PL&#39; script creates the &#39;Build&#39; script
+  ./Build             # Need ./ to ensure we&#39;re using this &quot;Build&quot; script
+  ./Build test        # and not another one that happens to be in the PATH
+  ./Build install</code></pre>
+
+<p>This illustrates initial configuration and the running of three &#39;actions&#39;. In this case the actions run are &#39;build&#39; (the default action), &#39;test&#39;, and &#39;install&#39;. Other actions defined so far include:</p>
+
+<pre><code>  build                          manifest
+  clean                          manifest_skip
+  code                           manpages
+  config_data                    pardist
+  diff                           ppd
+  dist                           ppmdist
+  distcheck                      prereq_data
+  distclean                      prereq_report
+  distdir                        pure_install
+  distinstall                    realclean
+  distmeta                       retest
+  distsign                       skipcheck
+  disttest                       test
+  docs                           testall
+  fakeinstall                    testcover
+  help                           testdb
+  html                           testpod
+  install                        testpodcoverage
+  installdeps                    versioninstall</code></pre>
+
+<p>You can run the &#39;help&#39; action for a complete list of actions.</p>
+
+<h1 id="GUIDE-TO-DOCUMENTATION"><a id="GUIDE"></a>GUIDE TO DOCUMENTATION</h1>
+
+<p>The documentation for <code>Module::Build</code> is broken up into sections:</p>
+
+<dl>
+
+<dt id="General-Usage-(Module::Build)"><a id="General"></a><a id="General-Usage--Module::Build"></a>General Usage (<a href="./Module::Build.html">Module::Build</a>)</dt>
+<dd>
+
+<p>This is the document you are currently reading. It describes basic usage and background information. Its main purpose is to assist the user who wants to learn how to invoke and control <code>Module::Build</code> scripts at the command line.</p>
+
+</dd>
+<dt id="Authoring-Reference-(Module::Build::Authoring)"><a id="Authoring"></a><a id="Authoring-Reference--Module::Build::Authoring"></a>Authoring Reference (<a href="https://metacpan.org/pod/distribution/Module-Build/lib/Module/Build/Authoring.pod">Module::Build::Authoring</a>)</dt>
+<dd>
+
+<p>This document describes the structure and organization of <code>Module::Build</code>, and the relevant concepts needed by authors who are writing <i>Build.PL</i> scripts for a distribution or controlling <code>Module::Build</code> processes programmatically.</p>
+
+</dd>
+<dt id="API-Reference-(Module::Build::API)"><a id="API"></a><a id="API-Reference--Module::Build::API"></a>API Reference (<a href="https://metacpan.org/pod/distribution/Module-Build/lib/Module/Build/API.pod">Module::Build::API</a>)</dt>
+<dd>
+
+<p>This is a reference to the <code>Module::Build</code> API.</p>
+
+</dd>
+<dt id="Cookbook-(Module::Build::Cookbook)"><a id="Cookbook"></a><a id="Cookbook--Module::Build::Cookbook"></a>Cookbook (<a href="https://metacpan.org/pod/Module::Build::Cookbook">Module::Build::Cookbook</a>)</dt>
+<dd>
+
+<p>This document demonstrates how to accomplish many common tasks. It covers general command line usage and authoring of <i>Build.PL</i> scripts. Includes working examples.</p>
+
+</dd>
+</dl>
+
+<h1 id="ACTIONS">ACTIONS</h1>
+
+<p>There are some general principles at work here. First, each task when building a module is called an &quot;action&quot;. These actions are listed above; they correspond to the building, testing, installing, packaging, etc., tasks.</p>
+
+<p>Second, arguments are processed in a very systematic way. Arguments are always key=value pairs. They may be specified at <code>perl Build.PL</code> time (i.e. <code>perl Build.PL destdir=/my/secret/place</code>), in which case their values last for the lifetime of the <code>Build</code> script. They may also be specified when executing a particular action (i.e. <code>Build test verbose=1</code>), in which case their values last only for the lifetime of that command. Per-action command line parameters take precedence over parameters specified at <code>perl Build.PL</code> time.</p>
+
+<p>The build process also relies heavily on the <code>Config.pm</code> module. If the user wishes to override any of the values in <code>Config.pm</code>, she may specify them like so:</p>
+
+<pre><code>  perl Build.PL --config cc=gcc --config ld=gcc</code></pre>
+
+<p>The following build actions are provided by default.</p>
+
+<dl>
+
+<dt id="build">build</dt>
+<dd>
+
+<p>[version 0.01]</p>
+
+<p>If you run the <code>Build</code> script without any arguments, it runs the <code>build</code> action, which in turn runs the <code>code</code> and <code>docs</code> actions.</p>
+
+<p>This is analogous to the <code>MakeMaker</code> <i>make all</i> target.</p>
+
+</dd>
+<dt id="clean">clean</dt>
+<dd>
+
+<p>[version 0.01]</p>
+
+<p>This action will clean up any files that the build process may have created, including the <code>blib/</code> directory (but not including the <code>_build/</code> directory and the <code>Build</code> script itself).</p>
+
+</dd>
+<dt id="code">code</dt>
+<dd>
+
+<p>[version 0.20]</p>
+
+<p>This action builds your code base.</p>
+
+<p>By default it just creates a <code>blib/</code> directory and copies any <code>.pm</code> and <code>.pod</code> files from your <code>lib/</code> directory into the <code>blib/</code> directory. It also compiles any <code>.xs</code> files from <code>lib/</code> and places them in <code>blib/</code>. Of course, you need a working C compiler (probably the same one that built perl itself) for the compilation to work properly.</p>
+
+<p>The <code>code</code> action also runs any <code>.PL</code> files in your <i>lib/</i> directory. Typically these create other files, named the same but without the <code>.PL</code> ending. For example, a file <i>lib/Foo/Bar.pm.PL</i> could create the file <i>lib/Foo/Bar.pm</i>. The <code>.PL</code> files are processed first, so any <code>.pm</code> files (or other kinds that we deal with) will get copied correctly.</p>
+
+</dd>
+<dt id="config_data">config_data</dt>
+<dd>
+
+<p>[version 0.26]</p>
+
+<p>...</p>
+
+</dd>
+<dt id="diff">diff</dt>
+<dd>
+
+<p>[version 0.14]</p>
+
+<p>This action will compare the files about to be installed with their installed counterparts. For .pm and .pod files, a diff will be shown (this currently requires a &#39;diff&#39; program to be in your PATH). For other files like compiled binary files, we simply report whether they differ.</p>
+
+<p>A <code>flags</code> parameter may be passed to the action, which will be passed to the &#39;diff&#39; program. Consult your &#39;diff&#39; documentation for the parameters it will accept - a good one is <code>-u</code>:</p>
+
+<pre><code>  ./Build diff flags=-u</code></pre>
+
+</dd>
+<dt id="dist">dist</dt>
+<dd>
+
+<p>[version 0.02]</p>
+
+<p>This action is helpful for module authors who want to package up their module for source distribution through a medium like CPAN. It will create a tarball of the files listed in <i>MANIFEST</i> and compress the tarball using GZIP compression.</p>
+
+<p>By default, this action will use the <code>Archive::Tar</code> module. However, you can force it to use binary &quot;tar&quot; and &quot;gzip&quot; executables by supplying an explicit <code>tar</code> (and optional <code>gzip</code>) parameter:</p>
+
+<pre><code>  ./Build dist --tar C:\path\to\tar.exe --gzip C:\path\to\zip.exe</code></pre>
+
+</dd>
+<dt id="distcheck">distcheck</dt>
+<dd>
+
+<p>[version 0.05]</p>
+
+<p>Reports which files are in the build directory but not in the <i>MANIFEST</i> file, and vice versa. (See <a href="./Module::Build.html#manifest">&quot;manifest&quot;</a> for details.)</p>
+
+</dd>
+<dt id="distclean">distclean</dt>
+<dd>
+
+<p>[version 0.05]</p>
+
+<p>Performs the &#39;realclean&#39; action and then the &#39;distcheck&#39; action.</p>
+
+</dd>
+<dt id="distdir">distdir</dt>
+<dd>
+
+<p>[version 0.05]</p>
+
+<p>Creates a &quot;distribution directory&quot; named <code>$dist_name-$dist_version</code> (if that directory already exists, it will be removed first), then copies all the files listed in the <i>MANIFEST</i> file to that directory. This directory is what the distribution tarball is created from.</p>
+
+</dd>
+<dt id="distinstall">distinstall</dt>
+<dd>
+
+<p>[version 0.37]</p>
+
+<p>Performs the &#39;distdir&#39; action, then switches into that directory and runs a <code>perl Build.PL</code>, followed by the &#39;build&#39; and &#39;install&#39; actions in that directory. Use PERL_MB_OPT or <i>.modulebuildrc</i> to set options that should be applied during subprocesses</p>
+
+</dd>
+<dt id="distmeta">distmeta</dt>
+<dd>
+
+<p>[version 0.21]</p>
+
+<p>Creates the <i>META.yml</i> file that describes the distribution.</p>
+
+<p><i>META.yml</i> is a file containing various bits of <i>metadata</i> about the distribution. The metadata includes the distribution name, version, abstract, prerequisites, license, and various other data about the distribution. This file is created as <i>META.yml</i> in a simplified YAML format.</p>
+
+<p><i>META.yml</i> file must also be listed in <i>MANIFEST</i> - if it&#39;s not, a warning will be issued.</p>
+
+<p>The current version of the <i>META.yml</i> specification can be found on CPAN as <a href="https://metacpan.org/pod/CPAN::Meta::Spec">CPAN::Meta::Spec</a>.</p>
+
+</dd>
+<dt id="distsign">distsign</dt>
+<dd>
+
+<p>[version 0.16]</p>
+
+<p>Uses <code>Module::Signature</code> to create a SIGNATURE file for your distribution, and adds the SIGNATURE file to the distribution&#39;s MANIFEST.</p>
+
+</dd>
+<dt id="disttest">disttest</dt>
+<dd>
+
+<p>[version 0.05]</p>
+
+<p>Performs the &#39;distdir&#39; action, then switches into that directory and runs a <code>perl Build.PL</code>, followed by the &#39;build&#39; and &#39;test&#39; actions in that directory. Use PERL_MB_OPT or <i>.modulebuildrc</i> to set options that should be applied during subprocesses</p>
+
+</dd>
+<dt id="docs">docs</dt>
+<dd>
+
+<p>[version 0.20]</p>
+
+<p>This will generate documentation (e.g. Unix man pages and HTML documents) for any installable items under <b>blib/</b> that contain POD. If there are no <code>bindoc</code> or <code>libdoc</code> installation targets defined (as will be the case on systems that don&#39;t support Unix manpages) no action is taken for manpages. If there are no <code>binhtml</code> or <code>libhtml</code> installation targets defined no action is taken for HTML documents.</p>
+
+</dd>
+<dt id="fakeinstall">fakeinstall</dt>
+<dd>
+
+<p>[version 0.02]</p>
+
+<p>This is just like the <code>install</code> action, but it won&#39;t actually do anything, it will just report what it <i>would</i> have done if you had actually run the <code>install</code> action.</p>
+
+</dd>
+<dt id="help">help</dt>
+<dd>
+
+<p>[version 0.03]</p>
+
+<p>This action will simply print out a message that is meant to help you use the build process. It will show you a list of available build actions too.</p>
+
+<p>With an optional argument specifying an action name (e.g. <code>Build help test</code>), the &#39;help&#39; action will show you any POD documentation it can find for that action.</p>
+
+</dd>
+<dt id="html">html</dt>
+<dd>
+
+<p>[version 0.26]</p>
+
+<p>This will generate HTML documentation for any binary or library files under <b>blib/</b> that contain POD. The HTML documentation will only be installed if the install paths can be determined from values in <code>Config.pm</code>. You can also supply or override install paths on the command line by specifying <code>install_path</code> values for the <code>binhtml</code> and/or <code>libhtml</code> installation targets.</p>
+
+<p>With an optional <code>html_links</code> argument set to a false value, you can skip the search for other documentation to link to, because that can waste a lot of time if there aren&#39;t any links to generate anyway:</p>
+
+<pre><code>  ./Build html --html_links 0</code></pre>
+
+</dd>
+<dt id="install">install</dt>
+<dd>
+
+<p>[version 0.01]</p>
+
+<p>This action will use <code>ExtUtils::Install</code> to install the files from <code>blib/</code> into the system. See <a href="./Module::Build.html#INSTALL-PATHS">&quot;INSTALL PATHS&quot;</a> for details about how Module::Build determines where to install things, and how to influence this process.</p>
+
+<p>If you want the installation process to look around in <code>@INC</code> for other versions of the stuff you&#39;re installing and try to delete it, you can use the <code>uninst</code> parameter, which tells <code>ExtUtils::Install</code> to do so:</p>
+
+<pre><code>  ./Build install uninst=1</code></pre>
+
+<p>This can be a good idea, as it helps prevent multiple versions of a module from being present on your system, which can be a confusing situation indeed.</p>
+
+</dd>
+<dt id="installdeps">installdeps</dt>
+<dd>
+
+<p>[version 0.36]</p>
+
+<p>This action will use the <code>cpan_client</code> parameter as a command to install missing prerequisites. You will be prompted whether to install optional dependencies.</p>
+
+<p>The <code>cpan_client</code> option defaults to &#39;cpan&#39; but can be set as an option or in <i>.modulebuildrc</i>. It must be a shell command that takes a list of modules to install as arguments (e.g. &#39;cpanp -i&#39; for CPANPLUS). If the program part is a relative path (e.g. &#39;cpan&#39; or &#39;cpanp&#39;), it will be located relative to the perl program that executed Build.PL.</p>
+
+<pre><code>  /opt/perl/5.8.9/bin/perl Build.PL
+  ./Build installdeps --cpan_client &#39;cpanp -i&#39;
+  # installs to 5.8.9</code></pre>
+
+</dd>
+<dt id="manifest">manifest</dt>
+<dd>
+
+<p>[version 0.05]</p>
+
+<p>This is an action intended for use by module authors, not people installing modules. It will bring the <i>MANIFEST</i> up to date with the files currently present in the distribution. You may use a <i>MANIFEST.SKIP</i> file to exclude certain files or directories from inclusion in the <i>MANIFEST</i>. <i>MANIFEST.SKIP</i> should contain a bunch of regular expressions, one per line. If a file in the distribution directory matches any of the regular expressions, it won&#39;t be included in the <i>MANIFEST</i>.</p>
+
+<p>The following is a reasonable <i>MANIFEST.SKIP</i> starting point, you can add your own stuff to it:</p>
+
+<pre><code>  ^_build
+  ^Build$
+  ^blib
+  ~$
+  \.bak$
+  ^MANIFEST\.SKIP$
+  CVS</code></pre>
+
+<p>See the <a href="./Module::Build.html#distcheck">&quot;distcheck&quot;</a> and <a href="./Module::Build.html#skipcheck">&quot;skipcheck&quot;</a> actions if you want to find out what the <code>manifest</code> action would do, without actually doing anything.</p>
+
+</dd>
+<dt id="manifest_skip">manifest_skip</dt>
+<dd>
+
+<p>[version 0.3608]</p>
+
+<p>This is an action intended for use by module authors, not people installing modules. It will generate a boilerplate MANIFEST.SKIP file if one does not already exist.</p>
+
+</dd>
+<dt id="manpages">manpages</dt>
+<dd>
+
+<p>[version 0.28]</p>
+
+<p>This will generate man pages for any binary or library files under <b>blib/</b> that contain POD. The man pages will only be installed if the install paths can be determined from values in <code>Config.pm</code>. You can also supply or override install paths by specifying there values on the command line with the <code>bindoc</code> and <code>libdoc</code> installation targets.</p>
+
+</dd>
+<dt id="pardist">pardist</dt>
+<dd>
+
+<p>[version 0.2806]</p>
+
+<p>Generates a PAR binary distribution for use with <a href="PAR.html">PAR</a> or <a href="https://metacpan.org/pod/PAR::Dist">PAR::Dist</a>.</p>
+
+<p>It requires that the PAR::Dist module (version 0.17 and up) is installed on your system.</p>
+
+</dd>
+<dt id="ppd">ppd</dt>
+<dd>
+
+<p>[version 0.20]</p>
+
+<p>Build a PPD file for your distribution.</p>
+
+<p>This action takes an optional argument <code>codebase</code> which is used in the generated PPD file to specify the (usually relative) URL of the distribution. By default, this value is the distribution name without any path information.</p>
+
+<p>Example:</p>
+
+<pre><code>  ./Build ppd --codebase &quot;MSWin32-x86-multi-thread/Module-Build-0.21.tar.gz&quot;</code></pre>
+
+</dd>
+<dt id="ppmdist">ppmdist</dt>
+<dd>
+
+<p>[version 0.23]</p>
+
+<p>Generates a PPM binary distribution and a PPD description file. This action also invokes the <code>ppd</code> action, so it can accept the same <code>codebase</code> argument described under that action.</p>
+
+<p>This uses the same mechanism as the <code>dist</code> action to tar &amp; zip its output, so you can supply <code>tar</code> and/or <code>gzip</code> parameters to affect the result.</p>
+
+</dd>
+<dt id="prereq_data">prereq_data</dt>
+<dd>
+
+<p>[version 0.32]</p>
+
+<p>This action prints out a Perl data structure of all prerequisites and the versions required. The output can be loaded again using <code>eval()</code>. This can be useful for external tools that wish to query a Build script for prerequisites.</p>
+
+</dd>
+<dt id="prereq_report">prereq_report</dt>
+<dd>
+
+<p>[version 0.28]</p>
+
+<p>This action prints out a list of all prerequisites, the versions required, and the versions actually installed. This can be useful for reviewing the configuration of your system prior to a build, or when compiling data to send for a bug report.</p>
+
+</dd>
+<dt id="pure_install">pure_install</dt>
+<dd>
+
+<p>[version 0.28]</p>
+
+<p>This action is identical to the <code>install</code> action. In the future, though, when <code>install</code> starts writing to the file <i>$(INSTALLARCHLIB)/perllocal.pod</i>, <code>pure_install</code> won&#39;t, and that will be the only difference between them.</p>
+
+</dd>
+<dt id="realclean">realclean</dt>
+<dd>
+
+<p>[version 0.01]</p>
+
+<p>This action is just like the <code>clean</code> action, but also removes the <code>_build</code> directory and the <code>Build</code> script. If you run the <code>realclean</code> action, you are essentially starting over, so you will have to re-create the <code>Build</code> script again.</p>
+
+</dd>
+<dt id="retest">retest</dt>
+<dd>
+
+<p>[version 0.2806]</p>
+
+<p>This is just like the <code>test</code> action, but doesn&#39;t actually build the distribution first, and doesn&#39;t add <i>blib/</i> to the load path, and therefore will test against a <i>previously</i> installed version of the distribution. This can be used to verify that a certain installed distribution still works, or to see whether newer versions of a distribution still pass the old regression tests, and so on.</p>
+
+</dd>
+<dt id="skipcheck">skipcheck</dt>
+<dd>
+
+<p>[version 0.05]</p>
+
+<p>Reports which files are skipped due to the entries in the <i>MANIFEST.SKIP</i> file (See <a href="./Module::Build.html#manifest">&quot;manifest&quot;</a> for details)</p>
+
+</dd>
+<dt id="test">test</dt>
+<dd>
+
+<p>[version 0.01]</p>
+
+<p>This will use <code>Test::Harness</code> or <code>TAP::Harness</code> to run any regression tests and report their results. Tests can be defined in the standard places: a file called <code>test.pl</code> in the top-level directory, or several files ending with <code>.t</code> in a <code>t/</code> directory.</p>
+
+<p>If you want tests to be &#39;verbose&#39;, i.e. show details of test execution rather than just summary information, pass the argument <code>verbose=1</code>.</p>
+
+<p>If you want to run tests under the perl debugger, pass the argument <code>debugger=1</code>.</p>
+
+<p>If you want to have Module::Build find test files with different file name extensions, pass the <code>test_file_exts</code> argument with an array of extensions, such as <code>[qw( .t .s .z )]</code>.</p>
+
+<p>If you want test to be run by <code>TAP::Harness</code>, rather than <code>Test::Harness</code>, pass the argument <code>tap_harness_args</code> as an array reference of arguments to pass to the TAP::Harness constructor.</p>
+
+<p>In addition, if a file called <code>visual.pl</code> exists in the top-level directory, this file will be executed as a Perl script and its output will be shown to the user. This is a good place to put speed tests or other tests that don&#39;t use the <code>Test::Harness</code> format for output.</p>
+
+<p>To override the choice of tests to run, you may pass a <code>test_files</code> argument whose value is a whitespace-separated list of test scripts to run. This is especially useful in development, when you only want to run a single test to see whether you&#39;ve squashed a certain bug yet:</p>
+
+<pre><code>  ./Build test --test_files t/something_failing.t</code></pre>
+
+<p>You may also pass several <code>test_files</code> arguments separately:</p>
+
+<pre><code>  ./Build test --test_files t/one.t --test_files t/two.t</code></pre>
+
+<p>or use a <code>glob()</code>-style pattern:</p>
+
+<pre><code>  ./Build test --test_files &#39;t/01-*.t&#39;</code></pre>
+
+</dd>
+<dt id="testall">testall</dt>
+<dd>
+
+<p>[version 0.2807]</p>
+
+<p>[Note: the &#39;testall&#39; action and the code snippets below are currently in alpha stage, see <a href="http://www.nntp.perl.org/group/perl.module.build/2007/03/msg584.html">http://www.nntp.perl.org/group/perl.module.build/2007/03/msg584.html</a> ]</p>
+
+<p>Runs the <code>test</code> action plus each of the <code>test$type</code> actions defined by the keys of the <code>test_types</code> parameter.</p>
+
+<p>Currently, you need to define the ACTION_test$type method yourself and enumerate them in the test_types parameter.</p>
+
+<pre><code>  my $mb = Module::Build-&gt;subclass(
+    code =&gt; q(
+      sub ACTION_testspecial { shift-&gt;generic_test(type =&gt; &#39;special&#39;); }
+      sub ACTION_testauthor  { shift-&gt;generic_test(type =&gt; &#39;author&#39;); }
+    )
+  )-&gt;new(
+    ...
+    test_types  =&gt; {
+      special =&gt; &#39;.st&#39;,
+      author  =&gt; [&#39;.at&#39;, &#39;.pt&#39; ],
+    },
+    ...</code></pre>
+
+</dd>
+<dt id="testcover">testcover</dt>
+<dd>
+
+<p>[version 0.26]</p>
+
+<p>Runs the <code>test</code> action using <code>Devel::Cover</code>, generating a code-coverage report showing which parts of the code were actually exercised during the tests.</p>
+
+<p>To pass options to <code>Devel::Cover</code>, set the <code>$DEVEL_COVER_OPTIONS</code> environment variable:</p>
+
+<pre><code>  DEVEL_COVER_OPTIONS=-ignore,Build ./Build testcover</code></pre>
+
+</dd>
+<dt id="testdb">testdb</dt>
+<dd>
+
+<p>[version 0.05]</p>
+
+<p>This is a synonym for the &#39;test&#39; action with the <code>debugger=1</code> argument.</p>
+
+</dd>
+<dt id="testpod">testpod</dt>
+<dd>
+
+<p>[version 0.25]</p>
+
+<p>This checks all the files described in the <code>docs</code> action and produces <code>Test::Harness</code>-style output. If you are a module author, this is useful to run before creating a new release.</p>
+
+</dd>
+<dt id="testpodcoverage">testpodcoverage</dt>
+<dd>
+
+<p>[version 0.28]</p>
+
+<p>This checks the pod coverage of the distribution and produces <code>Test::Harness</code>-style output. If you are a module author, this is useful to run before creating a new release.</p>
+
+</dd>
+<dt id="versioninstall">versioninstall</dt>
+<dd>
+
+<p>[version 0.16]</p>
+
+<p>** Note: since <code>only.pm</code> is so new, and since we just recently added support for it here too, this feature is to be considered experimental. **</p>
+
+<p>If you have the <code>only.pm</code> module installed on your system, you can use this action to install a module into the version-specific library trees. This means that you can have several versions of the same module installed and <code>use</code> a specific one like this:</p>
+
+<pre><code>  use only MyModule =&gt; 0.55;</code></pre>
+
+<p>To override the default installation libraries in <code>only::config</code>, specify the <code>versionlib</code> parameter when you run the <code>Build.PL</code> script:</p>
+
+<pre><code>  perl Build.PL --versionlib /my/version/place/</code></pre>
+
+<p>To override which version the module is installed as, specify the <code>version</code> parameter when you run the <code>Build.PL</code> script:</p>
+
+<pre><code>  perl Build.PL --version 0.50</code></pre>
+
+<p>See the <code>only.pm</code> documentation for more information on version-specific installs.</p>
+
+</dd>
+</dl>
+
+<h1 id="OPTIONS">OPTIONS</h1>
+
+<h2 id="Command-Line-Options"><a id="Command"></a>Command Line Options</h2>
+
+<p>The following options can be used during any invocation of <code>Build.PL</code> or the Build script, during any action. For information on other options specific to an action, see the documentation for the respective action.</p>
+
+<p>NOTE: There is some preliminary support for options to use the more familiar long option style. Most options can be preceded with the <code>--</code> long option prefix, and the underscores changed to dashes (e.g. <code>--use-rcfile</code>). Additionally, the argument to boolean options is optional, and boolean options can be negated by prefixing them with <code>no</code> or <code>no-</code> (e.g. <code>--noverbose</code> or <code>--no-verbose</code>).</p>
+
+<dl>
+
+<dt id="quiet">quiet</dt>
+<dd>
+
+<p>Suppress informative messages on output.</p>
+
+</dd>
+<dt id="verbose">verbose</dt>
+<dd>
+
+<p>Display extra information about the Build on output. <code>verbose</code> will turn off <code>quiet</code></p>
+
+</dd>
+<dt id="cpan_client">cpan_client</dt>
+<dd>
+
+<p>Sets the <code>cpan_client</code> command for use with the <code>installdeps</code> action. See <code>installdeps</code> for more details.</p>
+
+</dd>
+<dt id="use_rcfile">use_rcfile</dt>
+<dd>
+
+<p>Load the <i>~/.modulebuildrc</i> option file. This option can be set to false to prevent the custom resource file from being loaded.</p>
+
+</dd>
+<dt id="allow_mb_mismatch">allow_mb_mismatch</dt>
+<dd>
+
+<p>Suppresses the check upon startup that the version of Module::Build we&#39;re now running under is the same version that was initially invoked when building the distribution (i.e. when the <code>Build.PL</code> script was first run). As of 0.3601, a mismatch results in a warning instead of a fatal error, so this option effectively just suppresses the warning.</p>
+
+</dd>
+<dt id="debug">debug</dt>
+<dd>
+
+<p>Prints Module::Build debugging information to STDOUT, such as a trace of executed build actions.</p>
+
+</dd>
+</dl>
+
+<h2 id="Default-Options-File-(.modulebuildrc)"><a id="Default"></a><a id="Default-Options-File--.modulebuildrc"></a>Default Options File (<i>.modulebuildrc</i>)</h2>
+
+<p>[version 0.28]</p>
+
+<p>When Module::Build starts up, it will look first for a file, <i>$ENV{HOME}/.modulebuildrc</i>. If it&#39;s not found there, it will look in the <i>.modulebuildrc</i> file in the directories referred to by the environment variables <code>HOMEDRIVE</code> + <code>HOMEDIR</code>, <code>USERPROFILE</code>, <code>APPDATA</code>, <code>WINDIR</code>, <code>SYS$LOGIN</code>. If the file exists, the options specified there will be used as defaults, as if they were typed on the command line. The defaults can be overridden by specifying new values on the command line.</p>
+
+<p>The action name must come at the beginning of the line, followed by any amount of whitespace and then the options. Options are given the same as they would be on the command line. They can be separated by any amount of whitespace, including newlines, as long there is whitespace at the beginning of each continued line. Anything following a hash mark (<code>#</code>) is considered a comment, and is stripped before parsing. If more than one line begins with the same action name, those lines are merged into one set of options.</p>
+
+<p>Besides the regular actions, there are two special pseudo-actions: the key <code>*</code> (asterisk) denotes any global options that should be applied to all actions, and the key &#39;Build_PL&#39; specifies options to be applied when you invoke <code>perl Build.PL</code>.</p>
+
+<pre><code>  *           verbose=1   # global options
+  diff        flags=-u
+  install     --install_base /home/ken
+              --install_path html=/home/ken/docs/html
+  installdeps --cpan_client &#39;cpanp -i&#39;</code></pre>
+
+<p>If you wish to locate your resource file in a different location, you can set the environment variable <code>MODULEBUILDRC</code> to the complete absolute path of the file containing your options.</p>
+
+<h2 id="Environment-variables"><a id="Environment"></a>Environment variables</h2>
+
+<dl>
+
+<dt id="MODULEBUILDRC">MODULEBUILDRC</dt>
+<dd>
+
+<p>[version 0.28]</p>
+
+<p>Specifies an alternate location for a default options file as described above.</p>
+
+</dd>
+<dt id="PERL_MB_OPT">PERL_MB_OPT</dt>
+<dd>
+
+<p>[version 0.36]</p>
+
+<p>Command line options that are applied to Build.PL or any Build action. The string is split as the shell would (e.g. whitespace) and the result is prepended to any actual command-line arguments.</p>
+
+</dd>
+</dl>
+
+<h1 id="INSTALL-PATHS"><a id="INSTALL"></a>INSTALL PATHS</h1>
+
+<p>[version 0.19]</p>
+
+<p>When you invoke Module::Build&#39;s <code>build</code> action, it needs to figure out where to install things. The nutshell version of how this works is that default installation locations are determined from <i>Config.pm</i>, and they may be overridden by using the <code>install_path</code> parameter. An <code>install_base</code> parameter lets you specify an alternative installation root like <i>/home/foo</i>, and a <code>destdir</code> lets you specify a temporary installation directory like <i>/tmp/install</i> in case you want to create bundled-up installable packages.</p>
+
+<p>Natively, Module::Build provides default installation locations for the following types of installable items:</p>
+
+<dl>
+
+<dt id="lib">lib</dt>
+<dd>
+
+<p>Usually pure-Perl module files ending in <i>.pm</i>.</p>
+
+</dd>
+<dt id="arch">arch</dt>
+<dd>
+
+<p>&quot;Architecture-dependent&quot; module files, usually produced by compiling XS, <a href="https://metacpan.org/pod/Inline">Inline</a>, or similar code.</p>
+
+</dd>
+<dt id="script">script</dt>
+<dd>
+
+<p>Programs written in pure Perl. In order to improve reuse, try to make these as small as possible - put the code into modules whenever possible.</p>
+
+</dd>
+<dt id="bin">bin</dt>
+<dd>
+
+<p>&quot;Architecture-dependent&quot; executable programs, i.e. compiled C code or something. Pretty rare to see this in a perl distribution, but it happens.</p>
+
+</dd>
+<dt id="bindoc">bindoc</dt>
+<dd>
+
+<p>Documentation for the stuff in <code>script</code> and <code>bin</code>. Usually generated from the POD in those files. Under Unix, these are manual pages belonging to the &#39;man1&#39; category.</p>
+
+</dd>
+<dt id="libdoc">libdoc</dt>
+<dd>
+
+<p>Documentation for the stuff in <code>lib</code> and <code>arch</code>. This is usually generated from the POD in <i>.pm</i> files. Under Unix, these are manual pages belonging to the &#39;man3&#39; category.</p>
+
+</dd>
+<dt id="binhtml">binhtml</dt>
+<dd>
+
+<p>This is the same as <code>bindoc</code> above, but applies to HTML documents.</p>
+
+</dd>
+<dt id="libhtml">libhtml</dt>
+<dd>
+
+<p>This is the same as <code>libdoc</code> above, but applies to HTML documents.</p>
+
+</dd>
+</dl>
+
+<p>Four other parameters let you control various aspects of how installation paths are determined:</p>
+
+<dl>
+
+<dt id="installdirs">installdirs</dt>
+<dd>
+
+<p>The default destinations for these installable things come from entries in your system&#39;s <code>Config.pm</code>. You can select from three different sets of default locations by setting the <code>installdirs</code> parameter as follows:</p>
+
+<pre><code>                          &#39;installdirs&#39; set to:
+                   core          site                vendor
+
+              uses the following defaults from Config.pm:
+
+  lib     =&gt; installprivlib  installsitelib      installvendorlib
+  arch    =&gt; installarchlib  installsitearch     installvendorarch
+  script  =&gt; installscript   installsitescript   installvendorscript
+  bin     =&gt; installbin      installsitebin      installvendorbin
+  bindoc  =&gt; installman1dir  installsiteman1dir  installvendorman1dir
+  libdoc  =&gt; installman3dir  installsiteman3dir  installvendorman3dir
+  binhtml =&gt; installhtml1dir installsitehtml1dir installvendorhtml1dir [*]
+  libhtml =&gt; installhtml3dir installsitehtml3dir installvendorhtml3dir [*]
+
+  * Under some OS (eg. MSWin32) the destination for HTML documents is
+    determined by the C&lt;Config.pm&gt; entry C&lt;installhtmldir&gt;.</code></pre>
+
+<p>The default value of <code>installdirs</code> is &quot;site&quot;. If you&#39;re creating vendor distributions of module packages, you may want to do something like this:</p>
+
+<pre><code>  perl Build.PL --installdirs vendor</code></pre>
+
+<p>or</p>
+
+<pre><code>  ./Build install --installdirs vendor</code></pre>
+
+<p>If you&#39;re installing an updated version of a module that was included with perl itself (i.e. a &quot;core module&quot;), then you may set <code>installdirs</code> to &quot;core&quot; to overwrite the module in its present location.</p>
+
+<p>(Note that the &#39;script&#39; line is different from <code>MakeMaker</code> - unfortunately there&#39;s no such thing as &quot;installsitescript&quot; or &quot;installvendorscript&quot; entry in <code>Config.pm</code>, so we use the &quot;installsitebin&quot; and &quot;installvendorbin&quot; entries to at least get the general location right. In the future, if <code>Config.pm</code> adds some more appropriate entries, we&#39;ll start using those.)</p>
+
+</dd>
+<dt id="install_path">install_path</dt>
+<dd>
+
+<p>Once the defaults have been set, you can override them.</p>
+
+<p>On the command line, that would look like this:</p>
+
+<pre><code>  perl Build.PL --install_path lib=/foo/lib --install_path arch=/foo/lib/arch</code></pre>
+
+<p>or this:</p>
+
+<pre><code>  ./Build install --install_path lib=/foo/lib --install_path arch=/foo/lib/arch</code></pre>
+
+</dd>
+<dt id="install_base">install_base</dt>
+<dd>
+
+<p>You can also set the whole bunch of installation paths by supplying the <code>install_base</code> parameter to point to a directory on your system. For instance, if you set <code>install_base</code> to &quot;/home/ken&quot; on a Linux system, you&#39;ll install as follows:</p>
+
+<pre><code>  lib     =&gt; /home/ken/lib/perl5
+  arch    =&gt; /home/ken/lib/perl5/i386-linux
+  script  =&gt; /home/ken/bin
+  bin     =&gt; /home/ken/bin
+  bindoc  =&gt; /home/ken/man/man1
+  libdoc  =&gt; /home/ken/man/man3
+  binhtml =&gt; /home/ken/html
+  libhtml =&gt; /home/ken/html</code></pre>
+
+<p>Note that this is <i>different</i> from how <code>MakeMaker</code>&#39;s <code>PREFIX</code> parameter works. <code>install_base</code> just gives you a default layout under the directory you specify, which may have little to do with the <code>installdirs=site</code> layout.</p>
+
+<p>The exact layout under the directory you specify may vary by system - we try to do the &quot;sensible&quot; thing on each platform.</p>
+
+</dd>
+<dt id="destdir">destdir</dt>
+<dd>
+
+<p>If you want to install everything into a temporary directory first (for instance, if you want to create a directory tree that a package manager like <code>rpm</code> or <code>dpkg</code> could create a package from), you can use the <code>destdir</code> parameter:</p>
+
+<pre><code>  perl Build.PL --destdir /tmp/foo</code></pre>
+
+<p>or</p>
+
+<pre><code>  ./Build install --destdir /tmp/foo</code></pre>
+
+<p>This will effectively install to &quot;/tmp/foo/$sitelib&quot;, &quot;/tmp/foo/$sitearch&quot;, and the like, except that it will use <code>File::Spec</code> to make the pathnames work correctly on whatever platform you&#39;re installing on.</p>
+
+</dd>
+<dt id="prefix">prefix</dt>
+<dd>
+
+<p>Provided for compatibility with <code>ExtUtils::MakeMaker</code>&#39;s PREFIX argument. <code>prefix</code> should be used when you want Module::Build to install your modules, documentation, and scripts in the same place as <code>ExtUtils::MakeMaker</code>&#39;s PREFIX mechanism.</p>
+
+<p>The following are equivalent.</p>
+
+<pre><code>    perl Build.PL --prefix /tmp/foo
+    perl Makefile.PL PREFIX=/tmp/foo</code></pre>
+
+<p>Because of the complex nature of the prefixification logic, the behavior of PREFIX in <code>MakeMaker</code> has changed subtly over time. Module::Build&#39;s --prefix logic is equivalent to the PREFIX logic found in <code>ExtUtils::MakeMaker</code> 6.30.</p>
+
+<p>The maintainers of <code>MakeMaker</code> do understand the troubles with the PREFIX mechanism, and added INSTALL_BASE support in version 6.31 of <code>MakeMaker</code>, which was released in 2006.</p>
+
+<p>If you don&#39;t need to retain compatibility with old versions (pre-6.31) of <code>ExtUtils::MakeMaker</code> or are starting a fresh Perl installation we recommend you use <code>install_base</code> instead (and <code>INSTALL_BASE</code> in <code>ExtUtils::MakeMaker</code>). See <a href="https://metacpan.org/pod/Module::Build::Cookbook#Installing-in-the-same-location-as-ExtUtils::MakeMaker">&quot;Installing in the same location as ExtUtils::MakeMaker&quot; in Module::Build::Cookbook</a> for further information.</p>
+
+</dd>
+</dl>
+
+<h1 id="COMPARISON">COMPARISON</h1>
+
+<p>A comparison between <code>Module::Build</code> and other CPAN distribution installers.</p>
+
+<ul>
+
+<li><p><a href="https://metacpan.org/pod/ExtUtils::MakeMaker">ExtUtils::MakeMaker</a> requires <code>make</code> and use of a <i>Makefile</i>. <code>Module::Build</code> does not, nor do other pure-perl installers following the <i>Build.PL</i> spec such as <a href="./Module::Build::Tiny.html">Module::Build::Tiny</a>. In practice, this is usually not an issue for the end user, as <code>make</code> is already required to install most CPAN modules, even on Windows.</p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/ExtUtils::MakeMaker">ExtUtils::MakeMaker</a> has been a core module in every version of Perl 5, and must maintain compatibility to install the majority of CPAN modules. <code>Module::Build</code> was added to core in Perl 5.10 and removed from core in Perl 5.20, and (like <a href="https://metacpan.org/pod/ExtUtils::MakeMaker">ExtUtils::MakeMaker</a>) is only updated to fix critical issues and maintain compatibility. <code>Module::Build</code> and other non-core installers like <a href="./Module::Build::Tiny.html">Module::Build::Tiny</a> are installed from CPAN by declaring themselves as a <code>configure</code> phase prerequisite, and in this way any installer can be used in place of <a href="https://metacpan.org/pod/ExtUtils::MakeMaker">ExtUtils::MakeMaker</a>.</p>
+
+</li>
+<li><p>Customizing the build process with <a href="https://metacpan.org/pod/ExtUtils::MakeMaker">ExtUtils::MakeMaker</a> involves overriding certain methods that form the <i>Makefile</i> by defining the subs in the <code>MY::</code> namespace, requiring in-depth knowledge of <i>Makefile</i>, but allowing targeted customization of the entire build. Customizing <code>Module::Build</code> involves subclassing <code>Module::Build</code> itself, adding or overriding pure-perl methods that represent build actions, which are invoked as arguments passed to the generated <code>./Build</code> script. This is a simpler concept but requires redefining the standard build actions to invoke your customizations. <a href="./Module::Build::Tiny.html">Module::Build::Tiny</a> does not allow for customization.</p>
+
+</li>
+<li><p><code>Module::Build</code> provides more features and a better experience for distribution authors than <a href="https://metacpan.org/pod/ExtUtils::MakeMaker">ExtUtils::MakeMaker</a>. However, tools designed specifically for authoring, such as <a href="./Dist::Zilla.html">Dist::Zilla</a> and its spinoffs <a href="./Dist::Milla.html">Dist::Milla</a> and <a href="Minilla.html">Minilla</a>, provide these features and more, and generate a configure script (<i>Makefile.PL</i>/<i>Build.PL</i>) that will use any of the various installers separately on the end user side. <a href="https://metacpan.org/pod/App::ModuleBuildTiny">App::ModuleBuildTiny</a> is an alternative standalone authoring tool for distributions using <a href="./Module::Build::Tiny.html">Module::Build::Tiny</a>, which requires only a simple two-line <i>Build.PL</i>.</p>
+
+</li>
+</ul>
+
+<h1 id="TO-DO"><a id="TO"></a>TO DO</h1>
+
+<p>The current method of relying on time stamps to determine whether a derived file is out of date isn&#39;t likely to scale well, since it requires tracing all dependencies backward, it runs into problems on NFS, and it&#39;s just generally flimsy. It would be better to use an MD5 signature or the like, if available. See <code>cons</code> for an example.</p>
+
+<pre><code> - append to perllocal.pod
+ - add a &#39;plugin&#39; functionality</code></pre>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Ken Williams &lt;kwilliams@cpan.org&gt;</p>
+
+<p>Development questions, bug reports, and patches should be sent to the Module-Build mailing list at &lt;module-build@perl.org&gt;.</p>
+
+<p>Bug reports are also welcome at &lt;http://rt.cpan.org/NoAuth/Bugs.html?Dist=Module-Build&gt;.</p>
+
+<p>The latest development version is available from the Git repository at &lt;https://github.com/Perl-Toolchain-Gang/Module-Build&gt;</p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright (c) 2001-2006 Ken Williams. All rights reserved.</p>
+
+<p>This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p>perl(1), <a href="https://metacpan.org/pod/Module::Build::Cookbook">Module::Build::Cookbook</a>, <a href="https://metacpan.org/pod/distribution/Module-Build/lib/Module/Build/Authoring.pod">Module::Build::Authoring</a>, <a href="https://metacpan.org/pod/distribution/Module-Build/lib/Module/Build/API.pod">Module::Build::API</a>, <a href="https://metacpan.org/pod/ExtUtils::MakeMaker">ExtUtils::MakeMaker</a></p>
+
+<p><i>META.yml</i> Specification: <a href="https://metacpan.org/pod/CPAN::Meta::Spec">CPAN::Meta::Spec</a></p>
+
+<p><a href="http://www.dsmit.com/cons/">http://www.dsmit.com/cons/</a></p>
+
+<p><a href="http://search.cpan.org/dist/PerlBuildSystem/">http://search.cpan.org/dist/PerlBuildSystem/</a></p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Module::Build, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Module::Build</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Module::Build</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Module::Build.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

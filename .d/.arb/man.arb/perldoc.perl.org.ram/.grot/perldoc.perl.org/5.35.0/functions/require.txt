@@ -1,0 +1,229 @@
+=over
+
+=item require VERSION
+X<require>
+
+=item require EXPR
+
+=item require
+
+Demands a version of Perl specified by VERSION, or demands some semantics
+specified by EXPR or by L<C<$_>|perlvar/$_> if EXPR is not supplied.
+
+VERSION may be either a literal such as v5.24.1, which will be
+compared to L<C<$^V>|perlvar/$^V> (or C<$PERL_VERSION> in L<English>),
+or a numeric argument of the form 5.024001, which will be compared to
+L<C<$]>|perlvar/$]>. An exception is raised if VERSION is greater than
+the version of the current Perl interpreter.  Compare with
+L<C<use>|/use Module VERSION LIST>, which can do a similar check at
+compile time.
+
+Specifying VERSION as a numeric argument of the form 5.024001 should
+generally be avoided as older less readable syntax compared to
+v5.24.1. Before perl 5.8.0 (released in 2002), the more verbose numeric
+form was the only supported syntax, which is why you might see it in
+older code.
+
+    require v5.24.1;    # run time version check
+    require 5.24.1;     # ditto
+    require 5.024_001;  # ditto; older syntax compatible
+                          with perl 5.6
+
+Otherwise, L<C<require>|/require VERSION> demands that a library file be
+included if it hasn't already been included.  The file is included via
+the do-FILE mechanism, which is essentially just a variety of
+L<C<eval>|/eval EXPR> with the
+caveat that lexical variables in the invoking script will be invisible
+to the included code.  If it were implemented in pure Perl, it
+would have semantics similar to the following:
+
+    use Carp 'croak';
+    use version;
+
+    sub require {
+        my ($filename) = @_;
+        if ( my $version = eval { version->parse($filename) } ) {
+            if ( $version > $^V ) {
+               my $vn = $version->normal;
+               croak "Perl $vn required--this is only $^V, stopped";
+            }
+            return 1;
+        }
+
+        if (exists $INC{$filename}) {
+            return 1 if $INC{$filename};
+            croak "Compilation failed in require";
+        }
+
+        foreach $prefix (@INC) {
+            if (ref($prefix)) {
+                #... do other stuff - see text below ....
+            }
+            # (see text below about possible appending of .pmc
+            # suffix to $filename)
+            my $realfilename = "$prefix/$filename";
+            next if ! -e $realfilename || -d _ || -b _;
+            $INC{$filename} = $realfilename;
+            my $result = do($realfilename);
+                         # but run in caller's namespace
+
+            if (!defined $result) {
+                $INC{$filename} = undef;
+                croak $@ ? "$@Compilation failed in require"
+                         : "Can't locate $filename: $!\n";
+            }
+            if (!$result) {
+                delete $INC{$filename};
+                croak "$filename did not return true value";
+            }
+            $! = 0;
+            return $result;
+        }
+        croak "Can't locate $filename in \@INC ...";
+    }
+
+Note that the file will not be included twice under the same specified
+name.
+
+The file must return true as the last statement to indicate
+successful execution of any initialization code, so it's customary to
+end such a file with C<1;> unless you're sure it'll return true
+otherwise.  But it's better just to put the C<1;>, in case you add more
+statements.
+
+If EXPR is a bareword, L<C<require>|/require VERSION> assumes a F<.pm>
+extension and replaces C<::> with C</> in the filename for you,
+to make it easy to load standard modules.  This form of loading of
+modules does not risk altering your namespace, however it will autovivify
+the stash for the required module.
+
+In other words, if you try this:
+
+        require Foo::Bar;     # a splendid bareword
+
+The require function will actually look for the F<Foo/Bar.pm> file in the
+directories specified in the L<C<@INC>|perlvar/@INC> array, and it will
+autovivify the C<Foo::Bar::> stash at compile time.
+
+But if you try this:
+
+        my $class = 'Foo::Bar';
+        require $class;       # $class is not a bareword
+    #or
+        require "Foo::Bar";   # not a bareword because of the ""
+
+The require function will look for the F<Foo::Bar> file in the
+L<C<@INC>|perlvar/@INC>  array and
+will complain about not finding F<Foo::Bar> there.  In this case you can do:
+
+        eval "require $class";
+
+or you could do
+
+        require "Foo/Bar.pm";
+
+Neither of these forms will autovivify any stashes at compile time and
+only have run time effects.
+
+Now that you understand how L<C<require>|/require VERSION> looks for
+files with a bareword argument, there is a little extra functionality
+going on behind the scenes.  Before L<C<require>|/require VERSION> looks
+for a F<.pm> extension, it will first look for a similar filename with a
+F<.pmc> extension.  If this file is found, it will be loaded in place of
+any file ending in a F<.pm> extension. This applies to both the explicit
+C<require "Foo/Bar.pm";> form and the C<require Foo::Bar;> form.
+
+You can also insert hooks into the import facility by putting Perl code
+directly into the L<C<@INC>|perlvar/@INC> array.  There are three forms
+of hooks: subroutine references, array references, and blessed objects.
+
+Subroutine references are the simplest case.  When the inclusion system
+walks through L<C<@INC>|perlvar/@INC> and encounters a subroutine, this
+subroutine gets called with two parameters, the first a reference to
+itself, and the second the name of the file to be included (e.g.,
+F<Foo/Bar.pm>).  The subroutine should return either nothing or else a
+list of up to four values in the following order:
+
+=over
+
+=item 1
+
+A reference to a scalar, containing any initial source code to prepend to
+the file or generator output.
+
+=item 2
+
+A filehandle, from which the file will be read.
+
+=item 3
+
+A reference to a subroutine.  If there is no filehandle (previous item),
+then this subroutine is expected to generate one line of source code per
+call, writing the line into L<C<$_>|perlvar/$_> and returning 1, then
+finally at end of file returning 0.  If there is a filehandle, then the
+subroutine will be called to act as a simple source filter, with the
+line as read in L<C<$_>|perlvar/$_>.
+Again, return 1 for each valid line, and 0 after all lines have been
+returned.
+For historical reasons the subroutine will receive a meaningless argument
+(in fact always the numeric value zero) as C<$_[0]>.
+
+=item 4
+
+Optional state for the subroutine.  The state is passed in as C<$_[1]>.
+
+=back
+
+If an empty list, L<C<undef>|/undef EXPR>, or nothing that matches the
+first 3 values above is returned, then L<C<require>|/require VERSION>
+looks at the remaining elements of L<C<@INC>|perlvar/@INC>.
+Note that this filehandle must be a real filehandle (strictly a typeglob
+or reference to a typeglob, whether blessed or unblessed); tied filehandles
+will be ignored and processing will stop there.
+
+If the hook is an array reference, its first element must be a subroutine
+reference.  This subroutine is called as above, but the first parameter is
+the array reference.  This lets you indirectly pass arguments to
+the subroutine.
+
+In other words, you can write:
+
+    push @INC, \&my_sub;
+    sub my_sub {
+        my ($coderef, $filename) = @_;  # $coderef is \&my_sub
+        ...
+    }
+
+or:
+
+    push @INC, [ \&my_sub, $x, $y, ... ];
+    sub my_sub {
+        my ($arrayref, $filename) = @_;
+        # Retrieve $x, $y, ...
+        my (undef, @parameters) = @$arrayref;
+        ...
+    }
+
+If the hook is an object, it must provide an C<INC> method that will be
+called as above, the first parameter being the object itself.  (Note that
+you must fully qualify the sub's name, as unqualified C<INC> is always forced
+into package C<main>.)  Here is a typical code layout:
+
+    # In Foo.pm
+    package Foo;
+    sub new { ... }
+    sub Foo::INC {
+        my ($self, $filename) = @_;
+        ...
+    }
+
+    # In the main program
+    push @INC, Foo->new(...);
+
+These hooks are also permitted to set the L<C<%INC>|perlvar/%INC> entry
+corresponding to the files they have loaded.  See L<perlvar/%INC>.
+
+For a yet-more-powerful import facility, see
+L<C<use>|/use Module VERSION LIST> and L<perlmod>.
+
+=back

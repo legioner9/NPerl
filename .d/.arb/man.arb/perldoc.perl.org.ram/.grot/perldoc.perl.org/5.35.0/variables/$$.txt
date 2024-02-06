@@ -1,0 +1,35 @@
+=over
+
+=item $PROCESS_ID
+
+=item $PID
+
+=item $$
+X<$$> X<$PID> X<$PROCESS_ID>
+
+The process number of the Perl running this script.  Though you I<can> set
+this variable, doing so is generally discouraged, although it can be
+invaluable for some testing purposes.  It will be reset automatically
+across C<fork()> calls.
+
+Note for Linux and Debian GNU/kFreeBSD users: Before Perl v5.16.0 perl
+would emulate POSIX semantics on Linux systems using LinuxThreads, a
+partial implementation of POSIX Threads that has since been superseded
+by the Native POSIX Thread Library (NPTL).
+
+LinuxThreads is now obsolete on Linux, and caching C<getpid()>
+like this made embedding perl unnecessarily complex (since you'd have
+to manually update the value of $$), so now C<$$> and C<getppid()>
+will always return the same values as the underlying C library.
+
+Debian GNU/kFreeBSD systems also used LinuxThreads up until and
+including the 6.0 release, but after that moved to FreeBSD thread
+semantics, which are POSIX-like.
+
+To see if your system is affected by this discrepancy check if
+C<getconf GNU_LIBPTHREAD_VERSION | grep -q NPTL> returns a false
+value.  NTPL threads preserve the POSIX semantics.
+
+Mnemonic: same as shells.
+
+=back

@@ -1,0 +1,48 @@
+=over
+
+=item sleep EXPR
+X<sleep> X<pause>
+
+=item sleep
+
+Causes the script to sleep for (integer) EXPR seconds, or forever if no
+argument is given.  Returns the integer number of seconds actually slept.
+
+EXPR should be a positive integer. If called with a negative integer,
+L<C<sleep>|/sleep EXPR> does not sleep but instead emits a warning, sets
+$! (C<errno>), and returns zero.
+
+C<sleep 0> is permitted, but a function call to the underlying platform
+implementation still occurs, with any side effects that may have.
+C<sleep 0> is therefore not exactly identical to not sleeping at all.
+
+May be interrupted if the process receives a signal such as C<SIGALRM>.
+
+    eval {
+        local $SIG{ALRM} = sub { die "Alarm!\n" };
+        sleep;
+    };
+    die $@ unless $@ eq "Alarm!\n";
+
+You probably cannot mix L<C<alarm>|/alarm SECONDS> and
+L<C<sleep>|/sleep EXPR> calls, because L<C<sleep>|/sleep EXPR> is often
+implemented using L<C<alarm>|/alarm SECONDS>.
+
+On some older systems, it may sleep up to a full second less than what
+you requested, depending on how it counts seconds.  Most modern systems
+always sleep the full amount.  They may appear to sleep longer than that,
+however, because your process might not be scheduled right away in a
+busy multitasking system.
+
+For delays of finer granularity than one second, the L<Time::HiRes>
+module (from CPAN, and starting from Perl 5.8 part of the standard
+distribution) provides L<C<usleep>|Time::HiRes/usleep ( $useconds )>.
+You may also use Perl's four-argument
+version of L<C<select>|/select RBITS,WBITS,EBITS,TIMEOUT> leaving the
+first three arguments undefined, or you might be able to use the
+L<C<syscall>|/syscall NUMBER, LIST> interface to access L<setitimer(2)>
+if your system supports it.  See L<perlfaq8> for details.
+
+See also the L<POSIX> module's L<C<pause>|POSIX/C<pause>> function.
+
+=back

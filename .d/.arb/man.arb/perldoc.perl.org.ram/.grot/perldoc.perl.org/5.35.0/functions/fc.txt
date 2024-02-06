@@ -1,0 +1,65 @@
+=over
+
+=item fc EXPR
+X<fc> X<foldcase> X<casefold> X<fold-case> X<case-fold>
+
+=item fc
+
+Returns the casefolded version of EXPR.  This is the internal function
+implementing the C<\F> escape in double-quoted strings.
+
+Casefolding is the process of mapping strings to a form where case
+differences are erased; comparing two strings in their casefolded
+form is effectively a way of asking if two strings are equal,
+regardless of case.
+
+Roughly, if you ever found yourself writing this
+
+    lc($this) eq lc($that)    # Wrong!
+        # or
+    uc($this) eq uc($that)    # Also wrong!
+        # or
+    $this =~ /^\Q$that\E\z/i  # Right!
+
+Now you can write
+
+    fc($this) eq fc($that)
+
+And get the correct results.
+
+Perl only implements the full form of casefolding, but you can access
+the simple folds using L<Unicode::UCD/B<casefold()>> and
+L<Unicode::UCD/B<prop_invmap()>>.
+For further information on casefolding, refer to
+the Unicode Standard, specifically sections 3.13 C<Default Case Operations>,
+4.2 C<Case-Normative>, and 5.18 C<Case Mappings>,
+available at L<https://www.unicode.org/versions/latest/>, as well as the
+Case Charts available at L<https://www.unicode.org/charts/case/>.
+
+If EXPR is omitted, uses L<C<$_>|perlvar/$_>.
+
+This function behaves the same way under various pragmas, such as within
+L<S<C<"use feature 'unicode_strings">>|feature/The 'unicode_strings' feature>,
+as L<C<lc>|/lc EXPR> does, with the single exception of
+L<C<fc>|/fc EXPR> of I<LATIN CAPITAL LETTER SHARP S> (U+1E9E) within the
+scope of L<S<C<use locale>>|locale>.  The foldcase of this character
+would normally be C<"ss">, but as explained in the L<C<lc>|/lc EXPR>
+section, case
+changes that cross the 255/256 boundary are problematic under locales,
+and are hence prohibited.  Therefore, this function under locale returns
+instead the string C<"\x{17F}\x{17F}">, which is the I<LATIN SMALL LETTER
+LONG S>.  Since that character itself folds to C<"s">, the string of two
+of them together should be equivalent to a single U+1E9E when foldcased.
+
+While the Unicode Standard defines two additional forms of casefolding,
+one for Turkic languages and one that never maps one character into multiple
+characters, these are not provided by the Perl core.  However, the CPAN module
+L<C<Unicode::Casing>|Unicode::Casing> may be used to provide an implementation.
+
+L<C<fc>|/fc EXPR> is available only if the
+L<C<"fc"> feature|feature/The 'fc' feature> is enabled or if it is
+prefixed with C<CORE::>.  The
+L<C<"fc"> feature|feature/The 'fc' feature> is enabled automatically
+with a C<use v5.16> (or higher) declaration in the current scope.
+
+=back

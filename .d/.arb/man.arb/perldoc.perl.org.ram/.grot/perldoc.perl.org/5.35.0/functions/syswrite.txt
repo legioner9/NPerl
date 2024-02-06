@@ -1,0 +1,38 @@
+=over
+
+=item syswrite FILEHANDLE,SCALAR,LENGTH,OFFSET
+X<syswrite>
+
+=item syswrite FILEHANDLE,SCALAR,LENGTH
+
+=item syswrite FILEHANDLE,SCALAR
+
+Attempts to write LENGTH bytes of data from variable SCALAR to the
+specified FILEHANDLE, using L<write(2)>.  If LENGTH is
+not specified, writes whole SCALAR.  It bypasses any L<PerlIO> layers
+including buffered IO (but is affected by the presence of the C<:utf8>
+layer as described later), so
+mixing this with reads (other than C<sysread)>),
+L<C<print>|/print FILEHANDLE LIST>, L<C<write>|/write FILEHANDLE>,
+L<C<seek>|/seek FILEHANDLE,POSITION,WHENCE>,
+L<C<tell>|/tell FILEHANDLE>, or L<C<eof>|/eof FILEHANDLE> may cause
+confusion because the C<:perlio> and C<:crlf> layers usually buffer data.
+Returns the number of bytes actually written, or L<C<undef>|/undef EXPR>
+if there was an error (in this case the errno variable
+L<C<$!>|perlvar/$!> is also set).  If the LENGTH is greater than the
+data available in the SCALAR after the OFFSET, only as much data as is
+available will be written.
+
+An OFFSET may be specified to write the data from some part of the
+string other than the beginning.  A negative OFFSET specifies writing
+that many characters counting backwards from the end of the string.
+If SCALAR is of length zero, you can only use an OFFSET of 0.
+
+B<WARNING>: If the filehandle is marked C<:utf8>, C<syswrite> will raise an exception.
+The C<:encoding(...)> layer implicitly introduces the C<:utf8> layer.
+Alternately, if the handle is not marked with an encoding but you
+attempt to write characters with code points over 255, raises an exception.
+See L<C<binmode>|/binmode FILEHANDLE, LAYER>,
+L<C<open>|/open FILEHANDLE,MODE,EXPR>, and the L<open> pragma.
+
+=back

@@ -1,0 +1,35 @@
+=over
+
+=item scalar EXPR
+X<scalar> X<context>
+
+Forces EXPR to be interpreted in scalar context and returns the value
+of EXPR.
+
+    my @counts = ( scalar @a, scalar @b, scalar @c );
+
+There is no equivalent operator to force an expression to
+be interpolated in list context because in practice, this is never
+needed.  If you really wanted to do so, however, you could use
+the construction C<@{[ (some expression) ]}>, but usually a simple
+C<(some expression)> suffices.
+
+Because L<C<scalar>|/scalar EXPR> is a unary operator, if you
+accidentally use a
+parenthesized list for the EXPR, this behaves as a scalar comma expression,
+evaluating all but the last element in void context and returning the final
+element evaluated in scalar context.  This is seldom what you want.
+
+The following single statement:
+
+    print uc(scalar(foo(), $bar)), $baz;
+
+is the moral equivalent of these two:
+
+    foo();
+    print(uc($bar), $baz);
+
+See L<perlop> for more details on unary operators and the comma operator,
+and L<perldata> for details on evaluating a hash in scalar context.
+
+=back

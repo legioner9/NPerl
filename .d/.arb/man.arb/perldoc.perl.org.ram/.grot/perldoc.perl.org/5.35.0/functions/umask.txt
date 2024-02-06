@@ -1,0 +1,49 @@
+=over
+
+=item umask EXPR
+X<umask>
+
+=item umask
+
+Sets the umask for the process to EXPR and returns the previous value.
+If EXPR is omitted, merely returns the current umask.
+
+The Unix permission C<rwxr-x---> is represented as three sets of three
+bits, or three octal digits: C<0750> (the leading 0 indicates octal
+and isn't one of the digits).  The L<C<umask>|/umask EXPR> value is such
+a number representing disabled permissions bits.  The permission (or
+"mode") values you pass L<C<mkdir>|/mkdir FILENAME,MODE> or
+L<C<sysopen>|/sysopen FILEHANDLE,FILENAME,MODE> are modified by your
+umask, so even if you tell
+L<C<sysopen>|/sysopen FILEHANDLE,FILENAME,MODE> to create a file with
+permissions C<0777>, if your umask is C<0022>, then the file will
+actually be created with permissions C<0755>.  If your
+L<C<umask>|/umask EXPR> were C<0027> (group can't write; others can't
+read, write, or execute), then passing
+L<C<sysopen>|/sysopen FILEHANDLE,FILENAME,MODE> C<0666> would create a
+file with mode C<0640> (because C<0666 &~ 027> is C<0640>).
+
+Here's some advice: supply a creation mode of C<0666> for regular
+files (in L<C<sysopen>|/sysopen FILEHANDLE,FILENAME,MODE>) and one of
+C<0777> for directories (in L<C<mkdir>|/mkdir FILENAME,MODE>) and
+executable files.  This gives users the freedom of
+choice: if they want protected files, they might choose process umasks
+of C<022>, C<027>, or even the particularly antisocial mask of C<077>.
+Programs should rarely if ever make policy decisions better left to
+the user.  The exception to this is when writing files that should be
+kept private: mail files, web browser cookies, F<.rhosts> files, and
+so on.
+
+If L<umask(2)> is not implemented on your system and you are trying to
+restrict access for I<yourself> (i.e., C<< (EXPR & 0700) > 0 >>),
+raises an exception.  If L<umask(2)> is not implemented and you are
+not trying to restrict access for yourself, returns
+L<C<undef>|/undef EXPR>.
+
+Remember that a umask is a number, usually given in octal; it is I<not> a
+string of octal digits.  See also L<C<oct>|/oct EXPR>, if all you have
+is a string.
+
+Portability issues: L<perlport/umask>.
+
+=back

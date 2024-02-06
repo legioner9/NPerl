@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Pod::Find - find POD documents in directory trees - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Pod-Parser - MetaCPAN" href="https://metacpan.org/dist/Pod-Parser/releases.rss" />
+        <link rel="canonical" href="./Pod::Find.html" />
+        <meta name="description" content="find POD documents in directory trees" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Pod::Find" />
+<meta name="twitter:title"       content="Pod::Find" />
+<meta name="twitter:description" content="find POD documents in directory trees" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Pod::Find.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Pod-Parser was released.">
+      <span class="relatize">03 Jan 2024 21:23:20 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Pod-Parser">Pod-Parser</a>
+  </li>
+  <li>
+    Module version: 1.67
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Pod-Parser/source/lib/Pod/Find.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Pod-Parser/source/lib/Pod/Find.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Pod-Parser/source/lib/Pod">Browse</a>
+    (<a href="https://metacpan.org/dist/Pod-Parser/source/lib/Pod?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Pod-Parser/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Pod-Parser/contribute">How to Contribute</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Pod-Parser">Issues</a>
+      (0)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Pod-Parser+1.67" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Pod-Parser.html?oncpan=1&amp;distmat=1&amp;version=1.67&amp;grade=2" style="color: #090">334</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Pod-Parser.html?oncpan=1&amp;distmat=1&amp;version=1.67&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Pod-Parser.html?oncpan=1&amp;distmat=1&amp;version=1.67&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/MAREKR/Pod-Parser-1.67">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Pod-Parser who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 5
+      </div>
+    </li>
+    <li>
+      License: unknown
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Pod-Parser/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/M/MA/MAREKR/Pod-Parser-1.67.tar.gz">
+      Download (<span itemprop="fileSize">79.06KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FMAREKR%2FPod-Parser-1.67%2Flib%2FPod%2FFind.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Pod-Parser/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Pod-Parser/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Pod-Parser">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Pod-Parser">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Pod/Find.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="MAREKR/Pod-Parser-1.67"
+>1.67
+  (MAREKR on 2024-01-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.66"
+>1.66
+  (MAREKR on 2023-04-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.65"
+>1.65
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.64"
+>1.64
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.63"
+>1.63
+  (MAREKR on 2015-02-10)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.62"
+>1.62
+  (MAREKR on 2014-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.51"
+>1.51
+  (MAREKR on 2012-01-25)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.38"
+>1.38
+  (MAREKR on 2009-02-09)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MAREKR/Pod-Parser-1.61"
+>1.61
+  (MAREKR on 2013-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.60"
+>1.60
+  (MAREKR on 2013-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.50"
+>1.50
+  (MAREKR on 2012-01-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.37"
+>1.37
+  (MAREKR on 2009-02-04)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.36"
+>1.36
+  (MAREKR on 2009-01-20)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.35"
+>1.35
+  (MAREKR on 2006-10-26)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.34"
+>1.34
+  (MAREKR on 2005-10-06)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.33"
+>1.33
+  (MAREKR on 2005-09-05)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.32"
+>1.32
+  (MAREKR on 2005-06-15)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.31"
+>1.31
+  (MAREKR on 2005-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.30"
+>1.30
+  (MAREKR on 2005-03-13)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/MAREKR/Pod-Parser-1.67/diff/' + encodeURIComponent(this.value) + '/lib/Pod/Find.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="MAREKR/Pod-Parser-1.67"
+>1.67
+  (MAREKR on 2024-01-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.66"
+>1.66
+  (MAREKR on 2023-04-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.65"
+>1.65
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.64"
+>1.64
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.63"
+>1.63
+  (MAREKR on 2015-02-10)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.62"
+>1.62
+  (MAREKR on 2014-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.51"
+>1.51
+  (MAREKR on 2012-01-25)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.38"
+>1.38
+  (MAREKR on 2009-02-09)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MAREKR/Pod-Parser-1.61"
+>1.61
+  (MAREKR on 2013-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.60"
+>1.60
+  (MAREKR on 2013-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.50"
+>1.50
+  (MAREKR on 2012-01-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.37"
+>1.37
+  (MAREKR on 2009-02-04)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.36"
+>1.36
+  (MAREKR on 2009-01-20)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.35"
+>1.35
+  (MAREKR on 2006-10-26)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.34"
+>1.34
+  (MAREKR on 2005-10-06)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.33"
+>1.33
+  (MAREKR on 2005-09-05)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.32"
+>1.32
+  (MAREKR on 2005-06-15)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.31"
+>1.31
+  (MAREKR on 2005-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.30"
+>1.30
+  (MAREKR on 2005-03-13)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Cwd" title="Cwd" class="ellipsis">Cwd</a></li>
+  <li><a href="https://metacpan.org/pod/File::Basename" title="File::Basename" class="ellipsis">File::Basename</a></li>
+  <li><a href="https://metacpan.org/pod/Test::More" title="Test::More" class="ellipsis">Test::More</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Pod::Find/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Pod%3A%3AFind">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Pod-Parser">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/MAREKR/Pod-Parser-1.67/view/lib/Pod/Find.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Pod::Find.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/DOHERTY"><img src="https://www.gravatar.com/avatar/9533c36b6385c8321bad636c98e9c0a8?d=identicon&amp;s=20" title="DOHERTY" alt="DOHERTY"></a>
+<a class="display-all" href="https://metacpan.org/author/JMATES"><img src="https://www.gravatar.com/avatar/06accb84e6519284be3941ff72e429cb?d=identicon&amp;s=20" title="JMATES" alt="JMATES"></a>
+<a class="display-all" href="https://metacpan.org/author/AZAWAWI"><img src="https://www.gravatar.com/avatar/70ebafdecf974e15bcaba4cbe39efef1?d=identicon&amp;s=20" title="AZAWAWI" alt="AZAWAWI"></a>
+<a class="display-all" href="https://metacpan.org/author/KEEDI"><img src="https://www.gravatar.com/avatar/95f905a7a4ccc573c711e9d264c0fde8?d=identicon&amp;s=20" title="KEEDI" alt="KEEDI"></a>
+<a class="display-all" href="https://metacpan.org/author/SYP"><img src="https://www.gravatar.com/avatar/9b6fa62677be03c25ee1af4d95472042?d=identicon&amp;s=20" title="SYP" alt="SYP"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Pod-Parser/plussers">7 PAUSE users</a>
+</div>
+<div>
+    6 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-contrib-email="bradapp@enteract.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Brad Appleton, Marek Rouchal &lt;marekr@cpan.org&gt;
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/MAREKR" class="author-name">Marek Rouchal</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Pod/Find.pm&#39;" class="">
+<option
+  selected
+  value="MAREKR/Pod-Parser-1.67"
+>1.67
+  (MAREKR on 2024-01-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.66"
+>1.66
+  (MAREKR on 2023-04-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.65"
+>1.65
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.64"
+>1.64
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.63"
+>1.63
+  (MAREKR on 2015-02-10)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.62"
+>1.62
+  (MAREKR on 2014-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.51"
+>1.51
+  (MAREKR on 2012-01-25)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.38"
+>1.38
+  (MAREKR on 2009-02-09)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MAREKR/Pod-Parser-1.61"
+>1.61
+  (MAREKR on 2013-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.60"
+>1.60
+  (MAREKR on 2013-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.50"
+>1.50
+  (MAREKR on 2012-01-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.37"
+>1.37
+  (MAREKR on 2009-02-04)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.36"
+>1.36
+  (MAREKR on 2009-01-20)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.35"
+>1.35
+  (MAREKR on 2006-10-26)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.34"
+>1.34
+  (MAREKR on 2005-10-06)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.33"
+>1.33
+  (MAREKR on 2005-09-05)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.32"
+>1.32
+  (MAREKR on 2005-06-15)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.31"
+>1.31
+  (MAREKR on 2005-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.30"
+>1.30
+  (MAREKR on 2005-03-13)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Pod-Parser">Pod-Parser-1.67</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage four &#10;
+          • 98 direct dependents &#10;          • 1275 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Pod-Parser-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Pod-Parser-1.67">
+    <input type="hidden" name="author" value="MAREKR">
+    <input type="hidden" name="distribution" value="Pod-Parser">
+    <button type="submit" class="favorite highlight"><span>13</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Pod::Find.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>13</span> ++</a>
+</div>
+   / <span>Pod::Find</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Pod::Find.html#NAME">NAME</a></li>
+  <li><a href="./Pod::Find.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Pod::Find.html#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a href="./Pod::Find.html#pod_find(-%7B-%25opts-%7D-,-@directories-)">pod_find( { %opts } , @directories )</a></li>
+      <li><a href="./Pod::Find.html#simplify_name(-$str-)">simplify_name( $str )</a></li>
+      <li><a href="./Pod::Find.html#pod_where(-%7B-%25opts-%7D,-$pod-)">pod_where( { %opts }, $pod )</a></li>
+      <li><a href="./Pod::Find.html#contains_pod(-$file-,-$verbose-)">contains_pod( $file , $verbose )</a></li>
+    </ul>
+  </li>
+  <li><a href="./Pod::Find.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Pod::Find.html#SEE-ALSO">SEE ALSO</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Pod::Find - find POD documents in directory trees</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  use Pod::Find qw(pod_find simplify_name);
+  my %pods = pod_find({ -verbose =&gt; 1, -inc =&gt; 1 });
+  foreach(keys %pods) {
+     print &quot;found library POD `$pods{$_}&#39; in $_\n&quot;;
+  }
+
+  print &quot;podname=&quot;,simplify_name(&#39;a/b/c/mymodule.pod&#39;),&quot;\n&quot;;
+
+  $location = pod_where( { -inc =&gt; 1 }, &quot;Pod::Find&quot; );</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p><b>NOTE: This module is considered legacy; modern Perl releases (5.31.1 and higher) are going to remove Pod-Parser from core and use <a href="https://metacpan.org/pod/Pod::Simple">Pod::Simple</a> for all things POD.</b></p>
+
+<p><b>Pod::Find</b> provides a set of functions to locate POD files. Note that no function is exported by default to avoid pollution of your namespace, so be sure to specify them in the <b>use</b> statement if you need them:</p>
+
+<pre><code>  use Pod::Find qw(pod_find);</code></pre>
+
+<p>From this version on the typical SCM (software configuration management) directories are ignored. These are: RCS, CVS, SCCS, .svn, .hg, .git, .sync</p>
+
+<h2 id="pod_find(-{-%opts-}-,-@directories-)"><a id="pod_find"></a><a id="pod_find-----opts------directories"></a><code>pod_find( { %opts } , @directories )</code></h2>
+
+<p>The function <b>pod_find</b> searches for POD documents in a given set of files and/or directories. It returns a hash with the file names as keys and the POD name as value. The POD name is derived from the file name and its position in the directory tree.</p>
+
+<p>E.g. when searching in <i>$HOME/perl5lib</i>, the file <i>$HOME/perl5lib/MyModule.pm</i> would get the POD name <i>MyModule</i>, whereas <i>$HOME/perl5lib/Myclass/Subclass.pm</i> would be <i>Myclass::Subclass</i>. The name information can be used for POD translators.</p>
+
+<p>Only text files containing at least one valid POD command are found.</p>
+
+<p>A warning is printed if more than one POD file with the same POD name is found, e.g. <i>CPAN.pm</i> in different directories. This usually indicates duplicate occurrences of modules in the <i>@INC</i> search path.</p>
+
+<p><b>OPTIONS</b> The first argument for <b>pod_find</b> may be a hash reference with options. The rest are either directories that are searched recursively or files. The POD names of files are the plain basenames with any Perl-like extension (.pm, .pl, .pod) stripped.</p>
+
+<dl>
+
+<dt id="-verbose-=&gt;-1"><a id="verbose---1"></a><code>-verbose =&gt; 1</code></dt>
+<dd>
+
+<p>Print progress information while scanning.</p>
+
+</dd>
+<dt id="-perl-=&gt;-1"><a id="perl---1"></a><code>-perl =&gt; 1</code></dt>
+<dd>
+
+<p>Apply Perl-specific heuristics to find the correct PODs. This includes stripping Perl-like extensions, omitting subdirectories that are numeric but do <i>not</i> match the current Perl interpreter&#39;s version id, suppressing <i>site_perl</i> as a module hierarchy name etc.</p>
+
+</dd>
+<dt id="-script-=&gt;-1"><a id="script---1"></a><code>-script =&gt; 1</code></dt>
+<dd>
+
+<p>Search for PODs in the current Perl interpreter&#39;s installation <b>scriptdir</b>. This is taken from the local <a href="https://metacpan.org/pod/Config">Config</a> module.</p>
+
+</dd>
+<dt id="-inc-=&gt;-1"><a id="inc---1"></a><code>-inc =&gt; 1</code></dt>
+<dd>
+
+<p>Search for PODs in the current Perl interpreter&#39;s <i>@INC</i> paths. This automatically considers paths specified in the <code>PERL5LIB</code> environment as this is included in <i>@INC</i> by the Perl interpreter itself.</p>
+
+</dd>
+</dl>
+
+<h2 id="simplify_name(-$str-)"><a id="simplify_name"></a><a id="simplify_name---str"></a><code>simplify_name( $str )</code></h2>
+
+<p>The function <b>simplify_name</b> is equivalent to <b>basename</b>, but also strips Perl-like extensions (.pm, .pl, .pod) and extensions like <i>.bat</i>, <i>.cmd</i> on Win32 and OS/2, or <i>.com</i> on VMS, respectively.</p>
+
+<h2 id="pod_where(-{-%opts-},-$pod-)"><a id="pod_where"></a><a id="pod_where-----opts----pod"></a><code>pod_where( { %opts }, $pod )</code></h2>
+
+<p>Returns the location of a pod document given a search directory and a module (e.g. <code>File::Find</code>) or script (e.g. <code>perldoc</code>) name.</p>
+
+<p>Options:</p>
+
+<dl>
+
+<dt id="-inc-=&gt;-11"><a id="inc---11"></a><code>-inc =&gt; 1</code></dt>
+<dd>
+
+<p>Search @INC for the pod and also the <code>scriptdir</code> defined in the <a href="https://metacpan.org/pod/Config">Config</a> module.</p>
+
+</dd>
+<dt id="-dirs-=&gt;-[-$dir1,-$dir2,-...-]"><a id="dirs------dir1---dir2"></a><code>-dirs =&gt; [ $dir1, $dir2, ... ]</code></dt>
+<dd>
+
+<p>Reference to an array of search directories. These are searched in order before looking in <code>@INC</code> (if <b>-inc</b>). Current directory is used if none are specified.</p>
+
+</dd>
+<dt id="-verbose-=&gt;-11"><a id="verbose---11"></a><code>-verbose =&gt; 1</code></dt>
+<dd>
+
+<p>List directories as they are searched</p>
+
+</dd>
+</dl>
+
+<p>Returns the full path of the first occurrence to the file. Package names (eg &#39;A::B&#39;) are automatically converted to directory names in the selected directory. (eg on unix &#39;A::B&#39; is converted to &#39;A/B&#39;). Additionally, &#39;.pm&#39;, &#39;.pl&#39; and &#39;.pod&#39; are appended to the search automatically if required.</p>
+
+<p>A subdirectory <i>pod/</i> is also checked if it exists in any of the given search directories. This ensures that e.g. <a href="functions/CORE.html">perlfunc</a> is found.</p>
+
+<p>It is assumed that if a module name is supplied, that that name matches the file name. Pods are not opened to check for the &#39;NAME&#39; entry.</p>
+
+<p>A check is made to make sure that the file that is found does contain some pod documentation.</p>
+
+<h2 id="contains_pod(-$file-,-$verbose-)"><a id="contains_pod"></a><a id="contains_pod---file----verbose"></a><code>contains_pod( $file , $verbose )</code></h2>
+
+<p>Returns true if the supplied filename (not POD module) contains some pod information.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Please report bugs using <a href="http://rt.cpan.org">http://rt.cpan.org</a>.</p>
+
+<p>Marek Rouchal &lt;marekr@cpan.org&gt;, heavily borrowing code from Nick Ing-Simmons&#39; PodToHtml.</p>
+
+<p>Tim Jenness &lt;t.jenness@jach.hawaii.edu&gt; provided <code>pod_where</code> and <code>contains_pod</code>.</p>
+
+<p><b>Pod::Find</b> is part of the <a href="./Pod::Parser.html">Pod::Parser</a> distribution.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Pod::Parser.html">Pod::Parser</a>, <a href="https://metacpan.org/pod/Pod::Checker">Pod::Checker</a>, <a href="https://metacpan.org/pod/perldoc">perldoc</a></p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Pod::Parser, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Pod::Parser</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Pod::Parser</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Pod::Find.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

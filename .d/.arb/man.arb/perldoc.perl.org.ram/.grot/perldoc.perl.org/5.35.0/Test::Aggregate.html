@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Test::Aggregate - Aggregate *.t tests to make them run faster. - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Test-Aggregate - MetaCPAN" href="https://metacpan.org/dist/Test-Aggregate/releases.rss" />
+        <link rel="canonical" href="./Test::Aggregate.html" />
+        <meta name="description" content="Aggregate *.t tests to make them run faster." />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Test::Aggregate" />
+<meta name="twitter:title"       content="Test::Aggregate" />
+<meta name="twitter:description" content="Aggregate *.t tests to make them run faster." />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Test::Aggregate.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Test-Aggregate was released.">
+      <span class="relatize">28 Jan 2017 23:59:09 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Test-Aggregate">Test-Aggregate</a>
+  </li>
+  <li>
+    Module version: 0.375
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Test-Aggregate/source/lib/Test/Aggregate.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Test-Aggregate/source/lib/Test/Aggregate.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Test-Aggregate/source/lib/Test">Browse</a>
+    (<a href="https://metacpan.org/dist/Test-Aggregate/source/lib/Test?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Test-Aggregate/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Test-Aggregate/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/rwstauner/test-aggregate">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Test-Aggregate">Issues</a>
+      (5)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Test-Aggregate+0.375" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/T/Test-Aggregate.html?oncpan=1&amp;distmat=1&amp;version=0.375&amp;grade=2" style="color: #090">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/T/Test-Aggregate.html?oncpan=1&amp;distmat=1&amp;version=0.375&amp;grade=3" style="color: #900">13</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/T/Test-Aggregate.html?oncpan=1&amp;distmat=1&amp;version=0.375&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/RWSTAUNER/Test-Aggregate-0.375">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Test-Aggregate who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 2
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Test-Aggregate-0.375/index.html">% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Test-Aggregate/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/R/RW/RWSTAUNER/Test-Aggregate-0.375.tar.gz">
+      Download (<span itemprop="fileSize">33.53KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FRWSTAUNER%2FTest-Aggregate-0.375%2Flib%2FTest%2FAggregate.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Test-Aggregate/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Test-Aggregate/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Test-Aggregate">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Test-Aggregate">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Test/Aggregate.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="RWSTAUNER/Test-Aggregate-0.375"
+>0.375
+  (RWSTAUNER on 2017-01-28)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.374"
+>0.374
+  (RWSTAUNER on 2016-08-16)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.373"
+>0.373
+  (RWSTAUNER on 2015-09-28)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.372"
+>0.372
+  (RWSTAUNER on 2015-01-07)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.371"
+>0.371
+  (RWSTAUNER on 2013-09-24)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.370"
+>0.370
+  (RWSTAUNER on 2013-09-01)</option>
+<option
+  
+  value="FLORA/Test-Aggregate-0.364"
+>0.364
+  (FLORA on 2010-12-04)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.363"
+>0.363
+  (OVID on 2009-11-24)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.362"
+>0.362
+  (OVID on 2009-11-17)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.361"
+>0.361
+  (OVID on 2009-10-21)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.36"
+>0.36
+  (OVID on 2009-10-18)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_07"
+>0.35_07 DEV
+  (OVID on 2009-08-19)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_05"
+>0.35_05 DEV
+  (OVID on 2009-05-20)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_03"
+>0.35_03 DEV
+  (OVID on 2009-05-14)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_02"
+>0.35_02 DEV
+  (OVID on 2009-05-13)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_01"
+>0.35_01 DEV
+  (OVID on 2008-11-18)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35"
+>0.35
+  (OVID on 2008-10-27)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_09"
+>0.34_09 DEV
+  (OVID on 2008-10-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_08"
+>0.34_08 DEV
+  (OVID on 2008-10-14)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_07"
+>0.34_07 DEV
+  (OVID on 2008-10-13)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_06"
+>0.34_06 DEV
+  (OVID on 2008-09-21)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_05"
+>0.34_05 DEV
+  (OVID on 2008-09-19)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_04"
+>0.34_04 DEV
+  (OVID on 2008-09-18)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_03"
+>0.34_03 DEV
+  (OVID on 2008-09-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_02"
+>0.34_02 DEV
+  (OVID on 2008-09-14)</option>
+<option
+  
+  value="FLORA/Test-Aggregate-0.34_01"
+>0.34_01 DEV
+  (FLORA on 2008-09-04)</option>
+<option
+  
+  value="FLORA/Test-Aggregate-0.33"
+>0.33
+  (FLORA on 2008-09-03)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_05"
+>0.32_05 DEV
+  (OVID on 2008-08-19)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_04"
+>0.32_04 DEV
+  (OVID on 2008-08-08)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_03"
+>0.32_03 DEV
+  (OVID on 2008-08-04)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_02"
+>0.32_02 DEV
+  (OVID on 2008-08-03)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_01"
+>0.32_01 DEV
+  (OVID on 2008-08-03)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.31"
+>0.31
+  (OVID on 2008-07-22)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.30"
+>0.30
+  (OVID on 2008-07-17)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.369"
+>0.369
+  (RWSTAUNER on 2013-08-26)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.368"
+>0.368
+  (RWSTAUNER on 2013-08-15)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.367"
+>0.367
+  (RWSTAUNER on 2013-08-14)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.366"
+>0.366
+  (RWSTAUNER on 2013-07-11)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.365"
+>0.365
+  (RWSTAUNER on 2013-07-11)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.24"
+>0.24
+  (OVID on 2008-07-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.23"
+>0.23
+  (OVID on 2008-06-12)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.22"
+>0.22
+  (OVID on 2008-06-11)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.21"
+>0.21
+  (OVID on 2008-06-11)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.20"
+>0.20
+  (OVID on 2008-04-05)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.11"
+>0.11
+  (OVID on 2008-03-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.10"
+>0.10
+  (OVID on 2008-03-13)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.08"
+>0.08
+  (OVID on 2008-03-09)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.07"
+>0.07
+  (OVID on 2008-03-05)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.06"
+>0.06
+  (OVID on 2008-01-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.05"
+>0.05
+  (OVID on 2007-12-29)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.04"
+>0.04
+  (OVID on 2007-12-29)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.03"
+>0.03
+  (OVID on 2007-11-29)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.02"
+>0.02
+  (OVID on 2007-11-26)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.01"
+>0.01
+  (OVID on 2007-11-25)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/RWSTAUNER/Test-Aggregate-0.375/diff/' + encodeURIComponent(this.value) + '/lib/Test/Aggregate.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="RWSTAUNER/Test-Aggregate-0.375"
+>0.375
+  (RWSTAUNER on 2017-01-28)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.374"
+>0.374
+  (RWSTAUNER on 2016-08-16)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.373"
+>0.373
+  (RWSTAUNER on 2015-09-28)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.372"
+>0.372
+  (RWSTAUNER on 2015-01-07)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.371"
+>0.371
+  (RWSTAUNER on 2013-09-24)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.370"
+>0.370
+  (RWSTAUNER on 2013-09-01)</option>
+<option
+  
+  value="FLORA/Test-Aggregate-0.364"
+>0.364
+  (FLORA on 2010-12-04)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.363"
+>0.363
+  (OVID on 2009-11-24)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.362"
+>0.362
+  (OVID on 2009-11-17)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.361"
+>0.361
+  (OVID on 2009-10-21)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.36"
+>0.36
+  (OVID on 2009-10-18)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_07"
+>0.35_07 DEV
+  (OVID on 2009-08-19)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_05"
+>0.35_05 DEV
+  (OVID on 2009-05-20)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_03"
+>0.35_03 DEV
+  (OVID on 2009-05-14)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_02"
+>0.35_02 DEV
+  (OVID on 2009-05-13)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_01"
+>0.35_01 DEV
+  (OVID on 2008-11-18)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35"
+>0.35
+  (OVID on 2008-10-27)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_09"
+>0.34_09 DEV
+  (OVID on 2008-10-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_08"
+>0.34_08 DEV
+  (OVID on 2008-10-14)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_07"
+>0.34_07 DEV
+  (OVID on 2008-10-13)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_06"
+>0.34_06 DEV
+  (OVID on 2008-09-21)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_05"
+>0.34_05 DEV
+  (OVID on 2008-09-19)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_04"
+>0.34_04 DEV
+  (OVID on 2008-09-18)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_03"
+>0.34_03 DEV
+  (OVID on 2008-09-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_02"
+>0.34_02 DEV
+  (OVID on 2008-09-14)</option>
+<option
+  
+  value="FLORA/Test-Aggregate-0.34_01"
+>0.34_01 DEV
+  (FLORA on 2008-09-04)</option>
+<option
+  
+  value="FLORA/Test-Aggregate-0.33"
+>0.33
+  (FLORA on 2008-09-03)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_05"
+>0.32_05 DEV
+  (OVID on 2008-08-19)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_04"
+>0.32_04 DEV
+  (OVID on 2008-08-08)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_03"
+>0.32_03 DEV
+  (OVID on 2008-08-04)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_02"
+>0.32_02 DEV
+  (OVID on 2008-08-03)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_01"
+>0.32_01 DEV
+  (OVID on 2008-08-03)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.31"
+>0.31
+  (OVID on 2008-07-22)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.30"
+>0.30
+  (OVID on 2008-07-17)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.369"
+>0.369
+  (RWSTAUNER on 2013-08-26)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.368"
+>0.368
+  (RWSTAUNER on 2013-08-15)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.367"
+>0.367
+  (RWSTAUNER on 2013-08-14)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.366"
+>0.366
+  (RWSTAUNER on 2013-07-11)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.365"
+>0.365
+  (RWSTAUNER on 2013-07-11)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.24"
+>0.24
+  (OVID on 2008-07-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.23"
+>0.23
+  (OVID on 2008-06-12)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.22"
+>0.22
+  (OVID on 2008-06-11)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.21"
+>0.21
+  (OVID on 2008-06-11)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.20"
+>0.20
+  (OVID on 2008-04-05)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.11"
+>0.11
+  (OVID on 2008-03-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.10"
+>0.10
+  (OVID on 2008-03-13)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.08"
+>0.08
+  (OVID on 2008-03-09)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.07"
+>0.07
+  (OVID on 2008-03-05)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.06"
+>0.06
+  (OVID on 2008-01-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.05"
+>0.05
+  (OVID on 2007-12-29)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.04"
+>0.04
+  (OVID on 2007-12-29)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.03"
+>0.03
+  (OVID on 2007-11-29)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.02"
+>0.02
+  (OVID on 2007-11-26)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.01"
+>0.01
+  (OVID on 2007-11-25)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/FindBin" title="FindBin" class="ellipsis">FindBin</a></li>
+  <li><a href="https://metacpan.org/pod/Test::Harness" title="Test::Harness" class="ellipsis">Test::Harness</a></li>
+  <li><a href="https://metacpan.org/pod/Test::NoWarnings" title="Test::NoWarnings" class="ellipsis">Test::NoWarnings</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Test::Aggregate/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Test%3A%3AAggregate">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Test-Aggregate">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/RWSTAUNER/Test-Aggregate-0.375/view/lib/Test/Aggregate.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Test::Aggregate.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/LLAP"><img src="https://www.gravatar.com/avatar/fe83c062043dc4e41c9af07b080e306e?d=identicon&amp;s=20" title="LLAP" alt="LLAP"></a>
+<a class="display-all" href="https://metacpan.org/author/AYOUNG"><img src="https://www.gravatar.com/avatar/8d1e4946c288fbe87d1e0394f3e41b24?d=identicon&amp;s=20" title="AYOUNG" alt="AYOUNG"></a>
+<a class="display-all" href="https://metacpan.org/author/RRWO"><img src="https://www.gravatar.com/avatar/4a5274bc5d690ee3d619f044778771a7?d=identicon&amp;s=20" title="RRWO" alt="RRWO"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Test-Aggregate/plussers">3 PAUSE users</a>
+</div>
+<div>
+    1 non-PAUSE user
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 3 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="OVID"
+      data-contrib-email="ovid@cpan.org"
+    >
+      <a href="https://metacpan.org/author/OVID" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/7f633daa0796788b31b868b5ffe98157?d=identicon&amp;s=20" />
+      Curtis &quot;Ovid&quot; Poe
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="FLORA"
+      data-contrib-email="flora@cpan.org"
+    >
+      <a href="https://metacpan.org/author/FLORA" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/fd2bdaaefe41908133793d1ddf38f75d?d=identicon&amp;s=20" />
+      Florian Ragwitz
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="SHLOMIF"
+      data-contrib-email="shlomif@cpan.org"
+    >
+      <a href="https://metacpan.org/author/SHLOMIF" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/072331b92b0e6e9d9bc31c3af8f8ccea?d=identicon&amp;s=20" />
+      Shlomi Fish
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/RWSTAUNER" class="author-name">Randy Stauner ⛰</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Test/Aggregate.pm&#39;" class="">
+<option
+  selected
+  value="RWSTAUNER/Test-Aggregate-0.375"
+>0.375
+  (RWSTAUNER on 2017-01-28)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.374"
+>0.374
+  (RWSTAUNER on 2016-08-16)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.373"
+>0.373
+  (RWSTAUNER on 2015-09-28)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.372"
+>0.372
+  (RWSTAUNER on 2015-01-07)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.371"
+>0.371
+  (RWSTAUNER on 2013-09-24)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.370"
+>0.370
+  (RWSTAUNER on 2013-09-01)</option>
+<option
+  
+  value="FLORA/Test-Aggregate-0.364"
+>0.364
+  (FLORA on 2010-12-04)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.363"
+>0.363
+  (OVID on 2009-11-24)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.362"
+>0.362
+  (OVID on 2009-11-17)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.361"
+>0.361
+  (OVID on 2009-10-21)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.36"
+>0.36
+  (OVID on 2009-10-18)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_07"
+>0.35_07 DEV
+  (OVID on 2009-08-19)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_05"
+>0.35_05 DEV
+  (OVID on 2009-05-20)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_03"
+>0.35_03 DEV
+  (OVID on 2009-05-14)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_02"
+>0.35_02 DEV
+  (OVID on 2009-05-13)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35_01"
+>0.35_01 DEV
+  (OVID on 2008-11-18)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.35"
+>0.35
+  (OVID on 2008-10-27)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_09"
+>0.34_09 DEV
+  (OVID on 2008-10-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_08"
+>0.34_08 DEV
+  (OVID on 2008-10-14)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_07"
+>0.34_07 DEV
+  (OVID on 2008-10-13)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_06"
+>0.34_06 DEV
+  (OVID on 2008-09-21)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_05"
+>0.34_05 DEV
+  (OVID on 2008-09-19)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_04"
+>0.34_04 DEV
+  (OVID on 2008-09-18)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_03"
+>0.34_03 DEV
+  (OVID on 2008-09-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.34_02"
+>0.34_02 DEV
+  (OVID on 2008-09-14)</option>
+<option
+  
+  value="FLORA/Test-Aggregate-0.34_01"
+>0.34_01 DEV
+  (FLORA on 2008-09-04)</option>
+<option
+  
+  value="FLORA/Test-Aggregate-0.33"
+>0.33
+  (FLORA on 2008-09-03)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_05"
+>0.32_05 DEV
+  (OVID on 2008-08-19)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_04"
+>0.32_04 DEV
+  (OVID on 2008-08-08)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_03"
+>0.32_03 DEV
+  (OVID on 2008-08-04)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_02"
+>0.32_02 DEV
+  (OVID on 2008-08-03)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.32_01"
+>0.32_01 DEV
+  (OVID on 2008-08-03)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.31"
+>0.31
+  (OVID on 2008-07-22)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.30"
+>0.30
+  (OVID on 2008-07-17)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.369"
+>0.369
+  (RWSTAUNER on 2013-08-26)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.368"
+>0.368
+  (RWSTAUNER on 2013-08-15)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.367"
+>0.367
+  (RWSTAUNER on 2013-08-14)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.366"
+>0.366
+  (RWSTAUNER on 2013-07-11)</option>
+<option
+  
+  value="RWSTAUNER/Test-Aggregate-0.365"
+>0.365
+  (RWSTAUNER on 2013-07-11)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.24"
+>0.24
+  (OVID on 2008-07-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.23"
+>0.23
+  (OVID on 2008-06-12)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.22"
+>0.22
+  (OVID on 2008-06-11)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.21"
+>0.21
+  (OVID on 2008-06-11)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.20"
+>0.20
+  (OVID on 2008-04-05)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.11"
+>0.11
+  (OVID on 2008-03-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.10"
+>0.10
+  (OVID on 2008-03-13)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.08"
+>0.08
+  (OVID on 2008-03-09)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.07"
+>0.07
+  (OVID on 2008-03-05)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.06"
+>0.06
+  (OVID on 2008-01-15)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.05"
+>0.05
+  (OVID on 2007-12-29)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.04"
+>0.04
+  (OVID on 2007-12-29)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.03"
+>0.03
+  (OVID on 2007-11-29)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.02"
+>0.02
+  (OVID on 2007-11-26)</option>
+<option
+  
+  value="OVID/Test-Aggregate-0.01"
+>0.01
+  (OVID on 2007-11-25)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Test-Aggregate">Test-Aggregate-0.375</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage one &#10;
+          • 4 direct dependents &#10;          • 5 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Test-Aggregate-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Test-Aggregate-0.375">
+    <input type="hidden" name="author" value="RWSTAUNER">
+    <input type="hidden" name="distribution" value="Test-Aggregate">
+    <button type="submit" class="favorite highlight"><span>4</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Test::Aggregate.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>4</span> ++</a>
+</div>
+   / <span>Test::Aggregate</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Test::Aggregate.html#NAME">NAME</a></li>
+  <li><a href="./Test::Aggregate.html#VERSION">VERSION</a></li>
+  <li><a href="./Test::Aggregate.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Test::Aggregate.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Test::Aggregate.html#DEPRECATION">DEPRECATION</a></li>
+  <li><a href="./Test::Aggregate.html#USAGE">USAGE</a></li>
+  <li><a href="./Test::Aggregate.html#METHODS">METHODS</a>
+    <ul>
+      <li><a href="./Test::Aggregate.html#new">new</a></li>
+      <li><a href="./Test::Aggregate.html#run">run</a></li>
+    </ul>
+  </li>
+  <li><a href="./Test::Aggregate.html#SETUP/TEARDOWN">SETUP/TEARDOWN</a></li>
+  <li><a href="./Test::Aggregate.html#GLOBAL-VARIABLES">GLOBAL VARIABLES</a></li>
+  <li><a href="./Test::Aggregate.html#CAVEATS">CAVEATS</a></li>
+  <li><a href="./Test::Aggregate.html#DEBUGGING-AGGREGATE-TESTS">DEBUGGING AGGREGATE TESTS</a>
+    <ul>
+      <li><a href="./Test::Aggregate.html#Manually-run-the-tests">Manually run the tests</a></li>
+      <li><a href="./Test::Aggregate.html#Run-a-dump-file">Run a dump file</a></li>
+      <li><a href="./Test::Aggregate.html#Tweaking-the-dump-file">Tweaking the dump file</a></li>
+    </ul>
+  </li>
+  <li><a href="./Test::Aggregate.html#COMMON-PITFALLS">COMMON PITFALLS</a>
+    <ul>
+      <li><a href="./Test::Aggregate.html#My-Tests-Threw-an-Exception-But-Passed-Anyway!">My Tests Threw an Exception But Passed Anyway!</a></li>
+      <li><a href="./Test::Aggregate.html#BEGIN-and-END-blocks">BEGIN and END blocks</a></li>
+      <li><a href="./Test::Aggregate.html#CHECK-and-INIT-blocks.">CHECK and INIT blocks.</a></li>
+      <li><a href="./Test::Aggregate.html#Test::NoWarnings">Test::NoWarnings</a></li>
+      <li><a href="./Test::Aggregate.html#Paths">Paths</a></li>
+      <li><a href="./Test::Aggregate.html#$0">$0</a></li>
+      <li><a href="./Test::Aggregate.html#Minimal-test-case">Minimal test case</a></li>
+    </ul>
+  </li>
+  <li><a href="./Test::Aggregate.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Test::Aggregate.html#BUGS">BUGS</a></li>
+  <li><a href="./Test::Aggregate.html#SUPPORT">SUPPORT</a></li>
+  <li><a href="./Test::Aggregate.html#ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</a></li>
+  <li><a href="./Test::Aggregate.html#COPYRIGHT-&amp;-LICENSE">COPYRIGHT &amp; LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Test::Aggregate - Aggregate <code>*.t</code> tests to make them run faster.</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>Version 0.375</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    use Test::Aggregate;
+
+    my $tests = Test::Aggregate-&gt;new( {
+        dirs =&gt; $aggregate_test_dir,
+    } );
+    $tests-&gt;run;
+
+    ok $some_data, &#39;Test::Aggregate also re-exports Test::More functions&#39;;</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p><b>WARNING</b>: this is ALPHA code. The interface is not guaranteed to be stable. Further, check out <a href="https://metacpan.org/pod/Test::Aggregate::Nested">Test::Aggregate::Nested</a> (included with this distribution). It&#39;s a more robust implementation which does not have the same limitations as <code>Test::Aggregate</code>.</p>
+
+<p>A common problem with many test suites is that they can take a long time to run. The longer they run, the less likely you are to run the tests. This module borrows a trick from <code>Apache::Registry</code> to load up your tests at once, create a separate package for each test and wraps each package in a method named <code>run_the_tests</code>. This allows us to load perl only once and related modules only once. If you have modules which are expensive to load, this can dramatically speed up a test suite.</p>
+
+<h1 id="DEPRECATION">DEPRECATION</h1>
+
+<p>For a whole variety of reasons, tests run in BEGIN/CHECK/INIT/INIT blocks are now deprecated. They cause all sorts of test sequence headaches. Plus, they break the up-coming nested TAP work. You will have a problem if you use this common idiom:</p>
+
+<pre><code> BEGIN {
+     use_ok &#39;My::Module&#39; or die;
+ }</code></pre>
+
+<p>Instead, just <code>use</code> the module and put the <code>use_ok</code> tests in a t/load.t file or something similar and <b>don&#39;t</b> aggregate it. See the following for more information: <a href="http://use.perl.org/~Ovid/journal/38974">http://use.perl.org/~Ovid/journal/38974</a>.</p>
+
+<h1 id="USAGE">USAGE</h1>
+
+<p>Create a separate directory for your tests. This should not be a subdirectory of your regular test directory. Write a small driver program and put it in your regular test directory (<code>t/</code> is the standard):</p>
+
+<pre><code> use Test::Aggregate;
+ my $other_test_dir = &#39;aggregate_tests&#39;;
+ my $tests = Test::Aggregate-&gt;new( {
+    dirs =&gt; $other_test_dir
+ });
+ $tests-&gt;run;
+
+ ok $some_data, &#39;Test::Aggregate also re-exports Test::More functions&#39;;</code></pre>
+
+<p>Take your simplest tests and move them, one by one, into the new test directory and keep running the <code>Test::Aggregate</code> program. You&#39;ll find some tests will not run in a shared environment like this. You can either fix the tests or simply leave them in your regular test directory. See how this distribution&#39;s tests are organized for an example.</p>
+
+<p>Note that <code>Test::Aggregate</code> also exports all exported functions from <code>Test::More</code>, allowing you to run other tests after the aggregated tests have run.</p>
+
+<pre><code> use Test::Aggregate;
+ my $other_test_dir = &#39;aggregate_tests&#39;;
+ my $tests = Test::Aggregate-&gt;new( {
+    dirs =&gt; $other_test_dir
+ });
+ $tests-&gt;run;
+ ok !(-f &#39;t/data/tmp.txt&#39;), &#39;... and our temp file should be deleted&#39;;</code></pre>
+
+<p>Some tests cannot run in an aggregate environment. These may include test for this with the <code>$ENV{TEST_AGGREGATE}</code> variable:</p>
+
+<pre><code> package Some::Package;
+
+ BEGIN {
+     die __PACKAGE__ .&quot; cannot run in aggregated tests&quot;
+       if $ENV{TEST_AGGREGATE};
+ }</code></pre>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="new"><code>new</code></h2>
+
+<pre><code> my $tests = Test::Aggregate-&gt;new(
+     {
+         dirs            =&gt; &#39;aggtests&#39;,
+         verbose         =&gt; 1,            # optional, but recommended
+         dump            =&gt; &#39;dump.t&#39;,     # optional
+         shuffle         =&gt; 1,            # optional
+         matching        =&gt; qr/customer/, # optional
+         set_filenames   =&gt; 0,            # optional and not recommended
+         tidy            =&gt; 1,            # optional and experimental
+         test_nowarnings =&gt; 0,            # optional and experimental
+     }
+ );
+ </code></pre>
+
+<p>Creates a new <code>Test::Aggregate</code> instance. Accepts a hashref with the following keys:</p>
+
+<ul>
+
+<li><p><code>dirs</code> (either this or <code>tests</code> is mandatory)</p>
+
+<p>The directories to look in for the aggregated tests. This may be a scalar value of a single directory or an array reference of multiple directories.</p>
+
+</li>
+<li><p><code>tests</code> (either this or <code>dirs</code> is mandatory)</p>
+
+<p>Instead of providing directories for the aggregated tests, you may supply an array reference with a list of tests to aggregate. If both are supplied, these tests will be appended to the list of tests found in <code>dirs</code>.</p>
+
+<p>The <code>matching</code> parameter does not apply to test files identified with this key.</p>
+
+</li>
+<li><p><code>verbose</code> (optional, but strongly recommended)</p>
+
+<p>If set with a true value, each test programs success or failure will be indicated with a diagnostic output. The output below means that <code>aggtests/slow_load.t</code> was an aggregated test which failed. This means it&#39;s much easier to determine which aggregated tests are causing problems.</p>
+
+<pre><code> t/aggregate.........2/? 
+ #     ok - aggtests/boilerplate.t
+ #     ok - aggtests/00-load.t
+ # not ok - aggtests/subs.t
+ #     ok - aggtests/slow_load.t
+ t/aggregate.........ok
+ t/pod-coverage......ok
+ t/pod...............ok</code></pre>
+
+<p>Note that three possible values are allowed for <code>verbose</code>:</p>
+
+<ul>
+
+<li><p><code>0</code> (default)</p>
+
+<p>No individual test program success or failure will be displayed.</p>
+
+</li>
+<li><p><code>1</code></p>
+
+<p>Only failing test programs will have their failure status shown.</p>
+
+</li>
+<li><p><code>2</code></p>
+
+<p>All test programs will have their success/failure shown.</p>
+
+</li>
+</ul>
+
+</li>
+<li><p><code>dump</code> (optional)</p>
+
+<p>You may list the name of a file to dump the aggregated tests to. This is useful if you have test failures and need to debug why the tests failed.</p>
+
+</li>
+<li><p><code>shuffle</code> (optional)</p>
+
+<p>Ordinarily, the tests are sorted by name and run in that order. This allows you to run them in any order.</p>
+
+</li>
+<li><p><code>matching</code> (optional)</p>
+
+<p>If supplied with a regular expression (requires the <code>qr</code> operator), will only run tests whose filename matches the regular expression.</p>
+
+</li>
+<li><p><code>set_filenames</code> (optional)</p>
+
+<p>If supplied with a true value, this will cause the following to be added for each test:</p>
+
+<pre><code>  local $0 = $test_filename;</code></pre>
+
+<p>This is the default behavior.</p>
+
+</li>
+<li><p><code>findbin</code> (optional)</p>
+
+<p>If supplied with a true value, this will cause FindBin::again() to be called before each test file.</p>
+
+<p>This is turned off by default.</p>
+
+<p>Note that older versions of FindBin (pre 1.47) sometimes get confused about where the bin directory is when I set <code>$0</code>. I don&#39;t know why, but this is a rarely used option and only happens pre 5.8 perl, so I&#39;m not too worried about it. Just keep it in mind.</p>
+
+</li>
+<li><p><code>dry</code> (optional)</p>
+
+<p>Just print the tests which will be run and the order they will be run in (obviously the order will be random if <code>shuffle</code> is true).</p>
+
+</li>
+<li><p><code>tidy</code></p>
+
+<p>If supplied a true value, attempts to run <code>Perl::Tidy</code> on the source code. This is a no-op if <code>Perl::Tidy</code> cannot be loaded. This option is <code>experimental</code>. Plus, if your tests are terribly convoluted, this could be slow and possibly buggy.</p>
+
+<p>If the value of this argument is the name of a file, assumes that this file is a <code>.perltidyrc</code> file.</p>
+
+</li>
+<li><p><code>test_nowarnings</code></p>
+
+<p>Disables <code>Test::NoWarnings</code> (fails if the module cannot be loaded).</p>
+
+<p>This is experimental and somewhat problematic. Let me know if there are any problems.</p>
+
+</li>
+</ul>
+
+<h2 id="run"><code>run</code></h2>
+
+<pre><code> $tests-&gt;run;</code></pre>
+
+<p>Attempts to aggregate and run all tests listed in the directories specified in the constructor.</p>
+
+<h1 id="SETUP/TEARDOWN"><a id="SETUP"></a><a id="SETUP-TEARDOWN"></a>SETUP/TEARDOWN</h1>
+
+<p>Since <code>BEGIN</code> and <code>END</code> blocks are for the entire aggregated tests and not for each test program (see <code>CAVEATS</code>), you might find that you need to have setup/teardown functions for tests. These are useful if you need to setup connections to test databases, clear out temp files, or any of a variety of tasks that your test suite might require. Here&#39;s a somewhat useless example, pulled from our tests:</p>
+
+<pre><code> #!/usr/bin/perl
+ 
+ use strict;
+ use warnings;
+ 
+ use lib &#39;lib&#39;, &#39;t/lib&#39;;
+ use Test::Aggregate;
+ use Test::More;
+ 
+ my $dump = &#39;dump.t&#39;;
+ 
+ my ( $startup, $shutdown ) = ( 0, 0 );
+ my ( $setup,   $teardown ) = ( 0, 0 );
+ my $tests = Test::Aggregate-&gt;new(
+     {
+         dirs     =&gt; &#39;aggtests&#39;,
+         dump     =&gt; $dump,
+         startup  =&gt; sub { $startup++ },
+         shutdown =&gt; sub { $shutdown++ },
+         setup    =&gt; sub { $setup++ },
+         teardown =&gt; sub { $teardown++ },
+     }
+ );
+ $tests-&gt;run;
+ is $startup,  1, &#39;Startup should be called once&#39;;
+ is $shutdown, 1, &#39;... as should shutdown&#39;;
+ is $setup,    4, &#39;Setup should be called once for each test program&#39;;
+ is $teardown, 4, &#39;... as should teardown&#39;;</code></pre>
+
+<p>Note that you can still dump these to a dump file. This will only work if <code>Data::Dump::Streamer</code> 1.11 or later is installed.</p>
+
+<p>There are four attributes which can be passed to the constructor, each of which expects a code reference:</p>
+
+<ul>
+
+<li><p><code>startup</code></p>
+
+<pre><code> startup =&gt; \&amp;connect_to_database,</code></pre>
+
+<p>This function will be called before any of the tests are run. It is not run in a BEGIN block.</p>
+
+</li>
+<li><p><code>shutdown</code></p>
+
+<pre><code> shutdown =&gt; \&amp;clean_up_temp_files,</code></pre>
+
+<p>This function will be called after all of the tests are run. It will not be called in an END block.</p>
+
+</li>
+<li><p><code>setup</code></p>
+
+<pre><code> setup =&gt; sub { 
+    my $filename = shift;
+    # this gets run before each test program.
+ },</code></pre>
+
+<p>The setup function will be run before every test program. The name of the test file will be passed as the first argument.</p>
+
+</li>
+<li><p><code>teardown</code></p>
+
+<pre><code> teardown =&gt; sub {
+    my $filename = shift;
+    # this gets run after every test program.
+ }</code></pre>
+
+<p>The teardown function gets run after every test program. The name of the test file will be passed as the first argument.</p>
+
+</li>
+</ul>
+
+<h1 id="GLOBAL-VARIABLES"><a id="GLOBAL"></a>GLOBAL VARIABLES</h1>
+
+<p>You shouldn&#39;t be using global variables and a dependence on them can break your code. However, Perl provides quite a few handy global variables which, unfortunately, can easily break your tests if you change them in one test and another assumes an unchanged value. As a result, we localize many of Perl&#39;s most common global variables for you, using the following syntax:</p>
+
+<pre><code>    local %ENV = %ENV; 
+    </code></pre>
+
+<p>The following global variables are localized for you. Any others must be localized manually per test.</p>
+
+<ul>
+
+<li><p><code>@INC</code></p>
+
+</li>
+<li><p><code>%ENV</code></p>
+
+</li>
+<li><p><code>%SIG</code></p>
+
+</li>
+<li><p><code>$/</code></p>
+
+</li>
+<li><p><code>$_</code></p>
+
+</li>
+<li><p><code>$|</code></p>
+
+</li>
+</ul>
+
+<h1 id="CAVEATS">CAVEATS</h1>
+
+<p>Not all tests can be included with this technique. If you have <code>Test::Class</code> tests, there is no need to run them with this. Otherwise:</p>
+
+<ul>
+
+<li><p><code>exit</code></p>
+
+<p>Don&#39;t call exit() in your aggregated tests. We now warn very verbosely if this is done, but we still exit on the assumption that further tests cannot run.</p>
+
+</li>
+<li><p><code>__END__</code> and <code>__DATA__</code> tokens.</p>
+
+<p>These won&#39;t work and the tests will call BAIL_OUT() if these tokens are seen. However, this limitation does not apply to <a href="https://metacpan.org/pod/Test::Aggregate::Nested">Test::Aggregate::Nested</a>.</p>
+
+</li>
+<li><p><code>BEGIN</code> and <code>END</code> blocks.</p>
+
+<p>Since all of the tests are aggregated together, <code>BEGIN</code> and <code>END</code> blocks will be for the scope of the entire set of aggregated tests. If you need setup/teardown facilities, see <a href="https://metacpan.org/pod/SETUP#TEARDOWN">&quot;TEARDOWN&quot; in SETUP</a>.</p>
+
+</li>
+<li><p>Syntax errors</p>
+
+<p>Any syntax errors encountered will cause this program to BAIL_OUT(). This is why it&#39;s recommended that you move your tests into your new directory one at a time: it makes it easier to figure out which one has caused the problem.</p>
+
+</li>
+<li><p><code>no_plan</code></p>
+
+<p>Unfortunately, due to how this works, the plan is always <code>no_plan</code>. <a href="http://groups.google.com/group/perl.qa/browse_thread/thread/d58c49db734844f4/cd18996391acc601?#cd18996391acc601">http://groups.google.com/group/perl.qa/browse_thread/thread/d58c49db734844f4/cd18996391acc601?#cd18996391acc601</a> for more information.</p>
+
+</li>
+<li><p><code>Test::NoWarnings</code></p>
+
+<p>Great module. It loves to break aggregated tests since some might have warnings when others will not. You can disable it like this:</p>
+
+<pre><code> my $tests = Test::Aggregate-&gt;new(
+     dirs    =&gt; &#39;aggtests/&#39;,
+     startup =&gt; sub { $INC{&#39;Test/NoWarnings.pm&#39;} = 1 },
+ );</code></pre>
+
+<p>As an alternative, you can also disable it with:</p>
+
+<pre><code> my $tests = Test::Aggregate-&gt;new({
+    dirs            =&gt; &#39;aggtests&#39;,
+    test_nowarnings =&gt; 0,
+ });</code></pre>
+
+<p>We do work internally to subtract the extra test added by <code>Test::NoWarnings</code>. It&#39;s painful and experimental. Good luck.</p>
+
+</li>
+<li><p><code>Variable &quot;$x&quot; will not stay shared at (eval ...</code></p>
+
+<p>Because each test is wrapped in a method call, any of your subs which access a variable in an outer scope will likely throw the above warning. Pass in arguments explicitly to suppress this.</p>
+
+<p>Instead of:</p>
+
+<pre><code> my $x = 17;
+ sub foo {
+     my $y = shift;
+     return $y + $x;
+ }</code></pre>
+
+<p>Write this:</p>
+
+<pre><code> my $x = 17;
+ sub foo {
+     my ( $y, $x ) = @_;
+     return $y + $x;
+ }</code></pre>
+
+<p>However, consider <a href="https://metacpan.org/pod/Test::Aggregate::Nested">Test::Aggregate::Nested</a>. This warning does not apply with that module.</p>
+
+</li>
+<li><p>Singletons</p>
+
+<p>Be very careful of code which loads singletons. Oftimes those singletons in test suites may be altered for testing purposes, but later attempts to use those singletons can fail dramatically as they&#39;re not expecting the alterations. (Your author has painfully learned this lesson with database connections).</p>
+
+</li>
+</ul>
+
+<h1 id="DEBUGGING-AGGREGATE-TESTS"><a id="DEBUGGING"></a>DEBUGGING AGGREGATE TESTS</h1>
+
+<p>Before aggregating tests, make sure that you add tests <b>one at a time</b> to the aggregated test directory. Attempting to add many tests to the directory at once and then experiencing a failure means it will be much harder to track down which tests caused the failure.</p>
+
+<p>Debugging aggregated tests which fail is a multi-step process. Let&#39;s say the following fails:</p>
+
+<pre><code> my $tests = Test::Aggregate-&gt;new(
+     {
+         dump    =&gt; &#39;dump.t&#39;,
+         shuffle =&gt; 1,
+         dirs    =&gt; &#39;aggtests&#39;,
+     }
+ );
+ $tests-&gt;run;</code></pre>
+
+<h2 id="Manually-run-the-tests"><a id="Manually"></a>Manually run the tests</h2>
+
+<p>The first step is to manually run all of the tests in the <code>aggtests</code> dir.</p>
+
+<pre><code> prove -r aggtests/</code></pre>
+
+<p>If the failures appear the same, fix them just like you would fix any other test failure and then rerun the <code>Test::Aggregate</code> code.</p>
+
+<p>Sometimes this means that a different number of tests run from what the aggregted tests run. Look for code which ends the program prematurely, such as an exception or an <code>exit</code> statement.</p>
+
+<h2 id="Run-a-dump-file"><a id="Run"></a>Run a dump file</h2>
+
+<p>If this does not fix your problem, create a dump file by passing <code>dump =&gt; $dumpfile</code> to the constructor (as in the above example). Then try running this dumpfile directly to attempt to replicate the error:</p>
+
+<pre><code> prove -r $dumpfile</code></pre>
+
+<h2 id="Tweaking-the-dump-file"><a id="Tweaking"></a>Tweaking the dump file</h2>
+
+<p>Assuming the error has been replicated, open up the dump file. The beginning of the dump file will have some code which overrides some <code>Test::Builder</code> internals. After that, you&#39;ll see the code which runs the tests. It will look similar to this:</p>
+
+<pre><code> if ( __FILE__ eq &#39;dump.t&#39; ) {
+     Test::More::diag(&quot;******** running tests for aggtests/boilerplate.t ********&quot;)
+        if $ENV{TEST_VERBOSE};
+     aggtestsboilerplatet-&gt;run_the_tests;
+
+     Test::More::diag(&quot;******** running tests for aggtests/subs.t ********&quot;)
+        if $ENV{TEST_VERBOSE};
+     aggtestssubst-&gt;run_the_tests;
+
+     Test::More::diag(&quot;******** running tests for aggtests/00-load.t ********&quot;)
+        if $ENV{TEST_VERBOSE};
+     aggtests00loadt-&gt;run_the_tests;
+
+     Test::More::diag(&quot;******** running tests for aggtests/slow_load.t ********&quot;)
+        if $ENV{TEST_VERBOSE};
+     aggtestsslow_loadt-&gt;run_the_tests;
+ }</code></pre>
+
+<p>You can try to narrow down the problem by commenting out all of the <code>run_the_tests</code> lines and gradually reintroducing them until you can figure out which one is actually causing the failure.</p>
+
+<h1 id="COMMON-PITFALLS"><a id="COMMON"></a>COMMON PITFALLS</h1>
+
+<h2 id="My-Tests-Threw-an-Exception-But-Passed-Anyway!"><a id="My"></a><a id="My-Tests-Threw-an-Exception-But-Passed-Anyway"></a>My Tests Threw an Exception But Passed Anyway!</h2>
+
+<p>This really isn&#39;t a <code>Test::Aggregate</code> problem so much as a general Perl problem. For each test file, <code>Test::Aggregate</code> wraps the tests in an eval and checks <code>my $error = $@</code>. Unfortunately, we sometimes get code like this:</p>
+
+<pre><code>  $server-&gt;ip_address(&#39;apple&#39;);</code></pre>
+
+<p>And internally, the &#39;Server&#39; class throws an exception but uses its own evals in a <code>DESTROY</code> block (or something similar) to trap it. If the code you call uses an eval but fails to localize it, it wipes out <i>your</i> eval. Neat, eh? Thus, you never get a chance to see the error. For various reasons, this tends to impact <code>Test::Aggregate</code> when a <code>DESTROY</code> block is triggered and calls code which internally uses eval (e.g., <code>DBIx::Class</code>). You can often fix this with:</p>
+
+<pre><code> DESTROY {
+    local $@ = $@;  # localize but preserve the value
+    my $self = shift;
+    # do whatever you want
+ }</code></pre>
+
+<h2 id="BEGIN-and-END-blocks"><a id="BEGIN"></a><code>BEGIN</code> and <code>END</code> blocks</h2>
+
+<p>Remember that since the tests are now being run at once, these blocks will no longer run on a per-test basis, but will run for the entire aggregated set of tests. You may need to examine these individually to determine the problem.</p>
+
+<h2 id="CHECK-and-INIT-blocks."><a id="CHECK"></a><a id="CHECK-and-INIT-blocks"></a><code>CHECK</code> and <code>INIT</code> blocks.</h2>
+
+<p>Sorry, but you can&#39;t use these (just as in modperl). See <a href="https://metacpan.org/pod/perlmod">perlmod</a> for more information about them and why they won&#39;t work.</p>
+
+<h2 id="Test::NoWarnings"><a id="Test"></a><code>Test::NoWarnings</code></h2>
+
+<p>This is a great test module. When aggregating tests together, however, it can cause pain as you&#39;ll often discover warnings that you never new existed. For a quick fix, add this before you attempt to run your tests:</p>
+
+<pre><code> $INC{&#39;Test/NoWarnings.pm&#39;} = 1;</code></pre>
+
+<p>That will disable <code>Test::NoWarnings</code>, but you&#39;ll want to go in later to fix them.</p>
+
+<h2 id="Paths">Paths</h2>
+
+<p>Many tests make assumptions about the paths to files and moving them into a new test directory can break this.</p>
+
+<h2 id="$0"><a id="pod"></a><code>$0</code></h2>
+
+<p>Tests which use <code>$0</code> can be problematic as the code is run in an <code>eval</code> through <code>Test::Aggregate</code> and <code>$0</code> may not match expectations. This also means that it can behave differently if run directly from a dump file.</p>
+
+<p>As it turns out, you can assign to <code>$0</code>! We do this by default and set the <code>$0</code> to the correct filename. If you don&#39;t want this behavior, pass <code>set_filenames =&gt; 0</code> to the constructor.</p>
+
+<h2 id="Minimal-test-case"><a id="Minimal"></a>Minimal test case</h2>
+
+<p>If you cannot solve the problem, feel free to try and create a minimal test case and send it to me (assuming it&#39;s something I can run).</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Curtis Poe, <code>&lt;ovid at cpan.org&gt;</code></p>
+
+<h1 id="BUGS">BUGS</h1>
+
+<p>Please report any bugs or feature requests to <code>bug-test-aggregate at rt.cpan.org</code>, or through the web interface at <a href="http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-Aggregate">http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Test-Aggregate</a>. I will be notified, and then you&#39;ll automatically be notified of progress on your bug as I make changes.</p>
+
+<h1 id="SUPPORT">SUPPORT</h1>
+
+<p>You can find documentation for this module with the perldoc command.</p>
+
+<pre><code>    perldoc Test::Aggregate</code></pre>
+
+<p>You can also find information oneline:</p>
+
+<p><a href="http://metacpan.org/release/Test-Aggregate">http://metacpan.org/release/Test-Aggregate</a></p>
+
+<h1 id="ACKNOWLEDGEMENTS">ACKNOWLEDGEMENTS</h1>
+
+<p>Many thanks to mauzo (<a href="http://use.perl.org/~mauzo/">http://use.perl.org/~mauzo/</a> for helping me find the &#39;skip_all&#39; bug.</p>
+
+<p>Thanks to Johan Lindstr&ouml;m for pointing me to Apache::Registry.</p>
+
+<h1 id="COPYRIGHT-&amp;-LICENSE"><a id="COPYRIGHT"></a><a id="COPYRIGHT---LICENSE"></a>COPYRIGHT &amp; LICENSE</h1>
+
+<p>Copyright 2007 Curtis &quot;Ovid&quot; Poe, all rights reserved.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Test::Aggregate, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Test::Aggregate</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Test::Aggregate</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Test::Aggregate.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

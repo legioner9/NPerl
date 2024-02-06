@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>DB - programmatic interface to the Perl debugging API - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/DB">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="DB.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/DB">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/DB">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/DB">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/DB">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/DB">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/DB">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/DB">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/DB">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/DB">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/DB">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/DB">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/DB">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/DB">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/DB">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/DB">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/DB">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/DB">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/DB">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/DB">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/DB">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/DB">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/DB">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/DB">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/DB">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/DB">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/DB">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/DB">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/DB">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/DB">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/DB">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/DB">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/DB">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/DB">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/DB">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/DB">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/DB">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/DB">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/DB">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/DB">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/DB">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/DB">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/DB">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/DB">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/DB">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/DB">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/DB">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/DB">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/DB">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/DB">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/DB">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/DB">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/DB">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/DB">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/DB">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/DB">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/DB">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/DB">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/DB">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/DB">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/DB">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/DB">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/DB">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/DB">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/DB">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/DB">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/DB">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/DB">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/DB">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/DB">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/DB">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/DB">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/DB">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/DB">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/DB">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/DB">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/DB">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/DB">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/DB">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/DB">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/DB">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="DB.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/DB">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/DB">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/DB">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/DB">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/DB">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/DB">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/DB">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/DB">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/DB">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/DB">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/DB">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/DB">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/DB">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/DB">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/DB">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/DB">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/DB">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/DB">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/DB">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/DB">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/DB">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/DB">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/DB">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/DB">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/DB">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/DB">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/DB">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/DB">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/DB">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/DB">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/DB">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/DB">5.35.1</a>
+          <a class="dropdown-item active" href="DB.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="DB.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="DB.html">DB</a>
+          <div id="more">
+            (<a href="DB.txt">source</a>,
+            <a href="https://metacpan.org/pod/DB">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 1.08</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="DB.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DB.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DB.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="DB.html#Global-Variables">Global Variables</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DB.html#API-Methods">API Methods</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DB.html#Client-Callback-Methods">Client Callback Methods</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DB.html#BUGS">BUGS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="DB.html#AUTHOR">AUTHOR</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="DB.html#NAME">#</a>NAME</h1>
+
+<p>DB - programmatic interface to the Perl debugging API</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="DB.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>package CLIENT;
+use DB;
+@ISA = qw(DB);
+
+# these (inherited) methods can be called by the client
+
+CLIENT-&gt;register()      # register a client package name
+CLIENT-&gt;done()          # de-register from the debugging API
+CLIENT-&gt;skippkg(&#39;hide::hide&#39;)  # ask DB not to stop in this package
+CLIENT-&gt;cont([WHERE])       # run some more (until BREAK or 
+                            # another breakpointt)
+CLIENT-&gt;step()              # single step
+CLIENT-&gt;next()              # step over
+CLIENT-&gt;ret()               # return from current subroutine
+CLIENT-&gt;backtrace()         # return the call stack description
+CLIENT-&gt;ready()             # call when client setup is done
+CLIENT-&gt;trace_toggle()      # toggle subroutine call trace mode
+CLIENT-&gt;subs([SUBS])        # return subroutine information
+CLIENT-&gt;files()             # return list of all files known to DB
+CLIENT-&gt;lines()             # return lines in currently loaded file
+CLIENT-&gt;loadfile(FILE,LINE) # load a file and let other clients know
+CLIENT-&gt;lineevents()        # return info on lines with actions
+CLIENT-&gt;set_break([WHERE],[COND])
+CLIENT-&gt;set_tbreak([WHERE])
+CLIENT-&gt;clr_breaks([LIST])
+CLIENT-&gt;set_action(WHERE,ACTION)
+CLIENT-&gt;clr_actions([LIST])
+CLIENT-&gt;evalcode(STRING)  # eval STRING in executing code&#39;s context
+CLIENT-&gt;prestop([STRING]) # execute in code context before stopping
+CLIENT-&gt;poststop([STRING])# execute in code context before resuming
+
+# These methods will be called at the appropriate times.
+# Stub versions provided do nothing.
+# None of these can block.
+
+CLIENT-&gt;init()          # called when debug API inits itself
+CLIENT-&gt;stop(FILE,LINE) # when execution stops
+CLIENT-&gt;idle()          # while stopped (can be a client event loop)
+CLIENT-&gt;cleanup()       # just before exit
+CLIENT-&gt;output(LIST)    # called to print any output that
+                        # the API must show</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="DB.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>Perl debug information is frequently required not just by debuggers, but also by modules that need some &quot;special&quot; information to do their job properly, like profilers.</p>
+
+<p>This module abstracts and provides all of the hooks into Perl internal debugging functionality, so that various implementations of Perl debuggers (or packages that want to simply get at the &quot;privileged&quot; debugging data) can all benefit from the development of this common code. Currently used by Swat, the perl/Tk GUI debugger.</p>
+
+<p>Note that multiple &quot;front-ends&quot; can latch into this debugging API simultaneously. This is intended to facilitate things like debugging with a command line and GUI at the same time, debugging debuggers etc. [Sounds nice, but this needs some serious support -- GSAR]</p>
+
+<p>In particular, this API does <b>not</b> provide the following functions:</p>
+
+<ul>
+
+<li><p>data display</p>
+
+</li>
+<li><p>command processing</p>
+
+</li>
+<li><p>command alias management</p>
+
+</li>
+<li><p>user interface (tty or graphical)</p>
+
+</li>
+</ul>
+
+<p>These are intended to be services performed by the clients of this API.</p>
+
+<p>This module attempts to be squeaky clean w.r.t <code>use strict;</code> and when warnings are enabled.</p>
+
+<h2 id="Global-Variables"><a class="permalink" href="DB.html#Global-Variables">#</a><a id="Global"></a>Global Variables</h2>
+
+<p>The following &quot;public&quot; global names can be read by clients of this API. Beware that these should be considered &quot;readonly&quot;.</p>
+
+<dl>
+
+<dt id="$DB::sub"><a class="permalink" href="DB.html#$DB::sub">#</a><a id="DB::sub"></a>$DB::sub</dt>
+<dd>
+
+<p>Name of current executing subroutine.</p>
+
+</dd>
+<dt id="%DB::sub"><a class="permalink" href="DB.html#%25DB::sub">#</a><a id="DB::sub1"></a>%DB::sub</dt>
+<dd>
+
+<p>The keys of this hash are the names of all the known subroutines. Each value is an encoded string that has the sprintf(3) format <code>(&quot;%s:%d-%d&quot;, filename, fromline, toline)</code>.</p>
+
+</dd>
+<dt id="$DB::single"><a class="permalink" href="DB.html#$DB::single">#</a><a id="DB::single"></a>$DB::single</dt>
+<dd>
+
+<p>Single-step flag. Will be true if the API will stop at the next statement.</p>
+
+</dd>
+<dt id="$DB::signal"><a class="permalink" href="DB.html#$DB::signal">#</a><a id="DB::signal"></a>$DB::signal</dt>
+<dd>
+
+<p>Signal flag. Will be set to a true value if a signal was caught. Clients may check for this flag to abort time-consuming operations.</p>
+
+</dd>
+<dt id="$DB::trace"><a class="permalink" href="DB.html#$DB::trace">#</a><a id="DB::trace"></a>$DB::trace</dt>
+<dd>
+
+<p>This flag is set to true if the API is tracing through subroutine calls.</p>
+
+</dd>
+<dt id="@DB::args"><a class="permalink" href="DB.html#@DB::args">#</a><a id="DB::args"></a>@DB::args</dt>
+<dd>
+
+<p>Contains the arguments of current subroutine, or the <code>@ARGV</code> array if in the toplevel context.</p>
+
+</dd>
+<dt id="@DB::dbline"><a class="permalink" href="DB.html#@DB::dbline">#</a><a id="DB::dbline"></a>@DB::dbline</dt>
+<dd>
+
+<p>List of lines in currently loaded file.</p>
+
+</dd>
+<dt id="%DB::dbline"><a class="permalink" href="DB.html#%25DB::dbline">#</a><a id="DB::dbline1"></a>%DB::dbline</dt>
+<dd>
+
+<p>Actions in current file (keys are line numbers). The values are strings that have the sprintf(3) format <code>(&quot;%s\000%s&quot;, breakcondition, actioncode)</code>.</p>
+
+</dd>
+<dt id="$DB::package"><a class="permalink" href="DB.html#$DB::package">#</a><a id="DB::package"></a>$DB::package</dt>
+<dd>
+
+<p>Package namespace of currently executing code.</p>
+
+</dd>
+<dt id="$DB::filename"><a class="permalink" href="DB.html#$DB::filename">#</a><a id="DB::filename"></a>$DB::filename</dt>
+<dd>
+
+<p>Currently loaded filename.</p>
+
+</dd>
+<dt id="$DB::subname"><a class="permalink" href="DB.html#$DB::subname">#</a><a id="DB::subname"></a>$DB::subname</dt>
+<dd>
+
+<p>Fully qualified name of currently executing subroutine.</p>
+
+</dd>
+<dt id="$DB::lineno"><a class="permalink" href="DB.html#$DB::lineno">#</a><a id="DB::lineno"></a>$DB::lineno</dt>
+<dd>
+
+<p>Line number that will be executed next.</p>
+
+</dd>
+</dl>
+
+<h2 id="API-Methods"><a class="permalink" href="DB.html#API-Methods">#</a><a id="API"></a>API Methods</h2>
+
+<p>The following are methods in the DB base class. A client must access these methods by inheritance (*not* by calling them directly), since the API keeps track of clients through the inheritance mechanism.</p>
+
+<dl>
+
+<dt id="CLIENT-&gt;register()"><a class="permalink" href="DB.html#CLIENT-%3Eregister()">#</a><a id="CLIENT"></a><a id="CLIENT-register"></a>CLIENT-&gt;register()</dt>
+<dd>
+
+<p>register a client object/package</p>
+
+</dd>
+<dt id="CLIENT-&gt;evalcode(STRING)"><a class="permalink" href="DB.html#CLIENT-%3Eevalcode(STRING)">#</a><a id="CLIENT1"></a><a id="CLIENT-evalcode-STRING"></a>CLIENT-&gt;evalcode(STRING)</dt>
+<dd>
+
+<p>eval STRING in executing code context</p>
+
+</dd>
+<dt id="CLIENT-&gt;skippkg(&#39;D::hide&#39;)"><a class="permalink" href="DB.html#CLIENT-%3Eskippkg(&#39;D::hide&#39;)">#</a><a id="CLIENT2"></a><a id="CLIENT-skippkg-D::hide"></a>CLIENT-&gt;skippkg(&#39;D::hide&#39;)</dt>
+<dd>
+
+<p>ask DB not to stop in these packages</p>
+
+</dd>
+<dt id="CLIENT-&gt;run()"><a class="permalink" href="DB.html#CLIENT-%3Erun()">#</a><a id="CLIENT3"></a><a id="CLIENT-run"></a>CLIENT-&gt;run()</dt>
+<dd>
+
+<p>run some more (until a breakpt is reached)</p>
+
+</dd>
+<dt id="CLIENT-&gt;step()"><a class="permalink" href="DB.html#CLIENT-%3Estep()">#</a><a id="CLIENT4"></a><a id="CLIENT-step"></a>CLIENT-&gt;step()</dt>
+<dd>
+
+<p>single step</p>
+
+</dd>
+<dt id="CLIENT-&gt;next()"><a class="permalink" href="DB.html#CLIENT-%3Enext()">#</a><a id="CLIENT5"></a><a id="CLIENT-next"></a>CLIENT-&gt;next()</dt>
+<dd>
+
+<p>step over</p>
+
+</dd>
+<dt id="CLIENT-&gt;done()"><a class="permalink" href="DB.html#CLIENT-%3Edone()">#</a><a id="CLIENT6"></a><a id="CLIENT-done"></a>CLIENT-&gt;done()</dt>
+<dd>
+
+<p>de-register from the debugging API</p>
+
+</dd>
+</dl>
+
+<h2 id="Client-Callback-Methods"><a class="permalink" href="DB.html#Client-Callback-Methods">#</a><a id="Client"></a>Client Callback Methods</h2>
+
+<p>The following &quot;virtual&quot; methods can be defined by the client. They will be called by the API at appropriate points. Note that unless specified otherwise, the debug API only defines empty, non-functional default versions of these methods.</p>
+
+<dl>
+
+<dt id="CLIENT-&gt;init()"><a class="permalink" href="DB.html#CLIENT-%3Einit()">#</a><a id="CLIENT7"></a><a id="CLIENT-init"></a>CLIENT-&gt;init()</dt>
+<dd>
+
+<p>Called after debug API inits itself.</p>
+
+</dd>
+<dt id="CLIENT-&gt;prestop([STRING])"><a class="permalink" href="DB.html#CLIENT-%3Eprestop(%5BSTRING%5D)">#</a><a id="CLIENT8"></a><a id="CLIENT-prestop-STRING"></a>CLIENT-&gt;prestop([STRING])</dt>
+<dd>
+
+<p>Usually inherited from DB package. If no arguments are passed, returns the prestop action string.</p>
+
+</dd>
+<dt id="CLIENT-&gt;stop()"><a class="permalink" href="DB.html#CLIENT-%3Estop()">#</a><a id="CLIENT9"></a><a id="CLIENT-stop"></a>CLIENT-&gt;stop()</dt>
+<dd>
+
+<p>Called when execution stops (w/ args file, line).</p>
+
+</dd>
+<dt id="CLIENT-&gt;idle()"><a class="permalink" href="DB.html#CLIENT-%3Eidle()">#</a><a id="CLIENT10"></a><a id="CLIENT-idle"></a>CLIENT-&gt;idle()</dt>
+<dd>
+
+<p>Called while stopped (can be a client event loop).</p>
+
+</dd>
+<dt id="CLIENT-&gt;poststop([STRING])"><a class="permalink" href="DB.html#CLIENT-%3Epoststop(%5BSTRING%5D)">#</a><a id="CLIENT11"></a><a id="CLIENT-poststop-STRING"></a>CLIENT-&gt;poststop([STRING])</dt>
+<dd>
+
+<p>Usually inherited from DB package. If no arguments are passed, returns the poststop action string.</p>
+
+</dd>
+<dt id="CLIENT-&gt;evalcode(STRING)1"><a class="permalink" href="DB.html#CLIENT-%3Eevalcode(STRING)1">#</a><a id="CLIENT12"></a><a id="CLIENT-evalcode-STRING1"></a>CLIENT-&gt;evalcode(STRING)</dt>
+<dd>
+
+<p>Usually inherited from DB package. Ask for a STRING to be <code>eval</code>-ed in executing code context.</p>
+
+</dd>
+<dt id="CLIENT-&gt;cleanup()"><a class="permalink" href="DB.html#CLIENT-%3Ecleanup()">#</a><a id="CLIENT13"></a><a id="CLIENT-cleanup"></a>CLIENT-&gt;cleanup()</dt>
+<dd>
+
+<p>Called just before exit.</p>
+
+</dd>
+<dt id="CLIENT-&gt;output(LIST)"><a class="permalink" href="DB.html#CLIENT-%3Eoutput(LIST)">#</a><a id="CLIENT14"></a><a id="CLIENT-output-LIST"></a>CLIENT-&gt;output(LIST)</dt>
+<dd>
+
+<p>Called when API must show a message (warnings, errors etc.).</p>
+
+</dd>
+</dl>
+
+<h1 id="BUGS"><a class="permalink" href="DB.html#BUGS">#</a>BUGS</h1>
+
+<p>The interface defined by this module is missing some of the later additions to perl&#39;s debugging functionality. As such, this interface should be considered highly experimental and subject to change.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="DB.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Gurusamy Sarathy gsar@activestate.com</p>
+
+<p>This code heavily adapted from an early version of perl5db.pl attributable to Larry Wall and the Perl Porters.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

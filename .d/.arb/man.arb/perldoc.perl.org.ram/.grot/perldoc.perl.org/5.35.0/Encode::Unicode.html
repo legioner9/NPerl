@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Encode::Unicode -- Various Unicode Transformation Formats - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Encode::Unicode">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Encode::Unicode.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Encode::Unicode">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Encode::Unicode">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Encode::Unicode">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Encode::Unicode">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Encode::Unicode">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Encode::Unicode">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Encode::Unicode">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Encode::Unicode">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Encode::Unicode">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Encode::Unicode">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Encode::Unicode">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Encode::Unicode">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Encode::Unicode">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Encode::Unicode">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Encode::Unicode">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Encode::Unicode">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Encode::Unicode">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Encode::Unicode">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Encode::Unicode">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Encode::Unicode">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Encode::Unicode">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Encode::Unicode">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Encode::Unicode">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Encode::Unicode">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Encode::Unicode">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Encode::Unicode">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Encode::Unicode">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Encode::Unicode">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Encode::Unicode">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Encode::Unicode">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Encode::Unicode">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Encode::Unicode">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Encode::Unicode">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Encode::Unicode">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Encode::Unicode">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Encode::Unicode">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Encode::Unicode">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Encode::Unicode">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Encode::Unicode">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Encode::Unicode">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Encode::Unicode">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Encode::Unicode">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Encode::Unicode">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Encode::Unicode">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Encode::Unicode">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Encode::Unicode">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Encode::Unicode">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Encode::Unicode">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Encode::Unicode">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Encode::Unicode">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Encode::Unicode">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Encode::Unicode">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Encode::Unicode">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Encode::Unicode">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Encode::Unicode">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Encode::Unicode">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Encode::Unicode">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Encode::Unicode">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Encode::Unicode">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Encode::Unicode">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Encode::Unicode">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Encode::Unicode">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Encode::Unicode">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Encode::Unicode">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Encode::Unicode">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Encode::Unicode">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Encode::Unicode">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Encode::Unicode">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Encode::Unicode">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Encode::Unicode">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Encode::Unicode">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Encode::Unicode">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Encode::Unicode">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Encode::Unicode">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Encode::Unicode">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Encode::Unicode">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Encode::Unicode">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Encode::Unicode">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Encode::Unicode">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Encode::Unicode">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Encode::Unicode.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Encode::Unicode">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Encode::Unicode">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Encode::Unicode">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Encode::Unicode">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Encode::Unicode">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Encode::Unicode">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Encode::Unicode">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Encode::Unicode">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Encode::Unicode">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Encode::Unicode">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Encode::Unicode">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Encode::Unicode">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Encode::Unicode">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Encode::Unicode">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Encode::Unicode">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Encode::Unicode">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Encode::Unicode">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Encode::Unicode">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Encode::Unicode">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Encode::Unicode">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Encode::Unicode">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Encode::Unicode">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Encode::Unicode">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Encode::Unicode">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Encode::Unicode">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Encode::Unicode">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Encode::Unicode">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Encode::Unicode">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Encode::Unicode">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Encode::Unicode">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Encode::Unicode">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Encode::Unicode">5.35.1</a>
+          <a class="dropdown-item active" href="./Encode::Unicode.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Encode::Unicode.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Encode::Unicode.html">Encode::Unicode</a>
+          <div id="more">
+            (<a href="./Encode::Unicode.txt">source</a>,
+            <a href="https://metacpan.org/pod/Encode::Unicode">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 2.18</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Encode::Unicode.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Encode::Unicode.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Encode::Unicode.html#ABSTRACT">ABSTRACT</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Encode::Unicode.html#Size,-Endianness,-and-BOM">Size, Endianness, and BOM</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Encode::Unicode.html#by-size">by size</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Encode::Unicode.html#by-endianness">by endianness</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Encode::Unicode.html#Surrogate-Pairs">Surrogate Pairs</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Encode::Unicode.html#Error-Checking">Error Checking</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Encode::Unicode.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Encode::Unicode.html#NAME">#</a>NAME</h1>
+
+<p>Encode::Unicode -- Various Unicode Transformation Formats</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Encode::Unicode.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Encode qw/encode decode/;
+$ucs2 = encode(&quot;UCS-2BE&quot;, $utf8);
+$utf8 = decode(&quot;UCS-2BE&quot;, $ucs2);</code></pre>
+
+<h1 id="ABSTRACT"><a class="permalink" href="./Encode::Unicode.html#ABSTRACT">#</a>ABSTRACT</h1>
+
+<p>This module implements all Character Encoding Schemes of Unicode that are officially documented by Unicode Consortium (except, of course, for UTF-8, which is a native format in perl).</p>
+
+<dl>
+
+<dt id="http://www.unicode.org/glossary/-says:"><a class="permalink" href="./Encode::Unicode.html#http://www.unicode.org/glossary/-says:">#</a><a id="http"></a><a id="http:-www.unicode.org-glossary-says"></a><a href="http://www.unicode.org/glossary/">http://www.unicode.org/glossary/</a> says:</dt>
+<dd>
+
+<p><i>Character Encoding Scheme</i> A character encoding form plus byte serialization. There are Seven character encoding schemes in Unicode: UTF-8, UTF-16, UTF-16BE, UTF-16LE, UTF-32 (UCS-4), UTF-32BE (UCS-4BE) and UTF-32LE (UCS-4LE), and UTF-7.</p>
+
+<p>Since UTF-7 is a 7-bit (re)encoded version of UTF-16BE, It is not part of Unicode&#39;s Character Encoding Scheme. It is separately implemented in Encode::Unicode::UTF7. For details see <a href="./Encode::Unicode::UTF7.html">Encode::Unicode::UTF7</a>.</p>
+
+</dd>
+<dt id="Quick-Reference"><a class="permalink" href="./Encode::Unicode.html#Quick-Reference">#</a><a id="Quick"></a>Quick Reference</dt>
+<dd>
+
+<pre><code class="plaintext">              Decodes from ord(N)           Encodes chr(N) to...
+     octet/char BOM S.P d800-dfff  ord &gt; 0xffff     \x{1abcd} ==
+---------------+-----------------+------------------------------
+UCS-2BE       2   N   N  is bogus                  Not Available
+UCS-2LE       2   N   N     bogus                  Not Available
+UTF-16      2/4   Y   Y  is   S.P           S.P            BE/LE
+UTF-16BE    2/4   N   Y       S.P           S.P    0xd82a,0xdfcd
+UTF-16LE    2/4   N   Y       S.P           S.P    0x2ad8,0xcddf
+UTF-32        4   Y   -  is bogus         As is            BE/LE
+UTF-32BE      4   N   -     bogus         As is       0x0001abcd
+UTF-32LE      4   N   -     bogus         As is       0xcdab0100
+UTF-8       1-4   -   -     bogus   &gt;= 4 octets   \xf0\x9a\af\8d
+---------------+-----------------+------------------------------</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="Size,-Endianness,-and-BOM"><a class="permalink" href="./Encode::Unicode.html#Size,-Endianness,-and-BOM">#</a><a id="Size"></a><a id="Size-Endianness-and-BOM"></a>Size, Endianness, and BOM</h1>
+
+<p>You can categorize these CES by 3 criteria: size of each character, endianness, and Byte Order Mark.</p>
+
+<h2 id="by-size"><a class="permalink" href="./Encode::Unicode.html#by-size">#</a><a id="by"></a>by size</h2>
+
+<p>UCS-2 is a fixed-length encoding with each character taking 16 bits. It <b>does not</b> support <i>surrogate pairs</i>. When a surrogate pair is encountered during decode(), its place is filled with \x{FFFD} if <i>CHECK</i> is 0, or the routine croaks if <i>CHECK</i> is 1. When a character whose ord value is larger than 0xFFFF is encountered, its place is filled with \x{FFFD} if <i>CHECK</i> is 0, or the routine croaks if <i>CHECK</i> is 1.</p>
+
+<p>UTF-16 is almost the same as UCS-2 but it supports <i>surrogate pairs</i>. When it encounters a high surrogate (0xD800-0xDBFF), it fetches the following low surrogate (0xDC00-0xDFFF) and <code>desurrogate</code>s them to form a character. Bogus surrogates result in death. When \x{10000} or above is encountered during encode(), it <code>ensurrogate</code>s them and pushes the surrogate pair to the output stream.</p>
+
+<p>UTF-32 (UCS-4) is a fixed-length encoding with each character taking 32 bits. Since it is 32-bit, there is no need for <i>surrogate pairs</i>.</p>
+
+<h2 id="by-endianness"><a class="permalink" href="./Encode::Unicode.html#by-endianness">#</a><a id="by1"></a>by endianness</h2>
+
+<p>The first (and now failed) goal of Unicode was to map all character repertoires into a fixed-length integer so that programmers are happy. Since each character is either a <i>short</i> or <i>long</i> in C, you have to pay attention to the endianness of each platform when you pass data to one another.</p>
+
+<p>Anything marked as BE is Big Endian (or network byte order) and LE is Little Endian (aka VAX byte order). For anything not marked either BE or LE, a character called Byte Order Mark (BOM) indicating the endianness is prepended to the string.</p>
+
+<p>CAVEAT: Though BOM in utf8 (\xEF\xBB\xBF) is valid, it is meaningless and as of this writing Encode suite just leave it as is (\x{FeFF}).</p>
+
+<dl>
+
+<dt id="BOM-as-integer-when-fetched-in-network-byte-order"><a class="permalink" href="./Encode::Unicode.html#BOM-as-integer-when-fetched-in-network-byte-order">#</a><a id="BOM"></a>BOM as integer when fetched in network byte order</dt>
+<dd>
+
+<pre><code class="plaintext">            16         32 bits/char
+-------------------------
+BE      0xFeFF 0x0000FeFF
+LE      0xFFFe 0xFFFe0000
+-------------------------</code></pre>
+
+</dd>
+</dl>
+
+<p>This modules handles the BOM as follows.</p>
+
+<ul>
+
+<li><p>When BE or LE is explicitly stated as the name of encoding, BOM is simply treated as a normal character (ZERO WIDTH NO-BREAK SPACE).</p>
+
+</li>
+<li><p>When BE or LE is omitted during decode(), it checks if BOM is at the beginning of the string; if one is found, the endianness is set to what the BOM says.</p>
+
+</li>
+<li><p>Default Byte Order</p>
+
+<p>When no BOM is found, Encode 2.76 and blow croaked. Since Encode 2.77, it falls back to BE accordingly to RFC2781 and the Unicode Standard version 8.0</p>
+
+</li>
+<li><p>When BE or LE is omitted during encode(), it returns a BE-encoded string with BOM prepended. So when you want to encode a whole text file, make sure you encode() the whole text at once, not line by line or each line, not file, will have a BOM prepended.</p>
+
+</li>
+<li><p><code>UCS-2</code> is an exception. Unlike others, this is an alias of UCS-2BE. UCS-2 is already registered by IANA and others that way.</p>
+
+</li>
+</ul>
+
+<h1 id="Surrogate-Pairs"><a class="permalink" href="./Encode::Unicode.html#Surrogate-Pairs">#</a><a id="Surrogate"></a>Surrogate Pairs</h1>
+
+<p>To say the least, surrogate pairs were the biggest mistake of the Unicode Consortium. But according to the late Douglas Adams in <i>The Hitchhiker&#39;s Guide to the Galaxy</i> Trilogy, <code>In the beginning the Universe was created. This has made a lot of people very angry and been widely regarded as a bad move</code>. Their mistake was not of this magnitude so let&#39;s forgive them.</p>
+
+<p>(I don&#39;t dare make any comparison with Unicode Consortium and the Vogons here ;) Or, comparing Encode to Babel Fish is completely appropriate -- if you can only stick this into your ear :)</p>
+
+<p>Surrogate pairs were born when the Unicode Consortium finally admitted that 16 bits were not big enough to hold all the world&#39;s character repertoires. But they already made UCS-2 16-bit. What do we do?</p>
+
+<p>Back then, the range 0xD800-0xDFFF was not allocated. Let&#39;s split that range in half and use the first half to represent the <code>upper half of a character</code> and the second half to represent the <code>lower half of a character</code>. That way, you can represent 1024 * 1024 = 1048576 more characters. Now we can store character ranges up to \x{10ffff} even with 16-bit encodings. This pair of half-character is now called a <i>surrogate pair</i> and UTF-16 is the name of the encoding that embraces them.</p>
+
+<p>Here is a formula to ensurrogate a Unicode character \x{10000} and above;</p>
+
+<pre><code>$hi = ($uni - 0x10000) / 0x400 + 0xD800;
+$lo = ($uni - 0x10000) % 0x400 + 0xDC00;</code></pre>
+
+<p>And to desurrogate;</p>
+
+<pre><code>$uni = 0x10000 + ($hi - 0xD800) * 0x400 + ($lo - 0xDC00);</code></pre>
+
+<p>Note this move has made \x{D800}-\x{DFFF} into a forbidden zone but perl does not prohibit the use of characters within this range. To perl, every one of \x{0000_0000} up to \x{ffff_ffff} (*) is <i>a character</i>.</p>
+
+<pre><code class="plaintext">(*) or \x{ffff_ffff_ffff_ffff} if your perl is compiled with 64-bit
+integer support!</code></pre>
+
+<h1 id="Error-Checking"><a class="permalink" href="./Encode::Unicode.html#Error-Checking">#</a><a id="Error"></a>Error Checking</h1>
+
+<p>Unlike most encodings which accept various ways to handle errors, Unicode encodings simply croaks.</p>
+
+<pre><code>% perl -MEncode -e&#39;$_ = &quot;\xfe\xff\xd8\xd9\xda\xdb\0\n&quot;&#39; \
+       -e&#39;Encode::from_to($_, &quot;utf16&quot;,&quot;shift_jis&quot;, 0); print&#39;
+UTF-16:Malformed LO surrogate d8d9 at /path/to/Encode.pm line 184.
+% perl -MEncode -e&#39;$a = &quot;BOM missing&quot;&#39; \
+       -e&#39; Encode::from_to($a, &quot;utf16&quot;, &quot;shift_jis&quot;, 0); print&#39;
+UTF-16:Unrecognised BOM 424f at /path/to/Encode.pm line 184.</code></pre>
+
+<p>Unlike other encodings where mappings are not one-to-one against Unicode, UTFs are supposed to map 100% against one another. So Encode is more strict on UTFs.</p>
+
+<p>Consider that &quot;division by zero&quot; of Encode :)</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./Encode::Unicode.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="Encode.html">Encode</a>, <a href="./Encode::Unicode::UTF7.html">Encode::Unicode::UTF7</a>, <a href="http://www.unicode.org/glossary/">http://www.unicode.org/glossary/</a>, <a href="http://www.unicode.org/unicode/faq/utf_bom.html">http://www.unicode.org/unicode/faq/utf_bom.html</a>,</p>
+
+<p>RFC 2781 <a href="http://www.ietf.org/rfc/rfc2781.txt">http://www.ietf.org/rfc/rfc2781.txt</a>,</p>
+
+<p>The whole Unicode standard <a href="http://www.unicode.org/unicode/uni2book/u2.html">http://www.unicode.org/unicode/uni2book/u2.html</a></p>
+
+<p>Ch. 15, pp. 403 of <code>Programming Perl (3rd Edition)</code> by Larry Wall, Tom Christiansen, Jon Orwant; O&#39;Reilly &amp; Associates; ISBN 0-596-00027-8</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

@@ -1,0 +1,2282 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Unicode::GCString - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Unicode-LineBreak - MetaCPAN" href="https://metacpan.org/dist/Unicode-LineBreak/releases.rss" />
+        <link rel="canonical" href="./Unicode::GCString.html" />
+        <meta name="description" content="UAX #14 Unicode Line Breaking Algorithm" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Unicode::GCString" />
+<meta name="twitter:title"       content="Unicode::GCString" />
+<meta name="twitter:description" content="" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Unicode::GCString.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Unicode-LineBreak was released.">
+      <span class="relatize">29 Dec 2018 05:21:00 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Unicode-LineBreak">Unicode-LineBreak</a>
+  </li>
+  <li>
+    Module version: 2013.10
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Unicode-LineBreak/source/lib/Unicode/GCString.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Unicode-LineBreak/source/lib/Unicode/GCString.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g p" href="https://metacpan.org/dist/Unicode-LineBreak/source/lib/Unicode/GCString.pod">Pod Source</a>
+    (<a href="https://metacpan.org/dist/Unicode-LineBreak/source/lib/Unicode/GCString.pod?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Unicode-LineBreak/source/lib/Unicode">Browse</a>
+    (<a href="https://metacpan.org/dist/Unicode-LineBreak/source/lib/Unicode?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Unicode-LineBreak/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Unicode-LineBreak/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/hatukanezumi/Unicode-LineBreak">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Unicode-LineBreak">Issues</a>
+      (11)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Unicode-LineBreak+2019.001" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/U/Unicode-LineBreak.html?oncpan=1&amp;distmat=1&amp;version=2019.001&amp;grade=2" style="color: #090">8535</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/U/Unicode-LineBreak.html?oncpan=1&amp;distmat=1&amp;version=2019.001&amp;grade=3" style="color: #900">1</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/U/Unicode-LineBreak.html?oncpan=1&amp;distmat=1&amp;version=2019.001&amp;grade=4">1</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/NEZUMI/Unicode-LineBreak-2019.001">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Unicode-LineBreak who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Unicode-LineBreak-2019.001/index.html">49.20% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.8.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Unicode-LineBreak/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/N/NE/NEZUMI/Unicode-LineBreak-2019.001.tar.gz">
+      Download (<span itemprop="fileSize">304.91KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FNEZUMI%2FUnicode-LineBreak-2019.001%2Flib%2FUnicode%2FGCString.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Unicode-LineBreak/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Unicode-LineBreak/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Unicode-LineBreak">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Unicode-LineBreak">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Unicode/GCString.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="NEZUMI/Unicode-LineBreak-2019.001"
+>2019.001
+  (NEZUMI on 2018-12-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2018.003"
+>2018.003
+  (NEZUMI on 2018-03-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2017.004"
+>2017.004
+  (NEZUMI on 2017-04-11)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2016.007_02"
+>2016.007_02 DEV
+  (NEZUMI on 2016-07-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2016.003"
+>2016.003
+  (NEZUMI on 2016-03-28)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.12"
+>2015.12
+  (NEZUMI on 2015-11-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.11"
+>2015.11
+  (NEZUMI on 2015-11-01)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.07.16"
+>2015.07.16
+  (NEZUMI on 2015-07-17)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.06"
+>2015.06
+  (NEZUMI on 2015-06-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2014.06"
+>2014.06
+  (NEZUMI on 2014-06-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.11"
+>2013.11
+  (NEZUMI on 2013-11-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.10"
+>2013.10
+  (NEZUMI on 2013-10-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.10"
+>2012.10
+  (NEZUMI on 2012-10-01)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.06"
+>2012.06
+  (NEZUMI on 2012-06-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.04"
+>2012.04
+  (NEZUMI on 2012-03-31)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.02"
+>2012.02
+  (NEZUMI on 2012-02-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.12"
+>2011.12
+  (NEZUMI on 2011-12-17)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.11"
+>2011.11
+  (NEZUMI on 2011-11-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.05"
+>2011.05
+  (NEZUMI on 2011-05-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.04.26"
+>2011.04.26
+  (NEZUMI on 2011-04-16)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.04"
+>2011.04
+  (NEZUMI on 2011-03-31)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.03.21"
+>2011.03.21
+  (NEZUMI on 2011-03-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.03.05"
+>2011.03.05
+  (NEZUMI on 2011-03-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.01"
+>2011.01
+  (NEZUMI on 2011-01-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.011"
+>1.011
+  (NEZUMI on 2011-01-01)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2018.012"
+>2018.012
+  (NEZUMI on 2018-12-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2016.002_27"
+>2016.002_27 DEV
+  (NEZUMI on 2016-02-27)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.011_09"
+>2015.011_09 DEV
+  (NEZUMI on 2015-11-09)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.011_03"
+>2015.011_03 DEV
+  (NEZUMI on 2015-11-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2014.004_26"
+>2014.004_26 DEV
+  (NEZUMI on 2014-05-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.009_26"
+>2013.009_26 DEV
+  (NEZUMI on 2013-09-27)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.008_06"
+>2013.008_06 DEV
+  (NEZUMI on 2013-08-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.004_26"
+>2013.004_26 DEV
+  (NEZUMI on 2013-04-27)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.003_11"
+>2013.003_11 DEV
+  (NEZUMI on 2013-03-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.008_16"
+>2012.008_16 DEV
+  (NEZUMI on 2012-08-18)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.007_16"
+>2012.007_16 DEV
+  (NEZUMI on 2012-07-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.007_14"
+>2012.007_14 DEV
+  (NEZUMI on 2012-07-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.005_18"
+>2012.005_18 DEV
+  (NEZUMI on 2012-05-26)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_30"
+>2012.003_30 DEV
+  (NEZUMI on 2012-03-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_26"
+>2012.003_26 DEV
+  (NEZUMI on 2012-03-13)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_13"
+>2012.003_13 DEV
+  (NEZUMI on 2012-03-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_11"
+>2012.003_11 DEV
+  (NEZUMI on 2012-03-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.001_29"
+>2012.001_29 DEV
+  (NEZUMI on 2012-01-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.010_26"
+>2011.010_26 DEV
+  (NEZUMI on 2011-10-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.010_21"
+>2011.010_21 DEV
+  (NEZUMI on 2011-10-22)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.003_13"
+>2011.003_13 DEV
+  (NEZUMI on 2011-03-13)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.003_06"
+>2011.003_06 DEV
+  (NEZUMI on 2011-03-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.03"
+>2011.03
+  (NEZUMI on 2011-03-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_30"
+>2011.002_30 DEV
+  (NEZUMI on 2011-02-26)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_29"
+>2011.002_29 DEV
+  (NEZUMI on 2011-02-26)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_19"
+>2011.002_19 DEV
+  (NEZUMI on 2011-02-19)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_11"
+>2011.002_11 DEV
+  (NEZUMI on 2011-02-11)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.000_01"
+>2011.000_01 DEV
+  (NEZUMI on 2011-01-16)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.010"
+>1.010
+  (NEZUMI on 2010-12-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008.2"
+>1.008.2
+  (NEZUMI on 2010-11-16)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008.1"
+>1.008.1
+  (NEZUMI on 2010-11-15)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008"
+>1.008
+  (NEZUMI on 2010-10-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_07"
+>1.008_07 DEV
+  (NEZUMI on 2010-10-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_05"
+>1.008_05 DEV
+  (NEZUMI on 2010-09-23)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_04"
+>1.008_04 DEV
+  (NEZUMI on 2010-09-23)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_03"
+>1.008_03 DEV
+  (NEZUMI on 2010-09-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_02"
+>1.008_02 DEV
+  (NEZUMI on 2010-09-18)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_01"
+>1.008_01 DEV
+  (NEZUMI on 2010-08-10)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.007.520"
+>1.007.520
+  (NEZUMI on 2009-12-30)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.006.520"
+>1.006.520
+  (NEZUMI on 2009-12-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.005.520"
+>1.005.520
+  (NEZUMI on 2009-12-01)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.004.520"
+>1.004.520
+  (NEZUMI on 2009-10-18)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003.520"
+>1.003.520
+  (NEZUMI on 2009-10-15)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_11"
+>1.003_11 DEV
+  (NEZUMI on 2009-10-11)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_09"
+>1.003_09 DEV
+  (NEZUMI on 2009-10-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_08"
+>1.003_08 DEV
+  (NEZUMI on 2009-10-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_07"
+>1.003_07 DEV
+  (NEZUMI on 2009-10-03)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_06"
+>1.003_06 DEV
+  (NEZUMI on 2009-09-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_05"
+>1.003_05 DEV
+  (NEZUMI on 2009-09-10)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_04"
+>1.003_04 DEV
+  (NEZUMI on 2009-09-10)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_02"
+>1.003_02 DEV
+  (NEZUMI on 2009-08-31)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_01"
+>1.003_01 DEV
+  (NEZUMI on 2009-08-30)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.002.510"
+>1.002.510
+  (NEZUMI on 2009-06-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.001.510"
+>1.001.510
+  (NEZUMI on 2009-06-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.000.510"
+>1.000.510
+  (NEZUMI on 2009-06-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.000_02"
+>1.000_02 DEV
+  (NEZUMI on 2009-06-14)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.000_01"
+>1.000_01 DEV
+  (NEZUMI on 2009-05-30)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.005.510"
+>0.005.510
+  (NEZUMI on 2009-05-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.004.510"
+>0.004.510
+  (NEZUMI on 2009-05-23)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.003.510"
+>0.003.510
+  (NEZUMI on 2009-05-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.002.510"
+>0.002.510
+  (NEZUMI on 2009-05-17)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001.510"
+>0.001.510
+  (NEZUMI on 2009-05-09)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001"
+>0.001
+  (NEZUMI on 2009-05-09)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_11"
+>0.001_11 DEV
+  (NEZUMI on 2009-05-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_10"
+>0.001_10 DEV
+  (NEZUMI on 2009-05-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_03"
+>0.001_03 DEV
+  (NEZUMI on 2009-04-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_02"
+>0.001_02 DEV
+  (NEZUMI on 2009-04-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.01_01"
+>0.01_01 DEV
+  (NEZUMI on 2009-04-18)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/NEZUMI/Unicode-LineBreak-2019.001/diff/' + encodeURIComponent(this.value) + '/lib/Unicode/GCString.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="NEZUMI/Unicode-LineBreak-2019.001"
+>2019.001
+  (NEZUMI on 2018-12-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2018.003"
+>2018.003
+  (NEZUMI on 2018-03-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2017.004"
+>2017.004
+  (NEZUMI on 2017-04-11)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2016.007_02"
+>2016.007_02 DEV
+  (NEZUMI on 2016-07-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2016.003"
+>2016.003
+  (NEZUMI on 2016-03-28)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.12"
+>2015.12
+  (NEZUMI on 2015-11-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.11"
+>2015.11
+  (NEZUMI on 2015-11-01)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.07.16"
+>2015.07.16
+  (NEZUMI on 2015-07-17)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.06"
+>2015.06
+  (NEZUMI on 2015-06-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2014.06"
+>2014.06
+  (NEZUMI on 2014-06-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.11"
+>2013.11
+  (NEZUMI on 2013-11-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.10"
+>2013.10
+  (NEZUMI on 2013-10-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.10"
+>2012.10
+  (NEZUMI on 2012-10-01)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.06"
+>2012.06
+  (NEZUMI on 2012-06-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.04"
+>2012.04
+  (NEZUMI on 2012-03-31)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.02"
+>2012.02
+  (NEZUMI on 2012-02-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.12"
+>2011.12
+  (NEZUMI on 2011-12-17)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.11"
+>2011.11
+  (NEZUMI on 2011-11-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.05"
+>2011.05
+  (NEZUMI on 2011-05-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.04.26"
+>2011.04.26
+  (NEZUMI on 2011-04-16)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.04"
+>2011.04
+  (NEZUMI on 2011-03-31)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.03.21"
+>2011.03.21
+  (NEZUMI on 2011-03-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.03.05"
+>2011.03.05
+  (NEZUMI on 2011-03-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.01"
+>2011.01
+  (NEZUMI on 2011-01-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.011"
+>1.011
+  (NEZUMI on 2011-01-01)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2018.012"
+>2018.012
+  (NEZUMI on 2018-12-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2016.002_27"
+>2016.002_27 DEV
+  (NEZUMI on 2016-02-27)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.011_09"
+>2015.011_09 DEV
+  (NEZUMI on 2015-11-09)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.011_03"
+>2015.011_03 DEV
+  (NEZUMI on 2015-11-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2014.004_26"
+>2014.004_26 DEV
+  (NEZUMI on 2014-05-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.009_26"
+>2013.009_26 DEV
+  (NEZUMI on 2013-09-27)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.008_06"
+>2013.008_06 DEV
+  (NEZUMI on 2013-08-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.004_26"
+>2013.004_26 DEV
+  (NEZUMI on 2013-04-27)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.003_11"
+>2013.003_11 DEV
+  (NEZUMI on 2013-03-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.008_16"
+>2012.008_16 DEV
+  (NEZUMI on 2012-08-18)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.007_16"
+>2012.007_16 DEV
+  (NEZUMI on 2012-07-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.007_14"
+>2012.007_14 DEV
+  (NEZUMI on 2012-07-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.005_18"
+>2012.005_18 DEV
+  (NEZUMI on 2012-05-26)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_30"
+>2012.003_30 DEV
+  (NEZUMI on 2012-03-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_26"
+>2012.003_26 DEV
+  (NEZUMI on 2012-03-13)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_13"
+>2012.003_13 DEV
+  (NEZUMI on 2012-03-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_11"
+>2012.003_11 DEV
+  (NEZUMI on 2012-03-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.001_29"
+>2012.001_29 DEV
+  (NEZUMI on 2012-01-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.010_26"
+>2011.010_26 DEV
+  (NEZUMI on 2011-10-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.010_21"
+>2011.010_21 DEV
+  (NEZUMI on 2011-10-22)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.003_13"
+>2011.003_13 DEV
+  (NEZUMI on 2011-03-13)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.003_06"
+>2011.003_06 DEV
+  (NEZUMI on 2011-03-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.03"
+>2011.03
+  (NEZUMI on 2011-03-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_30"
+>2011.002_30 DEV
+  (NEZUMI on 2011-02-26)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_29"
+>2011.002_29 DEV
+  (NEZUMI on 2011-02-26)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_19"
+>2011.002_19 DEV
+  (NEZUMI on 2011-02-19)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_11"
+>2011.002_11 DEV
+  (NEZUMI on 2011-02-11)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.000_01"
+>2011.000_01 DEV
+  (NEZUMI on 2011-01-16)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.010"
+>1.010
+  (NEZUMI on 2010-12-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008.2"
+>1.008.2
+  (NEZUMI on 2010-11-16)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008.1"
+>1.008.1
+  (NEZUMI on 2010-11-15)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008"
+>1.008
+  (NEZUMI on 2010-10-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_07"
+>1.008_07 DEV
+  (NEZUMI on 2010-10-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_05"
+>1.008_05 DEV
+  (NEZUMI on 2010-09-23)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_04"
+>1.008_04 DEV
+  (NEZUMI on 2010-09-23)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_03"
+>1.008_03 DEV
+  (NEZUMI on 2010-09-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_02"
+>1.008_02 DEV
+  (NEZUMI on 2010-09-18)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_01"
+>1.008_01 DEV
+  (NEZUMI on 2010-08-10)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.007.520"
+>1.007.520
+  (NEZUMI on 2009-12-30)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.006.520"
+>1.006.520
+  (NEZUMI on 2009-12-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.005.520"
+>1.005.520
+  (NEZUMI on 2009-12-01)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.004.520"
+>1.004.520
+  (NEZUMI on 2009-10-18)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003.520"
+>1.003.520
+  (NEZUMI on 2009-10-15)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_11"
+>1.003_11 DEV
+  (NEZUMI on 2009-10-11)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_09"
+>1.003_09 DEV
+  (NEZUMI on 2009-10-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_08"
+>1.003_08 DEV
+  (NEZUMI on 2009-10-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_07"
+>1.003_07 DEV
+  (NEZUMI on 2009-10-03)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_06"
+>1.003_06 DEV
+  (NEZUMI on 2009-09-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_05"
+>1.003_05 DEV
+  (NEZUMI on 2009-09-10)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_04"
+>1.003_04 DEV
+  (NEZUMI on 2009-09-10)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_02"
+>1.003_02 DEV
+  (NEZUMI on 2009-08-31)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_01"
+>1.003_01 DEV
+  (NEZUMI on 2009-08-30)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.002.510"
+>1.002.510
+  (NEZUMI on 2009-06-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.001.510"
+>1.001.510
+  (NEZUMI on 2009-06-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.000.510"
+>1.000.510
+  (NEZUMI on 2009-06-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.000_02"
+>1.000_02 DEV
+  (NEZUMI on 2009-06-14)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.000_01"
+>1.000_01 DEV
+  (NEZUMI on 2009-05-30)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.005.510"
+>0.005.510
+  (NEZUMI on 2009-05-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.004.510"
+>0.004.510
+  (NEZUMI on 2009-05-23)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.003.510"
+>0.003.510
+  (NEZUMI on 2009-05-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.002.510"
+>0.002.510
+  (NEZUMI on 2009-05-17)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001.510"
+>0.001.510
+  (NEZUMI on 2009-05-09)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001"
+>0.001
+  (NEZUMI on 2009-05-09)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_11"
+>0.001_11 DEV
+  (NEZUMI on 2009-05-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_10"
+>0.001_10 DEV
+  (NEZUMI on 2009-05-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_03"
+>0.001_03 DEV
+  (NEZUMI on 2009-04-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_02"
+>0.001_02 DEV
+  (NEZUMI on 2009-04-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.01_01"
+>0.01_01 DEV
+  (NEZUMI on 2009-04-18)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Encode" title="Encode" class="ellipsis">Encode</a></li>
+  <li><a href="https://metacpan.org/pod/MIME::Charset" title="MIME::Charset" class="ellipsis">MIME::Charset</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Unicode::GCString/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Unicode%3A%3AGCString">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Unicode-LineBreak">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/NEZUMI/Unicode-LineBreak-2019.001/view/lib/Unicode/GCString.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Unicode::GCString.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/HANNIBAL"><img src="https://www.gravatar.com/avatar/325c153e70a65543b9496e0ad7cdca29?d=identicon&amp;s=20" title="HANNIBAL" alt="HANNIBAL"></a>
+<a class="display-all" href="https://metacpan.org/author/ZMUGHAL"><img src="https://www.gravatar.com/avatar/82e7c54d334bfdfd32594d34583d32bc?d=identicon&amp;s=20" title="ZMUGHAL" alt="ZMUGHAL"></a>
+<a class="display-all" href="https://metacpan.org/author/PERLANCAR"><img src="https://www.gravatar.com/avatar/c66c9e215cc2342796cd87ca82d044a8?d=identicon&amp;s=20" title="PERLANCAR" alt="PERLANCAR"></a>
+<a class="display-all" href="https://metacpan.org/author/KEEDI"><img src="https://www.gravatar.com/avatar/95f905a7a4ccc573c711e9d264c0fde8?d=identicon&amp;s=20" title="KEEDI" alt="KEEDI"></a>
+<a class="display-all" href="https://metacpan.org/author/ARISTOTLE"><img src="https://www.gravatar.com/avatar/81da52fa1b6754867e9056c58afab74d?d=identicon&amp;s=20" title="ARISTOTLE" alt="ARISTOTLE"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Unicode-LineBreak/plussers">8 PAUSE users</a>
+</div>
+<div>
+    2 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-contrib-email="hatuka@nezumi.nu"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Hatuka*nezumi - IKEDA Soji
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/NEZUMI" class="author-name">二十日☆鼠 - IKEDA Soji</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Unicode/GCString.pm&#39;" class="">
+<option
+  selected
+  value="NEZUMI/Unicode-LineBreak-2019.001"
+>2019.001
+  (NEZUMI on 2018-12-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2018.003"
+>2018.003
+  (NEZUMI on 2018-03-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2017.004"
+>2017.004
+  (NEZUMI on 2017-04-11)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2016.007_02"
+>2016.007_02 DEV
+  (NEZUMI on 2016-07-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2016.003"
+>2016.003
+  (NEZUMI on 2016-03-28)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.12"
+>2015.12
+  (NEZUMI on 2015-11-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.11"
+>2015.11
+  (NEZUMI on 2015-11-01)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.07.16"
+>2015.07.16
+  (NEZUMI on 2015-07-17)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.06"
+>2015.06
+  (NEZUMI on 2015-06-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2014.06"
+>2014.06
+  (NEZUMI on 2014-06-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.11"
+>2013.11
+  (NEZUMI on 2013-11-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.10"
+>2013.10
+  (NEZUMI on 2013-10-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.10"
+>2012.10
+  (NEZUMI on 2012-10-01)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.06"
+>2012.06
+  (NEZUMI on 2012-06-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.04"
+>2012.04
+  (NEZUMI on 2012-03-31)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.02"
+>2012.02
+  (NEZUMI on 2012-02-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.12"
+>2011.12
+  (NEZUMI on 2011-12-17)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.11"
+>2011.11
+  (NEZUMI on 2011-11-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.05"
+>2011.05
+  (NEZUMI on 2011-05-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.04.26"
+>2011.04.26
+  (NEZUMI on 2011-04-16)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.04"
+>2011.04
+  (NEZUMI on 2011-03-31)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.03.21"
+>2011.03.21
+  (NEZUMI on 2011-03-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.03.05"
+>2011.03.05
+  (NEZUMI on 2011-03-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.01"
+>2011.01
+  (NEZUMI on 2011-01-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.011"
+>1.011
+  (NEZUMI on 2011-01-01)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2018.012"
+>2018.012
+  (NEZUMI on 2018-12-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2016.002_27"
+>2016.002_27 DEV
+  (NEZUMI on 2016-02-27)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.011_09"
+>2015.011_09 DEV
+  (NEZUMI on 2015-11-09)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2015.011_03"
+>2015.011_03 DEV
+  (NEZUMI on 2015-11-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2014.004_26"
+>2014.004_26 DEV
+  (NEZUMI on 2014-05-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.009_26"
+>2013.009_26 DEV
+  (NEZUMI on 2013-09-27)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.008_06"
+>2013.008_06 DEV
+  (NEZUMI on 2013-08-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.004_26"
+>2013.004_26 DEV
+  (NEZUMI on 2013-04-27)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2013.003_11"
+>2013.003_11 DEV
+  (NEZUMI on 2013-03-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.008_16"
+>2012.008_16 DEV
+  (NEZUMI on 2012-08-18)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.007_16"
+>2012.007_16 DEV
+  (NEZUMI on 2012-07-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.007_14"
+>2012.007_14 DEV
+  (NEZUMI on 2012-07-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.005_18"
+>2012.005_18 DEV
+  (NEZUMI on 2012-05-26)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_30"
+>2012.003_30 DEV
+  (NEZUMI on 2012-03-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_26"
+>2012.003_26 DEV
+  (NEZUMI on 2012-03-13)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_13"
+>2012.003_13 DEV
+  (NEZUMI on 2012-03-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.003_11"
+>2012.003_11 DEV
+  (NEZUMI on 2012-03-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2012.001_29"
+>2012.001_29 DEV
+  (NEZUMI on 2012-01-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.010_26"
+>2011.010_26 DEV
+  (NEZUMI on 2011-10-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.010_21"
+>2011.010_21 DEV
+  (NEZUMI on 2011-10-22)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.003_13"
+>2011.003_13 DEV
+  (NEZUMI on 2011-03-13)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.003_06"
+>2011.003_06 DEV
+  (NEZUMI on 2011-03-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.03"
+>2011.03
+  (NEZUMI on 2011-03-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_30"
+>2011.002_30 DEV
+  (NEZUMI on 2011-02-26)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_29"
+>2011.002_29 DEV
+  (NEZUMI on 2011-02-26)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_19"
+>2011.002_19 DEV
+  (NEZUMI on 2011-02-19)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.002_11"
+>2011.002_11 DEV
+  (NEZUMI on 2011-02-11)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-2011.000_01"
+>2011.000_01 DEV
+  (NEZUMI on 2011-01-16)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.010"
+>1.010
+  (NEZUMI on 2010-12-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008.2"
+>1.008.2
+  (NEZUMI on 2010-11-16)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008.1"
+>1.008.1
+  (NEZUMI on 2010-11-15)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008"
+>1.008
+  (NEZUMI on 2010-10-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_07"
+>1.008_07 DEV
+  (NEZUMI on 2010-10-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_05"
+>1.008_05 DEV
+  (NEZUMI on 2010-09-23)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_04"
+>1.008_04 DEV
+  (NEZUMI on 2010-09-23)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_03"
+>1.008_03 DEV
+  (NEZUMI on 2010-09-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_02"
+>1.008_02 DEV
+  (NEZUMI on 2010-09-18)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.008_01"
+>1.008_01 DEV
+  (NEZUMI on 2010-08-10)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.007.520"
+>1.007.520
+  (NEZUMI on 2009-12-30)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.006.520"
+>1.006.520
+  (NEZUMI on 2009-12-05)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.005.520"
+>1.005.520
+  (NEZUMI on 2009-12-01)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.004.520"
+>1.004.520
+  (NEZUMI on 2009-10-18)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003.520"
+>1.003.520
+  (NEZUMI on 2009-10-15)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_11"
+>1.003_11 DEV
+  (NEZUMI on 2009-10-11)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_09"
+>1.003_09 DEV
+  (NEZUMI on 2009-10-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_08"
+>1.003_08 DEV
+  (NEZUMI on 2009-10-04)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_07"
+>1.003_07 DEV
+  (NEZUMI on 2009-10-03)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_06"
+>1.003_06 DEV
+  (NEZUMI on 2009-09-12)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_05"
+>1.003_05 DEV
+  (NEZUMI on 2009-09-10)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_04"
+>1.003_04 DEV
+  (NEZUMI on 2009-09-10)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_02"
+>1.003_02 DEV
+  (NEZUMI on 2009-08-31)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.003_01"
+>1.003_01 DEV
+  (NEZUMI on 2009-08-30)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.002.510"
+>1.002.510
+  (NEZUMI on 2009-06-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.001.510"
+>1.001.510
+  (NEZUMI on 2009-06-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.000.510"
+>1.000.510
+  (NEZUMI on 2009-06-20)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.000_02"
+>1.000_02 DEV
+  (NEZUMI on 2009-06-14)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-1.000_01"
+>1.000_01 DEV
+  (NEZUMI on 2009-05-30)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.005.510"
+>0.005.510
+  (NEZUMI on 2009-05-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.004.510"
+>0.004.510
+  (NEZUMI on 2009-05-23)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.003.510"
+>0.003.510
+  (NEZUMI on 2009-05-21)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.002.510"
+>0.002.510
+  (NEZUMI on 2009-05-17)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001.510"
+>0.001.510
+  (NEZUMI on 2009-05-09)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001"
+>0.001
+  (NEZUMI on 2009-05-09)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_11"
+>0.001_11 DEV
+  (NEZUMI on 2009-05-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_10"
+>0.001_10 DEV
+  (NEZUMI on 2009-05-02)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_03"
+>0.001_03 DEV
+  (NEZUMI on 2009-04-29)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.001_02"
+>0.001_02 DEV
+  (NEZUMI on 2009-04-25)</option>
+<option
+  
+  value="NEZUMI/Unicode-LineBreak-0.01_01"
+>0.01_01 DEV
+  (NEZUMI on 2009-04-18)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Unicode-LineBreak">Unicode-LineBreak-2019.001</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage three &#10;
+          • 11 direct dependents &#10;          • 330 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Unicode-LineBreak-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Unicode-LineBreak-2019.001">
+    <input type="hidden" name="author" value="NEZUMI">
+    <input type="hidden" name="distribution" value="Unicode-LineBreak">
+    <button type="submit" class="favorite highlight"><span>10</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Unicode::GCString.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>10</span> ++</a>
+</div>
+   / <span>Unicode::GCString</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Unicode::GCString.html#NAME">NAME</a></li>
+  <li><a href="./Unicode::GCString.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Unicode::GCString.html#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a href="./Unicode::GCString.html#Public-Interface">Public Interface</a>
+        <ul>
+          <li><a href="./Unicode::GCString.html#Constructors">Constructors</a></li>
+          <li><a href="./Unicode::GCString.html#Sizes">Sizes</a></li>
+          <li><a href="./Unicode::GCString.html#Operations-as-String">Operations as String</a></li>
+          <li><a href="./Unicode::GCString.html#Operations-as-Sequence-of-Grapheme-Clusters">Operations as Sequence of Grapheme Clusters</a></li>
+          <li><a href="./Unicode::GCString.html#Miscelaneous">Miscelaneous</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="./Unicode::GCString.html#CAVEATS">CAVEATS</a></li>
+  <li><a href="./Unicode::GCString.html#VERSION">VERSION</a>
+    <ul>
+      <li><a href="./Unicode::GCString.html#Incompatible-Changes">Incompatible Changes</a></li>
+    </ul>
+  </li>
+  <li><a href="./Unicode::GCString.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Unicode::GCString.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Unicode::GCString.html#COPYRIGHT">COPYRIGHT</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Unicode::GCString - String as Sequence of UAX #29 Grapheme Clusters</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    use Unicode::GCString;
+    $gcstring = Unicode::GCString-&gt;new($string);
+    </code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>Unicode::GCString treats Unicode string as a sequence of <i>extended grapheme clusters</i> defined by Unicode Standard Annex #29 [UAX #29].</p>
+
+<p><b>Grapheme cluster</b> is a sequence of Unicode character(s) that consists of one <b>grapheme base</b> and optional <b>grapheme extender</b> and/or <b>&ldquo;prepend&rdquo; character</b>. It is close in that people consider as <i>character</i>.</p>
+
+<h2 id="Public-Interface"><a id="Public"></a>Public Interface</h2>
+
+<h3 id="Constructors">Constructors</h3>
+
+<dl>
+
+<dt id="new-(STRING,-[KEY-=&gt;-VALUE,-...])"><a id="new"></a><a id="new--STRING---KEY---VALUE"></a>new (STRING, [KEY =&gt; VALUE, ...])</dt>
+<dd>
+
+</dd>
+<dt id="new-(STRING,-[LINEBREAK])"><a id="new1"></a><a id="new--STRING---LINEBREAK"></a>new (STRING, [LINEBREAK])</dt>
+<dd>
+
+<p><i>Constructor</i>. Create new grapheme cluster string (Unicode::GCString object) from Unicode string STRING.</p>
+
+<p>About optional KEY =&gt; VALUE pairs see <a href="https://metacpan.org/pod/distribution/Unicode-LineBreak/lib/Unicode/LineBreak.pod#Options">&quot;Options&quot; in Unicode::LineBreak</a>. On second form, <a href="https://metacpan.org/pod/distribution/Unicode-LineBreak/lib/Unicode/LineBreak.pod">Unicode::LineBreak</a> object LINEBREAK controls breaking features.</p>
+
+<p><b>Note</b>: The first form was introduced by release 2012.10.</p>
+
+</dd>
+<dt id="copy">copy</dt>
+<dd>
+
+<p><i>Copy constructor</i>. Create a copy of grapheme cluster string. Next position of new string is set at beginning.</p>
+
+</dd>
+</dl>
+
+<h3 id="Sizes">Sizes</h3>
+
+<dl>
+
+<dt id="chars">chars</dt>
+<dd>
+
+<p><i>Instance method</i>. Returns number of Unicode characters grapheme cluster string includes, i.e. length as Unicode string.</p>
+
+</dd>
+<dt id="columns">columns</dt>
+<dd>
+
+<p><i>Instance method</i>. Returns total number of columns of grapheme clusters defined by built-in character database. For more details see <a href="https://metacpan.org/pod/distribution/Unicode-LineBreak/lib/Unicode/LineBreak.pod#DESCRIPTION">&quot;DESCRIPTION&quot; in Unicode::LineBreak</a>.</p>
+
+</dd>
+<dt id="length">length</dt>
+<dd>
+
+<p><i>Instance method</i>. Returns number of grapheme clusters contained in grapheme cluster string.</p>
+
+</dd>
+</dl>
+
+<h3 id="Operations-as-String"><a id="Operations"></a>Operations as String</h3>
+
+<dl>
+
+<dt id="as_string">as_string</dt>
+<dd>
+
+</dd>
+<dt id="&quot;OBJECT&quot;"><a id="OBJECT"></a><code>&quot;</code>OBJECT<code>&quot;</code></dt>
+<dd>
+
+<p><i>Instance method</i>. Convert grapheme cluster string to Unicode string explicitly.</p>
+
+</dd>
+<dt id="cmp-(STRING)"><a id="cmp"></a><a id="cmp--STRING"></a>cmp (STRING)</dt>
+<dd>
+
+</dd>
+<dt id="STRING-cmp-STRING"><a id="STRING"></a>STRING <code>cmp</code> STRING</dt>
+<dd>
+
+<p><i>Instance method</i>. Compare strings. There are no oddities. One of each STRING may be Unicode string.</p>
+
+</dd>
+<dt id="concat-(STRING)"><a id="concat"></a><a id="concat--STRING"></a>concat (STRING)</dt>
+<dd>
+
+</dd>
+<dt id="STRING-.-STRING"><a id="STRING1"></a>STRING <code>.</code> STRING</dt>
+<dd>
+
+<p><i>Instance method</i>. Concatenate STRINGs. One of each STRING may be Unicode string. Note that number of columns (see columns()) or grapheme clusters (see length()) of resulting string is not always equal to sum of both strings. Next position of new string is that set on the left value.</p>
+
+</dd>
+<dt id="join-([STRING,-...])"><a id="join"></a><a id="join--STRING"></a>join ([STRING, ...])</dt>
+<dd>
+
+<p><i>Instance method</i>. Join STRINGs inserting grapheme cluster string. Any of STRINGs may be Unicode string.</p>
+
+</dd>
+<dt id="substr-(OFFSET,-[LENGTH,-[REPLACEMENT]])"><a id="substr"></a><a id="substr--OFFSET---LENGTH---REPLACEMENT"></a>substr (OFFSET, [LENGTH, [REPLACEMENT]])</dt>
+<dd>
+
+<p><i>Instance method</i>. Returns substring of grapheme cluster string. OFFSET and LENGTH are based on grapheme clusters. If REPLACEMENT is specified, substring is replaced by it. REPLACEMENT may be Unicode string.</p>
+
+<p>Note: This method cannot return the lvalue, unlike built-in substr().</p>
+
+</dd>
+</dl>
+
+<h3 id="Operations-as-Sequence-of-Grapheme-Clusters"><a id="Operations1"></a>Operations as Sequence of Grapheme Clusters</h3>
+
+<dl>
+
+<dt id="as_array">as_array</dt>
+<dd>
+
+</dd>
+<dt id="@{OBJECT}"><a id="OBJECT1"></a><code>@{</code>OBJECT<code>}</code></dt>
+<dd>
+
+</dd>
+<dt id="as_arrayref">as_arrayref</dt>
+<dd>
+
+<p><i>Instance method</i>. Convert grapheme cluster string to an array of grapheme clusters.</p>
+
+</dd>
+<dt id="eos">eos</dt>
+<dd>
+
+<p><i>Instance method</i>. Test if current position is at end of grapheme cluster string.</p>
+
+</dd>
+<dt id="item-([OFFSET])"><a id="item"></a><a id="item--OFFSET"></a>item ([OFFSET])</dt>
+<dd>
+
+<p><i>Instance method</i>. Returns OFFSET-th grapheme cluster. If OFFSET was not specified, returns next grapheme cluster.</p>
+
+</dd>
+<dt id="next">next</dt>
+<dd>
+
+</dd>
+<dt id="&lt;OBJECT&gt;"><a id="OBJECT2"></a><code>&lt;</code>OBJECT<code>&gt;</code></dt>
+<dd>
+
+<p><i>Instance method</i>, iterative. Returns next grapheme cluster and increment next position.</p>
+
+</dd>
+<dt id="pos-([OFFSET])"><a id="pos"></a><a id="pos--OFFSET"></a>pos ([OFFSET])</dt>
+<dd>
+
+<p><i>Instance method</i>. If optional OFFSET is specified, set next position by it. Returns next position of grapheme cluster string.</p>
+
+</dd>
+</dl>
+
+<h3 id="Miscelaneous">Miscelaneous</h3>
+
+<dl>
+
+<dt id="lbc">lbc</dt>
+<dd>
+
+<p><i>Instance method</i>. Returns Line Breaking Class (See <a href="https://metacpan.org/pod/distribution/Unicode-LineBreak/lib/Unicode/LineBreak.pod">Unicode::LineBreak</a>) of the first character of first grapheme cluster.</p>
+
+</dd>
+<dt id="lbcext">lbcext</dt>
+<dd>
+
+<p><i>Instance method</i>. Returns Line Breaking Class (See <a href="https://metacpan.org/pod/distribution/Unicode-LineBreak/lib/Unicode/LineBreak.pod">Unicode::LineBreak</a>) of the last grapheme extender of last grapheme cluster. If there are no grapheme extenders or its class is CM, value of last grapheme base will be returned.</p>
+
+</dd>
+</dl>
+
+<h1 id="CAVEATS">CAVEATS</h1>
+
+<ul>
+
+<li><p>The grapheme cluster should not be referred to as &quot;grapheme&quot; even though Larry does.</p>
+
+</li>
+<li><p>On Perl around 5.10.1, implicit conversion from Unicode::GCString object to Unicode string sometimes let <code>&quot;utf8_mg_pos_cache_update&quot;</code> cache be confused.</p>
+
+<p>For example, instead of doing</p>
+
+<pre><code>    $sub = substr($gcstring, $i, $j);</code></pre>
+
+<p>do</p>
+
+<pre><code>    $sub = substr(&quot;$gcstring&quot;, $i, $j);
+
+    $sub = substr($gcstring-&gt;as_string, $i, $j);</code></pre>
+
+</li>
+<li><p>This module implements <i>default</i> algorithm for determining grapheme cluster boundaries. Tailoring mechanism has not been supported yet.</p>
+
+</li>
+</ul>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>Consult $VERSION variable.</p>
+
+<h2 id="Incompatible-Changes"><a id="Incompatible"></a>Incompatible Changes</h2>
+
+<dl>
+
+<dt id="Release-2013.10"><a id="Release"></a>Release 2013.10</dt>
+<dd>
+
+<ul>
+
+<li><p>The new() method can take non-Unicode string argument. In this case it will be decoded by iso-8859-1 (Latin 1) character set. That method of former releases would die with non-Unicode inputs.</p>
+
+</li>
+</ul>
+
+</dd>
+</dl>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p>[UAX #29] Mark Davis (ed.) (2009-2013). <i>Unicode Standard Annex #29: Unicode Text Segmentation</i>, Revisions 15-23. <a href="http://www.unicode.org/reports/tr29/">http://www.unicode.org/reports/tr29/</a>.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Hatuka*nezumi - IKEDA Soji &lt;hatuka(at)nezumi.nu&gt;</p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright (C) 2009-2013 Hatuka*nezumi - IKEDA Soji.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Unicode::LineBreak, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Unicode::LineBreak</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Unicode::LineBreak</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Unicode::GCString.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,1906 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>ExtUtils::ModuleMaker - Better than h2xs for creating modules - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of ExtUtils-ModuleMaker - MetaCPAN" href="https://metacpan.org/dist/ExtUtils-ModuleMaker/releases.rss" />
+        <link rel="canonical" href="./ExtUtils::ModuleMaker.html" />
+        <meta name="description" content="Better than h2xs for creating modules" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/ExtUtils::ModuleMaker" />
+<meta name="twitter:title"       content="ExtUtils::ModuleMaker" />
+<meta name="twitter:description" content="Better than h2xs for creating modules" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./ExtUtils::ModuleMaker.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of ExtUtils-ModuleMaker was released.">
+      <span class="relatize">31 Jul 2018 16:36:35 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/ExtUtils-ModuleMaker">ExtUtils-ModuleMaker</a>
+  </li>
+  <li>
+    Module version: 0.63
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/ExtUtils-ModuleMaker/source/lib/ExtUtils/ModuleMaker.pm">Source</a>
+    (<a href="https://metacpan.org/dist/ExtUtils-ModuleMaker/source/lib/ExtUtils/ModuleMaker.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/ExtUtils-ModuleMaker/source/lib/ExtUtils">Browse</a>
+    (<a href="https://metacpan.org/dist/ExtUtils-ModuleMaker/source/lib/ExtUtils?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/ExtUtils-ModuleMaker/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="http://thenceforward.net/perl/modules/ExtUtils-ModuleMaker/">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/ExtUtils-ModuleMaker/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/jkeenan/extutils-modulemaker">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=ExtUtils-ModuleMaker">Issues</a>
+      (1)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=ExtUtils-ModuleMaker+0.63" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/E/ExtUtils-ModuleMaker.html?oncpan=1&amp;distmat=1&amp;version=0.63&amp;grade=2" style="color: #090">962</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/E/ExtUtils-ModuleMaker.html?oncpan=1&amp;distmat=1&amp;version=0.63&amp;grade=3" style="color: #900">4</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/E/ExtUtils-ModuleMaker.html?oncpan=1&amp;distmat=1&amp;version=0.63&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/JKEENAN/ExtUtils-ModuleMaker-0.63">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on ExtUtils-ModuleMaker who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/ExtUtils-ModuleMaker-0.63/index.html">92.46% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/ExtUtils-ModuleMaker/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/ExtUtils-ModuleMaker-0.63.tar.gz">
+      Download (<span itemprop="fileSize">133.22KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FJKEENAN%2FExtUtils-ModuleMaker-0.63%2Flib%2FExtUtils%2FModuleMaker.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/ExtUtils-ModuleMaker/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/ExtUtils-ModuleMaker/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:ExtUtils-ModuleMaker">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="ExtUtils-ModuleMaker">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/ExtUtils/ModuleMaker.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="JKEENAN/ExtUtils-ModuleMaker-0.63"
+>0.63
+  (JKEENAN on 2018-07-31)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.33"
+>0.33
+  (JKEENAN on 2005-07-09)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.32"
+>0.32
+  (RGEOFFREY on 2003-06-17)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.31229"
+>0.31229
+  (RGEOFFREY on 2002-09-19)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.204"
+>0.204
+  (RGEOFFREY on 2002-05-30)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.202"
+>0.202
+  (RGEOFFREY on 2002-05-23)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.20102"
+>0.20102
+  (RGEOFFREY on 2001-07-27)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.62"
+>0.62
+  (JKEENAN on 2018-05-15)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.61"
+>0.61
+  (JKEENAN on 2018-05-14)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.60"
+>0.60
+  (JKEENAN on 2018-05-07)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.59"
+>0.59
+  (JKEENAN on 2018-05-07)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.58"
+>0.58
+  (JKEENAN on 2018-05-05)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.57"
+>0.57
+  (JKEENAN on 2018-05-02)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.56"
+>0.56
+  (JKEENAN on 2017-01-30)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.55"
+>0.55
+  (JKEENAN on 2016-01-03)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.54"
+>0.54
+  (JKEENAN on 2015-03-13)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.53"
+>0.53
+  (JKEENAN on 2015-03-10)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.52"
+>0.52
+  (JKEENAN on 2014-07-04)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.51"
+>0.51
+  (JKEENAN on 2008-02-09)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.49"
+>0.49
+  (JKEENAN on 2007-03-28)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.48"
+>0.48
+  (JKEENAN on 2007-03-26)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.47"
+>0.47
+  (JKEENAN on 2006-05-18)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.46"
+>0.46
+  (JKEENAN on 2006-04-29)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.45"
+>0.45
+  (JKEENAN on 2006-04-05)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.44"
+>0.44
+  (JKEENAN on 2005-12-25)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.43"
+>0.43
+  (JKEENAN on 2005-09-29)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.42"
+>0.42
+  (JKEENAN on 2005-09-28)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.41"
+>0.41
+  (JKEENAN on 2005-09-19)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.40"
+>0.40
+  (JKEENAN on 2005-09-18)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.39"
+>0.39
+  (JKEENAN on 2005-09-05)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.38"
+>0.38
+  (JKEENAN on 2005-09-04)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.37"
+>0.37
+  (JKEENAN on 2005-09-04)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.36"
+>0.36
+  (JKEENAN on 2005-07-19)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.35"
+>0.35
+  (JKEENAN on 2005-07-17)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/JKEENAN/ExtUtils-ModuleMaker-0.63/diff/' + encodeURIComponent(this.value) + '/lib/ExtUtils/ModuleMaker.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="JKEENAN/ExtUtils-ModuleMaker-0.63"
+>0.63
+  (JKEENAN on 2018-07-31)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.33"
+>0.33
+  (JKEENAN on 2005-07-09)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.32"
+>0.32
+  (RGEOFFREY on 2003-06-17)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.31229"
+>0.31229
+  (RGEOFFREY on 2002-09-19)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.204"
+>0.204
+  (RGEOFFREY on 2002-05-30)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.202"
+>0.202
+  (RGEOFFREY on 2002-05-23)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.20102"
+>0.20102
+  (RGEOFFREY on 2001-07-27)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.62"
+>0.62
+  (JKEENAN on 2018-05-15)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.61"
+>0.61
+  (JKEENAN on 2018-05-14)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.60"
+>0.60
+  (JKEENAN on 2018-05-07)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.59"
+>0.59
+  (JKEENAN on 2018-05-07)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.58"
+>0.58
+  (JKEENAN on 2018-05-05)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.57"
+>0.57
+  (JKEENAN on 2018-05-02)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.56"
+>0.56
+  (JKEENAN on 2017-01-30)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.55"
+>0.55
+  (JKEENAN on 2016-01-03)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.54"
+>0.54
+  (JKEENAN on 2015-03-13)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.53"
+>0.53
+  (JKEENAN on 2015-03-10)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.52"
+>0.52
+  (JKEENAN on 2014-07-04)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.51"
+>0.51
+  (JKEENAN on 2008-02-09)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.49"
+>0.49
+  (JKEENAN on 2007-03-28)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.48"
+>0.48
+  (JKEENAN on 2007-03-26)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.47"
+>0.47
+  (JKEENAN on 2006-05-18)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.46"
+>0.46
+  (JKEENAN on 2006-04-29)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.45"
+>0.45
+  (JKEENAN on 2006-04-05)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.44"
+>0.44
+  (JKEENAN on 2005-12-25)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.43"
+>0.43
+  (JKEENAN on 2005-09-29)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.42"
+>0.42
+  (JKEENAN on 2005-09-28)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.41"
+>0.41
+  (JKEENAN on 2005-09-19)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.40"
+>0.40
+  (JKEENAN on 2005-09-18)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.39"
+>0.39
+  (JKEENAN on 2005-09-05)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.38"
+>0.38
+  (JKEENAN on 2005-09-04)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.37"
+>0.37
+  (JKEENAN on 2005-09-04)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.36"
+>0.36
+  (JKEENAN on 2005-07-19)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.35"
+>0.35
+  (JKEENAN on 2005-07-17)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Data::Dumper" title="Data::Dumper" class="ellipsis">Data::Dumper</a></li>
+  <li><a href="https://metacpan.org/pod/File::Basename" title="File::Basename" class="ellipsis">File::Basename</a></li>
+  <li><a href="https://metacpan.org/pod/File::HomeDir" title="File::HomeDir" class="ellipsis">File::HomeDir</a></li>
+  <li><a href="https://metacpan.org/pod/File::Path" title="File::Path" class="ellipsis">File::Path</a></li>
+  <li><a href="https://metacpan.org/pod/Getopt::Long" title="Getopt::Long" class="ellipsis">Getopt::Long</a></li>
+  <li><a href="https://metacpan.org/pod/Getopt::Std" title="Getopt::Std" class="ellipsis">Getopt::Std</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/ExtUtils::ModuleMaker/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=ExtUtils%3A%3AModuleMaker">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=ExtUtils-ModuleMaker">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/JKEENAN/ExtUtils-ModuleMaker-0.63/view/lib/ExtUtils/ModuleMaker.pm">This version</a>
+    </li>
+    <li>
+      <a href="./ExtUtils::ModuleMaker.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/BKB"><img src="https://www.gravatar.com/avatar/191945c6c283d81db701008b2d89b68c?d=identicon&amp;s=20" title="BKB" alt="BKB"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/ExtUtils-ModuleMaker/plussers">1 PAUSE user</a>
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+    >
+      James E Keenan (jkeenan@cpan.org)
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/JKEENAN" class="author-name">James E Keenan</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/ExtUtils/ModuleMaker.pm&#39;" class="">
+<option
+  selected
+  value="JKEENAN/ExtUtils-ModuleMaker-0.63"
+>0.63
+  (JKEENAN on 2018-07-31)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.33"
+>0.33
+  (JKEENAN on 2005-07-09)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.32"
+>0.32
+  (RGEOFFREY on 2003-06-17)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.31229"
+>0.31229
+  (RGEOFFREY on 2002-09-19)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.204"
+>0.204
+  (RGEOFFREY on 2002-05-30)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.202"
+>0.202
+  (RGEOFFREY on 2002-05-23)</option>
+<option
+  
+  value="RGEOFFREY/ExtUtils-ModuleMaker-0.20102"
+>0.20102
+  (RGEOFFREY on 2001-07-27)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.62"
+>0.62
+  (JKEENAN on 2018-05-15)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.61"
+>0.61
+  (JKEENAN on 2018-05-14)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.60"
+>0.60
+  (JKEENAN on 2018-05-07)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.59"
+>0.59
+  (JKEENAN on 2018-05-07)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.58"
+>0.58
+  (JKEENAN on 2018-05-05)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.57"
+>0.57
+  (JKEENAN on 2018-05-02)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.56"
+>0.56
+  (JKEENAN on 2017-01-30)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.55"
+>0.55
+  (JKEENAN on 2016-01-03)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.54"
+>0.54
+  (JKEENAN on 2015-03-13)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.53"
+>0.53
+  (JKEENAN on 2015-03-10)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.52"
+>0.52
+  (JKEENAN on 2014-07-04)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.51"
+>0.51
+  (JKEENAN on 2008-02-09)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.49"
+>0.49
+  (JKEENAN on 2007-03-28)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.48"
+>0.48
+  (JKEENAN on 2007-03-26)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.47"
+>0.47
+  (JKEENAN on 2006-05-18)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.46"
+>0.46
+  (JKEENAN on 2006-04-29)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.45"
+>0.45
+  (JKEENAN on 2006-04-05)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.44"
+>0.44
+  (JKEENAN on 2005-12-25)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.43"
+>0.43
+  (JKEENAN on 2005-09-29)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.42"
+>0.42
+  (JKEENAN on 2005-09-28)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.41"
+>0.41
+  (JKEENAN on 2005-09-19)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.40"
+>0.40
+  (JKEENAN on 2005-09-18)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.39"
+>0.39
+  (JKEENAN on 2005-09-05)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.38"
+>0.38
+  (JKEENAN on 2005-09-04)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.37"
+>0.37
+  (JKEENAN on 2005-09-04)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.36"
+>0.36
+  (JKEENAN on 2005-07-19)</option>
+<option
+  
+  value="JKEENAN/ExtUtils-ModuleMaker-0.35"
+>0.35
+  (JKEENAN on 2005-07-17)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/ExtUtils-ModuleMaker">ExtUtils-ModuleMaker-0.63</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage one &#10;
+          • 3 direct dependents &#10;          • 4 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="ExtUtils-ModuleMaker-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="ExtUtils-ModuleMaker-0.63">
+    <input type="hidden" name="author" value="JKEENAN">
+    <input type="hidden" name="distribution" value="ExtUtils-ModuleMaker">
+    <button type="submit" class="favorite highlight"><span>1</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./ExtUtils::ModuleMaker.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>1</span> ++</a>
+</div>
+   / <span>ExtUtils::ModuleMaker</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./ExtUtils::ModuleMaker.html#NAME">NAME</a></li>
+  <li><a href="./ExtUtils::ModuleMaker.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./ExtUtils::ModuleMaker.html#VERSION">VERSION</a></li>
+  <li><a href="./ExtUtils::ModuleMaker.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./ExtUtils::ModuleMaker.html#USAGE">USAGE</a>
+    <ul>
+      <li><a href="./ExtUtils::ModuleMaker.html#Usage-from-the-command-line-with-modulemaker">Usage from the command-line with modulemaker</a></li>
+      <li><a href="./ExtUtils::ModuleMaker.html#Use-of-Public-Methods-within-a-Perl-Program">Use of Public Methods within a Perl Program</a>
+        <ul>
+          <li><a href="./ExtUtils::ModuleMaker.html#new">new</a></li>
+          <li><a href="./ExtUtils::ModuleMaker.html#complete_build">complete_build</a></li>
+          <li><a href="./ExtUtils::ModuleMaker.html#dump_keys">dump_keys</a></li>
+          <li><a href="./ExtUtils::ModuleMaker.html#dump_keys_except">dump_keys_except</a></li>
+          <li><a href="./ExtUtils::ModuleMaker.html#get_license">get_license</a></li>
+          <li><a href="./ExtUtils::ModuleMaker.html#make_selections_defaults()">make_selections_defaults()</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="./ExtUtils::ModuleMaker.html#CUSTOMIZATION">CUSTOMIZATION</a>
+    <ul>
+      <li><a href="./ExtUtils::ModuleMaker.html#Via-modulemaker-Utility-Interactive-Mode">Via modulemaker Utility Interactive Mode</a></li>
+      <li><a href="./ExtUtils::ModuleMaker.html#Via-modulemaker-Utility-Command-Line-Options-Mode">Via modulemaker Utility Command-Line Options Mode</a></li>
+      <li><a href="./ExtUtils::ModuleMaker.html#Via-ExtUtils::ModuleMaker::new()">Via ExtUtils::ModuleMaker::new()</a></li>
+      <li><a href="./ExtUtils::ModuleMaker.html#Via-Subclassing-ExtUtils::ModuleMaker">Via Subclassing ExtUtils::ModuleMaker</a>
+        <ul>
+          <li><a href="./ExtUtils::ModuleMaker.html#1.-Study-ExtUtils::ModuleMaker::Defaults,-::Initializers-and-::StandardText">1. Study ExtUtils::ModuleMaker::Defaults, ::Initializers and ::StandardText</a></li>
+          <li><a href="./ExtUtils::ModuleMaker.html#2.-Use-modulemaker-to-Create-the-Framework-for-a-New-Distribution">2. Use modulemaker to Create the Framework for a New Distribution</a></li>
+          <li><a href="./ExtUtils::ModuleMaker.html#3.-Edit-the-lib/*.pm-File">3. Edit the lib/*.pm File</a></li>
+          <li><a href="./ExtUtils::ModuleMaker.html#4.-Test">4. Test</a></li>
+          <li><a href="./ExtUtils::ModuleMaker.html#5.-Install-and-Use">5. Install and Use</a></li>
+          <li><a href="./ExtUtils::ModuleMaker.html#An-Alternative-Approach-to-Subclassing">An Alternative Approach to Subclassing</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="./ExtUtils::ModuleMaker.html#CAVEATS">CAVEATS</a></li>
+  <li><a href="./ExtUtils::ModuleMaker.html#TO-DO">TO DO</a></li>
+  <li><a href="./ExtUtils::ModuleMaker.html#AUTHOR/MAINTAINER">AUTHOR/MAINTAINER</a></li>
+  <li><a href="./ExtUtils::ModuleMaker.html#SUPPORT">SUPPORT</a></li>
+  <li><a href="./ExtUtils::ModuleMaker.html#ACKNOWLEDGMENTS">ACKNOWLEDGMENTS</a></li>
+  <li><a href="./ExtUtils::ModuleMaker.html#COPYRIGHT">COPYRIGHT</a></li>
+  <li><a href="./ExtUtils::ModuleMaker.html#DISCLAIMER-OF-WARRANTY">DISCLAIMER OF WARRANTY</a></li>
+  <li><a href="./ExtUtils::ModuleMaker.html#SEE-ALSO">SEE ALSO</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>ExtUtils::ModuleMaker - Better than h2xs for creating modules</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<p>At the command prompt:</p>
+
+<pre><code>    %   modulemaker</code></pre>
+
+<p>Inside a Perl program:</p>
+
+<pre><code>    use ExtUtils::ModuleMaker;
+
+    $mod = ExtUtils::ModuleMaker-&gt;new(
+        NAME =&gt; &#39;Sample::Module&#39;
+    );
+
+    $mod-&gt;complete_build();
+
+    $mod-&gt;dump_keys(qw|
+        ...  # key provided as argument to constructor
+        ...  # same
+    |);
+
+    $mod-&gt;dump_keys_except(qw|
+        ...  # key provided as argument to constructor
+        ...  # same
+    |);
+
+    $license = $mod-&gt;get_license();
+
+    $mod-&gt;make_selections_defaults();</code></pre>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>This document references version 0.63 of ExtUtils::ModuleMaker, released to CPAN on July 31 2018.</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module is a replacement for the most typical use of the <i>h2xs</i> utility bundled with all Perl distributions: the creation of the directories and files required for a pure-Perl module to be installable with <i>make</i> and distributable on the Comprehensive Perl Archive Network (CPAN).</p>
+
+<p><i>h2xs</i> has many options which are useful -- indeed, necessary -- for the creation of a properly structured distribution that includes C code as well as Perl code. Most of the time, however, <i>h2xs</i> is used as follows</p>
+
+<pre><code>    %   h2xs -AXn My::Module</code></pre>
+
+<p>to create a distribution containing only Perl code. ExtUtils::ModuleMaker is intended to be an easy-to-use replacement for <i>this</i> use of <i>h2xs</i>.</p>
+
+<p>While you can call ExtUtils::ModuleMaker from within a Perl script (as in the SYNOPSIS above), it&#39;s easier to use with a command-prompt invocation of the <i>modulemaker</i> script bundled with this distribution:</p>
+
+<pre><code>    %   modulemaker</code></pre>
+
+<p>Then respond to the prompts. For Perl programmers, laziness is a virtue -- and <i>modulemaker</i> is far and away the laziest way to create a pure Perl distribution which meets all the requirements for worldwide distribution via CPAN.</p>
+
+<h1 id="USAGE">USAGE</h1>
+
+<h2 id="Usage-from-the-command-line-with-modulemaker"><a id="Usage"></a>Usage from the command-line with <i>modulemaker</i></h2>
+
+<p>The easiest way to use ExtUtils::ModuleMaker is to invoke the <i>modulemaker</i> script from the command-line. You can control the content of the files built by <i>modulemaker</i> either by supplying command-line options or -- easier still -- replying to the screen prompts in <i>modulemaker</i>&#39;s interactive mode.</p>
+
+<p><b>If you are encountering ExtUtils::ModuleMaker for the first time, you should turn now to the documentation for <i>modulemaker</i> which is bundled this distribution.</b> Return to this document once you have become familiar with <i>modulemaker</i>.</p>
+
+<h2 id="Use-of-Public-Methods-within-a-Perl-Program"><a id="Use"></a>Use of Public Methods within a Perl Program</h2>
+
+<p>You can use ExtUtils::ModuleMaker within a Perl script to generate the directories and files needed to begin work on a CPAN-ready Perl distribution. You will need to call <code>new()</code> and <code>complete_build()</code>, both of which are described in the next section. These two methods control the building of the file and directory structure for a new Perl distribution.</p>
+
+<p>There are four other publicly available methods in this version of ExtUtils::ModuleMaker. <code>dump_keys</code>, <code>dump_keys_except</code> and <code>get_license</code> are intended primarily as shortcuts for trouble-shooting problems with an ExtUtils::ModuleMaker object. <code>make_selections_defaults</code> enables you to be even lazier in your use of ExtUtils::ModuleMaker by saving keystrokes entered for attributes.</p>
+
+<h3 id="new"><code>new</code></h3>
+
+<p>Creates and returns an ExtUtils::ModuleMaker object. Takes a list containing key-value pairs with information specifying the structure and content of the new module(s). (In this documentation, we will sometimes refer to these key-value pairs as the <i>attributes</i> of the ExtUtils::ModuleMaker object.) With the exception of key <code>EXTRA_MODULES</code> (see below), the values in these pairs are all strings. Like most such lists of key-value pairs, this list is probably best held in a hash. Keys which may be specified are:</p>
+
+<ul>
+
+<li><p>Required Argument</p>
+
+<ul>
+
+<li><p>NAME</p>
+
+<p>The <b>only</b> required feature. This is the name of the primary module (with &#39;<code>::</code>&#39; separators if needed). Will no longer support the older, Perl 4-style separator &quot;<code>&#39;</code>&quot; like the module <i>D&#39;Oh</i>. There is no current default for NAME; you must supply a name explicitly.</p>
+
+</li>
+</ul>
+
+</li>
+<li><p>Other Important Arguments</p>
+
+<ul>
+
+<li><p>ABSTRACT</p>
+
+<p>A short description of the module. CPAN likes to use this feature to describe the module. If the abstract contains an apostrophe (<code>&#39;</code>), then the value corresponding to key <code>ABSTRACT</code> in the list passed to the constructor must be double-quoted; otherwise <i>Makefile.PL</i> gets messed up. Certain CPAN indexing features still work better if the abstract is 44 or fewer characters in length, but this does not appear to be as mandatory as in the past. (Defaults to dummy copy.)</p>
+
+</li>
+<li><p>VERSION</p>
+
+<p>A string holding the version number. For alpha releases, include an underscore to the right of the dot like <code>0.31_21</code>. (Default is <code>0.01</code>.)</p>
+
+</li>
+<li><p>LICENSE</p>
+
+<p>Which license to include in the Copyright section. You can choose one of the standard licenses by including &#39;perl&#39;, &#39;gpl&#39;, &#39;artistic&#39;, and 18 others approved by opensource.org. The default is to choose the &#39;perl&#39; flavor which is to share it &quot;under the same terms as Perl itself.&quot;</p>
+
+<p>Other licenses can be added by individual module authors to ExtUtils::ModuleMaker::Licenses::Local to keep your company lawyers happy.</p>
+
+<p>Some licenses include placeholders that will be replaced with AUTHOR information.</p>
+
+</li>
+<li><p>BUILD_SYSTEM</p>
+
+<p>This can take one of three values:</p>
+
+<ul>
+
+<li><p><code>&#39;ExtUtils::MakeMaker&#39;</code></p>
+
+<p>The first generates a basic Makefile.PL file for your module.</p>
+
+</li>
+<li><p><code>&#39;Module::Build&#39;</code></p>
+
+<p>The second creates a Build.PL file.</p>
+
+</li>
+<li><p><code>&#39;Module::Build and Proxy&#39;</code></p>
+
+<p>The third creates a Build.PL along with a proxy Makefile.PL script that attempts to install Module::Build if necessary, and then runs the Build.PL script. This option is recommended if you want to use Module::Build as your build system. See Module::Build::Compat for more details.</p>
+
+<p><b>Note:</b> To correct a discrepancy between the documentation and code in earlier versions of ExtUtils::ModuleMaker, we now explicitly provide this synonym for the third option:</p>
+
+<pre><code>    &#39;Module::Build and proxy Makefile.PL&#39;</code></pre>
+
+<p>(Thanks to David A Golden for spotting this bug.)</p>
+
+</li>
+</ul>
+
+</li>
+<li><p>COMPACT</p>
+
+<p>For a module named &quot;Foo::Bar::Baz&quot; creates a base directory named &quot;Foo-Bar-Baz&quot; instead of Foo/Bar/Baz. (Default is off.)</p>
+
+</li>
+<li><p>VERBOSE</p>
+
+<p>Prints messages to STDOUT as it creates directories, writes files, etc. (Default is off.)</p>
+
+</li>
+<li><p>PERMISSIONS</p>
+
+<p>Used to create new directories. (Default is 0755: group and world can not write.)</p>
+
+</li>
+<li><p>USAGE_MESSAGE</p>
+
+<p>Message given when the module <code>die</code>s. Scripts should set this to the same string it would print if the user asked for help. (A reasonable default is provided.)</p>
+
+</li>
+<li><p>NEED_POD</p>
+
+<p>Include POD section in <i>*.pm</i> files created. (Default is on.)</p>
+
+</li>
+<li><p>NEED_NEW_METHOD</p>
+
+<p>Include a simple <code>new()</code> method in the <i>*.pm</i> files created. (Default is on.)</p>
+
+</li>
+<li><p>CHANGES_IN_POD</p>
+
+<p>Omit a <i>Changes</i> file, but instead add a HISTORY section to the POD. (Default is off).</p>
+
+</li>
+<li><p>INCLUDE_MANIFEST_SKIP</p>
+
+<p>Boolean value which, if true, includes a <i>MANIFEST.SKIP</i> file in the distribution with reasonable default values facilitating use of the <i>make manifest</i> command during module development. (Thanks to David A Golden for this feature. Default is off.)</p>
+
+</li>
+<li><p>INCLUDE_TODO</p>
+
+<p>Boolean value which, if true, includes a <i>Todo</i> file in the distribution in which the module&#39;s author or maintainer can discuss future lines of development. (Default is on.)</p>
+
+</li>
+<li><p>INCLUDE_LICENSE</p>
+
+<p>Boolean value which, if true, includes a <i>LICENSE</i> file in the distribution. (Which LICENSE file is determined in the LICENSE option.) (Default is on.)</p>
+
+</li>
+<li><p>INCLUDE_SCRIPTS_DIRECTORY</p>
+
+<p>Boolean value which, if true, includes a <i>scripts/</i> directory (at the same level as <i>lib/</i> or <i>t/</i>). (Default is on.)</p>
+
+</li>
+<li><p>INCLUDE_WARNINGS</p>
+
+<p>Boolean value which, if true, inserts <code>use warnings;</code> in all Perl modules created by use of this module. (Default is off.)</p>
+
+</li>
+<li><p>INCLUDE_ID_LINE</p>
+
+<p>Boolean value which, if true, inserts <code>#$Id$</code> in all Perl modules created by use of this module for the purpose of inserting a Subversion file &#39;Id&#39; string. (Default is off.)</p>
+
+</li>
+</ul>
+
+</li>
+<li><p>Arguments Related to the Module&#39;s Author</p>
+
+<ul>
+
+<li><p>AUTHOR</p>
+
+<p>Name of the author. If the author&#39;s name contains an apostrophe (<code>&#39;</code>), then the corresponding value in the list passed to the constructor must be double-quoted; otherwise <i>Makefile.PL</i> gets messed up. (Defaults to dummy copy.)</p>
+
+</li>
+<li><p>EMAIL</p>
+
+<p>Email address of the author. If the author&#39;s e-mail address contains an apostrophe (<code>&#39;</code>), then the corresponding value in the list passed to the constructor must be double-quoted; otherwise <i>Makefile.PL</i> gets messed up. (Defaults to dummy copy.)</p>
+
+</li>
+<li><p>CPANID</p>
+
+<p>The CPANID of the author. (Defaults to dummy copy. To suppress printing of this line entirely, set <code>CPANID</code> to a Perl-false value such as an empty string.)</p>
+
+</li>
+<li><p>WEBSITE</p>
+
+<p>The personal or organizational website of the author. (Defaults to dummy copy. To suppress printing of this line entirely, set <code>CPANID</code> to a Perl-false value such as an empty string.)</p>
+
+</li>
+<li><p>ORGANIZATION</p>
+
+<p>Company or group owning the module. (Defaults to dummy copy. To suppress printing of this line entirely, set <code>CPANID</code> to a Perl-false value such as an empty string.)</p>
+
+</li>
+</ul>
+
+</li>
+<li><p>Argument Related to Multiple Modules within a Distribution</p>
+
+<ul>
+
+<li><p>EXTRA_MODULES</p>
+
+<p>A reference to an array of hashes, each of which contains values for additional modules in the distribution.</p>
+
+<pre><code>    $mod = ExtUtils::ModuleMaker-&gt;new(
+        NAME           =&gt; &#39;Alpha::Beta&#39;,
+        EXTRA_MODULES  =&gt; [
+            { NAME =&gt; &#39;Alpha::Beta::Gamma&#39; },
+            { NAME =&gt; &#39;Alpha::Beta::Delta&#39; },
+            { NAME =&gt; &#39;Alpha::Beta::Gamma::Epsilon&#39; },
+        ],
+    );</code></pre>
+
+<p>As with the primary module, the only attribute required for each extra module is <code>NAME</code>. Other attributes may be supplied but the primary module&#39;s values will be used if no value is given here.</p>
+
+<p>Each extra module will be created in the correct relative place in the <i>lib</i> directory. By default, a test file will also be created in the <i>t</i> directory corresponding to each extra module to test that it loads properly. (See EXTRA_MODULES_SINGLE_TEST_FILE below to learn how to change this behavior.) However, no other supporting documents (<i>e.g.,</i> README, Changes) will be created.</p>
+
+<p>This is one major improvement over the earlier <i>h2xs</i> as you can now build multi-module packages.</p>
+
+</li>
+</ul>
+
+</li>
+<li><p>Arguments Related to Test Files</p>
+
+<ul>
+
+<li><p>FIRST_TEST_NUMBER</p>
+
+<p>A non-negative natural number from which the count begins in test files that are numerically ordered. (Default is <code>1</code>.)</p>
+
+</li>
+<li><p>TEST_NUMBER_FORMAT</p>
+
+<p>In test files that are numerically ordered, a Perl <code>sprintf</code> formatting string that specifies how FIRST_TEST_NUMBER is to be formatted. (Default is <code>&quot;%03d&quot;</code>.)</p>
+
+</li>
+<li><p>TEST_NAME</p>
+
+<p>String forming the core of the name of a test file. (Default is <code>load</code>).</p>
+
+</li>
+<li><p>TEST_NAME_DERIVED_FROM_MODULE_NAME</p>
+
+<p>Boolean value which, when true, tells ExtUtils::ModuleMaker to create a file in the test suite with a name derived from the <i>.pm</i> package it is testing, thereby overriding any value set in the TEST_NAME attribute. For example, for a module called &#39;Alpha::Sigma::Tau&#39;, a test file named <i>t/Alpha_Sigma_Tau.t</i> will be created. (Default is off.)</p>
+
+</li>
+<li><p>TEST_NAME_SEPARATOR</p>
+
+<p>String holding the character which joins components of a test file&#39;s name, <i>e.g.,</i> the character used to join <code>001</code> and &lt;load&gt; in a file named <i>001_load.t</i>. (Defaults to an underscore <code>_</code>.)</p>
+
+</li>
+<li><p>EXTRA_MODULES_SINGLE_TEST_FILE</p>
+
+<p>Boolean value which, when true and when extra modules have been specified in the EXTRA_MODULES attribute, will put tests for those extra modules in a single test file rather than in individual test files corresponding to each module. (Default is off.)</p>
+
+</li>
+<li><p>INCLUDE_POD_COVERAGE_TEST</p>
+
+<p>Boolean value which, if true, causes a test file called <i>t/pod-coverage.t</i> to be included in the <i>t/</i> directory. This test is advocated by some Perl quality assurance experts and module authors. However, since the maintainer of ExtUtils::ModuleMaker is not persuaded of its worth, default is off.</p>
+
+</li>
+<li><p>INCLUDE_POD_TEST</p>
+
+<p>Boolean value which, if true, causes a test file called <i>t/pod.t</i> to be included in the <i>t/</i> directory. This test is advocated by some Perl quality assurance experts and module authors. However, since the maintainer of ExtUtils::ModuleMaker is not persuaded of its worth, default is off.</p>
+
+</li>
+<li><p>INCLUDE_FILE_IN_PM</p>
+
+<p>String holding a path to a file containing Perl code and/or documentation which will be included in each <i>lib/*.pm</i> file created in a particular distribution. By default, such content is placed after any constructor and before the main POD block. This could, for example, be used to insert stub subroutines in each package within a distribution. Default is off.</p>
+
+</li>
+</ul>
+
+</li>
+<li><p>Arguments for Advanced Usages</p>
+
+<ul>
+
+<li><p>INTERACTIVE</p>
+
+<p>Activates interactive mode in <i>modulemaker</i> utility. The interactive mode presents the user with a series of menus from which the user selects features by entering text at the command prompt. This attribute should only be used by interactive scripts like <i>modulemaker</i>. (Default is off.)</p>
+
+</li>
+<li><p>ALT_BUILD</p>
+
+<p>Name of a Perl package holding methods which override those called withiin <code>complete_build</code> to shape the content of files created by using ExtUtils::ModuleMaker. See &quot;An Alternative Approach to Subclassing&quot; below.</p>
+
+</li>
+</ul>
+
+</li>
+</ul>
+
+<h3 id="complete_build"><code>complete_build</code></h3>
+
+<p>Creates all directories and files as configured by the key-value pairs passed to <code>ExtUtils::ModuleMaker::new</code>. Returns a true value if all specified files are created -- but this says nothing about whether those files have been created with the correct content.</p>
+
+<h3 id="dump_keys"><code>dump_keys</code></h3>
+
+<p>When troubleshooting problems with an ExtUtils::ModuleMaker object, it is often useful to use <i>Data::Dumper</i> to dump the contents of the object. Use <code>dump_keys()</code> when you only need to examine a few of the object&#39;s attributes.</p>
+
+<pre><code>    $mod-&gt;dump_keys( qw| NAME ABSTRACT | );</code></pre>
+
+<h3 id="dump_keys_except"><code>dump_keys_except</code></h3>
+
+<p>When troubleshooting problems with an ExtUtils::ModuleMaker object, it is often useful to use <i>Data::Dumper</i> to dump the contents of the object. However, since certain elements of that object are often quite lengthy (<i>e.g,</i> the values of keys <code>LicenseParts</code> and <code>USAGE_MESSAGE</code>), it&#39;s handy to have a dumper function that dumps all keys <i>except</i> certain designated keys.</p>
+
+<pre><code>    $mod-&gt;dump_keys_except(qw| LicenseParts USAGE_MESSAGE |);</code></pre>
+
+<h3 id="get_license"><code>get_license</code></h3>
+
+<p>Returns a string which nicely formats a short version of the License and Copyright information.</p>
+
+<pre><code>    $license = $mod-&gt;get_license();
+    print $license;</code></pre>
+
+<p>... will print something like this:</p>
+
+<pre><code>    =====================================================================
+    =====================================================================
+    [License Information]
+    =====================================================================
+    =====================================================================
+    [Copyright Information]
+    =====================================================================
+    =====================================================================</code></pre>
+
+<p>(Earlier versions of ExtUtils::ModuleMaker contained a <code>Display_License</code> function in each of submodules <i>ExtUtils::ModuleMaker::Licenses::Standard</i> and <i>ExtUtils::ModuleMaker::Licenses::Local</i>. These functions were never publicly documented or tested. <code>get_license()</code> is intended as a replacement for those two functions.)</p>
+
+<h3 id="make_selections_defaults()"><a id="make_selections_defaults"></a><code>make_selections_defaults()</code></h3>
+
+<p>Saves the values you entered as arguments passed to <code>new()</code> in a personal defaults file so that they supersede the defaults provided by ExtUtils::ModuleMaker itself.</p>
+
+<p>This is an advanced usage of ExtUtils::ModuleMaker. If you have used ExtUtils::ModuleMaker more than once, you have probably typed in a choice for <code>AUTHOR</code>, <code>EMAIL</code>, etc., more than once. To save unnecessary typing and reduce typing errors, ExtUtils::ModuleMaker now offers you the possibility of establishing <b>personal default values</b> which override the default values supplied with the distribution and found in <i>lib/ExtUtils/ModuleMaker/Defaults.pm</i>.</p>
+
+<p>Suppose that you have called <code>ExtUtils::ModuleMaker::new()</code> as follows:</p>
+
+<pre><code>    $mod = ExtUtils::ModuleMaker-&gt;new(
+        NAME            =&gt; &#39;Sample::Module&#39;,
+        ABSTRACT        =&gt; &#39;Now is the time to join the party&#39;,
+        AUTHOR          =&gt; &#39;Hilton Stallone&#39;,
+        CPANID          =&gt; &#39;RAMBO&#39;,
+        ORGANIZATION    =&gt; &#39;Parliamentary Pictures&#39;,
+        WEBSITE         =&gt; &#39;http://parliamentarypictures.com&#39;,
+        EMAIL           =&gt; &#39;hiltons@parliamentarypictures.com&#39;,
+    );</code></pre>
+
+<p>While <code>$mod</code> is still in scope, you can call:</p>
+
+<pre><code>    $mod-&gt;make_selections_defaults()</code></pre>
+
+<p>and the values selected -- <b>with two important exceptions</b> -- will be saved in a <i>Personal/Defaults.pm</i> file stored in your home directory. The next time you invoke ExtUtils::ModuleMaker, the new values will appear in the appropriate locations in the files created by <code>complete_build()</code>. They will also appear in the menus provided on screen by the <i>modulemaker</i> utility.</p>
+
+<p>What are those two important exceptions?</p>
+
+<ul>
+
+<li><p><code>NAME</code></p>
+
+<p>You cannot enter a default value for <code>NAME</code>: the name of the module you are creating. ExtUtil::ModuleMaker&#39;s own defaults file omits a value for <code>NAME</code> to prevent you from overwriting an already existing module. (More precisely, the default value is an empty string. ExtUtil::ModuleMaker will throw an error if you attempt to create a module whose name is empty.) This precaution applies to your personal defaults file as well.</p>
+
+</li>
+<li><p><code>ABSTRACT</code></p>
+
+<p>Since every module you create presumably has its own unique purpose, every module must have a unique <code>ABSTRACT</code> to summarize that purpose. ExtUtil::ModuleMaker supplies the following string as the default value for the <code>ABSTRACT</code> key:</p>
+
+<pre><code>    Module abstract (&lt;= 44 characters) goes here</code></pre>
+
+<p>... a string which, not coincidentally, happens to be exactly 44 characters long -- so you can just overstrike it. This will be the default value for <code>ABSTRACT</code> in any <i>Personal/Defaults.pm</i> file you create as well.</p>
+
+</li>
+</ul>
+
+<h1 id="CUSTOMIZATION">CUSTOMIZATION</h1>
+
+<p>ExtUtils::ModuleMaker is designed to be customizable to your needs and to offer you more flexibility as you become more experienced with it.</p>
+
+<h2 id="Via-modulemaker-Utility-Interactive-Mode"><a id="Via"></a>Via <i>modulemaker</i> Utility Interactive Mode</h2>
+
+<p>As with everything else about ExtUtils::ModuleMaker, the easiest, laziest way to get started is via the <i>modulemaker</i> utility; see its documentation. Suppose that you have entered your correct name, email address and website at the prompts in <i>modulemaker</i>&#39;s Author Menu.</p>
+
+<pre><code>  ------------------------
+
+  modulemaker: Author Menu
+
+      Feature       Current Value
+  N - Author        &#39;John Q Public&#39;
+  C - CPAN ID       &#39;MODAUTHOR&#39;
+  O - Organization  &#39;XYZ Corp.&#39;
+  W - Website       &#39;http://public.net/~jqpublic&#39;
+  E - Email         &#39;jqpublic@public.net&#39;
+
+  R - Return to main menu
+  X - Exit immediately
+
+  Please choose which feature you would like to edit:</code></pre>
+
+<p>Why should you ever have to enter this information again? Return to the <i>modulemaker</i> Main Menu (<code>R</code>).</p>
+
+<pre><code>  ------------------------
+
+  modulemaker: Main Menu
+
+      Feature                     Current Value
+  N - Name of module              &#39;&#39;
+  S - Abstract                    &#39;Module abstract (&lt;= 44 characters) goes here&#39;
+  A - Author information
+  L - License                     &#39;perl&#39;
+  D - Directives
+  B - Build system                &#39;ExtUtils::MakeMaker&#39;
+
+  G - Generate module
+  H - Generate module;
+      save selections as defaults
+
+  X - Exit immediately
+
+  Please choose which feature you would like to edit:</code></pre>
+
+<p>Select <code>H</code> instead of <code>G</code> to generate the distribution. An internal call to <code>make_selections_defaults()</code> will save those selections in a personal defaults file and present them to you on the Author Menu the next time you go to use it.</p>
+
+<h2 id="Via-modulemaker-Utility-Command-Line-Options-Mode"><a id="Via1"></a>Via <i>modulemaker</i> Utility Command-Line Options Mode</h2>
+
+<p>For simplicity, not all of ExtUtils::ModuleMaker&#39;s default values are represented on <i>modulemaker</i>&#39;s menus. Those that are not represented on those menus cannot be changed from there. They <i>can</i>, however, in many cases be specified as options passed to <i>modulemaker</i> on the command-line and automatically saved as personal defaults by including the <code>s</code> flag as one of those options. If, for example, your name is &#39;John Q Public&#39; and you want all modules you create to have compact top-level directories, you would call:</p>
+
+<pre><code>    %   modulemaker -Icsn Sample::Module -u &#39;John Q Public&#39;</code></pre>
+
+<p>A distribution with a top-level directory <i>Sample-Module</i> would be created. &#39;John Q Public&#39; would appear in appropriate places in <i>Sample-Module/Makefile.PL</i> and <i>Sample-Module/lib/Sample/Module.pm</i>. You could then throw away the entire <i>Sample-Module</i> directory tree. The <i>next</i> time you call <code>modulemaker</code>, the call</p>
+
+<pre><code>    %   modulemaker -In Second::Module</code></pre>
+
+<p>would suffice to generate a compact top-level directory and &#39;John Q Public&#39; would appear in appropriate locations instead of the dreaded &#39;A. U. Thor&#39;.</p>
+
+<h2 id="Via-ExtUtils::ModuleMaker::new()"><a id="Via2"></a><a id="Via-ExtUtils::ModuleMaker::new"></a>Via <code>ExtUtils::ModuleMaker::new()</code></h2>
+
+<p>In <i>all</i> cases, ExtUtils::ModuleMaker&#39;s default values can be overridden with arguments passed to <code>new()</code> inside a Perl program. The overriding can then be made permanent by calling <code>make_selections_defaults()</code>.</p>
+
+<p>Suppose, for example,</p>
+
+<ol>
+
+<li><p>that you want the files in your test suite to appear in a numerical order starting from <code>0</code> rather than ExtUtils::ModuleMaker&#39;s own default starting point of <code>1</code>;</p>
+
+</li>
+<li><p>that you want the number in the test file&#39;s name to be formatted as a two-digit string padded with zeroes rather than ExtUtils::ModuleMaker&#39;s own default format of a three-digit, zero-padded string;</p>
+
+</li>
+<li><p>that you want the numerical part of the test filename to be joined to the lexical part with a dot (<code>.</code>) rather than ExtUtils::ModuleMaker&#39;s own default linkage character of an underscore (<code>_</code>); and</p>
+
+</li>
+<li><p>that you want the lexical part of the test filename to reflect the module&#39;s name rather than ExtUtils::ModuleMaker&#39;s default of <code>load</code>.</p>
+
+</li>
+</ol>
+
+<p>Your Perl program would look like this:</p>
+
+<pre><code>    #!/usr/local/bin/perl
+    use strict;
+    use warnings;
+    use ExtUtils::ModuleMaker;
+
+    my $mod = ExtUtils::ModuleMaker-&gt;new(
+        NAME        =&gt; &#39;Sample::Module&#39;,
+        AUTHOR      =&gt; &#39;John Q Public&#39;,
+        COMPACT     =&gt; 1,
+        FIRST_TEST_NUMBER    =&gt; 0,
+        TEST_NUMBER_FORMAT   =&gt; &quot;%02d&quot;,
+        TEST_NAME_SEPARATOR  =&gt; q{.},
+        TEST_NAME_DERIVED_FROM_MODULE_NAME =&gt; 1,
+    );
+
+    $mod-&gt;make_selections_defaults();</code></pre>
+
+<p>A subsequent call to the <i>modulemaker</i> utility,</p>
+
+<pre><code>    %    modulemaker -In Second::Balcony::Jump</code></pre>
+
+<p>would generate a directory tree with a compact top-level, &#39;John Q Public&#39; in appropriate locations in <i>Second-Balcony-Jump/Makefile.PL</i> and <i>Second-Balcony-Jump/lib/Second/Balcony/Jump.pm</i> and a test file called <i>Second-Balcony-Jump/t/00.Second.Balcony.Jump.t</i>.</p>
+
+<h2 id="Via-Subclassing-ExtUtils::ModuleMaker"><a id="Via3"></a>Via Subclassing ExtUtils::ModuleMaker</h2>
+
+<p>If you&#39;re a power-user, once you start playing with ExtUtils::ModuleMaker, you won&#39;t be able to stop. You&#39;ll ask yourself, &quot;Self, if I can change the default values, why can&#39;t I change the &#39;boilerplate&#39; copy that appears inside the files which ExtUtils::ModuleMaker creates?&quot;</p>
+
+<p>Now, you can. You can hack on the methods which <code>ExtUtils::ModuleMaker::new()</code> and <code>complete_build()</code> call internally to customize their results to your heart&#39;s desire. The key: build an entirely new Perl extension whose <i>lib/*.pm</i> file has methods that override the methods you need overridden -- and <i>only</i> those methods. Follow these steps:</p>
+
+<h3 id="1.-Study-ExtUtils::ModuleMaker::Defaults,-::Initializers-and-::StandardText"><a id="1"></a><a id="Study-ExtUtils::ModuleMaker::Defaults--::Initializers-and-::StandardText"></a>1. Study <i>ExtUtils::ModuleMaker::Defaults</i>, <i>::Initializers</i> and <i>::StandardText</i></h3>
+
+<p>ExtUtils::ModuleMaker&#39;s default values are stored in <i>lib/ExtUtils/ModuleMaker/Defaults.pm</i>, specifically, in its <code>default_values()</code> method. Identify those values which you wish to change.</p>
+
+<p>ExtUtils::ModuleMaker&#39;s other internal methods are found in two other files: <i>/lib/ExtUtils/ModuleMaker/Initializers.pm</i> and <i>lib/ExtUtils/ModuleMaker/StandardText.pm</i>. Rule of thumb: If an internal method is called within <code>new()</code>, it is found in ExtUtils::ModuleMaker::Initializers. If it is called within <code>complete_build()</code>, it is found in ExtUtils::ModuleMaker::StandardText. Study these two packages to identify the methods you wish to override.</p>
+
+<p><i>Hint:</i> If changing a default value in ExtUtils::ModuleMaker::Defaults will achieve your objective, make that change rather than trying to override methods in ExtUtils::ModuleMaker::Initializers or ExtUtils::ModuleMaker::StandardText.</p>
+
+<p><i>Hint:</i> You should probably think about overriding methods in ExtUtils::ModuleMaker::StandardText before overriding those in ExtUtils::ModuleMaker::Initializers.</p>
+
+<h3 id="2.-Use-modulemaker-to-Create-the-Framework-for-a-New-Distribution"><a id="2"></a><a id="Use-modulemaker-to-Create-the-Framework-for-a-New-Distribution"></a>2. Use <i>modulemaker</i> to Create the Framework for a New Distribution</h3>
+
+<p>You&#39;re creating a new Perl extension. Who ya gonna call? <i>modulemaker</i>, natch! (If you have not read the documentation for <i>modulemaker</i> by this point, do so now.)</p>
+
+<p>Suppose that you&#39;ve gotten on the &#39;Perl Best Practices&#39; bandwagon and want to create all your Perl extensions in the style recommended by Damian Conway in the book of the same name. Use <i>modulemaker</i> to create the framework:</p>
+
+<pre><code>    %    modulemaker -Icqn ExtUtils::ModuleMaker::PBP \
+         -u &#39;James E Keenan&#39; \
+         -p JKEENAN \
+         -o &#39;Perl Seminar NY&#39; \
+         -w http://search.cpan.org/~jkeenan/</code></pre>
+
+<p>You used the <code>-q</code> option above because you do <i>not</i> want or need a constructor in the new package you are creating. That package will <i>inherit</i> its constructor from ExtUtils::ModuleMaker.</p>
+
+<h3 id="3.-Edit-the-lib/*.pm-File"><a id="3"></a><a id="Edit-the-lib-.pm-File"></a>3. Edit the <i>lib/*.pm</i> File</h3>
+
+<p>Open up the best text-editor at your disposal and proceed to hack:</p>
+
+<pre><code>    %    vi ExtUtils-ModuleMaker-PBP/lib/ExtUtils/ModuleMaker/PBP.pm</code></pre>
+
+<p>Add this line near the top of the file:</p>
+
+<pre><code>    use base qw{ ExtUtils::ModuleMaker };</code></pre>
+
+<p>so that ExtUtils::ModuleMaker::PBP inherits from ExtUtils::ModuleMaker (which, in turn, inherits from ExtUtils::ModuleMaker::Defaults, ExtUtils::ModuleMaker::Initializers and ExtUtils::ModuleMaker::StandardText).</p>
+
+<p>If you have carefully studied ExtUtils::ModuleMaker::Defaults, ExtUtils::ModuleMaker::StandardText and <i>Perl Best Practices</i>, you will write methods including the following:</p>
+
+<pre><code>    sub default_values {
+        my $self = shift;
+        my $defaults_ref = $self-&gt;SUPER::default_values();
+        $defaults_ref-&gt;{COMPACT}                        = 1;
+        $defaults_ref-&gt;{FIRST_TEST_NUMBER}              = 0;
+        $defaults_ref-&gt;{TEST_NUMBER_FORMAT}             = &quot;%02d&quot;;
+        $defaults_ref-&gt;{EXTRA_MODULES_SINGLE_TEST_FILE} = 1;
+        $defaults_ref-&gt;{TEST_NAME_SEPARATOR}            = q{.};
+        $defaults_ref-&gt;{INCLUDE_TODO}                   = 0;
+        $defaults_ref-&gt;{INCLUDE_POD_COVERAGE_TEST}      = 1;
+        $defaults_ref-&gt;{INCLUDE_POD_TEST}               = 1;
+        return $defaults_ref;;
+    }
+
+    sub text_Makefile {
+        my $self = shift;
+        my $Makefile_format = q~
+    use strict;
+    use warnings;
+    use ExtUtils::MakeMaker;
+
+    WriteMakefile(
+        NAME            =&gt; &#39;%s&#39;,
+        AUTHOR          =&gt; &#39;%s &lt;%s&gt;&#39;,
+        VERSION_FROM    =&gt; &#39;%s&#39;,
+        ABSTRACT_FROM   =&gt; &#39;%s&#39;,
+        PL_FILES        =&gt; {},
+        PREREQ_PM    =&gt; {
+            &#39;Test::More&#39;    =&gt; 0,
+            &#39;version&#39;       =&gt; 0,
+        },
+        dist            =&gt; { COMPRESS =&gt; &#39;gzip -9f&#39;, SUFFIX =&gt; &#39;gz&#39;, },
+        clean           =&gt; { FILES =&gt; &#39;%s-*&#39; },
+    );
+    ~;
+        my $text_of_Makefile = sprintf $Makefile_format,
+            map { my $s = $_; $s =~ s{&#39;}{\\&#39;}g; $s; }
+                $self-&gt;{NAME},
+                $self-&gt;{AUTHOR},
+                $self-&gt;{EMAIL},
+                $self-&gt;{FILE},
+                $self-&gt;{FILE},
+                $self-&gt;{FILE};
+        return $text_of_Makefile;
+    }</code></pre>
+
+<p>Of course, for true Perl laziness, you&#39;ll use CPAN distribution ExtUtils::ModuleMaker::PBP, written by the author of ExtUtils::ModuleMaker as an exemplar of subclassing ExtUtils::ModuleMaker and generating the same output as Damian Conway&#39;s Module::Starter::PBP.</p>
+
+<h3 id="4.-Test"><a id="4"></a><a id="Test"></a>4. Test</h3>
+
+<p>How do you know you have correctly subclassed ExtUtils::ModuleMaker? With a test suite, of course. With careful editing, you can use many of ExtUtils::ModuleMaker&#39;s own tests in your new distribution. You will, of course, have to change a number of tests, because the default values implied by Conway&#39;s recommendations are different from ExtUtils::ModuleMaker&#39;s own defaults. Among other things, you will have to do a search-and-replace on all constructor calls.</p>
+
+<pre><code>    %    perl -pi&#39;*.bak&#39; -e &#39;s{ExtUtils::ModuleMaker-&gt;new}{ExtUtils::ModuleMaker::PBP-&gt;new}g;&#39;</code></pre>
+
+<p>Of course, you <i>should</i> have written your tests first, right?</p>
+
+<h3 id="5.-Install-and-Use"><a id="5"></a><a id="Install-and-Use"></a>5. Install and Use</h3>
+
+<p>You would install your new distribution as you would any other Perl distribution, <i>i.e.,</i> with either ExtUtils::MakeMaker or Module::Build, depending on which you chose in creating your subclass.</p>
+
+<pre><code>    #!/usr/local/bin/perl
+    use strict;
+    use warnings;
+    use ExtUtils::ModuleMaker::PBP;
+
+    my $mod = ExtUtils::ModuleMaker::PBP-&gt;new(
+        NAME        =&gt; &#39;Sample::Module&#39;,
+    );
+
+    $mod-&gt;complete_build();</code></pre>
+
+<p>For an adaptation of the <i>modulemaker</i> utility to work with ExtUtils::ModuleMaker::PBP, see <i>mmkrpbp</i> which is bundled with the latter package.</p>
+
+<h3 id="An-Alternative-Approach-to-Subclassing"><a id="An"></a>An Alternative Approach to Subclassing</h3>
+
+<p>There is one other way to subclass to ExtUtils::ModuleMaker which bears mentioning, more because the author used it in the development of this version of ExtUtils::ModuleMaker than because it is recommended. If for some reason you do not wish to create a full-fledged Perl distribution for your subclass, you can simply write the subclassing package and store it in the same directory hierarchy on your system in which your personal defaults file is stored.</p>
+
+<p>For example, suppose you are experimenting and only wish to override one method in ExtUtils::ModuleMaker::StandardText. You can create a package called ExtUtils::ModuleMaker::AlternativeText. If you are working on a Unix-like system, you would move that file such that its path would be:</p>
+
+<pre><code>    &quot;$ENV{HOME}/.modulemaker/ExtUtils/ModuleMaker/AlternativeText.pm&quot;</code></pre>
+
+<p>You would then add one argument to your call to <code>ExtUtils::ModuleMaker::new()</code>:</p>
+
+<pre><code>    my $mod = ExtUtils::ModuleMaker-&gt;new(
+        NAME        =&gt; &#39;Sample::Module&#39;,
+        ALT_BUILD   =&gt; &#39;ExtUtils::ModuleMaker::AlternativeText&#39;,
+    );</code></pre>
+
+<h1 id="CAVEATS">CAVEATS</h1>
+
+<ul>
+
+<li><p>Require Perl 5.6.1</p>
+
+<p>Support for versions of Perl earlier than 5.6.1 was dropped in version 0.57 released in May 2018.</p>
+
+</li>
+<li><p>Testing of <i>modulemaker</i>&#39;s Interactive Mode</p>
+
+<p>The easiest, laziest and recommended way of using this distribution is the command-line utility <i>modulemaker</i>, especially its interactive mode. However, this is necessarily the most difficult test, as its testing would require capturing the STDIN, STDOUT and STDERR for a process spawned by a <code>system(&#39;modulemaker&#39;)</code> call from within a test file. For now, the maintainer has relied on repeated visual inspection of the screen prompts generated by <i>modulemaker</i>. With luck, <i>Expect</i>-based tests will be available in a future version.</p>
+
+</li>
+<li><p>Testing <i>modulemaker</i> on Non-*nix-Like Operating Systems</p>
+
+<p>Since testing the <i>modulemaker</i> utility from within the test suite requires a <code>system()</code> call, a clean test run depends in part on the way a given operating system parses command-line arguments. The maintainer has tested this on Darwin and Win32 and, thanks to a suggestion by A. Sinan Unur, solved a problem on Win32. Results on other operating systems may differ; feedback is welcome.</p>
+
+</li>
+</ul>
+
+<h1 id="TO-DO"><a id="TO"></a>TO DO</h1>
+
+<ul>
+
+<li><p>Tests for <i>modulemaker</i>&#39;s interactive mode.</p>
+
+</li>
+<li><p>Possible new <code>USE_AS_BASE</code> attribute which would insert modules from which user&#39;s new module will inherit.</p>
+
+<pre><code>    USE_AS_BASE =&gt; [ qw|
+        Template::Toolkit
+        Module::Build
+        Lingua::Romana::Perligata
+        Acme::Buffy
+    | ],</code></pre>
+
+<p>Such an attribute would require replacement copy for <code>ExtUtils::ModuleMaker::StandardText::block_begin()</code>.</p>
+
+</li>
+</ul>
+
+<h1 id="AUTHOR/MAINTAINER"><a id="AUTHOR"></a><a id="AUTHOR-MAINTAINER"></a>AUTHOR/MAINTAINER</h1>
+
+<p>ExtUtils::ModuleMaker was originally written in 2001-02 by R. Geoffrey Avery (modulemaker [at] PlatypiVentures [dot] com). Since version 0.33 (July 2005) it has been maintained by James E. Keenan (jkeenan [at] cpan [dot] org).</p>
+
+<h1 id="SUPPORT">SUPPORT</h1>
+
+<p>Send email to jkeenan [at] cpan [dot] org. Please include &#39;modulemaker&#39; in the subject line. Please report any bugs or feature requests to <code>bug-ExtUtils-ModuleMaker@rt.cpan.org</code>, or through the web interface at <a href="http://rt.cpan.org">http://rt.cpan.org</a>.</p>
+
+<p>Development repository: <a href="https://github.com/jkeenan/extutils-modulemaker">https://github.com/jkeenan/extutils-modulemaker</a></p>
+
+<h1 id="ACKNOWLEDGMENTS">ACKNOWLEDGMENTS</h1>
+
+<p>Thanks first and foremost to Geoff Avery for creating ExtUtils::ModuleMaker and popularizing it via presentations I attended at YAPC::NA::2003 (Boca Raton) and YAPC::EU::2003 (Paris).</p>
+
+<p>Soon after I took over maintenance of ExtUtils::ModuleMaker, David A Golden became a driving force in its ongoing development, providing suggestions for additional functionality as well as bug reports. David is the author of ExtUtils::ModuleMaker::TT which, while not a pure subclass of ExtUtils::ModuleMaker, extends its functionality for users of Template::Toolkit.</p>
+
+<p>Thanks for suggestions about testing the <i>modulemaker</i> utility to Michael G Schwern on perl.qa and A Sinan Unur and Paul Lalli on comp.lang.perl.misc. Thanks for help in dealing with a nasty bug in the testing to Perlmonks davidrw and tlm. That well known Perl hacker, Anonymous Guest, contributed another bug report on rt.cpan.org.</p>
+
+<p>As development proceeded, several issues were clarified by members of Perlmonks.org. CountZero, xdg, Tanktalus, holli, TheDamian and nothingmuch made particularly useful suggestions, as did Brian Clarkson.</p>
+
+<p>Thanks also go to the following beta testers: Alex Gill, Marc Prewitt, Scott Godin, Reinhard Urban and imacat.</p>
+
+<p>Version 0.39 of ExtUtils::ModuleMaker encountered spurious testing failure reports from testers.cpan.org. These were eventually diagnosed as being due to bugs in the automated testing programs and/or their operating environments on different systems -- <i>i.e.,</i> to problems outside ExtUtils::ModuleMaker itself. Several Perlmonks helped investigate this problem: chromatic, dave_the_m, randyk, and njh.</p>
+
+<p>Thanks to Paul M Sirianni for reporting bugs that led to versions 0.48 and 0.51.</p>
+
+<p>Thanks to Chris Kirke for pointing to reports at http://cpants.cpanauthors.org/dist/ExtUtils-ModuleMaker of inconsistent $VERSION numbers across the component files.</p>
+
+<h1 id="COPYRIGHT">COPYRIGHT</h1>
+
+<p>Copyright (c) 2001-2002 R. Geoffrey Avery. Revisions from v0.33 forward (c) 2005-2015 James E. Keenan. All rights reserved. This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+<p>The full text of the license can be found in the LICENSE file included with this module.</p>
+
+<h1 id="DISCLAIMER-OF-WARRANTY"><a id="DISCLAIMER"></a>DISCLAIMER OF WARRANTY</h1>
+
+<p>BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE SOFTWARE &quot;AS IS&quot; WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR, OR CORRECTION.</p>
+
+<p>IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><i>modulemaker</i>, <i>perlnewmod</i>, <i>h2xs</i>, <i>ExtUtils::MakeMaker</i>, <i>Module::Build</i>, <i>ExtUtils::ModuleMaker::PBP</i>, <i>ExtUtils::ModuleMaker::TT</i>, <i>mmkrpbp</i>.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install ExtUtils::ModuleMaker, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm ExtUtils::ModuleMaker</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install ExtUtils::ModuleMaker</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./ExtUtils::ModuleMaker.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

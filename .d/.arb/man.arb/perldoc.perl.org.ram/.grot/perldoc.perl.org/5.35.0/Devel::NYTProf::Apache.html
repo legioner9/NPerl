@@ -1,0 +1,3008 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Devel::NYTProf::Apache - Profile mod_perl applications with Devel::NYTProf - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Devel-NYTProf - MetaCPAN" href="https://metacpan.org/dist/Devel-NYTProf/releases.rss" />
+        <link rel="canonical" href="./Devel::NYTProf::Apache.html" />
+        <meta name="description" content="Profile mod_perl applications with Devel::NYTProf" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Devel::NYTProf::Apache" />
+<meta name="twitter:title"       content="Devel::NYTProf::Apache" />
+<meta name="twitter:description" content="Profile mod_perl applications with Devel::NYTProf" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Devel::NYTProf::Apache.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Devel-NYTProf was released.">
+      <span class="relatize">18 Oct 2023 22:42:10 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Devel-NYTProf">Devel-NYTProf</a>
+  </li>
+  <li>
+    Module version: 6.14
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Devel-NYTProf/source/lib/Devel/NYTProf/Apache.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Devel-NYTProf/source/lib/Devel/NYTProf/Apache.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Devel-NYTProf/source/lib/Devel/NYTProf">Browse</a>
+    (<a href="https://metacpan.org/dist/Devel-NYTProf/source/lib/Devel/NYTProf?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Devel-NYTProf/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://code.google.com/p/perl-devel-nytprof/">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Devel-NYTProf/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/timbunce/devel-nytprof">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/timbunce/devel-nytprof/issues">Issues</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Devel-NYTProf+6.14" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-NYTProf.html?oncpan=1&amp;distmat=1&amp;version=6.14&amp;grade=2" style="color: #090">446</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-NYTProf.html?oncpan=1&amp;distmat=1&amp;version=6.14&amp;grade=3" style="color: #900">22</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-NYTProf.html?oncpan=1&amp;distmat=1&amp;version=6.14&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/JKEENAN/Devel-NYTProf-6.14">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Devel-NYTProf who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Devel-NYTProf/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/J/JK/JKEENAN/Devel-NYTProf-6.14.tar.gz">
+      Download (<span itemprop="fileSize">556.61KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FJKEENAN%2FDevel-NYTProf-6.14%2Flib%2FDevel%2FNYTProf%2FApache.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-NYTProf/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-NYTProf/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Devel-NYTProf">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Devel-NYTProf">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Devel/NYTProf/Apache.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="JKEENAN/Devel-NYTProf-6.14"
+>6.14
+  (JKEENAN on 2023-10-18)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.13"
+>6.13
+  (JKEENAN on 2023-10-10)</option>
+<option
+  
+  value="RURBAN/Devel-NYTProf-6.06_03"
+>6.06_03 DEV
+  (RURBAN on 2019-06-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.06"
+>6.06
+  (TIMB on 2018-06-04)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.05"
+>6.05
+  (TIMB on 2018-03-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.04"
+>6.04
+  (TIMB on 2016-11-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.03"
+>6.03
+  (TIMB on 2016-03-25)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.15"
+>1.15
+  (AKAPLAN on 2008-05-25)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.13_003"
+>6.13_003 DEV
+  (JKEENAN on 2023-10-15)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.13_001"
+>6.13_001 DEV
+  (JKEENAN on 2023-10-12)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12_005"
+>6.12_005 DEV
+  (JKEENAN on 2023-10-09)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12_004"
+>6.12_004 DEV
+  (JKEENAN on 2023-10-08)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12_003"
+>6.12_003 DEV
+  (JKEENAN on 2023-10-08)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12"
+>6.12
+  (JKEENAN on 2022-11-16)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.11"
+>6.11
+  (JKEENAN on 2021-09-19)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.10"
+>6.10
+  (JKEENAN on 2021-05-09)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.09_001"
+>6.09_001 DEV
+  (JKEENAN on 2021-05-05)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.09"
+>6.09
+  (JKEENAN on 2021-05-02)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.08_002"
+>6.08_002 DEV
+  (JKEENAN on 2021-05-02)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.08_001"
+>6.08_001 DEV
+  (JKEENAN on 2021-04-29)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.08"
+>6.08
+  (JKEENAN on 2021-04-27)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.07"
+>6.07
+  (JKEENAN on 2021-04-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.02_91"
+>6.02_91 DEV
+  (TIMB on 2016-03-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.02_90"
+>6.02_90 DEV
+  (TIMB on 2016-03-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.02"
+>6.02
+  (TIMB on 2015-08-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.01"
+>6.01
+  (TIMB on 2015-04-04)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.07"
+>5.07
+  (TIMB on 2015-02-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.07-TRIAL1"
+>5.07-TRIAL1 DEV
+  (TIMB on 2015-02-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.06_80"
+>5.06_80 DEV
+  (TIMB on 2014-06-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.06"
+>5.06
+  (TIMB on 2013-09-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.05"
+>5.05
+  (TIMB on 2013-07-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.04_90"
+>5.04_90 DEV
+  (TIMB on 2013-07-02)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.04"
+>5.04
+  (TIMB on 2013-06-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.03"
+>5.03
+  (TIMB on 2013-05-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.02"
+>5.02
+  (TIMB on 2013-04-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.01_90"
+>5.01_90 DEV
+  (TIMB on 2013-04-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.01"
+>5.01
+  (TIMB on 2013-04-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.00"
+>5.00
+  (TIMB on 2013-04-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.90_91"
+>4.90_91 DEV
+  (TIMB on 2013-04-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.90_90"
+>4.90_90 DEV
+  (TIMB on 2013-04-04)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.25"
+>4.25
+  (TIMB on 2013-02-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.24_90"
+>4.24_90 DEV
+  (TIMB on 2013-02-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.24"
+>4.24
+  (TIMB on 2013-02-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.23"
+>4.23
+  (TIMB on 2013-01-02)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.20_90"
+>4.20_90 DEV
+  (TIMB on 2012-12-29)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.12"
+>4.12
+  (TIMB on 2012-12-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.11"
+>4.11
+  (TIMB on 2012-12-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.09"
+>4.09
+  (TIMB on 2012-09-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.08"
+>4.08
+  (TIMB on 2012-08-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.07"
+>4.07
+  (TIMB on 2012-08-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.06"
+>4.06
+  (TIMB on 2010-12-01)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.05_91"
+>4.05_91 DEV
+  (TIMB on 2010-11-30)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.05_90"
+>4.05_90 DEV
+  (TIMB on 2010-11-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.05"
+>4.05
+  (TIMB on 2010-09-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_81"
+>4.04_81 DEV
+  (TIMB on 2010-09-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_80"
+>4.04_80 DEV
+  (TIMB on 2010-09-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_71"
+>4.04_71 DEV
+  (TIMB on 2010-09-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_70"
+>4.04_70 DEV
+  (TIMB on 2010-09-12)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04"
+>4.04
+  (TIMB on 2010-07-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.03_90"
+>4.03_90 DEV
+  (TIMB on 2010-07-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.03"
+>4.03
+  (TIMB on 2010-06-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.02"
+>4.02
+  (TIMB on 2010-06-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.01_90"
+>4.01_90 DEV
+  (TIMB on 2010-06-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.01"
+>4.01
+  (TIMB on 2010-06-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.00"
+>4.00
+  (TIMB on 2010-06-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.90_92"
+>3.90_92 DEV
+  (TIMB on 2010-06-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.90_91"
+>3.90_91 DEV
+  (TIMB on 2010-06-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.90_90"
+>3.90_90 DEV
+  (TIMB on 2010-05-30)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_94"
+>3.11_94 DEV
+  (TIMB on 2010-05-27)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_93"
+>3.11_93 DEV
+  (TIMB on 2010-05-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_92"
+>3.11_92 DEV
+  (TIMB on 2010-05-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_91"
+>3.11_91 DEV
+  (TIMB on 2010-05-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_90"
+>3.11_90 DEV
+  (TIMB on 2010-04-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11"
+>3.11
+  (TIMB on 2010-03-16)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_53"
+>3.10_53 DEV
+  (TIMB on 2010-03-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_52"
+>3.10_52 DEV
+  (TIMB on 2010-03-12)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_51"
+>3.10_51 DEV
+  (TIMB on 2010-03-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_50"
+>3.10_50 DEV
+  (TIMB on 2010-03-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.02"
+>3.02
+  (TIMB on 2010-03-05)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_96"
+>3.01_96 DEV
+  (TIMB on 2010-02-27)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_95"
+>3.01_95 DEV
+  (TIMB on 2010-02-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_94"
+>3.01_94 DEV
+  (TIMB on 2010-02-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_93"
+>3.01_93 DEV
+  (TIMB on 2010-02-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_92"
+>3.01_92 DEV
+  (TIMB on 2010-02-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_91"
+>3.01_91 DEV
+  (TIMB on 2010-02-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01"
+>3.01
+  (TIMB on 2009-12-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.00"
+>3.00
+  (TIMB on 2009-12-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_987"
+>2.11_987 DEV
+  (TIMB on 2009-12-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_949"
+>2.11_949 DEV
+  (TIMB on 2009-12-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_947"
+>2.11_947 DEV
+  (TIMB on 2009-12-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_942"
+>2.11_942 DEV
+  (TIMB on 2009-12-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_937"
+>2.11_937 DEV
+  (TIMB on 2009-12-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_935"
+>2.11_935 DEV
+  (TIMB on 2009-12-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_932"
+>2.11_932 DEV
+  (TIMB on 2009-12-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_931"
+>2.11_931 DEV
+  (TIMB on 2009-12-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_81"
+>2.11_81 DEV
+  (TIMB on 2009-11-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_80"
+>2.11_80 DEV
+  (TIMB on 2009-11-16)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_99"
+>2.10_99 DEV
+  (TIMB on 2009-11-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_98"
+>2.10_98 DEV
+  (TIMB on 2009-10-29)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_97"
+>2.10_97 DEV
+  (TIMB on 2009-10-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_96"
+>2.10_96 DEV
+  (TIMB on 2009-10-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_95"
+>2.10_95 DEV
+  (TIMB on 2009-10-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_94"
+>2.10_94 DEV
+  (TIMB on 2009-10-25)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_93"
+>2.10_93 DEV
+  (TIMB on 2009-10-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_92"
+>2.10_92 DEV
+  (TIMB on 2009-10-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_91"
+>2.10_91 DEV
+  (TIMB on 2009-10-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_90"
+>2.10_90 DEV
+  (TIMB on 2009-10-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10"
+>2.10
+  (TIMB on 2009-06-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.09_90"
+>2.09_90 DEV
+  (TIMB on 2009-06-18)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.09"
+>2.09
+  (TIMB on 2009-03-29)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08_92"
+>2.08_92 DEV
+  (TIMB on 2009-03-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08_91"
+>2.08_91 DEV
+  (TIMB on 2009-03-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08_90"
+>2.08_90 DEV
+  (TIMB on 2009-03-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08"
+>2.08
+  (TIMB on 2009-02-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_96"
+>2.07_96 DEV
+  (TIMB on 2009-02-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_95"
+>2.07_95 DEV
+  (TIMB on 2009-02-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_94"
+>2.07_94 DEV
+  (TIMB on 2009-01-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_93"
+>2.07_93 DEV
+  (TIMB on 2009-01-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_92"
+>2.07_92 DEV
+  (TIMB on 2009-01-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_91"
+>2.07_91 DEV
+  (TIMB on 2009-01-05)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_90"
+>2.07_90 DEV
+  (TIMB on 2009-01-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07"
+>2.07
+  (TIMB on 2008-11-01)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.06_RC1"
+>2.06_RC1
+  (TIMB on 2008-10-31)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.05"
+>2.05
+  (TIMB on 2008-10-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.04"
+>2.04
+  (TIMB on 2008-10-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.04_RC1"
+>2.04_RC1
+  (TIMB on 2008-10-01)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.03"
+>2.03
+  (TIMB on 2008-08-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.03_1"
+>2.03_1 DEV
+  (TIMB on 2008-08-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.02"
+>2.02
+  (TIMB on 2008-07-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.01"
+>2.01
+  (TIMB on 2008-07-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.00"
+>2.00
+  (TIMB on 2008-07-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_6"
+>1.90_6 DEV
+  (TIMB on 2008-07-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_5"
+>1.90_5 DEV
+  (TIMB on 2008-07-12)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_4"
+>1.90_4 DEV
+  (TIMB on 2008-07-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_3"
+>1.90_3 DEV
+  (TIMB on 2008-07-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_2"
+>1.90_2 DEV
+  (TIMB on 2008-07-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_1"
+>1.90_1 DEV
+  (TIMB on 2008-07-09)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.14"
+>1.14
+  (AKAPLAN on 2008-05-23)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.13"
+>1.13
+  (AKAPLAN on 2008-05-23)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.12"
+>1.12
+  (AKAPLAN on 2008-03-25)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.11"
+>1.11
+  (AKAPLAN on 2008-03-24)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.10"
+>1.10
+  (AKAPLAN on 2008-03-20)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.09"
+>0.09
+  (AKAPLAN on 2008-03-19)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.08"
+>0.08
+  (AKAPLAN on 2008-03-10)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.07"
+>0.07
+  (AKAPLAN on 2008-03-10)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.06"
+>0.06
+  (AKAPLAN on 2008-03-10)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.05"
+>0.05
+  (AKAPLAN on 2008-03-07)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.04"
+>0.04
+  (AKAPLAN on 2008-03-07)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.03"
+>0.03
+  (AKAPLAN on 2008-03-06)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.02"
+>0.02
+  (AKAPLAN on 2008-03-05)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.01"
+>0.01
+  (AKAPLAN on 2008-03-04)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/JKEENAN/Devel-NYTProf-6.14/diff/' + encodeURIComponent(this.value) + '/lib/Devel/NYTProf/Apache.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="JKEENAN/Devel-NYTProf-6.14"
+>6.14
+  (JKEENAN on 2023-10-18)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.13"
+>6.13
+  (JKEENAN on 2023-10-10)</option>
+<option
+  
+  value="RURBAN/Devel-NYTProf-6.06_03"
+>6.06_03 DEV
+  (RURBAN on 2019-06-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.06"
+>6.06
+  (TIMB on 2018-06-04)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.05"
+>6.05
+  (TIMB on 2018-03-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.04"
+>6.04
+  (TIMB on 2016-11-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.03"
+>6.03
+  (TIMB on 2016-03-25)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.15"
+>1.15
+  (AKAPLAN on 2008-05-25)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.13_003"
+>6.13_003 DEV
+  (JKEENAN on 2023-10-15)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.13_001"
+>6.13_001 DEV
+  (JKEENAN on 2023-10-12)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12_005"
+>6.12_005 DEV
+  (JKEENAN on 2023-10-09)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12_004"
+>6.12_004 DEV
+  (JKEENAN on 2023-10-08)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12_003"
+>6.12_003 DEV
+  (JKEENAN on 2023-10-08)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12"
+>6.12
+  (JKEENAN on 2022-11-16)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.11"
+>6.11
+  (JKEENAN on 2021-09-19)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.10"
+>6.10
+  (JKEENAN on 2021-05-09)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.09_001"
+>6.09_001 DEV
+  (JKEENAN on 2021-05-05)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.09"
+>6.09
+  (JKEENAN on 2021-05-02)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.08_002"
+>6.08_002 DEV
+  (JKEENAN on 2021-05-02)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.08_001"
+>6.08_001 DEV
+  (JKEENAN on 2021-04-29)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.08"
+>6.08
+  (JKEENAN on 2021-04-27)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.07"
+>6.07
+  (JKEENAN on 2021-04-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.02_91"
+>6.02_91 DEV
+  (TIMB on 2016-03-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.02_90"
+>6.02_90 DEV
+  (TIMB on 2016-03-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.02"
+>6.02
+  (TIMB on 2015-08-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.01"
+>6.01
+  (TIMB on 2015-04-04)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.07"
+>5.07
+  (TIMB on 2015-02-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.07-TRIAL1"
+>5.07-TRIAL1 DEV
+  (TIMB on 2015-02-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.06_80"
+>5.06_80 DEV
+  (TIMB on 2014-06-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.06"
+>5.06
+  (TIMB on 2013-09-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.05"
+>5.05
+  (TIMB on 2013-07-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.04_90"
+>5.04_90 DEV
+  (TIMB on 2013-07-02)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.04"
+>5.04
+  (TIMB on 2013-06-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.03"
+>5.03
+  (TIMB on 2013-05-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.02"
+>5.02
+  (TIMB on 2013-04-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.01_90"
+>5.01_90 DEV
+  (TIMB on 2013-04-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.01"
+>5.01
+  (TIMB on 2013-04-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.00"
+>5.00
+  (TIMB on 2013-04-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.90_91"
+>4.90_91 DEV
+  (TIMB on 2013-04-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.90_90"
+>4.90_90 DEV
+  (TIMB on 2013-04-04)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.25"
+>4.25
+  (TIMB on 2013-02-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.24_90"
+>4.24_90 DEV
+  (TIMB on 2013-02-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.24"
+>4.24
+  (TIMB on 2013-02-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.23"
+>4.23
+  (TIMB on 2013-01-02)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.20_90"
+>4.20_90 DEV
+  (TIMB on 2012-12-29)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.12"
+>4.12
+  (TIMB on 2012-12-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.11"
+>4.11
+  (TIMB on 2012-12-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.09"
+>4.09
+  (TIMB on 2012-09-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.08"
+>4.08
+  (TIMB on 2012-08-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.07"
+>4.07
+  (TIMB on 2012-08-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.06"
+>4.06
+  (TIMB on 2010-12-01)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.05_91"
+>4.05_91 DEV
+  (TIMB on 2010-11-30)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.05_90"
+>4.05_90 DEV
+  (TIMB on 2010-11-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.05"
+>4.05
+  (TIMB on 2010-09-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_81"
+>4.04_81 DEV
+  (TIMB on 2010-09-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_80"
+>4.04_80 DEV
+  (TIMB on 2010-09-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_71"
+>4.04_71 DEV
+  (TIMB on 2010-09-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_70"
+>4.04_70 DEV
+  (TIMB on 2010-09-12)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04"
+>4.04
+  (TIMB on 2010-07-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.03_90"
+>4.03_90 DEV
+  (TIMB on 2010-07-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.03"
+>4.03
+  (TIMB on 2010-06-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.02"
+>4.02
+  (TIMB on 2010-06-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.01_90"
+>4.01_90 DEV
+  (TIMB on 2010-06-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.01"
+>4.01
+  (TIMB on 2010-06-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.00"
+>4.00
+  (TIMB on 2010-06-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.90_92"
+>3.90_92 DEV
+  (TIMB on 2010-06-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.90_91"
+>3.90_91 DEV
+  (TIMB on 2010-06-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.90_90"
+>3.90_90 DEV
+  (TIMB on 2010-05-30)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_94"
+>3.11_94 DEV
+  (TIMB on 2010-05-27)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_93"
+>3.11_93 DEV
+  (TIMB on 2010-05-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_92"
+>3.11_92 DEV
+  (TIMB on 2010-05-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_91"
+>3.11_91 DEV
+  (TIMB on 2010-05-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_90"
+>3.11_90 DEV
+  (TIMB on 2010-04-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11"
+>3.11
+  (TIMB on 2010-03-16)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_53"
+>3.10_53 DEV
+  (TIMB on 2010-03-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_52"
+>3.10_52 DEV
+  (TIMB on 2010-03-12)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_51"
+>3.10_51 DEV
+  (TIMB on 2010-03-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_50"
+>3.10_50 DEV
+  (TIMB on 2010-03-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.02"
+>3.02
+  (TIMB on 2010-03-05)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_96"
+>3.01_96 DEV
+  (TIMB on 2010-02-27)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_95"
+>3.01_95 DEV
+  (TIMB on 2010-02-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_94"
+>3.01_94 DEV
+  (TIMB on 2010-02-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_93"
+>3.01_93 DEV
+  (TIMB on 2010-02-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_92"
+>3.01_92 DEV
+  (TIMB on 2010-02-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_91"
+>3.01_91 DEV
+  (TIMB on 2010-02-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01"
+>3.01
+  (TIMB on 2009-12-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.00"
+>3.00
+  (TIMB on 2009-12-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_987"
+>2.11_987 DEV
+  (TIMB on 2009-12-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_949"
+>2.11_949 DEV
+  (TIMB on 2009-12-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_947"
+>2.11_947 DEV
+  (TIMB on 2009-12-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_942"
+>2.11_942 DEV
+  (TIMB on 2009-12-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_937"
+>2.11_937 DEV
+  (TIMB on 2009-12-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_935"
+>2.11_935 DEV
+  (TIMB on 2009-12-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_932"
+>2.11_932 DEV
+  (TIMB on 2009-12-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_931"
+>2.11_931 DEV
+  (TIMB on 2009-12-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_81"
+>2.11_81 DEV
+  (TIMB on 2009-11-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_80"
+>2.11_80 DEV
+  (TIMB on 2009-11-16)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_99"
+>2.10_99 DEV
+  (TIMB on 2009-11-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_98"
+>2.10_98 DEV
+  (TIMB on 2009-10-29)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_97"
+>2.10_97 DEV
+  (TIMB on 2009-10-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_96"
+>2.10_96 DEV
+  (TIMB on 2009-10-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_95"
+>2.10_95 DEV
+  (TIMB on 2009-10-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_94"
+>2.10_94 DEV
+  (TIMB on 2009-10-25)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_93"
+>2.10_93 DEV
+  (TIMB on 2009-10-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_92"
+>2.10_92 DEV
+  (TIMB on 2009-10-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_91"
+>2.10_91 DEV
+  (TIMB on 2009-10-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_90"
+>2.10_90 DEV
+  (TIMB on 2009-10-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10"
+>2.10
+  (TIMB on 2009-06-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.09_90"
+>2.09_90 DEV
+  (TIMB on 2009-06-18)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.09"
+>2.09
+  (TIMB on 2009-03-29)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08_92"
+>2.08_92 DEV
+  (TIMB on 2009-03-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08_91"
+>2.08_91 DEV
+  (TIMB on 2009-03-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08_90"
+>2.08_90 DEV
+  (TIMB on 2009-03-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08"
+>2.08
+  (TIMB on 2009-02-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_96"
+>2.07_96 DEV
+  (TIMB on 2009-02-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_95"
+>2.07_95 DEV
+  (TIMB on 2009-02-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_94"
+>2.07_94 DEV
+  (TIMB on 2009-01-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_93"
+>2.07_93 DEV
+  (TIMB on 2009-01-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_92"
+>2.07_92 DEV
+  (TIMB on 2009-01-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_91"
+>2.07_91 DEV
+  (TIMB on 2009-01-05)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_90"
+>2.07_90 DEV
+  (TIMB on 2009-01-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07"
+>2.07
+  (TIMB on 2008-11-01)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.06_RC1"
+>2.06_RC1
+  (TIMB on 2008-10-31)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.05"
+>2.05
+  (TIMB on 2008-10-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.04"
+>2.04
+  (TIMB on 2008-10-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.04_RC1"
+>2.04_RC1
+  (TIMB on 2008-10-01)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.03"
+>2.03
+  (TIMB on 2008-08-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.03_1"
+>2.03_1 DEV
+  (TIMB on 2008-08-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.02"
+>2.02
+  (TIMB on 2008-07-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.01"
+>2.01
+  (TIMB on 2008-07-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.00"
+>2.00
+  (TIMB on 2008-07-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_6"
+>1.90_6 DEV
+  (TIMB on 2008-07-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_5"
+>1.90_5 DEV
+  (TIMB on 2008-07-12)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_4"
+>1.90_4 DEV
+  (TIMB on 2008-07-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_3"
+>1.90_3 DEV
+  (TIMB on 2008-07-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_2"
+>1.90_2 DEV
+  (TIMB on 2008-07-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_1"
+>1.90_1 DEV
+  (TIMB on 2008-07-09)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.14"
+>1.14
+  (AKAPLAN on 2008-05-23)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.13"
+>1.13
+  (AKAPLAN on 2008-05-23)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.12"
+>1.12
+  (AKAPLAN on 2008-03-25)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.11"
+>1.11
+  (AKAPLAN on 2008-03-24)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.10"
+>1.10
+  (AKAPLAN on 2008-03-20)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.09"
+>0.09
+  (AKAPLAN on 2008-03-19)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.08"
+>0.08
+  (AKAPLAN on 2008-03-10)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.07"
+>0.07
+  (AKAPLAN on 2008-03-10)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.06"
+>0.06
+  (AKAPLAN on 2008-03-10)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.05"
+>0.05
+  (AKAPLAN on 2008-03-07)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.04"
+>0.04
+  (AKAPLAN on 2008-03-07)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.03"
+>0.03
+  (AKAPLAN on 2008-03-06)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.02"
+>0.02
+  (AKAPLAN on 2008-03-05)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.01"
+>0.01
+  (AKAPLAN on 2008-03-04)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/File::Which" title="File::Which" class="ellipsis">File::Which</a></li>
+  <li><a href="https://metacpan.org/pod/Getopt::Long" title="Getopt::Long" class="ellipsis">Getopt::Long</a></li>
+  <li><a href="./JSON::MaybeXS.html" title="JSON::MaybeXS" class="ellipsis">JSON::MaybeXS</a></li>
+  <li><a href="https://metacpan.org/pod/List::Util" title="List::Util" class="ellipsis">List::Util</a></li>
+  <li><a href="https://metacpan.org/pod/XSLoader" title="XSLoader" class="ellipsis">XSLoader</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Devel::NYTProf::Apache/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Devel%3A%3ANYTProf%3A%3AApache">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Devel-NYTProf">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/JKEENAN/Devel-NYTProf-6.14/view/lib/Devel/NYTProf/Apache.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Devel::NYTProf::Apache.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/JASEI"><img src="https://www.gravatar.com/avatar/22e4dbbfcaa9209071b52f41cb36cea1?d=identicon&amp;s=20" title="JASEI" alt="JASEI"></a>
+<a class="display-all" href="https://metacpan.org/author/ACCARDO"><img src="https://www.gravatar.com/avatar/f28b8647f8e7e4647fa3030e12eb5b70?d=identicon&amp;s=20" title="ACCARDO" alt="ACCARDO"></a>
+<a class="display-all" href="https://metacpan.org/author/SARTAK"><img src="https://www.gravatar.com/avatar/b0805b622209805fd673107d0fb3c707?d=identicon&amp;s=20" title="SARTAK" alt="SARTAK"></a>
+<a class="display-all" href="https://metacpan.org/author/ALEXPAN"><img src="https://www.gravatar.com/avatar/70e0ed15dcfbb2cf0e09fbb0d09c9bf8?d=identicon&amp;s=20" title="ALEXPAN" alt="ALEXPAN"></a>
+<a class="display-all" href="https://metacpan.org/author/SIMUL"><img src="https://www.gravatar.com/avatar/283334c9e2521b806c67e58891c0c2b2?d=identicon&amp;s=20" title="SIMUL" alt="SIMUL"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Devel-NYTProf/plussers">108 PAUSE users</a>
+</div>
+<div>
+    80 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="TIMB"
+      data-contrib-email="timb@cpan.org"
+    >
+      <a href="https://metacpan.org/author/TIMB" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/a497fd127f6d1e9e1e618bf46504fc59?d=identicon&amp;s=20" />
+      Tim Bunce
+      </a>
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/JKEENAN" class="author-name">James E Keenan</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Devel/NYTProf/Apache.pm&#39;" class="">
+<option
+  selected
+  value="JKEENAN/Devel-NYTProf-6.14"
+>6.14
+  (JKEENAN on 2023-10-18)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.13"
+>6.13
+  (JKEENAN on 2023-10-10)</option>
+<option
+  
+  value="RURBAN/Devel-NYTProf-6.06_03"
+>6.06_03 DEV
+  (RURBAN on 2019-06-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.06"
+>6.06
+  (TIMB on 2018-06-04)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.05"
+>6.05
+  (TIMB on 2018-03-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.04"
+>6.04
+  (TIMB on 2016-11-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.03"
+>6.03
+  (TIMB on 2016-03-25)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.15"
+>1.15
+  (AKAPLAN on 2008-05-25)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.13_003"
+>6.13_003 DEV
+  (JKEENAN on 2023-10-15)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.13_001"
+>6.13_001 DEV
+  (JKEENAN on 2023-10-12)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12_005"
+>6.12_005 DEV
+  (JKEENAN on 2023-10-09)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12_004"
+>6.12_004 DEV
+  (JKEENAN on 2023-10-08)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12_003"
+>6.12_003 DEV
+  (JKEENAN on 2023-10-08)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.12"
+>6.12
+  (JKEENAN on 2022-11-16)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.11"
+>6.11
+  (JKEENAN on 2021-09-19)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.10"
+>6.10
+  (JKEENAN on 2021-05-09)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.09_001"
+>6.09_001 DEV
+  (JKEENAN on 2021-05-05)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.09"
+>6.09
+  (JKEENAN on 2021-05-02)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.08_002"
+>6.08_002 DEV
+  (JKEENAN on 2021-05-02)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.08_001"
+>6.08_001 DEV
+  (JKEENAN on 2021-04-29)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.08"
+>6.08
+  (JKEENAN on 2021-04-27)</option>
+<option
+  
+  value="JKEENAN/Devel-NYTProf-6.07"
+>6.07
+  (JKEENAN on 2021-04-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.02_91"
+>6.02_91 DEV
+  (TIMB on 2016-03-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.02_90"
+>6.02_90 DEV
+  (TIMB on 2016-03-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.02"
+>6.02
+  (TIMB on 2015-08-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-6.01"
+>6.01
+  (TIMB on 2015-04-04)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.07"
+>5.07
+  (TIMB on 2015-02-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.07-TRIAL1"
+>5.07-TRIAL1 DEV
+  (TIMB on 2015-02-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.06_80"
+>5.06_80 DEV
+  (TIMB on 2014-06-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.06"
+>5.06
+  (TIMB on 2013-09-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.05"
+>5.05
+  (TIMB on 2013-07-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.04_90"
+>5.04_90 DEV
+  (TIMB on 2013-07-02)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.04"
+>5.04
+  (TIMB on 2013-06-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.03"
+>5.03
+  (TIMB on 2013-05-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.02"
+>5.02
+  (TIMB on 2013-04-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.01_90"
+>5.01_90 DEV
+  (TIMB on 2013-04-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.01"
+>5.01
+  (TIMB on 2013-04-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-5.00"
+>5.00
+  (TIMB on 2013-04-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.90_91"
+>4.90_91 DEV
+  (TIMB on 2013-04-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.90_90"
+>4.90_90 DEV
+  (TIMB on 2013-04-04)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.25"
+>4.25
+  (TIMB on 2013-02-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.24_90"
+>4.24_90 DEV
+  (TIMB on 2013-02-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.24"
+>4.24
+  (TIMB on 2013-02-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.23"
+>4.23
+  (TIMB on 2013-01-02)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.20_90"
+>4.20_90 DEV
+  (TIMB on 2012-12-29)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.12"
+>4.12
+  (TIMB on 2012-12-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.11"
+>4.11
+  (TIMB on 2012-12-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.09"
+>4.09
+  (TIMB on 2012-09-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.08"
+>4.08
+  (TIMB on 2012-08-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.07"
+>4.07
+  (TIMB on 2012-08-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.06"
+>4.06
+  (TIMB on 2010-12-01)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.05_91"
+>4.05_91 DEV
+  (TIMB on 2010-11-30)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.05_90"
+>4.05_90 DEV
+  (TIMB on 2010-11-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.05"
+>4.05
+  (TIMB on 2010-09-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_81"
+>4.04_81 DEV
+  (TIMB on 2010-09-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_80"
+>4.04_80 DEV
+  (TIMB on 2010-09-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_71"
+>4.04_71 DEV
+  (TIMB on 2010-09-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04_70"
+>4.04_70 DEV
+  (TIMB on 2010-09-12)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.04"
+>4.04
+  (TIMB on 2010-07-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.03_90"
+>4.03_90 DEV
+  (TIMB on 2010-07-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.03"
+>4.03
+  (TIMB on 2010-06-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.02"
+>4.02
+  (TIMB on 2010-06-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.01_90"
+>4.01_90 DEV
+  (TIMB on 2010-06-17)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.01"
+>4.01
+  (TIMB on 2010-06-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-4.00"
+>4.00
+  (TIMB on 2010-06-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.90_92"
+>3.90_92 DEV
+  (TIMB on 2010-06-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.90_91"
+>3.90_91 DEV
+  (TIMB on 2010-06-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.90_90"
+>3.90_90 DEV
+  (TIMB on 2010-05-30)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_94"
+>3.11_94 DEV
+  (TIMB on 2010-05-27)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_93"
+>3.11_93 DEV
+  (TIMB on 2010-05-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_92"
+>3.11_92 DEV
+  (TIMB on 2010-05-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_91"
+>3.11_91 DEV
+  (TIMB on 2010-05-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11_90"
+>3.11_90 DEV
+  (TIMB on 2010-04-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.11"
+>3.11
+  (TIMB on 2010-03-16)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_53"
+>3.10_53 DEV
+  (TIMB on 2010-03-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_52"
+>3.10_52 DEV
+  (TIMB on 2010-03-12)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_51"
+>3.10_51 DEV
+  (TIMB on 2010-03-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.10_50"
+>3.10_50 DEV
+  (TIMB on 2010-03-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.02"
+>3.02
+  (TIMB on 2010-03-05)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_96"
+>3.01_96 DEV
+  (TIMB on 2010-02-27)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_95"
+>3.01_95 DEV
+  (TIMB on 2010-02-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_94"
+>3.01_94 DEV
+  (TIMB on 2010-02-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_93"
+>3.01_93 DEV
+  (TIMB on 2010-02-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_92"
+>3.01_92 DEV
+  (TIMB on 2010-02-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01_91"
+>3.01_91 DEV
+  (TIMB on 2010-02-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.01"
+>3.01
+  (TIMB on 2009-12-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-3.00"
+>3.00
+  (TIMB on 2009-12-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_987"
+>2.11_987 DEV
+  (TIMB on 2009-12-22)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_949"
+>2.11_949 DEV
+  (TIMB on 2009-12-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_947"
+>2.11_947 DEV
+  (TIMB on 2009-12-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_942"
+>2.11_942 DEV
+  (TIMB on 2009-12-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_937"
+>2.11_937 DEV
+  (TIMB on 2009-12-09)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_935"
+>2.11_935 DEV
+  (TIMB on 2009-12-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_932"
+>2.11_932 DEV
+  (TIMB on 2009-12-07)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_931"
+>2.11_931 DEV
+  (TIMB on 2009-12-06)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_81"
+>2.11_81 DEV
+  (TIMB on 2009-11-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.11_80"
+>2.11_80 DEV
+  (TIMB on 2009-11-16)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_99"
+>2.10_99 DEV
+  (TIMB on 2009-11-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_98"
+>2.10_98 DEV
+  (TIMB on 2009-10-29)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_97"
+>2.10_97 DEV
+  (TIMB on 2009-10-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_96"
+>2.10_96 DEV
+  (TIMB on 2009-10-28)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_95"
+>2.10_95 DEV
+  (TIMB on 2009-10-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_94"
+>2.10_94 DEV
+  (TIMB on 2009-10-25)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_93"
+>2.10_93 DEV
+  (TIMB on 2009-10-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_92"
+>2.10_92 DEV
+  (TIMB on 2009-10-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_91"
+>2.10_91 DEV
+  (TIMB on 2009-10-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10_90"
+>2.10_90 DEV
+  (TIMB on 2009-10-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.10"
+>2.10
+  (TIMB on 2009-06-23)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.09_90"
+>2.09_90 DEV
+  (TIMB on 2009-06-18)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.09"
+>2.09
+  (TIMB on 2009-03-29)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08_92"
+>2.08_92 DEV
+  (TIMB on 2009-03-26)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08_91"
+>2.08_91 DEV
+  (TIMB on 2009-03-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08_90"
+>2.08_90 DEV
+  (TIMB on 2009-03-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.08"
+>2.08
+  (TIMB on 2009-02-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_96"
+>2.07_96 DEV
+  (TIMB on 2009-02-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_95"
+>2.07_95 DEV
+  (TIMB on 2009-02-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_94"
+>2.07_94 DEV
+  (TIMB on 2009-01-21)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_93"
+>2.07_93 DEV
+  (TIMB on 2009-01-20)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_92"
+>2.07_92 DEV
+  (TIMB on 2009-01-19)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_91"
+>2.07_91 DEV
+  (TIMB on 2009-01-05)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07_90"
+>2.07_90 DEV
+  (TIMB on 2009-01-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.07"
+>2.07
+  (TIMB on 2008-11-01)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.06_RC1"
+>2.06_RC1
+  (TIMB on 2008-10-31)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.05"
+>2.05
+  (TIMB on 2008-10-08)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.04"
+>2.04
+  (TIMB on 2008-10-03)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.04_RC1"
+>2.04_RC1
+  (TIMB on 2008-10-01)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.03"
+>2.03
+  (TIMB on 2008-08-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.03_1"
+>2.03_1 DEV
+  (TIMB on 2008-08-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.02"
+>2.02
+  (TIMB on 2008-07-24)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.01"
+>2.01
+  (TIMB on 2008-07-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-2.00"
+>2.00
+  (TIMB on 2008-07-15)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_6"
+>1.90_6 DEV
+  (TIMB on 2008-07-13)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_5"
+>1.90_5 DEV
+  (TIMB on 2008-07-12)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_4"
+>1.90_4 DEV
+  (TIMB on 2008-07-11)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_3"
+>1.90_3 DEV
+  (TIMB on 2008-07-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_2"
+>1.90_2 DEV
+  (TIMB on 2008-07-10)</option>
+<option
+  
+  value="TIMB/Devel-NYTProf-1.90_1"
+>1.90_1 DEV
+  (TIMB on 2008-07-09)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.14"
+>1.14
+  (AKAPLAN on 2008-05-23)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.13"
+>1.13
+  (AKAPLAN on 2008-05-23)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.12"
+>1.12
+  (AKAPLAN on 2008-03-25)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.11"
+>1.11
+  (AKAPLAN on 2008-03-24)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-1.10"
+>1.10
+  (AKAPLAN on 2008-03-20)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.09"
+>0.09
+  (AKAPLAN on 2008-03-19)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.08"
+>0.08
+  (AKAPLAN on 2008-03-10)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.07"
+>0.07
+  (AKAPLAN on 2008-03-10)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.06"
+>0.06
+  (AKAPLAN on 2008-03-10)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.05"
+>0.05
+  (AKAPLAN on 2008-03-07)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.04"
+>0.04
+  (AKAPLAN on 2008-03-07)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.03"
+>0.03
+  (AKAPLAN on 2008-03-06)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.02"
+>0.02
+  (AKAPLAN on 2008-03-05)</option>
+<option
+  
+  value="AKAPLAN/Devel-NYTProf-0.01"
+>0.01
+  (AKAPLAN on 2008-03-04)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Devel-NYTProf">Devel-NYTProf-6.14</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage two &#10;
+          • 35 direct dependents &#10;          • 45 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Devel-NYTProf-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Devel-NYTProf-6.14">
+    <input type="hidden" name="author" value="JKEENAN">
+    <input type="hidden" name="distribution" value="Devel-NYTProf">
+    <button type="submit" class="favorite highlight"><span>188</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Devel::NYTProf::Apache.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>188</span> ++</a>
+</div>
+   / <span>Devel::NYTProf::Apache</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Devel::NYTProf::Apache.html#NAME">NAME</a></li>
+  <li><a href="./Devel::NYTProf::Apache.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Devel::NYTProf::Apache.html#CAUTION">CAUTION</a></li>
+  <li><a href="./Devel::NYTProf::Apache.html#DESCRIPTION">DESCRIPTION</a>
+    <ul>
+      <li><a href="./Devel::NYTProf::Apache.html#Example-httpd.conf">Example httpd.conf</a></li>
+    </ul>
+  </li>
+  <li><a href="./Devel::NYTProf::Apache.html#VIRTUAL-HOSTS">VIRTUAL HOSTS</a></li>
+  <li><a href="./Devel::NYTProf::Apache.html#LIMITATIONS">LIMITATIONS</a></li>
+  <li><a href="./Devel::NYTProf::Apache.html#TROUBLESHOOTING">TROUBLESHOOTING</a></li>
+  <li><a href="./Devel::NYTProf::Apache.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Devel::NYTProf::Apache.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Devel::NYTProf::Apache.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Devel::NYTProf::Apache - Profile mod_perl applications with Devel::NYTProf</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  # in your Apache config file with mod_perl installed
+  PerlPassEnv NYTPROF
+  PerlModule Devel::NYTProf::Apache</code></pre>
+
+<p>If you&#39;re using virtual hosts with <code>PerlOptions</code> that include either <code>+Parent</code> or <code>+Clone</code> then see <a href="./Devel::NYTProf::Apache.html#VIRTUAL-HOSTS">&quot;VIRTUAL HOSTS&quot;</a> below.</p>
+
+<h1 id="CAUTION">CAUTION</h1>
+
+<p>Use of <code>Devel::NYTProf::Apache</code> is officially <b>discouraged</b>.</p>
+
+<p>The <code>Apache</code> module is not exercised anywhere in Devel-NYTProf&#39;s test suite. To do so would require an Apache/mod_perl environment, which in turn would require a major redirection of developer efforts. The code may be perfectly sound -- so we&#39;re not officially deprecating it -- but it was last modified in 2010.</p>
+
+<p>If ...</p>
+
+<ol>
+
+<li><p>You are an experienced user of <i>Devel-NYTProf</i>;</p>
+
+</li>
+<li><p>you can set up a development/testing environment with Apache/mod_perl;</p>
+
+</li>
+<li><p>can devise some tests that would demonstrate that <i>Devel::NYTProf::Apache</i> works as intended; and</p>
+
+</li>
+<li><p>would be willing to support it as an independent CPAN distribution, then please let us know!</p>
+
+</li>
+</ol>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module allows mod_perl applications to be profiled using <code>Devel::NYTProf</code>.</p>
+
+<p>If the NYTPROF environment variable isn&#39;t set <i>at the time Devel::NYTProf::Apache is loaded</i> then Devel::NYTProf::Apache will issue a warning and default it to:</p>
+
+<pre><code>  file=/tmp/nytprof.$$.out:addpid=1:endatexit=1</code></pre>
+
+<p>The file actually created by NTProf will also have the process id appended to it because the <code>addpid</code> option is enabled by default.</p>
+
+<p>See <a href="./Devel::NYTProf.html#ENVIRONMENT-VARIABLES">&quot;ENVIRONMENT VARIABLES&quot; in Devel::NYTProf</a> for more details on the settings effected by this environment variable.</p>
+
+<p>Try using <code>PerlPassEnv</code> in your httpd.conf if you can set the NYTPROF environment variable externally. Note that if you set the NYTPROF environment variable externally then the file name obviously can&#39;t include the parent process id. For example, to set stmts=0 externally, use:</p>
+
+<pre><code>    NYTPROF=file=/tmp/nytprof.out:out:addpid=1:endatexit=1:stmts=0</code></pre>
+
+<p>Each profiled mod_perl process will need to have terminated cleanly before you can successfully read the profile data file. The simplest approach is to start the httpd, make some requests (e.g., 100 of the same request), then stop it and process the profile data.</p>
+
+<p>Alternatively you could send a TERM signal to the httpd worker process to terminate that one process. The parent httpd process will start up another one for you ready for more profiling.</p>
+
+<h2 id="Example-httpd.conf"><a id="Example"></a>Example httpd.conf</h2>
+
+<p>It&#39;s usually a good idea to use just one child process when profiling, which you can do by setting the <code>MaxClients</code> to 1 in httpd.conf.</p>
+
+<p>Set <code>MaxRequestsPerChild</code> to 0 to avoid worker processes exiting and restarting during the profiling, which would split the profile data across multiple files.</p>
+
+<p>Using an <code>IfDefine</code> blocks lets you leave the profile configuration in place and enable it whenever it&#39;s needed by adding <code>-D NYTPROF</code> to the httpd startup command line.</p>
+
+<pre><code>  &lt;IfDefine NYTPROF&gt;
+      MaxClients 1
+      MaxRequestsPerChild 0
+      PerlModule Devel::NYTProf::Apache
+  &lt;/IfDefine&gt;</code></pre>
+
+<p>With that configuration you should get two profile files, one for the parent process and one for the worker.</p>
+
+<h1 id="VIRTUAL-HOSTS"><a id="VIRTUAL"></a>VIRTUAL HOSTS</h1>
+
+<p>If your httpd configuration includes virtual hosts with <code>PerlOptions</code> that include either <code>+Parent</code> or <code>+Clone</code> then mod_perl2 will create a new perl interpreter to handle requests for that virtual host. This causes some issues for profiling.</p>
+
+<p>If <code>Devel::NYTProf::Apache</code> is loaded in the top-level configuration then activity in any virtual hosts that use their own perl interpreter won&#39;t be profiled. Normal virtual hosts will be profiled just fine.</p>
+
+<p>You can profile a <i>single</i> virtual host that uses its own perl interpreter by loading <code>Devel::NYTProf::Apache</code> <i>inside the configuration for that virtual host</i>. In this case <i>do not</i> use <code>PerlModule</code> directive. You need to use a <code>Perl</code> directive instead, like this:</p>
+
+<pre><code>    &lt;VirtualHost *:1234&gt;
+        ...
+        &lt;Perl&gt; use Devel::NYTProf::Apache; &lt;/Perl&gt;
+        ...
+    &lt;/VirtualHost&gt;</code></pre>
+
+<h1 id="LIMITATIONS">LIMITATIONS</h1>
+
+<p>Profiling mod_perl on Windows is not supported because NYTProf currently doesn&#39;t support threads.</p>
+
+<h1 id="TROUBLESHOOTING">TROUBLESHOOTING</h1>
+
+<p>Truncated profile: Profiles for large applications can take a while to write to the disk. Allow sufficient time after stopping apache, or check the process has actually exited, before trying to read the profile.</p>
+
+<p>Truncated profile: The mod_perl child_terminate() function terminates the child without giving perl an opportunity to cleanup. Since <code>Devel::NYTProf::Apache</code> doesn&#39;t intercept the mod_perl child_terminate() function (yet) the profile will be corrupted if it&#39;s called. You&#39;re most likely to encounter this when using <a href="https://metacpan.org/pod/Apache::SizeLimit">Apache::SizeLimit</a>, so you may want to disable it while profiling.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Devel::NYTProf.html">Devel::NYTProf</a></p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p><b>Adam Kaplan</b>, <code>&lt;akaplan at nytimes.com&gt;</code> <b>Tim Bunce</b>, <a href="http://blog.timbunce.org">http://blog.timbunce.org</a> <b>Steve Peters</b>, <code>&lt;steve at fisharerojo.org&gt;</code></p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<pre><code>  Copyright (C) 2008 by Adam Kaplan and The New York Times Company.
+  Copyright (C) 2008 by Steve Peters.
+  Copyright (C) 2008-2012 by Tim Bunce.</code></pre>
+
+<p>This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself, either Perl version 5.8.8 or, at your option, any later version of Perl 5 you may have available.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Devel::NYTProf, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Devel::NYTProf</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Devel::NYTProf</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Devel::NYTProf::Apache.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Pod::InputObjects - objects representing POD input paragraphs, commands, etc. - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Pod-Parser - MetaCPAN" href="https://metacpan.org/dist/Pod-Parser/releases.rss" />
+        <link rel="canonical" href="./Pod::InputObjects.html" />
+        <meta name="description" content="objects representing POD input paragraphs, commands, etc." />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Pod::InputObjects" />
+<meta name="twitter:title"       content="Pod::InputObjects" />
+<meta name="twitter:description" content="objects representing POD input paragraphs, commands, etc." />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Pod::InputObjects.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Pod-Parser was released.">
+      <span class="relatize">03 Jan 2024 21:23:20 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Pod-Parser">Pod-Parser</a>
+  </li>
+  <li>
+    Module version: 1.67
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Pod-Parser/source/lib/Pod/InputObjects.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Pod-Parser/source/lib/Pod/InputObjects.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Pod-Parser/source/lib/Pod">Browse</a>
+    (<a href="https://metacpan.org/dist/Pod-Parser/source/lib/Pod?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Pod-Parser/changes">Changes</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Pod-Parser/contribute">How to Contribute</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://rt.cpan.org/Public/Dist/Display.html?Name=Pod-Parser">Issues</a>
+      (0)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Pod-Parser+1.67" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Pod-Parser.html?oncpan=1&amp;distmat=1&amp;version=1.67&amp;grade=2" style="color: #090">334</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Pod-Parser.html?oncpan=1&amp;distmat=1&amp;version=1.67&amp;grade=3" style="color: #900">0</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/P/Pod-Parser.html?oncpan=1&amp;distmat=1&amp;version=1.67&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/MAREKR/Pod-Parser-1.67">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Pod-Parser who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 5
+      </div>
+    </li>
+    <li>
+      License: unknown
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Pod-Parser/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/M/MA/MAREKR/Pod-Parser-1.67.tar.gz">
+      Download (<span itemprop="fileSize">79.06KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FMAREKR%2FPod-Parser-1.67%2Flib%2FPod%2FInputObjects.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Pod-Parser/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Pod-Parser/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Pod-Parser">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Pod-Parser">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Pod/InputObjects.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="MAREKR/Pod-Parser-1.67"
+>1.67
+  (MAREKR on 2024-01-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.66"
+>1.66
+  (MAREKR on 2023-04-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.65"
+>1.65
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.64"
+>1.64
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.63"
+>1.63
+  (MAREKR on 2015-02-10)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.62"
+>1.62
+  (MAREKR on 2014-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.51"
+>1.51
+  (MAREKR on 2012-01-25)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.38"
+>1.38
+  (MAREKR on 2009-02-09)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MAREKR/Pod-Parser-1.61"
+>1.61
+  (MAREKR on 2013-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.60"
+>1.60
+  (MAREKR on 2013-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.50"
+>1.50
+  (MAREKR on 2012-01-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.37"
+>1.37
+  (MAREKR on 2009-02-04)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.36"
+>1.36
+  (MAREKR on 2009-01-20)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.35"
+>1.35
+  (MAREKR on 2006-10-26)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.34"
+>1.34
+  (MAREKR on 2005-10-06)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.33"
+>1.33
+  (MAREKR on 2005-09-05)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.32"
+>1.32
+  (MAREKR on 2005-06-15)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.31"
+>1.31
+  (MAREKR on 2005-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.30"
+>1.30
+  (MAREKR on 2005-03-13)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/MAREKR/Pod-Parser-1.67/diff/' + encodeURIComponent(this.value) + '/lib/Pod/InputObjects.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="MAREKR/Pod-Parser-1.67"
+>1.67
+  (MAREKR on 2024-01-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.66"
+>1.66
+  (MAREKR on 2023-04-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.65"
+>1.65
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.64"
+>1.64
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.63"
+>1.63
+  (MAREKR on 2015-02-10)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.62"
+>1.62
+  (MAREKR on 2014-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.51"
+>1.51
+  (MAREKR on 2012-01-25)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.38"
+>1.38
+  (MAREKR on 2009-02-09)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MAREKR/Pod-Parser-1.61"
+>1.61
+  (MAREKR on 2013-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.60"
+>1.60
+  (MAREKR on 2013-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.50"
+>1.50
+  (MAREKR on 2012-01-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.37"
+>1.37
+  (MAREKR on 2009-02-04)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.36"
+>1.36
+  (MAREKR on 2009-01-20)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.35"
+>1.35
+  (MAREKR on 2006-10-26)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.34"
+>1.34
+  (MAREKR on 2005-10-06)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.33"
+>1.33
+  (MAREKR on 2005-09-05)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.32"
+>1.32
+  (MAREKR on 2005-06-15)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.31"
+>1.31
+  (MAREKR on 2005-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.30"
+>1.30
+  (MAREKR on 2005-03-13)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Cwd" title="Cwd" class="ellipsis">Cwd</a></li>
+  <li><a href="https://metacpan.org/pod/File::Basename" title="File::Basename" class="ellipsis">File::Basename</a></li>
+  <li><a href="https://metacpan.org/pod/Test::More" title="Test::More" class="ellipsis">Test::More</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Pod::InputObjects/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Pod%3A%3AInputObjects">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Pod-Parser">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/MAREKR/Pod-Parser-1.67/view/lib/Pod/InputObjects.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Pod::InputObjects.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/JMATES"><img src="https://www.gravatar.com/avatar/06accb84e6519284be3941ff72e429cb?d=identicon&amp;s=20" title="JMATES" alt="JMATES"></a>
+<a class="display-all" href="https://metacpan.org/author/KEEDI"><img src="https://www.gravatar.com/avatar/95f905a7a4ccc573c711e9d264c0fde8?d=identicon&amp;s=20" title="KEEDI" alt="KEEDI"></a>
+<a class="display-all" href="https://metacpan.org/author/AZAWAWI"><img src="https://www.gravatar.com/avatar/70ebafdecf974e15bcaba4cbe39efef1?d=identicon&amp;s=20" title="AZAWAWI" alt="AZAWAWI"></a>
+<a class="display-all" href="https://metacpan.org/author/DOHERTY"><img src="https://www.gravatar.com/avatar/9533c36b6385c8321bad636c98e9c0a8?d=identicon&amp;s=20" title="DOHERTY" alt="DOHERTY"></a>
+<a class="display-all" href="https://metacpan.org/author/SYP"><img src="https://www.gravatar.com/avatar/9b6fa62677be03c25ee1af4d95472042?d=identicon&amp;s=20" title="SYP" alt="SYP"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Pod-Parser/plussers">7 PAUSE users</a>
+</div>
+<div>
+    6 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 1 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-contrib-email="bradapp@enteract.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Brad Appleton, Marek Rouchal &lt;marekr@cpan.org&gt;
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/MAREKR" class="author-name">Marek Rouchal</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Pod/InputObjects.pm&#39;" class="">
+<option
+  selected
+  value="MAREKR/Pod-Parser-1.67"
+>1.67
+  (MAREKR on 2024-01-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.66"
+>1.66
+  (MAREKR on 2023-04-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.65"
+>1.65
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.64"
+>1.64
+  (MAREKR on 2022-05-21)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.63"
+>1.63
+  (MAREKR on 2015-02-10)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.62"
+>1.62
+  (MAREKR on 2014-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.51"
+>1.51
+  (MAREKR on 2012-01-25)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.38"
+>1.38
+  (MAREKR on 2009-02-09)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="MAREKR/Pod-Parser-1.61"
+>1.61
+  (MAREKR on 2013-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.60"
+>1.60
+  (MAREKR on 2013-02-03)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.50"
+>1.50
+  (MAREKR on 2012-01-22)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.37"
+>1.37
+  (MAREKR on 2009-02-04)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.36"
+>1.36
+  (MAREKR on 2009-01-20)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.35"
+>1.35
+  (MAREKR on 2006-10-26)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.34"
+>1.34
+  (MAREKR on 2005-10-06)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.33"
+>1.33
+  (MAREKR on 2005-09-05)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.32"
+>1.32
+  (MAREKR on 2005-06-15)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.31"
+>1.31
+  (MAREKR on 2005-06-01)</option>
+<option
+  
+  value="MAREKR/Pod-Parser-1.30"
+>1.30
+  (MAREKR on 2005-03-13)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Pod-Parser">Pod-Parser-1.67</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage four &#10;
+          • 98 direct dependents &#10;          • 1275 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Pod-Parser-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Pod-Parser-1.67">
+    <input type="hidden" name="author" value="MAREKR">
+    <input type="hidden" name="distribution" value="Pod-Parser">
+    <button type="submit" class="favorite highlight"><span>13</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Pod::InputObjects.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>13</span> ++</a>
+</div>
+   / <span>Pod::InputObjects</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Pod::InputObjects.html#NAME">NAME</a></li>
+  <li><a href="./Pod::InputObjects.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Pod::InputObjects.html#REQUIRES">REQUIRES</a></li>
+  <li><a href="./Pod::InputObjects.html#EXPORTS">EXPORTS</a></li>
+  <li><a href="./Pod::InputObjects.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Pod::InputObjects.html#Pod::Paragraph">Pod::Paragraph</a>
+    <ul>
+      <li><a href="./Pod::InputObjects.html#Pod::Paragraph-%3Enew()">Pod::Paragraph-&gt;new()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_para-%3Ecmd_name()">$pod_para-&gt;cmd_name()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_para-%3Etext()">$pod_para-&gt;text()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_para-%3Eraw_text()">$pod_para-&gt;raw_text()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_para-%3Ecmd_prefix()">$pod_para-&gt;cmd_prefix()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_para-%3Ecmd_separator()">$pod_para-&gt;cmd_separator()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_para-%3Eparse_tree()">$pod_para-&gt;parse_tree()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_para-%3Efile_line()">$pod_para-&gt;file_line()</a></li>
+    </ul>
+  </li>
+  <li><a href="./Pod::InputObjects.html#Pod::InteriorSequence">Pod::InteriorSequence</a>
+    <ul>
+      <li><a href="./Pod::InputObjects.html#Pod::InteriorSequence-%3Enew()">Pod::InteriorSequence-&gt;new()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_seq-%3Ecmd_name()">$pod_seq-&gt;cmd_name()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_seq-%3Eprepend()">$pod_seq-&gt;prepend()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_seq-%3Eappend()">$pod_seq-&gt;append()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_seq-%3Enested()">$pod_seq-&gt;nested()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_seq-%3Eraw_text()">$pod_seq-&gt;raw_text()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_seq-%3Eleft_delimiter()">$pod_seq-&gt;left_delimiter()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_seq-%3Eright_delimiter()">$pod_seq-&gt;right_delimiter()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_seq-%3Eparse_tree()">$pod_seq-&gt;parse_tree()</a></li>
+      <li><a href="./Pod::InputObjects.html#$pod_seq-%3Efile_line()">$pod_seq-&gt;file_line()</a></li>
+      <li><a href="./Pod::InputObjects.html#Pod::InteriorSequence::DESTROY()">Pod::InteriorSequence::DESTROY()</a></li>
+    </ul>
+  </li>
+  <li><a href="./Pod::InputObjects.html#Pod::ParseTree">Pod::ParseTree</a>
+    <ul>
+      <li><a href="./Pod::InputObjects.html#Pod::ParseTree-%3Enew()">Pod::ParseTree-&gt;new()</a></li>
+      <li><a href="./Pod::InputObjects.html#$ptree-%3Etop()">$ptree-&gt;top()</a></li>
+      <li><a href="./Pod::InputObjects.html#$ptree-%3Echildren()">$ptree-&gt;children()</a></li>
+      <li><a href="./Pod::InputObjects.html#$ptree-%3Eprepend()">$ptree-&gt;prepend()</a></li>
+      <li><a href="./Pod::InputObjects.html#$ptree-%3Eappend()">$ptree-&gt;append()</a></li>
+      <li><a href="./Pod::InputObjects.html#$ptree-%3Eraw_text()">$ptree-&gt;raw_text()</a></li>
+      <li><a href="./Pod::InputObjects.html#Pod::ParseTree::DESTROY()">Pod::ParseTree::DESTROY()</a></li>
+    </ul>
+  </li>
+  <li><a href="./Pod::InputObjects.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Pod::InputObjects.html#AUTHOR">AUTHOR</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Pod::InputObjects - objects representing POD input paragraphs, commands, etc.</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>    use Pod::InputObjects;</code></pre>
+
+<h1 id="REQUIRES">REQUIRES</h1>
+
+<p>perl5.004, Carp</p>
+
+<h1 id="EXPORTS">EXPORTS</h1>
+
+<p>Nothing.</p>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p><b>NOTE: This module is considered legacy; modern Perl releases (5.31.1 and higher) are going to remove Pod-Parser from core and use <a href="https://metacpan.org/pod/Pod::Simple">Pod::Simple</a> for all things POD.</b></p>
+
+<p>This module defines some basic input objects used by <b>Pod::Parser</b> when reading and parsing POD text from an input source. The following objects are defined:</p>
+
+<dl>
+
+<dt id="package-Pod::Paragraph"><a id="package"></a>package <b>Pod::Paragraph</b></dt>
+<dd>
+
+<p>An object corresponding to a paragraph of POD input text. It may be a plain paragraph, a verbatim paragraph, or a command paragraph (see <a href="https://metacpan.org/pod/perlpod">perlpod</a>).</p>
+
+</dd>
+<dt id="package-Pod::InteriorSequence"><a id="package1"></a>package <b>Pod::InteriorSequence</b></dt>
+<dd>
+
+<p>An object corresponding to an interior sequence command from the POD input text (see <a href="https://metacpan.org/pod/perlpod">perlpod</a>).</p>
+
+</dd>
+<dt id="package-Pod::ParseTree"><a id="package2"></a>package <b>Pod::ParseTree</b></dt>
+<dd>
+
+<p>An object corresponding to a tree of parsed POD text. Each &quot;node&quot; in a parse-tree (or <i>ptree</i>) is either a text-string or a reference to a <b>Pod::InteriorSequence</b> object. The nodes appear in the parse-tree in the order in which they were parsed from left-to-right.</p>
+
+</dd>
+</dl>
+
+<p>Each of these input objects are described in further detail in the sections which follow.</p>
+
+<h1 id="Pod::Paragraph"><a id="Pod"></a><b>Pod::Paragraph</b></h1>
+
+<p>An object representing a paragraph of POD input text. It has the following methods/attributes:</p>
+
+<h2 id="Pod::Paragraph-&gt;new()"><a id="Pod1"></a><a id="Pod::Paragraph--new"></a>Pod::Paragraph-&gt;<b>new()</b></h2>
+
+<pre><code>        my $pod_para1 = Pod::Paragraph-&gt;new(-text =&gt; $text);
+        my $pod_para2 = Pod::Paragraph-&gt;new(-name =&gt; $cmd,
+                                            -text =&gt; $text);
+        my $pod_para3 = new Pod::Paragraph(-text =&gt; $text);
+        my $pod_para4 = new Pod::Paragraph(-name =&gt; $cmd,
+                                           -text =&gt; $text);
+        my $pod_para5 = Pod::Paragraph-&gt;new(-name =&gt; $cmd,
+                                            -text =&gt; $text,
+                                            -file =&gt; $filename,
+                                            -line =&gt; $line_number);</code></pre>
+
+<p>This is a class method that constructs a <code>Pod::Paragraph</code> object and returns a reference to the new paragraph object. It may be given one or two keyword arguments. The <code>-text</code> keyword indicates the corresponding text of the POD paragraph. The <code>-name</code> keyword indicates the name of the corresponding POD command, such as <code>head1</code> or <code>item</code> (it should <i>not</i> contain the <code>=</code> prefix); this is needed only if the POD paragraph corresponds to a command paragraph. The <code>-file</code> and <code>-line</code> keywords indicate the filename and line number corresponding to the beginning of the paragraph</p>
+
+<h2 id="$pod_para-&gt;cmd_name()"><a id="pod_para--cmd_name"></a>$pod_para-&gt;<b>cmd_name()</b></h2>
+
+<pre><code>        my $para_cmd = $pod_para-&gt;cmd_name();</code></pre>
+
+<p>If this paragraph is a command paragraph, then this method will return the name of the command (<i>without</i> any leading <code>=</code> prefix).</p>
+
+<h2 id="$pod_para-&gt;text()"><a id="pod_para--text"></a>$pod_para-&gt;<b>text()</b></h2>
+
+<pre><code>        my $para_text = $pod_para-&gt;text();</code></pre>
+
+<p>This method will return the corresponding text of the paragraph.</p>
+
+<h2 id="$pod_para-&gt;raw_text()"><a id="pod_para--raw_text"></a>$pod_para-&gt;<b>raw_text()</b></h2>
+
+<pre><code>        my $raw_pod_para = $pod_para-&gt;raw_text();</code></pre>
+
+<p>This method will return the <i>raw</i> text of the POD paragraph, exactly as it appeared in the input.</p>
+
+<h2 id="$pod_para-&gt;cmd_prefix()"><a id="pod_para--cmd_prefix"></a>$pod_para-&gt;<b>cmd_prefix()</b></h2>
+
+<pre><code>        my $prefix = $pod_para-&gt;cmd_prefix();</code></pre>
+
+<p>If this paragraph is a command paragraph, then this method will return the prefix used to denote the command (which should be the string &quot;=&quot; or &quot;==&quot;).</p>
+
+<h2 id="$pod_para-&gt;cmd_separator()"><a id="pod_para--cmd_separator"></a>$pod_para-&gt;<b>cmd_separator()</b></h2>
+
+<pre><code>        my $separator = $pod_para-&gt;cmd_separator();</code></pre>
+
+<p>If this paragraph is a command paragraph, then this method will return the text used to separate the command name from the rest of the paragraph (if any).</p>
+
+<h2 id="$pod_para-&gt;parse_tree()"><a id="pod_para--parse_tree"></a>$pod_para-&gt;<b>parse_tree()</b></h2>
+
+<pre><code>        my $ptree = $pod_parser-&gt;parse_text( $pod_para-&gt;text() );
+        $pod_para-&gt;parse_tree( $ptree );
+        $ptree = $pod_para-&gt;parse_tree();</code></pre>
+
+<p>This method will get/set the corresponding parse-tree of the paragraph&#39;s text.</p>
+
+<h2 id="$pod_para-&gt;file_line()"><a id="pod_para--file_line"></a>$pod_para-&gt;<b>file_line()</b></h2>
+
+<pre><code>        my ($filename, $line_number) = $pod_para-&gt;file_line();
+        my $position = $pod_para-&gt;file_line();</code></pre>
+
+<p>Returns the current filename and line number for the paragraph object. If called in a list context, it returns a list of two elements: first the filename, then the line number. If called in a scalar context, it returns a string containing the filename, followed by a colon (&#39;:&#39;), followed by the line number.</p>
+
+<h1 id="Pod::InteriorSequence"><a id="Pod2"></a><b>Pod::InteriorSequence</b></h1>
+
+<p>An object representing a POD interior sequence command. It has the following methods/attributes:</p>
+
+<h2 id="Pod::InteriorSequence-&gt;new()"><a id="Pod3"></a><a id="Pod::InteriorSequence--new"></a>Pod::InteriorSequence-&gt;<b>new()</b></h2>
+
+<pre><code>        my $pod_seq1 = Pod::InteriorSequence-&gt;new(-name =&gt; $cmd
+                                                  -ldelim =&gt; $delimiter);
+        my $pod_seq2 = new Pod::InteriorSequence(-name =&gt; $cmd,
+                                                 -ldelim =&gt; $delimiter);
+        my $pod_seq3 = new Pod::InteriorSequence(-name =&gt; $cmd,
+                                                 -ldelim =&gt; $delimiter,
+                                                 -file =&gt; $filename,
+                                                 -line =&gt; $line_number);
+
+        my $pod_seq4 = new Pod::InteriorSequence(-name =&gt; $cmd, $ptree);
+        my $pod_seq5 = new Pod::InteriorSequence($cmd, $ptree);</code></pre>
+
+<p>This is a class method that constructs a <code>Pod::InteriorSequence</code> object and returns a reference to the new interior sequence object. It should be given two keyword arguments. The <code>-ldelim</code> keyword indicates the corresponding left-delimiter of the interior sequence (e.g. &#39;&lt;&#39;). The <code>-name</code> keyword indicates the name of the corresponding interior sequence command, such as <code>I</code> or <code>B</code> or <code>C</code>. The <code>-file</code> and <code>-line</code> keywords indicate the filename and line number corresponding to the beginning of the interior sequence. If the <code>$ptree</code> argument is given, it must be the last argument, and it must be either string, or else an array-ref suitable for passing to <b>Pod::ParseTree::new</b> (or it may be a reference to a Pod::ParseTree object).</p>
+
+<h2 id="$pod_seq-&gt;cmd_name()"><a id="pod_seq--cmd_name"></a>$pod_seq-&gt;<b>cmd_name()</b></h2>
+
+<pre><code>        my $seq_cmd = $pod_seq-&gt;cmd_name();</code></pre>
+
+<p>The name of the interior sequence command.</p>
+
+<h2 id="$pod_seq-&gt;prepend()"><a id="pod_seq--prepend"></a>$pod_seq-&gt;<b>prepend()</b></h2>
+
+<pre><code>        $pod_seq-&gt;prepend($text);
+        $pod_seq1-&gt;prepend($pod_seq2);</code></pre>
+
+<p>Prepends the given string or parse-tree or sequence object to the parse-tree of this interior sequence.</p>
+
+<h2 id="$pod_seq-&gt;append()"><a id="pod_seq--append"></a>$pod_seq-&gt;<b>append()</b></h2>
+
+<pre><code>        $pod_seq-&gt;append($text);
+        $pod_seq1-&gt;append($pod_seq2);</code></pre>
+
+<p>Appends the given string or parse-tree or sequence object to the parse-tree of this interior sequence.</p>
+
+<h2 id="$pod_seq-&gt;nested()"><a id="pod_seq--nested"></a>$pod_seq-&gt;<b>nested()</b></h2>
+
+<pre><code>        $outer_seq = $pod_seq-&gt;nested || print &quot;not nested&quot;;</code></pre>
+
+<p>If this interior sequence is nested inside of another interior sequence, then the outer/parent sequence that contains it is returned. Otherwise <code>undef</code> is returned.</p>
+
+<h2 id="$pod_seq-&gt;raw_text()"><a id="pod_seq--raw_text"></a>$pod_seq-&gt;<b>raw_text()</b></h2>
+
+<pre><code>        my $seq_raw_text = $pod_seq-&gt;raw_text();</code></pre>
+
+<p>This method will return the <i>raw</i> text of the POD interior sequence, exactly as it appeared in the input.</p>
+
+<h2 id="$pod_seq-&gt;left_delimiter()"><a id="pod_seq--left_delimiter"></a>$pod_seq-&gt;<b>left_delimiter()</b></h2>
+
+<pre><code>        my $ldelim = $pod_seq-&gt;left_delimiter();</code></pre>
+
+<p>The leftmost delimiter beginning the argument text to the interior sequence (should be &quot;&lt;&quot;).</p>
+
+<h2 id="$pod_seq-&gt;right_delimiter()"><a id="pod_seq--right_delimiter"></a>$pod_seq-&gt;<b>right_delimiter()</b></h2>
+
+<p>The rightmost delimiter beginning the argument text to the interior sequence (should be &quot;&gt;&quot;).</p>
+
+<h2 id="$pod_seq-&gt;parse_tree()"><a id="pod_seq--parse_tree"></a>$pod_seq-&gt;<b>parse_tree()</b></h2>
+
+<pre><code>        my $ptree = $pod_parser-&gt;parse_text($paragraph_text);
+        $pod_seq-&gt;parse_tree( $ptree );
+        $ptree = $pod_seq-&gt;parse_tree();</code></pre>
+
+<p>This method will get/set the corresponding parse-tree of the interior sequence&#39;s text.</p>
+
+<h2 id="$pod_seq-&gt;file_line()"><a id="pod_seq--file_line"></a>$pod_seq-&gt;<b>file_line()</b></h2>
+
+<pre><code>        my ($filename, $line_number) = $pod_seq-&gt;file_line();
+        my $position = $pod_seq-&gt;file_line();</code></pre>
+
+<p>Returns the current filename and line number for the interior sequence object. If called in a list context, it returns a list of two elements: first the filename, then the line number. If called in a scalar context, it returns a string containing the filename, followed by a colon (&#39;:&#39;), followed by the line number.</p>
+
+<h2 id="Pod::InteriorSequence::DESTROY()"><a id="Pod4"></a><a id="Pod::InteriorSequence::DESTROY"></a>Pod::InteriorSequence::<b>DESTROY()</b></h2>
+
+<p>This method performs any necessary cleanup for the interior-sequence. If you override this method then it is <b>imperative</b> that you invoke the parent method from within your own method, otherwise <i>interior-sequence storage will not be reclaimed upon destruction!</i></p>
+
+<h1 id="Pod::ParseTree"><a id="Pod5"></a><b>Pod::ParseTree</b></h1>
+
+<p>This object corresponds to a tree of parsed POD text. As POD text is scanned from left to right, it is parsed into an ordered list of text-strings and <b>Pod::InteriorSequence</b> objects (in order of appearance). A <b>Pod::ParseTree</b> object corresponds to this list of strings and sequences. Each interior sequence in the parse-tree may itself contain a parse-tree (since interior sequences may be nested).</p>
+
+<h2 id="Pod::ParseTree-&gt;new()"><a id="Pod6"></a><a id="Pod::ParseTree--new"></a>Pod::ParseTree-&gt;<b>new()</b></h2>
+
+<pre><code>        my $ptree1 = Pod::ParseTree-&gt;new;
+        my $ptree2 = new Pod::ParseTree;
+        my $ptree4 = Pod::ParseTree-&gt;new($array_ref);
+        my $ptree3 = new Pod::ParseTree($array_ref);</code></pre>
+
+<p>This is a class method that constructs a <code>Pod::Parse_tree</code> object and returns a reference to the new parse-tree. If a single-argument is given, it must be a reference to an array, and is used to initialize the root (top) of the parse tree.</p>
+
+<h2 id="$ptree-&gt;top()"><a id="ptree--top"></a>$ptree-&gt;<b>top()</b></h2>
+
+<pre><code>        my $top_node = $ptree-&gt;top();
+        $ptree-&gt;top( $top_node );
+        $ptree-&gt;top( @children );</code></pre>
+
+<p>This method gets/sets the top node of the parse-tree. If no arguments are given, it returns the topmost node in the tree (the root), which is also a <b>Pod::ParseTree</b>. If it is given a single argument that is a reference, then the reference is assumed to a parse-tree and becomes the new top node. Otherwise, if arguments are given, they are treated as the new list of children for the top node.</p>
+
+<h2 id="$ptree-&gt;children()"><a id="ptree--children"></a>$ptree-&gt;<b>children()</b></h2>
+
+<p>This method gets/sets the children of the top node in the parse-tree. If no arguments are given, it returns the list (array) of children (each of which should be either a string or a <b>Pod::InteriorSequence</b>. Otherwise, if arguments are given, they are treated as the new list of children for the top node.</p>
+
+<h2 id="$ptree-&gt;prepend()"><a id="ptree--prepend"></a>$ptree-&gt;<b>prepend()</b></h2>
+
+<p>This method prepends the given text or parse-tree to the current parse-tree. If the first item on the parse-tree is text and the argument is also text, then the text is prepended to the first item (not added as a separate string). Otherwise the argument is added as a new string or parse-tree <i>before</i> the current one.</p>
+
+<h2 id="$ptree-&gt;append()"><a id="ptree--append"></a>$ptree-&gt;<b>append()</b></h2>
+
+<p>This method appends the given text or parse-tree to the current parse-tree. If the last item on the parse-tree is text and the argument is also text, then the text is appended to the last item (not added as a separate string). Otherwise the argument is added as a new string or parse-tree <i>after</i> the current one.</p>
+
+<h2 id="$ptree-&gt;raw_text()"><a id="ptree--raw_text"></a>$ptree-&gt;<b>raw_text()</b></h2>
+
+<pre><code>        my $ptree_raw_text = $ptree-&gt;raw_text();</code></pre>
+
+<p>This method will return the <i>raw</i> text of the POD parse-tree exactly as it appeared in the input.</p>
+
+<h2 id="Pod::ParseTree::DESTROY()"><a id="Pod7"></a><a id="Pod::ParseTree::DESTROY"></a>Pod::ParseTree::<b>DESTROY()</b></h2>
+
+<p>This method performs any necessary cleanup for the parse-tree. If you override this method then it is <b>imperative</b> that you invoke the parent method from within your own method, otherwise <i>parse-tree storage will not be reclaimed upon destruction!</i></p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<p><b>Pod::InputObjects</b> is part of the <a href="./Pod::Parser.html">Pod::Parser</a> distribution.</p>
+
+<p>See <a href="./Pod::Parser.html">Pod::Parser</a>, <a href="./Pod::Select.html">Pod::Select</a></p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Please report bugs using <a href="http://rt.cpan.org">http://rt.cpan.org</a>.</p>
+
+<p>Brad Appleton &lt;bradapp@enteract.com&gt;</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Pod::Parser, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Pod::Parser</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Pod::Parser</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Pod::InputObjects.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

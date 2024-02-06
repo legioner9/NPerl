@@ -1,0 +1,44 @@
+=over
+
+=item chown LIST
+X<chown> X<owner> X<user> X<group>
+
+Changes the owner (and group) of a list of files.  The first two
+elements of the list must be the I<numeric> uid and gid, in that
+order.  A value of -1 in either position is interpreted by most
+systems to leave that value unchanged.  Returns the number of files
+successfully changed.
+
+    my $cnt = chown $uid, $gid, 'foo', 'bar';
+    chown $uid, $gid, @filenames;
+
+On systems that support L<fchown(2)>, you may pass filehandles among the
+files.  On systems that don't support L<fchown(2)>, passing filehandles raises
+an exception.  Filehandles must be passed as globs or glob references to be
+recognized; barewords are considered filenames.
+
+Here's an example that looks up nonnumeric uids in the passwd file:
+
+    print "User: ";
+    chomp(my $user = <STDIN>);
+    print "Files: ";
+    chomp(my $pattern = <STDIN>);
+
+    my ($login,$pass,$uid,$gid) = getpwnam($user)
+        or die "$user not in passwd file";
+
+    my @ary = glob($pattern);  # expand filenames
+    chown $uid, $gid, @ary;
+
+On most systems, you are not allowed to change the ownership of the
+file unless you're the superuser, although you should be able to change
+the group to any of your secondary groups.  On insecure systems, these
+restrictions may be relaxed, but this is not a portable assumption.
+On POSIX systems, you can detect this condition this way:
+
+    use POSIX qw(sysconf _PC_CHOWN_RESTRICTED);
+    my $can_chown_giveaway = ! sysconf(_PC_CHOWN_RESTRICTED);
+
+Portability issues: L<perlport/chown>.
+
+=back

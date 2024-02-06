@@ -1,5 +1,5 @@
-# #!/usr/bin/perl -w
- #!/usr/bin/perl
+#!/usr/bin/perl -w 
+## !/usr/bin/perl 
 
  # Проверка переданного имени файла HTML
  die "Не задан файл HTML!" unless @ARGV;
@@ -20,9 +20,8 @@
    print F1 replace($m);   # Запись строки в новый файл
  }
 
- # Закрытие нового файла HTML
+ # Закрытие нового файла HTML 
  close(F1) or die $!;
-
 
 print "\ndone!";
 
@@ -32,3 +31,13 @@ print "\ndone!";
    $string =~ s/<(.+?)>/<\L$1\U>/g;
    return $string;
  }
+
+=head1 NAME
+
+My Script name
+
+=head1 DESCRIPTION
+
+Description of My Script
+
+=cut

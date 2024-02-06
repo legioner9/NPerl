@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test2 - Framework for writing test tools that all work together. - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Test2">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Test2.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Test2">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Test2">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Test2">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Test2">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Test2">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Test2">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Test2">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Test2">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Test2">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Test2">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Test2">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Test2">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Test2">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Test2">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Test2">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Test2">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Test2">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Test2">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Test2">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Test2">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Test2">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Test2">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Test2">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Test2">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Test2">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Test2">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Test2">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Test2">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Test2">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Test2">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Test2">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Test2">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Test2">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Test2">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Test2">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Test2">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Test2">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Test2">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Test2">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Test2">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Test2">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Test2">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Test2">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Test2">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Test2">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Test2">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Test2">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Test2">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Test2">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Test2">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Test2">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Test2">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Test2">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Test2">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Test2">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Test2">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Test2">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Test2">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Test2">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Test2">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Test2">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Test2">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Test2">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Test2">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Test2">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Test2">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Test2">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Test2">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Test2">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Test2">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Test2">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Test2">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Test2">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Test2">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Test2">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Test2">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Test2">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Test2">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Test2">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Test2">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Test2.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Test2">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Test2">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Test2">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Test2">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Test2">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Test2">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Test2">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Test2">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Test2">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Test2">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Test2">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Test2">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Test2">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Test2">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Test2">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Test2">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Test2">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Test2">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Test2">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Test2">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Test2">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Test2">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Test2">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Test2">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Test2">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Test2">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Test2">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Test2">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Test2">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Test2">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Test2">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Test2">5.35.1</a>
+          <a class="dropdown-item active" href="Test2.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="Test2.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="Test2.html">Test2</a>
+          <div id="more">
+            (<a href="Test2.txt">source</a>,
+            <a href="https://metacpan.org/pod/Test2">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 1.302183</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#WHAT-IS-NEW?">WHAT IS NEW?</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#GETTING-STARTED">GETTING STARTED</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#NAMESPACE-LAYOUT">NAMESPACE LAYOUT</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::Tools::">Test2::Tools::</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::Plugin::">Test2::Plugin::</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::Bundle::">Test2::Bundle::</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::Require::">Test2::Require::</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::Formatter::">Test2::Formatter::</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::Event::">Test2::Event::</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::Hub::">Test2::Hub::</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::IPC::">Test2::IPC::</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::IPC::Driver::">Test2::IPC::Driver::</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::Util::">Test2::Util::</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::API::">Test2::API::</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#Test2::">Test2::</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#CONTACTING-US">CONTACTING US</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#SOURCE">SOURCE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#MAINTAINERS">MAINTAINERS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#AUTHORS">AUTHORS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="Test2.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="Test2.html#NAME">#</a>NAME</h1>
+
+<p>Test2 - Framework for writing test tools that all work together.</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="Test2.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>Test2 is a new testing framework produced by forking <a href="./Test::Builder.html">Test::Builder</a>, completely refactoring it, adding many new features and capabilities.</p>
+
+<h2 id="WHAT-IS-NEW?"><a class="permalink" href="Test2.html#WHAT-IS-NEW?">#</a><a id="WHAT"></a><a id="WHAT-IS-NEW"></a>WHAT IS NEW?</h2>
+
+<dl>
+
+<dt id="Easier-to-test-new-testing-tools."><a class="permalink" href="Test2.html#Easier-to-test-new-testing-tools.">#</a><a id="Easier"></a><a id="Easier-to-test-new-testing-tools"></a>Easier to test new testing tools.</dt>
+<dd>
+
+<p>From the beginning Test2 was built with introspection capabilities. With Test::Builder it was difficult at best to capture test tool output for verification. Test2 Makes it easy with <code>Test2::API::intercept()</code>.</p>
+
+</dd>
+<dt id="Better-diagnostics-capabilities."><a class="permalink" href="Test2.html#Better-diagnostics-capabilities.">#</a><a id="Better"></a><a id="Better-diagnostics-capabilities"></a>Better diagnostics capabilities.</dt>
+<dd>
+
+<p>Test2 uses an <a href="./Test2::API::Context.html">Test2::API::Context</a> object to track filename, line number, and tool details. This object greatly simplifies tracking for where errors should be reported.</p>
+
+</dd>
+<dt id="Event-driven."><a class="permalink" href="Test2.html#Event-driven.">#</a><a id="Event"></a><a id="Event-driven"></a>Event driven.</dt>
+<dd>
+
+<p>Test2 based tools produce events which get passed through a processing system before being output by a formatter. This event system allows for rich plugin and extension support.</p>
+
+</dd>
+<dt id="More-complete-API."><a class="permalink" href="Test2.html#More-complete-API.">#</a><a id="More"></a><a id="More-complete-API"></a>More complete API.</dt>
+<dd>
+
+<p>Test::Builder only provided a handful of methods for generating lines of TAP. Test2 took inventory of everything people were doing with Test::Builder that required hacking it up. Test2 made public API functions for nearly all the desired functionality people didn&#39;t previously have.</p>
+
+</dd>
+<dt id="Support-for-output-other-than-TAP."><a class="permalink" href="Test2.html#Support-for-output-other-than-TAP.">#</a><a id="Support"></a><a id="Support-for-output-other-than-TAP"></a>Support for output other than TAP.</dt>
+<dd>
+
+<p>Test::Builder assumed everything would end up as TAP. Test2 makes no such assumption. Test2 provides ways for you to specify alternative and custom formatters.</p>
+
+</dd>
+<dt id="Subtest-implementation-is-more-sane."><a class="permalink" href="Test2.html#Subtest-implementation-is-more-sane.">#</a><a id="Subtest"></a><a id="Subtest-implementation-is-more-sane"></a>Subtest implementation is more sane.</dt>
+<dd>
+
+<p>The Test::Builder implementation of subtests was certifiably insane. Test2 uses a stacked event hub system that greatly improves how subtests are implemented.</p>
+
+</dd>
+<dt id="Support-for-threading/forking."><a class="permalink" href="Test2.html#Support-for-threading/forking.">#</a><a id="Support1"></a><a id="Support-for-threading-forking"></a>Support for threading/forking.</dt>
+<dd>
+
+<p>Test2 support for forking and threading can be turned on using <a href="./Test2::IPC.html">Test2::IPC</a>. Once turned on threading and forking operate sanely and work as one would expect.</p>
+
+</dd>
+</dl>
+
+<h1 id="GETTING-STARTED"><a class="permalink" href="Test2.html#GETTING-STARTED">#</a><a id="GETTING"></a>GETTING STARTED</h1>
+
+<p>If you are interested in writing tests using new tools then you should look at <a href="./Test2::Suite.html">Test2::Suite</a>. <a href="./Test2::Suite.html">Test2::Suite</a> is a separate cpan distribution that contains many tools implemented on Test2.</p>
+
+<p>If you are interested in writing new tools you should take a look at <a href="./Test2::API.html">Test2::API</a> first.</p>
+
+<h1 id="NAMESPACE-LAYOUT"><a class="permalink" href="Test2.html#NAMESPACE-LAYOUT">#</a><a id="NAMESPACE"></a>NAMESPACE LAYOUT</h1>
+
+<p>This describes the namespace layout for the Test2 ecosystem. Not all the namespaces listed here are part of the Test2 distribution, some are implemented in <a href="./Test2::Suite.html">Test2::Suite</a>.</p>
+
+<h2 id="Test2::Tools::"><a class="permalink" href="Test2.html#Test2::Tools::">#</a><a id="Test2"></a><a id="Test2::Tools"></a>Test2::Tools::</h2>
+
+<p>This namespace is for sets of tools. Modules in this namespace should export tools like <code>ok()</code> and <code>is()</code>. Most things written for Test2 should go here. Modules in this namespace <b>MUST NOT</b> export subs from other tools. See the <a href="Test2.html#Test2%3A%3ABundle%3A%3A">&quot;Test2::Bundle::&quot;</a> namespace if you want to do that.</p>
+
+<h2 id="Test2::Plugin::"><a class="permalink" href="Test2.html#Test2::Plugin::">#</a><a id="Test21"></a><a id="Test2::Plugin"></a>Test2::Plugin::</h2>
+
+<p>This namespace is for plugins. Plugins are modules that change or enhance the behavior of Test2. An example of a plugin is a module that sets the encoding to utf8 globally. Another example is a module that causes a bail-out event after the first test failure.</p>
+
+<h2 id="Test2::Bundle::"><a class="permalink" href="Test2.html#Test2::Bundle::">#</a><a id="Test22"></a><a id="Test2::Bundle"></a>Test2::Bundle::</h2>
+
+<p>This namespace is for bundles of tools and plugins. Loading one of these may load multiple tools and plugins. Modules in this namespace should not implement tools directly. In general modules in this namespace should load tools and plugins, then re-export things into the consumers namespace.</p>
+
+<h2 id="Test2::Require::"><a class="permalink" href="Test2.html#Test2::Require::">#</a><a id="Test23"></a><a id="Test2::Require"></a>Test2::Require::</h2>
+
+<p>This namespace is for modules that cause a test to be skipped when conditions do not allow it to run. Examples would be modules that skip the test on older perls, or when non-essential modules have not been installed.</p>
+
+<h2 id="Test2::Formatter::"><a class="permalink" href="Test2.html#Test2::Formatter::">#</a><a id="Test24"></a><a id="Test2::Formatter"></a>Test2::Formatter::</h2>
+
+<p>Formatters live under this namespace. <a href="./Test2::Formatter::TAP.html">Test2::Formatter::TAP</a> is the only formatter currently. It is acceptable for third party distributions to create new formatters under this namespace.</p>
+
+<h2 id="Test2::Event::"><a class="permalink" href="Test2.html#Test2::Event::">#</a><a id="Test25"></a><a id="Test2::Event"></a>Test2::Event::</h2>
+
+<p>Events live under this namespace. It is considered acceptable for third party distributions to add new event types in this namespace.</p>
+
+<h2 id="Test2::Hub::"><a class="permalink" href="Test2.html#Test2::Hub::">#</a><a id="Test26"></a><a id="Test2::Hub"></a>Test2::Hub::</h2>
+
+<p>Hub subclasses (and some hub utility objects) live under this namespace. It is perfectly reasonable for third party distributions to add new hub subclasses in this namespace.</p>
+
+<h2 id="Test2::IPC::"><a class="permalink" href="Test2.html#Test2::IPC::">#</a><a id="Test27"></a><a id="Test2::IPC"></a>Test2::IPC::</h2>
+
+<p>The IPC subsystem lives in this namespace. There are not many good reasons to add anything to this namespace, with exception of IPC drivers.</p>
+
+<h3 id="Test2::IPC::Driver::"><a class="permalink" href="Test2.html#Test2::IPC::Driver::">#</a><a id="Test28"></a><a id="Test2::IPC::Driver"></a>Test2::IPC::Driver::</h3>
+
+<p>IPC drivers live in this namespace. It is fine to create new IPC drivers and to put them in this namespace.</p>
+
+<h2 id="Test2::Util::"><a class="permalink" href="Test2.html#Test2::Util::">#</a><a id="Test29"></a><a id="Test2::Util"></a>Test2::Util::</h2>
+
+<p>This namespace is for general utilities used by testing tools. Please be considerate when adding new modules to this namespace.</p>
+
+<h2 id="Test2::API::"><a class="permalink" href="Test2.html#Test2::API::">#</a><a id="Test210"></a><a id="Test2::API"></a>Test2::API::</h2>
+
+<p>This is for Test2 API and related packages.</p>
+
+<h2 id="Test2::"><a class="permalink" href="Test2.html#Test2::">#</a><a id="Test211"></a>Test2::</h2>
+
+<p>The Test2:: namespace is intended for extensions and frameworks. Tools, Plugins, etc should not go directly into this namespace. However extensions that are used to build tools and plugins may go here.</p>
+
+<p>In short: If the module exports anything that should be run directly by a test script it should probably NOT go directly into <code>Test2::XXX</code>.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="Test2.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Test2::API.html">Test2::API</a> - Primary API functions.</p>
+
+<p><a href="./Test2::API::Context.html">Test2::API::Context</a> - Detailed documentation of the context object.</p>
+
+<p><a href="./Test2::IPC.html">Test2::IPC</a> - The IPC system used for threading/fork support.</p>
+
+<p><a href="./Test2::Formatter.html">Test2::Formatter</a> - Formatters such as TAP live here.</p>
+
+<p><a href="./Test2::Event.html">Test2::Event</a> - Events live in this namespace.</p>
+
+<p><a href="./Test2::Hub.html">Test2::Hub</a> - All events eventually funnel through a hub. Custom hubs are how <code>intercept()</code> and <code>run_subtest()</code> are implemented.</p>
+
+<h1 id="CONTACTING-US"><a class="permalink" href="Test2.html#CONTACTING-US">#</a><a id="CONTACTING"></a>CONTACTING US</h1>
+
+<p>Many Test2 developers and users lurk on <a href="irc://irc.perl.org/#perl-qa">irc://irc.perl.org/#perl-qa</a> and <a href="irc://irc.perl.org/#toolchain">irc://irc.perl.org/#toolchain</a>. We also have a slack team that can be joined by anyone with an <code>@cpan.org</code> email address <a href="https://perl-test2.slack.com/">https://perl-test2.slack.com/</a> If you do not have an <code>@cpan.org</code> email you can ask for a slack invite by emailing Chad Granum &lt;exodist@cpan.org&gt;.</p>
+
+<h1 id="SOURCE"><a class="permalink" href="Test2.html#SOURCE">#</a>SOURCE</h1>
+
+<p>The source code repository for Test2 can be found at <i>http://github.com/Test-More/test-more/</i>.</p>
+
+<h1 id="MAINTAINERS"><a class="permalink" href="Test2.html#MAINTAINERS">#</a>MAINTAINERS</h1>
+
+<dl>
+
+<dt id="Chad-Granum"><a class="permalink" href="Test2.html#Chad-Granum">#</a><a id="Chad-Granum-&lt;exodist@cpan.org&gt;"></a><a id="Chad"></a><a id="Chad-Granum-exodist-cpan.org"></a>Chad Granum &lt;exodist@cpan.org&gt;</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="AUTHORS"><a class="permalink" href="Test2.html#AUTHORS">#</a>AUTHORS</h1>
+
+<dl>
+
+<dt id="Chad-Granum1"><a class="permalink" href="Test2.html#Chad-Granum1">#</a><a id="Chad-Granum-&lt;exodist@cpan.org&gt;1"></a><a id="Chad1"></a><a id="Chad-Granum-exodist-cpan.org1"></a>Chad Granum &lt;exodist@cpan.org&gt;</dt>
+<dd>
+
+</dd>
+</dl>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="Test2.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>Copyright 2020 Chad Granum &lt;exodist@cpan.org&gt;.</p>
+
+<p>This program is free software; you can redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+<p>See <i>http://dev.perl.org/licenses/</i></p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

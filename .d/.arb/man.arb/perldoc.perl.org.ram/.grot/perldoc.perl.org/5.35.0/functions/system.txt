@@ -1,0 +1,86 @@
+=over
+
+=item system LIST
+X<system> X<shell>
+
+=item system PROGRAM LIST
+
+Does exactly the same thing as L<C<exec>|/exec LIST>, except that a fork is
+done first and the parent process waits for the child process to
+exit.  Note that argument processing varies depending on the
+number of arguments.  If there is more than one argument in LIST,
+or if LIST is an array with more than one value, starts the program
+given by the first element of the list with arguments given by the
+rest of the list.  If there is only one scalar argument, the argument
+is checked for shell metacharacters, and if there are any, the
+entire argument is passed to the system's command shell for parsing
+(this is C</bin/sh -c> on Unix platforms, but varies on other
+platforms).  If there are no shell metacharacters in the argument,
+it is split into words and passed directly to C<execvp>, which is
+more efficient.  On Windows, only the C<system PROGRAM LIST> syntax will
+reliably avoid using the shell; C<system LIST>, even with more than one
+element, will fall back to the shell if the first spawn fails.
+
+Perl will attempt to flush all files opened for
+output before any operation that may do a fork, but this may not be
+supported on some platforms (see L<perlport>).  To be safe, you may need
+to set L<C<$E<verbar>>|perlvar/$E<verbar>> (C<$AUTOFLUSH> in L<English>)
+or call the C<autoflush> method of L<C<IO::Handle>|IO::Handle/METHODS>
+on any open handles.
+
+The return value is the exit status of the program as returned by the
+L<C<wait>|/wait> call.  To get the actual exit value, shift right by
+eight (see below).  See also L<C<exec>|/exec LIST>.  This is I<not> what
+you want to use to capture the output from a command; for that you
+should use merely backticks or
+L<C<qxE<sol>E<sol>>|/qxE<sol>STRINGE<sol>>, as described in
+L<perlop/"`STRING`">.  Return value of -1 indicates a failure to start
+the program or an error of the L<wait(2)> system call (inspect
+L<C<$!>|perlvar/$!> for the reason).
+
+If you'd like to make L<C<system>|/system LIST> (and many other bits of
+Perl) die on error, have a look at the L<autodie> pragma.
+
+Like L<C<exec>|/exec LIST>, L<C<system>|/system LIST> allows you to lie
+to a program about its name if you use the C<system PROGRAM LIST>
+syntax.  Again, see L<C<exec>|/exec LIST>.
+
+Since C<SIGINT> and C<SIGQUIT> are ignored during the execution of
+L<C<system>|/system LIST>, if you expect your program to terminate on
+receipt of these signals you will need to arrange to do so yourself
+based on the return value.
+
+    my @args = ("command", "arg1", "arg2");
+    system(@args) == 0
+        or die "system @args failed: $?";
+
+If you'd like to manually inspect L<C<system>|/system LIST>'s failure,
+you can check all possible failure modes by inspecting
+L<C<$?>|perlvar/$?> like this:
+
+    if ($? == -1) {
+        print "failed to execute: $!\n";
+    }
+    elsif ($? & 127) {
+        printf "child died with signal %d, %s coredump\n",
+            ($? & 127),  ($? & 128) ? 'with' : 'without';
+    }
+    else {
+        printf "child exited with value %d\n", $? >> 8;
+    }
+
+Alternatively, you may inspect the value of
+L<C<${^CHILD_ERROR_NATIVE}>|perlvar/${^CHILD_ERROR_NATIVE}> with the
+L<C<W*()>|POSIX/C<WIFEXITED>> calls from the L<POSIX> module.
+
+When L<C<system>|/system LIST>'s arguments are executed indirectly by
+the shell, results and return codes are subject to its quirks.
+See L<perlop/"`STRING`"> and L<C<exec>|/exec LIST> for details.
+
+Since L<C<system>|/system LIST> does a L<C<fork>|/fork> and
+L<C<wait>|/wait> it may affect a C<SIGCHLD> handler.  See L<perlipc> for
+details.
+
+Portability issues: L<perlport/system>.
+
+=back

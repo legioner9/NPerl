@@ -1,0 +1,47 @@
+=over
+
+=item continue BLOCK
+X<continue>
+
+=item continue
+
+When followed by a BLOCK, L<C<continue>|/continue BLOCK> is actually a
+flow control statement rather than a function.  If there is a
+L<C<continue>|/continue BLOCK> BLOCK attached to a BLOCK (typically in a
+C<while> or C<foreach>), it is always executed just before the
+conditional is about to be evaluated again, just like the third part of
+a C<for> loop in C.  Thus it can be used to increment a loop variable,
+even when the loop has been continued via the L<C<next>|/next LABEL>
+statement (which is similar to the C L<C<continue>|/continue BLOCK>
+statement).
+
+L<C<last>|/last LABEL>, L<C<next>|/next LABEL>, or
+L<C<redo>|/redo LABEL> may appear within a
+L<C<continue>|/continue BLOCK> block; L<C<last>|/last LABEL> and
+L<C<redo>|/redo LABEL> behave as if they had been executed within the
+main block.  So will L<C<next>|/next LABEL>, but since it will execute a
+L<C<continue>|/continue BLOCK> block, it may be more entertaining.
+
+    while (EXPR) {
+        ### redo always comes here
+        do_something;
+    } continue {
+        ### next always comes here
+        do_something_else;
+        # then back the top to re-check EXPR
+    }
+    ### last always comes here
+
+Omitting the L<C<continue>|/continue BLOCK> section is equivalent to
+using an empty one, logically enough, so L<C<next>|/next LABEL> goes
+directly back to check the condition at the top of the loop.
+
+When there is no BLOCK, L<C<continue>|/continue BLOCK> is a function
+that falls through the current C<when> or C<default> block instead of
+iterating a dynamically enclosing C<foreach> or exiting a lexically
+enclosing C<given>.  In Perl 5.14 and earlier, this form of
+L<C<continue>|/continue BLOCK> was only available when the
+L<C<"switch"> feature|feature/The 'switch' feature> was enabled.  See
+L<feature> and L<perlsyn/"Switch Statements"> for more information.
+
+=back

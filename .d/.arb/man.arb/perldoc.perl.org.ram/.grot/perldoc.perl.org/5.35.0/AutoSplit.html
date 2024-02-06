@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AutoSplit - split a package for autoloading - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/AutoSplit">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="AutoSplit.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/AutoSplit">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/AutoSplit">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/AutoSplit">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/AutoSplit">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/AutoSplit">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/AutoSplit">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/AutoSplit">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/AutoSplit">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/AutoSplit">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/AutoSplit">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/AutoSplit">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/AutoSplit">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/AutoSplit">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/AutoSplit">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/AutoSplit">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/AutoSplit">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/AutoSplit">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/AutoSplit">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/AutoSplit">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/AutoSplit">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/AutoSplit">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/AutoSplit">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/AutoSplit">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/AutoSplit">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/AutoSplit">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/AutoSplit">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/AutoSplit">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/AutoSplit">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/AutoSplit">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/AutoSplit">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/AutoSplit">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/AutoSplit">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/AutoSplit">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/AutoSplit">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/AutoSplit">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/AutoSplit">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/AutoSplit">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/AutoSplit">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/AutoSplit">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/AutoSplit">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/AutoSplit">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/AutoSplit">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/AutoSplit">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/AutoSplit">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/AutoSplit">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/AutoSplit">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/AutoSplit">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/AutoSplit">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/AutoSplit">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/AutoSplit">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/AutoSplit">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/AutoSplit">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/AutoSplit">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/AutoSplit">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/AutoSplit">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/AutoSplit">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/AutoSplit">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/AutoSplit">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/AutoSplit">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/AutoSplit">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/AutoSplit">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/AutoSplit">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/AutoSplit">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/AutoSplit">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/AutoSplit">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/AutoSplit">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/AutoSplit">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/AutoSplit">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/AutoSplit">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/AutoSplit">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/AutoSplit">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/AutoSplit">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/AutoSplit">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/AutoSplit">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/AutoSplit">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/AutoSplit">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/AutoSplit">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/AutoSplit">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/AutoSplit">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/AutoSplit">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="AutoSplit.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/AutoSplit">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/AutoSplit">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/AutoSplit">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/AutoSplit">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/AutoSplit">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/AutoSplit">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/AutoSplit">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/AutoSplit">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/AutoSplit">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/AutoSplit">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/AutoSplit">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/AutoSplit">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/AutoSplit">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/AutoSplit">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/AutoSplit">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/AutoSplit">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/AutoSplit">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/AutoSplit">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/AutoSplit">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/AutoSplit">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/AutoSplit">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/AutoSplit">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/AutoSplit">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/AutoSplit">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/AutoSplit">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/AutoSplit">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/AutoSplit">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/AutoSplit">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/AutoSplit">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/AutoSplit">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/AutoSplit">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/AutoSplit">5.35.1</a>
+          <a class="dropdown-item active" href="AutoSplit.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="AutoSplit.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="AutoSplit.html">AutoSplit</a>
+          <div id="more">
+            (<a href="AutoSplit.txt">source</a>,
+            <a href="https://metacpan.org/pod/AutoSplit">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 1.06</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="AutoSplit.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="AutoSplit.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="AutoSplit.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="AutoSplit.html#Multiple-packages">Multiple packages</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="AutoSplit.html#DIAGNOSTICS">DIAGNOSTICS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="AutoSplit.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="AutoSplit.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="AutoSplit.html#NAME">#</a>NAME</h1>
+
+<p>AutoSplit - split a package for autoloading</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="AutoSplit.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>autosplit($file, $dir, $keep, $check, $modtime);
+
+autosplit_lib_modules(@modules);</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="AutoSplit.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This function will split up your program into files that the AutoLoader module can handle. It is used by both the standard perl libraries and by the MakeMaker utility, to automatically configure libraries for autoloading.</p>
+
+<p>The <code>autosplit</code> interface splits the specified file into a hierarchy rooted at the directory <code>$dir</code>. It creates directories as needed to reflect class hierarchy, and creates the file <i>autosplit.ix</i>. This file acts as both forward declaration of all package routines, and as timestamp for the last update of the hierarchy.</p>
+
+<p>The remaining three arguments to <code>autosplit</code> govern other options to the autosplitter.</p>
+
+<dl>
+
+<dt id="$keep"><a class="permalink" href="AutoSplit.html#$keep">#</a><a id="keep"></a>$keep</dt>
+<dd>
+
+<p>If the third argument, <i>$keep</i>, is false, then any pre-existing <code>*.al</code> files in the autoload directory are removed if they are no longer part of the module (obsoleted functions). $keep defaults to 0.</p>
+
+</dd>
+<dt id="$check"><a class="permalink" href="AutoSplit.html#$check">#</a><a id="check"></a>$check</dt>
+<dd>
+
+<p>The fourth argument, <i>$check</i>, instructs <code>autosplit</code> to check the module currently being split to ensure that it includes a <code>use</code> specification for the AutoLoader module, and skips the module if AutoLoader is not detected. $check defaults to 1.</p>
+
+</dd>
+<dt id="$modtime"><a class="permalink" href="AutoSplit.html#$modtime">#</a><a id="modtime"></a>$modtime</dt>
+<dd>
+
+<p>Lastly, the <i>$modtime</i> argument specifies that <code>autosplit</code> is to check the modification time of the module against that of the <code>autosplit.ix</code> file, and only split the module if it is newer. $modtime defaults to 1.</p>
+
+</dd>
+</dl>
+
+<p>Typical use of AutoSplit in the perl MakeMaker utility is via the command-line with:</p>
+
+<pre><code>perl -e &#39;use AutoSplit; autosplit($ARGV[0], $ARGV[1], 0, 1, 1)&#39;</code></pre>
+
+<p>Defined as a Make macro, it is invoked with file and directory arguments; <code>autosplit</code> will split the specified file into the specified directory and delete obsolete <code>.al</code> files, after checking first that the module does use the AutoLoader, and ensuring that the module is not already currently split in its current form (the modtime test).</p>
+
+<p>The <code>autosplit_lib_modules</code> form is used in the building of perl. It takes as input a list of files (modules) that are assumed to reside in a directory <b>lib</b> relative to the current directory. Each file is sent to the autosplitter one at a time, to be split into the directory <b>lib/auto</b>.</p>
+
+<p>In both usages of the autosplitter, only subroutines defined following the perl <i>__END__</i> token are split out into separate files. Some routines may be placed prior to this marker to force their immediate loading and parsing.</p>
+
+<h2 id="Multiple-packages"><a class="permalink" href="AutoSplit.html#Multiple-packages">#</a><a id="Multiple"></a>Multiple packages</h2>
+
+<p>As of version 1.01 of the AutoSplit module it is possible to have multiple packages within a single file. Both of the following cases are supported:</p>
+
+<pre><code>package NAME;
+__END__
+sub AAA { ... }
+package NAME::option1;
+sub BBB { ... }
+package NAME::option2;
+sub BBB { ... }
+
+package NAME;
+__END__
+sub AAA { ... }
+sub NAME::option1::BBB { ... }
+sub NAME::option2::BBB { ... }</code></pre>
+
+<h1 id="DIAGNOSTICS"><a class="permalink" href="AutoSplit.html#DIAGNOSTICS">#</a>DIAGNOSTICS</h1>
+
+<p><code>AutoSplit</code> will inform the user if it is necessary to create the top-level directory specified in the invocation. It is preferred that the script or installation process that invokes <code>AutoSplit</code> have created the full directory path ahead of time. This warning may indicate that the module is being split into an incorrect path.</p>
+
+<p><code>AutoSplit</code> will warn the user of all subroutines whose name causes potential file naming conflicts on machines with drastically limited (8 characters or less) file name length. Since the subroutine name is used as the file name, these warnings can aid in portability to such systems.</p>
+
+<p>Warnings are issued and the file skipped if <code>AutoSplit</code> cannot locate either the <i>__END__</i> marker or a &quot;package Name;&quot;-style specification.</p>
+
+<p><code>AutoSplit</code> will also emit general diagnostics for inability to create directories or files.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="AutoSplit.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p><code>AutoSplit</code> is maintained by the perl5-porters. Please direct any questions to the canonical mailing list. Anything that is applicable to the CPAN release can be sent to its maintainer, though.</p>
+
+<p>Author and Maintainer: The Perl5-Porters &lt;perl5-porters@perl.org&gt;</p>
+
+<p>Maintainer of the CPAN release: Steffen Mueller &lt;smueller@cpan.org&gt;</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a class="permalink" href="AutoSplit.html#COPYRIGHT-AND-LICENSE">#</a><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>This package has been part of the perl core since the first release of perl5. It has been released separately to CPAN so older installations can benefit from bug fixes.</p>
+
+<p>This package has the same copyright and license as the perl core:</p>
+
+<pre><code class="plaintext">             Copyright (C) 1993, 1994, 1995, 1996, 1997, 1998, 1999,
+        2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008
+        by Larry Wall and others
+    
+			    All rights reserved.
+    
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of either:
+    
+	a) the GNU General Public License as published by the Free
+	Software Foundation; either version 1, or (at your option) any
+	later version, or
+    
+	b) the &quot;Artistic License&quot; which comes with this Kit.
+    
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See either
+    the GNU General Public License or the Artistic License for more details.
+    
+    You should have received a copy of the Artistic License with this
+    Kit, in the file named &quot;Artistic&quot;.  If not, I&#39;ll be glad to provide one.
+    
+    You should also have received a copy of the GNU General Public License
+    along with this program in the file named &quot;Copying&quot;. If not, write to the 
+    Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 
+    02111-1307, USA or visit their web page on the internet at
+    http://www.gnu.org/copyleft/gpl.html.
+    
+    For those of you that choose to use the GNU General Public License,
+    my interpretation of the GNU General Public License is that no Perl
+    script falls under the terms of the GPL unless you explicitly put
+    said script under the terms of the GPL yourself.  Furthermore, any
+    object code linked with perl does not automatically fall under the
+    terms of the GPL, provided such object code only adds definitions
+    of subroutines and variables, and does not otherwise impair the
+    resulting interpreter from executing any standard Perl script.  I
+    consider linking in C subroutines in this manner to be the moral
+    equivalent of defining subroutines in the Perl language itself.  You
+    may sell such an object file as proprietary provided that you provide
+    or offer to provide the Perl source, as specified by the GNU General
+    Public License.  (This is merely an alternate way of specifying input
+    to the program.)  You may also sell a binary produced by the dumping of
+    a running Perl script that belongs to you, provided that you provide or
+    offer to provide the Perl source as specified by the GPL.  (The
+    fact that a Perl interpreter and your code are in the same binary file
+    is, in this case, a form of mere aggregation.)  This is my interpretation
+    of the GPL.  If you still have concerns or difficulties understanding
+    my intent, feel free to contact me.  Of course, the Artistic License
+    spells all this out for your protection, so you may prefer to use that.</code></pre>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

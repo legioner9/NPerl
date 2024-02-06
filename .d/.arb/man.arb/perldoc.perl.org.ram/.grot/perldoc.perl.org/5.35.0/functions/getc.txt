@@ -1,0 +1,40 @@
+=over
+
+=item getc FILEHANDLE
+X<getc> X<getchar> X<character> X<file, read>
+
+=item getc
+
+Returns the next character from the input file attached to FILEHANDLE,
+or the undefined value at end of file or if there was an error (in
+the latter case L<C<$!>|perlvar/$!> is set).  If FILEHANDLE is omitted,
+reads from
+STDIN.  This is not particularly efficient.  However, it cannot be
+used by itself to fetch single characters without waiting for the user
+to hit enter.  For that, try something more like:
+
+    if ($BSD_STYLE) {
+        system "stty cbreak </dev/tty >/dev/tty 2>&1";
+    }
+    else {
+        system "stty", '-icanon', 'eol', "\001";
+    }
+
+    my $key = getc(STDIN);
+
+    if ($BSD_STYLE) {
+        system "stty -cbreak </dev/tty >/dev/tty 2>&1";
+    }
+    else {
+        system 'stty', 'icanon', 'eol', '^@'; # ASCII NUL
+    }
+    print "\n";
+
+Determination of whether C<$BSD_STYLE> should be set is left as an
+exercise to the reader.
+
+The L<C<POSIX::getattr>|POSIX/C<getattr>> function can do this more
+portably on systems purporting POSIX compliance.  See also the
+L<C<Term::ReadKey>|Term::ReadKey> module on CPAN.
+
+=back

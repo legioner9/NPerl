@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>HTTP::CookieJar - A minimalist HTTP user agent cookie jar - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of HTTP-CookieJar - MetaCPAN" href="https://metacpan.org/dist/HTTP-CookieJar/releases.rss" />
+        <link rel="canonical" href="./HTTP::CookieJar.html" />
+        <meta name="description" content="A minimalist HTTP user agent cookie jar" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/HTTP::CookieJar" />
+<meta name="twitter:title"       content="HTTP::CookieJar" />
+<meta name="twitter:description" content="A minimalist HTTP user agent cookie jar" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./HTTP::CookieJar.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of HTTP-CookieJar was released.">
+      <span class="relatize">25 Jul 2022 13:47:11 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/HTTP-CookieJar">HTTP-CookieJar</a>
+  </li>
+  <li>
+    Module version: 0.014
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/HTTP-CookieJar/source/lib/HTTP/CookieJar.pm">Source</a>
+    (<a href="https://metacpan.org/dist/HTTP-CookieJar/source/lib/HTTP/CookieJar.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/HTTP-CookieJar/source/lib/HTTP">Browse</a>
+    (<a href="https://metacpan.org/dist/HTTP-CookieJar/source/lib/HTTP?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/HTTP-CookieJar/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="https://github.com/dagolden/HTTP-CookieJar">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/HTTP-CookieJar/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/dagolden/HTTP-CookieJar">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/dagolden/HTTP-CookieJar/issues">Issues</a>
+      (1)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=HTTP-CookieJar+0.014" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/H/HTTP-CookieJar.html?oncpan=1&amp;distmat=1&amp;version=0.014&amp;grade=2" style="color: #090">4033</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/H/HTTP-CookieJar.html?oncpan=1&amp;distmat=1&amp;version=0.014&amp;grade=3" style="color: #900">2</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/H/HTTP-CookieJar.html?oncpan=1&amp;distmat=1&amp;version=0.014&amp;grade=4">1</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/DAGOLDEN/HTTP-CookieJar-0.014">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on HTTP-CookieJar who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/HTTP-CookieJar-0.014/index.html">78.82% Coverage </a>
+    </li>
+    <li>
+      License: apache_2_0
+    </li>
+    <li>
+      Perl: v5.8.1
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/HTTP-CookieJar/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/D/DA/DAGOLDEN/HTTP-CookieJar-0.014.tar.gz">
+      Download (<span itemprop="fileSize">28.36KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FDAGOLDEN%2FHTTP-CookieJar-0.014%2Flib%2FHTTP%2FCookieJar.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/HTTP-CookieJar/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/HTTP-CookieJar/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:HTTP-CookieJar">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="HTTP-CookieJar">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/HTTP/CookieJar.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="DAGOLDEN/HTTP-CookieJar-0.014"
+>0.014
+  (DAGOLDEN on 2022-07-25)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.013-TRIAL"
+>0.013-TRIAL DEV
+  (DAGOLDEN on 2022-07-17)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.012"
+>0.012
+  (DAGOLDEN on 2021-06-16)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.011-TRIAL"
+>0.011-TRIAL DEV
+  (DAGOLDEN on 2021-06-15)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.010"
+>0.010
+  (DAGOLDEN on 2020-09-20)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.009-TRIAL"
+>0.009-TRIAL DEV
+  (DAGOLDEN on 2020-09-18)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.008"
+>0.008
+  (DAGOLDEN on 2015-11-07)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.007"
+>0.007
+  (DAGOLDEN on 2015-08-21)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.006"
+>0.006
+  (DAGOLDEN on 2014-02-20)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.005"
+>0.005
+  (DAGOLDEN on 2013-08-04)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.004"
+>0.004
+  (DAGOLDEN on 2013-04-24)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.003"
+>0.003
+  (DAGOLDEN on 2013-03-07)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.002"
+>0.002
+  (DAGOLDEN on 2013-03-07)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.001"
+>0.001
+  (DAGOLDEN on 2013-02-13)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/DAGOLDEN/HTTP-CookieJar-0.014/diff/' + encodeURIComponent(this.value) + '/lib/HTTP/CookieJar.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="DAGOLDEN/HTTP-CookieJar-0.014"
+>0.014
+  (DAGOLDEN on 2022-07-25)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.013-TRIAL"
+>0.013-TRIAL DEV
+  (DAGOLDEN on 2022-07-17)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.012"
+>0.012
+  (DAGOLDEN on 2021-06-16)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.011-TRIAL"
+>0.011-TRIAL DEV
+  (DAGOLDEN on 2021-06-15)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.010"
+>0.010
+  (DAGOLDEN on 2020-09-20)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.009-TRIAL"
+>0.009-TRIAL DEV
+  (DAGOLDEN on 2020-09-18)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.008"
+>0.008
+  (DAGOLDEN on 2015-11-07)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.007"
+>0.007
+  (DAGOLDEN on 2015-08-21)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.006"
+>0.006
+  (DAGOLDEN on 2014-02-20)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.005"
+>0.005
+  (DAGOLDEN on 2013-08-04)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.004"
+>0.004
+  (DAGOLDEN on 2013-04-24)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.003"
+>0.003
+  (DAGOLDEN on 2013-03-07)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.002"
+>0.002
+  (DAGOLDEN on 2013-03-07)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.001"
+>0.001
+  (DAGOLDEN on 2013-02-13)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Carp" title="Carp" class="ellipsis">Carp</a></li>
+  <li><a href="https://metacpan.org/pod/HTTP::Date" title="HTTP::Date" class="ellipsis">HTTP::Date</a></li>
+  <li><a href="https://metacpan.org/pod/Time::Local" title="Time::Local" class="ellipsis">Time::Local</a></li>
+  <li><a href="https://metacpan.org/pod/parent" title="parent" class="ellipsis">parent</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/warnings" title="warnings" class="ellipsis">warnings</a></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/HTTP::CookieJar/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=HTTP%3A%3ACookieJar">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=HTTP-CookieJar">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/DAGOLDEN/HTTP-CookieJar-0.014/view/lib/HTTP/CookieJar.pm">This version</a>
+    </li>
+    <li>
+      <a href="./HTTP::CookieJar.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/KEEDI"><img src="https://www.gravatar.com/avatar/95f905a7a4ccc573c711e9d264c0fde8?d=identicon&amp;s=20" title="KEEDI" alt="KEEDI"></a>
+<a class="display-all" href="https://metacpan.org/author/DAGOLDEN"><img src="https://www.gravatar.com/avatar/bb755c989fcb9897f28a2c6e00df61e2?d=identicon&amp;s=20" title="DAGOLDEN" alt="DAGOLDEN"></a>
+<a class="display-all" href="https://metacpan.org/author/RWP"><img src="https://www.gravatar.com/avatar/7110eb2389e69a066d9d7cad7a1cc2bf?d=identicon&amp;s=20" title="RWP" alt="RWP"></a>
+<a class="display-all" href="https://metacpan.org/author/OALDERS"><img src="https://www.gravatar.com/avatar/7a66ba9f5f4af93dd55fcdc0e69c0b55?d=identicon&amp;s=20" title="OALDERS" alt="OALDERS"></a>
+<a class="display-all" href="https://metacpan.org/author/ILUX"><img src="https://www.gravatar.com/avatar/1cd0eea5e6ca13346060bb9d2c1e286b?d=identicon&amp;s=20" title="ILUX" alt="ILUX"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/HTTP-CookieJar/plussers">7 PAUSE users</a>
+</div>
+<div>
+    2 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 2 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-contrib-email="grinnz@grinnz.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      Dan Book
+    </li>
+    <li class="contributor"
+      data-contrib-email="jdv@base2bio.com"
+    >
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/d41d8cd98f00b204e9800998ecf8427e?d=identicon&amp;s=20" />
+      jvolkening
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/DAGOLDEN" class="author-name">David Golden</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/HTTP/CookieJar.pm&#39;" class="">
+<option
+  selected
+  value="DAGOLDEN/HTTP-CookieJar-0.014"
+>0.014
+  (DAGOLDEN on 2022-07-25)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.013-TRIAL"
+>0.013-TRIAL DEV
+  (DAGOLDEN on 2022-07-17)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.012"
+>0.012
+  (DAGOLDEN on 2021-06-16)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.011-TRIAL"
+>0.011-TRIAL DEV
+  (DAGOLDEN on 2021-06-15)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.010"
+>0.010
+  (DAGOLDEN on 2020-09-20)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.009-TRIAL"
+>0.009-TRIAL DEV
+  (DAGOLDEN on 2020-09-18)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.008"
+>0.008
+  (DAGOLDEN on 2015-11-07)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.007"
+>0.007
+  (DAGOLDEN on 2015-08-21)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.006"
+>0.006
+  (DAGOLDEN on 2014-02-20)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.005"
+>0.005
+  (DAGOLDEN on 2013-08-04)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.004"
+>0.004
+  (DAGOLDEN on 2013-04-24)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.003"
+>0.003
+  (DAGOLDEN on 2013-03-07)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.002"
+>0.002
+  (DAGOLDEN on 2013-03-07)</option>
+<option
+  
+  value="DAGOLDEN/HTTP-CookieJar-0.001"
+>0.001
+  (DAGOLDEN on 2013-02-13)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/HTTP-CookieJar">HTTP-CookieJar-0.014</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage four &#10;
+          • 30 direct dependents &#10;          • 6397 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="HTTP-CookieJar-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="HTTP-CookieJar-0.014">
+    <input type="hidden" name="author" value="DAGOLDEN">
+    <input type="hidden" name="distribution" value="HTTP-CookieJar">
+    <button type="submit" class="favorite highlight"><span>9</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./HTTP::CookieJar.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>9</span> ++</a>
+</div>
+   / <span>HTTP::CookieJar</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./HTTP::CookieJar.html#NAME">NAME</a></li>
+  <li><a href="./HTTP::CookieJar.html#VERSION">VERSION</a></li>
+  <li><a href="./HTTP::CookieJar.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./HTTP::CookieJar.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./HTTP::CookieJar.html#CONSTRUCTORS">CONSTRUCTORS</a>
+    <ul>
+      <li><a href="./HTTP::CookieJar.html#new">new</a></li>
+    </ul>
+  </li>
+  <li><a href="./HTTP::CookieJar.html#METHODS">METHODS</a>
+    <ul>
+      <li><a href="./HTTP::CookieJar.html#add">add</a></li>
+      <li><a href="./HTTP::CookieJar.html#clear">clear</a></li>
+      <li><a href="./HTTP::CookieJar.html#cookies_for">cookies_for</a></li>
+      <li><a href="./HTTP::CookieJar.html#cookie_header">cookie_header</a></li>
+      <li><a href="./HTTP::CookieJar.html#dump_cookies">dump_cookies</a></li>
+      <li><a href="./HTTP::CookieJar.html#load_cookies">load_cookies</a></li>
+    </ul>
+  </li>
+  <li><a href="./HTTP::CookieJar.html#LIMITATIONS-AND-CAVEATS">LIMITATIONS AND CAVEATS</a>
+    <ul>
+      <li><a href="./HTTP::CookieJar.html#RFC-6265-vs-prior-standards">RFC 6265 vs prior standards</a></li>
+      <li><a href="./HTTP::CookieJar.html#Internationalized-domain-names">Internationalized domain names</a></li>
+      <li><a href="./HTTP::CookieJar.html#Public-suffixes">Public suffixes</a></li>
+      <li><a href="./HTTP::CookieJar.html#Third-party-cookies">Third-party cookies</a></li>
+    </ul>
+  </li>
+  <li><a href="./HTTP::CookieJar.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./HTTP::CookieJar.html#SUPPORT">SUPPORT</a>
+    <ul>
+      <li><a href="./HTTP::CookieJar.html#Bugs-/-Feature-Requests">Bugs / Feature Requests</a></li>
+      <li><a href="./HTTP::CookieJar.html#Source-Code">Source Code</a></li>
+    </ul>
+  </li>
+  <li><a href="./HTTP::CookieJar.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./HTTP::CookieJar.html#CONTRIBUTORS">CONTRIBUTORS</a></li>
+  <li><a href="./HTTP::CookieJar.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>HTTP::CookieJar - A minimalist HTTP user agent cookie jar</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>version 0.014</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  use HTTP::CookieJar;
+
+  my $jar = HTTP::CookieJar-&gt;new;
+
+  # add cookie received from a request
+  $jar-&gt;add( &quot;http://www.example.com/&quot;, &quot;CUSTOMER=WILE_E_COYOTE; Path=/; Domain=example.com&quot; );
+
+  # extract cookie header for a given request
+  my $cookie = $jar-&gt;cookie_header( &quot;http://www.example.com/&quot; );</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>This module implements a minimalist HTTP user agent cookie jar in conformance with <a href="http://tools.ietf.org/html/rfc6265">RFC 6265</a>.</p>
+
+<p>Unlike the commonly used <a href="https://metacpan.org/pod/HTTP::Cookies">HTTP::Cookies</a> module, this module does not require use of <a href="./HTTP::Request.html">HTTP::Request</a> and <a href="./HTTP::Response.html">HTTP::Response</a> objects. An LWP-compatible adapter is available as <a href="https://metacpan.org/pod/HTTP::CookieJar::LWP">HTTP::CookieJar::LWP</a>.</p>
+
+<h1 id="CONSTRUCTORS">CONSTRUCTORS</h1>
+
+<h2 id="new">new</h2>
+
+<pre><code>    my $jar = HTTP::CookieJar-&gt;new;</code></pre>
+
+<p>Return a new, empty cookie jar</p>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="add">add</h2>
+
+<pre><code>    $jar-&gt;add(
+        &quot;http://www.example.com/&quot;, &quot;lang=en-US; Path=/; Domain=example.com&quot;
+    );</code></pre>
+
+<p>Given a request URL and a <code>Set-Cookie</code> header string, attempts to adds the cookie to the jar. If the cookie is expired, instead it deletes any matching cookie from the jar. A <code>Max-Age</code> attribute will be converted to an absolute <code>Expires</code> attribute.</p>
+
+<p>It will throw an exception if the request URL is missing or invalid. Returns true if successful cookie processing or undef/empty-list on failure.</p>
+
+<h2 id="clear">clear</h2>
+
+<pre><code>    $jar-&gt;clear</code></pre>
+
+<p>Empties the cookie jar.</p>
+
+<h2 id="cookies_for">cookies_for</h2>
+
+<pre><code>    my @cookies = $jar-&gt;cookies_for(&quot;http://www.example.com/foo/bar&quot;);</code></pre>
+
+<p>Given a request URL, returns a list of hash references representing cookies that should be sent. The hash references are copies -- changing values will not change the cookies in the jar.</p>
+
+<p>Cookies set <code>secure</code> will only be returned if the request scheme is <code>https</code>. Expired cookies will not be returned.</p>
+
+<p>Keys of a cookie hash reference might include:</p>
+
+<ul>
+
+<li><p>name -- the name of the cookie</p>
+
+</li>
+<li><p>value -- the value of the cookie</p>
+
+</li>
+<li><p>domain -- the domain name to which the cookie applies</p>
+
+</li>
+<li><p>path -- the path to which the cookie applies</p>
+
+</li>
+<li><p>expires -- if present, when the cookie expires in epoch seconds</p>
+
+</li>
+<li><p>secure -- if present, the cookie was set <code>Secure</code></p>
+
+</li>
+<li><p>httponly -- if present, the cookie was set <code>HttpOnly</code></p>
+
+</li>
+<li><p>hostonly -- if present, the cookie may only be used with the domain as a host</p>
+
+</li>
+<li><p>creation_time -- epoch time when the cookie was first stored</p>
+
+</li>
+<li><p>last_access_time -- epoch time when the cookie was last accessed (i.e. &quot;now&quot;)</p>
+
+</li>
+</ul>
+
+<p>Keep in mind that <code>httponly</code> means it should only be used in requests and not made available via Javascript, etc. This is pretty meaningless for Perl user agents.</p>
+
+<p>Generally, user agents should use the <code>cookie_header</code> method instead.</p>
+
+<p>It will throw an exception if the request URL is missing or invalid.</p>
+
+<h2 id="cookie_header">cookie_header</h2>
+
+<pre><code>    my $header = $jar-&gt;cookie_header(&quot;http://www.example.com/foo/bar&quot;);</code></pre>
+
+<p>Given a request URL, returns a correctly-formatted string with all relevant cookies for the request. This string is ready to be used in a <code>Cookie</code> header in an HTTP request. E.g.:</p>
+
+<pre><code>    SID=31d4d96e407aad42; lang=en-US</code></pre>
+
+<p>It follows the same exclusion rules as <code>cookies_for</code>.</p>
+
+<p>If the request is invalid or no cookies apply, it will return an empty string.</p>
+
+<h2 id="dump_cookies">dump_cookies</h2>
+
+<pre><code>    my @list = $jar-&gt;dump_cookies;
+    my @list = $jar-&gt;dump_cookies( { persistent =&gt; 1 } );</code></pre>
+
+<p>Returns a list of raw cookies in string form. The strings resemble what would be received from <code>Set-Cookie</code> headers, but with additional internal fields. The list is only intended for use with <code>load_cookies</code> to allow cookie jar persistence.</p>
+
+<p>If a hash reference with a true <code>persistent</code> key is given as an argument, cookies without an <code>Expires</code> time (i.e. &quot;session cookies&quot;) will be omitted.</p>
+
+<p>Here is a trivial example of saving a cookie jar file with <a href="./Path::Tiny.html">Path::Tiny</a>:</p>
+
+<pre><code>    path(&quot;jar.txt&quot;)-&gt;spew( join &quot;\n&quot;, $jar-&gt;dump_cookies );</code></pre>
+
+<h2 id="load_cookies">load_cookies</h2>
+
+<pre><code>    $jar-&gt;load_cookies( @cookies );</code></pre>
+
+<p>Given a list of cookie strings from <code>dump_cookies</code>, it adds them to the cookie jar. Cookies added in this way will supersede any existing cookies with similar domain, path and name.</p>
+
+<p>It returns the jar object for convenience when loading a new object:</p>
+
+<pre><code>    my $jar = HTTP::CookieJar-&gt;new-&gt;load_cookies( @cookies );</code></pre>
+
+<p>Here is a trivial example of loading a cookie jar file with <a href="./Path::Tiny.html">Path::Tiny</a>:</p>
+
+<pre><code>    my $jar = HTTP::CookieJar-&gt;new-&gt;load_cookies(
+        path(&quot;jar.txt&quot;)-&gt;lines
+    );</code></pre>
+
+<h1 id="LIMITATIONS-AND-CAVEATS"><a id="LIMITATIONS"></a>LIMITATIONS AND CAVEATS</h1>
+
+<h2 id="RFC-6265-vs-prior-standards"><a id="RFC"></a>RFC 6265 vs prior standards</h2>
+
+<p>This modules adheres as closely as possible to the user-agent rules of RFC 6265. Therefore, it does not handle nor generate <code>Set-Cookie2</code> and <code>Cookie2</code> headers, implement <code>.local</code> suffixes, or do path/domain matching in accord with prior RFC&#39;s.</p>
+
+<h2 id="Internationalized-domain-names"><a id="Internationalized"></a>Internationalized domain names</h2>
+
+<p>Internationalized domain names given in requests must be properly encoded in ASCII form.</p>
+
+<h2 id="Public-suffixes"><a id="Public"></a>Public suffixes</h2>
+
+<p>If <a href="https://metacpan.org/pod/Mozilla::PublicSuffix">Mozilla::PublicSuffix</a> is installed, cookie domains will be checked against the public suffix list. Public suffix cookies are only allowed as host-only cookies.</p>
+
+<h2 id="Third-party-cookies"><a id="Third"></a>Third-party cookies</h2>
+
+<p>According to RFC 6265, a cookie may be accepted only if has no <code>Domain</code> attribute (in which case it is &quot;host-only&quot;) or if the <code>Domain</code> attribute is a suffix of the request URL. This effectively prohibits Site A from setting a cookie for unrelated Site B, which is one potential third-party cookie vector.</p>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<ul>
+
+<li><p><a href="https://metacpan.org/pod/HTTP::Cookies">HTTP::Cookies</a></p>
+
+</li>
+<li><p><a href="https://metacpan.org/pod/Mojo::UserAgent::CookieJar">Mojo::UserAgent::CookieJar</a></p>
+
+</li>
+</ul>
+
+<h1 id="SUPPORT">SUPPORT</h1>
+
+<h2 id="Bugs-/-Feature-Requests"><a id="Bugs"></a><a id="Bugs---Feature-Requests"></a>Bugs / Feature Requests</h2>
+
+<p>Please report any bugs or feature requests through the issue tracker at <a href="https://github.com/dagolden/HTTP-CookieJar/issues">https://github.com/dagolden/HTTP-CookieJar/issues</a>. You will be notified automatically of any progress on your issue.</p>
+
+<h2 id="Source-Code"><a id="Source"></a>Source Code</h2>
+
+<p>This is open source software. The code repository is available for public review and contribution under the terms of the license.</p>
+
+<p><a href="https://github.com/dagolden/HTTP-CookieJar">https://github.com/dagolden/HTTP-CookieJar</a></p>
+
+<pre><code>  git clone https://github.com/dagolden/HTTP-CookieJar.git</code></pre>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>David Golden &lt;dagolden@cpan.org&gt;</p>
+
+<h1 id="CONTRIBUTORS">CONTRIBUTORS</h1>
+
+<ul>
+
+<li><p>Dan Book &lt;grinnz@grinnz.com&gt;</p>
+
+</li>
+<li><p>David Golden &lt;xdg@xdg.me&gt;</p>
+
+</li>
+<li><p>jvolkening &lt;jdv@base2bio.com&gt;</p>
+
+</li>
+</ul>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>This software is Copyright (c) 2013 by David Golden.</p>
+
+<p>This is free software, licensed under:</p>
+
+<pre><code>  The Apache License, Version 2.0, January 2004</code></pre></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install HTTP::CookieJar, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm HTTP::CookieJar</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install HTTP::CookieJar</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./HTTP::CookieJar.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>

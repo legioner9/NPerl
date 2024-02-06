@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PerlIO::via - Helper class for PerlIO layers implemented in perl - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/PerlIO::via">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./PerlIO::via.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/PerlIO::via">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/PerlIO::via">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/PerlIO::via">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/PerlIO::via">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/PerlIO::via">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/PerlIO::via">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/PerlIO::via">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/PerlIO::via">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/PerlIO::via">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/PerlIO::via">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/PerlIO::via">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/PerlIO::via">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/PerlIO::via">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/PerlIO::via">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/PerlIO::via">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/PerlIO::via">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/PerlIO::via">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/PerlIO::via">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/PerlIO::via">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/PerlIO::via">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/PerlIO::via">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/PerlIO::via">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/PerlIO::via">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/PerlIO::via">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/PerlIO::via">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/PerlIO::via">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/PerlIO::via">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/PerlIO::via">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/PerlIO::via">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/PerlIO::via">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/PerlIO::via">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/PerlIO::via">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/PerlIO::via">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/PerlIO::via">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/PerlIO::via">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/PerlIO::via">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/PerlIO::via">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/PerlIO::via">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/PerlIO::via">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/PerlIO::via">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/PerlIO::via">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/PerlIO::via">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/PerlIO::via">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/PerlIO::via">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/PerlIO::via">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/PerlIO::via">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/PerlIO::via">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/PerlIO::via">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/PerlIO::via">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/PerlIO::via">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/PerlIO::via">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/PerlIO::via">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/PerlIO::via">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/PerlIO::via">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/PerlIO::via">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/PerlIO::via">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/PerlIO::via">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/PerlIO::via">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/PerlIO::via">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/PerlIO::via">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/PerlIO::via">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/PerlIO::via">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/PerlIO::via">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/PerlIO::via">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/PerlIO::via">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/PerlIO::via">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/PerlIO::via">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/PerlIO::via">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/PerlIO::via">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/PerlIO::via">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/PerlIO::via">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/PerlIO::via">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/PerlIO::via">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/PerlIO::via">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/PerlIO::via">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/PerlIO::via">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/PerlIO::via">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/PerlIO::via">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/PerlIO::via">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/PerlIO::via">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./PerlIO::via.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/PerlIO::via">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/PerlIO::via">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/PerlIO::via">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/PerlIO::via">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/PerlIO::via">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/PerlIO::via">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/PerlIO::via">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/PerlIO::via">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/PerlIO::via">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/PerlIO::via">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/PerlIO::via">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/PerlIO::via">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/PerlIO::via">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/PerlIO::via">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/PerlIO::via">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/PerlIO::via">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/PerlIO::via">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/PerlIO::via">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/PerlIO::via">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/PerlIO::via">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/PerlIO::via">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/PerlIO::via">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/PerlIO::via">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/PerlIO::via">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/PerlIO::via">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/PerlIO::via">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/PerlIO::via">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/PerlIO::via">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/PerlIO::via">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/PerlIO::via">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/PerlIO::via">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/PerlIO::via">5.35.1</a>
+          <a class="dropdown-item active" href="./PerlIO::via.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./PerlIO::via.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./PerlIO::via.html">PerlIO::via</a>
+          <div id="more">
+            (<a href="./PerlIO::via.txt">source</a>,
+            <a href="https://metacpan.org/pod/PerlIO::via">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 0.18</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./PerlIO::via.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./PerlIO::via.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./PerlIO::via.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./PerlIO::via.html#EXPECTED-METHODS">EXPECTED METHODS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./PerlIO::via.html#EXAMPLES">EXAMPLES</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./PerlIO::via.html#Example-a-Hexadecimal-Handle">Example - a Hexadecimal Handle</a>
+              </li>
+          </ul>
+
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./PerlIO::via.html#NAME">#</a>NAME</h1>
+
+<p>PerlIO::via - Helper class for PerlIO layers implemented in perl</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./PerlIO::via.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use PerlIO::via::Layer;
+open($fh,&quot;&lt;:via(Layer)&quot;,...);
+
+use Some::Other::Package;
+open($fh,&quot;&gt;:via(Some::Other::Package)&quot;,...);</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./PerlIO::via.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>The PerlIO::via module allows you to develop PerlIO layers in Perl, without having to go into the nitty gritty of programming C with XS as the interface to Perl.</p>
+
+<p>One example module, <a href="./PerlIO::via::QuotedPrint.html">PerlIO::via::QuotedPrint</a>, is included with Perl 5.8.0, and more example modules are available from CPAN, such as <a href="./PerlIO::via::StripHTML.html">PerlIO::via::StripHTML</a> and <a href="https://perldoc.perl.org/5.35.0/PerlIO::via::Base64">PerlIO::via::Base64</a>. The PerlIO::via::StripHTML module for instance, allows you to say:</p>
+
+<pre><code>	use PerlIO::via::StripHTML;
+	open( my $fh, &quot;&lt;:via(StripHTML)&quot;, &quot;index.html&quot; );
+        my @line = &lt;$fh&gt;;</code></pre>
+
+<p>to obtain the text of an HTML-file in an array with all the HTML-tags automagically removed.</p>
+
+<p>Please note that if the layer is created in the PerlIO::via:: namespace, it does <b>not</b> have to be fully qualified. The PerlIO::via module will prefix the PerlIO::via:: namespace if the specified modulename does not exist as a fully qualified module name.</p>
+
+<h1 id="EXPECTED-METHODS"><a class="permalink" href="./PerlIO::via.html#EXPECTED-METHODS">#</a><a id="EXPECTED"></a>EXPECTED METHODS</h1>
+
+<p>To create a Perl module that implements a PerlIO layer in Perl (as opposed to in C using XS as the interface to Perl), you need to supply some of the following subroutines. It is recommended to create these Perl modules in the PerlIO::via:: namespace, so that they can easily be located on CPAN and use the default namespace feature of the PerlIO::via module itself.</p>
+
+<p>Please note that this is an area of recent development in Perl and that the interface described here is therefore still subject to change (and hopefully will have better documentation and more examples).</p>
+
+<p>In the method descriptions below <i>$fh</i> will be a reference to a glob which can be treated as a perl file handle. It refers to the layer below. <i>$fh</i> is not passed if the layer is at the bottom of the stack, for this reason and to maintain some level of &quot;compatibility&quot; with TIEHANDLE classes it is passed last.</p>
+
+<dl>
+
+<dt id="$class-&gt;PUSHED([$mode,[$fh]])"><a class="permalink" href="./PerlIO::via.html#$class-%3EPUSHED(%5B$mode,%5B$fh%5D%5D)">#</a><a id="PUSHED"></a><a id="class-PUSHED-mode-fh"></a>$class-&gt;PUSHED([$mode,[$fh]])</dt>
+<dd>
+
+<p>Should return an object or the class, or -1 on failure. (Compare TIEHANDLE.) The arguments are an optional mode string (&quot;r&quot;, &quot;w&quot;, &quot;w+&quot;, ...) and a filehandle for the PerlIO layer below. Mandatory.</p>
+
+<p>When the layer is pushed as part of an <code>open</code> call, <code>PUSHED</code> will be called <i>before</i> the actual open occurs, whether that be via <code>OPEN</code>, <code>SYSOPEN</code>, <code>FDOPEN</code> or by letting a lower layer do the open.</p>
+
+</dd>
+<dt id="$obj-&gt;POPPED([$fh])"><a class="permalink" href="./PerlIO::via.html#$obj-%3EPOPPED(%5B$fh%5D)">#</a><a id="POPPED"></a><a id="obj-POPPED-fh"></a>$obj-&gt;POPPED([$fh])</dt>
+<dd>
+
+<p>Optional - called when the layer is about to be removed.</p>
+
+</dd>
+<dt id="$obj-&gt;UTF8($belowFlag,[$fh])"><a class="permalink" href="./PerlIO::via.html#$obj-%3EUTF8($belowFlag,%5B$fh%5D)">#</a><a id="UTF8"></a><a id="obj-UTF8-belowFlag-fh"></a>$obj-&gt;UTF8($belowFlag,[$fh])</dt>
+<dd>
+
+<p>Optional - if present it will be called immediately after PUSHED has returned. It should return a true value if the layer expects data to be UTF-8 encoded. If it returns true, the result is as if the caller had done</p>
+
+<pre><code class="plaintext">&quot;:via(YourClass):utf8&quot;</code></pre>
+
+<p>If not present or if it returns false, then the stream is left with the UTF-8 flag clear. The <i>$belowFlag</i> argument will be true if there is a layer below and that layer was expecting UTF-8.</p>
+
+</dd>
+<dt id="$obj-&gt;OPEN($path,$mode,[$fh])"><a class="permalink" href="./PerlIO::via.html#$obj-%3EOPEN($path,$mode,%5B$fh%5D)">#</a><a id="OPEN"></a><a id="obj-OPEN-path-mode-fh"></a>$obj-&gt;OPEN($path,$mode,[$fh])</dt>
+<dd>
+
+<p>Optional - if not present a lower layer does the open. If present, called for normal opens after the layer is pushed. This function is subject to change as there is no easy way to get a lower layer to do the open and then regain control.</p>
+
+</dd>
+<dt id="$obj-&gt;BINMODE([$fh])"><a class="permalink" href="./PerlIO::via.html#$obj-%3EBINMODE(%5B$fh%5D)">#</a><a id="BINMODE"></a><a id="obj-BINMODE-fh"></a>$obj-&gt;BINMODE([$fh])</dt>
+<dd>
+
+<p>Optional - if not present the layer is popped on binmode($fh) or when <code>:raw</code> is pushed. If present it should return 0 on success, -1 on error, or undef to pop the layer.</p>
+
+</dd>
+<dt id="$obj-&gt;FDOPEN($fd,[$fh])"><a class="permalink" href="./PerlIO::via.html#$obj-%3EFDOPEN($fd,%5B$fh%5D)">#</a><a id="FDOPEN"></a><a id="obj-FDOPEN-fd-fh"></a>$obj-&gt;FDOPEN($fd,[$fh])</dt>
+<dd>
+
+<p>Optional - if not present a lower layer does the open. If present, called after the layer is pushed for opens which pass a numeric file descriptor. This function is subject to change as there is no easy way to get a lower layer to do the open and then regain control.</p>
+
+</dd>
+<dt id="$obj-&gt;SYSOPEN($path,$imode,$perm,[$fh])"><a class="permalink" href="./PerlIO::via.html#$obj-%3ESYSOPEN($path,$imode,$perm,%5B$fh%5D)">#</a><a id="SYSOPEN"></a><a id="obj-SYSOPEN-path-imode-perm-fh"></a>$obj-&gt;SYSOPEN($path,$imode,$perm,[$fh])</dt>
+<dd>
+
+<p>Optional - if not present a lower layer does the open. If present, called after the layer is pushed for sysopen style opens which pass a numeric mode and permissions. This function is subject to change as there is no easy way to get a lower layer to do the open and then regain control.</p>
+
+</dd>
+<dt id="$obj-&gt;FILENO($fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3EFILENO($fh)">#</a><a id="FILENO"></a><a id="obj-FILENO-fh"></a>$obj-&gt;FILENO($fh)</dt>
+<dd>
+
+<p>Returns a numeric value for a Unix-like file descriptor. Returns -1 if there isn&#39;t one. Optional. Default is fileno($fh).</p>
+
+</dd>
+<dt id="$obj-&gt;READ($buffer,$len,$fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3EREAD($buffer,$len,$fh)">#</a><a id="READ"></a><a id="obj-READ-buffer-len-fh"></a>$obj-&gt;READ($buffer,$len,$fh)</dt>
+<dd>
+
+<p>Returns the number of octets placed in $buffer (must be less than or equal to $len). Optional. Default is to use FILL instead.</p>
+
+</dd>
+<dt id="$obj-&gt;WRITE($buffer,$fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3EWRITE($buffer,$fh)">#</a><a id="WRITE"></a><a id="obj-WRITE-buffer-fh"></a>$obj-&gt;WRITE($buffer,$fh)</dt>
+<dd>
+
+<p>Returns the number of octets from $buffer that have been successfully written.</p>
+
+</dd>
+<dt id="$obj-&gt;FILL($fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3EFILL($fh)">#</a><a id="FILL"></a><a id="obj-FILL-fh"></a>$obj-&gt;FILL($fh)</dt>
+<dd>
+
+<p>Should return a string to be placed in the buffer. Optional. If not provided, must provide READ or reject handles open for reading in PUSHED.</p>
+
+</dd>
+<dt id="$obj-&gt;CLOSE($fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3ECLOSE($fh)">#</a><a id="CLOSE"></a><a id="obj-CLOSE-fh"></a>$obj-&gt;CLOSE($fh)</dt>
+<dd>
+
+<p>Should return 0 on success, -1 on error. Optional.</p>
+
+</dd>
+<dt id="$obj-&gt;SEEK($posn,$whence,$fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3ESEEK($posn,$whence,$fh)">#</a><a id="SEEK"></a><a id="obj-SEEK-posn-whence-fh"></a>$obj-&gt;SEEK($posn,$whence,$fh)</dt>
+<dd>
+
+<p>Should return 0 on success, -1 on error. Optional. Default is to fail, but that is likely to be changed in future.</p>
+
+</dd>
+<dt id="$obj-&gt;TELL($fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3ETELL($fh)">#</a><a id="TELL"></a><a id="obj-TELL-fh"></a>$obj-&gt;TELL($fh)</dt>
+<dd>
+
+<p>Returns file position. Optional. Default to be determined.</p>
+
+</dd>
+<dt id="$obj-&gt;UNREAD($buffer,$fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3EUNREAD($buffer,$fh)">#</a><a id="UNREAD"></a><a id="obj-UNREAD-buffer-fh"></a>$obj-&gt;UNREAD($buffer,$fh)</dt>
+<dd>
+
+<p>Returns the number of octets from $buffer that have been successfully saved to be returned on future FILL/READ calls. Optional. Default is to push data into a temporary layer above this one.</p>
+
+</dd>
+<dt id="$obj-&gt;FLUSH($fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3EFLUSH($fh)">#</a><a id="FLUSH"></a><a id="obj-FLUSH-fh"></a>$obj-&gt;FLUSH($fh)</dt>
+<dd>
+
+<p>Flush any buffered write data. May possibly be called on readable handles too. Should return 0 on success, -1 on error.</p>
+
+</dd>
+<dt id="$obj-&gt;SETLINEBUF($fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3ESETLINEBUF($fh)">#</a><a id="SETLINEBUF"></a><a id="obj-SETLINEBUF-fh"></a>$obj-&gt;SETLINEBUF($fh)</dt>
+<dd>
+
+<p>Optional. No return.</p>
+
+</dd>
+<dt id="$obj-&gt;CLEARERR($fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3ECLEARERR($fh)">#</a><a id="CLEARERR"></a><a id="obj-CLEARERR-fh"></a>$obj-&gt;CLEARERR($fh)</dt>
+<dd>
+
+<p>Optional. No return.</p>
+
+</dd>
+<dt id="$obj-&gt;ERROR($fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3EERROR($fh)">#</a><a id="ERROR"></a><a id="obj-ERROR-fh"></a>$obj-&gt;ERROR($fh)</dt>
+<dd>
+
+<p>Optional. Returns error state. Default is no error until a mechanism to signal error (die?) is worked out.</p>
+
+</dd>
+<dt id="$obj-&gt;EOF($fh)"><a class="permalink" href="./PerlIO::via.html#$obj-%3EEOF($fh)">#</a><a id="EOF"></a><a id="obj-EOF-fh"></a>$obj-&gt;EOF($fh)</dt>
+<dd>
+
+<p>Optional. Returns end-of-file state. Default is a function of the return value of FILL or READ.</p>
+
+</dd>
+</dl>
+
+<h1 id="EXAMPLES"><a class="permalink" href="./PerlIO::via.html#EXAMPLES">#</a>EXAMPLES</h1>
+
+<p>Check the PerlIO::via:: namespace on CPAN for examples of PerlIO layers implemented in Perl. To give you an idea how simple the implementation of a PerlIO layer can look, a simple example is included here.</p>
+
+<h2 id="Example-a-Hexadecimal-Handle"><a class="permalink" href="./PerlIO::via.html#Example-a-Hexadecimal-Handle">#</a><a id="Example"></a><a id="Example---a-Hexadecimal-Handle"></a>Example - a Hexadecimal Handle</h2>
+
+<p>Given the following module, PerlIO::via::Hex :</p>
+
+<pre><code>package PerlIO::via::Hex;
+
+sub PUSHED
+{
+ my ($class,$mode,$fh) = @_;
+ # When writing we buffer the data
+ my $buf = &#39;&#39;;
+ return bless \$buf,$class;
+}
+
+sub FILL
+{
+ my ($obj,$fh) = @_;
+ my $line = &lt;$fh&gt;;
+ return (defined $line) ? pack(&quot;H*&quot;, $line) : undef;
+}
+
+sub WRITE
+{
+ my ($obj,$buf,$fh) = @_;
+ $$obj .= unpack(&quot;H*&quot;, $buf);
+ return length($buf);
+}
+
+sub FLUSH
+{
+ my ($obj,$fh) = @_;
+ print $fh $$obj or return -1;
+ $$obj = &#39;&#39;;
+ return 0;
+}
+
+1;</code></pre>
+
+<p>The following code opens up an output handle that will convert any output to a hexadecimal dump of the output bytes: for example &quot;A&quot; will be converted to &quot;41&quot; (on ASCII-based machines, on EBCDIC platforms the &quot;A&quot; will become &quot;c1&quot;)</p>
+
+<pre><code>use PerlIO::via::Hex;
+open(my $fh, &quot;&gt;:via(Hex)&quot;, &quot;foo.hex&quot;);</code></pre>
+
+<p>and the following code will read the hexdump in and convert it on the fly back into bytes:</p>
+
+<pre><code>open(my $fh, &quot;&lt;:via(Hex)&quot;, &quot;foo.hex&quot;);</code></pre>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

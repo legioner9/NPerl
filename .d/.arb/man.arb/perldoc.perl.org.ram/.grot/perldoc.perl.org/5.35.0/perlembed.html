@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>perlembed - how to embed perl in your C program - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/perlembed">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlembed.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/perlembed">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/perlembed">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/perlembed">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/perlembed">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/perlembed">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/perlembed">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/perlembed">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/perlembed">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/perlembed">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/perlembed">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/perlembed">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/perlembed">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/perlembed">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/perlembed">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/perlembed">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/perlembed">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/perlembed">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/perlembed">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/perlembed">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/perlembed">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/perlembed">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/perlembed">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/perlembed">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/perlembed">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/perlembed">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/perlembed">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/perlembed">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/perlembed">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/perlembed">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/perlembed">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/perlembed">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/perlembed">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/perlembed">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/perlembed">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/perlembed">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/perlembed">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/perlembed">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/perlembed">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/perlembed">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/perlembed">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/perlembed">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/perlembed">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/perlembed">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/perlembed">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/perlembed">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/perlembed">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/perlembed">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/perlembed">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/perlembed">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/perlembed">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/perlembed">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/perlembed">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/perlembed">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/perlembed">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/perlembed">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/perlembed">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/perlembed">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/perlembed">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/perlembed">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/perlembed">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/perlembed">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/perlembed">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/perlembed">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/perlembed">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/perlembed">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/perlembed">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/perlembed">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/perlembed">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/perlembed">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/perlembed">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/perlembed">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/perlembed">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/perlembed">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/perlembed">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/perlembed">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/perlembed">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/perlembed">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/perlembed">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/perlembed">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/perlembed">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlembed.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/perlembed">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/perlembed">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/perlembed">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/perlembed">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/perlembed">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/perlembed">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/perlembed">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/perlembed">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/perlembed">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/perlembed">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/perlembed">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/perlembed">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/perlembed">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/perlembed">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/perlembed">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/perlembed">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/perlembed">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/perlembed">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/perlembed">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/perlembed">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/perlembed">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/perlembed">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/perlembed">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/perlembed">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/perlembed">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/perlembed">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/perlembed">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/perlembed">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/perlembed">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/perlembed">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/perlembed">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/perlembed">5.35.1</a>
+          <a class="dropdown-item active" href="perlembed.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="perlembed.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="perlembed.html">perlembed</a>
+          <div id="more">
+            (<a href="perlembed.txt">source</a>,
+            <a href="https://metacpan.org/pod/perlembed">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#PREAMBLE">PREAMBLE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#ROADMAP">ROADMAP</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Compiling-your-C-program">Compiling your C program</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Adding-a-Perl-interpreter-to-your-C-program">Adding a Perl interpreter to your C program</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Calling-a-Perl-subroutine-from-your-C-program">Calling a Perl subroutine from your C program</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Evaluating-a-Perl-statement-from-your-C-program">Evaluating a Perl statement from your C program</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Performing-Perl-pattern-matches-and-substitutions-from-your-C-program">Performing Perl pattern matches and substitutions from your C program</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Fiddling-with-the-Perl-stack-from-your-C-program">Fiddling with the Perl stack from your C program</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Maintaining-a-persistent-interpreter">Maintaining a persistent interpreter</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Execution-of-END-blocks">Execution of END blocks</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#$0-assignments">$0 assignments</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Maintaining-multiple-interpreter-instances">Maintaining multiple interpreter instances</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Using-Perl-modules,-which-themselves-use-C-libraries,-from-your-C-program">Using Perl modules, which themselves use C libraries, from your C program</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Using-embedded-Perl-with-POSIX-locales">Using embedded Perl with POSIX locales</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#Hiding-Perl_">Hiding Perl_</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#MORAL">MORAL</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="perlembed.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="perlembed.html#NAME">#</a>NAME</h1>
+
+<p>perlembed - how to embed perl in your C program</p>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="perlembed.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<h2 id="PREAMBLE"><a class="permalink" href="perlembed.html#PREAMBLE">#</a>PREAMBLE</h2>
+
+<p>Do you want to:</p>
+
+<dl>
+
+<dt id="Use-C-from-Perl?"><a class="permalink" href="perlembed.html#Use-C-from-Perl?">#</a><a id="Use"></a><a id="Use-C-from-Perl"></a><b>Use C from Perl?</b></dt>
+<dd>
+
+<p>Read <a href="perlxstut.html">perlxstut</a>, <a href="perlxs.html">perlxs</a>, <a href="h2xs.html">h2xs</a>, <a href="perlguts.html">perlguts</a>, and <a href="perlapi.html">perlapi</a>.</p>
+
+</dd>
+<dt id="Use-a-Unix-program-from-Perl?"><a class="permalink" href="perlembed.html#Use-a-Unix-program-from-Perl?">#</a><a id="Use1"></a><a id="Use-a-Unix-program-from-Perl"></a><b>Use a Unix program from Perl?</b></dt>
+<dd>
+
+<p>Read about back-quotes and about <code>system</code> and <code>exec</code> in <a href="perlfunc.html">perlfunc</a>.</p>
+
+</dd>
+<dt id="Use-Perl-from-Perl?"><a class="permalink" href="perlembed.html#Use-Perl-from-Perl?">#</a><a id="Use2"></a><a id="Use-Perl-from-Perl"></a><b>Use Perl from Perl?</b></dt>
+<dd>
+
+<p>Read about <a href="perlfunc.html#do">&quot;do&quot; in perlfunc</a> and <a href="perlfunc.html#eval">&quot;eval&quot; in perlfunc</a> and <a href="perlfunc.html#require">&quot;require&quot; in perlfunc</a> and <a href="perlfunc.html#use">&quot;use&quot; in perlfunc</a>.</p>
+
+</dd>
+<dt id="Use-C-from-C?"><a class="permalink" href="perlembed.html#Use-C-from-C?">#</a><a id="Use3"></a><a id="Use-C-from-C"></a><b>Use C from C?</b></dt>
+<dd>
+
+<p>Rethink your design.</p>
+
+</dd>
+<dt id="Use-Perl-from-C?"><a class="permalink" href="perlembed.html#Use-Perl-from-C?">#</a><a id="Use4"></a><a id="Use-Perl-from-C"></a><b>Use Perl from C?</b></dt>
+<dd>
+
+<p>Read on...</p>
+
+</dd>
+</dl>
+
+<h2 id="ROADMAP"><a class="permalink" href="perlembed.html#ROADMAP">#</a>ROADMAP</h2>
+
+<ul>
+
+<li><p>Compiling your C program</p>
+
+</li>
+<li><p>Adding a Perl interpreter to your C program</p>
+
+</li>
+<li><p>Calling a Perl subroutine from your C program</p>
+
+</li>
+<li><p>Evaluating a Perl statement from your C program</p>
+
+</li>
+<li><p>Performing Perl pattern matches and substitutions from your C program</p>
+
+</li>
+<li><p>Fiddling with the Perl stack from your C program</p>
+
+</li>
+<li><p>Maintaining a persistent interpreter</p>
+
+</li>
+<li><p>Maintaining multiple interpreter instances</p>
+
+</li>
+<li><p>Using Perl modules, which themselves use C libraries, from your C program</p>
+
+</li>
+<li><p>Embedding Perl under Win32</p>
+
+</li>
+</ul>
+
+<h2 id="Compiling-your-C-program"><a class="permalink" href="perlembed.html#Compiling-your-C-program">#</a><a id="Compiling"></a>Compiling your C program</h2>
+
+<p>If you have trouble compiling the scripts in this documentation, you&#39;re not alone. The cardinal rule: COMPILE THE PROGRAMS IN EXACTLY THE SAME WAY THAT YOUR PERL WAS COMPILED. (Sorry for yelling.)</p>
+
+<p>Also, every C program that uses Perl must link in the <i>perl library</i>. What&#39;s that, you ask? Perl is itself written in C; the perl library is the collection of compiled C programs that were used to create your perl executable (<i>/usr/bin/perl</i> or equivalent). (Corollary: you can&#39;t use Perl from your C program unless Perl has been compiled on your machine, or installed properly--that&#39;s why you shouldn&#39;t blithely copy Perl executables from machine to machine without also copying the <i>lib</i> directory.)</p>
+
+<p>When you use Perl from C, your C program will--usually--allocate, &quot;run&quot;, and deallocate a <i>PerlInterpreter</i> object, which is defined by the perl library.</p>
+
+<p>If your copy of Perl is recent enough to contain this documentation (version 5.002 or later), then the perl library (and <i>EXTERN.h</i> and <i>perl.h</i>, which you&#39;ll also need) will reside in a directory that looks like this:</p>
+
+<pre><code class="plaintext">/usr/local/lib/perl5/your_architecture_here/CORE</code></pre>
+
+<p>or perhaps just</p>
+
+<pre><code class="plaintext">/usr/local/lib/perl5/CORE</code></pre>
+
+<p>or maybe something like</p>
+
+<pre><code class="plaintext">/usr/opt/perl5/CORE</code></pre>
+
+<p>Execute this statement for a hint about where to find CORE:</p>
+
+<pre><code>perl -MConfig -e &#39;print $Config{archlib}&#39;</code></pre>
+
+<p>Here&#39;s how you&#39;d compile the example in the next section, <a href="perlembed.html#Adding-a-Perl-interpreter-to-your-C-program">&quot;Adding a Perl interpreter to your C program&quot;</a>, on my Linux box:</p>
+
+<pre><code class="plaintext">% gcc -O2 -Dbool=char -DHAS_BOOL -I/usr/local/include
+-I/usr/local/lib/perl5/i586-linux/5.003/CORE
+-L/usr/local/lib/perl5/i586-linux/5.003/CORE
+-o interp interp.c -lperl -lm</code></pre>
+
+<p>(That&#39;s all one line.) On my DEC Alpha running old 5.003_05, the incantation is a bit different:</p>
+
+<pre><code class="plaintext">% cc -O2 -Olimit 2900 -I/usr/local/include
+-I/usr/local/lib/perl5/alpha-dec_osf/5.00305/CORE
+-L/usr/local/lib/perl5/alpha-dec_osf/5.00305/CORE -L/usr/local/lib
+-D__LANGUAGE_C__ -D_NO_PROTO -o interp interp.c -lperl -lm</code></pre>
+
+<p>How can you figure out what to add? Assuming your Perl is post-5.001, execute a <code>perl -V</code> command and pay special attention to the &quot;cc&quot; and &quot;ccflags&quot; information.</p>
+
+<p>You&#39;ll have to choose the appropriate compiler (<i>cc</i>, <i>gcc</i>, et al.) for your machine: <code>perl -MConfig -e &#39;print $Config{cc}&#39;</code> will tell you what to use.</p>
+
+<p>You&#39;ll also have to choose the appropriate library directory (<i>/usr/local/lib/...</i>) for your machine. If your compiler complains that certain functions are undefined, or that it can&#39;t locate <i>-lperl</i>, then you need to change the path following the <code>-L</code>. If it complains that it can&#39;t find <i>EXTERN.h</i> and <i>perl.h</i>, you need to change the path following the <code>-I</code>.</p>
+
+<p>You may have to add extra libraries as well. Which ones? Perhaps those printed by</p>
+
+<pre><code>perl -MConfig -e &#39;print $Config{libs}&#39;</code></pre>
+
+<p>Provided your perl binary was properly configured and installed the <b>ExtUtils::Embed</b> module will determine all of this information for you:</p>
+
+<pre><code class="plaintext">% cc -o interp interp.c `perl -MExtUtils::Embed -e ccopts -e ldopts`</code></pre>
+
+<p>If the <b>ExtUtils::Embed</b> module isn&#39;t part of your Perl distribution, you can retrieve it from <a href="https://metacpan.org/pod/ExtUtils::Embed">https://metacpan.org/pod/ExtUtils::Embed</a> (If this documentation came from your Perl distribution, then you&#39;re running 5.004 or better and you already have it.)</p>
+
+<p>The <b>ExtUtils::Embed</b> kit on CPAN also contains all source code for the examples in this document, tests, additional examples and other information you may find useful.</p>
+
+<h2 id="Adding-a-Perl-interpreter-to-your-C-program"><a class="permalink" href="perlembed.html#Adding-a-Perl-interpreter-to-your-C-program">#</a><a id="Adding"></a>Adding a Perl interpreter to your C program</h2>
+
+<p>In a sense, perl (the C program) is a good example of embedding Perl (the language), so I&#39;ll demonstrate embedding with <i>miniperlmain.c</i>, included in the source distribution. Here&#39;s a bastardized, non-portable version of <i>miniperlmain.c</i> containing the essentials of embedding:</p>
+
+<pre><code> #include &lt;EXTERN.h&gt;               /* from the Perl distribution     */
+ #include &lt;perl.h&gt;                 /* from the Perl distribution     */
+
+ static PerlInterpreter *my_perl;  /***    The Perl interpreter    ***/
+
+ int main(int argc, char **argv, char **env)
+ {
+	PERL_SYS_INIT3(&amp;argc,&amp;argv,&amp;env);
+        my_perl = perl_alloc();
+        perl_construct(my_perl);
+	PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
+        perl_parse(my_perl, NULL, argc, argv, (char **)NULL);
+        perl_run(my_perl);
+        perl_destruct(my_perl);
+        perl_free(my_perl);
+	PERL_SYS_TERM();
+	exit(EXIT_SUCCESS);
+ }</code></pre>
+
+<p>Notice that we don&#39;t use the <code>env</code> pointer. Normally handed to <code>perl_parse</code> as its final argument, <code>env</code> here is replaced by <code>NULL</code>, which means that the current environment will be used.</p>
+
+<p>The macros PERL_SYS_INIT3() and PERL_SYS_TERM() provide system-specific tune up of the C runtime environment necessary to run Perl interpreters; they should only be called once regardless of how many interpreters you create or destroy. Call PERL_SYS_INIT3() before you create your first interpreter, and PERL_SYS_TERM() after you free your last interpreter.</p>
+
+<p>Since PERL_SYS_INIT3() may change <code>env</code>, it may be more appropriate to provide <code>env</code> as an argument to perl_parse().</p>
+
+<p>Also notice that no matter what arguments you pass to perl_parse(), PERL_SYS_INIT3() must be invoked on the C main() argc, argv and env and only once.</p>
+
+<p>Mind that argv[argc] must be NULL, same as those passed to a main function in C.</p>
+
+<p>Now compile this program (I&#39;ll call it <i>interp.c</i>) into an executable:</p>
+
+<pre><code class="plaintext">% cc -o interp interp.c `perl -MExtUtils::Embed -e ccopts -e ldopts`</code></pre>
+
+<p>After a successful compilation, you&#39;ll be able to use <i>interp</i> just like perl itself:</p>
+
+<pre><code>% interp
+print &quot;Pretty Good Perl \n&quot;;
+print &quot;10890 - 9801 is &quot;, 10890 - 9801;
+&lt;CTRL-D&gt;
+Pretty Good Perl
+10890 - 9801 is 1089</code></pre>
+
+<p>or</p>
+
+<pre><code>% interp -e &#39;printf(&quot;%x&quot;, 3735928559)&#39;
+deadbeef</code></pre>
+
+<p>You can also read and execute Perl statements from a file while in the midst of your C program, by placing the filename in <i>argv[1]</i> before calling <i>perl_run</i>.</p>
+
+<h2 id="Calling-a-Perl-subroutine-from-your-C-program"><a class="permalink" href="perlembed.html#Calling-a-Perl-subroutine-from-your-C-program">#</a><a id="Calling"></a>Calling a Perl subroutine from your C program</h2>
+
+<p>To call individual Perl subroutines, you can use any of the <b>call_*</b> functions documented in <a href="perlcall.html">perlcall</a>. In this example we&#39;ll use <code>call_argv</code>.</p>
+
+<p>That&#39;s shown below, in a program I&#39;ll call <i>showtime.c</i>.</p>
+
+<pre><code>    #include &lt;EXTERN.h&gt;
+    #include &lt;perl.h&gt;
+
+    static PerlInterpreter *my_perl;
+
+    int main(int argc, char **argv, char **env)
+    {
+        char *args[] = { NULL };
+	PERL_SYS_INIT3(&amp;argc,&amp;argv,&amp;env);
+        my_perl = perl_alloc();
+        perl_construct(my_perl);
+
+        perl_parse(my_perl, NULL, argc, argv, NULL);
+	PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
+
+        /*** skipping perl_run() ***/
+
+        call_argv(&quot;showtime&quot;, G_DISCARD | G_NOARGS, args);
+
+        perl_destruct(my_perl);
+        perl_free(my_perl);
+	PERL_SYS_TERM();
+	exit(EXIT_SUCCESS);
+    }</code></pre>
+
+<p>where <i>showtime</i> is a Perl subroutine that takes no arguments (that&#39;s the <i>G_NOARGS</i>) and for which I&#39;ll ignore the return value (that&#39;s the <i>G_DISCARD</i>). Those flags, and others, are discussed in <a href="perlcall.html">perlcall</a>.</p>
+
+<p>I&#39;ll define the <i>showtime</i> subroutine in a file called <i>showtime.pl</i>:</p>
+
+<pre><code>print &quot;I shan&#39;t be printed.&quot;;
+
+sub showtime {
+    print time;
+}</code></pre>
+
+<p>Simple enough. Now compile and run:</p>
+
+<pre><code class="plaintext">% cc -o showtime showtime.c \
+    `perl -MExtUtils::Embed -e ccopts -e ldopts`
+% showtime showtime.pl
+818284590</code></pre>
+
+<p>yielding the number of seconds that elapsed between January 1, 1970 (the beginning of the Unix epoch), and the moment I began writing this sentence.</p>
+
+<p>In this particular case we don&#39;t have to call <i>perl_run</i>, as we set the PL_exit_flag PERL_EXIT_DESTRUCT_END which executes END blocks in perl_destruct.</p>
+
+<p>If you want to pass arguments to the Perl subroutine, you can add strings to the <code>NULL</code>-terminated <code>args</code> list passed to <i>call_argv</i>. For other data types, or to examine return values, you&#39;ll need to manipulate the Perl stack. That&#39;s demonstrated in <a href="perlembed.html#Fiddling-with-the-Perl-stack-from-your-C-program">&quot;Fiddling with the Perl stack from your C program&quot;</a>.</p>
+
+<h2 id="Evaluating-a-Perl-statement-from-your-C-program"><a class="permalink" href="perlembed.html#Evaluating-a-Perl-statement-from-your-C-program">#</a><a id="Evaluating"></a>Evaluating a Perl statement from your C program</h2>
+
+<p>Perl provides two API functions to evaluate pieces of Perl code. These are <a href="perlapi.html#eval_sv">&quot;eval_sv&quot; in perlapi</a> and <a href="perlapi.html#eval_pv">&quot;eval_pv&quot; in perlapi</a>.</p>
+
+<p>Arguably, these are the only routines you&#39;ll ever need to execute snippets of Perl code from within your C program. Your code can be as long as you wish; it can contain multiple statements; it can employ <a href="perlfunc.html#use">&quot;use&quot; in perlfunc</a>, <a href="perlfunc.html#require">&quot;require&quot; in perlfunc</a>, and <a href="perlfunc.html#do">&quot;do&quot; in perlfunc</a> to include external Perl files.</p>
+
+<p><i>eval_pv</i> lets us evaluate individual Perl strings, and then extract variables for coercion into C types. The following program, <i>string.c</i>, executes three Perl strings, extracting an <code>int</code> from the first, a <code>float</code> from the second, and a <code>char *</code> from the third.</p>
+
+<pre><code>#include &lt;EXTERN.h&gt;
+#include &lt;perl.h&gt;
+
+static PerlInterpreter *my_perl;
+
+main (int argc, char **argv, char **env)
+{
+    char *embedding[] = { &quot;&quot;, &quot;-e&quot;, &quot;0&quot;, NULL };
+
+    PERL_SYS_INIT3(&amp;argc,&amp;argv,&amp;env);
+    my_perl = perl_alloc();
+    perl_construct( my_perl );
+
+    perl_parse(my_perl, NULL, 3, embedding, NULL);
+    PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
+    perl_run(my_perl);
+
+    /** Treat $a as an integer **/
+    eval_pv(&quot;$a = 3; $a **= 2&quot;, TRUE);
+    printf(&quot;a = %d\n&quot;, SvIV(get_sv(&quot;a&quot;, 0)));
+
+    /** Treat $a as a float **/
+    eval_pv(&quot;$a = 3.14; $a **= 2&quot;, TRUE);
+    printf(&quot;a = %f\n&quot;, SvNV(get_sv(&quot;a&quot;, 0)));
+
+    /** Treat $a as a string **/
+    eval_pv(
+      &quot;$a = &#39;rekcaH lreP rehtonA tsuJ&#39;; $a = reverse($a);&quot;, TRUE);
+    printf(&quot;a = %s\n&quot;, SvPV_nolen(get_sv(&quot;a&quot;, 0)));
+
+    perl_destruct(my_perl);
+    perl_free(my_perl);
+    PERL_SYS_TERM();
+}</code></pre>
+
+<p>All of those strange functions with <i>sv</i> in their names help convert Perl scalars to C types. They&#39;re described in <a href="perlguts.html">perlguts</a> and <a href="perlapi.html">perlapi</a>.</p>
+
+<p>If you compile and run <i>string.c</i>, you&#39;ll see the results of using <i>SvIV()</i> to create an <code>int</code>, <i>SvNV()</i> to create a <code>float</code>, and <i>SvPV()</i> to create a string:</p>
+
+<pre><code class="plaintext">a = 9
+a = 9.859600
+a = Just Another Perl Hacker</code></pre>
+
+<p>In the example above, we&#39;ve created a global variable to temporarily store the computed value of our eval&#39;ed expression. It is also possible and in most cases a better strategy to fetch the return value from <i>eval_pv()</i> instead. Example:</p>
+
+<pre><code>...
+SV *val = eval_pv(&quot;reverse &#39;rekcaH lreP rehtonA tsuJ&#39;&quot;, TRUE);
+printf(&quot;%s\n&quot;, SvPV_nolen(val));
+...</code></pre>
+
+<p>This way, we avoid namespace pollution by not creating global variables and we&#39;ve simplified our code as well.</p>
+
+<h2 id="Performing-Perl-pattern-matches-and-substitutions-from-your-C-program"><a class="permalink" href="perlembed.html#Performing-Perl-pattern-matches-and-substitutions-from-your-C-program">#</a><a id="Performing"></a>Performing Perl pattern matches and substitutions from your C program</h2>
+
+<p>The <i>eval_sv()</i> function lets us evaluate strings of Perl code, so we can define some functions that use it to &quot;specialize&quot; in matches and substitutions: <i>match()</i>, <i>substitute()</i>, and <i>matches()</i>.</p>
+
+<pre><code>I32 match(SV *string, char *pattern);</code></pre>
+
+<p>Given a string and a pattern (e.g., <code>m/clasp/</code> or <code>/\b\w*\b/</code>, which in your C program might appear as &quot;/\\b\\w*\\b/&quot;), match() returns 1 if the string matches the pattern and 0 otherwise.</p>
+
+<pre><code>int substitute(SV **string, char *pattern);</code></pre>
+
+<p>Given a pointer to an <code>SV</code> and an <code>=~</code> operation (e.g., <code>s/bob/robert/g</code> or <code>tr[A-Z][a-z]</code>), substitute() modifies the string within the <code>SV</code> as according to the operation, returning the number of substitutions made.</p>
+
+<pre><code>SSize_t matches(SV *string, char *pattern, AV **matches);</code></pre>
+
+<p>Given an <code>SV</code>, a pattern, and a pointer to an empty <code>AV</code>, matches() evaluates <code>$string =~ $pattern</code> in a list context, and fills in <i>matches</i> with the array elements, returning the number of matches found.</p>
+
+<p>Here&#39;s a sample program, <i>match.c</i>, that uses all three (long lines have been wrapped here):</p>
+
+<pre><code> #include &lt;EXTERN.h&gt;
+ #include &lt;perl.h&gt;
+
+ static PerlInterpreter *my_perl;
+
+ /** my_eval_sv(code, error_check)
+ ** kinda like eval_sv(),
+ ** but we pop the return value off the stack
+ **/
+ SV* my_eval_sv(SV *sv, I32 croak_on_error)
+ {
+     dSP;
+     SV* retval;
+
+
+     PUSHMARK(SP);
+     eval_sv(sv, G_SCALAR);
+
+     SPAGAIN;
+     retval = POPs;
+     PUTBACK;
+
+     if (croak_on_error &amp;&amp; SvTRUE(ERRSV))
+        croak_sv(ERRSV);
+
+     return retval;
+ }
+
+ /** match(string, pattern)
+ **
+ ** Used for matches in a scalar context.
+ **
+ ** Returns 1 if the match was successful; 0 otherwise.
+ **/
+
+ I32 match(SV *string, char *pattern)
+ {
+     SV *command = newSV(0), *retval;
+
+     sv_setpvf(command, &quot;my $string = &#39;%s&#39;; $string =~ %s&quot;,
+ 	      SvPV_nolen(string), pattern);
+
+     retval = my_eval_sv(command, TRUE);
+     SvREFCNT_dec(command);
+
+     return SvIV(retval);
+ }
+
+ /** substitute(string, pattern)
+ **
+ ** Used for =~ operations that
+ ** modify their left-hand side (s/// and tr///)
+ **
+ ** Returns the number of successful matches, and
+ ** modifies the input string if there were any.
+ **/
+
+ I32 substitute(SV **string, char *pattern)
+ {
+     SV *command = newSV(0), *retval;
+
+     sv_setpvf(command, &quot;$string = &#39;%s&#39;; ($string =~ %s)&quot;,
+ 	      SvPV_nolen(*string), pattern);
+
+     retval = my_eval_sv(command, TRUE);
+     SvREFCNT_dec(command);
+
+     *string = get_sv(&quot;string&quot;, 0);
+     return SvIV(retval);
+ }
+
+ /** matches(string, pattern, matches)
+ **
+ ** Used for matches in a list context.
+ **
+ ** Returns the number of matches,
+ ** and fills in **matches with the matching substrings
+ **/
+
+ SSize_t matches(SV *string, char *pattern, AV **match_list)
+ {
+     SV *command = newSV(0);
+     SSize_t num_matches;
+
+     sv_setpvf(command, &quot;my $string = &#39;%s&#39;; @array = ($string =~ %s)&quot;,
+ 	      SvPV_nolen(string), pattern);
+
+     my_eval_sv(command, TRUE);
+     SvREFCNT_dec(command);
+
+     *match_list = get_av(&quot;array&quot;, 0);
+     num_matches = av_top_index(*match_list) + 1;
+
+     return num_matches;
+ }
+
+ main (int argc, char **argv, char **env)
+ {
+     char *embedding[] = { &quot;&quot;, &quot;-e&quot;, &quot;0&quot;, NULL };
+     AV *match_list;
+     I32 num_matches, i;
+     SV *text;
+
+     PERL_SYS_INIT3(&amp;argc,&amp;argv,&amp;env);
+     my_perl = perl_alloc();
+     perl_construct(my_perl);
+     perl_parse(my_perl, NULL, 3, embedding, NULL);
+     PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
+
+     text = newSV(0);
+     sv_setpv(text, &quot;When he is at a convenience store and the &quot;
+	&quot;bill comes to some amount like 76 cents, Maynard is &quot;
+	&quot;aware that there is something he *should* do, something &quot;
+	&quot;that will enable him to get back a quarter, but he has &quot;
+	&quot;no idea *what*.  He fumbles through his red squeezey &quot;
+	&quot;changepurse and gives the boy three extra pennies with &quot;
+	&quot;his dollar, hoping that he might luck into the correct &quot;
+	&quot;amount.  The boy gives him back two of his own pennies &quot;
+	&quot;and then the big shiny quarter that is his prize. &quot;
+	&quot;-RICHH&quot;);
+
+     if (match(text, &quot;m/quarter/&quot;)) /** Does text contain &#39;quarter&#39;? **/
+ 	printf(&quot;match: Text contains the word &#39;quarter&#39;.\n\n&quot;);
+     else
+ 	printf(&quot;match: Text doesn&#39;t contain the word &#39;quarter&#39;.\n\n&quot;);
+
+     if (match(text, &quot;m/eighth/&quot;)) /** Does text contain &#39;eighth&#39;? **/
+ 	printf(&quot;match: Text contains the word &#39;eighth&#39;.\n\n&quot;);
+     else
+ 	printf(&quot;match: Text doesn&#39;t contain the word &#39;eighth&#39;.\n\n&quot;);
+
+     /** Match all occurrences of /wi../ **/
+     num_matches = matches(text, &quot;m/(wi..)/g&quot;, &amp;match_list);
+     printf(&quot;matches: m/(wi..)/g found %d matches...\n&quot;, num_matches);
+
+     for (i = 0; i &lt; num_matches; i++)
+         printf(&quot;match: %s\n&quot;,
+                  SvPV_nolen(*av_fetch(match_list, i, FALSE)));
+     printf(&quot;\n&quot;);
+
+     /** Remove all vowels from text **/
+     num_matches = substitute(&amp;text, &quot;s/[aeiou]//gi&quot;);
+     if (num_matches) {
+ 	printf(&quot;substitute: s/[aeiou]//gi...%lu substitutions made.\n&quot;,
+ 	       (unsigned long)num_matches);
+ 	printf(&quot;Now text is: %s\n\n&quot;, SvPV_nolen(text));
+     }
+
+     /** Attempt a substitution **/
+     if (!substitute(&amp;text, &quot;s/Perl/C/&quot;)) {
+ 	printf(&quot;substitute: s/Perl/C...No substitution made.\n\n&quot;);
+     }
+
+     SvREFCNT_dec(text);
+     PL_perl_destruct_level = 1;
+     perl_destruct(my_perl);
+     perl_free(my_perl);
+     PERL_SYS_TERM();
+ }</code></pre>
+
+<p>which produces the output (again, long lines have been wrapped here)</p>
+
+<pre><code class="plaintext">match: Text contains the word &#39;quarter&#39;.
+
+match: Text doesn&#39;t contain the word &#39;eighth&#39;.
+
+matches: m/(wi..)/g found 2 matches...
+match: will
+match: with
+
+substitute: s/[aeiou]//gi...139 substitutions made.
+Now text is: Whn h s t  cnvnnc str nd th bll cms t sm mnt lk 76 cnts,
+Mynrd s wr tht thr s smthng h *shld* d, smthng tht wll nbl hm t gt
+bck qrtr, bt h hs n d *wht*.  H fmbls thrgh hs rd sqzy chngprs nd
+gvs th by thr xtr pnns wth hs dllr, hpng tht h mght lck nt th crrct
+mnt.  Th by gvs hm bck tw f hs wn pnns nd thn th bg shny qrtr tht s
+hs prz. -RCHH
+
+substitute: s/Perl/C...No substitution made.</code></pre>
+
+<h2 id="Fiddling-with-the-Perl-stack-from-your-C-program"><a class="permalink" href="perlembed.html#Fiddling-with-the-Perl-stack-from-your-C-program">#</a><a id="Fiddling"></a>Fiddling with the Perl stack from your C program</h2>
+
+<p>When trying to explain stacks, most computer science textbooks mumble something about spring-loaded columns of cafeteria plates: the last thing you pushed on the stack is the first thing you pop off. That&#39;ll do for our purposes: your C program will push some arguments onto &quot;the Perl stack&quot;, shut its eyes while some magic happens, and then pop the results--the return value of your Perl subroutine--off the stack.</p>
+
+<p>First you&#39;ll need to know how to convert between C types and Perl types, with newSViv() and sv_setnv() and newAV() and all their friends. They&#39;re described in <a href="perlguts.html">perlguts</a> and <a href="perlapi.html">perlapi</a>.</p>
+
+<p>Then you&#39;ll need to know how to manipulate the Perl stack. That&#39;s described in <a href="perlcall.html">perlcall</a>.</p>
+
+<p>Once you&#39;ve understood those, embedding Perl in C is easy.</p>
+
+<p>Because C has no builtin function for integer exponentiation, let&#39;s make Perl&#39;s ** operator available to it (this is less useful than it sounds, because Perl implements ** with C&#39;s <i>pow()</i> function). First I&#39;ll create a stub exponentiation function in <i>power.pl</i>:</p>
+
+<pre><code>sub expo {
+    my ($a, $b) = @_;
+    return $a ** $b;
+}</code></pre>
+
+<p>Now I&#39;ll create a C program, <i>power.c</i>, with a function <i>PerlPower()</i> that contains all the perlguts necessary to push the two arguments into <i>expo()</i> and to pop the return value out. Take a deep breath...</p>
+
+<pre><code>#include &lt;EXTERN.h&gt;
+#include &lt;perl.h&gt;
+
+static PerlInterpreter *my_perl;
+
+static void
+PerlPower(int a, int b)
+{
+  dSP;                            /* initialize stack pointer      */
+  ENTER;                          /* everything created after here */
+  SAVETMPS;                       /* ...is a temporary variable.   */
+  PUSHMARK(SP);                   /* remember the stack pointer    */
+  XPUSHs(sv_2mortal(newSViv(a))); /* push the base onto the stack  */
+  XPUSHs(sv_2mortal(newSViv(b))); /* push the exponent onto stack  */
+  PUTBACK;                      /* make local stack pointer global */
+  call_pv(&quot;expo&quot;, G_SCALAR);      /* call the function             */
+  SPAGAIN;                        /* refresh stack pointer         */
+                                /* pop the return value from stack */
+  printf (&quot;%d to the %dth power is %d.\n&quot;, a, b, POPi);
+  PUTBACK;
+  FREETMPS;                       /* free that return value        */
+  LEAVE;                       /* ...and the XPUSHed &quot;mortal&quot; args.*/
+}
+
+int main (int argc, char **argv, char **env)
+{
+  char *my_argv[] = { &quot;&quot;, &quot;power.pl&quot;, NULL };
+
+  PERL_SYS_INIT3(&amp;argc,&amp;argv,&amp;env);
+  my_perl = perl_alloc();
+  perl_construct( my_perl );
+
+  perl_parse(my_perl, NULL, 2, my_argv, (char **)NULL);
+  PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
+  perl_run(my_perl);
+
+  PerlPower(3, 4);                      /*** Compute 3 ** 4 ***/
+
+  perl_destruct(my_perl);
+  perl_free(my_perl);
+  PERL_SYS_TERM();
+  exit(EXIT_SUCCESS);
+}</code></pre>
+
+<p>Compile and run:</p>
+
+<pre><code class="plaintext">% cc -o power power.c `perl -MExtUtils::Embed -e ccopts -e ldopts`
+
+% power
+3 to the 4th power is 81.</code></pre>
+
+<h2 id="Maintaining-a-persistent-interpreter"><a class="permalink" href="perlembed.html#Maintaining-a-persistent-interpreter">#</a><a id="Maintaining"></a>Maintaining a persistent interpreter</h2>
+
+<p>When developing interactive and/or potentially long-running applications, it&#39;s a good idea to maintain a persistent interpreter rather than allocating and constructing a new interpreter multiple times. The major reason is speed: since Perl will only be loaded into memory once.</p>
+
+<p>However, you have to be more cautious with namespace and variable scoping when using a persistent interpreter. In previous examples we&#39;ve been using global variables in the default package <code>main</code>. We knew exactly what code would be run, and assumed we could avoid variable collisions and outrageous symbol table growth.</p>
+
+<p>Let&#39;s say your application is a server that will occasionally run Perl code from some arbitrary file. Your server has no way of knowing what code it&#39;s going to run. Very dangerous.</p>
+
+<p>If the file is pulled in by <code>perl_parse()</code>, compiled into a newly constructed interpreter, and subsequently cleaned out with <code>perl_destruct()</code> afterwards, you&#39;re shielded from most namespace troubles.</p>
+
+<p>One way to avoid namespace collisions in this scenario is to translate the filename into a guaranteed-unique package name, and then compile the code into that package using <a href="perlfunc.html#eval">&quot;eval&quot; in perlfunc</a>. In the example below, each file will only be compiled once. Or, the application might choose to clean out the symbol table associated with the file after it&#39;s no longer needed. Using <a href="perlapi.html#call_argv">&quot;call_argv&quot; in perlapi</a>, We&#39;ll call the subroutine <code>Embed::Persistent::eval_file</code> which lives in the file <code>persistent.pl</code> and pass the filename and boolean cleanup/cache flag as arguments.</p>
+
+<p>Note that the process will continue to grow for each file that it uses. In addition, there might be <code>AUTOLOAD</code>ed subroutines and other conditions that cause Perl&#39;s symbol table to grow. You might want to add some logic that keeps track of the process size, or restarts itself after a certain number of requests, to ensure that memory consumption is minimized. You&#39;ll also want to scope your variables with <a href="perlfunc.html#my">&quot;my&quot; in perlfunc</a> whenever possible.</p>
+
+<pre><code> package Embed::Persistent;
+ #persistent.pl
+
+ use strict;
+ our %Cache;
+ use Symbol qw(delete_package);
+
+ sub valid_package_name {
+     my($string) = @_;
+     $string =~ s/([^A-Za-z0-9\/])/sprintf(&quot;_%2x&quot;,unpack(&quot;C&quot;,$1))/eg;
+     # second pass only for words starting with a digit
+     $string =~ s|/(\d)|sprintf(&quot;/_%2x&quot;,unpack(&quot;C&quot;,$1))|eg;
+
+     # Dress it up as a real package name
+     $string =~ s|/|::|g;
+     return &quot;Embed&quot; . $string;
+ }
+
+ sub eval_file {
+     my($filename, $delete) = @_;
+     my $package = valid_package_name($filename);
+     my $mtime = -M $filename;
+     if(defined $Cache{$package}{mtime}
+        &amp;&amp;
+        $Cache{$package}{mtime} &lt;= $mtime)
+     {
+        # we have compiled this subroutine already,
+        # it has not been updated on disk, nothing left to do
+        print STDERR &quot;already compiled $package-&gt;handler\n&quot;;
+     }
+     else {
+        local *FH;
+        open FH, $filename or die &quot;open &#39;$filename&#39; $!&quot;;
+        local($/) = undef;
+        my $sub = &lt;FH&gt;;
+        close FH;
+
+        #wrap the code into a subroutine inside our unique package
+        my $eval = qq{package $package; sub handler { $sub; }};
+        {
+            # hide our variables within this block
+            my($filename,$mtime,$package,$sub);
+            eval $eval;
+        }
+        die $@ if $@;
+
+        #cache it unless we&#39;re cleaning out each time
+        $Cache{$package}{mtime} = $mtime unless $delete;
+     }
+
+     eval {$package-&gt;handler;};
+     die $@ if $@;
+
+     delete_package($package) if $delete;
+
+     #take a look if you want
+     #print Devel::Symdump-&gt;rnew($package)-&gt;as_string, $/;
+ }
+
+ 1;
+
+ __END__
+
+ /* persistent.c */
+ #include &lt;EXTERN.h&gt;
+ #include &lt;perl.h&gt;
+
+ /* 1 = clean out filename&#39;s symbol table after each request,
+    0 = don&#39;t
+ */
+ #ifndef DO_CLEAN
+ #define DO_CLEAN 0
+ #endif
+
+ #define BUFFER_SIZE 1024
+
+ static PerlInterpreter *my_perl = NULL;
+
+ int
+ main(int argc, char **argv, char **env)
+ {
+     char *embedding[] = { &quot;&quot;, &quot;persistent.pl&quot;, NULL };
+     char *args[] = { &quot;&quot;, DO_CLEAN, NULL };
+     char filename[BUFFER_SIZE];
+     int failing, exitstatus;
+
+     PERL_SYS_INIT3(&amp;argc,&amp;argv,&amp;env);
+     if((my_perl = perl_alloc()) == NULL) {
+        fprintf(stderr, &quot;no memory!&quot;);
+        exit(EXIT_FAILURE);
+     }
+     perl_construct(my_perl);
+
+     PL_origalen = 1; /* don&#39;t let $0 assignment update the
+                         proctitle or embedding[0] */
+     failing = perl_parse(my_perl, NULL, 2, embedding, NULL);
+     PL_exit_flags |= PERL_EXIT_DESTRUCT_END;
+     if(!failing)
+	failing = perl_run(my_perl);
+     if(!failing) {
+        while(printf(&quot;Enter file name: &quot;) &amp;&amp;
+              fgets(filename, BUFFER_SIZE, stdin)) {
+
+            filename[strlen(filename)-1] = &#39;\0&#39;; /* strip \n */
+            /* call the subroutine,
+                     passing it the filename as an argument */
+            args[0] = filename;
+            call_argv(&quot;Embed::Persistent::eval_file&quot;,
+                           G_DISCARD | G_EVAL, args);
+
+            /* check $@ */
+            if(SvTRUE(ERRSV))
+                fprintf(stderr, &quot;eval error: %s\n&quot;, SvPV_nolen(ERRSV));
+        }
+     }
+
+     PL_perl_destruct_level = 0;
+     exitstatus = perl_destruct(my_perl);
+     perl_free(my_perl);
+     PERL_SYS_TERM();
+     exit(exitstatus);
+ }</code></pre>
+
+<p>Now compile:</p>
+
+<pre><code class="plaintext">% cc -o persistent persistent.c \
+       `perl -MExtUtils::Embed -e ccopts -e ldopts`</code></pre>
+
+<p>Here&#39;s an example script file:</p>
+
+<pre><code>#test.pl
+my $string = &quot;hello&quot;;
+foo($string);
+
+sub foo {
+    print &quot;foo says: @_\n&quot;;
+}</code></pre>
+
+<p>Now run:</p>
+
+<pre><code>% persistent
+Enter file name: test.pl
+foo says: hello
+Enter file name: test.pl
+already compiled Embed::test_2epl-&gt;handler
+foo says: hello
+Enter file name: ^C</code></pre>
+
+<h2 id="Execution-of-END-blocks"><a class="permalink" href="perlembed.html#Execution-of-END-blocks">#</a><a id="Execution"></a>Execution of END blocks</h2>
+
+<p>Traditionally END blocks have been executed at the end of the perl_run. This causes problems for applications that never call perl_run. Since perl 5.7.2 you can specify <code>PL_exit_flags |= PERL_EXIT_DESTRUCT_END</code> to get the new behaviour. This also enables the running of END blocks if the perl_parse fails and <code>perl_destruct</code> will return the exit value.</p>
+
+<h2 id="$0-assignments"><a class="permalink" href="perlembed.html#$0-assignments">#</a><a id="assignments"></a>$0 assignments</h2>
+
+<p>When a perl script assigns a value to $0 then the perl runtime will try to make this value show up as the program name reported by &quot;ps&quot; by updating the memory pointed to by the argv passed to perl_parse() and also calling API functions like setproctitle() where available. This behaviour might not be appropriate when embedding perl and can be disabled by assigning the value <code>1</code> to the variable <code>PL_origalen</code> before perl_parse() is called.</p>
+
+<p>The <i>persistent.c</i> example above is for instance likely to segfault when $0 is assigned to if the <code>PL_origalen = 1;</code> assignment is removed. This because perl will try to write to the read only memory of the <code>embedding[]</code> strings.</p>
+
+<h2 id="Maintaining-multiple-interpreter-instances"><a class="permalink" href="perlembed.html#Maintaining-multiple-interpreter-instances">#</a><a id="Maintaining1"></a>Maintaining multiple interpreter instances</h2>
+
+<p>Some rare applications will need to create more than one interpreter during a session. Such an application might sporadically decide to release any resources associated with the interpreter.</p>
+
+<p>The program must take care to ensure that this takes place <i>before</i> the next interpreter is constructed. By default, when perl is not built with any special options, the global variable <code>PL_perl_destruct_level</code> is set to <code>0</code>, since extra cleaning isn&#39;t usually needed when a program only ever creates a single interpreter in its entire lifetime.</p>
+
+<p>Setting <code>PL_perl_destruct_level</code> to <code>1</code> makes everything squeaky clean:</p>
+
+<pre><code>while(1) {
+    ...
+    /* reset global variables here with PL_perl_destruct_level = 1 */
+    PL_perl_destruct_level = 1;
+    perl_construct(my_perl);
+    ...
+    /* clean and reset _everything_ during perl_destruct */
+    PL_perl_destruct_level = 1;
+    perl_destruct(my_perl);
+    perl_free(my_perl);
+    ...
+    /* let&#39;s go do it again! */
+}</code></pre>
+
+<p>When <i>perl_destruct()</i> is called, the interpreter&#39;s syntax parse tree and symbol tables are cleaned up, and global variables are reset. The second assignment to <code>PL_perl_destruct_level</code> is needed because perl_construct resets it to <code>0</code>.</p>
+
+<p>Now suppose we have more than one interpreter instance running at the same time. This is feasible, but only if you used the Configure option <code>-Dusemultiplicity</code> or the options <code>-Dusethreads -Duseithreads</code> when building perl. By default, enabling one of these Configure options sets the per-interpreter global variable <code>PL_perl_destruct_level</code> to <code>1</code>, so that thorough cleaning is automatic and interpreter variables are initialized correctly. Even if you don&#39;t intend to run two or more interpreters at the same time, but to run them sequentially, like in the above example, it is recommended to build perl with the <code>-Dusemultiplicity</code> option otherwise some interpreter variables may not be initialized correctly between consecutive runs and your application may crash.</p>
+
+<p>See also <a href="perlxs.html#Thread-aware-system-interfaces">&quot;Thread-aware system interfaces&quot; in perlxs</a>.</p>
+
+<p>Using <code>-Dusethreads -Duseithreads</code> rather than <code>-Dusemultiplicity</code> is more appropriate if you intend to run multiple interpreters concurrently in different threads, because it enables support for linking in the thread libraries of your system with the interpreter.</p>
+
+<p>Let&#39;s give it a try:</p>
+
+<pre><code>#include &lt;EXTERN.h&gt;
+#include &lt;perl.h&gt;
+
+/* we&#39;re going to embed two interpreters */
+
+#define SAY_HELLO &quot;-e&quot;, &quot;print qq(Hi, I&#39;m $^X\n)&quot;
+
+int main(int argc, char **argv, char **env)
+{
+    PerlInterpreter *one_perl, *two_perl;
+    char *one_args[] = { &quot;one_perl&quot;, SAY_HELLO, NULL };
+    char *two_args[] = { &quot;two_perl&quot;, SAY_HELLO, NULL };
+
+    PERL_SYS_INIT3(&amp;argc,&amp;argv,&amp;env);
+    one_perl = perl_alloc();
+    two_perl = perl_alloc();
+
+    PERL_SET_CONTEXT(one_perl);
+    perl_construct(one_perl);
+    PERL_SET_CONTEXT(two_perl);
+    perl_construct(two_perl);
+
+    PERL_SET_CONTEXT(one_perl);
+    perl_parse(one_perl, NULL, 3, one_args, (char **)NULL);
+    PERL_SET_CONTEXT(two_perl);
+    perl_parse(two_perl, NULL, 3, two_args, (char **)NULL);
+
+    PERL_SET_CONTEXT(one_perl);
+    perl_run(one_perl);
+    PERL_SET_CONTEXT(two_perl);
+    perl_run(two_perl);
+
+    PERL_SET_CONTEXT(one_perl);
+    perl_destruct(one_perl);
+    PERL_SET_CONTEXT(two_perl);
+    perl_destruct(two_perl);
+
+    PERL_SET_CONTEXT(one_perl);
+    perl_free(one_perl);
+    PERL_SET_CONTEXT(two_perl);
+    perl_free(two_perl);
+    PERL_SYS_TERM();
+    exit(EXIT_SUCCESS);
+}</code></pre>
+
+<p>Note the calls to PERL_SET_CONTEXT(). These are necessary to initialize the global state that tracks which interpreter is the &quot;current&quot; one on the particular process or thread that may be running it. It should always be used if you have more than one interpreter and are making perl API calls on both interpreters in an interleaved fashion.</p>
+
+<p>PERL_SET_CONTEXT(interp) should also be called whenever <code>interp</code> is used by a thread that did not create it (using either perl_alloc(), or the more esoteric perl_clone()).</p>
+
+<p>Compile as usual:</p>
+
+<pre><code class="plaintext">% cc -o multiplicity multiplicity.c \
+ `perl -MExtUtils::Embed -e ccopts -e ldopts`</code></pre>
+
+<p>Run it, Run it:</p>
+
+<pre><code class="plaintext">% multiplicity
+Hi, I&#39;m one_perl
+Hi, I&#39;m two_perl</code></pre>
+
+<h2 id="Using-Perl-modules,-which-themselves-use-C-libraries,-from-your-C-program"><a class="permalink" href="perlembed.html#Using-Perl-modules,-which-themselves-use-C-libraries,-from-your-C-program">#</a><a id="Using"></a><a id="Using-Perl-modules-which-themselves-use-C-libraries-from-your-C-program"></a>Using Perl modules, which themselves use C libraries, from your C program</h2>
+
+<p>If you&#39;ve played with the examples above and tried to embed a script that <i>use()</i>s a Perl module (such as <i>Socket</i>) which itself uses a C or C++ library, this probably happened:</p>
+
+<pre><code class="plaintext">Can&#39;t load module Socket, dynamic loading not available in this perl.
+ (You may need to build a new perl executable which either supports
+ dynamic loading or has the Socket module statically linked into it.)</code></pre>
+
+<p>What&#39;s wrong?</p>
+
+<p>Your interpreter doesn&#39;t know how to communicate with these extensions on its own. A little glue will help. Up until now you&#39;ve been calling <i>perl_parse()</i>, handing it NULL for the second argument:</p>
+
+<pre><code>perl_parse(my_perl, NULL, argc, my_argv, NULL);</code></pre>
+
+<p>That&#39;s where the glue code can be inserted to create the initial contact between Perl and linked C/C++ routines. Let&#39;s take a look some pieces of <i>perlmain.c</i> to see how Perl does this:</p>
+
+<pre><code>static void xs_init (pTHX);
+
+EXTERN_C void boot_DynaLoader (pTHX_ CV* cv);
+EXTERN_C void boot_Socket (pTHX_ CV* cv);
+
+
+EXTERN_C void
+xs_init(pTHX)
+{
+       char *file = __FILE__;
+       /* DynaLoader is a special case */
+       newXS(&quot;DynaLoader::boot_DynaLoader&quot;, boot_DynaLoader, file);
+       newXS(&quot;Socket::bootstrap&quot;, boot_Socket, file);
+}</code></pre>
+
+<p>Simply put: for each extension linked with your Perl executable (determined during its initial configuration on your computer or when adding a new extension), a Perl subroutine is created to incorporate the extension&#39;s routines. Normally, that subroutine is named <i>Module::bootstrap()</i> and is invoked when you say <i>use Module</i>. In turn, this hooks into an XSUB, <i>boot_Module</i>, which creates a Perl counterpart for each of the extension&#39;s XSUBs. Don&#39;t worry about this part; leave that to the <i>xsubpp</i> and extension authors. If your extension is dynamically loaded, DynaLoader creates <i>Module::bootstrap()</i> for you on the fly. In fact, if you have a working DynaLoader then there is rarely any need to link in any other extensions statically.</p>
+
+<p>Once you have this code, slap it into the second argument of <i>perl_parse()</i>:</p>
+
+<pre><code>perl_parse(my_perl, xs_init, argc, my_argv, NULL);</code></pre>
+
+<p>Then compile:</p>
+
+<pre><code>% cc -o interp interp.c `perl -MExtUtils::Embed -e ccopts -e ldopts`
+
+% interp
+  use Socket;
+  use SomeDynamicallyLoadedModule;
+
+  print &quot;Now I can use extensions!\n&quot;&#39;</code></pre>
+
+<p><b>ExtUtils::Embed</b> can also automate writing the <i>xs_init</i> glue code.</p>
+
+<pre><code class="plaintext">% perl -MExtUtils::Embed -e xsinit -- -o perlxsi.c
+% cc -c perlxsi.c `perl -MExtUtils::Embed -e ccopts`
+% cc -c interp.c  `perl -MExtUtils::Embed -e ccopts`
+% cc -o interp perlxsi.o interp.o `perl -MExtUtils::Embed -e ldopts`</code></pre>
+
+<p>Consult <a href="perlxs.html">perlxs</a>, <a href="perlguts.html">perlguts</a>, and <a href="perlapi.html">perlapi</a> for more details.</p>
+
+<h2 id="Using-embedded-Perl-with-POSIX-locales"><a class="permalink" href="perlembed.html#Using-embedded-Perl-with-POSIX-locales">#</a><a id="Using1"></a>Using embedded Perl with POSIX locales</h2>
+
+<p>(See <a href="perllocale.html">perllocale</a> for information about these.) When a Perl interpreter normally starts up, it tells the system it wants to use the system&#39;s default locale. This is often, but not necessarily, the &quot;C&quot; or &quot;POSIX&quot; locale. Absent a <span style="white-space: nowrap;"><code>&quot;use locale&quot;</code></span> within the perl code, this mostly has no effect (but see <a href="perllocale.html#Not-within-the-scope-of-%22use-locale%22">&quot;Not within the scope of &quot;use locale&quot;&quot; in perllocale</a>). Also, there is not a problem if the locale you want to use in your embedded perl is the same as the system default. However, this doesn&#39;t work if you have set up and want to use a locale that isn&#39;t the system default one. Starting in Perl v5.20, you can tell the embedded Perl interpreter that the locale is already properly set up, and to skip doing its own normal initialization. It skips if the environment variable <code>PERL_SKIP_LOCALE_INIT</code> is set (even if set to 0 or <code>&quot;&quot;</code>). A perl that has this capability will define the C pre-processor symbol <code>HAS_SKIP_LOCALE_INIT</code>. This allows code that has to work with multiple Perl versions to do some sort of work-around when confronted with an earlier Perl.</p>
+
+<p>If your program is using the POSIX 2008 multi-thread locale functionality, you should switch into the global locale and set that up properly before starting the Perl interpreter. It will then properly switch back to using the thread-safe functions.</p>
+
+<h1 id="Hiding-Perl_"><a class="permalink" href="perlembed.html#Hiding-Perl_">#</a><a id="Hiding"></a>Hiding Perl_</h1>
+
+<p>If you completely hide the short forms of the Perl public API, add -DPERL_NO_SHORT_NAMES to the compilation flags. This means that for example instead of writing</p>
+
+<pre><code>warn(&quot;%d bottles of beer on the wall&quot;, bottlecount);</code></pre>
+
+<p>you will have to write the explicit full form</p>
+
+<pre><code>Perl_warn(aTHX_ &quot;%d bottles of beer on the wall&quot;, bottlecount);</code></pre>
+
+<p>(See <a href="perlguts.html#Background-and-PERL_IMPLICIT_CONTEXT">&quot;Background and PERL_IMPLICIT_CONTEXT&quot; in perlguts</a> for the explanation of the <code>aTHX_</code>. ) Hiding the short forms is very useful for avoiding all sorts of nasty (C preprocessor or otherwise) conflicts with other software packages (Perl defines about 2400 APIs with these short names, take or leave few hundred, so there certainly is room for conflict.)</p>
+
+<h1 id="MORAL"><a class="permalink" href="perlembed.html#MORAL">#</a>MORAL</h1>
+
+<p>You can sometimes <i>write faster code</i> in C, but you can always <i>write code faster</i> in Perl. Because you can use each from the other, combine them as you wish.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="perlembed.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Jon Orwant &lt;<i>orwant@media.mit.edu</i>&gt; and Doug MacEachern &lt;<i>dougm@covalent.net</i>&gt;, with small contributions from Tim Bunce, Tom Christiansen, Guy Decoux, Hallvard Furuseth, Dov Grobgeld, and Ilya Zakharevich.</p>
+
+<p>Doug MacEachern has an article on embedding in Volume 1, Issue 4 of The Perl Journal ( <a href="http://www.tpj.com/">http://www.tpj.com/</a> ). Doug is also the developer of the most widely-used Perl embedding: the mod_perl system (perl.apache.org), which embeds Perl in the Apache web server. Oracle, Binary Evolution, ActiveState, and Ben Sugars&#39;s nsapi_perl have used this model for Oracle, Netscape and Internet Information Server Perl plugins.</p>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="perlembed.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>Copyright (C) 1995, 1996, 1997, 1998 Doug MacEachern and Jon Orwant. All Rights Reserved.</p>
+
+<p>This document may be distributed under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

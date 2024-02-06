@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Net::NNTP - NNTP Client class - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Net::NNTP">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Net::NNTP.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Net::NNTP">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Net::NNTP">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Net::NNTP">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Net::NNTP">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Net::NNTP">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Net::NNTP">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Net::NNTP">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Net::NNTP">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Net::NNTP">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Net::NNTP">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Net::NNTP">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Net::NNTP">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Net::NNTP">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Net::NNTP">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Net::NNTP">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Net::NNTP">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Net::NNTP">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Net::NNTP">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Net::NNTP">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Net::NNTP">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Net::NNTP">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Net::NNTP">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Net::NNTP">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Net::NNTP">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Net::NNTP">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Net::NNTP">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Net::NNTP">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Net::NNTP">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Net::NNTP">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Net::NNTP">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Net::NNTP">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Net::NNTP">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Net::NNTP">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Net::NNTP">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Net::NNTP">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Net::NNTP">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Net::NNTP">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Net::NNTP">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Net::NNTP">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Net::NNTP">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Net::NNTP">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Net::NNTP">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Net::NNTP">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Net::NNTP">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Net::NNTP">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Net::NNTP">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Net::NNTP">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Net::NNTP">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Net::NNTP">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Net::NNTP">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Net::NNTP">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Net::NNTP">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Net::NNTP">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Net::NNTP">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Net::NNTP">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Net::NNTP">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Net::NNTP">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Net::NNTP">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Net::NNTP">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Net::NNTP">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Net::NNTP">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Net::NNTP">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Net::NNTP">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Net::NNTP">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Net::NNTP">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Net::NNTP">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Net::NNTP">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Net::NNTP">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Net::NNTP">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Net::NNTP">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Net::NNTP">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Net::NNTP">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Net::NNTP">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Net::NNTP">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Net::NNTP">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Net::NNTP">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Net::NNTP">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Net::NNTP">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Net::NNTP">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Net::NNTP">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Net::NNTP.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Net::NNTP">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Net::NNTP">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Net::NNTP">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Net::NNTP">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Net::NNTP">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Net::NNTP">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Net::NNTP">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Net::NNTP">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Net::NNTP">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Net::NNTP">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Net::NNTP">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Net::NNTP">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Net::NNTP">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Net::NNTP">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Net::NNTP">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Net::NNTP">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Net::NNTP">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Net::NNTP">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Net::NNTP">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Net::NNTP">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Net::NNTP">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Net::NNTP">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Net::NNTP">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Net::NNTP">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Net::NNTP">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Net::NNTP">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Net::NNTP">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Net::NNTP">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Net::NNTP">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Net::NNTP">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Net::NNTP">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Net::NNTP">5.35.1</a>
+          <a class="dropdown-item active" href="./Net::NNTP.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Net::NNTP.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Net::NNTP.html">Net::NNTP</a>
+          <div id="more">
+            (<a href="./Net::NNTP.txt">source</a>,
+            <a href="https://metacpan.org/pod/Net::NNTP">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 3.13</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#Class-Methods">Class Methods</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#Object-Methods">Object Methods</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#Extension-Methods">Extension Methods</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#Unsupported">Unsupported</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#Definitions">Definitions</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#EXPORTS">EXPORTS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#KNOWN-BUGS">KNOWN BUGS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#LICENCE">LICENCE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#VERSION">VERSION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#DATE">DATE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::NNTP.html#HISTORY">HISTORY</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Net::NNTP.html#NAME">#</a>NAME</h1>
+
+<p>Net::NNTP - NNTP Client class</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Net::NNTP.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Net::NNTP;
+
+$nntp = Net::NNTP-&gt;new(&quot;some.host.name&quot;);
+$nntp-&gt;quit;
+
+# start with SSL, e.g. nntps
+$nntp = Net::NNTP-&gt;new(&quot;some.host.name&quot;, SSL =&gt; 1);
+
+# start with plain and upgrade to SSL
+$nntp = Net::NNTP-&gt;new(&quot;some.host.name&quot;);
+$nntp-&gt;starttls;</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Net::NNTP.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p><code>Net::NNTP</code> is a class implementing a simple NNTP client in Perl as described in RFC977 and RFC4642. With <a href="./IO::Socket::SSL.html">IO::Socket::SSL</a> installed it also provides support for implicit and explicit TLS encryption, i.e. NNTPS or NNTP+STARTTLS.</p>
+
+<p>The Net::NNTP class is a subclass of Net::Cmd and (depending on avaibility) of IO::Socket::IP, IO::Socket::INET6 or IO::Socket::INET.</p>
+
+<h2 id="Class-Methods"><a class="permalink" href="./Net::NNTP.html#Class-Methods">#</a><a id="Class"></a>Class Methods</h2>
+
+<dl>
+
+<dt id="new([$host][,-%options])"><a class="permalink" href="./Net::NNTP.html#new(%5B$host%5D%5B,-%25options%5D)">#</a><a id="new"></a><a id="new-host-options"></a><code>new([$host][, %options])</code></dt>
+<dd>
+
+<p>This is the constructor for a new Net::NNTP object. <code>$host</code> is the name of the remote host to which a NNTP connection is required. If not given then it may be passed as the <code>Host</code> option described below. If no host is passed then two environment variables are checked, first <code>NNTPSERVER</code> then <code>NEWSHOST</code>, then <code>Net::Config</code> is checked, and if a host is not found then <code>news</code> is used.</p>
+
+<p><code>%options</code> are passed in a hash like fashion, using key and value pairs. Possible options are:</p>
+
+<p><b>Host</b> - NNTP host to connect to. It may be a single scalar, as defined for the <code>PeerAddr</code> option in <a href="./IO::Socket::INET.html">IO::Socket::INET</a>, or a reference to an array with hosts to try in turn. The <a href="./Net::NNTP.html#host">&quot;host&quot;</a> method will return the value which was used to connect to the host.</p>
+
+<p><b>Port</b> - port to connect to. Default - 119 for plain NNTP and 563 for immediate SSL (nntps).</p>
+
+<p><b>SSL</b> - If the connection should be done from start with SSL, contrary to later upgrade with <code>starttls</code>. You can use SSL arguments as documented in <a href="./IO::Socket::SSL.html">IO::Socket::SSL</a>, but it will usually use the right arguments already.</p>
+
+<p><b>Timeout</b> - Maximum time, in seconds, to wait for a response from the NNTP server, a value of zero will cause all IO operations to block. (default: 120)</p>
+
+<p><b>Debug</b> - Enable the printing of debugging information to STDERR</p>
+
+<p><b>Reader</b> - If the remote server is INN then initially the connection will be to innd, by default <code>Net::NNTP</code> will issue a <code>MODE READER</code> command so that the remote server becomes nnrpd. If the <code>Reader</code> option is given with a value of zero, then this command will not be sent and the connection will be left talking to innd.</p>
+
+<p><b>LocalAddr</b> and <b>LocalPort</b> - These parameters are passed directly to IO::Socket to allow binding the socket to a specific local address and port.</p>
+
+<p><b>Domain</b> - This parameter is passed directly to IO::Socket and makes it possible to enforce IPv4 connections even if <a href="./IO::Socket::IP.html">IO::Socket::IP</a> is used as super class. Alternatively <b>Family</b> can be used.</p>
+
+</dd>
+</dl>
+
+<h2 id="Object-Methods"><a class="permalink" href="./Net::NNTP.html#Object-Methods">#</a><a id="Object"></a>Object Methods</h2>
+
+<p>Unless otherwise stated all methods return either a <i>true</i> or <i>false</i> value, with <i>true</i> meaning that the operation was a success. When a method states that it returns a value, failure will be returned as <i>undef</i> or an empty list.</p>
+
+<p><code>Net::NNTP</code> inherits from <code>Net::Cmd</code> so methods defined in <code>Net::Cmd</code> may be used to send commands to the remote NNTP server in addition to the methods documented here.</p>
+
+<dl>
+
+<dt id="host()"><a class="permalink" href="./Net::NNTP.html#host()">#</a><a id="host"></a><code>host()</code></dt>
+<dd>
+
+<p>Returns the value used by the constructor, and passed to IO::Socket::INET, to connect to the host.</p>
+
+</dd>
+<dt id="starttls()"><a class="permalink" href="./Net::NNTP.html#starttls()">#</a><a id="starttls"></a><code>starttls()</code></dt>
+<dd>
+
+<p>Upgrade existing plain connection to SSL. Any arguments necessary for SSL must be given in <code>new</code> already.</p>
+
+</dd>
+<dt id="article([{$msgid|$msgnum}[,-$fh]])"><a class="permalink" href="./Net::NNTP.html#article(%5B%7B$msgid%7C$msgnum%7D%5B,-$fh%5D%5D)">#</a><a id="article"></a><a id="article-msgid-msgnum-fh"></a><code>article([{$msgid|$msgnum}[, $fh]])</code></dt>
+<dd>
+
+<p>Retrieve the header, a blank line, then the body (text) of the specified article.</p>
+
+<p>If <code>$fh</code> is specified then it is expected to be a valid filehandle and the result will be printed to it, on success a true value will be returned. If <code>$fh</code> is not specified then the return value, on success, will be a reference to an array containing the article requested, each entry in the array will contain one line of the article.</p>
+
+<p>If no arguments are passed then the current article in the currently selected newsgroup is fetched.</p>
+
+<p><code>$msgnum</code> is a numeric id of an article in the current newsgroup, and will change the current article pointer. <code>$msgid</code> is the message id of an article as shown in that article&#39;s header. It is anticipated that the client will obtain the <code>$msgid</code> from a list provided by the <code>newnews</code> command, from references contained within another article, or from the message-id provided in the response to some other commands.</p>
+
+<p>If there is an error then <code>undef</code> will be returned.</p>
+
+</dd>
+<dt id="body([{$msgid|$msgnum}[,-[$fh]])"><a class="permalink" href="./Net::NNTP.html#body(%5B%7B$msgid%7C$msgnum%7D%5B,-%5B$fh%5D%5D)">#</a><a id="body"></a><a id="body-msgid-msgnum-fh"></a><code>body([{$msgid|$msgnum}[, [$fh]])</code></dt>
+<dd>
+
+<p>Like <code>article</code> but only fetches the body of the article.</p>
+
+</dd>
+<dt id="head([{$msgid|$msgnum}[,-[$fh]])"><a class="permalink" href="./Net::NNTP.html#head(%5B%7B$msgid%7C$msgnum%7D%5B,-%5B$fh%5D%5D)">#</a><a id="head"></a><a id="head-msgid-msgnum-fh"></a><code>head([{$msgid|$msgnum}[, [$fh]])</code></dt>
+<dd>
+
+<p>Like <code>article</code> but only fetches the headers for the article.</p>
+
+</dd>
+<dt id="articlefh([{$msgid|$msgnum}])"><a class="permalink" href="./Net::NNTP.html#articlefh(%5B%7B$msgid%7C$msgnum%7D%5D)">#</a><a id="articlefh"></a><a id="articlefh-msgid-msgnum"></a><code>articlefh([{$msgid|$msgnum}])</code></dt>
+<dd>
+
+</dd>
+<dt id="bodyfh([{$msgid|$msgnum}])"><a class="permalink" href="./Net::NNTP.html#bodyfh(%5B%7B$msgid%7C$msgnum%7D%5D)">#</a><a id="bodyfh"></a><a id="bodyfh-msgid-msgnum"></a><code>bodyfh([{$msgid|$msgnum}])</code></dt>
+<dd>
+
+</dd>
+<dt id="headfh([{$msgid|$msgnum}])"><a class="permalink" href="./Net::NNTP.html#headfh(%5B%7B$msgid%7C$msgnum%7D%5D)">#</a><a id="headfh"></a><a id="headfh-msgid-msgnum"></a><code>headfh([{$msgid|$msgnum}])</code></dt>
+<dd>
+
+<p>These are similar to article(), body() and head(), but rather than returning the requested data directly, they return a tied filehandle from which to read the article.</p>
+
+</dd>
+<dt id="nntpstat([{$msgid|$msgnum}])"><a class="permalink" href="./Net::NNTP.html#nntpstat(%5B%7B$msgid%7C$msgnum%7D%5D)">#</a><a id="nntpstat"></a><a id="nntpstat-msgid-msgnum"></a><code>nntpstat([{$msgid|$msgnum}])</code></dt>
+<dd>
+
+<p>The <code>nntpstat</code> command is similar to the <code>article</code> command except that no text is returned. When selecting by message number within a group, the <code>nntpstat</code> command serves to set the &quot;current article pointer&quot; without sending text.</p>
+
+<p>Using the <code>nntpstat</code> command to select by message-id is valid but of questionable value, since a selection by message-id does <b>not</b> alter the &quot;current article pointer&quot;.</p>
+
+<p>Returns the message-id of the &quot;current article&quot;.</p>
+
+</dd>
+<dt id="group([$group])"><a class="permalink" href="./Net::NNTP.html#group(%5B$group%5D)">#</a><a id="group"></a><a id="group-group"></a><code>group([$group])</code></dt>
+<dd>
+
+<p>Set and/or get the current group. If <code>$group</code> is not given then information is returned on the current group.</p>
+
+<p>In a scalar context it returns the group name.</p>
+
+<p>In an array context the return value is a list containing, the number of articles in the group, the number of the first article, the number of the last article and the group name.</p>
+
+</dd>
+<dt id="help()"><a class="permalink" href="./Net::NNTP.html#help()">#</a><a id="help"></a><code>help()</code></dt>
+<dd>
+
+<p>Request help text (a short summary of commands that are understood by this implementation) from the server. Returns the text or undef upon failure.</p>
+
+</dd>
+<dt id="ihave($msgid[,-$message])"><a class="permalink" href="./Net::NNTP.html#ihave($msgid%5B,-$message%5D)">#</a><a id="ihave"></a><a id="ihave-msgid-message"></a><code>ihave($msgid[, $message])</code></dt>
+<dd>
+
+<p>The <code>ihave</code> command informs the server that the client has an article whose id is <code>$msgid</code>. If the server desires a copy of that article and <code>$message</code> has been given then it will be sent.</p>
+
+<p>Returns <i>true</i> if the server desires the article and <code>$message</code> was successfully sent, if specified.</p>
+
+<p>If <code>$message</code> is not specified then the message must be sent using the <code>datasend</code> and <code>dataend</code> methods from <a href="./Net::Cmd.html">Net::Cmd</a></p>
+
+<p><code>$message</code> can be either an array of lines or a reference to an array and must be encoded by the caller to octets of whatever encoding is required, e.g. by using the Encode module&#39;s <code>encode()</code> function.</p>
+
+</dd>
+<dt id="last()"><a class="permalink" href="./Net::NNTP.html#last()">#</a><a id="last"></a><code>last()</code></dt>
+<dd>
+
+<p>Set the &quot;current article pointer&quot; to the previous article in the current newsgroup.</p>
+
+<p>Returns the message-id of the article.</p>
+
+</dd>
+<dt id="date()"><a class="permalink" href="./Net::NNTP.html#date()">#</a><a id="date"></a><code>date()</code></dt>
+<dd>
+
+<p>Returns the date on the remote server. This date will be in a UNIX time format (seconds since 1970)</p>
+
+</dd>
+<dt id="postok()"><a class="permalink" href="./Net::NNTP.html#postok()">#</a><a id="postok"></a><code>postok()</code></dt>
+<dd>
+
+<p><code>postok</code> will return <i>true</i> if the servers initial response indicated that it will allow posting.</p>
+
+</dd>
+<dt id="authinfo($user,-$pass)"><a class="permalink" href="./Net::NNTP.html#authinfo($user,-$pass)">#</a><a id="authinfo"></a><a id="authinfo-user-pass"></a><code>authinfo($user, $pass)</code></dt>
+<dd>
+
+<p>Authenticates to the server (using the original AUTHINFO USER / AUTHINFO PASS form, defined in RFC2980) using the supplied username and password. Please note that the password is sent in clear text to the server. This command should not be used with valuable passwords unless the connection to the server is somehow protected.</p>
+
+</dd>
+<dt id="authinfo_simple($user,-$pass)"><a class="permalink" href="./Net::NNTP.html#authinfo_simple($user,-$pass)">#</a><a id="authinfo_simple"></a><a id="authinfo_simple-user-pass"></a><code>authinfo_simple($user, $pass)</code></dt>
+<dd>
+
+<p>Authenticates to the server (using the proposed NNTP V2 AUTHINFO SIMPLE form, defined and deprecated in RFC2980) using the supplied username and password. As with <a href="./Net::NNTP.html#authinfo">&quot;authinfo&quot;</a> the password is sent in clear text.</p>
+
+</dd>
+<dt id="list()"><a class="permalink" href="./Net::NNTP.html#list()">#</a><a id="list"></a><code>list()</code></dt>
+<dd>
+
+<p>Obtain information about all the active newsgroups. The results is a reference to a hash where the key is a group name and each value is a reference to an array. The elements in this array are:- the last article number in the group, the first article number in the group and any information flags about the group.</p>
+
+</dd>
+<dt id="newgroups($since[,-$distributions])"><a class="permalink" href="./Net::NNTP.html#newgroups($since%5B,-$distributions%5D)">#</a><a id="newgroups"></a><a id="newgroups-since-distributions"></a><code>newgroups($since[, $distributions])</code></dt>
+<dd>
+
+<p><code>$since</code> is a time value and <code>$distributions</code> is either a distribution pattern or a reference to a list of distribution patterns. The result is the same as <code>list</code>, but the groups return will be limited to those created after <code>$since</code> and, if specified, in one of the distribution areas in <code>$distributions</code>.</p>
+
+</dd>
+<dt id="newnews($since[,-$groups[,-$distributions]])"><a class="permalink" href="./Net::NNTP.html#newnews($since%5B,-$groups%5B,-$distributions%5D%5D)">#</a><a id="newnews"></a><a id="newnews-since-groups-distributions"></a><code>newnews($since[, $groups[, $distributions]])</code></dt>
+<dd>
+
+<p><code>$since</code> is a time value. <code>$groups</code> is either a group pattern or a reference to a list of group patterns. <code>$distributions</code> is either a distribution pattern or a reference to a list of distribution patterns.</p>
+
+<p>Returns a reference to a list which contains the message-ids of all news posted after <code>$since</code>, that are in a groups which matched <code>$groups</code> and a distribution which matches <code>$distributions</code>.</p>
+
+</dd>
+<dt id="next()"><a class="permalink" href="./Net::NNTP.html#next()">#</a><a id="next"></a><code>next()</code></dt>
+<dd>
+
+<p>Set the &quot;current article pointer&quot; to the next article in the current newsgroup.</p>
+
+<p>Returns the message-id of the article.</p>
+
+</dd>
+<dt id="post([$message])"><a class="permalink" href="./Net::NNTP.html#post(%5B$message%5D)">#</a><a id="post"></a><a id="post-message"></a><code>post([$message])</code></dt>
+<dd>
+
+<p>Post a new article to the news server. If <code>$message</code> is specified and posting is allowed then the message will be sent.</p>
+
+<p>If <code>$message</code> is not specified then the message must be sent using the <code>datasend</code> and <code>dataend</code> methods from <a href="./Net::Cmd.html">Net::Cmd</a></p>
+
+<p><code>$message</code> can be either an array of lines or a reference to an array and must be encoded by the caller to octets of whatever encoding is required, e.g. by using the Encode module&#39;s <code>encode()</code> function.</p>
+
+<p>The message, either sent via <code>datasend</code> or as the <code>$message</code> parameter, must be in the format as described by RFC822 and must contain From:, Newsgroups: and Subject: headers.</p>
+
+</dd>
+<dt id="postfh()"><a class="permalink" href="./Net::NNTP.html#postfh()">#</a><a id="postfh"></a><code>postfh()</code></dt>
+<dd>
+
+<p>Post a new article to the news server using a tied filehandle. If posting is allowed, this method will return a tied filehandle that you can print() the contents of the article to be posted. You must explicitly close() the filehandle when you are finished posting the article, and the return value from the close() call will indicate whether the message was successfully posted.</p>
+
+</dd>
+<dt id="slave()"><a class="permalink" href="./Net::NNTP.html#slave()">#</a><a id="slave"></a><code>slave()</code></dt>
+<dd>
+
+<p>Tell the remote server that I am not a user client, but probably another news server.</p>
+
+</dd>
+<dt id="quit()"><a class="permalink" href="./Net::NNTP.html#quit()">#</a><a id="quit"></a><code>quit()</code></dt>
+<dd>
+
+<p>Quit the remote server and close the socket connection.</p>
+
+</dd>
+<dt id="can_inet6()"><a class="permalink" href="./Net::NNTP.html#can_inet6()">#</a><a id="can_inet6"></a><code>can_inet6()</code></dt>
+<dd>
+
+<p>Returns whether we can use IPv6.</p>
+
+</dd>
+<dt id="can_ssl()"><a class="permalink" href="./Net::NNTP.html#can_ssl()">#</a><a id="can_ssl"></a><code>can_ssl()</code></dt>
+<dd>
+
+<p>Returns whether we can use SSL.</p>
+
+</dd>
+</dl>
+
+<h2 id="Extension-Methods"><a class="permalink" href="./Net::NNTP.html#Extension-Methods">#</a><a id="Extension"></a>Extension Methods</h2>
+
+<p>These methods use commands that are not part of the RFC977 documentation. Some servers may not support all of them.</p>
+
+<dl>
+
+<dt id="newsgroups([$pattern])"><a class="permalink" href="./Net::NNTP.html#newsgroups(%5B$pattern%5D)">#</a><a id="newsgroups"></a><a id="newsgroups-pattern"></a><code>newsgroups([$pattern])</code></dt>
+<dd>
+
+<p>Returns a reference to a hash where the keys are all the group names which match <code>$pattern</code>, or all of the groups if no pattern is specified, and each value contains the description text for the group.</p>
+
+</dd>
+<dt id="distributions()"><a class="permalink" href="./Net::NNTP.html#distributions()">#</a><a id="distributions"></a><code>distributions()</code></dt>
+<dd>
+
+<p>Returns a reference to a hash where the keys are all the possible distribution names and the values are the distribution descriptions.</p>
+
+</dd>
+<dt id="distribution_patterns()"><a class="permalink" href="./Net::NNTP.html#distribution_patterns()">#</a><a id="distribution_patterns"></a><code>distribution_patterns()</code></dt>
+<dd>
+
+<p>Returns a reference to an array where each element, itself an array reference, consists of the three fields of a line of the distrib.pats list maintained by some NNTP servers, namely: a weight, a wildmat and a value which the client may use to construct a Distribution header.</p>
+
+</dd>
+<dt id="subscriptions()"><a class="permalink" href="./Net::NNTP.html#subscriptions()">#</a><a id="subscriptions"></a><code>subscriptions()</code></dt>
+<dd>
+
+<p>Returns a reference to a list which contains a list of groups which are recommended for a new user to subscribe to.</p>
+
+</dd>
+<dt id="overview_fmt()"><a class="permalink" href="./Net::NNTP.html#overview_fmt()">#</a><a id="overview_fmt"></a><code>overview_fmt()</code></dt>
+<dd>
+
+<p>Returns a reference to an array which contain the names of the fields returned by <code>xover</code>.</p>
+
+</dd>
+<dt id="active_times()"><a class="permalink" href="./Net::NNTP.html#active_times()">#</a><a id="active_times"></a><code>active_times()</code></dt>
+<dd>
+
+<p>Returns a reference to a hash where the keys are the group names and each value is a reference to an array containing the time the groups was created and an identifier, possibly an Email address, of the creator.</p>
+
+</dd>
+<dt id="active([$pattern])"><a class="permalink" href="./Net::NNTP.html#active(%5B$pattern%5D)">#</a><a id="active"></a><a id="active-pattern"></a><code>active([$pattern])</code></dt>
+<dd>
+
+<p>Similar to <code>list</code> but only active groups that match the pattern are returned. <code>$pattern</code> can be a group pattern.</p>
+
+</dd>
+<dt id="xgtitle($pattern)"><a class="permalink" href="./Net::NNTP.html#xgtitle($pattern)">#</a><a id="xgtitle"></a><a id="xgtitle-pattern"></a><code>xgtitle($pattern)</code></dt>
+<dd>
+
+<p>Returns a reference to a hash where the keys are all the group names which match <code>$pattern</code> and each value is the description text for the group.</p>
+
+</dd>
+<dt id="xhdr($header,-$message_spec)"><a class="permalink" href="./Net::NNTP.html#xhdr($header,-$message_spec)">#</a><a id="xhdr"></a><a id="xhdr-header-message_spec"></a><code>xhdr($header, $message_spec)</code></dt>
+<dd>
+
+<p>Obtain the header field <code>$header</code> for all the messages specified.</p>
+
+<p>The return value will be a reference to a hash where the keys are the message numbers and each value contains the text of the requested header for that message.</p>
+
+</dd>
+<dt id="xover($message_spec)"><a class="permalink" href="./Net::NNTP.html#xover($message_spec)">#</a><a id="xover"></a><a id="xover-message_spec"></a><code>xover($message_spec)</code></dt>
+<dd>
+
+<p>The return value will be a reference to a hash where the keys are the message numbers and each value contains a reference to an array which contains the overview fields for that message.</p>
+
+<p>The names of the fields can be obtained by calling <code>overview_fmt</code>.</p>
+
+</dd>
+<dt id="xpath($message_id)"><a class="permalink" href="./Net::NNTP.html#xpath($message_id)">#</a><a id="xpath"></a><a id="xpath-message_id"></a><code>xpath($message_id)</code></dt>
+<dd>
+
+<p>Returns the path name to the file on the server which contains the specified message.</p>
+
+</dd>
+<dt id="xpat($header,-$pattern,-$message_spec)"><a class="permalink" href="./Net::NNTP.html#xpat($header,-$pattern,-$message_spec)">#</a><a id="xpat"></a><a id="xpat-header-pattern-message_spec"></a><code>xpat($header, $pattern, $message_spec)</code></dt>
+<dd>
+
+<p>The result is the same as <code>xhdr</code> except the is will be restricted to headers where the text of the header matches <code>$pattern</code></p>
+
+</dd>
+<dt id="xrover($message_spec)"><a class="permalink" href="./Net::NNTP.html#xrover($message_spec)">#</a><a id="xrover"></a><a id="xrover-message_spec"></a><code>xrover($message_spec)</code></dt>
+<dd>
+
+<p>The XROVER command returns reference information for the article(s) specified.</p>
+
+<p>Returns a reference to a HASH where the keys are the message numbers and the values are the References: lines from the articles</p>
+
+</dd>
+<dt id="listgroup([$group])"><a class="permalink" href="./Net::NNTP.html#listgroup(%5B$group%5D)">#</a><a id="listgroup"></a><a id="listgroup-group"></a><code>listgroup([$group])</code></dt>
+<dd>
+
+<p>Returns a reference to a list of all the active messages in <code>$group</code>, or the current group if <code>$group</code> is not specified.</p>
+
+</dd>
+<dt id="reader()"><a class="permalink" href="./Net::NNTP.html#reader()">#</a><a id="reader"></a><code>reader()</code></dt>
+<dd>
+
+<p>Tell the server that you are a reader and not another server.</p>
+
+<p>This is required by some servers. For example if you are connecting to an INN server and you have transfer permission your connection will be connected to the transfer daemon, not the NNTP daemon. Issuing this command will cause the transfer daemon to hand over control to the NNTP daemon.</p>
+
+<p>Some servers do not understand this command, but issuing it and ignoring the response is harmless.</p>
+
+</dd>
+</dl>
+
+<h2 id="Unsupported"><a class="permalink" href="./Net::NNTP.html#Unsupported">#</a>Unsupported</h2>
+
+<p>The following NNTP command are unsupported by the package, and there are no plans to do so.</p>
+
+<pre><code class="plaintext">AUTHINFO GENERIC
+XTHREAD
+XSEARCH
+XINDEX</code></pre>
+
+<h2 id="Definitions"><a class="permalink" href="./Net::NNTP.html#Definitions">#</a>Definitions</h2>
+
+<dl>
+
+<dt id="$message_spec"><a class="permalink" href="./Net::NNTP.html#$message_spec">#</a><a id="message_spec"></a>$message_spec</dt>
+<dd>
+
+<p><code>$message_spec</code> is either a single message-id, a single message number, or a reference to a list of two message numbers.</p>
+
+<p>If <code>$message_spec</code> is a reference to a list of two message numbers and the second number in a range is less than or equal to the first then the range represents all messages in the group after the first message number.</p>
+
+<p><b>NOTE</b> For compatibility reasons only with earlier versions of Net::NNTP a message spec can be passed as a list of two numbers, this is deprecated and a reference to the list should now be passed</p>
+
+</dd>
+<dt id="$pattern"><a class="permalink" href="./Net::NNTP.html#$pattern">#</a><a id="pattern"></a>$pattern</dt>
+<dd>
+
+<p>The <code>NNTP</code> protocol uses the <code>WILDMAT</code> format for patterns. The WILDMAT format was first developed by Rich Salz based on the format used in the UNIX &quot;find&quot; command to articulate file names. It was developed to provide a uniform mechanism for matching patterns in the same manner that the UNIX shell matches filenames.</p>
+
+<p>Patterns are implicitly anchored at the beginning and end of each string when testing for a match.</p>
+
+<p>There are five pattern matching operations other than a strict one-to-one match between the pattern and the source to be checked for a match.</p>
+
+<p>The first is an asterisk <code>*</code> to match any sequence of zero or more characters.</p>
+
+<p>The second is a question mark <code>?</code> to match any single character. The third specifies a specific set of characters.</p>
+
+<p>The set is specified as a list of characters, or as a range of characters where the beginning and end of the range are separated by a minus (or dash) character, or as any combination of lists and ranges. The dash can also be included in the set as a character it if is the beginning or end of the set. This set is enclosed in square brackets. The close square bracket <code>]</code> may be used in a set if it is the first character in the set.</p>
+
+<p>The fourth operation is the same as the logical not of the third operation and is specified the same way as the third with the addition of a caret character <code>^</code> at the beginning of the test string just inside the open square bracket.</p>
+
+<p>The final operation uses the backslash character to invalidate the special meaning of an open square bracket <code>[</code>, the asterisk, backslash or the question mark. Two backslashes in sequence will result in the evaluation of the backslash as a character with no special meaning.</p>
+
+<dl>
+
+<dt id="Examples"><a class="permalink" href="./Net::NNTP.html#Examples">#</a>Examples</dt>
+<dd>
+
+</dd>
+<dt id="[^]-]"><a class="permalink" href="./Net::NNTP.html#%5B%5E%5D-%5D">#</a><a id="pod"></a><code>[^]-]</code></dt>
+<dd>
+
+<p>matches any single character other than a close square bracket or a minus sign/dash.</p>
+
+</dd>
+<dt id="*bdc"><a class="permalink" href="./Net::NNTP.html#*bdc">#</a><a id="bdc"></a><code>*bdc</code></dt>
+<dd>
+
+<p>matches any string that ends with the string &quot;bdc&quot; including the string &quot;bdc&quot; (without quotes).</p>
+
+</dd>
+<dt id="[0-9a-zA-Z]"><a class="permalink" href="./Net::NNTP.html#%5B0-9a-zA-Z%5D">#</a><a id="a-zA-Z"></a><code>[0-9a-zA-Z]</code></dt>
+<dd>
+
+<p>matches any single printable alphanumeric ASCII character.</p>
+
+</dd>
+<dt id="a??d"><a class="permalink" href="./Net::NNTP.html#a??d">#</a><a id="a"></a><a id="a-d"></a><code>a??d</code></dt>
+<dd>
+
+<p>matches any four character string which begins with a and ends with d.</p>
+
+</dd>
+</dl>
+
+</dd>
+</dl>
+
+<h1 id="EXPORTS"><a class="permalink" href="./Net::NNTP.html#EXPORTS">#</a>EXPORTS</h1>
+
+<p><i>None</i>.</p>
+
+<h1 id="KNOWN-BUGS"><a class="permalink" href="./Net::NNTP.html#KNOWN-BUGS">#</a><a id="KNOWN"></a>KNOWN BUGS</h1>
+
+<p>See <a href="https://rt.cpan.org/Dist/Display.html?Status=Active&amp;Queue=libnet">https://rt.cpan.org/Dist/Display.html?Status=Active&amp;Queue=libnet</a>.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./Net::NNTP.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Net::Cmd.html">Net::Cmd</a>, <a href="./IO::Socket::SSL.html">IO::Socket::SSL</a>.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./Net::NNTP.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Graham Barr &lt;<a href="mailto:gbarr@pobox.com">gbarr@pobox.com</a>&gt;.</p>
+
+<p>Steve Hay &lt;<a href="mailto:shay@cpan.org">shay@cpan.org</a>&gt; is now maintaining libnet as of version 1.22_02.</p>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="./Net::NNTP.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>Copyright (C) 1995-1997 Graham Barr. All rights reserved.</p>
+
+<p>Copyright (C) 2013-2016, 2020 Steve Hay. All rights reserved.</p>
+
+<h1 id="LICENCE"><a class="permalink" href="./Net::NNTP.html#LICENCE">#</a>LICENCE</h1>
+
+<p>This module is free software; you can redistribute it and/or modify it under the same terms as Perl itself, i.e. under the terms of either the GNU General Public License or the Artistic License, as specified in the <i>LICENCE</i> file.</p>
+
+<h1 id="VERSION"><a class="permalink" href="./Net::NNTP.html#VERSION">#</a>VERSION</h1>
+
+<p>Version 3.13</p>
+
+<h1 id="DATE"><a class="permalink" href="./Net::NNTP.html#DATE">#</a>DATE</h1>
+
+<p>23 Dec 2020</p>
+
+<h1 id="HISTORY"><a class="permalink" href="./Net::NNTP.html#HISTORY">#</a>HISTORY</h1>
+
+<p>See the <i>Changes</i> file.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Time::Local - Efficiently compute time from local and GMT time - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Time::Local">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Time::Local.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Time::Local">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Time::Local">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Time::Local">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Time::Local">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Time::Local">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Time::Local">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Time::Local">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Time::Local">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Time::Local">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Time::Local">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Time::Local">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Time::Local">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Time::Local">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Time::Local">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Time::Local">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Time::Local">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Time::Local">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Time::Local">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Time::Local">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Time::Local">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Time::Local">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Time::Local">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Time::Local">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Time::Local">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Time::Local">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Time::Local">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Time::Local">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Time::Local">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Time::Local">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Time::Local">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Time::Local">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Time::Local">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Time::Local">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Time::Local">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Time::Local">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Time::Local">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Time::Local">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Time::Local">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Time::Local">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Time::Local">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Time::Local">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Time::Local">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Time::Local">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Time::Local">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Time::Local">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Time::Local">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Time::Local">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Time::Local">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Time::Local">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Time::Local">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Time::Local">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Time::Local">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Time::Local">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Time::Local">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Time::Local">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Time::Local">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Time::Local">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Time::Local">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Time::Local">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Time::Local">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Time::Local">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Time::Local">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Time::Local">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Time::Local">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Time::Local">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Time::Local">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Time::Local">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Time::Local">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Time::Local">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Time::Local">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Time::Local">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Time::Local">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Time::Local">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Time::Local">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Time::Local">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Time::Local">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Time::Local">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Time::Local">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Time::Local">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Time::Local">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Time::Local.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Time::Local">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Time::Local">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Time::Local">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Time::Local">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Time::Local">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Time::Local">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Time::Local">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Time::Local">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Time::Local">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Time::Local">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Time::Local">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Time::Local">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Time::Local">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Time::Local">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Time::Local">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Time::Local">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Time::Local">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Time::Local">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Time::Local">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Time::Local">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Time::Local">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Time::Local">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Time::Local">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Time::Local">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Time::Local">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Time::Local">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Time::Local">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Time::Local">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Time::Local">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Time::Local">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Time::Local">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Time::Local">5.35.1</a>
+          <a class="dropdown-item active" href="./Time::Local.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Time::Local.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Time::Local.html">Time::Local</a>
+          <div id="more">
+            (<a href="./Time::Local.txt">source</a>,
+            <a href="https://metacpan.org/pod/Time::Local">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 1.30</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#VERSION">VERSION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#FUNCTIONS">FUNCTIONS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#timelocal_posix()-and-timegm_posix()">timelocal_posix() and timegm_posix()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#timelocal_modern()-and-timegm_modern()">timelocal_modern() and timegm_modern()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#timelocal()-and-timegm()">timelocal() and timegm()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#timelocal_nocheck()-and-timegm_nocheck()">timelocal_nocheck() and timegm_nocheck()</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#Year-Value-Interpretation">Year Value Interpretation</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#Limits-of-time_t">Limits of time_t</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#Ambiguous-Local-Times-(DST)">Ambiguous Local Times (DST)</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#Non-Existent-Local-Times-(DST)">Non-Existent Local Times (DST)</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#Negative-Epoch-Values">Negative Epoch Values</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#IMPLEMENTATION">IMPLEMENTATION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#AUTHORS-EMERITUS">AUTHORS EMERITUS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#BUGS">BUGS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#SOURCE">SOURCE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#CONTRIBUTORS">CONTRIBUTORS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Time::Local.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Time::Local.html#NAME">#</a>NAME</h1>
+
+<p>Time::Local - Efficiently compute time from local and GMT time</p>
+
+<h1 id="VERSION"><a class="permalink" href="./Time::Local.html#VERSION">#</a>VERSION</h1>
+
+<p>version 1.30</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Time::Local.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Time::Local qw( timelocal_posix timegm_posix );
+
+my $time = timelocal_posix( $sec, $min, $hour, $mday, $mon, $year );
+my $time = timegm_posix( $sec, $min, $hour, $mday, $mon, $year );</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Time::Local.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This module provides functions that are the inverse of built-in perl functions <code>localtime()</code> and <code>gmtime()</code>. They accept a date as a six-element array, and return the corresponding <code>time(2)</code> value in seconds since the system epoch (Midnight, January 1, 1970 GMT on Unix, for example). This value can be positive or negative, though POSIX only requires support for positive values, so dates before the system&#39;s epoch may not work on all operating systems.</p>
+
+<p>It is worth drawing particular attention to the expected ranges for the values provided. The value for the day of the month is the actual day (i.e. 1..31), while the month is the number of months since January (0..11). This is consistent with the values returned from <code>localtime()</code> and <code>gmtime()</code>.</p>
+
+<h1 id="FUNCTIONS"><a class="permalink" href="./Time::Local.html#FUNCTIONS">#</a>FUNCTIONS</h1>
+
+<h2 id="timelocal_posix()-and-timegm_posix()"><a class="permalink" href="./Time::Local.html#timelocal_posix()-and-timegm_posix()">#</a><a id="timelocal_posix"></a><a id="timelocal_posix-and-timegm_posix"></a><code>timelocal_posix()</code> and <code>timegm_posix()</code></h2>
+
+<p>These functions are the exact inverse of Perl&#39;s built-in <code>localtime</code> and <code>gmtime</code> functions. That means that calling <code>timelocal_posix( localtime($value) )</code> will always give you the same <code>$value</code> you started with. The same applies to <code>timegm_posix( gmtime($value) )</code>.</p>
+
+<p>The one exception is when the value returned from <code>localtime()</code> represents an ambiguous local time because of a DST change. See the documentation below for more details.</p>
+
+<p>These functions expect the year value to be the number of years since 1900, which is what the <code>localtime()</code> and <code>gmtime()</code> built-ins returns.</p>
+
+<p>They perform range checking by default on the input <code>$sec</code>, <code>$min</code>, <code>$hour</code>, <code>$mday</code>, and <code>$mon</code> values and will croak (using <code>Carp::croak()</code>) if given a value outside the allowed ranges.</p>
+
+<p>While it would be nice to make this the default behavior, that would almost certainly break a lot of code, so you must explicitly import these functions and use them instead of the default <code>timelocal()</code> and <code>timegm()</code>.</p>
+
+<p>You are <b>strongly</b> encouraged to use these functions in any new code which uses this module. It will almost certainly make your code&#39;s behavior less surprising.</p>
+
+<h2 id="timelocal_modern()-and-timegm_modern()"><a class="permalink" href="./Time::Local.html#timelocal_modern()-and-timegm_modern()">#</a><a id="timelocal_modern"></a><a id="timelocal_modern-and-timegm_modern"></a><code>timelocal_modern()</code> and <code>timegm_modern()</code></h2>
+
+<p>When <code>Time::Local</code> was first written, it was a common practice to represent years as a two-digit value like <code>99</code> for <code>1999</code> or <code>1</code> for <code>2001</code>. This caused all sorts of problems (google &quot;Y2K problem&quot; if you&#39;re very young) and developers eventually realized that this was a terrible idea.</p>
+
+<p>The default exports of <code>timelocal()</code> and <code>timegm()</code> do a complicated calculation when given a year value less than 1000. This leads to surprising results in many cases. See <a href="./Time::Local.html#Year-Value-Interpretation">&quot;Year Value Interpretation&quot;</a> for details.</p>
+
+<p>The <code>time*_modern()</code> functions do not do this year munging and simply take the year value as provided.</p>
+
+<p>They perform range checking by default on the input <code>$sec</code>, <code>$min</code>, <code>$hour</code>, <code>$mday</code>, and <code>$mon</code> values and will croak (using <code>Carp::croak()</code>) if given a value outside the allowed ranges.</p>
+
+<h2 id="timelocal()-and-timegm()"><a class="permalink" href="./Time::Local.html#timelocal()-and-timegm()">#</a><a id="timelocal"></a><a id="timelocal-and-timegm"></a><code>timelocal()</code> and <code>timegm()</code></h2>
+
+<p>This module exports two functions by default, <code>timelocal()</code> and <code>timegm()</code>.</p>
+
+<p>They perform range checking by default on the input <code>$sec</code>, <code>$min</code>, <code>$hour</code>, <code>$mday</code>, and <code>$mon</code> values and will croak (using <code>Carp::croak()</code>) if given a value outside the allowed ranges.</p>
+
+<p><b>Warning: The year value interpretation that these functions and their nocheck variants use will almost certainly lead to bugs in your code, if not now, then in the future. You are strongly discouraged from using these in new code, and you should convert old code to using either the <code>*_posix</code> or <code>*_modern</code> functions if possible.</b></p>
+
+<h2 id="timelocal_nocheck()-and-timegm_nocheck()"><a class="permalink" href="./Time::Local.html#timelocal_nocheck()-and-timegm_nocheck()">#</a><a id="timelocal_nocheck"></a><a id="timelocal_nocheck-and-timegm_nocheck"></a><code>timelocal_nocheck()</code> and <code>timegm_nocheck()</code></h2>
+
+<p>If you are working with data you know to be valid, you can use the &quot;nocheck&quot; variants, <code>timelocal_nocheck()</code> and <code>timegm_nocheck()</code>. These variants must be explicitly imported.</p>
+
+<p>If you supply data which is not valid (month 27, second 1,000) the results will be unpredictable (so don&#39;t do that).</p>
+
+<p>Note that my benchmarks show that this is just a 3% speed increase over the checked versions, so unless calling <code>Time::Local</code> is the hottest spot in your application, using these nocheck variants is unlikely to have much impact on your application.</p>
+
+<h2 id="Year-Value-Interpretation"><a class="permalink" href="./Time::Local.html#Year-Value-Interpretation">#</a><a id="Year"></a>Year Value Interpretation</h2>
+
+<p><b>This does not apply to the <code>*_posix</code> or <code>*_modern</code> functions. Use those exports if you want to ensure consistent behavior as your code ages.</b></p>
+
+<p>Strictly speaking, the year should be specified in a form consistent with <code>localtime()</code>, i.e. the offset from 1900. In order to make the interpretation of the year easier for humans, however, who are more accustomed to seeing years as two-digit or four-digit values, the following conventions are followed:</p>
+
+<ul>
+
+<li><p>Years greater than 999 are interpreted as being the actual year, rather than the offset from 1900. Thus, 1964 would indicate the year Martin Luther King won the Nobel prize, not the year 3864.</p>
+
+</li>
+<li><p>Years in the range 100..999 are interpreted as offset from 1900, so that 112 indicates 2012. This rule also applies to years less than zero (but see note below regarding date range).</p>
+
+</li>
+<li><p>Years in the range 0..99 are interpreted as shorthand for years in the rolling &quot;current century,&quot; defined as 50 years on either side of the current year. Thus, today, in 1999, 0 would refer to 2000, and 45 to 2045, but 55 would refer to 1955. Twenty years from now, 55 would instead refer to 2055. This is messy, but matches the way people currently think about two digit dates. Whenever possible, use an absolute four digit year instead.</p>
+
+</li>
+</ul>
+
+<p>The scheme above allows interpretation of a wide range of dates, particularly if 4-digit years are used. But it also means that the behavior of your code changes as time passes, because the rolling &quot;current century&quot; changes each year.</p>
+
+<h2 id="Limits-of-time_t"><a class="permalink" href="./Time::Local.html#Limits-of-time_t">#</a><a id="Limits"></a>Limits of time_t</h2>
+
+<p>On perl versions older than 5.12.0, the range of dates that can be actually be handled depends on the size of <code>time_t</code> (usually a signed integer) on the given platform. Currently, this is 32 bits for most systems, yielding an approximate range from Dec 1901 to Jan 2038.</p>
+
+<p>Both <code>timelocal()</code> and <code>timegm()</code> croak if given dates outside the supported range.</p>
+
+<p>As of version 5.12.0, perl has stopped using the time implementation of the operating system it&#39;s running on. Instead, it has its own implementation of those routines with a safe range of at least +/- 2**52 (about 142 million years)</p>
+
+<h2 id="Ambiguous-Local-Times-(DST)"><a class="permalink" href="./Time::Local.html#Ambiguous-Local-Times-(DST)">#</a><a id="Ambiguous"></a><a id="Ambiguous-Local-Times-DST"></a>Ambiguous Local Times (DST)</h2>
+
+<p>Because of DST changes, there are many time zones where the same local time occurs for two different GMT times on the same day. For example, in the &quot;Europe/Paris&quot; time zone, the local time of 2001-10-28 02:30:00 can represent either 2001-10-28 00:30:00 GMT, <b>or</b> 2001-10-28 01:30:00 GMT.</p>
+
+<p>When given an ambiguous local time, the timelocal() function will always return the epoch for the <i>earlier</i> of the two possible GMT times.</p>
+
+<h2 id="Non-Existent-Local-Times-(DST)"><a class="permalink" href="./Time::Local.html#Non-Existent-Local-Times-(DST)">#</a><a id="Non"></a><a id="Non-Existent-Local-Times-DST"></a>Non-Existent Local Times (DST)</h2>
+
+<p>When a DST change causes a locale clock to skip one hour forward, there will be an hour&#39;s worth of local times that don&#39;t exist. Again, for the &quot;Europe/Paris&quot; time zone, the local clock jumped from 2001-03-25 01:59:59 to 2001-03-25 03:00:00.</p>
+
+<p>If the <code>timelocal()</code> function is given a non-existent local time, it will simply return an epoch value for the time one hour later.</p>
+
+<h2 id="Negative-Epoch-Values"><a class="permalink" href="./Time::Local.html#Negative-Epoch-Values">#</a><a id="Negative"></a>Negative Epoch Values</h2>
+
+<p>On perl version 5.12.0 and newer, negative epoch values are fully supported.</p>
+
+<p>On older versions of perl, negative epoch (<code>time_t</code>) values, which are not officially supported by the POSIX standards, are known not to work on some systems. These include MacOS (pre-OSX) and Win32.</p>
+
+<p>On systems which do support negative epoch values, this module should be able to cope with dates before the start of the epoch, down the minimum value of time_t for the system.</p>
+
+<h1 id="IMPLEMENTATION"><a class="permalink" href="./Time::Local.html#IMPLEMENTATION">#</a>IMPLEMENTATION</h1>
+
+<p>These routines are quite efficient and yet are always guaranteed to agree with <code>localtime()</code> and <code>gmtime()</code>. We manage this by caching the start times of any months we&#39;ve seen before. If we know the start time of the month, we can always calculate any time within the month. The start times are calculated using a mathematical formula. Unlike other algorithms that do multiple calls to <code>gmtime()</code>.</p>
+
+<p>The <code>timelocal()</code> function is implemented using the same cache. We just assume that we&#39;re translating a GMT time, and then fudge it when we&#39;re done for the timezone and daylight savings arguments. Note that the timezone is evaluated for each date because countries occasionally change their official timezones. Assuming that <code>localtime()</code> corrects for these changes, this routine will also be correct.</p>
+
+<h1 id="AUTHORS-EMERITUS"><a class="permalink" href="./Time::Local.html#AUTHORS-EMERITUS">#</a><a id="AUTHORS"></a>AUTHORS EMERITUS</h1>
+
+<p>This module is based on a Perl 4 library, timelocal.pl, that was included with Perl 4.036, and was most likely written by Tom Christiansen.</p>
+
+<p>The current version was written by Graham Barr.</p>
+
+<h1 id="BUGS"><a class="permalink" href="./Time::Local.html#BUGS">#</a>BUGS</h1>
+
+<p>The whole scheme for interpreting two-digit years can be considered a bug.</p>
+
+<p>Bugs may be submitted at <a href="https://github.com/houseabsolute/Time-Local/issues">https://github.com/houseabsolute/Time-Local/issues</a>.</p>
+
+<p>There is a mailing list available for users of this distribution, <a href="mailto:datetime@perl.org">mailto:datetime@perl.org</a>.</p>
+
+<p>I am also usually active on IRC as &#39;autarch&#39; on <code>irc://irc.perl.org</code>.</p>
+
+<h1 id="SOURCE"><a class="permalink" href="./Time::Local.html#SOURCE">#</a>SOURCE</h1>
+
+<p>The source code repository for Time-Local can be found at <a href="https://github.com/houseabsolute/Time-Local">https://github.com/houseabsolute/Time-Local</a>.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./Time::Local.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Dave Rolsky &lt;autarch@urth.org&gt;</p>
+
+<h1 id="CONTRIBUTORS"><a class="permalink" href="./Time::Local.html#CONTRIBUTORS">#</a>CONTRIBUTORS</h1>
+
+<ul>
+
+<li><p>Florian Ragwitz &lt;rafl@debian.org&gt;</p>
+
+</li>
+<li><p>J. Nick Koston &lt;nick@cpanel.net&gt;</p>
+
+</li>
+<li><p>Unknown &lt;unknown@example.com&gt;</p>
+
+</li>
+</ul>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a class="permalink" href="./Time::Local.html#COPYRIGHT-AND-LICENSE">#</a><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>This software is copyright (c) 1997 - 2020 by Graham Barr &amp; Dave Rolsky.</p>
+
+<p>This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.</p>
+
+<p>The full text of the license can be found in the <i>LICENSE</i> file included with this distribution.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

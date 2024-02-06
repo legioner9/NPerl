@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pod::Text - Convert POD data to formatted text - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Pod::Text">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Pod::Text.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Pod::Text">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Pod::Text">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Pod::Text">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Pod::Text">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Pod::Text">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Pod::Text">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Pod::Text">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Pod::Text">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Pod::Text">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Pod::Text">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Pod::Text">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Pod::Text">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Pod::Text">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Pod::Text">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Pod::Text">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Pod::Text">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Pod::Text">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Pod::Text">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Pod::Text">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Pod::Text">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Pod::Text">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Pod::Text">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Pod::Text">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Pod::Text">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Pod::Text">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Pod::Text">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Pod::Text">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Pod::Text">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Pod::Text">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Pod::Text">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Pod::Text">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Pod::Text">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Pod::Text">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Pod::Text">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Pod::Text">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Pod::Text">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Pod::Text">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Pod::Text">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Pod::Text">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Pod::Text">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Pod::Text">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Pod::Text">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Pod::Text">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Pod::Text">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Pod::Text">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Pod::Text">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Pod::Text">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Pod::Text">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Pod::Text">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Pod::Text">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Pod::Text">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Pod::Text">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Pod::Text">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Pod::Text">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Pod::Text">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Pod::Text">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Pod::Text">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Pod::Text">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Pod::Text">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Pod::Text">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Pod::Text">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Pod::Text">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Pod::Text">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Pod::Text">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Pod::Text">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Pod::Text">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Pod::Text">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Pod::Text">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Pod::Text">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Pod::Text">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Pod::Text">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Pod::Text">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Pod::Text">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Pod::Text">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Pod::Text">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Pod::Text">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Pod::Text">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Pod::Text">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Pod::Text">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Pod::Text">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Pod::Text.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Pod::Text">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Pod::Text">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Pod::Text">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Pod::Text">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Pod::Text">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Pod::Text">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Pod::Text">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Pod::Text">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Pod::Text">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Pod::Text">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Pod::Text">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Pod::Text">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Pod::Text">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Pod::Text">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Pod::Text">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Pod::Text">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Pod::Text">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Pod::Text">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Pod::Text">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Pod::Text">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Pod::Text">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Pod::Text">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Pod::Text">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Pod::Text">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Pod::Text">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Pod::Text">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Pod::Text">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Pod::Text">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Pod::Text">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Pod::Text">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Pod::Text">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Pod::Text">5.35.1</a>
+          <a class="dropdown-item active" href="./Pod::Text.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Pod::Text.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Pod::Text.html">Pod::Text</a>
+          <div id="more">
+            (<a href="./Pod::Text.txt">source</a>,
+            <a href="https://metacpan.org/pod/Pod::Text">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 4.14</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Text.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Text.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Text.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Text.html#DIAGNOSTICS">DIAGNOSTICS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Text.html#BUGS">BUGS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Text.html#CAVEATS">CAVEATS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Text.html#NOTES">NOTES</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Text.html#AUTHOR">AUTHOR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Text.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Pod::Text.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Pod::Text.html#NAME">#</a>NAME</h1>
+
+<p>Pod::Text - Convert POD data to formatted text</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Pod::Text.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Pod::Text;
+my $parser = Pod::Text-&gt;new (sentence =&gt; 1, width =&gt; 78);
+
+# Read POD from STDIN and write to STDOUT.
+$parser-&gt;parse_from_filehandle;
+
+# Read POD from file.pod and write to file.txt.
+$parser-&gt;parse_from_file (&#39;file.pod&#39;, &#39;file.txt&#39;);</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Pod::Text.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>Pod::Text is a module that can convert documentation in the POD format (the preferred language for documenting Perl) into formatted text. It uses no special formatting controls or codes whatsoever, and its output is therefore suitable for nearly any device.</p>
+
+<p>As a derived class from Pod::Simple, Pod::Text supports the same methods and interfaces. See <a href="./Pod::Simple.html">Pod::Simple</a> for all the details; briefly, one creates a new parser with <code>Pod::Text-&gt;new()</code> and then normally calls parse_file().</p>
+
+<p>new() can take options, in the form of key/value pairs, that control the behavior of the parser. The currently recognized options are:</p>
+
+<dl>
+
+<dt id="alt"><a class="permalink" href="./Pod::Text.html#alt">#</a>alt</dt>
+<dd>
+
+<p>If set to a true value, selects an alternate output format that, among other things, uses a different heading style and marks <code>=item</code> entries with a colon in the left margin. Defaults to false.</p>
+
+</dd>
+<dt id="code"><a class="permalink" href="./Pod::Text.html#code">#</a>code</dt>
+<dd>
+
+<p>If set to a true value, the non-POD parts of the input file will be included in the output. Useful for viewing code documented with POD blocks with the POD rendered and the code left intact.</p>
+
+</dd>
+<dt id="errors"><a class="permalink" href="./Pod::Text.html#errors">#</a>errors</dt>
+<dd>
+
+<p>How to report errors. <code>die</code> says to throw an exception on any POD formatting error. <code>stderr</code> says to report errors on standard error, but not to throw an exception. <code>pod</code> says to include a POD ERRORS section in the resulting documentation summarizing the errors. <code>none</code> ignores POD errors entirely, as much as possible.</p>
+
+<p>The default is <code>pod</code>.</p>
+
+</dd>
+<dt id="indent"><a class="permalink" href="./Pod::Text.html#indent">#</a>indent</dt>
+<dd>
+
+<p>The number of spaces to indent regular text, and the default indentation for <code>=over</code> blocks. Defaults to 4.</p>
+
+</dd>
+<dt id="loose"><a class="permalink" href="./Pod::Text.html#loose">#</a>loose</dt>
+<dd>
+
+<p>If set to a true value, a blank line is printed after a <code>=head1</code> heading. If set to false (the default), no blank line is printed after <code>=head1</code>, although one is still printed after <code>=head2</code>. This is the default because it&#39;s the expected formatting for manual pages; if you&#39;re formatting arbitrary text documents, setting this to true may result in more pleasing output.</p>
+
+</dd>
+<dt id="margin"><a class="permalink" href="./Pod::Text.html#margin">#</a>margin</dt>
+<dd>
+
+<p>The width of the left margin in spaces. Defaults to 0. This is the margin for all text, including headings, not the amount by which regular text is indented; for the latter, see the <i>indent</i> option. To set the right margin, see the <i>width</i> option.</p>
+
+</dd>
+<dt id="nourls"><a class="permalink" href="./Pod::Text.html#nourls">#</a>nourls</dt>
+<dd>
+
+<p>Normally, L&lt;&gt; formatting codes with a URL but anchor text are formatted to show both the anchor text and the URL. In other words:</p>
+
+<pre><code class="plaintext">L&lt;foo|http://example.com/&gt;</code></pre>
+
+<p>is formatted as:</p>
+
+<pre><code class="plaintext">foo &lt;http://example.com/&gt;</code></pre>
+
+<p>This option, if set to a true value, suppresses the URL when anchor text is given, so this example would be formatted as just <code>foo</code>. This can produce less cluttered output in cases where the URLs are not particularly important.</p>
+
+</dd>
+<dt id="quotes"><a class="permalink" href="./Pod::Text.html#quotes">#</a>quotes</dt>
+<dd>
+
+<p>Sets the quote marks used to surround C&lt;&gt; text. If the value is a single character, it is used as both the left and right quote. Otherwise, it is split in half, and the first half of the string is used as the left quote and the second is used as the right quote.</p>
+
+<p>This may also be set to the special value <code>none</code>, in which case no quote marks are added around C&lt;&gt; text.</p>
+
+</dd>
+<dt id="sentence"><a class="permalink" href="./Pod::Text.html#sentence">#</a>sentence</dt>
+<dd>
+
+<p>If set to a true value, Pod::Text will assume that each sentence ends in two spaces, and will try to preserve that spacing. If set to false, all consecutive whitespace in non-verbatim paragraphs is compressed into a single space. Defaults to false.</p>
+
+</dd>
+<dt id="stderr"><a class="permalink" href="./Pod::Text.html#stderr">#</a>stderr</dt>
+<dd>
+
+<p>Send error messages about invalid POD to standard error instead of appending a POD ERRORS section to the generated output. This is equivalent to setting <code>errors</code> to <code>stderr</code> if <code>errors</code> is not already set. It is supported for backward compatibility.</p>
+
+</dd>
+<dt id="utf8"><a class="permalink" href="./Pod::Text.html#utf8">#</a>utf8</dt>
+<dd>
+
+<p>By default, Pod::Text uses the same output encoding as the input encoding of the POD source (provided that Perl was built with PerlIO; otherwise, it doesn&#39;t encode its output). If this option is given, the output encoding is forced to UTF-8.</p>
+
+<p>Be aware that, when using this option, the input encoding of your POD source should be properly declared unless it&#39;s US-ASCII. Pod::Simple will attempt to guess the encoding and may be successful if it&#39;s Latin-1 or UTF-8, but it will produce warnings. Use the <code>=encoding</code> command to declare the encoding. See <a href="http://man.he.net/man1/perlpod">perlpod(1)</a> for more information.</p>
+
+</dd>
+<dt id="width"><a class="permalink" href="./Pod::Text.html#width">#</a>width</dt>
+<dd>
+
+<p>The column at which to wrap text on the right-hand side. Defaults to 76.</p>
+
+</dd>
+</dl>
+
+<p>The standard Pod::Simple method parse_file() takes one argument naming the POD file to read from. By default, the output is sent to <code>STDOUT</code>, but this can be changed with the output_fh() method.</p>
+
+<p>The standard Pod::Simple method parse_from_file() takes up to two arguments, the first being the input file to read POD from and the second being the file to write the formatted output to.</p>
+
+<p>You can also call parse_lines() to parse an array of lines or parse_string_document() to parse a document already in memory. As with parse_file(), parse_lines() and parse_string_document() default to sending their output to <code>STDOUT</code> unless changed with the output_fh() method. Be aware that parse_lines() and parse_string_document() both expect raw bytes, not decoded characters.</p>
+
+<p>To put the output from any parse method into a string instead of a file handle, call the output_string() method instead of output_fh().</p>
+
+<p>See <a href="./Pod::Simple.html">Pod::Simple</a> for more specific details on the methods available to all derived parsers.</p>
+
+<h1 id="DIAGNOSTICS"><a class="permalink" href="./Pod::Text.html#DIAGNOSTICS">#</a>DIAGNOSTICS</h1>
+
+<dl>
+
+<dt id="Bizarre-space-in-item"><a class="permalink" href="./Pod::Text.html#Bizarre-space-in-item">#</a><a id="Bizarre"></a>Bizarre space in item</dt>
+<dd>
+
+</dd>
+<dt id="Item-called-without-tag"><a class="permalink" href="./Pod::Text.html#Item-called-without-tag">#</a><a id="Item"></a>Item called without tag</dt>
+<dd>
+
+<p>(W) Something has gone wrong in internal <code>=item</code> processing. These messages indicate a bug in Pod::Text; you should never see them.</p>
+
+</dd>
+<dt id="Can&#39;t-open-%s-for-reading:-%s"><a class="permalink" href="./Pod::Text.html#Can&#39;t-open-%25s-for-reading:-%25s">#</a><a id="Can"></a><a id="Cant-open-s-for-reading:-s"></a>Can&#39;t open %s for reading: %s</dt>
+<dd>
+
+<p>(F) Pod::Text was invoked via the compatibility mode pod2text() interface and the input file it was given could not be opened.</p>
+
+</dd>
+<dt id="Invalid-errors-setting-&quot;%s&quot;"><a class="permalink" href="./Pod::Text.html#Invalid-errors-setting-%22%25s%22">#</a><a id="Invalid"></a><a id="Invalid-errors-setting-s"></a>Invalid errors setting &quot;%s&quot;</dt>
+<dd>
+
+<p>(F) The <code>errors</code> parameter to the constructor was set to an unknown value.</p>
+
+</dd>
+<dt id="Invalid-quote-specification-&quot;%s&quot;"><a class="permalink" href="./Pod::Text.html#Invalid-quote-specification-%22%25s%22">#</a><a id="Invalid1"></a><a id="Invalid-quote-specification-s"></a>Invalid quote specification &quot;%s&quot;</dt>
+<dd>
+
+<p>(F) The quote specification given (the <code>quotes</code> option to the constructor) was invalid. A quote specification must be either one character long or an even number (greater than one) characters long.</p>
+
+</dd>
+<dt id="POD-document-had-syntax-errors"><a class="permalink" href="./Pod::Text.html#POD-document-had-syntax-errors">#</a><a id="POD"></a>POD document had syntax errors</dt>
+<dd>
+
+<p>(F) The POD document being formatted had syntax errors and the <code>errors</code> option was set to <code>die</code>.</p>
+
+</dd>
+</dl>
+
+<h1 id="BUGS"><a class="permalink" href="./Pod::Text.html#BUGS">#</a>BUGS</h1>
+
+<p>Encoding handling assumes that PerlIO is available and does not work properly if it isn&#39;t. The <code>utf8</code> option is therefore not supported unless Perl is built with PerlIO support.</p>
+
+<h1 id="CAVEATS"><a class="permalink" href="./Pod::Text.html#CAVEATS">#</a>CAVEATS</h1>
+
+<p>If Pod::Text is given the <code>utf8</code> option, the encoding of its output file handle will be forced to UTF-8 if possible, overriding any existing encoding. This will be done even if the file handle is not created by Pod::Text and was passed in from outside. This maintains consistency regardless of PERL_UNICODE and other settings.</p>
+
+<p>If the <code>utf8</code> option is not given, the encoding of its output file handle will be forced to the detected encoding of the input POD, which preserves whatever the input text is. This ensures backward compatibility with earlier, pre-Unicode versions of this module, without large numbers of Perl warnings.</p>
+
+<p>This is not ideal, but it seems to be the best compromise. If it doesn&#39;t work for you, please let me know the details of how it broke.</p>
+
+<h1 id="NOTES"><a class="permalink" href="./Pod::Text.html#NOTES">#</a>NOTES</h1>
+
+<p>This is a replacement for an earlier Pod::Text module written by Tom Christiansen. It has a revamped interface, since it now uses Pod::Simple, but an interface roughly compatible with the old Pod::Text::pod2text() function is still available. Please change to the new calling convention, though.</p>
+
+<p>The original Pod::Text contained code to do formatting via termcap sequences, although it wasn&#39;t turned on by default and it was problematic to get it to work at all. This rewrite doesn&#39;t even try to do that, but a subclass of it does. Look for <a href="./Pod::Text::Termcap.html">Pod::Text::Termcap</a>.</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./Pod::Text.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Russ Allbery &lt;rra@cpan.org&gt;, based <i>very</i> heavily on the original Pod::Text by Tom Christiansen &lt;tchrist@mox.perl.com&gt; and its conversion to Pod::Parser by Brad Appleton &lt;bradapp@enteract.com&gt;. Sean Burke&#39;s initial conversion of Pod::Man to use Pod::Simple provided much-needed guidance on how to use Pod::Simple.</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a class="permalink" href="./Pod::Text.html#COPYRIGHT-AND-LICENSE">#</a><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>Copyright 1999-2002, 2004, 2006, 2008-2009, 2012-2016, 2018-2019 Russ Allbery &lt;rra@cpan.org&gt;</p>
+
+<p>This program is free software; you may redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./Pod::Text.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Pod::Simple.html">Pod::Simple</a>, <a href="./Pod::Text::Termcap.html">Pod::Text::Termcap</a>, <a href="http://man.he.net/man1/perlpod">perlpod(1)</a>, <a href="http://man.he.net/man1/pod2text">pod2text(1)</a></p>
+
+<p>The current version of this module is always available from its web site at <a href="https://www.eyrie.org/~eagle/software/podlators/">https://www.eyrie.org/~eagle/software/podlators/</a>. It is also part of the Perl core distribution as of 5.6.0.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+=over
+
+=item exists EXPR
+X<exists> X<autovivification>
+
+Given an expression that specifies an element of a hash, returns true if the
+specified element in the hash has ever been initialized, even if the
+corresponding value is undefined.
+
+    print "Exists\n"    if exists $hash{$key};
+    print "Defined\n"   if defined $hash{$key};
+    print "True\n"      if $hash{$key};
+
+exists may also be called on array elements, but its behavior is much less
+obvious and is strongly tied to the use of L<C<delete>|/delete EXPR> on
+arrays.
+
+B<WARNING:> Calling L<C<exists>|/exists EXPR> on array values is
+strongly discouraged.  The
+notion of deleting or checking the existence of Perl array elements is not
+conceptually coherent, and can lead to surprising behavior.
+
+    print "Exists\n"    if exists $array[$index];
+    print "Defined\n"   if defined $array[$index];
+    print "True\n"      if $array[$index];
+
+A hash or array element can be true only if it's defined and defined only if
+it exists, but the reverse doesn't necessarily hold true.
+
+Given an expression that specifies the name of a subroutine,
+returns true if the specified subroutine has ever been declared, even
+if it is undefined.  Mentioning a subroutine name for exists or defined
+does not count as declaring it.  Note that a subroutine that does not
+exist may still be callable: its package may have an C<AUTOLOAD>
+method that makes it spring into existence the first time that it is
+called; see L<perlsub>.
+
+    print "Exists\n"  if exists &subroutine;
+    print "Defined\n" if defined &subroutine;
+
+Note that the EXPR can be arbitrarily complicated as long as the final
+operation is a hash or array key lookup or subroutine name:
+
+    if (exists $ref->{A}->{B}->{$key})  { }
+    if (exists $hash{A}{B}{$key})       { }
+
+    if (exists $ref->{A}->{B}->[$ix])   { }
+    if (exists $hash{A}{B}[$ix])        { }
+
+    if (exists &{$ref->{A}{B}{$key}})   { }
+
+Although the most deeply nested array or hash element will not spring into
+existence just because its existence was tested, any intervening ones will.
+Thus C<< $ref->{"A"} >> and C<< $ref->{"A"}->{"B"} >> will spring
+into existence due to the existence test for the C<$key> element above.
+This happens anywhere the arrow operator is used, including even here:
+
+    undef $ref;
+    if (exists $ref->{"Some key"})    { }
+    print $ref;  # prints HASH(0x80d3d5c)
+
+Use of a subroutine call, rather than a subroutine name, as an argument
+to L<C<exists>|/exists EXPR> is an error.
+
+    exists &sub;    # OK
+    exists &sub();  # Error
+
+=back

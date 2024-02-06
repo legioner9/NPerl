@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>File::Copy - Copy files or filehandles - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/File::Copy">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./File::Copy.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/File::Copy">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/File::Copy">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/File::Copy">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/File::Copy">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/File::Copy">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/File::Copy">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/File::Copy">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/File::Copy">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/File::Copy">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/File::Copy">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/File::Copy">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/File::Copy">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/File::Copy">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/File::Copy">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/File::Copy">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/File::Copy">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/File::Copy">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/File::Copy">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/File::Copy">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/File::Copy">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/File::Copy">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/File::Copy">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/File::Copy">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/File::Copy">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/File::Copy">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/File::Copy">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/File::Copy">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/File::Copy">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/File::Copy">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/File::Copy">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/File::Copy">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/File::Copy">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/File::Copy">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/File::Copy">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/File::Copy">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/File::Copy">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/File::Copy">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/File::Copy">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/File::Copy">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/File::Copy">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/File::Copy">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/File::Copy">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/File::Copy">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/File::Copy">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/File::Copy">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/File::Copy">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/File::Copy">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/File::Copy">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/File::Copy">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/File::Copy">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/File::Copy">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/File::Copy">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/File::Copy">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/File::Copy">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/File::Copy">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/File::Copy">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/File::Copy">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/File::Copy">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/File::Copy">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/File::Copy">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/File::Copy">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/File::Copy">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/File::Copy">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/File::Copy">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/File::Copy">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/File::Copy">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/File::Copy">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/File::Copy">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/File::Copy">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/File::Copy">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/File::Copy">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/File::Copy">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/File::Copy">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/File::Copy">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/File::Copy">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/File::Copy">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/File::Copy">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/File::Copy">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/File::Copy">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/File::Copy">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./File::Copy.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/File::Copy">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/File::Copy">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/File::Copy">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/File::Copy">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/File::Copy">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/File::Copy">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/File::Copy">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/File::Copy">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/File::Copy">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/File::Copy">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/File::Copy">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/File::Copy">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/File::Copy">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/File::Copy">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/File::Copy">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/File::Copy">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/File::Copy">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/File::Copy">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/File::Copy">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/File::Copy">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/File::Copy">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/File::Copy">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/File::Copy">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/File::Copy">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/File::Copy">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/File::Copy">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/File::Copy">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/File::Copy">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/File::Copy">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/File::Copy">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/File::Copy">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/File::Copy">5.35.1</a>
+          <a class="dropdown-item active" href="./File::Copy.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./File::Copy.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./File::Copy.html">File::Copy</a>
+          <div id="more">
+            (<a href="./File::Copy.txt">source</a>,
+            <a href="https://metacpan.org/pod/File::Copy">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 2.35</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./File::Copy.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Copy.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Copy.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Copy.html#RETURN">RETURN</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Copy.html#NOTES">NOTES</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./File::Copy.html#AUTHOR">AUTHOR</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./File::Copy.html#NAME">#</a>NAME</h1>
+
+<p>File::Copy - Copy files or filehandles</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./File::Copy.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use File::Copy;
+
+copy(&quot;sourcefile&quot;,&quot;destinationfile&quot;) or die &quot;Copy failed: $!&quot;;
+copy(&quot;Copy.pm&quot;,\*STDOUT);
+move(&quot;/dev1/sourcefile&quot;,&quot;/dev2/destinationfile&quot;);
+
+use File::Copy &quot;cp&quot;;
+
+$n = FileHandle-&gt;new(&quot;/a/file&quot;,&quot;r&quot;);
+cp($n,&quot;x&quot;);</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./File::Copy.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>The File::Copy module provides two basic functions, <code>copy</code> and <code>move</code>, which are useful for getting the contents of a file from one place to another.</p>
+
+<dl>
+
+<dt id="copy"><a class="permalink" href="./File::Copy.html#copy">#</a>copy  </dt>
+<dd>
+
+<p>The <code>copy</code> function takes two parameters: a file to copy from and a file to copy to. Either argument may be a string, a FileHandle reference or a FileHandle glob. Obviously, if the first argument is a filehandle of some sort, it will be read from, and if it is a file <i>name</i> it will be opened for reading. Likewise, the second argument will be written to. If the second argument does not exist but the parent directory does exist, then it will be created. Trying to copy a file into a non-existent directory is an error. Trying to copy a file on top of itself is also an error. <code>copy</code> will not overwrite read-only files.</p>
+
+<p>If the destination (second argument) already exists and is a directory, and the source (first argument) is not a filehandle, then the source file will be copied into the directory specified by the destination, using the same base name as the source file. It&#39;s a failure to have a filehandle as the source when the destination is a directory.</p>
+
+<p><b>Note that passing in files as handles instead of names may lead to loss of information on some operating systems; it is recommended that you use file names whenever possible.</b> Files are opened in binary mode where applicable. To get a consistent behaviour when copying from a filehandle to a file, use <code>binmode</code> on the filehandle.</p>
+
+<p>An optional third parameter can be used to specify the buffer size used for copying. This is the number of bytes from the first file, that will be held in memory at any given time, before being written to the second file. The default buffer size depends upon the file, but will generally be the whole file (up to 2MB), or 1k for filehandles that do not reference files (eg. sockets).</p>
+
+<p>You may use the syntax <code>use File::Copy &quot;cp&quot;</code> to get at the <code>cp</code> alias for this function. The syntax is <i>exactly</i> the same. The behavior is nearly the same as well: as of version 2.15, <code>cp</code> will preserve the source file&#39;s permission bits like the shell utility <code>cp(1)</code> would do, while <code>copy</code> uses the default permissions for the target file (which may depend on the process&#39; <code>umask</code>, file ownership, inherited ACLs, etc.). If an error occurs in setting permissions, <code>cp</code> will return 0, regardless of whether the file was successfully copied.</p>
+
+</dd>
+<dt id="move"><a class="permalink" href="./File::Copy.html#move">#</a>move   </dt>
+<dd>
+
+<p>The <code>move</code> function also takes two parameters: the current name and the intended name of the file to be moved. If the destination already exists and is a directory, and the source is not a directory, then the source file will be renamed into the directory specified by the destination.</p>
+
+<p>If possible, move() will simply rename the file. Otherwise, it copies the file to the new location and deletes the original. If an error occurs during this copy-and-delete process, you may be left with a (possibly partial) copy of the file under the destination name.</p>
+
+<p>You may use the <code>mv</code> alias for this function in the same way that you may use the <code>cp</code> alias for <code>copy</code>.</p>
+
+</dd>
+<dt id="syscopy"><a class="permalink" href="./File::Copy.html#syscopy">#</a>syscopy </dt>
+<dd>
+
+<p>File::Copy also provides the <code>syscopy</code> routine, which copies the file specified in the first parameter to the file specified in the second parameter, preserving OS-specific attributes and file structure. For Unix systems, this is equivalent to the simple <code>copy</code> routine, which doesn&#39;t preserve OS-specific attributes. For VMS systems, this calls the <code>rmscopy</code> routine (see below). For OS/2 systems, this calls the <code>syscopy</code> XSUB directly. For Win32 systems, this calls <code>Win32::CopyFile</code>.</p>
+
+<p><b>Special behaviour if <code>syscopy</code> is defined (OS/2, VMS and Win32)</b>:</p>
+
+<p>If both arguments to <code>copy</code> are not file handles, then <code>copy</code> will perform a &quot;system copy&quot; of the input file to a new output file, in order to preserve file attributes, indexed file structure, <i>etc.</i> The buffer size parameter is ignored. If either argument to <code>copy</code> is a handle to an opened file, then data is copied using Perl operators, and no effort is made to preserve file attributes or record structure.</p>
+
+<p>The system copy routine may also be called directly under VMS and OS/2 as <code>File::Copy::syscopy</code> (or under VMS as <code>File::Copy::rmscopy</code>, which is the routine that does the actual work for syscopy).</p>
+
+</dd>
+<dt id="rmscopy($from,$to[,$date_flag])"><a class="permalink" href="./File::Copy.html#rmscopy($from,$to%5B,$date_flag%5D)">#</a><a id="rmscopy"></a><a id="rmscopy-from-to-date_flag"></a>rmscopy($from,$to[,$date_flag]) </dt>
+<dd>
+
+<p>The first and second arguments may be strings, typeglobs, typeglob references, or objects inheriting from IO::Handle; they are used in all cases to obtain the <i>filespec</i> of the input and output files, respectively. The name and type of the input file are used as defaults for the output file, if necessary.</p>
+
+<p>A new version of the output file is always created, which inherits the structure and RMS attributes of the input file, except for owner and protections (and possibly timestamps; see below). All data from the input file is copied to the output file; if either of the first two parameters to <code>rmscopy</code> is a file handle, its position is unchanged. (Note that this means a file handle pointing to the output file will be associated with an old version of that file after <code>rmscopy</code> returns, not the newly created version.)</p>
+
+<p>The third parameter is an integer flag, which tells <code>rmscopy</code> how to handle timestamps. If it is &lt; 0, none of the input file&#39;s timestamps are propagated to the output file. If it is &gt; 0, then it is interpreted as a bitmask: if bit 0 (the LSB) is set, then timestamps other than the revision date are propagated; if bit 1 is set, the revision date is propagated. If the third parameter to <code>rmscopy</code> is 0, then it behaves much like the DCL COPY command: if the name or type of the output file was explicitly specified, then no timestamps are propagated, but if they were taken implicitly from the input filespec, then all timestamps other than the revision date are propagated. If this parameter is not supplied, it defaults to 0.</p>
+
+<p><code>rmscopy</code> is VMS specific and cannot be exported; it must be referenced by its full name, e.g.:</p>
+
+<pre><code>File::Copy::rmscopy($from, $to) or die $!;</code></pre>
+
+<p>Like <code>copy</code>, <code>rmscopy</code> returns 1 on success. If an error occurs, it sets <code>$!</code>, deletes the output file, and returns 0.</p>
+
+</dd>
+</dl>
+
+<h1 id="RETURN"><a class="permalink" href="./File::Copy.html#RETURN">#</a>RETURN</h1>
+
+<p>All functions return 1 on success, 0 on failure. $! will be set if an error was encountered.</p>
+
+<h1 id="NOTES"><a class="permalink" href="./File::Copy.html#NOTES">#</a>NOTES</h1>
+
+<p>Before calling copy() or move() on a filehandle, the caller should close or flush() the file to avoid writes being lost. Note that this is the case even for move(), because it may actually copy the file, depending on the OS-specific implementation, and the underlying filesystem(s).</p>
+
+<h1 id="AUTHOR"><a class="permalink" href="./File::Copy.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>File::Copy was written by Aaron Sherman <i>&lt;ajs@ajs.com&gt;</i> in 1995, and updated by Charles Bailey <i>&lt;bailey@newman.upenn.edu&gt;</i> in 1996.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

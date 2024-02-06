@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Archive::Tar::File - a subclass for in-memory extracted file from Archive::Tar - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Archive::Tar::File">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Archive::Tar::File.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Archive::Tar::File">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Archive::Tar::File">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Archive::Tar::File">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Archive::Tar::File">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Archive::Tar::File">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Archive::Tar::File">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Archive::Tar::File">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Archive::Tar::File">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Archive::Tar::File">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Archive::Tar::File">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Archive::Tar::File">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Archive::Tar::File">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Archive::Tar::File">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Archive::Tar::File">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Archive::Tar::File">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Archive::Tar::File">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Archive::Tar::File">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Archive::Tar::File">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Archive::Tar::File">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Archive::Tar::File">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Archive::Tar::File">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Archive::Tar::File">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Archive::Tar::File">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Archive::Tar::File">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Archive::Tar::File">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Archive::Tar::File">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Archive::Tar::File">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Archive::Tar::File">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Archive::Tar::File">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Archive::Tar::File">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Archive::Tar::File">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Archive::Tar::File">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Archive::Tar::File">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Archive::Tar::File">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Archive::Tar::File">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Archive::Tar::File">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Archive::Tar::File">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Archive::Tar::File">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Archive::Tar::File">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Archive::Tar::File">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Archive::Tar::File">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Archive::Tar::File">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Archive::Tar::File">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Archive::Tar::File">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Archive::Tar::File">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Archive::Tar::File">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Archive::Tar::File">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Archive::Tar::File">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Archive::Tar::File">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Archive::Tar::File">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Archive::Tar::File">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Archive::Tar::File">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Archive::Tar::File">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Archive::Tar::File">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Archive::Tar::File">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Archive::Tar::File">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Archive::Tar::File">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Archive::Tar::File">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Archive::Tar::File">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Archive::Tar::File">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Archive::Tar::File">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Archive::Tar::File">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Archive::Tar::File">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Archive::Tar::File">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Archive::Tar::File">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Archive::Tar::File">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Archive::Tar::File">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Archive::Tar::File">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Archive::Tar::File">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Archive::Tar::File">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Archive::Tar::File">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Archive::Tar::File">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Archive::Tar::File">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Archive::Tar::File">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Archive::Tar::File">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Archive::Tar::File">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Archive::Tar::File">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Archive::Tar::File">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Archive::Tar::File">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Archive::Tar::File">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Archive::Tar::File.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Archive::Tar::File">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Archive::Tar::File">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Archive::Tar::File">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Archive::Tar::File">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Archive::Tar::File">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Archive::Tar::File">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Archive::Tar::File">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Archive::Tar::File">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Archive::Tar::File">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Archive::Tar::File">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Archive::Tar::File">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Archive::Tar::File">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Archive::Tar::File">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Archive::Tar::File">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Archive::Tar::File">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Archive::Tar::File">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Archive::Tar::File">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Archive::Tar::File">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Archive::Tar::File">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Archive::Tar::File">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Archive::Tar::File">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Archive::Tar::File">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Archive::Tar::File">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Archive::Tar::File">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Archive::Tar::File">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Archive::Tar::File">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Archive::Tar::File">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Archive::Tar::File">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Archive::Tar::File">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Archive::Tar::File">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Archive::Tar::File">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Archive::Tar::File">5.35.1</a>
+          <a class="dropdown-item active" href="./Archive::Tar::File.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Archive::Tar::File.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Archive::Tar::File.html">Archive::Tar::File</a>
+          <div id="more">
+            (<a href="./Archive::Tar::File.txt">source</a>,
+            <a href="https://metacpan.org/pod/Archive::Tar::File">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 2.38</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#Accessors">Accessors</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#Methods">Methods</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#Archive::Tar::File-%3Enew(-file-=%3E-$path-)">Archive::Tar::File-&gt;new( file =&gt; $path )</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#Archive::Tar::File-%3Enew(-data-=%3E-$path,-$data,-$opt-)">Archive::Tar::File-&gt;new( data =&gt; $path, $data, $opt )</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#Archive::Tar::File-%3Enew(-chunk-=%3E-$chunk-)">Archive::Tar::File-&gt;new( chunk =&gt; $chunk )</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#$bool-=-$file-%3Eextract(-%5B-$alternative_name-%5D-)">$bool = $file-&gt;extract( [ $alternative_name ] )</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#$path-=-$file-%3Efull_path">$path = $file-&gt;full_path</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#$bool-=-$file-%3Evalidate">$bool = $file-&gt;validate</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#$bool-=-$file-%3Ehas_content">$bool = $file-&gt;has_content</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#$content-=-$file-%3Eget_content">$content = $file-&gt;get_content</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#$cref-=-$file-%3Eget_content_by_ref">$cref = $file-&gt;get_content_by_ref</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#$bool-=-$file-%3Ereplace_content(-$content-)">$bool = $file-&gt;replace_content( $content )</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#$bool-=-$file-%3Erename(-$new_name-)">$bool = $file-&gt;rename( $new_name )</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#$bool-=-$file-%3Echmod-$mode)">$bool = $file-&gt;chmod $mode)</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#$bool-=-$file-%3Echown(-$user-%5B,-$group%5D)">$bool = $file-&gt;chown( $user [, $group])</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Archive::Tar::File.html#Convenience-methods">Convenience methods</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Archive::Tar::File.html#NAME">#</a>NAME</h1>
+
+<p>Archive::Tar::File - a subclass for in-memory extracted file from Archive::Tar</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Archive::Tar::File.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>my @items = $tar-&gt;get_files;
+
+print $_-&gt;name, &#39; &#39;, $_-&gt;size, &quot;\n&quot; for @items;
+
+print $object-&gt;get_content;
+$object-&gt;replace_content(&#39;new content&#39;);
+
+$object-&gt;rename( &#39;new/full/path/to/file.c&#39; );</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Archive::Tar::File.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>Archive::Tar::Files provides a neat little object layer for in-memory extracted files. It&#39;s mostly used internally in Archive::Tar to tidy up the code, but there&#39;s no reason users shouldn&#39;t use this API as well.</p>
+
+<h2 id="Accessors"><a class="permalink" href="./Archive::Tar::File.html#Accessors">#</a>Accessors</h2>
+
+<p>A lot of the methods in this package are accessors to the various fields in the tar header:</p>
+
+<dl>
+
+<dt id="name"><a class="permalink" href="./Archive::Tar::File.html#name">#</a>name</dt>
+<dd>
+
+<p>The file&#39;s name</p>
+
+</dd>
+<dt id="mode"><a class="permalink" href="./Archive::Tar::File.html#mode">#</a>mode</dt>
+<dd>
+
+<p>The file&#39;s mode</p>
+
+</dd>
+<dt id="uid"><a class="permalink" href="./Archive::Tar::File.html#uid">#</a>uid</dt>
+<dd>
+
+<p>The user id owning the file</p>
+
+</dd>
+<dt id="gid"><a class="permalink" href="./Archive::Tar::File.html#gid">#</a>gid</dt>
+<dd>
+
+<p>The group id owning the file</p>
+
+</dd>
+<dt id="size"><a class="permalink" href="./Archive::Tar::File.html#size">#</a>size</dt>
+<dd>
+
+<p>File size in bytes</p>
+
+</dd>
+<dt id="mtime"><a class="permalink" href="./Archive::Tar::File.html#mtime">#</a>mtime</dt>
+<dd>
+
+<p>Modification time. Adjusted to mac-time on MacOS if required</p>
+
+</dd>
+<dt id="chksum"><a class="permalink" href="./Archive::Tar::File.html#chksum">#</a>chksum</dt>
+<dd>
+
+<p>Checksum field for the tar header</p>
+
+</dd>
+<dt id="type"><a class="permalink" href="./Archive::Tar::File.html#type">#</a>type</dt>
+<dd>
+
+<p>File type -- numeric, but comparable to exported constants -- see Archive::Tar&#39;s documentation</p>
+
+</dd>
+<dt id="linkname"><a class="permalink" href="./Archive::Tar::File.html#linkname">#</a>linkname</dt>
+<dd>
+
+<p>If the file is a symlink, the file it&#39;s pointing to</p>
+
+</dd>
+<dt id="magic"><a class="permalink" href="./Archive::Tar::File.html#magic">#</a>magic</dt>
+<dd>
+
+<p>Tar magic string -- not useful for most users</p>
+
+</dd>
+<dt id="version"><a class="permalink" href="./Archive::Tar::File.html#version">#</a>version</dt>
+<dd>
+
+<p>Tar version string -- not useful for most users</p>
+
+</dd>
+<dt id="uname"><a class="permalink" href="./Archive::Tar::File.html#uname">#</a>uname</dt>
+<dd>
+
+<p>The user name that owns the file</p>
+
+</dd>
+<dt id="gname"><a class="permalink" href="./Archive::Tar::File.html#gname">#</a>gname</dt>
+<dd>
+
+<p>The group name that owns the file</p>
+
+</dd>
+<dt id="devmajor"><a class="permalink" href="./Archive::Tar::File.html#devmajor">#</a>devmajor</dt>
+<dd>
+
+<p>Device major number in case of a special file</p>
+
+</dd>
+<dt id="devminor"><a class="permalink" href="./Archive::Tar::File.html#devminor">#</a>devminor</dt>
+<dd>
+
+<p>Device minor number in case of a special file</p>
+
+</dd>
+<dt id="prefix"><a class="permalink" href="./Archive::Tar::File.html#prefix">#</a>prefix</dt>
+<dd>
+
+<p>Any directory to prefix to the extraction path, if any</p>
+
+</dd>
+<dt id="raw"><a class="permalink" href="./Archive::Tar::File.html#raw">#</a>raw</dt>
+<dd>
+
+<p>Raw tar header -- not useful for most users</p>
+
+</dd>
+</dl>
+
+<h1 id="Methods"><a class="permalink" href="./Archive::Tar::File.html#Methods">#</a>Methods</h1>
+
+<h2 id="Archive::Tar::File-&gt;new(-file-=&gt;-$path-)"><a class="permalink" href="./Archive::Tar::File.html#Archive::Tar::File-%3Enew(-file-=%3E-$path-)">#</a><a id="Archive"></a><a id="Archive::Tar::File-new-file-path"></a>Archive::Tar::File-&gt;new( file =&gt; $path )</h2>
+
+<p>Returns a new Archive::Tar::File object from an existing file.</p>
+
+<p>Returns undef on failure.</p>
+
+<h2 id="Archive::Tar::File-&gt;new(-data-=&gt;-$path,-$data,-$opt-)"><a class="permalink" href="./Archive::Tar::File.html#Archive::Tar::File-%3Enew(-data-=%3E-$path,-$data,-$opt-)">#</a><a id="Archive1"></a><a id="Archive::Tar::File-new-data-path-data-opt"></a>Archive::Tar::File-&gt;new( data =&gt; $path, $data, $opt )</h2>
+
+<p>Returns a new Archive::Tar::File object from data.</p>
+
+<p><code>$path</code> defines the file name (which need not exist), <code>$data</code> the file contents, and <code>$opt</code> is a reference to a hash of attributes which may be used to override the default attributes (fields in the tar header), which are described above in the Accessors section.</p>
+
+<p>Returns undef on failure.</p>
+
+<h2 id="Archive::Tar::File-&gt;new(-chunk-=&gt;-$chunk-)"><a class="permalink" href="./Archive::Tar::File.html#Archive::Tar::File-%3Enew(-chunk-=%3E-$chunk-)">#</a><a id="Archive2"></a><a id="Archive::Tar::File-new-chunk-chunk"></a>Archive::Tar::File-&gt;new( chunk =&gt; $chunk )</h2>
+
+<p>Returns a new Archive::Tar::File object from a raw 512-byte tar archive chunk.</p>
+
+<p>Returns undef on failure.</p>
+
+<h2 id="$bool-=-$file-&gt;extract(-[-$alternative_name-]-)"><a class="permalink" href="./Archive::Tar::File.html#$bool-=-$file-%3Eextract(-%5B-$alternative_name-%5D-)">#</a><a id="bool-file-extract-alternative_name"></a>$bool = $file-&gt;extract( [ $alternative_name ] )</h2>
+
+<p>Extract this object, optionally to an alternative name.</p>
+
+<p>See <code>Archive::Tar-&gt;extract_file</code> for details.</p>
+
+<p>Returns true on success and false on failure.</p>
+
+<h2 id="$path-=-$file-&gt;full_path"><a class="permalink" href="./Archive::Tar::File.html#$path-=-$file-%3Efull_path">#</a><a id="path-file-full_path"></a>$path = $file-&gt;full_path</h2>
+
+<p>Returns the full path from the tar header; this is basically a concatenation of the <code>prefix</code> and <code>name</code> fields.</p>
+
+<h2 id="$bool-=-$file-&gt;validate"><a class="permalink" href="./Archive::Tar::File.html#$bool-=-$file-%3Evalidate">#</a><a id="bool-file-validate"></a>$bool = $file-&gt;validate</h2>
+
+<p>Done by Archive::Tar internally when reading the tar file: validate the header against the checksum to ensure integer tar file.</p>
+
+<p>Returns true on success, false on failure</p>
+
+<h2 id="$bool-=-$file-&gt;has_content"><a class="permalink" href="./Archive::Tar::File.html#$bool-=-$file-%3Ehas_content">#</a><a id="bool-file-has_content"></a>$bool = $file-&gt;has_content</h2>
+
+<p>Returns a boolean to indicate whether the current object has content. Some special files like directories and so on never will have any content. This method is mainly to make sure you don&#39;t get warnings for using uninitialized values when looking at an object&#39;s content.</p>
+
+<h2 id="$content-=-$file-&gt;get_content"><a class="permalink" href="./Archive::Tar::File.html#$content-=-$file-%3Eget_content">#</a><a id="content-file-get_content"></a>$content = $file-&gt;get_content</h2>
+
+<p>Returns the current content for the in-memory file</p>
+
+<h2 id="$cref-=-$file-&gt;get_content_by_ref"><a class="permalink" href="./Archive::Tar::File.html#$cref-=-$file-%3Eget_content_by_ref">#</a><a id="cref-file-get_content_by_ref"></a>$cref = $file-&gt;get_content_by_ref</h2>
+
+<p>Returns the current content for the in-memory file as a scalar reference. Normal users won&#39;t need this, but it will save memory if you are dealing with very large data files in your tar archive, since it will pass the contents by reference, rather than make a copy of it first.</p>
+
+<h2 id="$bool-=-$file-&gt;replace_content(-$content-)"><a class="permalink" href="./Archive::Tar::File.html#$bool-=-$file-%3Ereplace_content(-$content-)">#</a><a id="bool-file-replace_content-content"></a>$bool = $file-&gt;replace_content( $content )</h2>
+
+<p>Replace the current content of the file with the new content. This only affects the in-memory archive, not the on-disk version until you write it.</p>
+
+<p>Returns true on success, false on failure.</p>
+
+<h2 id="$bool-=-$file-&gt;rename(-$new_name-)"><a class="permalink" href="./Archive::Tar::File.html#$bool-=-$file-%3Erename(-$new_name-)">#</a><a id="bool-file-rename-new_name"></a>$bool = $file-&gt;rename( $new_name )</h2>
+
+<p>Rename the current file to $new_name.</p>
+
+<p>Note that you must specify a Unix path for $new_name, since per tar standard, all files in the archive must be Unix paths.</p>
+
+<p>Returns true on success and false on failure.</p>
+
+<h2 id="$bool-=-$file-&gt;chmod-$mode)"><a class="permalink" href="./Archive::Tar::File.html#$bool-=-$file-%3Echmod-$mode)">#</a><a id="bool-file-chmod-mode"></a>$bool = $file-&gt;chmod $mode)</h2>
+
+<p>Change mode of $file to $mode. The mode can be a string or a number which is interpreted as octal whether or not a leading 0 is given.</p>
+
+<p>Returns true on success and false on failure.</p>
+
+<h2 id="$bool-=-$file-&gt;chown(-$user-[,-$group])"><a class="permalink" href="./Archive::Tar::File.html#$bool-=-$file-%3Echown(-$user-%5B,-$group%5D)">#</a><a id="bool-file-chown-user-group"></a>$bool = $file-&gt;chown( $user [, $group])</h2>
+
+<p>Change owner of $file to $user. If a $group is given that is changed as well. You can also pass a single parameter with a colon separating the use and group as in &#39;root:wheel&#39;.</p>
+
+<p>Returns true on success and false on failure.</p>
+
+<h1 id="Convenience-methods"><a class="permalink" href="./Archive::Tar::File.html#Convenience-methods">#</a><a id="Convenience"></a>Convenience methods</h1>
+
+<p>To quickly check the type of a <code>Archive::Tar::File</code> object, you can use the following methods:</p>
+
+<dl>
+
+<dt id="$file-&gt;is_file"><a class="permalink" href="./Archive::Tar::File.html#$file-%3Eis_file">#</a><a id="is_file"></a><a id="file-is_file"></a>$file-&gt;is_file</dt>
+<dd>
+
+<p>Returns true if the file is of type <code>file</code></p>
+
+</dd>
+<dt id="$file-&gt;is_dir"><a class="permalink" href="./Archive::Tar::File.html#$file-%3Eis_dir">#</a><a id="is_dir"></a><a id="file-is_dir"></a>$file-&gt;is_dir</dt>
+<dd>
+
+<p>Returns true if the file is of type <code>dir</code></p>
+
+</dd>
+<dt id="$file-&gt;is_hardlink"><a class="permalink" href="./Archive::Tar::File.html#$file-%3Eis_hardlink">#</a><a id="is_hardlink"></a><a id="file-is_hardlink"></a>$file-&gt;is_hardlink</dt>
+<dd>
+
+<p>Returns true if the file is of type <code>hardlink</code></p>
+
+</dd>
+<dt id="$file-&gt;is_symlink"><a class="permalink" href="./Archive::Tar::File.html#$file-%3Eis_symlink">#</a><a id="is_symlink"></a><a id="file-is_symlink"></a>$file-&gt;is_symlink</dt>
+<dd>
+
+<p>Returns true if the file is of type <code>symlink</code></p>
+
+</dd>
+<dt id="$file-&gt;is_chardev"><a class="permalink" href="./Archive::Tar::File.html#$file-%3Eis_chardev">#</a><a id="is_chardev"></a><a id="file-is_chardev"></a>$file-&gt;is_chardev</dt>
+<dd>
+
+<p>Returns true if the file is of type <code>chardev</code></p>
+
+</dd>
+<dt id="$file-&gt;is_blockdev"><a class="permalink" href="./Archive::Tar::File.html#$file-%3Eis_blockdev">#</a><a id="is_blockdev"></a><a id="file-is_blockdev"></a>$file-&gt;is_blockdev</dt>
+<dd>
+
+<p>Returns true if the file is of type <code>blockdev</code></p>
+
+</dd>
+<dt id="$file-&gt;is_fifo"><a class="permalink" href="./Archive::Tar::File.html#$file-%3Eis_fifo">#</a><a id="is_fifo"></a><a id="file-is_fifo"></a>$file-&gt;is_fifo</dt>
+<dd>
+
+<p>Returns true if the file is of type <code>fifo</code></p>
+
+</dd>
+<dt id="$file-&gt;is_socket"><a class="permalink" href="./Archive::Tar::File.html#$file-%3Eis_socket">#</a><a id="is_socket"></a><a id="file-is_socket"></a>$file-&gt;is_socket</dt>
+<dd>
+
+<p>Returns true if the file is of type <code>socket</code></p>
+
+</dd>
+<dt id="$file-&gt;is_longlink"><a class="permalink" href="./Archive::Tar::File.html#$file-%3Eis_longlink">#</a><a id="is_longlink"></a><a id="file-is_longlink"></a>$file-&gt;is_longlink</dt>
+<dd>
+
+<p>Returns true if the file is of type <code>LongLink</code>. Should not happen after a successful <code>read</code>.</p>
+
+</dd>
+<dt id="$file-&gt;is_label"><a class="permalink" href="./Archive::Tar::File.html#$file-%3Eis_label">#</a><a id="is_label"></a><a id="file-is_label"></a>$file-&gt;is_label</dt>
+<dd>
+
+<p>Returns true if the file is of type <code>Label</code>. Should not happen after a successful <code>read</code>.</p>
+
+</dd>
+<dt id="$file-&gt;is_unknown"><a class="permalink" href="./Archive::Tar::File.html#$file-%3Eis_unknown">#</a><a id="is_unknown"></a><a id="file-is_unknown"></a>$file-&gt;is_unknown</dt>
+<dd>
+
+<p>Returns true if the file type is <code>unknown</code></p>
+
+</dd>
+</dl>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

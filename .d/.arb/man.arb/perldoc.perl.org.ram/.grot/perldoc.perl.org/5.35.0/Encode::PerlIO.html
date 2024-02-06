@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Encode::PerlIO -- a detailed document on Encode and PerlIO - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Encode::PerlIO">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Encode::PerlIO.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Encode::PerlIO">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Encode::PerlIO">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Encode::PerlIO">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Encode::PerlIO">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Encode::PerlIO">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Encode::PerlIO">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Encode::PerlIO">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Encode::PerlIO">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Encode::PerlIO">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Encode::PerlIO">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Encode::PerlIO">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Encode::PerlIO">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Encode::PerlIO">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Encode::PerlIO">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Encode::PerlIO">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Encode::PerlIO">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Encode::PerlIO">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Encode::PerlIO">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Encode::PerlIO">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Encode::PerlIO">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Encode::PerlIO">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Encode::PerlIO">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Encode::PerlIO">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Encode::PerlIO">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Encode::PerlIO">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Encode::PerlIO">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Encode::PerlIO">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Encode::PerlIO">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Encode::PerlIO">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Encode::PerlIO">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Encode::PerlIO">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Encode::PerlIO">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Encode::PerlIO">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Encode::PerlIO">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Encode::PerlIO">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Encode::PerlIO">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Encode::PerlIO">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Encode::PerlIO">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Encode::PerlIO">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Encode::PerlIO">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Encode::PerlIO">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Encode::PerlIO">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Encode::PerlIO">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Encode::PerlIO">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Encode::PerlIO">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Encode::PerlIO">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Encode::PerlIO">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Encode::PerlIO">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Encode::PerlIO">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Encode::PerlIO">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Encode::PerlIO">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Encode::PerlIO">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Encode::PerlIO">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Encode::PerlIO">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Encode::PerlIO">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Encode::PerlIO">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Encode::PerlIO">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Encode::PerlIO">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Encode::PerlIO">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Encode::PerlIO">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Encode::PerlIO">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Encode::PerlIO">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Encode::PerlIO">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Encode::PerlIO">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Encode::PerlIO">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Encode::PerlIO">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Encode::PerlIO">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Encode::PerlIO">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Encode::PerlIO">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Encode::PerlIO">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Encode::PerlIO">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Encode::PerlIO">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Encode::PerlIO">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Encode::PerlIO">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Encode::PerlIO">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Encode::PerlIO">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Encode::PerlIO">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Encode::PerlIO">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Encode::PerlIO">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Encode::PerlIO">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Encode::PerlIO.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Encode::PerlIO">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Encode::PerlIO">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Encode::PerlIO">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Encode::PerlIO">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Encode::PerlIO">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Encode::PerlIO">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Encode::PerlIO">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Encode::PerlIO">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Encode::PerlIO">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Encode::PerlIO">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Encode::PerlIO">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Encode::PerlIO">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Encode::PerlIO">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Encode::PerlIO">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Encode::PerlIO">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Encode::PerlIO">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Encode::PerlIO">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Encode::PerlIO">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Encode::PerlIO">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Encode::PerlIO">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Encode::PerlIO">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Encode::PerlIO">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Encode::PerlIO">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Encode::PerlIO">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Encode::PerlIO">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Encode::PerlIO">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Encode::PerlIO">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Encode::PerlIO">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Encode::PerlIO">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Encode::PerlIO">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Encode::PerlIO">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Encode::PerlIO">5.35.1</a>
+          <a class="dropdown-item active" href="./Encode::PerlIO.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Encode::PerlIO.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Encode::PerlIO.html">Encode::PerlIO</a>
+          <div id="more">
+            (<a href="./Encode::PerlIO.txt">source</a>,
+            <a href="https://metacpan.org/pod/Encode::PerlIO">CPAN</a>)
+          </div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Encode::PerlIO.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Encode::PerlIO.html#Overview">Overview</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Encode::PerlIO.html#How-does-it-work?">How does it work?</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Encode::PerlIO.html#Line-Buffering">Line Buffering</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Encode::PerlIO.html#How-can-I-tell-whether-my-encoding-fully-supports-PerlIO-?">How can I tell whether my encoding fully supports PerlIO ?</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Encode::PerlIO.html#SEE-ALSO">SEE ALSO</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Encode::PerlIO.html#NAME">#</a>NAME</h1>
+
+<p>Encode::PerlIO -- a detailed document on Encode and PerlIO</p>
+
+<h1 id="Overview"><a class="permalink" href="./Encode::PerlIO.html#Overview">#</a>Overview</h1>
+
+<p>It is very common to want to do encoding transformations when reading or writing files, network connections, pipes etc. If Perl is configured to use the new &#39;perlio&#39; IO system then <code>Encode</code> provides a &quot;layer&quot; (see <a href="PerlIO.html">PerlIO</a>) which can transform data as it is read or written.</p>
+
+<p>Here is how the blind poet would modernise the encoding:</p>
+
+<pre><code>use Encode;
+open(my $iliad,&#39;&lt;:encoding(iso-8859-7)&#39;,&#39;iliad.greek&#39;);
+open(my $utf8,&#39;&gt;:utf8&#39;,&#39;iliad.utf8&#39;);
+my @epic = &lt;$iliad&gt;;
+print $utf8 @epic;
+close($utf8);
+close($illiad);</code></pre>
+
+<p>In addition, the new IO system can also be configured to read/write UTF-8 encoded characters (as noted above, this is efficient):</p>
+
+<pre><code>open(my $fh,&#39;&gt;:utf8&#39;,&#39;anything&#39;);
+print $fh &quot;Any \x{0021} string \N{SMILEY FACE}\n&quot;;</code></pre>
+
+<p>Either of the above forms of &quot;layer&quot; specifications can be made the default for a lexical scope with the <code>use open ...</code> pragma. See <a href="open.html">open</a>.</p>
+
+<p>Once a handle is open, its layers can be altered using <code>binmode</code>.</p>
+
+<p>Without any such configuration, or if Perl itself is built using the system&#39;s own IO, then write operations assume that the file handle accepts only <i>bytes</i> and will <code>die</code> if a character larger than 255 is written to the handle. When reading, each octet from the handle becomes a byte-in-a-character. Note that this default is the same behaviour as bytes-only languages (including Perl before v5.6) would have, and is sufficient to handle native 8-bit encodings e.g. iso-8859-1, EBCDIC etc. and any legacy mechanisms for handling other encodings and binary data.</p>
+
+<p>In other cases, it is the program&#39;s responsibility to transform characters into bytes using the API above before doing writes, and to transform the bytes read from a handle into characters before doing &quot;character operations&quot; (e.g. <code>lc</code>, <code>/\W+/</code>, ...).</p>
+
+<p>You can also use PerlIO to convert larger amounts of data you don&#39;t want to bring into memory. For example, to convert between ISO-8859-1 (Latin 1) and UTF-8 (or UTF-EBCDIC in EBCDIC machines):</p>
+
+<pre><code>open(F, &quot;&lt;:encoding(iso-8859-1)&quot;, &quot;data.txt&quot;) or die $!;
+open(G, &quot;&gt;:utf8&quot;,                 &quot;data.utf&quot;) or die $!;
+while (&lt;F&gt;) { print G }
+
+# Could also do &quot;print G &lt;F&gt;&quot; but that would pull
+# the whole file into memory just to write it out again.</code></pre>
+
+<p>More examples:</p>
+
+<pre><code>open(my $f, &quot;&lt;:encoding(cp1252)&quot;)
+open(my $g, &quot;&gt;:encoding(iso-8859-2)&quot;)
+open(my $h, &quot;&gt;:encoding(latin9)&quot;)       # iso-8859-15</code></pre>
+
+<p>See also <a href="encoding.html">encoding</a> for how to change the default encoding of the data in your script.</p>
+
+<h1 id="How-does-it-work?"><a class="permalink" href="./Encode::PerlIO.html#How-does-it-work?">#</a><a id="How"></a><a id="How-does-it-work"></a>How does it work?</h1>
+
+<p>Here is a crude diagram of how filehandle, PerlIO, and Encode interact.</p>
+
+<pre><code class="plaintext">filehandle &lt;-&gt; PerlIO        PerlIO &lt;-&gt; scalar (read/printed)
+                     \      /
+                      Encode   </code></pre>
+
+<p>When PerlIO receives data from either direction, it fills a buffer (currently with 1024 bytes) and passes the buffer to Encode. Encode tries to convert the valid part and passes it back to PerlIO, leaving invalid parts (usually a partial character) in the buffer. PerlIO then appends more data to the buffer, calls Encode again, and so on until the data stream ends.</p>
+
+<p>To do so, PerlIO always calls (de|en)code methods with CHECK set to 1. This ensures that the method stops at the right place when it encounters partial character. The following is what happens when PerlIO and Encode tries to encode (from utf8) more than 1024 bytes and the buffer boundary happens to be in the middle of a character.</p>
+
+<pre><code class="plaintext"> A   B   C   ....   ~     \x{3000}    ....
+41  42  43   ....  7E   e3   80   80  ....
+&lt;- buffer ---------------&gt;
+&lt;&lt; encoded &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+                     &lt;- next buffer ------</code></pre>
+
+<p>Encode converts from the beginning to \x7E, leaving \xe3 in the buffer because it is invalid (partial character).</p>
+
+<p>Unfortunately, this scheme does not work well with escape-based encodings such as ISO-2022-JP.</p>
+
+<h1 id="Line-Buffering"><a class="permalink" href="./Encode::PerlIO.html#Line-Buffering">#</a><a id="Line"></a>Line Buffering</h1>
+
+<p>Now let&#39;s see what happens when you try to decode from ISO-2022-JP and the buffer ends in the middle of a character.</p>
+
+<pre><code class="plaintext">            JIS208-ESC   \x{5f3e}
+ A   B   C   ....   ~   \e   $   B  |DAN | ....
+41  42  43   ....  7E   1b  24  41  43  46 ....
+&lt;- buffer ---------------------------&gt;
+&lt;&lt; encoded &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;</code></pre>
+
+<p>As you see, the next buffer begins with \x43. But \x43 is &#39;C&#39; in ASCII, which is wrong in this case because we are now in JISX 0208 area so it has to convert \x43\x46, not \x43. Unlike utf8 and EUC, in escape-based encodings you can&#39;t tell if a given octet is a whole character or just part of it.</p>
+
+<p>Fortunately PerlIO also supports line buffer if you tell PerlIO to use one instead of fixed buffer. Since ISO-2022-JP is guaranteed to revert to ASCII at the end of the line, partial character will never happen when line buffer is used.</p>
+
+<p>To tell PerlIO to use line buffer, implement -&gt;needs_lines method for your encoding object. See <a href="./Encode::Encoding.html">Encode::Encoding</a> for details.</p>
+
+<p>Thanks to these efforts most encodings that come with Encode support PerlIO but that still leaves following encodings.</p>
+
+<pre><code class="plaintext">iso-2022-kr
+MIME-B
+MIME-Header
+MIME-Q</code></pre>
+
+<p>Fortunately iso-2022-kr is hardly used (according to Jungshik) and MIME-* are very unlikely to be fed to PerlIO because they are for mail headers. See <a href="./Encode::MIME::Header.html">Encode::MIME::Header</a> for details.</p>
+
+<h2 id="How-can-I-tell-whether-my-encoding-fully-supports-PerlIO-?"><a class="permalink" href="./Encode::PerlIO.html#How-can-I-tell-whether-my-encoding-fully-supports-PerlIO-?">#</a><a id="How1"></a><a id="How-can-I-tell-whether-my-encoding-fully-supports-PerlIO"></a>How can I tell whether my encoding fully supports PerlIO ?</h2>
+
+<p>As of this writing, any encoding whose class belongs to Encode::XS and Encode::Unicode works. The Encode module has a <code>perlio_ok</code> method which you can use before applying PerlIO encoding to the filehandle. Here is an example:</p>
+
+<pre><code>my $use_perlio = perlio_ok($enc);
+my $layer = $use_perlio ? &quot;&lt;:raw&quot; : &quot;&lt;:encoding($enc)&quot;;
+open my $fh, $layer, $file or die &quot;$file : $!&quot;;
+while(&lt;$fh&gt;){
+  $_ = decode($enc, $_) unless $use_perlio;
+  # .... 
+}</code></pre>
+
+<h1 id="SEE-ALSO"><a class="permalink" href="./Encode::PerlIO.html#SEE-ALSO">#</a><a id="SEE"></a>SEE ALSO</h1>
+
+<p><a href="./Encode::Encoding.html">Encode::Encoding</a>, <a href="./Encode::Supported.html">Encode::Supported</a>, <a href="./Encode::PerlIO.html">Encode::PerlIO</a>, <a href="encoding.html">encoding</a>, <a href="perlebcdic.html">perlebcdic</a>, <a href="perlfunc.html#open">&quot;open&quot; in perlfunc</a>, <a href="perlunicode.html">perlunicode</a>, <a href="utf8.html">utf8</a>, the Perl Unicode Mailing List &lt;perl-unicode@perl.org&gt;</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

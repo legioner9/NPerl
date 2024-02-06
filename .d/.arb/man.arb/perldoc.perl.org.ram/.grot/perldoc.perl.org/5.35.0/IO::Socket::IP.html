@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IO::Socket::IP - Family-neutral IP socket supporting both IPv4 and IPv6 - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/IO::Socket::IP">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IO::Socket::IP.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/IO::Socket::IP">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/IO::Socket::IP">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/IO::Socket::IP">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/IO::Socket::IP">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/IO::Socket::IP">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/IO::Socket::IP">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/IO::Socket::IP">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/IO::Socket::IP">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/IO::Socket::IP">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/IO::Socket::IP">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/IO::Socket::IP">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/IO::Socket::IP">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/IO::Socket::IP">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/IO::Socket::IP">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/IO::Socket::IP">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/IO::Socket::IP">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/IO::Socket::IP">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/IO::Socket::IP">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/IO::Socket::IP">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/IO::Socket::IP">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/IO::Socket::IP">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/IO::Socket::IP">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/IO::Socket::IP">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/IO::Socket::IP">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/IO::Socket::IP">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/IO::Socket::IP">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/IO::Socket::IP">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/IO::Socket::IP">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/IO::Socket::IP">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/IO::Socket::IP">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/IO::Socket::IP">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/IO::Socket::IP">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/IO::Socket::IP">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/IO::Socket::IP">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/IO::Socket::IP">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/IO::Socket::IP">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/IO::Socket::IP">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/IO::Socket::IP">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/IO::Socket::IP">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/IO::Socket::IP">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/IO::Socket::IP">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/IO::Socket::IP">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/IO::Socket::IP">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/IO::Socket::IP">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/IO::Socket::IP">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/IO::Socket::IP">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/IO::Socket::IP">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/IO::Socket::IP">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/IO::Socket::IP">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/IO::Socket::IP">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/IO::Socket::IP">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/IO::Socket::IP">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/IO::Socket::IP">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/IO::Socket::IP">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/IO::Socket::IP">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/IO::Socket::IP">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/IO::Socket::IP">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/IO::Socket::IP">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/IO::Socket::IP">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/IO::Socket::IP">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/IO::Socket::IP">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/IO::Socket::IP">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/IO::Socket::IP">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/IO::Socket::IP">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/IO::Socket::IP">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/IO::Socket::IP">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/IO::Socket::IP">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/IO::Socket::IP">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/IO::Socket::IP">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/IO::Socket::IP">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/IO::Socket::IP">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/IO::Socket::IP">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/IO::Socket::IP">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/IO::Socket::IP">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/IO::Socket::IP">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/IO::Socket::IP">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/IO::Socket::IP">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/IO::Socket::IP">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/IO::Socket::IP">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/IO::Socket::IP">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IO::Socket::IP.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/IO::Socket::IP">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/IO::Socket::IP">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/IO::Socket::IP">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/IO::Socket::IP">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/IO::Socket::IP">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/IO::Socket::IP">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/IO::Socket::IP">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/IO::Socket::IP">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/IO::Socket::IP">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/IO::Socket::IP">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/IO::Socket::IP">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/IO::Socket::IP">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/IO::Socket::IP">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/IO::Socket::IP">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/IO::Socket::IP">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/IO::Socket::IP">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/IO::Socket::IP">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/IO::Socket::IP">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/IO::Socket::IP">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/IO::Socket::IP">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/IO::Socket::IP">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/IO::Socket::IP">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/IO::Socket::IP">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/IO::Socket::IP">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/IO::Socket::IP">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/IO::Socket::IP">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/IO::Socket::IP">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/IO::Socket::IP">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/IO::Socket::IP">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/IO::Socket::IP">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/IO::Socket::IP">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/IO::Socket::IP">5.35.1</a>
+          <a class="dropdown-item active" href="./IO::Socket::IP.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./IO::Socket::IP.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./IO::Socket::IP.html">IO::Socket::IP</a>
+          <div id="more">
+            (<a href="./IO::Socket::IP.txt">source</a>,
+            <a href="https://metacpan.org/pod/IO::Socket::IP">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 0.41</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#DESCRIPTION">DESCRIPTION</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#REPLACING-IO::Socket-DEFAULT-BEHAVIOUR">REPLACING IO::Socket DEFAULT BEHAVIOUR</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#CONSTRUCTORS">CONSTRUCTORS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#new">new</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#new-(one-arg)">new (one arg)</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#METHODS">METHODS</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#sockhost_service">sockhost_service</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#sockhost">sockhost</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#sockport">sockport</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#sockhostname">sockhostname</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#sockservice">sockservice</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#sockaddr">sockaddr</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#peerhost_service">peerhost_service</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#peerhost">peerhost</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#peerport">peerport</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#peerhostname">peerhostname</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#peerservice">peerservice</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#peeraddr">peeraddr</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#as_inet">as_inet</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#NON-BLOCKING">NON-BLOCKING</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#PeerHost-AND-LocalHost-PARSING">PeerHost AND LocalHost PARSING</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#split_addr">split_addr</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#join_addr">join_addr</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#IO::Socket::INET-INCOMPATIBILITES">IO::Socket::INET INCOMPATIBILITES</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#TODO">TODO</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./IO::Socket::IP.html#AUTHOR">AUTHOR</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./IO::Socket::IP.html#NAME">#</a>NAME</h1>
+
+<p><code>IO::Socket::IP</code> - Family-neutral IP socket supporting both IPv4 and IPv6</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./IO::Socket::IP.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use IO::Socket::IP;
+
+my $sock = IO::Socket::IP-&gt;new(
+   PeerHost =&gt; &quot;www.google.com&quot;,
+   PeerPort =&gt; &quot;http&quot;,
+   Type     =&gt; SOCK_STREAM,
+) or die &quot;Cannot construct socket - $@&quot;;
+
+my $familyname = ( $sock-&gt;sockdomain == PF_INET6 ) ? &quot;IPv6&quot; :
+                 ( $sock-&gt;sockdomain == PF_INET  ) ? &quot;IPv4&quot; :
+                                                     &quot;unknown&quot;;
+
+printf &quot;Connected to google via %s\n&quot;, $familyname;</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./IO::Socket::IP.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This module provides a protocol-independent way to use IPv4 and IPv6 sockets, intended as a replacement for <a href="./IO::Socket::INET.html">IO::Socket::INET</a>. Most constructor arguments and methods are provided in a backward-compatible way. For a list of known differences, see the <code>IO::Socket::INET</code> INCOMPATIBILITES section below.</p>
+
+<p>It uses the <code>getaddrinfo(3)</code> function to convert hostnames and service names or port numbers into sets of possible addresses to connect to or listen on. This allows it to work for IPv6 where the system supports it, while still falling back to IPv4-only on systems which don&#39;t.</p>
+
+<h1 id="REPLACING-IO::Socket-DEFAULT-BEHAVIOUR"><a class="permalink" href="./IO::Socket::IP.html#REPLACING-IO::Socket-DEFAULT-BEHAVIOUR">#</a><a id="REPLACING"></a>REPLACING <code>IO::Socket</code> DEFAULT BEHAVIOUR</h1>
+
+<p>By placing <code>-register</code> in the import list to <code>IO::Socket::IP</code>, it will register itself with <a href="./IO::Socket.html">IO::Socket</a> as the class that handles <code>PF_INET</code>. It will also ask to handle <code>PF_INET6</code> as well, provided that constant is available.</p>
+
+<p>Changing <code>IO::Socket</code>&#39;s default behaviour means that calling the <code>IO::Socket</code> constructor with either <code>PF_INET</code> or <code>PF_INET6</code> as the <code>Domain</code> parameter will yield an <code>IO::Socket::IP</code> object.</p>
+
+<pre><code>use IO::Socket::IP -register;
+
+my $sock = IO::Socket-&gt;new(
+   Domain    =&gt; PF_INET6,
+   LocalHost =&gt; &quot;::1&quot;,
+   Listen    =&gt; 1,
+) or die &quot;Cannot create socket - $@\n&quot;;
+
+print &quot;Created a socket of type &quot; . ref($sock) . &quot;\n&quot;;</code></pre>
+
+<p>Note that <code>-register</code> is a global setting that applies to the entire program; it cannot be applied only for certain callers, removed, or limited by lexical scope.</p>
+
+<h1 id="CONSTRUCTORS"><a class="permalink" href="./IO::Socket::IP.html#CONSTRUCTORS">#</a>CONSTRUCTORS</h1>
+
+<h2 id="new"><a class="permalink" href="./IO::Socket::IP.html#new">#</a>new</h2>
+
+<pre><code>$sock = IO::Socket::IP-&gt;new( %args )</code></pre>
+
+<p>Creates a new <code>IO::Socket::IP</code> object, containing a newly created socket handle according to the named arguments passed. The recognised arguments are:</p>
+
+<dl>
+
+<dt id="PeerHost-=&gt;-STRING"><a class="permalink" href="./IO::Socket::IP.html#PeerHost-=%3E-STRING">#</a><a id="PeerHost"></a><a id="PeerHost-STRING"></a>PeerHost =&gt; STRING</dt>
+<dd>
+
+</dd>
+<dt id="PeerService-=&gt;-STRING"><a class="permalink" href="./IO::Socket::IP.html#PeerService-=%3E-STRING">#</a><a id="PeerService"></a><a id="PeerService-STRING"></a>PeerService =&gt; STRING</dt>
+<dd>
+
+<p>Hostname and service name for the peer to <code>connect()</code> to. The service name may be given as a port number, as a decimal string.</p>
+
+</dd>
+<dt id="PeerAddr-=&gt;-STRING"><a class="permalink" href="./IO::Socket::IP.html#PeerAddr-=%3E-STRING">#</a><a id="PeerAddr"></a><a id="PeerAddr-STRING"></a>PeerAddr =&gt; STRING</dt>
+<dd>
+
+</dd>
+<dt id="PeerPort-=&gt;-STRING"><a class="permalink" href="./IO::Socket::IP.html#PeerPort-=%3E-STRING">#</a><a id="PeerPort"></a><a id="PeerPort-STRING"></a>PeerPort =&gt; STRING</dt>
+<dd>
+
+<p>For symmetry with the accessor methods and compatibility with <code>IO::Socket::INET</code>, these are accepted as synonyms for <code>PeerHost</code> and <code>PeerService</code> respectively.</p>
+
+</dd>
+<dt id="PeerAddrInfo-=&gt;-ARRAY"><a class="permalink" href="./IO::Socket::IP.html#PeerAddrInfo-=%3E-ARRAY">#</a><a id="PeerAddrInfo"></a><a id="PeerAddrInfo-ARRAY"></a>PeerAddrInfo =&gt; ARRAY</dt>
+<dd>
+
+<p>Alternate form of specifying the peer to <code>connect()</code> to. This should be an array of the form returned by <code>Socket::getaddrinfo</code>.</p>
+
+<p>This parameter takes precedence over the <code>Peer*</code>, <code>Family</code>, <code>Type</code> and <code>Proto</code> arguments.</p>
+
+</dd>
+<dt id="LocalHost-=&gt;-STRING"><a class="permalink" href="./IO::Socket::IP.html#LocalHost-=%3E-STRING">#</a><a id="LocalHost"></a><a id="LocalHost-STRING"></a>LocalHost =&gt; STRING</dt>
+<dd>
+
+</dd>
+<dt id="LocalService-=&gt;-STRING"><a class="permalink" href="./IO::Socket::IP.html#LocalService-=%3E-STRING">#</a><a id="LocalService"></a><a id="LocalService-STRING"></a>LocalService =&gt; STRING</dt>
+<dd>
+
+<p>Hostname and service name for the local address to <code>bind()</code> to.</p>
+
+</dd>
+<dt id="LocalAddr-=&gt;-STRING"><a class="permalink" href="./IO::Socket::IP.html#LocalAddr-=%3E-STRING">#</a><a id="LocalAddr"></a><a id="LocalAddr-STRING"></a>LocalAddr =&gt; STRING</dt>
+<dd>
+
+</dd>
+<dt id="LocalPort-=&gt;-STRING"><a class="permalink" href="./IO::Socket::IP.html#LocalPort-=%3E-STRING">#</a><a id="LocalPort"></a><a id="LocalPort-STRING"></a>LocalPort =&gt; STRING</dt>
+<dd>
+
+<p>For symmetry with the accessor methods and compatibility with <code>IO::Socket::INET</code>, these are accepted as synonyms for <code>LocalHost</code> and <code>LocalService</code> respectively.</p>
+
+</dd>
+<dt id="LocalAddrInfo-=&gt;-ARRAY"><a class="permalink" href="./IO::Socket::IP.html#LocalAddrInfo-=%3E-ARRAY">#</a><a id="LocalAddrInfo"></a><a id="LocalAddrInfo-ARRAY"></a>LocalAddrInfo =&gt; ARRAY</dt>
+<dd>
+
+<p>Alternate form of specifying the local address to <code>bind()</code> to. This should be an array of the form returned by <code>Socket::getaddrinfo</code>.</p>
+
+<p>This parameter takes precedence over the <code>Local*</code>, <code>Family</code>, <code>Type</code> and <code>Proto</code> arguments.</p>
+
+</dd>
+<dt id="Family-=&gt;-INT"><a class="permalink" href="./IO::Socket::IP.html#Family-=%3E-INT">#</a><a id="Family"></a><a id="Family-INT"></a>Family =&gt; INT</dt>
+<dd>
+
+<p>The address family to pass to <code>getaddrinfo</code> (e.g. <code>AF_INET</code>, <code>AF_INET6</code>). Normally this will be left undefined, and <code>getaddrinfo</code> will search using any address family supported by the system.</p>
+
+</dd>
+<dt id="Type-=&gt;-INT"><a class="permalink" href="./IO::Socket::IP.html#Type-=%3E-INT">#</a><a id="Type"></a><a id="Type-INT"></a>Type =&gt; INT</dt>
+<dd>
+
+<p>The socket type to pass to <code>getaddrinfo</code> (e.g. <code>SOCK_STREAM</code>, <code>SOCK_DGRAM</code>). Normally defined by the caller; if left undefined <code>getaddrinfo</code> may attempt to infer the type from the service name.</p>
+
+</dd>
+<dt id="Proto-=&gt;-STRING-or-INT"><a class="permalink" href="./IO::Socket::IP.html#Proto-=%3E-STRING-or-INT">#</a><a id="Proto"></a><a id="Proto-STRING-or-INT"></a>Proto =&gt; STRING or INT</dt>
+<dd>
+
+<p>The IP protocol to use for the socket (e.g. <code>&#39;tcp&#39;</code>, <code>IPPROTO_TCP</code>, <code>&#39;udp&#39;</code>,<code>IPPROTO_UDP</code>). Normally this will be left undefined, and either <code>getaddrinfo</code> or the kernel will choose an appropriate value. May be given either in string name or numeric form.</p>
+
+</dd>
+<dt id="GetAddrInfoFlags-=&gt;-INT"><a class="permalink" href="./IO::Socket::IP.html#GetAddrInfoFlags-=%3E-INT">#</a><a id="GetAddrInfoFlags"></a><a id="GetAddrInfoFlags-INT"></a>GetAddrInfoFlags =&gt; INT</dt>
+<dd>
+
+<p>More flags to pass to the <code>getaddrinfo()</code> function. If not supplied, a default of <code>AI_ADDRCONFIG</code> will be used.</p>
+
+<p>These flags will be combined with <code>AI_PASSIVE</code> if the <code>Listen</code> argument is given. For more information see the documentation about <code>getaddrinfo()</code> in the <a href="Socket.html">Socket</a> module.</p>
+
+</dd>
+<dt id="Listen-=&gt;-INT"><a class="permalink" href="./IO::Socket::IP.html#Listen-=%3E-INT">#</a><a id="Listen"></a><a id="Listen-INT"></a>Listen =&gt; INT</dt>
+<dd>
+
+<p>If defined, puts the socket into listening mode where new connections can be accepted using the <code>accept</code> method. The value given is used as the <code>listen(2)</code> queue size.</p>
+
+</dd>
+<dt id="ReuseAddr-=&gt;-BOOL"><a class="permalink" href="./IO::Socket::IP.html#ReuseAddr-=%3E-BOOL">#</a><a id="ReuseAddr"></a><a id="ReuseAddr-BOOL"></a>ReuseAddr =&gt; BOOL</dt>
+<dd>
+
+<p>If true, set the <code>SO_REUSEADDR</code> sockopt</p>
+
+</dd>
+<dt id="ReusePort-=&gt;-BOOL"><a class="permalink" href="./IO::Socket::IP.html#ReusePort-=%3E-BOOL">#</a><a id="ReusePort"></a><a id="ReusePort-BOOL"></a>ReusePort =&gt; BOOL</dt>
+<dd>
+
+<p>If true, set the <code>SO_REUSEPORT</code> sockopt (not all OSes implement this sockopt)</p>
+
+</dd>
+<dt id="Broadcast-=&gt;-BOOL"><a class="permalink" href="./IO::Socket::IP.html#Broadcast-=%3E-BOOL">#</a><a id="Broadcast"></a><a id="Broadcast-BOOL"></a>Broadcast =&gt; BOOL</dt>
+<dd>
+
+<p>If true, set the <code>SO_BROADCAST</code> sockopt</p>
+
+</dd>
+<dt id="Sockopts-=&gt;-ARRAY"><a class="permalink" href="./IO::Socket::IP.html#Sockopts-=%3E-ARRAY">#</a><a id="Sockopts"></a><a id="Sockopts-ARRAY"></a>Sockopts =&gt; ARRAY</dt>
+<dd>
+
+<p>An optional array of other socket options to apply after the three listed above. The value is an ARRAY containing 2- or 3-element ARRAYrefs. Each inner array relates to a single option, giving the level and option name, and an optional value. If the value element is missing, it will be given the value of a platform-sized integer 1 constant (i.e. suitable to enable most of the common boolean options).</p>
+
+<p>For example, both options given below are equivalent to setting <code>ReuseAddr</code>.</p>
+
+<pre><code class="plaintext">Sockopts =&gt; [
+   [ SOL_SOCKET, SO_REUSEADDR ],
+   [ SOL_SOCKET, SO_REUSEADDR, pack( &quot;i&quot;, 1 ) ],
+]</code></pre>
+
+</dd>
+<dt id="V6Only-=&gt;-BOOL"><a class="permalink" href="./IO::Socket::IP.html#V6Only-=%3E-BOOL">#</a><a id="V6Only"></a><a id="V6Only-BOOL"></a>V6Only =&gt; BOOL</dt>
+<dd>
+
+<p>If defined, set the <code>IPV6_V6ONLY</code> sockopt when creating <code>PF_INET6</code> sockets to the given value. If true, a listening-mode socket will only listen on the <code>AF_INET6</code> addresses; if false it will also accept connections from <code>AF_INET</code> addresses.</p>
+
+<p>If not defined, the socket option will not be changed, and default value set by the operating system will apply. For repeatable behaviour across platforms it is recommended this value always be defined for listening-mode sockets.</p>
+
+<p>Note that not all platforms support disabling this option. Some, at least OpenBSD and MirBSD, will fail with <code>EINVAL</code> if you attempt to disable it. To determine whether it is possible to disable, you may use the class method</p>
+
+<pre><code>if( IO::Socket::IP-&gt;CAN_DISABLE_V6ONLY ) {
+   ...
+}
+else {
+   ...
+}</code></pre>
+
+<p>If your platform does not support disabling this option but you still want to listen for both <code>AF_INET</code> and <code>AF_INET6</code> connections you will have to create two listening sockets, one bound to each protocol.</p>
+
+</dd>
+<dt id="MultiHomed"><a class="permalink" href="./IO::Socket::IP.html#MultiHomed">#</a>MultiHomed</dt>
+<dd>
+
+<p>This <code>IO::Socket::INET</code>-style argument is ignored, except if it is defined but false. See the <code>IO::Socket::INET</code> INCOMPATIBILITES section below.</p>
+
+<p>However, the behaviour it enables is always performed by <code>IO::Socket::IP</code>.</p>
+
+</dd>
+<dt id="Blocking-=&gt;-BOOL"><a class="permalink" href="./IO::Socket::IP.html#Blocking-=%3E-BOOL">#</a><a id="Blocking"></a><a id="Blocking-BOOL"></a>Blocking =&gt; BOOL</dt>
+<dd>
+
+<p>If defined but false, the socket will be set to non-blocking mode. Otherwise it will default to blocking mode. See the NON-BLOCKING section below for more detail.</p>
+
+</dd>
+<dt id="Timeout-=&gt;-NUM"><a class="permalink" href="./IO::Socket::IP.html#Timeout-=%3E-NUM">#</a><a id="Timeout"></a><a id="Timeout-NUM"></a>Timeout =&gt; NUM</dt>
+<dd>
+
+<p>If defined, gives a maximum time in seconds to block per <code>connect()</code> call when in blocking mode. If missing, no timeout is applied other than that provided by the underlying operating system. When in non-blocking mode this parameter is ignored.</p>
+
+<p>Note that if the hostname resolves to multiple address candidates, the same timeout will apply to each connection attempt individually, rather than to the operation as a whole. Further note that the timeout does not apply to the initial hostname resolve operation, if connecting by hostname.</p>
+
+<p>This behviour is copied inspired by <code>IO::Socket::INET</code>; for more fine grained control over connection timeouts, consider performing a nonblocking connect directly.</p>
+
+</dd>
+</dl>
+
+<p>If neither <code>Type</code> nor <code>Proto</code> hints are provided, a default of <code>SOCK_STREAM</code> and <code>IPPROTO_TCP</code> respectively will be set, to maintain compatibility with <code>IO::Socket::INET</code>. Other named arguments that are not recognised are ignored.</p>
+
+<p>If neither <code>Family</code> nor any hosts or addresses are passed, nor any <code>*AddrInfo</code>, then the constructor has no information on which to decide a socket family to create. In this case, it performs a <code>getaddinfo</code> call with the <code>AI_ADDRCONFIG</code> flag, no host name, and a service name of <code>&quot;0&quot;</code>, and uses the family of the first returned result.</p>
+
+<p>If the constructor fails, it will set <code>$@</code> to an appropriate error message; this may be from <code>$!</code> or it may be some other string; not every failure necessarily has an associated <code>errno</code> value.</p>
+
+<h2 id="new-(one-arg)"><a class="permalink" href="./IO::Socket::IP.html#new-(one-arg)">#</a><a id="new1"></a><a id="new-one-arg"></a>new (one arg)</h2>
+
+<pre><code>$sock = IO::Socket::IP-&gt;new( $peeraddr )</code></pre>
+
+<p>As a special case, if the constructor is passed a single argument (as opposed to an even-sized list of key/value pairs), it is taken to be the value of the <code>PeerAddr</code> parameter. This is parsed in the same way, according to the behaviour given in the <code>PeerHost</code> AND <code>LocalHost</code> PARSING section below.</p>
+
+<h1 id="METHODS"><a class="permalink" href="./IO::Socket::IP.html#METHODS">#</a>METHODS</h1>
+
+<p>As well as the following methods, this class inherits all the methods in <a href="./IO::Socket.html">IO::Socket</a> and <a href="./IO::Handle.html">IO::Handle</a>.</p>
+
+<h2 id="sockhost_service"><a class="permalink" href="./IO::Socket::IP.html#sockhost_service">#</a>sockhost_service</h2>
+
+<pre><code>( $host, $service ) = $sock-&gt;sockhost_service( $numeric )</code></pre>
+
+<p>Returns the hostname and service name of the local address (that is, the socket address given by the <code>sockname</code> method).</p>
+
+<p>If <code>$numeric</code> is true, these will be given in numeric form rather than being resolved into names.</p>
+
+<p>The following four convenience wrappers may be used to obtain one of the two values returned here. If both host and service names are required, this method is preferable to the following wrappers, because it will call <code>getnameinfo(3)</code> only once.</p>
+
+<h2 id="sockhost"><a class="permalink" href="./IO::Socket::IP.html#sockhost">#</a>sockhost</h2>
+
+<pre><code>$addr = $sock-&gt;sockhost</code></pre>
+
+<p>Return the numeric form of the local address as a textual representation</p>
+
+<h2 id="sockport"><a class="permalink" href="./IO::Socket::IP.html#sockport">#</a>sockport</h2>
+
+<pre><code>$port = $sock-&gt;sockport</code></pre>
+
+<p>Return the numeric form of the local port number</p>
+
+<h2 id="sockhostname"><a class="permalink" href="./IO::Socket::IP.html#sockhostname">#</a>sockhostname</h2>
+
+<pre><code>$host = $sock-&gt;sockhostname</code></pre>
+
+<p>Return the resolved name of the local address</p>
+
+<h2 id="sockservice"><a class="permalink" href="./IO::Socket::IP.html#sockservice">#</a>sockservice</h2>
+
+<pre><code>$service = $sock-&gt;sockservice</code></pre>
+
+<p>Return the resolved name of the local port number</p>
+
+<h2 id="sockaddr"><a class="permalink" href="./IO::Socket::IP.html#sockaddr">#</a>sockaddr</h2>
+
+<pre><code>$addr = $sock-&gt;sockaddr</code></pre>
+
+<p>Return the local address as a binary octet string</p>
+
+<h2 id="peerhost_service"><a class="permalink" href="./IO::Socket::IP.html#peerhost_service">#</a>peerhost_service</h2>
+
+<pre><code>( $host, $service ) = $sock-&gt;peerhost_service( $numeric )</code></pre>
+
+<p>Returns the hostname and service name of the peer address (that is, the socket address given by the <code>peername</code> method), similar to the <code>sockhost_service</code> method.</p>
+
+<p>The following four convenience wrappers may be used to obtain one of the two values returned here. If both host and service names are required, this method is preferable to the following wrappers, because it will call <code>getnameinfo(3)</code> only once.</p>
+
+<h2 id="peerhost"><a class="permalink" href="./IO::Socket::IP.html#peerhost">#</a>peerhost</h2>
+
+<pre><code>$addr = $sock-&gt;peerhost</code></pre>
+
+<p>Return the numeric form of the peer address as a textual representation</p>
+
+<h2 id="peerport"><a class="permalink" href="./IO::Socket::IP.html#peerport">#</a>peerport</h2>
+
+<pre><code>$port = $sock-&gt;peerport</code></pre>
+
+<p>Return the numeric form of the peer port number</p>
+
+<h2 id="peerhostname"><a class="permalink" href="./IO::Socket::IP.html#peerhostname">#</a>peerhostname</h2>
+
+<pre><code>$host = $sock-&gt;peerhostname</code></pre>
+
+<p>Return the resolved name of the peer address</p>
+
+<h2 id="peerservice"><a class="permalink" href="./IO::Socket::IP.html#peerservice">#</a>peerservice</h2>
+
+<pre><code>$service = $sock-&gt;peerservice</code></pre>
+
+<p>Return the resolved name of the peer port number</p>
+
+<h2 id="peeraddr"><a class="permalink" href="./IO::Socket::IP.html#peeraddr">#</a>peeraddr</h2>
+
+<pre><code>$addr = $peer-&gt;peeraddr</code></pre>
+
+<p>Return the peer address as a binary octet string</p>
+
+<h2 id="as_inet"><a class="permalink" href="./IO::Socket::IP.html#as_inet">#</a>as_inet</h2>
+
+<pre><code>$inet = $sock-&gt;as_inet</code></pre>
+
+<p>Returns a new <a href="./IO::Socket::INET.html">IO::Socket::INET</a> instance wrapping the same filehandle. This may be useful in cases where it is required, for backward-compatibility, to have a real object of <code>IO::Socket::INET</code> type instead of <code>IO::Socket::IP</code>. The new object will wrap the same underlying socket filehandle as the original, so care should be taken not to continue to use both objects concurrently. Ideally the original <code>$sock</code> should be discarded after this method is called.</p>
+
+<p>This method checks that the socket domain is <code>PF_INET</code> and will throw an exception if it isn&#39;t.</p>
+
+<h1 id="NON-BLOCKING"><a class="permalink" href="./IO::Socket::IP.html#NON-BLOCKING">#</a><a id="NON"></a>NON-BLOCKING</h1>
+
+<p>If the constructor is passed a defined but false value for the <code>Blocking</code> argument then the socket is put into non-blocking mode. When in non-blocking mode, the socket will not be set up by the time the constructor returns, because the underlying <code>connect(2)</code> syscall would otherwise have to block.</p>
+
+<p>The non-blocking behaviour is an extension of the <code>IO::Socket::INET</code> API, unique to <code>IO::Socket::IP</code>, because the former does not support multi-homed non-blocking connect.</p>
+
+<p>When using non-blocking mode, the caller must repeatedly check for writeability on the filehandle (for instance using <code>select</code> or <code>IO::Poll</code>). Each time the filehandle is ready to write, the <code>connect</code> method must be called, with no arguments. Note that some operating systems, most notably <code>MSWin32</code> do not report a <code>connect()</code> failure using write-ready; so you must also <code>select()</code> for exceptional status.</p>
+
+<p>While <code>connect</code> returns false, the value of <code>$!</code> indicates whether it should be tried again (by being set to the value <code>EINPROGRESS</code>, or <code>EWOULDBLOCK</code> on MSWin32), or whether a permanent error has occurred (e.g. <code>ECONNREFUSED</code>).</p>
+
+<p>Once the socket has been connected to the peer, <code>connect</code> will return true and the socket will now be ready to use.</p>
+
+<p>Note that calls to the platform&#39;s underlying <code>getaddrinfo(3)</code> function may block. If <code>IO::Socket::IP</code> has to perform this lookup, the constructor will block even when in non-blocking mode.</p>
+
+<p>To avoid this blocking behaviour, the caller should pass in the result of such a lookup using the <code>PeerAddrInfo</code> or <code>LocalAddrInfo</code> arguments. This can be achieved by using <a href="./Net::LibAsyncNS.html">Net::LibAsyncNS</a>, or the <code>getaddrinfo(3)</code> function can be called in a child process.</p>
+
+<pre><code>use IO::Socket::IP;
+use Errno qw( EINPROGRESS EWOULDBLOCK );
+
+my @peeraddrinfo = ... # Caller must obtain the getaddinfo result here
+
+my $socket = IO::Socket::IP-&gt;new(
+   PeerAddrInfo =&gt; \@peeraddrinfo,
+   Blocking     =&gt; 0,
+) or die &quot;Cannot construct socket - $@&quot;;
+
+while( !$socket-&gt;connect and ( $! == EINPROGRESS || $! == EWOULDBLOCK ) ) {
+   my $wvec = &#39;&#39;;
+   vec( $wvec, fileno $socket, 1 ) = 1;
+   my $evec = &#39;&#39;;
+   vec( $evec, fileno $socket, 1 ) = 1;
+
+   select( undef, $wvec, $evec, undef ) or die &quot;Cannot select - $!&quot;;
+}
+
+die &quot;Cannot connect - $!&quot; if $!;
+
+...</code></pre>
+
+<p>The example above uses <code>select()</code>, but any similar mechanism should work analogously. <code>IO::Socket::IP</code> takes care when creating new socket filehandles to preserve the actual file descriptor number, so such techniques as <code>poll</code> or <code>epoll</code> should be transparent to its reallocation of a different socket underneath, perhaps in order to switch protocol family between <code>PF_INET</code> and <code>PF_INET6</code>.</p>
+
+<p>For another example using <code>IO::Poll</code> and <code>Net::LibAsyncNS</code>, see the <i>examples/nonblocking_libasyncns.pl</i> file in the module distribution.</p>
+
+<h1 id="PeerHost-AND-LocalHost-PARSING"><a class="permalink" href="./IO::Socket::IP.html#PeerHost-AND-LocalHost-PARSING">#</a><a id="PeerHost1"></a><code>PeerHost</code> AND <code>LocalHost</code> PARSING</h1>
+
+<p>To support the <code>IO::Socket::INET</code> API, the host and port information may be passed in a single string rather than as two separate arguments.</p>
+
+<p>If either <code>LocalHost</code> or <code>PeerHost</code> (or their <code>...Addr</code> synonyms) have any of the following special forms then special parsing is applied.</p>
+
+<p>The value of the <code>...Host</code> argument will be split to give both the hostname and port (or service name):</p>
+
+<pre><code class="plaintext">hostname.example.org:http    # Host name
+192.0.2.1:80                 # IPv4 address
+[2001:db8::1]:80             # IPv6 address</code></pre>
+
+<p>In each case, the port or service name (e.g. <code>80</code>) is passed as the <code>LocalService</code> or <code>PeerService</code> argument.</p>
+
+<p>Either of <code>LocalService</code> or <code>PeerService</code> (or their <code>...Port</code> synonyms) can be either a service name, a decimal number, or a string containing both a service name and number, in a form such as</p>
+
+<pre><code class="plaintext">http(80)</code></pre>
+
+<p>In this case, the name (<code>http</code>) will be tried first, but if the resolver does not understand it then the port number (<code>80</code>) will be used instead.</p>
+
+<p>If the <code>...Host</code> argument is in this special form and the corresponding <code>...Service</code> or <code>...Port</code> argument is also defined, the one parsed from the <code>...Host</code> argument will take precedence and the other will be ignored.</p>
+
+<h2 id="split_addr"><a class="permalink" href="./IO::Socket::IP.html#split_addr">#</a>split_addr</h2>
+
+<pre><code>( $host, $port ) = IO::Socket::IP-&gt;split_addr( $addr )</code></pre>
+
+<p>Utility method that provides the parsing functionality described above. Returns a 2-element list, containing either the split hostname and port description if it could be parsed, or the given address and <code>undef</code> if it was not recognised.</p>
+
+<pre><code>IO::Socket::IP-&gt;split_addr( &quot;hostname:http&quot; )
+                             # ( &quot;hostname&quot;,  &quot;http&quot; )
+
+IO::Socket::IP-&gt;split_addr( &quot;192.0.2.1:80&quot; )
+                             # ( &quot;192.0.2.1&quot;, &quot;80&quot;   )
+
+IO::Socket::IP-&gt;split_addr( &quot;[2001:db8::1]:80&quot; )
+                             # ( &quot;2001:db8::1&quot;, &quot;80&quot; )
+
+IO::Socket::IP-&gt;split_addr( &quot;something.else&quot; )
+                             # ( &quot;something.else&quot;, undef )</code></pre>
+
+<h2 id="join_addr"><a class="permalink" href="./IO::Socket::IP.html#join_addr">#</a>join_addr</h2>
+
+<pre><code>$addr = IO::Socket::IP-&gt;join_addr( $host, $port )</code></pre>
+
+<p>Utility method that performs the reverse of <code>split_addr</code>, returning a string formed by joining the specified host address and port number. The host address will be wrapped in <code>[]</code> brackets if required (because it is a raw IPv6 numeric address).</p>
+
+<p>This can be especially useful when combined with the <code>sockhost_service</code> or <code>peerhost_service</code> methods.</p>
+
+<pre><code>say &quot;Connected to &quot;, IO::Socket::IP-&gt;join_addr( $sock-&gt;peerhost_service );</code></pre>
+
+<h1 id="IO::Socket::INET-INCOMPATIBILITES"><a class="permalink" href="./IO::Socket::IP.html#IO::Socket::INET-INCOMPATIBILITES">#</a><a id="IO"></a><code>IO::Socket::INET</code> INCOMPATIBILITES</h1>
+
+<ul>
+
+<li><p>The behaviour enabled by <code>MultiHomed</code> is in fact implemented by <code>IO::Socket::IP</code> as it is required to correctly support searching for a useable address from the results of the <code>getaddrinfo(3)</code> call. The constructor will ignore the value of this argument, except if it is defined but false. An exception is thrown in this case, because that would request it disable the <code>getaddrinfo(3)</code> search behaviour in the first place.</p>
+
+</li>
+<li><p><code>IO::Socket::IP</code> implements both the <code>Blocking</code> and <code>Timeout</code> parameters, but it implements the interaction of both in a different way.</p>
+
+<p>In <code>::INET</code>, supplying a timeout overrides the non-blocking behaviour, meaning that the <code>connect()</code> operation will still block despite that the caller asked for a non-blocking socket. This is not explicitly specified in its documentation, nor does this author believe that is a useful behaviour - it appears to come from a quirk of implementation.</p>
+
+<p>In <code>::IP</code> therefore, the <code>Blocking</code> parameter takes precedence - if a non-blocking socket is requested, no operation will block. The <code>Timeout</code> parameter here simply defines the maximum time that a blocking <code>connect()</code> call will wait, if it blocks at all.</p>
+
+<p>In order to specifically obtain the &quot;blocking connect then non-blocking send and receive&quot; behaviour of specifying this combination of options to <code>::INET</code> when using <code>::IP</code>, perform first a blocking connect, then afterwards turn the socket into nonblocking mode.</p>
+
+<pre><code>my $sock = IO::Socket::IP-&gt;new(
+   PeerHost =&gt; $peer,
+   Timeout =&gt; 20,
+) or die &quot;Cannot connect - $@&quot;;
+
+$sock-&gt;blocking( 0 );</code></pre>
+
+<p>This code will behave identically under both <code>IO::Socket::INET</code> and <code>IO::Socket::IP</code>.</p>
+
+</li>
+</ul>
+
+<h1 id="TODO"><a class="permalink" href="./IO::Socket::IP.html#TODO">#</a>TODO</h1>
+
+<ul>
+
+<li><p>Investigate whether <code>POSIX::dup2</code> upsets BSD&#39;s <code>kqueue</code> watchers, and if so, consider what possible workarounds might be applied.</p>
+
+</li>
+</ul>
+
+<h1 id="AUTHOR"><a class="permalink" href="./IO::Socket::IP.html#AUTHOR">#</a>AUTHOR</h1>
+
+<p>Paul Evans &lt;leonerd@leonerd.org.uk&gt;</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

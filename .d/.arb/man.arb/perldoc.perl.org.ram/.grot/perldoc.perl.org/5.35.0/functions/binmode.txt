@@ -1,0 +1,108 @@
+=over
+
+=item binmode FILEHANDLE, LAYER
+X<binmode> X<binary> X<text> X<DOS> X<Windows>
+
+=item binmode FILEHANDLE
+
+Arranges for FILEHANDLE to be read or written in "binary" or "text"
+mode on systems where the run-time libraries distinguish between
+binary and text files.  If FILEHANDLE is an expression, the value is
+taken as the name of the filehandle.  Returns true on success,
+otherwise it returns L<C<undef>|/undef EXPR> and sets
+L<C<$!>|perlvar/$!> (errno).
+
+On some systems (in general, DOS- and Windows-based systems)
+L<C<binmode>|/binmode FILEHANDLE, LAYER> is necessary when you're not
+working with a text file.  For the sake of portability it is a good idea
+always to use it when appropriate, and never to use it when it isn't
+appropriate.  Also, people can set their I/O to be by default
+UTF8-encoded Unicode, not bytes.
+
+In other words: regardless of platform, use
+L<C<binmode>|/binmode FILEHANDLE, LAYER> on binary data, like images,
+for example.
+
+If LAYER is present it is a single string, but may contain multiple
+directives.  The directives alter the behaviour of the filehandle.
+When LAYER is present, using binmode on a text file makes sense.
+
+If LAYER is omitted or specified as C<:raw> the filehandle is made
+suitable for passing binary data.  This includes turning off possible CRLF
+translation and marking it as bytes (as opposed to Unicode characters).
+Note that, despite what may be implied in I<"Programming Perl"> (the
+Camel, 3rd edition) or elsewhere, C<:raw> is I<not> simply the inverse of C<:crlf>.
+Other layers that would affect the binary nature of the stream are
+I<also> disabled.  See L<PerlIO>, and the discussion about the PERLIO
+environment variable in L<perlrun|perlrun/PERLIO>.
+
+The C<:bytes>, C<:crlf>, C<:utf8>, and any other directives of the
+form C<:...>, are called I/O I<layers>.  The L<open> pragma can be used to
+establish default I/O layers.
+
+I<The LAYER parameter of the L<C<binmode>|/binmode FILEHANDLE, LAYER>
+function is described as "DISCIPLINE" in "Programming Perl, 3rd
+Edition".  However, since the publishing of this book, by many known as
+"Camel III", the consensus of the naming of this functionality has moved
+from "discipline" to "layer".  All documentation of this version of Perl
+therefore refers to "layers" rather than to "disciplines".  Now back to
+the regularly scheduled documentation...>
+
+To mark FILEHANDLE as UTF-8, use C<:utf8> or C<:encoding(UTF-8)>.
+C<:utf8> just marks the data as UTF-8 without further checking,
+while C<:encoding(UTF-8)> checks the data for actually being valid
+UTF-8.  More details can be found in L<PerlIO::encoding>.
+
+In general, L<C<binmode>|/binmode FILEHANDLE, LAYER> should be called
+after L<C<open>|/open FILEHANDLE,MODE,EXPR> but before any I/O is done on the
+filehandle.  Calling L<C<binmode>|/binmode FILEHANDLE, LAYER> normally
+flushes any pending buffered output data (and perhaps pending input
+data) on the handle.  An exception to this is the C<:encoding> layer
+that changes the default character encoding of the handle.
+The C<:encoding> layer sometimes needs to be called in
+mid-stream, and it doesn't flush the stream.  C<:encoding>
+also implicitly pushes on top of itself the C<:utf8> layer because
+internally Perl operates on UTF8-encoded Unicode characters.
+
+The operating system, device drivers, C libraries, and Perl run-time
+system all conspire to let the programmer treat a single
+character (C<\n>) as the line terminator, irrespective of external
+representation.  On many operating systems, the native text file
+representation matches the internal representation, but on some
+platforms the external representation of C<\n> is made up of more than
+one character.
+
+All variants of Unix, Mac OS (old and new), and Stream_LF files on VMS use
+a single character to end each line in the external representation of text
+(even though that single character is CARRIAGE RETURN on old, pre-Darwin
+flavors of Mac OS, and is LINE FEED on Unix and most VMS files).  In other
+systems like OS/2, DOS, and the various flavors of MS-Windows, your program
+sees a C<\n> as a simple C<\cJ>, but what's stored in text files are the
+two characters C<\cM\cJ>.  That means that if you don't use
+L<C<binmode>|/binmode FILEHANDLE, LAYER> on these systems, C<\cM\cJ>
+sequences on disk will be converted to C<\n> on input, and any C<\n> in
+your program will be converted back to C<\cM\cJ> on output.  This is
+what you want for text files, but it can be disastrous for binary files.
+
+Another consequence of using L<C<binmode>|/binmode FILEHANDLE, LAYER>
+(on some systems) is that special end-of-file markers will be seen as
+part of the data stream.  For systems from the Microsoft family this
+means that, if your binary data contain C<\cZ>, the I/O subsystem will
+regard it as the end of the file, unless you use
+L<C<binmode>|/binmode FILEHANDLE, LAYER>.
+
+L<C<binmode>|/binmode FILEHANDLE, LAYER> is important not only for
+L<C<readline>|/readline EXPR> and L<C<print>|/print FILEHANDLE LIST>
+operations, but also when using
+L<C<read>|/read FILEHANDLE,SCALAR,LENGTH,OFFSET>,
+L<C<seek>|/seek FILEHANDLE,POSITION,WHENCE>,
+L<C<sysread>|/sysread FILEHANDLE,SCALAR,LENGTH,OFFSET>,
+L<C<syswrite>|/syswrite FILEHANDLE,SCALAR,LENGTH,OFFSET> and
+L<C<tell>|/tell FILEHANDLE> (see L<perlport> for more details).  See the
+L<C<$E<sol>>|perlvar/$E<sol>> and L<C<$\>|perlvar/$\> variables in
+L<perlvar> for how to manually set your input and output
+line-termination sequences.
+
+Portability issues: L<perlport/binmode>.
+
+=back

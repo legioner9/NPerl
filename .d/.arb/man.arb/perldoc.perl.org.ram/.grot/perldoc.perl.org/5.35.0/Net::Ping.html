@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Net::Ping - check a remote host for reachability - Perldoc Browser</title>
+    <link rel="search" href="https://perldoc.perl.org/opensearch.xml" type="application/opensearchdescription+xml" title="Perldoc Browser">
+    <link rel="canonical" href="https://perldoc.perl.org/Net::Ping">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/stackoverflow-light.min.css" integrity="sha512-cG1IdFxqipi3gqLmksLtuk13C+hBa57a6zpWxMeoY3Q9O6ooFxq50DayCdm0QrDgZjMUn23z/0PMZlgft7Yp5Q==" crossorigin="anonymous" />
+    <style>
+      body {
+        background: #f4f4f5;
+        color: #020202;
+      }
+      .navbar-dark {
+        background-image: -webkit-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: -o-linear-gradient(top, #005f85 0, #002e49 100%);
+        background-image: linear-gradient(to bottom, #005f85 0, #002e49 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff005f85', endColorstr='#ff002e49', GradientType=0);
+        background-repeat: repeat-x;
+      }
+      .navbar-dark .navbar-nav .nav-link,
+      .navbar-dark .navbar-nav .nav-link:focus { color: #fff }
+      .navbar-dark .navbar-nav .nav-link:hover { color: #ffef68 }
+      #wrapperlicious {
+        margin: 0 auto;
+        font: 0.9em 'Helvetica Neue', Helvetica, sans-serif;
+        font-weight: normal;
+        line-height: 1.5em;
+        margin: 0;
+        padding: 0;
+      }
+      #wrapperlicious h1 { font-size: 1.5em }
+      #wrapperlicious h2 { font-size: 1.3em }
+      #wrapperlicious h3 { font-size: 1.1em }
+      #wrapperlicious h4 { font-size: 0.9em }
+      #wrapperlicious h1, #wrapperlicious h2, #wrapperlicious h3,
+      #wrapperlicious h4, #wrapperlicious dt {
+        color: #020202;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        position: relative;
+        font-weight: bold;
+      }
+      #wrapperlicious a { color: inherit; text-decoration: underline }
+      #wrapperlicious #toc { text-decoration: none }
+      #wrapperlicious a:hover { color: #2a2a2a }
+      #wrapperlicious a img { border: 0 }
+      #wrapperlicious :not(pre) > code {
+        color: inherit;
+        background-color: rgba(0, 0, 0, 0.04);
+        border-radius: 3px;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        padding: 0.3em;
+      }
+      #wrapperlicious dd {
+        margin: 0;
+        margin-left: 2em;
+      }
+      #wrapperlicious dt {
+        color: #2a2a2a;
+        font-weight: bold;
+        margin-left: 0.9em;
+      }
+      #wrapperlicious p {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious li > p {
+        margin-bottom: 0;
+        margin-top: 0;
+      }
+      #wrapperlicious pre {
+        border: 1px solid #c1c1c1;
+        border-radius: 3px;
+        font: 100% Consolas, Menlo, Monaco, monospace;
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious pre > code {
+        display: block;
+        background-color: #f6f6f6;
+        font: 0.9em Consolas, Menlo, Monaco, monospace;
+        line-height: 1.5em;
+        text-align: left;
+        white-space: pre;
+        padding: 1em;
+      }
+      #wrapperlicious dl, #wrapperlicious ol, #wrapperlicious ul {
+        margin-bottom: 1em;
+        margin-top: 1em;
+      }
+      #wrapperlicious ul {
+        list-style-type: square;
+      }
+      #wrapperlicious ul ul {
+        margin-bottom: 0px;
+        margin-top: 0px;
+      }
+      #footer {
+        font-size: 0.8em;
+        padding-top: 0.5em;
+        text-align: center;
+      }
+      #more {
+        display: inline;
+        font-size: 0.8em;
+      }
+      #perldocdiv {
+        background-color: #fff;
+        border: 1px solid #c1c1c1;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3em;
+        padding-top: 1em;
+        max-width: 960px;
+      }
+      #moduleversion { float: right }
+      #wrapperlicious .leading-notice {
+        font-style: italic;
+        padding-left: 1em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+      }
+      #wrapperlicious .permalink {
+        display: none;
+        left: -0.75em;
+        position: absolute;
+        padding-right: 0.25em;
+        text-decoration: none;
+      }
+      #wrapperlicious h1:hover .permalink, #wrapperlicious h2:hover .permalink,
+      #wrapperlicious h3:hover .permalink, #wrapperlicious h4:hover .permalink,
+      #wrapperlicious dt:hover .permalink {
+        display: block;
+      }
+    </style>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-KVNWBNT5FB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-KVNWBNT5FB');
+      gtag('config', 'UA-50555-3');
+    </script>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark justify-content-between">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="https://perldoc.perl.org/">Perldoc Browser</a>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Net::Ping.html#" id="dropdownlink-stable" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5.35.0</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-stable">
+          <a class="dropdown-item" href="https://perldoc.perl.org/Net::Ping">Latest</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.2/Net::Ping">5.38.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.1/Net::Ping">5.38.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0/Net::Ping">5.38.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.3/Net::Ping">5.36.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.2/Net::Ping">5.36.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.1/Net::Ping">5.36.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.36.0/Net::Ping">5.36.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.3/Net::Ping">5.34.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.2/Net::Ping">5.34.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.1/Net::Ping">5.34.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.34.0/Net::Ping">5.34.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.1/Net::Ping">5.32.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.32.0/Net::Ping">5.32.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.3/Net::Ping">5.30.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.2/Net::Ping">5.30.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.1/Net::Ping">5.30.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.30.0/Net::Ping">5.30.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.3/Net::Ping">5.28.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.2/Net::Ping">5.28.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.1/Net::Ping">5.28.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.28.0/Net::Ping">5.28.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.3/Net::Ping">5.26.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.2/Net::Ping">5.26.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.1/Net::Ping">5.26.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.26.0/Net::Ping">5.26.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.4/Net::Ping">5.24.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.3/Net::Ping">5.24.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.2/Net::Ping">5.24.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.1/Net::Ping">5.24.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.24.0/Net::Ping">5.24.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.4/Net::Ping">5.22.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.3/Net::Ping">5.22.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.2/Net::Ping">5.22.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.1/Net::Ping">5.22.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.22.0/Net::Ping">5.22.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.3/Net::Ping">5.20.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.2/Net::Ping">5.20.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.1/Net::Ping">5.20.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.20.0/Net::Ping">5.20.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.4/Net::Ping">5.18.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.3/Net::Ping">5.18.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.2/Net::Ping">5.18.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.1/Net::Ping">5.18.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.18.0/Net::Ping">5.18.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.3/Net::Ping">5.16.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.2/Net::Ping">5.16.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.1/Net::Ping">5.16.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.16.0/Net::Ping">5.16.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.4/Net::Ping">5.14.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.3/Net::Ping">5.14.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.2/Net::Ping">5.14.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.1/Net::Ping">5.14.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.14.0/Net::Ping">5.14.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.5/Net::Ping">5.12.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.4/Net::Ping">5.12.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.3/Net::Ping">5.12.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.2/Net::Ping">5.12.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.1/Net::Ping">5.12.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.12.0/Net::Ping">5.12.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.1/Net::Ping">5.10.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.10.0/Net::Ping">5.10.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.9/Net::Ping">5.8.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.8/Net::Ping">5.8.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.7/Net::Ping">5.8.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.6/Net::Ping">5.8.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.5/Net::Ping">5.8.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.4/Net::Ping">5.8.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.3/Net::Ping">5.8.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.2/Net::Ping">5.8.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.1/Net::Ping">5.8.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.8.0/Net::Ping">5.8.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.2/Net::Ping">5.6.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.1/Net::Ping">5.6.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.6.0/Net::Ping">5.6.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_04/Net::Ping">5.005_04</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_03/Net::Ping">5.005_03</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_02/Net::Ping">5.005_02</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005_01/Net::Ping">5.005_01</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.005/Net::Ping">5.005</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Net::Ping.html#" id="dropdownlink-dev" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dev</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-dev">
+          <a class="dropdown-item" href="https://perldoc.perl.org/blead/Net::Ping">blead</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.6/Net::Ping">5.39.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.5/Net::Ping">5.39.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.4/Net::Ping">5.39.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.3/Net::Ping">5.39.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.2/Net::Ping">5.39.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.39.1/Net::Ping">5.39.1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC2/Net::Ping">5.38.0-RC2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.38.0-RC1/Net::Ping">5.38.0-RC1</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.11/Net::Ping">5.37.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.10/Net::Ping">5.37.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.9/Net::Ping">5.37.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.8/Net::Ping">5.37.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.7/Net::Ping">5.37.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.6/Net::Ping">5.37.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.5/Net::Ping">5.37.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.4/Net::Ping">5.37.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.3/Net::Ping">5.37.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.2/Net::Ping">5.37.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.1/Net::Ping">5.37.1</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.37.0/Net::Ping">5.37.0</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.11/Net::Ping">5.35.11</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.10/Net::Ping">5.35.10</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.9/Net::Ping">5.35.9</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.8/Net::Ping">5.35.8</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.7/Net::Ping">5.35.7</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.6/Net::Ping">5.35.6</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.5/Net::Ping">5.35.5</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.4/Net::Ping">5.35.4</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.3/Net::Ping">5.35.3</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.2/Net::Ping">5.35.2</a>
+          <a class="dropdown-item" href="https://perldoc.perl.org/5.35.1/Net::Ping">5.35.1</a>
+          <a class="dropdown-item active" href="./Net::Ping.html">5.35.0</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown text-nowrap">
+        <a class="nav-link dropdown-toggle" href="./Net::Ping.html#" id="dropdownlink-nav" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Documentation</a>
+        <div class="dropdown-menu" aria-labelledby="dropdownlink-nav">
+          <a class="dropdown-item" href="perl.html">Perl</a>
+          <a class="dropdown-item" href="perlintro.html">Intro</a>
+          <a class="dropdown-item" href="perl.html#Tutorials">Tutorials</a>
+          <a class="dropdown-item" href="perlfaq.html">FAQs</a>
+          <a class="dropdown-item" href="perl.html#Reference-Manual">Reference</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlop.html">Operators</a>
+          <a class="dropdown-item" href="functions.html">Functions</a>
+          <a class="dropdown-item" href="variables.html">Variables</a>
+          <a class="dropdown-item" href="modules.html">Modules</a>
+          <a class="dropdown-item" href="perlutil.html">Utilities</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="perlcommunity.html">Community</a>
+          <a class="dropdown-item" href="perlhist.html">History</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <script>
+        function set_expand (expand) {
+          var perldocdiv = document.getElementById('perldocdiv');
+          var width = window.getComputedStyle(perldocdiv).getPropertyValue('max-width');
+          var expanded = (width == '' || width == 'none') ? true : false;
+          if (expand === null) {
+            expand = !expanded;
+          }
+          if ((expand && !expanded) || (!expand && expanded)) {
+            perldocdiv.style.setProperty('max-width', expand ? 'none' : '960px');
+            var button_classlist = document.getElementById('content-expand-button').classList;
+            if (expand) {
+              button_classlist.add('btn-light');
+              button_classlist.remove('btn-outline-light');
+            } else {
+              button_classlist.add('btn-outline-light');
+              button_classlist.remove('btn-light');
+            }
+          }
+          return expand;
+        }
+        function toggle_expand () {
+          var expand = set_expand(null);
+          document.cookie = 'perldoc_expand=' + (expand ? 1 : 0) + '; path=/; expires=Tue, 19 Jan 2038 03:14:07 UTC';
+        }
+        function read_expand () {
+          return document.cookie.split(';').some(function (item) { return item.indexOf('perldoc_expand=1') >= 0 });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', function () {
+            if (read_expand()) {
+              set_expand(true);
+            }
+          });
+        } else if (read_expand()) {
+          set_expand(true);
+        }
+      </script>
+      <button id="content-expand-button" type="button" class="btn btn-outline-light d-none d-lg-inline-block mr-2" onclick="toggle_expand()">Expand</button>
+    <ul>
+    <form class="form-inline" method="get" action="https://perldoc.perl.org/5.35.0/search">
+      <input class="form-control mr-3" type="search" name="q" placeholder="Search" aria-label="Search">
+    </form>
+  </div>
+</nav>
+
+    <div id="wrapperlicious" class="container-fluid">
+      <div id="perldocdiv">
+        <div id="links">
+          <a href="./Net::Ping.html">Net::Ping</a>
+          <div id="more">
+            (<a href="./Net::Ping.txt">source</a>,
+            <a href="https://metacpan.org/pod/Net::Ping">CPAN</a>)
+          </div>
+            <div id="moduleversion">version 2.74</div>
+        </div>
+        <div class="leading-notice">
+          You are viewing the version of this documentation from Perl 5.35.0.
+            This is a development version of Perl.
+        </div>
+        <h1><a id="toc">CONTENTS</a></h1>
+                  <ul>
+              <li>
+                <a class="text-decoration-none" href="./Net::Ping.html#NAME">NAME</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::Ping.html#SYNOPSIS">SYNOPSIS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::Ping.html#DESCRIPTION">DESCRIPTION</a>
+                            <ul>
+              <li>
+                <a class="text-decoration-none" href="./Net::Ping.html#Functions">Functions</a>
+              </li>
+          </ul>
+
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::Ping.html#NOTES">NOTES</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::Ping.html#INSTALL">INSTALL</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::Ping.html#BUGS">BUGS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::Ping.html#AUTHORS">AUTHORS</a>
+              </li>
+              <li>
+                <a class="text-decoration-none" href="./Net::Ping.html#COPYRIGHT">COPYRIGHT</a>
+              </li>
+          </ul>
+
+      <h1 id="NAME"><a class="permalink" href="./Net::Ping.html#NAME">#</a>NAME</h1>
+
+<p>Net::Ping - check a remote host for reachability</p>
+
+<h1 id="SYNOPSIS"><a class="permalink" href="./Net::Ping.html#SYNOPSIS">#</a>SYNOPSIS</h1>
+
+<pre><code>use Net::Ping;
+
+$p = Net::Ping-&gt;new();
+print &quot;$host is alive.\n&quot; if $p-&gt;ping($host);
+$p-&gt;close();
+
+$p = Net::Ping-&gt;new(&quot;icmp&quot;);
+$p-&gt;bind($my_addr); # Specify source interface of pings
+foreach $host (@host_array)
+{
+    print &quot;$host is &quot;;
+    print &quot;NOT &quot; unless $p-&gt;ping($host, 2);
+    print &quot;reachable.\n&quot;;
+    sleep(1);
+}
+$p-&gt;close();
+
+$p = Net::Ping-&gt;new(&quot;icmpv6&quot;);
+$ip = &quot;[fd00:dead:beef::4e]&quot;;
+print &quot;$ip is alive.\n&quot; if $p-&gt;ping($ip);
+
+$p = Net::Ping-&gt;new(&quot;tcp&quot;, 2);
+# Try connecting to the www port instead of the echo port
+$p-&gt;port_number(scalar(getservbyname(&quot;http&quot;, &quot;tcp&quot;)));
+while ($stop_time &gt; time())
+{
+    print &quot;$host not reachable &quot;, scalar(localtime()), &quot;\n&quot;
+        unless $p-&gt;ping($host);
+    sleep(300);
+}
+undef($p);
+
+# Like tcp protocol, but with many hosts
+$p = Net::Ping-&gt;new(&quot;syn&quot;);
+$p-&gt;port_number(getservbyname(&quot;http&quot;, &quot;tcp&quot;));
+foreach $host (@host_array) {
+  $p-&gt;ping($host);
+}
+while (($host,$rtt,$ip) = $p-&gt;ack) {
+  print &quot;HOST: $host [$ip] ACKed in $rtt seconds.\n&quot;;
+}
+
+# High precision syntax (requires Time::HiRes)
+$p = Net::Ping-&gt;new();
+$p-&gt;hires();
+($ret, $duration, $ip) = $p-&gt;ping($host, 5.5);
+printf(&quot;$host [ip: $ip] is alive (packet return time: %.2f ms)\n&quot;,
+        1000 * $duration)
+  if $ret;
+$p-&gt;close();
+
+# For backward compatibility
+print &quot;$host is alive.\n&quot; if pingecho($host);</code></pre>
+
+<h1 id="DESCRIPTION"><a class="permalink" href="./Net::Ping.html#DESCRIPTION">#</a>DESCRIPTION</h1>
+
+<p>This module contains methods to test the reachability of remote hosts on a network. A ping object is first created with optional parameters, a variable number of hosts may be pinged multiple times and then the connection is closed.</p>
+
+<p>You may choose one of six different protocols to use for the ping. The &quot;tcp&quot; protocol is the default. Note that a live remote host may still fail to be pingable by one or more of these protocols. For example, www.microsoft.com is generally alive but not &quot;icmp&quot; pingable.</p>
+
+<p>With the &quot;tcp&quot; protocol the ping() method attempts to establish a connection to the remote host&#39;s echo port. If the connection is successfully established, the remote host is considered reachable. No data is actually echoed. This protocol does not require any special privileges but has higher overhead than the &quot;udp&quot; and &quot;icmp&quot; protocols.</p>
+
+<p>Specifying the &quot;udp&quot; protocol causes the ping() method to send a udp packet to the remote host&#39;s echo port. If the echoed packet is received from the remote host and the received packet contains the same data as the packet that was sent, the remote host is considered reachable. This protocol does not require any special privileges. It should be borne in mind that, for a udp ping, a host will be reported as unreachable if it is not running the appropriate echo service. For Unix-like systems see <a href="http://man.he.net/man8/inetd">inetd(8)</a> for more information.</p>
+
+<p>If the &quot;icmp&quot; protocol is specified, the ping() method sends an icmp echo message to the remote host, which is what the UNIX ping program does. If the echoed message is received from the remote host and the echoed information is correct, the remote host is considered reachable. Specifying the &quot;icmp&quot; protocol requires that the program be run as root or that the program be setuid to root.</p>
+
+<p>If the &quot;external&quot; protocol is specified, the ping() method attempts to use the <code>Net::Ping::External</code> module to ping the remote host. <code>Net::Ping::External</code> interfaces with your system&#39;s default <code>ping</code> utility to perform the ping, and generally produces relatively accurate results. If <code>Net::Ping::External</code> if not installed on your system, specifying the &quot;external&quot; protocol will result in an error.</p>
+
+<p>If the &quot;syn&quot; protocol is specified, the <a href="./Net::Ping.html#ping">&quot;ping&quot;</a> method will only send a TCP SYN packet to the remote host then immediately return. If the syn packet was sent successfully, it will return a true value, otherwise it will return false. NOTE: Unlike the other protocols, the return value does NOT determine if the remote host is alive or not since the full TCP three-way handshake may not have completed yet. The remote host is only considered reachable if it receives a TCP ACK within the timeout specified. To begin waiting for the ACK packets, use the <a href="./Net::Ping.html#ack">&quot;ack&quot;</a> method as explained below. Use the &quot;syn&quot; protocol instead the &quot;tcp&quot; protocol to determine reachability of multiple destinations simultaneously by sending parallel TCP SYN packets. It will not block while testing each remote host. This protocol does not require any special privileges.</p>
+
+<h2 id="Functions"><a class="permalink" href="./Net::Ping.html#Functions">#</a>Functions</h2>
+
+<dl>
+
+<dt id="Net::Ping-&gt;new([proto,-timeout,-bytes,-device,-tos,-ttl,-family,-host,-port,-bind,-gateway,-retrans,-pingstring,-source_verify-econnrefused-dontfrag-IPV6_USE_MIN_MTU-IPV6_RECVPATHMTU])"><a class="permalink" href="./Net::Ping.html#Net::Ping-%3Enew(%5Bproto,-timeout,-bytes,-device,-tos,-ttl,-family,-host,-port,-bind,-gateway,-retrans,-pingstring,-source_verify-econnrefused-dontfrag-IPV6_USE_MIN_MTU-IPV6_RECVPATHMTU%5D)">#</a><a id="Net"></a><a id="Net::Ping-new-proto-timeout-bytes-device-tos-ttl-family-host-port-bind-gateway-retrans-pingstring-source_verify-econnrefused-dontfrag-IPV6_USE_MIN_MTU-IPV6_RECVPATHMTU"></a>Net::Ping-&gt;new([proto, timeout, bytes, device, tos, ttl, family, host, port, bind, gateway, retrans, pingstring, source_verify econnrefused dontfrag IPV6_USE_MIN_MTU IPV6_RECVPATHMTU]) </dt>
+<dd>
+
+<p>Create a new ping object. All of the parameters are optional and can be passed as hash ref. All options besides the first 7 must be passed as hash ref.</p>
+
+<p><code>proto</code> specifies the protocol to use when doing a ping. The current choices are &quot;tcp&quot;, &quot;udp&quot;, &quot;icmp&quot;, &quot;icmpv6&quot;, &quot;stream&quot;, &quot;syn&quot;, or &quot;external&quot;. The default is &quot;tcp&quot;.</p>
+
+<p>If a <code>timeout</code> in seconds is provided, it is used when a timeout is not given to the ping() method (below). The timeout must be greater than 0 and the default, if not specified, is 5 seconds.</p>
+
+<p>If the number of data bytes (<code>bytes</code>) is given, that many data bytes are included in the ping packet sent to the remote host. The number of data bytes is ignored if the protocol is &quot;tcp&quot;. The minimum (and default) number of data bytes is 1 if the protocol is &quot;udp&quot; and 0 otherwise. The maximum number of data bytes that can be specified is 65535, but staying below the MTU (1472 bytes for ICMP) is recommended. Many small devices cannot deal with fragmented ICMP packets.</p>
+
+<p>If <code>device</code> is given, this device is used to bind the source endpoint before sending the ping packet. I believe this only works with superuser privileges and with udp and icmp protocols at this time.</p>
+
+<p>If &lt;tos&gt; is given, this ToS is configured into the socket.</p>
+
+<p>For icmp, <code>ttl</code> can be specified to set the TTL of the outgoing packet.</p>
+
+<p>Valid <code>family</code> values for IPv4:</p>
+
+<pre><code class="plaintext">4, v4, ip4, ipv4, AF_INET (constant)</code></pre>
+
+<p>Valid <code>family</code> values for IPv6:</p>
+
+<pre><code class="plaintext">6, v6, ip6, ipv6, AF_INET6 (constant)</code></pre>
+
+<p>The <code>host</code> argument implicitly specifies the family if the family argument is not given.</p>
+
+<p>The <code>port</code> argument is only valid for a udp, tcp or stream ping, and will not do what you think it does. ping returns true when we get a &quot;Connection refused&quot;! The default is the echo port.</p>
+
+<p>The <code>bind</code> argument specifies the local_addr to bind to. By specifying a bind argument you don&#39;t need the bind method.</p>
+
+<p>The <code>gateway</code> argument is only valid for IPv6, and requires a IPv6 address.</p>
+
+<p>The <code>retrans</code> argument the exponential backoff rate, default 1.2. It matches the $def_factor global.</p>
+
+<p>The <code>dontfrag</code> argument sets the IP_DONTFRAG bit, but note that IP_DONTFRAG is not yet defined by Socket, and not available on many systems. Then it is ignored. On linux it also sets IP_MTU_DISCOVER to IP_PMTUDISC_DO but need we don&#39;t chunk oversized packets. You need to set $data_size manually.</p>
+
+</dd>
+<dt id="$p-&gt;ping($host-[,-$timeout-[,-$family]]);"><a class="permalink" href="./Net::Ping.html#$p-%3Eping($host-%5B,-$timeout-%5B,-$family%5D%5D);">#</a><a id="ping"></a><a id="p-ping-host-timeout-family"></a>$p-&gt;ping($host [, $timeout [, $family]]); </dt>
+<dd>
+
+<p>Ping the remote host and wait for a response. $host can be either the hostname or the IP number of the remote host. The optional timeout must be greater than 0 seconds and defaults to whatever was specified when the ping object was created. Returns a success flag. If the hostname cannot be found or there is a problem with the IP number, the success flag returned will be undef. Otherwise, the success flag will be 1 if the host is reachable and 0 if it is not. For most practical purposes, undef and 0 and can be treated as the same case. In array context, the elapsed time as well as the string form of the ip the host resolved to are also returned. The elapsed time value will be a float, as returned by the Time::HiRes::time() function, if hires() has been previously called, otherwise it is returned as an integer.</p>
+
+</dd>
+<dt id="$p-&gt;source_verify(-{-0-|-1-}-);"><a class="permalink" href="./Net::Ping.html#$p-%3Esource_verify(-%7B-0-%7C-1-%7D-);">#</a><a id="source_verify"></a><a id="p-source_verify-0-1"></a>$p-&gt;source_verify( { 0 | 1 } ); </dt>
+<dd>
+
+<p>Allows source endpoint verification to be enabled or disabled. This is useful for those remote destinations with multiples interfaces where the response may not originate from the same endpoint that the original destination endpoint was sent to. This only affects udp and icmp protocol pings.</p>
+
+<p>This is enabled by default.</p>
+
+</dd>
+<dt id="$p-&gt;service_check(-{-0-|-1-}-);"><a class="permalink" href="./Net::Ping.html#$p-%3Eservice_check(-%7B-0-%7C-1-%7D-);">#</a><a id="service_check"></a><a id="p-service_check-0-1"></a>$p-&gt;service_check( { 0 | 1 } ); </dt>
+<dd>
+
+<p>Set whether or not the connect behavior should enforce remote service availability as well as reachability. Normally, if the remote server reported ECONNREFUSED, it must have been reachable because of the status packet that it reported. With this option enabled, the full three-way tcp handshake must have been established successfully before it will claim it is reachable. NOTE: It still does nothing more than connect and disconnect. It does not speak any protocol (i.e., HTTP or FTP) to ensure the remote server is sane in any way. The remote server CPU could be grinding to a halt and unresponsive to any clients connecting, but if the kernel throws the ACK packet, it is considered alive anyway. To really determine if the server is responding well would be application specific and is beyond the scope of Net::Ping. For udp protocol, enabling this option demands that the remote server replies with the same udp data that it was sent as defined by the udp echo service.</p>
+
+<p>This affects the &quot;udp&quot;, &quot;tcp&quot;, and &quot;syn&quot; protocols.</p>
+
+<p>This is disabled by default.</p>
+
+</dd>
+<dt id="$p-&gt;tcp_service_check(-{-0-|-1-}-);"><a class="permalink" href="./Net::Ping.html#$p-%3Etcp_service_check(-%7B-0-%7C-1-%7D-);">#</a><a id="tcp_service_check"></a><a id="p-tcp_service_check-0-1"></a>$p-&gt;tcp_service_check( { 0 | 1 } ); </dt>
+<dd>
+
+<p>Deprecated method, but does the same as service_check() method.</p>
+
+</dd>
+<dt id="$p-&gt;hires(-{-0-|-1-}-);"><a class="permalink" href="./Net::Ping.html#$p-%3Ehires(-%7B-0-%7C-1-%7D-);">#</a><a id="hires"></a><a id="p-hires-0-1"></a>$p-&gt;hires( { 0 | 1 } ); </dt>
+<dd>
+
+<p>With 1 causes this module to use Time::HiRes module, allowing milliseconds to be returned by subsequent calls to ping().</p>
+
+</dd>
+<dt id="$p-&gt;time"><a class="permalink" href="./Net::Ping.html#$p-%3Etime">#</a><a id="time"></a><a id="p-time"></a>$p-&gt;time </dt>
+<dd>
+
+<p>The current time, hires or not.</p>
+
+</dd>
+<dt id="$p-&gt;socket_blocking_mode(-$fh,-$mode-);"><a class="permalink" href="./Net::Ping.html#$p-%3Esocket_blocking_mode(-$fh,-$mode-);">#</a><a id="socket_blocking_mode"></a><a id="p-socket_blocking_mode-fh-mode"></a>$p-&gt;socket_blocking_mode( $fh, $mode ); </dt>
+<dd>
+
+<p>Sets or clears the O_NONBLOCK flag on a file handle.</p>
+
+</dd>
+<dt id="$p-&gt;IPV6_USE_MIN_MTU"><a class="permalink" href="./Net::Ping.html#$p-%3EIPV6_USE_MIN_MTU">#</a><a id="IPV6_USE_MIN_MTU"></a><a id="p-IPV6_USE_MIN_MTU"></a>$p-&gt;IPV6_USE_MIN_MTU </dt>
+<dd>
+
+<p>With argument sets the option. Without returns the option value.</p>
+
+</dd>
+<dt id="$p-&gt;IPV6_RECVPATHMTU"><a class="permalink" href="./Net::Ping.html#$p-%3EIPV6_RECVPATHMTU">#</a><a id="IPV6_RECVPATHMTU"></a><a id="p-IPV6_RECVPATHMTU"></a>$p-&gt;IPV6_RECVPATHMTU </dt>
+<dd>
+
+<p>Notify an according IPv6 MTU.</p>
+
+<p>With argument sets the option. Without returns the option value.</p>
+
+</dd>
+<dt id="$p-&gt;IPV6_HOPLIMIT"><a class="permalink" href="./Net::Ping.html#$p-%3EIPV6_HOPLIMIT">#</a><a id="IPV6_HOPLIMIT"></a><a id="p-IPV6_HOPLIMIT"></a>$p-&gt;IPV6_HOPLIMIT </dt>
+<dd>
+
+<p>With argument sets the option. Without returns the option value.</p>
+
+</dd>
+<dt id="$p-&gt;IPV6_REACHCONF-NYI"><a class="permalink" href="./Net::Ping.html#$p-%3EIPV6_REACHCONF-NYI">#</a><a id="IPV6_REACHCONF"></a><a id="p-IPV6_REACHCONF-NYI"></a>$p-&gt;IPV6_REACHCONF <i>NYI</i> </dt>
+<dd>
+
+<p>Sets ipv6 reachability IPV6_REACHCONF was removed in RFC3542. ping6 -R supports it. IPV6_REACHCONF requires root/admin permissions.</p>
+
+<p>With argument sets the option. Without returns the option value.</p>
+
+<p>Not yet implemented.</p>
+
+</dd>
+<dt id="$p-&gt;bind($local_addr);"><a class="permalink" href="./Net::Ping.html#$p-%3Ebind($local_addr);">#</a><a id="bind"></a><a id="p-bind-local_addr"></a>$p-&gt;bind($local_addr); </dt>
+<dd>
+
+<p>Sets the source address from which pings will be sent. This must be the address of one of the interfaces on the local host. $local_addr may be specified as a hostname or as a text IP address such as &quot;192.168.1.1&quot;.</p>
+
+<p>If the protocol is set to &quot;tcp&quot;, this method may be called any number of times, and each call to the ping() method (below) will use the most recent $local_addr. If the protocol is &quot;icmp&quot; or &quot;udp&quot;, then bind() must be called at most once per object, and (if it is called at all) must be called before the first call to ping() for that object.</p>
+
+<p>The bind() call can be omitted when specifying the <code>bind</code> option to new().</p>
+
+</dd>
+<dt id="$p-&gt;message_type([$ping_type]);"><a class="permalink" href="./Net::Ping.html#$p-%3Emessage_type(%5B$ping_type%5D);">#</a><a id="message_type"></a><a id="p-message_type-ping_type"></a>$p-&gt;message_type([$ping_type]); </dt>
+<dd>
+
+<p>When you are using the &quot;icmp&quot; protocol, this call permit to change the message type to &#39;echo&#39; or &#39;timestamp&#39; (only for IPv4, see RFC 792).</p>
+
+<p>Without argument, it returns the currently used icmp protocol message type. By default, it returns &#39;echo&#39;.</p>
+
+</dd>
+<dt id="$p-&gt;open($host);"><a class="permalink" href="./Net::Ping.html#$p-%3Eopen($host);">#</a><a id="open"></a><a id="p-open-host"></a>$p-&gt;open($host); </dt>
+<dd>
+
+<p>When you are using the &quot;stream&quot; protocol, this call pre-opens the tcp socket. It&#39;s only necessary to do this if you want to provide a different timeout when creating the connection, or remove the overhead of establishing the connection from the first ping. If you don&#39;t call <code>open()</code>, the connection is automatically opened the first time <code>ping()</code> is called. This call simply does nothing if you are using any protocol other than stream.</p>
+
+<p>The $host argument can be omitted when specifying the <code>host</code> option to new().</p>
+
+</dd>
+<dt id="$p-&gt;ack(-[-$host-]-);"><a class="permalink" href="./Net::Ping.html#$p-%3Eack(-%5B-$host-%5D-);">#</a><a id="ack"></a><a id="p-ack-host"></a>$p-&gt;ack( [ $host ] ); </dt>
+<dd>
+
+<p>When using the &quot;syn&quot; protocol, use this method to determine the reachability of the remote host. This method is meant to be called up to as many times as ping() was called. Each call returns the host (as passed to ping()) that came back with the TCP ACK. The order in which the hosts are returned may not necessarily be the same order in which they were SYN queued using the ping() method. If the timeout is reached before the TCP ACK is received, or if the remote host is not listening on the port attempted, then the TCP connection will not be established and ack() will return undef. In list context, the host, the ack time, the dotted ip string, and the port number will be returned instead of just the host. If the optional <code>$host</code> argument is specified, the return value will be pertaining to that host only. This call simply does nothing if you are using any protocol other than &quot;syn&quot;.</p>
+
+<p>When <a href="./Net::Ping.html#new">&quot;new&quot;</a> had a host option, this host will be used. Without <code>$host</code> argument, all hosts are scanned.</p>
+
+</dd>
+<dt id="$p-&gt;nack(-$failed_ack_host-);"><a class="permalink" href="./Net::Ping.html#$p-%3Enack(-$failed_ack_host-);">#</a><a id="nack"></a><a id="p-nack-failed_ack_host"></a>$p-&gt;nack( $failed_ack_host ); </dt>
+<dd>
+
+<p>The reason that <code>host $failed_ack_host</code> did not receive a valid ACK. Useful to find out why when <code>ack($fail_ack_host)</code> returns a false value.</p>
+
+</dd>
+<dt id="$p-&gt;ack_unfork($host)"><a class="permalink" href="./Net::Ping.html#$p-%3Eack_unfork($host)">#</a><a id="ack_unfork"></a><a id="p-ack_unfork-host"></a>$p-&gt;ack_unfork($host) </dt>
+<dd>
+
+<p>The variant called by <a href="./Net::Ping.html#ack">&quot;ack&quot;</a> with the &quot;syn&quot; protocol and <code>$syn_forking</code> enabled.</p>
+
+</dd>
+<dt id="$p-&gt;ping_icmp([$host,-$timeout,-$family])"><a class="permalink" href="./Net::Ping.html#$p-%3Eping_icmp(%5B$host,-$timeout,-$family%5D)">#</a><a id="ping_icmp"></a><a id="p-ping_icmp-host-timeout-family"></a>$p-&gt;ping_icmp([$host, $timeout, $family]) </dt>
+<dd>
+
+<p>The <a href="./Net::Ping.html#ping">&quot;ping&quot;</a> method used with the icmp protocol.</p>
+
+</dd>
+<dt id="$p-&gt;ping_icmpv6([$host,-$timeout,-$family])"><a class="permalink" href="./Net::Ping.html#$p-%3Eping_icmpv6(%5B$host,-$timeout,-$family%5D)">#</a><a id="ping_icmpv6"></a><a id="p-ping_icmpv6-host-timeout-family"></a>$p-&gt;ping_icmpv6([$host, $timeout, $family]) </dt>
+<dd>
+
+<p>The <a href="./Net::Ping.html#ping">&quot;ping&quot;</a> method used with the icmpv6 protocol.</p>
+
+</dd>
+<dt id="$p-&gt;ping_stream([$host,-$timeout,-$family])"><a class="permalink" href="./Net::Ping.html#$p-%3Eping_stream(%5B$host,-$timeout,-$family%5D)">#</a><a id="ping_stream"></a><a id="p-ping_stream-host-timeout-family"></a>$p-&gt;ping_stream([$host, $timeout, $family]) </dt>
+<dd>
+
+<p>The <a href="./Net::Ping.html#ping">&quot;ping&quot;</a> method used with the stream protocol.</p>
+
+<p>Perform a stream ping. If the tcp connection isn&#39;t already open, it opens it. It then sends some data and waits for a reply. It leaves the stream open on exit.</p>
+
+</dd>
+<dt id="$p-&gt;ping_syn([$host,-$ip,-$start_time,-$stop_time])"><a class="permalink" href="./Net::Ping.html#$p-%3Eping_syn(%5B$host,-$ip,-$start_time,-$stop_time%5D)">#</a><a id="ping_syn"></a><a id="p-ping_syn-host-ip-start_time-stop_time"></a>$p-&gt;ping_syn([$host, $ip, $start_time, $stop_time]) </dt>
+<dd>
+
+<p>The <a href="./Net::Ping.html#ping">&quot;ping&quot;</a> method used with the syn protocol. Sends a TCP SYN packet to host specified.</p>
+
+</dd>
+<dt id="$p-&gt;ping_syn_fork([$host,-$timeout,-$family])"><a class="permalink" href="./Net::Ping.html#$p-%3Eping_syn_fork(%5B$host,-$timeout,-$family%5D)">#</a><a id="ping_syn_fork"></a><a id="p-ping_syn_fork-host-timeout-family"></a>$p-&gt;ping_syn_fork([$host, $timeout, $family]) </dt>
+<dd>
+
+<p>The <a href="./Net::Ping.html#ping">&quot;ping&quot;</a> method used with the forking syn protocol.</p>
+
+</dd>
+<dt id="$p-&gt;ping_tcp([$host,-$timeout,-$family])"><a class="permalink" href="./Net::Ping.html#$p-%3Eping_tcp(%5B$host,-$timeout,-$family%5D)">#</a><a id="ping_tcp"></a><a id="p-ping_tcp-host-timeout-family"></a>$p-&gt;ping_tcp([$host, $timeout, $family]) </dt>
+<dd>
+
+<p>The <a href="./Net::Ping.html#ping">&quot;ping&quot;</a> method used with the tcp protocol.</p>
+
+</dd>
+<dt id="$p-&gt;ping_udp([$host,-$timeout,-$family])"><a class="permalink" href="./Net::Ping.html#$p-%3Eping_udp(%5B$host,-$timeout,-$family%5D)">#</a><a id="ping_udp"></a><a id="p-ping_udp-host-timeout-family"></a>$p-&gt;ping_udp([$host, $timeout, $family]) </dt>
+<dd>
+
+<p>The <a href="./Net::Ping.html#ping">&quot;ping&quot;</a> method used with the udp protocol.</p>
+
+<p>Perform a udp echo ping. Construct a message of at least the one-byte sequence number and any additional data bytes. Send the message out and wait for a message to come back. If we get a message, make sure all of its parts match. If they do, we are done. Otherwise go back and wait for the message until we run out of time. Return the result of our efforts.</p>
+
+</dd>
+<dt id="$p-&gt;ping_external([$host,-$timeout,-$family])"><a class="permalink" href="./Net::Ping.html#$p-%3Eping_external(%5B$host,-$timeout,-$family%5D)">#</a><a id="ping_external"></a><a id="p-ping_external-host-timeout-family"></a>$p-&gt;ping_external([$host, $timeout, $family]) </dt>
+<dd>
+
+<p>The <a href="./Net::Ping.html#ping">&quot;ping&quot;</a> method used with the external protocol. Uses <a href="./Net::Ping::External.html">Net::Ping::External</a> to do an external ping.</p>
+
+</dd>
+<dt id="$p-&gt;tcp_connect([$ip,-$timeout])"><a class="permalink" href="./Net::Ping.html#$p-%3Etcp_connect(%5B$ip,-$timeout%5D)">#</a><a id="tcp_connect"></a><a id="p-tcp_connect-ip-timeout"></a>$p-&gt;tcp_connect([$ip, $timeout]) </dt>
+<dd>
+
+<p>Initiates a TCP connection, for a tcp ping.</p>
+
+</dd>
+<dt id="$p-&gt;tcp_echo([$ip,-$timeout,-$pingstring])"><a class="permalink" href="./Net::Ping.html#$p-%3Etcp_echo(%5B$ip,-$timeout,-$pingstring%5D)">#</a><a id="tcp_echo"></a><a id="p-tcp_echo-ip-timeout-pingstring"></a>$p-&gt;tcp_echo([$ip, $timeout, $pingstring]) </dt>
+<dd>
+
+<p>Performs a TCP echo. It writes the given string to the socket and then reads it back. It returns 1 on success, 0 on failure.</p>
+
+</dd>
+<dt id="$p-&gt;close();"><a class="permalink" href="./Net::Ping.html#$p-%3Eclose();">#</a><a id="close"></a><a id="p-close"></a>$p-&gt;close(); </dt>
+<dd>
+
+<p>Close the network connection for this ping object. The network connection is also closed by &quot;undef $p&quot;. The network connection is automatically closed if the ping object goes out of scope (e.g. $p is local to a subroutine and you leave the subroutine).</p>
+
+</dd>
+<dt id="$p-&gt;port_number([$port_number])"><a class="permalink" href="./Net::Ping.html#$p-%3Eport_number(%5B$port_number%5D)">#</a><a id="port_number"></a><a id="p-port_number-port_number"></a>$p-&gt;port_number([$port_number]) </dt>
+<dd>
+
+<p>When called with a port number, the port number used to ping is set to <code>$port_number</code> rather than using the echo port. It also has the effect of calling <code>$p-&gt;service_check(1)</code> causing a ping to return a successful response only if that specific port is accessible. This function returns the value of the port that <a href="./Net::Ping.html#ping">&quot;ping&quot;</a> will connect to.</p>
+
+</dd>
+<dt id="$p-&gt;mselect"><a class="permalink" href="./Net::Ping.html#$p-%3Emselect">#</a><a id="mselect"></a><a id="p-mselect"></a>$p-&gt;mselect </dt>
+<dd>
+
+<p>A <code>select()</code> wrapper that compensates for platform peculiarities.</p>
+
+</dd>
+<dt id="$p-&gt;ntop"><a class="permalink" href="./Net::Ping.html#$p-%3Entop">#</a><a id="ntop"></a><a id="p-ntop"></a>$p-&gt;ntop </dt>
+<dd>
+
+<p>Platform abstraction over <code>inet_ntop()</code></p>
+
+</dd>
+<dt id="$p-&gt;checksum($msg)"><a class="permalink" href="./Net::Ping.html#$p-%3Echecksum($msg)">#</a><a id="checksum"></a><a id="p-checksum-msg"></a>$p-&gt;checksum($msg) </dt>
+<dd>
+
+<p>Do a checksum on the message. Basically sum all of the short words and fold the high order bits into the low order bits.</p>
+
+</dd>
+<dt id="$p-&gt;icmp_result"><a class="permalink" href="./Net::Ping.html#$p-%3Eicmp_result">#</a><a id="icmp_result"></a><a id="p-icmp_result"></a>$p-&gt;icmp_result </dt>
+<dd>
+
+<p>Returns a list of addr, type, subcode.</p>
+
+</dd>
+<dt id="pingecho($host-[,-$timeout]);"><a class="permalink" href="./Net::Ping.html#pingecho($host-%5B,-$timeout%5D);">#</a><a id="pingecho"></a><a id="pingecho-host-timeout"></a>pingecho($host [, $timeout]); </dt>
+<dd>
+
+<p>To provide backward compatibility with the previous version of <a href="./Net::Ping.html">Net::Ping</a>, a <code>pingecho()</code> subroutine is available with the same functionality as before. <code>pingecho()</code> uses the tcp protocol. The return values and parameters are the same as described for the <a href="./Net::Ping.html#ping">&quot;ping&quot;</a> method. This subroutine is obsolete and may be removed in a future version of <a href="./Net::Ping.html">Net::Ping</a>.</p>
+
+</dd>
+<dt id="wakeonlan($mac,-[$host,-[$port]])"><a class="permalink" href="./Net::Ping.html#wakeonlan($mac,-%5B$host,-%5B$port%5D%5D)">#</a><a id="wakeonlan"></a><a id="wakeonlan-mac-host-port"></a>wakeonlan($mac, [$host, [$port]]) </dt>
+<dd>
+
+<p>Emit the popular wake-on-lan magic udp packet to wake up a local device. See also <a href="./Net::Wake.html">Net::Wake</a>, but this has the mac address as 1st arg. <code>$host</code> should be the local gateway. Without it will broadcast.</p>
+
+<p>Default host: &#39;255.255.255.255&#39; Default port: 9</p>
+
+<pre><code class="plaintext">perl -MNet::Ping=wakeonlan -e&#39;wakeonlan &quot;e0:69:95:35:68:d2&quot;&#39;</code></pre>
+
+</dd>
+</dl>
+
+<h1 id="NOTES"><a class="permalink" href="./Net::Ping.html#NOTES">#</a>NOTES</h1>
+
+<p>There will be less network overhead (and some efficiency in your program) if you specify either the udp or the icmp protocol. The tcp protocol will generate 2.5 times or more traffic for each ping than either udp or icmp. If many hosts are pinged frequently, you may wish to implement a small wait (e.g. 25ms or more) between each ping to avoid flooding your network with packets.</p>
+
+<p>The icmp and icmpv6 protocols requires that the program be run as root or that it be setuid to root. The other protocols do not require special privileges, but not all network devices implement tcp or udp echo.</p>
+
+<p>Local hosts should normally respond to pings within milliseconds. However, on a very congested network it may take up to 3 seconds or longer to receive an echo packet from the remote host. If the timeout is set too low under these conditions, it will appear that the remote host is not reachable (which is almost the truth).</p>
+
+<p>Reachability doesn&#39;t necessarily mean that the remote host is actually functioning beyond its ability to echo packets. tcp is slightly better at indicating the health of a system than icmp because it uses more of the networking stack to respond.</p>
+
+<p>Because of a lack of anything better, this module uses its own routines to pack and unpack ICMP packets. It would be better for a separate module to be written which understands all of the different kinds of ICMP packets.</p>
+
+<h1 id="INSTALL"><a class="permalink" href="./Net::Ping.html#INSTALL">#</a>INSTALL</h1>
+
+<p>The latest source tree is available via git:</p>
+
+<pre><code class="plaintext">git clone https://github.com/rurban/Net-Ping.git
+cd Net-Ping</code></pre>
+
+<p>The tarball can be created as follows:</p>
+
+<pre><code class="plaintext">perl Makefile.PL ; make ; make dist</code></pre>
+
+<p>The latest Net::Ping releases are included in cperl and perl5.</p>
+
+<h1 id="BUGS"><a class="permalink" href="./Net::Ping.html#BUGS">#</a>BUGS</h1>
+
+<p>For a list of known issues, visit:</p>
+
+<p><a href="https://rt.cpan.org/NoAuth/Bugs.html?Dist=Net-Ping">https://rt.cpan.org/NoAuth/Bugs.html?Dist=Net-Ping</a> and <a href="https://github.com/rurban/Net-Ping/issues">https://github.com/rurban/Net-Ping/issues</a></p>
+
+<p>To report a new bug, visit:</p>
+
+<p><a href="https://github.com/rurban/Net-Ping/issues">https://github.com/rurban/Net-Ping/issues</a></p>
+
+<h1 id="AUTHORS"><a class="permalink" href="./Net::Ping.html#AUTHORS">#</a>AUTHORS</h1>
+
+<pre><code>Current maintainers:
+  perl11 (for cperl, with IPv6 support and more)
+  p5p    (for perl5)
+
+Previous maintainers:
+  bbb@cpan.org (Rob Brown)
+  Steve Peters
+
+External protocol:
+  colinm@cpan.org (Colin McMillen)
+
+Stream protocol:
+  bronson@trestle.com (Scott Bronson)
+
+Wake-on-lan:
+  1999-2003 Clinton Wong
+
+Original pingecho():
+  karrer@bernina.ethz.ch (Andreas Karrer)
+  pmarquess@bfsec.bt.co.uk (Paul Marquess)
+
+Original Net::Ping author:
+  mose@ns.ccsn.edu (Russell Mosemann)</code></pre>
+
+<h1 id="COPYRIGHT"><a class="permalink" href="./Net::Ping.html#COPYRIGHT">#</a>COPYRIGHT</h1>
+
+<p>Copyright (c) 2017-2020, Reini Urban. All rights reserved.</p>
+
+<p>Copyright (c) 2016, cPanel Inc. All rights reserved.</p>
+
+<p>Copyright (c) 2012, Steve Peters. All rights reserved.</p>
+
+<p>Copyright (c) 2002-2003, Rob Brown. All rights reserved.</p>
+
+<p>Copyright (c) 2001, Colin McMillen. All rights reserved.</p>
+
+<p>This program is free software; you may redistribute it and/or modify it under the same terms as Perl itself.</p>
+
+
+      </div>
+      <div id="footer">
+        <p>Perldoc Browser is maintained by Dan Book (<a href="https://metacpan.org/author/DBOOK">DBOOK</a>). Please contact him via the <a href="https://github.com/Grinnz/perldoc-browser/issues">GitHub issue tracker</a> or <a href="mailto:dbook@cpan.org">email</a> regarding any issues with the site itself, search, or rendering of documentation.</p>
+
+<p>The Perl documentation is maintained by the Perl 5 Porters in the development of Perl. Please contact them via the <a href="https://github.com/Perl/perl5/issues">Perl issue tracker</a>, the <a href="https://lists.perl.org/list/perl5-porters.html">mailing list</a>, or <a href="https://kiwiirc.com/client/irc.perl.org/p5p">IRC</a> to report any issues with the contents or format of the documentation.</p>
+
+
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js" integrity="sha512-/DXTXr6nQodMUiq+IUJYCt2PPOUjrHJ9wFrqpJ3XkgPNOZVfMok7cRw6CSxyCQxXn6ozlESsSh1/sMCTF1rL/g==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js" integrity="sha512-ubuT8Z88WxezgSqf3RLuNi5lmjstiJcyezx34yIU2gAHonIi27Na7atqzUZCOoY4CExaoFumzOsFQ2Ch+I/HCw==" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="../highlight.pack.js"></script>
+    <script>hljs.highlightAll();</script>
+  </body>
+</html>

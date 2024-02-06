@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en-US">
+    <head>
+        <title>Devel::ebug - A simple, extensible Perl debugger - metacpan.org</title>
+        <link rel="preload" as="fetch" href="https://metacpan.org/account/login_status" crossorigin="anonymous" />
+        <link href="https://metacpan.org/_assets/b8ccceeed47a0652049703d99326a9cea4933443.css" rel="stylesheet" type="text/css">
+        <script src="https://metacpan.org/_assets/6bfedafe2d7caa915b7d84f61b45936818e3242e.js" type="text/javascript" defer></script>
+        <link rel="alternate" type="application/rss+xml" title="Recent CPAN Uploads of Devel-ebug - MetaCPAN" href="https://metacpan.org/dist/Devel-ebug/releases.rss" />
+        <link rel="canonical" href="./Devel::ebug.html" />
+        <meta name="description" content="A simple, extensible Perl debugger" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+        <link rel="shortcut icon" href="https://metacpan.org/static/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="152x152" href="https://metacpan.org/static/icons/apple-touch-icon.png">
+        <link rel="search" href="https://metacpan.org/static/opensearch.xml" type="application/opensearchdescription+xml" title="MetaCPAN">
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+          (function(skey, ga_id){
+            ga('create', ga_id, {
+              siteSpeedSampleRate : 100,
+              storage             : 'none',
+              clientId            : localStorage.getItem(skey)
+            });
+            ga(function(tracker) {
+              localStorage.setItem(skey, tracker.get('clientId'));
+            });
+            ga('send', 'pageview');
+          })('ga:clientId', 'UA-27829474-1');
+        </script>
+<meta name="twitter:card"        content="summary" />
+<meta name="twitter:url"         content="https://metacpan.org/pod/Devel::ebug" />
+<meta name="twitter:title"       content="Devel::ebug" />
+<meta name="twitter:description" content="A simple, extensible Perl debugger" />
+<meta name="twitter:site"        content="metacpan" />
+    </head>
+    <body>
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="header-logo-large hidden-xs">
+              <a href="https://metacpan.org/" tabindex="0">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#logo" />
+                </svg>
+              </a>
+            </div>
+            <div class="header-logo-icon visible-xs">
+              <a href="https://metacpan.org/">
+                <svg class="logo" aria-label="MetaCPAN">
+                  <use class="logo" href="/static/images/metacpan-logo.svg#dots" />
+                </svg>
+              </a>
+            </div>
+            <ul class="nav navbar-nav menu-items hidden-xs hidden-sm">
+              <li><a href="https://metacpan.org/about">About</a></li>
+              <li><a href="https://metacpan.org/about/sponsors">Sponsor</a></li>
+              <li><a href="https://grep.metacpan.org/">grep::cpan</a></li>
+              <li><a href="https://metacpan.org/recent">Recent</a></li>
+              <li><a href="https://metacpan.org/about/faq">FAQ</a></li>
+              <li><a href="https://metacpan.org/tools">Tools</a></li>
+              <li><a href="https://fastapi.metacpan.org/">API</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <button type="button" class="searchbar-btn visible-xs visible-sm">
+                    <i class="fa fa-search button-fa-icon"></i>
+                </button>
+                <form action="https://metacpan.org/search" class="searchbar-form visible-md visible-lg search-form form-horizontal">
+                   <input type="hidden" name="size" id="metacpan_search-size" value="20">
+                  <div class="form-group">
+                      <div class="search-group">
+                        <i class="fa fa-search"></i>
+                        <input type="text" name="q" placeholder="Search the CPAN" size="41" autocorrect="off" autocapitalize="off" spellcheck="false" id="metacpan_search-input" class="form-control" value="">
+                      </div>
+                  </div>
+                </form>
+                    <li class="icon-slidepanel visible-xs visible-sm">
+                      <button data-toggle="slidepanel" data-target=".slidepanel">
+                        <span class="button-fa-icon">
+                          <i class="fa fa-bars slidepanel-open"></i>
+                          <i class="fa fa-times slidepanel-close"></i>
+                        </span>
+                      </button>
+                    </li>
+                <form action="https://metacpan.org/account/logout" method="POST" id="metacpan-logout"></form>
+                <li class="dropdown logged_in" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon logged-in-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="https://metacpan.org/account/identities">Identities</a></li>
+                        <li><a href="https://metacpan.org/account/profile">Profile</a></li>
+                        <li><a href="https://metacpan.org/account/favorite/list">Favorites</a></li>
+                        <li>
+                            <a href="./Devel::ebug.html#" type="button" onclick="$('#metacpan-logout').submit(); return false">
+                              Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_out" style="display: none;">
+                    <button type="button" class="dropdown-toggle" data-toggle="dropdown">
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                      <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="https://metacpan.org/login/github">
+                                <i class="fab fa-github fa-fw"></i>
+                                GitHub
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/twitter">
+                                <i class="fab fa-twitter fa-fw"></i>
+                                Twitter
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://metacpan.org/login/google">
+                                <i class="fab fa-google fa-fw"></i>
+                                Google
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dropdown logged_placeholder">
+                    <button>
+                      <i class="fa fa-user button-fa-icon" aria-hidden="true"></i>
+                    </button>
+                </li>
+            </ul>
+        </nav>
+        <div class="page-content ">
+          <!--
+          <div class="top-notify-banner">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          -->
+          <nav class="sidebar">
+            <div class="slidepanel">
+              <ul class="nav-list ">
+    <li class="nav-header no-margin-top">
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The date that this version of Devel-ebug was released.">
+      <span class="relatize">10 Jul 2021 21:45:00 UTC</span>
+    </li>
+  <li>
+    Distribution: <a href="https://metacpan.org/dist/Devel-ebug">Devel-ebug</a>
+  </li>
+  <li>
+    Module version: 0.64
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g s" href="https://metacpan.org/dist/Devel-ebug/source/lib/Devel/ebug.pm">Source</a>
+    (<a href="https://metacpan.org/dist/Devel-ebug/source/lib/Devel/ebug.pm?raw=1">raw</a>)
+  </li>
+  <li>
+    <a data-keyboard-shortcut="g b" href="https://metacpan.org/dist/Devel-ebug/source/lib/Devel">Browse</a>
+    (<a href="https://metacpan.org/dist/Devel-ebug/source/lib/Devel?raw=1">raw</a>)
+  </li>
+    <li>
+      <a data-keyboard-shortcut="g c" href="https://metacpan.org/dist/Devel-ebug/changes">Changes</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" class="nopopup" href="./Devel::ebug.html">Homepage</a>
+    </li>
+    <li>
+      <a class="nopopup" href="https://metacpan.org/dist/Devel-ebug/contribute">How to Contribute</a>
+    </li>
+    <li>
+        <a rel="noopener nofollow" data-keyboard-shortcut="g r" href="https://github.com/uperl/Devel-ebug">Repository</a>
+    </li>
+    <li>
+      <a rel="noopener nofollow" data-keyboard-shortcut="g i" href="https://github.com/uperl/Devel-ebug/issues">Issues</a>
+      (18)
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://matrix.cpantesters.org/?dist=Devel-ebug+0.64" title="Matrix">Testers</a>
+        <span title="(pass / fail / na)">(<a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-ebug.html?oncpan=1&amp;distmat=1&amp;version=0.64&amp;grade=2" style="color: #090">234</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-ebug.html?oncpan=1&amp;distmat=1&amp;version=0.64&amp;grade=3" style="color: #900">2</a> / <a rel="noopener nofollow" href="https://www.cpantesters.org/distro/D/Devel-ebug.html?oncpan=1&amp;distmat=1&amp;version=0.64&amp;grade=4">0</a>)</span>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpants.cpanauthors.org/release/PLICEASE/Devel-ebug-0.64">Kwalitee</a>
+    </li>
+    <li>
+      <div class="ttip" data-toggle="tooltip" data-placement="bottom" title="The # people with an indexing permission on Devel-ebug who have released something to CPAN in the last 2 years (i.e. the # people likely able to release critical fixes in a timely manner)">
+      Bus factor: 1
+      </div>
+    </li>
+    <li>
+      <a rel="noopener nofollow" href="http://cpancover.com/latest/Devel-ebug-0.64/index.html">88.77% Coverage </a>
+    </li>
+    <li>
+      License: perl_5
+    </li>
+    <li>
+      Perl: v5.8.0
+    </li>
+    <li class="nav-header">Activity</li>
+    <li>
+<div class="activity-graph">
+    <img src="https://metacpan.org/dist/Devel-ebug/activity.svg?res=month" />
+    <div class="comment">24 month</div>
+</div>
+    </li>
+    <li class="nav-header">Tools</li>
+    <li>
+      <a itemprop="downloadUrl" href="https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/Devel-ebug-0.64.tar.gz">
+      Download (<span itemprop="fileSize">42.1KB</span>)</a>
+    </li>
+    <li>
+      <a href="https://explorer.metacpan.org/?url=%2Fmodule%2FPLICEASE%2FDevel-ebug-0.64%2Flib%2FDevel%2Febug.pm">
+        MetaCPAN Explorer
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-ebug/permissions">
+        Permissions
+      </a>
+    </li>
+    <li>
+      <a href="https://metacpan.org/dist/Devel-ebug/releases.rss">
+        Subscribe to distribution
+      </a>
+    </li>
+    <li>
+      <button class="btn btn-link" data-toggle="modal" data-target="#metacpan_install-instructions-dialog">
+        Install Instructions
+      </button>
+    </li>
+    <li>
+      <form action="https://metacpan.org/search">
+        <input type="hidden" name="q" value="dist:Devel-ebug">
+        <input type="search" name="q" placeholder="Search distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+      </form>
+    </li>
+    <li>
+      <form action="https://grep.metacpan.org/search">
+        <input type="hidden" name="qd" value="Devel-ebug">
+        <input type="hidden" name="source" value="metacpan">
+        <input type="search" name="q" placeholder="grep distribution" class="form-control tool-bar-form">
+        <input type="submit" style="display: none">
+     </form>
+    </li>
+    <li class="version-jump">
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Devel/ebug.pm&#39;" class="form-control tool-bar-form">
+  <option disabled selected>Jump to version</option>
+<option
+  disabled
+  value="PLICEASE/Devel-ebug-0.64"
+>0.64
+  (PLICEASE on 2021-07-10)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.59"
+>0.59
+  (AWWAIID on 2017-03-12)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.58"
+>0.58
+  (AWWAIID on 2017-03-06)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.57"
+>0.57
+  (AWWAIID on 2016-08-12)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.56"
+>0.56
+  (AWWAIID on 2014-04-17)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.49"
+>0.49
+  (LBROCARD on 2008-10-16)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.48"
+>0.48
+  (LBROCARD on 2007-04-30)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.47"
+>0.47
+  (LBROCARD on 2007-03-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.46"
+>0.46
+  (LBROCARD on 2006-03-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="PLICEASE/Devel-ebug-0.63"
+>0.63
+  (PLICEASE on 2020-07-27)</option>
+<option
+  
+  value="PLICEASE/Devel-ebug-0.62_01"
+>0.62_01 DEV
+  (PLICEASE on 2020-07-21)</option>
+<option
+  
+  value="PLICEASE/Devel-ebug-0.61_01"
+>0.61_01 DEV
+  (PLICEASE on 2020-07-16)</option>
+<option
+  
+  value="PLICEASE/Devel-ebug-0.60"
+>0.60
+  (PLICEASE on 2020-05-04)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.55"
+>0.55
+  (AWWAIID on 2013-03-20)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.54"
+>0.54
+  (AWWAIID on 2013-03-20)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.53"
+>0.53
+  (AWWAIID on 2012-03-10)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.53_02"
+>0.53_02 DEV
+  (AWWAIID on 2012-03-10)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.53_01"
+>0.53_01 DEV
+  (AWWAIID on 2012-02-29)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.52"
+>0.52
+  (AWWAIID on 2011-11-09)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.51"
+>0.51
+  (AWWAIID on 2011-11-08)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.50"
+>0.50
+  (AWWAIID on 2011-10-20)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.45"
+>0.45
+  (LBROCARD on 2005-09-02)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.44"
+>0.44
+  (LBROCARD on 2005-08-31)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.43"
+>0.43
+  (LBROCARD on 2005-05-16)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.42"
+>0.42
+  (LBROCARD on 2005-04-28)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.41"
+>0.41
+  (LBROCARD on 2005-04-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.40"
+>0.40
+  (LBROCARD on 2005-04-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.39"
+>0.39
+  (LBROCARD on 2005-04-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.38"
+>0.38
+  (LBROCARD on 2005-04-12)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.37"
+>0.37
+  (LBROCARD on 2005-04-05)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.36"
+>0.36
+  (LBROCARD on 2005-04-03)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.35"
+>0.35
+  (LBROCARD on 2005-04-02)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.34"
+>0.34
+  (LBROCARD on 2005-04-02)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.33"
+>0.33
+  (LBROCARD on 2005-04-01)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.32"
+>0.32
+  (LBROCARD on 2005-04-01)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.31"
+>0.31
+  (LBROCARD on 2005-04-01)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.30"
+>0.30
+  (LBROCARD on 2005-03-30)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.29"
+>0.29
+  (LBROCARD on 2005-03-29)</option>
+</optgroup>
+</select>
+    </li>
+    <li class="version-diff">
+<select onchange="document.location.href='/release/PLICEASE/Devel-ebug-0.64/diff/' + encodeURIComponent(this.value) + '/lib/Devel/ebug.pm'
+" class="form-control tool-bar-form">
+  <option disabled selected>Diff with version</option>
+<option
+  disabled
+  value="PLICEASE/Devel-ebug-0.64"
+>0.64
+  (PLICEASE on 2021-07-10)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.59"
+>0.59
+  (AWWAIID on 2017-03-12)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.58"
+>0.58
+  (AWWAIID on 2017-03-06)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.57"
+>0.57
+  (AWWAIID on 2016-08-12)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.56"
+>0.56
+  (AWWAIID on 2014-04-17)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.49"
+>0.49
+  (LBROCARD on 2008-10-16)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.48"
+>0.48
+  (LBROCARD on 2007-04-30)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.47"
+>0.47
+  (LBROCARD on 2007-03-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.46"
+>0.46
+  (LBROCARD on 2006-03-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="PLICEASE/Devel-ebug-0.63"
+>0.63
+  (PLICEASE on 2020-07-27)</option>
+<option
+  
+  value="PLICEASE/Devel-ebug-0.62_01"
+>0.62_01 DEV
+  (PLICEASE on 2020-07-21)</option>
+<option
+  
+  value="PLICEASE/Devel-ebug-0.61_01"
+>0.61_01 DEV
+  (PLICEASE on 2020-07-16)</option>
+<option
+  
+  value="PLICEASE/Devel-ebug-0.60"
+>0.60
+  (PLICEASE on 2020-05-04)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.55"
+>0.55
+  (AWWAIID on 2013-03-20)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.54"
+>0.54
+  (AWWAIID on 2013-03-20)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.53"
+>0.53
+  (AWWAIID on 2012-03-10)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.53_02"
+>0.53_02 DEV
+  (AWWAIID on 2012-03-10)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.53_01"
+>0.53_01 DEV
+  (AWWAIID on 2012-02-29)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.52"
+>0.52
+  (AWWAIID on 2011-11-09)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.51"
+>0.51
+  (AWWAIID on 2011-11-08)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.50"
+>0.50
+  (AWWAIID on 2011-10-20)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.45"
+>0.45
+  (LBROCARD on 2005-09-02)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.44"
+>0.44
+  (LBROCARD on 2005-08-31)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.43"
+>0.43
+  (LBROCARD on 2005-05-16)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.42"
+>0.42
+  (LBROCARD on 2005-04-28)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.41"
+>0.41
+  (LBROCARD on 2005-04-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.40"
+>0.40
+  (LBROCARD on 2005-04-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.39"
+>0.39
+  (LBROCARD on 2005-04-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.38"
+>0.38
+  (LBROCARD on 2005-04-12)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.37"
+>0.37
+  (LBROCARD on 2005-04-05)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.36"
+>0.36
+  (LBROCARD on 2005-04-03)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.35"
+>0.35
+  (LBROCARD on 2005-04-02)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.34"
+>0.34
+  (LBROCARD on 2005-04-02)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.33"
+>0.33
+  (LBROCARD on 2005-04-01)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.32"
+>0.32
+  (LBROCARD on 2005-04-01)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.31"
+>0.31
+  (LBROCARD on 2005-04-01)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.30"
+>0.30
+  (LBROCARD on 2005-03-30)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.29"
+>0.29
+  (LBROCARD on 2005-03-29)</option>
+</optgroup>
+</select>
+    </li>
+
+    <li>
+<ul class="dependencies">
+  <li class="nav-header">Dependencies</li>
+  <li><a href="https://metacpan.org/pod/Class::Accessor::Chained" title="Class::Accessor::Chained" class="ellipsis">Class::Accessor::Chained</a></li>
+  <li><a href="https://metacpan.org/pod/Devel::StackTrace" title="Devel::StackTrace" class="ellipsis">Devel::StackTrace</a></li>
+  <li><a href="https://metacpan.org/pod/IO::Socket::INET" title="IO::Socket::INET" class="ellipsis">IO::Socket::INET</a></li>
+  <li><a href="./Module::Pluggable.html" title="Module::Pluggable" class="ellipsis">Module::Pluggable</a></li>
+  <li><a href="PadWalker.html" title="PadWalker" class="ellipsis">PadWalker</a></li>
+  <li><a href="./Proc::Background.html" title="Proc::Background" class="ellipsis">Proc::Background</a></li>
+  <li><a href="https://metacpan.org/pod/String::Koremutake" title="String::Koremutake" class="ellipsis">String::Koremutake</a></li>
+  <li><a href="https://metacpan.org/pod/Term::ReadLine" title="Term::ReadLine" class="ellipsis">Term::ReadLine</a></li>
+  <li><a href="YAML.html" title="YAML" class="ellipsis">YAML</a></li>
+  <li><a href="https://metacpan.org/pod/base" title="base" class="ellipsis">base</a></li>
+  <li><a href="https://metacpan.org/pod/strict" title="strict" class="ellipsis">strict</a></li>
+  <li><a href="https://metacpan.org/pod/warnings" title="warnings" class="ellipsis">warnings</a></li>
+  <li><i class="ttip" title="dynamic_config enabled">and possibly others</i></li>
+  <li>
+    <hr>
+  </li>
+  <li>
+    <a href="https://metacpan.org/module/Devel::ebug/requires">Reverse dependencies</a>
+  </li>
+  <li>
+    <a href="http://deps.cpantesters.org/?module=Devel%3A%3Aebug">CPAN Testers List</a>
+  </li>
+  <li>
+    <a href="https://cpandeps.grinnz.com/?dist=Devel-ebug">Dependency graph</a>
+  </li>
+</ul>
+    </li>
+    <li class="nav-header">Permalinks</li>
+    <li>
+      <a href="https://metacpan.org/release/PLICEASE/Devel-ebug-0.64/view/lib/Devel/ebug.pm">This version</a>
+    </li>
+    <li>
+      <a href="./Devel::ebug.html">Latest version</a>
+    </li>
+    <li>
+<div class="plussers">
+<div class="nav-header">++ed by:</div>
+<div>
+<a class="display-all" href="https://metacpan.org/author/KES"><img src="https://www.gravatar.com/avatar/e8530f00b43b4f6a056f8ad4ee52ea47?d=identicon&amp;s=20" title="KES" alt="KES"></a>
+<a class="display-all" href="https://metacpan.org/author/VEESH"><img src="https://www.gravatar.com/avatar/5ec5a5223fe6ee8e96b03dca47b670ea?d=identicon&amp;s=20" title="VEESH" alt="VEESH"></a>
+<a class="display-all" href="https://metacpan.org/author/ALEXPAN"><img src="https://www.gravatar.com/avatar/70e0ed15dcfbb2cf0e09fbb0d09c9bf8?d=identicon&amp;s=20" title="ALEXPAN" alt="ALEXPAN"></a>
+<a class="display-all" href="https://metacpan.org/author/PLICEASE"><img src="https://www.gravatar.com/avatar/0640fb1c0a5e82f5a777f2306efcac77?d=identicon&amp;s=20" title="PLICEASE" alt="PLICEASE"></a>
+</div>
+<!-- Display counts of plussers-->
+<div>
+    <a href="https://metacpan.org/dist/Devel-ebug/plussers">4 PAUSE users</a>
+</div>
+<div>
+    6 non-PAUSE users
+</div>
+</div>
+    </li>
+    <li>
+<div id="metacpan_contributors">
+  <div>
+    <button class="btn-link"
+      onclick="$(this).hide(); $('#metacpan_contributors ul').slideDown(); return false;"
+    >and 3 contributors</button>
+  </div>
+  <ul style="display: none">
+    <li class="contributor"
+      data-cpan-author="LBROCARD"
+      data-contrib-email="acme@astray.com"
+    >
+      <a href="https://metacpan.org/author/LBROCARD" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/5f3898542bbdad5e02b65eb8a886e586?d=identicon&amp;s=20" />
+      Leon Brocard
+      </a>
+    </li>
+    <li class="contributor"
+      data-cpan-author="AWWAIID"
+      data-contrib-email="awwaiid@thelackthereof.org"
+    >
+      <a href="https://metacpan.org/author/AWWAIID" class="cpan-author">
+      <img class="gravatar" width="20" height="20" src="https://www.gravatar.com/avatar/c8cb1a859b22ce8295fc637e134e7763?d=identicon&amp;s=20" />
+      Brock Wilcox
+      </a>
+    </li>
+    <li class="contributor"
+    >
+      Taisuke Yamada
+    </li>
+  </ul>
+</div>
+    </li>
+              </ul>
+            </div>
+          </nav>
+          <div class="content-navigation">
+<div class="breadcrumbs">
+  <span>
+    <a data-keyboard-shortcut="g a" rel="author" href="https://metacpan.org/author/PLICEASE" class="author-name">Graham Ollis 🇺🇦🌻</a>
+  </span>
+  <span>&nbsp;/&nbsp;</span>
+  <div class="release dist-release status-latest maturity-released">
+    <span class="dropdown"><b class="caret"></b></span>
+<select onchange="document.location.href=&#39;/release/&#39;+this.value+&#39;/view/lib/Devel/ebug.pm&#39;" class="">
+<option
+  selected
+  value="PLICEASE/Devel-ebug-0.64"
+>0.64
+  (PLICEASE on 2021-07-10)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.59"
+>0.59
+  (AWWAIID on 2017-03-12)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.58"
+>0.58
+  (AWWAIID on 2017-03-06)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.57"
+>0.57
+  (AWWAIID on 2016-08-12)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.56"
+>0.56
+  (AWWAIID on 2014-04-17)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.49"
+>0.49
+  (LBROCARD on 2008-10-16)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.48"
+>0.48
+  (LBROCARD on 2007-04-30)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.47"
+>0.47
+  (LBROCARD on 2007-03-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.46"
+>0.46
+  (LBROCARD on 2006-03-06)</option>
+<optgroup label="BackPAN">'
+<option
+  
+  value="PLICEASE/Devel-ebug-0.63"
+>0.63
+  (PLICEASE on 2020-07-27)</option>
+<option
+  
+  value="PLICEASE/Devel-ebug-0.62_01"
+>0.62_01 DEV
+  (PLICEASE on 2020-07-21)</option>
+<option
+  
+  value="PLICEASE/Devel-ebug-0.61_01"
+>0.61_01 DEV
+  (PLICEASE on 2020-07-16)</option>
+<option
+  
+  value="PLICEASE/Devel-ebug-0.60"
+>0.60
+  (PLICEASE on 2020-05-04)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.55"
+>0.55
+  (AWWAIID on 2013-03-20)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.54"
+>0.54
+  (AWWAIID on 2013-03-20)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.53"
+>0.53
+  (AWWAIID on 2012-03-10)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.53_02"
+>0.53_02 DEV
+  (AWWAIID on 2012-03-10)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.53_01"
+>0.53_01 DEV
+  (AWWAIID on 2012-02-29)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.52"
+>0.52
+  (AWWAIID on 2011-11-09)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.51"
+>0.51
+  (AWWAIID on 2011-11-08)</option>
+<option
+  
+  value="AWWAIID/Devel-ebug-0.50"
+>0.50
+  (AWWAIID on 2011-10-20)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.45"
+>0.45
+  (LBROCARD on 2005-09-02)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.44"
+>0.44
+  (LBROCARD on 2005-08-31)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.43"
+>0.43
+  (LBROCARD on 2005-05-16)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.42"
+>0.42
+  (LBROCARD on 2005-04-28)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.41"
+>0.41
+  (LBROCARD on 2005-04-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.40"
+>0.40
+  (LBROCARD on 2005-04-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.39"
+>0.39
+  (LBROCARD on 2005-04-19)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.38"
+>0.38
+  (LBROCARD on 2005-04-12)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.37"
+>0.37
+  (LBROCARD on 2005-04-05)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.36"
+>0.36
+  (LBROCARD on 2005-04-03)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.35"
+>0.35
+  (LBROCARD on 2005-04-02)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.34"
+>0.34
+  (LBROCARD on 2005-04-02)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.33"
+>0.33
+  (LBROCARD on 2005-04-01)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.32"
+>0.32
+  (LBROCARD on 2005-04-01)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.31"
+>0.31
+  (LBROCARD on 2005-04-01)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.30"
+>0.30
+  (LBROCARD on 2005-03-30)</option>
+<option
+  
+  value="LBROCARD/Devel-ebug-0.29"
+>0.29
+  (LBROCARD on 2005-03-29)</option>
+</optgroup>
+</select>
+    <a data-keyboard-shortcut="g d" class="release-name" href="https://metacpan.org/dist/Devel-ebug">Devel-ebug-0.64</a>
+  </div>
+<span class="river-gauge-gauge">
+  <svg width="24px"
+       height="15px"
+       version="1.1"
+       xmlns="http://www.w3.org/2000/svg"
+       xmlns:xlink="http://www.w3.org/1999/xlink">
+
+    <g>
+      <title>        River stage one &#10;
+          • 4 direct dependents &#10;          • 6 total dependents
+      </title>
+
+      <rect x="0"  y="0" width="4" height="15" fill="#7ea3f2" />
+      <rect x="5"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="10"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="15"  y="0" width="4" height="15" fill="#e4e2e2" />
+      <rect x="20"  y="0" width="4" height="15" fill="#e4e2e2" />
+    </g>
+  </svg>
+
+</span>
+<div id="Devel-ebug-fav" class="logged_in">
+<form action="https://metacpan.org/account/favorite/add" style="display: inline" onsubmit="return favDistribution(this)">
+    <input type="hidden" name="remove" value="0">
+    <input type="hidden" name="release" value="Devel-ebug-0.64">
+    <input type="hidden" name="author" value="PLICEASE">
+    <input type="hidden" name="distribution" value="Devel-ebug">
+    <button type="submit" class="favorite highlight"><span>10</span> ++</button>
+</form>
+</div>
+<div class="logged_out">
+<a href="./Devel::ebug.html" onclick="alert('Please sign in to add favorites'); return false" class="favorite highlight">
+<span>10</span> ++</a>
+</div>
+   / <span>Devel::ebug</span>
+</div>
+          </div>
+          <main class="content">
+
+
+<nav class="toc">
+  <div class="toc-header"><strong>Contents</strong></div>
+<ul>
+  <li><a href="./Devel::ebug.html#NAME">NAME</a></li>
+  <li><a href="./Devel::ebug.html#VERSION">VERSION</a></li>
+  <li><a href="./Devel::ebug.html#SYNOPSIS">SYNOPSIS</a></li>
+  <li><a href="./Devel::ebug.html#DESCRIPTION">DESCRIPTION</a></li>
+  <li><a href="./Devel::ebug.html#CONSTRUCTOR">CONSTRUCTOR</a>
+    <ul>
+      <li><a href="./Devel::ebug.html#new">new</a></li>
+      <li><a href="./Devel::ebug.html#program">program</a></li>
+      <li><a href="./Devel::ebug.html#load">load</a></li>
+    </ul>
+  </li>
+  <li><a href="./Devel::ebug.html#METHODS">METHODS</a>
+    <ul>
+      <li><a href="./Devel::ebug.html#break_point">break_point</a></li>
+      <li><a href="./Devel::ebug.html#break_on_load">break_on_load</a></li>
+      <li><a href="./Devel::ebug.html#break_point_delete">break_point_delete</a></li>
+      <li><a href="./Devel::ebug.html#break_point_subroutine">break_point_subroutine</a></li>
+      <li><a href="./Devel::ebug.html#break_points">break_points</a></li>
+      <li><a href="./Devel::ebug.html#break_points_with_condition">break_points_with_condition</a></li>
+      <li><a href="./Devel::ebug.html#all_break_points_with_condition">all_break_points_with_condition</a></li>
+      <li><a href="./Devel::ebug.html#codeline">codeline</a></li>
+      <li><a href="./Devel::ebug.html#codelines">codelines</a></li>
+      <li><a href="./Devel::ebug.html#eval">eval</a></li>
+      <li><a href="./Devel::ebug.html#filename">filename</a></li>
+      <li><a href="./Devel::ebug.html#filenames">filenames</a></li>
+      <li><a href="./Devel::ebug.html#finished">finished</a></li>
+      <li><a href="./Devel::ebug.html#line">line</a></li>
+      <li><a href="./Devel::ebug.html#next">next</a></li>
+      <li><a href="./Devel::ebug.html#output">output</a></li>
+      <li><a href="./Devel::ebug.html#package">package</a></li>
+      <li><a href="./Devel::ebug.html#pad">pad</a></li>
+      <li><a href="./Devel::ebug.html#return">return</a></li>
+      <li><a href="./Devel::ebug.html#run">run</a></li>
+      <li><a href="./Devel::ebug.html#step">step</a></li>
+      <li><a href="./Devel::ebug.html#subroutine">subroutine</a></li>
+      <li><a href="./Devel::ebug.html#stack_trace">stack_trace</a></li>
+      <li><a href="./Devel::ebug.html#stack_trace_human">stack_trace_human</a></li>
+      <li><a href="./Devel::ebug.html#undo">undo</a></li>
+      <li><a href="./Devel::ebug.html#watch_point">watch_point</a></li>
+      <li><a href="./Devel::ebug.html#yaml">yaml</a></li>
+    </ul>
+  </li>
+  <li><a href="./Devel::ebug.html#SEE-ALSO">SEE ALSO</a></li>
+  <li><a href="./Devel::ebug.html#CAVEATS">CAVEATS</a></li>
+  <li><a href="./Devel::ebug.html#AUTHOR">AUTHOR</a></li>
+  <li><a href="./Devel::ebug.html#COPYRIGHT-AND-LICENSE">COPYRIGHT AND LICENSE</a></li>
+</ul></nav>
+<div class="pod anchors">
+<h1 id="NAME">NAME</h1>
+
+<p>Devel::ebug - A simple, extensible Perl debugger</p>
+
+<h1 id="VERSION">VERSION</h1>
+
+<p>version 0.64</p>
+
+<h1 id="SYNOPSIS">SYNOPSIS</h1>
+
+<pre><code>  use Devel::ebug;
+  my $ebug = Devel::ebug-&gt;new;
+  $ebug-&gt;program(&quot;calc.pl&quot;);
+  $ebug-&gt;load;
+ 
+  print &quot;At line: &quot;       . $ebug-&gt;line       . &quot;\n&quot;;
+  print &quot;In subroutine: &quot; . $ebug-&gt;subroutine . &quot;\n&quot;;
+  print &quot;In package: &quot;    . $ebug-&gt;package    . &quot;\n&quot;;
+  print &quot;In filename: &quot;   . $ebug-&gt;filename   . &quot;\n&quot;;
+  print &quot;Code: &quot;          . $ebug-&gt;codeline   . &quot;\n&quot;;
+  $ebug-&gt;step;
+  $ebug-&gt;step;
+  $ebug-&gt;next;
+  my($stdout, $stderr) = $ebug-&gt;output;
+  my $actual_line = $ebug-&gt;break_point(6);
+  $ebug-&gt;break_point(6, &#39;$e == 4&#39;);
+  $ebug-&gt;break_point(&quot;t/Calc.pm&quot;, 29);
+  $ebug-&gt;break_point(&quot;t/Calc.pm&quot;, 29, &#39;$i == 2&#39;);
+  $ebug-&gt;break_on_load(&quot;t/Calc.pm&quot;);
+  my $actual_line = $ebug-&gt;break_point_subroutine(&quot;main::add&quot;);
+  $ebug-&gt;break_point_delete(29);
+  $ebug-&gt;break_point_delete(&quot;t/Calc.pm&quot;, 29);
+  my @filenames    = $ebug-&gt;filenames();
+  my @break_points = $ebug-&gt;break_points();
+  my @break_points = $ebug-&gt;break_points(&quot;t/Calc.pm&quot;);
+  my @break_points = $ebug-&gt;break_points_with_condition();
+  my @break_points = $ebug-&gt;break_points_with_condition(&quot;t/Calc.pm&quot;);
+  my @break_points = $ebug-&gt;all_break_points_with_condition();
+  $ebug-&gt;watch_point(&#39;$x &gt; 100&#39;);
+  my $codelines = $ebug-&gt;codelines(@span);
+  $ebug-&gt;run;
+  my $pad  = $ebug-&gt;pad;
+  foreach my $k (sort keys %$pad) {
+    my $v = $pad-&gt;{$k};
+    print &quot;Variable: $k = $v\n&quot;;
+  }
+  my $v = $ebug-&gt;eval(&#39;2 ** $exp&#39;);
+  my( $v, $is_exception ) = $ebug-&gt;eval(&#39;die 123&#39;);
+  my $y = $ebug-&gt;yaml(&#39;$z&#39;);
+  my @frames = $ebug-&gt;stack_trace;
+  my @frames2 = $ebug-&gt;stack_trace_human;
+  $ebug-&gt;undo;
+  $ebug-&gt;return;
+  print &quot;Finished!\n&quot; if $ebug-&gt;finished;</code></pre>
+
+<h1 id="DESCRIPTION">DESCRIPTION</h1>
+
+<p>A debugger is a computer program that is used to debug other programs. <a href="./Devel::ebug.html">Devel::ebug</a> is a simple, extensible Perl debugger with a clean API. Using this module, you may easily write a Perl debugger to debug your programs. Alternatively, it comes with an interactive debugger, <a href="https://metacpan.org/pod/distribution/Devel-ebug/bin/ebug">ebug</a>.</p>
+
+<p>perl5db.pl, Perl&#39;s current debugger is currently 2,600 lines of magic and special cases. The code is nearly unreadable: fixing bugs and adding new features is fraught with difficulties. The debugger has no test suite which has caused breakage with changes that couldn&#39;t be properly tested. It will also not debug regexes. <a href="./Devel::ebug.html">Devel::ebug</a> is aimed at fixing these problems and delivering a replacement debugger which provides a well-tested simple programmatic interface to debugging programs. This makes it easier to build debuggers on top of <a href="./Devel::ebug.html">Devel::ebug</a>, be they console-, curses-, GUI- or Ajax-based.</p>
+
+<p>There are currently two user interfaces to <a href="https://metacpan.org/pod/Devel::debug">Devel::debug</a>, <a href="https://metacpan.org/pod/distribution/Devel-ebug/bin/ebug">ebug</a> and <a href="https://metacpan.org/pod/ebug_http">ebug_http</a>. <a href="https://metacpan.org/pod/distribution/Devel-ebug/bin/ebug">ebug</a> is a console-based interface to debugging programs, much like perl5db.pl. <a href="https://metacpan.org/pod/ebug_http">ebug_http</a> is an innovative web-based interface to debugging programs.</p>
+
+<p>Note that if you&#39;re debugging a program, you can invoke the debugger in the program itself by using the INT signal:</p>
+
+<pre><code>  kill 2, $$ if $square &gt; 100;</code></pre>
+
+<p><a href="./Devel::ebug.html">Devel::ebug</a> is a work in progress.</p>
+
+<p>Internally, <a href="./Devel::ebug.html">Devel::ebug</a> consists of two parts. The frontend is <a href="./Devel::ebug.html">Devel::ebug</a>, which you interact with. The frontend starts the code you are debugging in the background under the backend (running it under perl -d:ebug code.pl). The backend starts a TCP server, which the frontend then connects to, and uses this to drive the backend. This adds some flexibility in the debugger. There is some minor security in the client/server startup (a secret word), and a random port is used from 3141-4165 so that multiple debugging sessions can happen concurrently.</p>
+
+<h1 id="CONSTRUCTOR">CONSTRUCTOR</h1>
+
+<h2 id="new">new</h2>
+
+<p>The constructor creats a <a href="./Devel::ebug.html">Devel::ebug</a> object:</p>
+
+<pre><code>  my $ebug = Devel::ebug-&gt;new;</code></pre>
+
+<h2 id="program">program</h2>
+
+<p>The program method selects which program to load:</p>
+
+<pre><code>  $ebug-&gt;program(&quot;calc.pl&quot;);</code></pre>
+
+<h2 id="load">load</h2>
+
+<p>The load method loads the program and gets ready to debug it:</p>
+
+<pre><code>  $ebug-&gt;load;</code></pre>
+
+<h1 id="METHODS">METHODS</h1>
+
+<h2 id="break_point">break_point</h2>
+
+<p>The break_point method sets a break point in a program. If you are running through a program, the execution will stop at a break point. Break points can be set in a few ways.</p>
+
+<p>A break point can be set at a line number in the current file:</p>
+
+<pre><code>  my $actual_line = $ebug-&gt;break_point(6);</code></pre>
+
+<p>A break point can be set at a line number in the current file with a condition that must be true for execution to stop at the break point:</p>
+
+<pre><code>  my $actual_line = $ebug-&gt;break_point(6, &#39;$e = 4&#39;);</code></pre>
+
+<p>A break point can be set at a line number in a file:</p>
+
+<pre><code>  my $actual_line = $ebug-&gt;break_point(&quot;t/Calc.pm&quot;, 29);</code></pre>
+
+<p>A break point can be set at a line number in a file with a condition that must be true for execution to stop at the break point:</p>
+
+<pre><code>  my $actual_line = $ebug-&gt;break_point(&quot;t/Calc.pm&quot;, 29, &#39;$i == 2&#39;);</code></pre>
+
+<p>Breakpoints can not be set on some lines (for example comments); in this case a breakpoint will be set at the next breakable line, and the line number will be returned. If no such line exists, no breakpoint is set and the function returns <code>undef</code>.</p>
+
+<h2 id="break_on_load">break_on_load</h2>
+
+<p>Set a breakpoint on file loading, the file name can be relative or absolute.</p>
+
+<h2 id="break_point_delete">break_point_delete</h2>
+
+<p>The break_point_delete method deletes an existing break point. A break point at a line number in the current file can be deleted:</p>
+
+<pre><code>  $ebug-&gt;break_point_delete(29);</code></pre>
+
+<p>A break point at a line number in a file can be deleted:</p>
+
+<pre><code>  $ebug-&gt;break_point_delete(&quot;t/Calc.pm&quot;, 29);</code></pre>
+
+<h2 id="break_point_subroutine">break_point_subroutine</h2>
+
+<p>The break_point_subroutine method sets a break point in a program right at the beginning of the subroutine. The subroutine is specified with the full package name:</p>
+
+<pre><code>  my $line = $ebug-&gt;break_point_subroutine(&quot;main::add&quot;);
+  $ebug-&gt;break_point_subroutine(&quot;Calc::fib&quot;);</code></pre>
+
+<p>The return value is the line at which the break point is set.</p>
+
+<h2 id="break_points">break_points</h2>
+
+<p>The break_points method returns a list of all the line numbers in a given file that have a break point set.</p>
+
+<p>Return the list of breakpoints in the current file:</p>
+
+<pre><code>  my @break_points = $ebug-&gt;break_points();</code></pre>
+
+<p>Return the list of breakpoints in a given file:</p>
+
+<pre><code>  my @break_points = $ebug-&gt;break_points(&quot;t/Calc.pm&quot;);</code></pre>
+
+<h2 id="break_points_with_condition">break_points_with_condition</h2>
+
+<p>The break_points method returns a list of break points for a given file.</p>
+
+<p>Return the list of breakpoints in the current file:</p>
+
+<pre><code>  my @break_points = $ebug-&gt;break_points_with_condition();</code></pre>
+
+<p>Return the list of breakpoints in a given file:</p>
+
+<pre><code>  my @break_points = $ebug-&gt;break_points_with_condition(&quot;t/Calc.pm&quot;);</code></pre>
+
+<p>Each element of the list has the form</p>
+
+<pre><code>  { filename  =&gt; &quot;t/Calc.pm&quot;,
+    line      =&gt; 29,
+    condition =&gt; &quot;$foo &gt; 12&quot;,
+    }</code></pre>
+
+<p>where <code>condition</code> might not be present.</p>
+
+<h2 id="all_break_points_with_condition">all_break_points_with_condition</h2>
+
+<p>Like <code>break_points_with_condition</code> but returns a list of break points for the whole program.</p>
+
+<h2 id="codeline">codeline</h2>
+
+<p>The codeline method returns the line of code that is just about to be executed:</p>
+
+<pre><code>  print &quot;Code: &quot;          . $ebug-&gt;codeline   . &quot;\n&quot;;</code></pre>
+
+<h2 id="codelines">codelines</h2>
+
+<p>The codelines method returns lines of code.</p>
+
+<p>It can return all the code lines in the current file:</p>
+
+<pre><code>  my @codelines = $ebug-&gt;codelines();</code></pre>
+
+<p>It can return a span of code lines from the current file:</p>
+
+<pre><code>  my @codelines = $ebug-&gt;codelines(1, 3, 4, 5);</code></pre>
+
+<p>It can return all the code lines in a file:</p>
+
+<pre><code>  my @codelines = $ebug-&gt;codelines(&quot;t/Calc.pm&quot;);</code></pre>
+
+<p>It can return a span of code lines in a file:</p>
+
+<pre><code>  my @codelines = $ebug-&gt;codelines(&quot;t/Calc.pm&quot;, 5, 6);</code></pre>
+
+<h2 id="eval">eval</h2>
+
+<p>The eval method evaluates Perl code in the current program and returns the result. If the evaluation results in an exception, <code>$@</code> is returned.</p>
+
+<pre><code>  my $v = $ebug-&gt;eval(&#39;2 ** $exp&#39;);</code></pre>
+
+<p>In list context, eval also returns a flag indicating if the evaluation resulted in an exception.</p>
+
+<pre><code>  my( $v, $is_exception ) = $ebug-&gt;eval(&#39;die 123&#39;);</code></pre>
+
+<h2 id="filename">filename</h2>
+
+<p>The filename method returns the filename of the currently running code:</p>
+
+<pre><code>  print &quot;In filename: &quot;   . $ebug-&gt;filename   . &quot;\n&quot;;</code></pre>
+
+<h2 id="filenames">filenames</h2>
+
+<p>The filenames method returns a list of the filenames of all the files currently loaded:</p>
+
+<pre><code>  my @filenames = $ebug-&gt;filenames();</code></pre>
+
+<h2 id="finished">finished</h2>
+
+<p>The finished method returns whether the program has finished running:</p>
+
+<pre><code>  print &quot;Finished!\n&quot; if $ebug-&gt;finished;</code></pre>
+
+<h2 id="line">line</h2>
+
+<p>The line method returns the line number of the statement about to be executed:</p>
+
+<pre><code>  print &quot;At line: &quot;       . $ebug-&gt;line       . &quot;\n&quot;;</code></pre>
+
+<h2 id="next">next</h2>
+
+<p>The next method steps onto the next line in the program. It executes any subroutine calls but does not step through them.</p>
+
+<pre><code>  $ebug-&gt;next;</code></pre>
+
+<h2 id="output">output</h2>
+
+<p>The output method returns any content the program has output to either standard output or standard error:</p>
+
+<pre><code>  my($stdout, $stderr) = $ebug-&gt;output;</code></pre>
+
+<h2 id="package">package</h2>
+
+<p>The package method returns the package of the currently running code:</p>
+
+<pre><code>  print &quot;In package: &quot;    . $ebug-&gt;package    . &quot;\n&quot;;</code></pre>
+
+<h2 id="pad">pad</h2>
+
+<pre><code>  my $pad  = $ebug-&gt;pad;
+  foreach my $k (sort keys %$pad) {
+    my $v = $pad-&gt;{$k};
+    print &quot;Variable: $k = $v\n&quot;;
+  }</code></pre>
+
+<h2 id="return">return</h2>
+
+<p>The return subroutine returns from a subroutine. It continues running the subroutine, then single steps when the program flow has exited the subroutine:</p>
+
+<pre><code>  $ebug-&gt;return;</code></pre>
+
+<p>It can also return your own values from a subroutine, for testing purposes:</p>
+
+<pre><code>  $ebug-&gt;return(3.141);</code></pre>
+
+<h2 id="run">run</h2>
+
+<p>The run subroutine starts executing the code. It will only stop on a break point or watch point.</p>
+
+<pre><code>  $ebug-&gt;run;</code></pre>
+
+<h2 id="step">step</h2>
+
+<p>The step method steps onto the next line in the program. It steps through into any subroutine calls.</p>
+
+<pre><code>  $ebug-&gt;step;</code></pre>
+
+<h2 id="subroutine">subroutine</h2>
+
+<p>The subroutine method returns the subroutine of the currently working code:</p>
+
+<pre><code>  print &quot;In subroutine: &quot; . $ebug-&gt;subroutine . &quot;\n&quot;;</code></pre>
+
+<h2 id="stack_trace">stack_trace</h2>
+
+<p>The stack_trace method returns the current stack trace, using <a href="https://metacpan.org/pod/Devel::StackTrace">Devel::StackTrace</a>. It returns a list of <a href="https://metacpan.org/pod/Devel::StackTraceFrame">Devel::StackTraceFrame</a> methods:</p>
+
+<pre><code>  my @traces = $ebug-&gt;stack_trace;
+  foreach my $trace (@traces) {
+    print $trace-&gt;package, &quot;-&gt;&quot;,$trace-&gt;subroutine,
+    &quot;(&quot;, $trace-&gt;filename, &quot;#&quot;, $trace-&gt;line, &quot;)\n&quot;;
+  }</code></pre>
+
+<h2 id="stack_trace_human">stack_trace_human</h2>
+
+<p>The stack_trace_human method returns the current stack trace in a human-readable format:</p>
+
+<pre><code>  my @traces = $ebug-&gt;stack_trace_human;
+  foreach my $trace (@traces) {
+    print &quot;$trace\n&quot;;
+  }</code></pre>
+
+<h2 id="undo">undo</h2>
+
+<p>The undo method undoes the last action. It accomplishes this by restarting the process and passing (almost) all the previous commands to it. Note that commands which do not change state are ignored. Commands that change state are: break_point, break_point_delete, break_point_subroutine, eval, next, step, return, run and watch_point.</p>
+
+<pre><code>  $ebug-&gt;undo;</code></pre>
+
+<p>It can also undo multiple commands:</p>
+
+<pre><code>  $ebug-&gt;undo(3);</code></pre>
+
+<h2 id="watch_point">watch_point</h2>
+
+<p>The watch point method sets a watch point. A watch point has a condition, and the debugger will stop running as soon as this condition is true:</p>
+
+<pre><code>  $ebug-&gt;watch_point(&#39;$x &gt; 100&#39;);</code></pre>
+
+<h2 id="yaml">yaml</h2>
+
+<p>The eval method evaluates Perl code in the current program and returns the result of YAML&#39;s Dump() method:</p>
+
+<pre><code>  my $y = $ebug-&gt;yaml(&#39;$z&#39;);</code></pre>
+
+<h1 id="SEE-ALSO"><a id="SEE"></a>SEE ALSO</h1>
+
+<dl>
+
+<dt id="perldebguts"><a href="https://metacpan.org/pod/perldebguts">perldebguts</a></dt>
+<dd>
+
+<p>The guts of debugging Perl</p>
+
+</dd>
+<dt id="Devel::Chitin"><a id="Devel"></a><a href="https://metacpan.org/pod/Devel::Chitin">Devel::Chitin</a></dt>
+<dd>
+
+<p>A class that exposes the Perl debugging facilities as an API, with some functional overlap with <a href="./Devel::ebug.html">Devel::ebug</a>.</p>
+
+</dd>
+<dt id="ebug"><a href="https://metacpan.org/pod/distribution/Devel-ebug/bin/ebug">ebug</a></dt>
+<dd>
+
+<p>Command-line interface to <a href="./Devel::ebug.html">Devel::ebug</a></p>
+
+</dd>
+<dt id="ebug_http"><a href="https://metacpan.org/pod/ebug_http">ebug_http</a></dt>
+<dd>
+
+<p>Web based interface to <a href="./Devel::ebug.html">Devel::ebug</a></p>
+
+</dd>
+</dl>
+
+<h1 id="CAVEATS">CAVEATS</h1>
+
+<p><a href="./Devel::ebug.html">Devel::ebug</a> does not support Perls prior to 5.10.1.</p>
+
+<p><a href="./Devel::ebug.html">Devel::ebug</a> does not handle signals under Windows.</p>
+
+<h1 id="AUTHOR">AUTHOR</h1>
+
+<p>Original author: Leon Brocard &lt;acme@astray.com&gt;</p>
+
+<p>Current maintainer: Graham Ollis &lt;plicease@cpan.org&gt;</p>
+
+<p>Contributors:</p>
+
+<p>Brock Wilcox &lt;awwaiid@thelackthereof.org&gt;</p>
+
+<p>Taisuke Yamada</p>
+
+<h1 id="COPYRIGHT-AND-LICENSE"><a id="COPYRIGHT"></a>COPYRIGHT AND LICENSE</h1>
+
+<p>This software is copyright (c) 2005-2021 by Leon Brocard.</p>
+
+<p>This is free software; you can redistribute it and/or modify it under the same terms as the Perl 5 programming language system itself.</p></div>
+
+<div id="metacpan_install-instructions-dialog" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Module Install Instructions</h4>
+      </div>
+      <div class="modal-body">
+        <p>To install Devel::ebug, copy and paste the appropriate command in to your terminal.</p>
+        <p><a href="https://metacpan.org/dist/App-cpanminus/view/bin/cpanm">cpanm</a></p>
+        <pre><code>cpanm Devel::ebug</code></pre>
+        <p><a href="https://metacpan.org/pod/CPAN">CPAN shell</a></p>
+        <pre><code>perl -MCPAN -e shell
+install Devel::ebug</code></pre>
+        <p>For more information on module installation, please visit <a href="https://www.cpan.org/modules/INSTALL.html">the detailed CPAN module installation guide</a>.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="./Devel::ebug.html#" data-dismiss="modal" class="btn">Close</a>
+      </div>
+    </div>
+  </div>
+</div>
+          </main>
+          <div class="content-pagination">
+          </div>
+        </div>
+        <footer class="footer">
+          <div class="footer-container">
+            <div class="footer-social">
+              <div class="footer-link footer-logo">
+                <a href="https://metacpan.org/">
+                  <img src="https://metacpan.org/static/images/metacpan-logo.svg" alt="MetaCPAN" />
+                </a>
+              </div>
+              <a class="footer-social-link" href="https://github.com/metacpan">
+                <i class="fab fa-github-square"></i>
+              </a>
+              <a class="footer-social-link" href="https://fosstodon.org/@metacpan">
+                <i class="fab fa-mastodon"></i>
+              </a>
+            </div>
+            <div class="footer-links">
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about">About</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/sponsors">Sponsor</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://grep.metacpan.org">grep::cpan</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/recent">Recent</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/about/faq">FAQ</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://metacpan.org/tools">Tools</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://fastapi.metacpan.org/">API</a>
+              </div>
+              <div class="footer-link">
+                  <a href="https://www.perl.org/">Perl.org</a>
+              </div>
+            </div>
+            <div class="footer-sponsors">
+              <a class="footer-sponsor-link" target="_blank" href="https://www.bytemark.co.uk/" rel="noopener">
+                <img class="footer-sponsor-bytemark" src="https://metacpan.org/static/images/sponsors/bytemark_logo.svg" alt="Bytemark logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.liquidweb.com/" rel="noopener">
+                <img class="footer-sponsor-liquidweb" src="https://metacpan.org/static/images/sponsors/liquidweb_logo.png" alt="liquidweb logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://deriv.com/careers/" rel="noopener">
+                <img class="footer-sponsor-deriv" src="https://metacpan.org/static/images/sponsors/deriv.svg" alt="Deriv logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://geocode.xyz" rel="noopener">
+                <img class="footer-sponsor-geocode" src="https://metacpan.org/static/images/sponsors/geocodelogo.svg" alt="Geocode logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://www.fastly.com/" rel="noopener">
+                <img class="footer-sponsor-fastly" src="https://metacpan.org/static/images/sponsors/fastly_logo.svg" alt="Fastly logo">
+              </a>
+              <a class="footer-sponsor-link" target="_blank" href="https://opencagedata.com" rel="noopener">
+                <img class="footer-sponsor-opencage" src="https://metacpan.org/static/images/sponsors/open-cage.svg" alt="OpenCage logo">
+              </a>
+            </div>
+          </div>
+        </footer>
+        <div class="modal fade" tabindex="-1" role="dialog" id="metacpan_keyboard-shortcuts">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Keyboard Shortcuts</h4>
+              </div>
+              <div class="modal-body row">
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Global</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>s</kbd>
+        </td>
+        <td>Focus search bar</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>?</kbd>
+        </td>
+        <td>Bring up this help dialog</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>GitHub</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>p</kbd>
+        </td>
+        <td>Go to pull requests</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>go to github issues (only if github is preferred repository)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-6">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>POD</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>a</kbd>
+        </td>
+        <td>Go to author</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>c</kbd>
+        </td>
+        <td>Go to changes</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>i</kbd>
+        </td>
+        <td>Go to issues</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>d</kbd>
+        </td>
+        <td>Go to dist</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>r</kbd>
+        </td>
+        <td>Go to repository/SCM</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>s</kbd>
+        </td>
+        <td>Go to source</td>
+      </tr>
+      <tr>
+        <td class="keys">
+          <kbd>g</kbd> <kbd>b</kbd>
+        </td>
+        <td>Go to file browse</td>
+      </tr>
+
+    </tbody>
+  </table>
+</div>
+
+<div class="col-md-12">
+  <table class="table keyboard-shortcuts">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Search terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><em>module:</em> (e.g. <a href="https://metacpan.org/search?q=module%3APlugin">module:Plugin</a>)</td>
+      </tr>
+      <tr>
+        <td><em>distribution:</em> (e.g. <a href="https://metacpan.org/search?q=distribution%3ADancer+auth">distribution:Dancer auth</a>)</td>
+      </tr>
+      <tr>
+        <td><em>author:</em> (e.g. <a href="https://metacpan.org/search?q=author%3ASONGMU+Redis">author:SONGMU Redis</a>)</td>
+      </tr>
+      <tr>
+        <td><em>version:</em> (e.g. <a href="https://metacpan.org/search?q=version%3A1.00">version:1.00</a>)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+              </div>
+              <div class="modal-footer"></div>
+            </div>
+          </div>
+        </div>
+    </body>
+</html>
